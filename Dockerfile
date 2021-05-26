@@ -13,7 +13,6 @@ RUN npm install --production
 
 # Copy all files
 COPY ./src ./
-COPY .. ./
 
 # Build app
 RUN npm run build
