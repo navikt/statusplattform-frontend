@@ -10,7 +10,7 @@ export const fetchData = async (): Promise<string[]> => {
         response = await fetch("http://localhost:3001/rest/testAreas");
     }
     else {
-        response = await fetch("https://portalserver.dev.nav.no");
+        response = await fetch("https://portalserver.dev.nav.no/rest/testAreas");
     }
 
     if (response.ok) {
