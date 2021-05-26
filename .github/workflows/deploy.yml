@@ -3,7 +3,7 @@ name: Build, push, and deploy
 on: [push]
 
 env:
-  docker_image: ghcr.io/navikt/${{ github.repository }}/portal
+  docker_image: ghcr.io/navikt/portal-frontend :${{ github.sha }}
 
 jobs:
 
