@@ -103,6 +103,17 @@ export default function Navbar() {
 						</Link>
 					</LinkWrapper>
 				</li>
+				<li role="tab">
+					<LinkWrapper>
+						<Link href="/admin">
+							<LenkeCustomized>
+								<LenkeInner className={`${router.pathname === "/admin" ? "active" : ""}`}>
+								<NormalTekstCustomized>Admin</NormalTekstCustomized>
+							</LenkeInner>
+						</LenkeCustomized>
+					</Link>
+					</LinkWrapper>
+				</li>
 			</ul>
 		</Nav>
 	)
