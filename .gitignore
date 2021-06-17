@@ -1,7 +1,11 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/src/node_modules
+
+Add this
+
+node_modules/
+/src/portal-frontend/node_modules
 /src/.pnp
 /src.pnp.js
 

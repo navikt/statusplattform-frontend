@@ -1,6 +1,7 @@
 import Lenke from 'nav-frontend-lenker';
 import Link from 'next/link';
 import styled from 'styled-components'
+import { useEffect, useState } from "react";
 
 import NavInfoCircle from 'components/NavInfoCircle'
 import MaintenanceScheduling from 'components/MaintenanceScheduling'
@@ -9,6 +10,7 @@ import { Label, Input } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { countHealthyServices, countServicesInAreas, mapStatusAndIncidentsToArray } from 'utils/servicesOperations';
+import { fetchData } from 'utils/fetchAreas'
 
 const AdminContainer = styled.div`
     max-width: 1080px;
@@ -46,67 +48,56 @@ const AreasContainer = styled.div`
 
 
 
-const StatusOverview = (props: any) => {
+const AdminDashboard = () => {
+    const [adminAreas, setAdminAreas] = useState([])
+    const [isLoading, setIsLoading] = useState(true)
 
-    return (
+    useEffect(() => {
+        (async function () {
+            const adminAreas = await fetchData()
+            const parsedAreas = [...adminAreas]
+            setAdminAreas(parsedAreas)
+            setIsLoading(false)
+        })()
+    }, [])
+
+        return (
         <AdminContainer>
 
-            <AreasContainer>
-                <div>
-                    <h2>Områder</h2>
-                    <table className="tabell tabell--stripet">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Navn</th>
-                                <th>Beskrivelse</th>
-                                <th>Rangering</th>
-                                <th></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>Jean-Luc</td>
-                                <td>Picard</td>
-                                <td>3</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>2</td>
-                                <td>William</td>
-                                <td>Riker</td>
-                                <td>2</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td>3</td>
-                                <td>Geordi</td>
-                                <td>La Forge</td>
-                                <td>1</td>
-                                <td></td>
-                            </tr>
-                            <tr>
-                                <td> 4</td>
-                                <td>
-                                    <Input aria-labelledby="header-fornavn" defaultValue="" />
-                                </td>
-                                <td>
-                                    <Input aria-labelledby="header-etternavn" defaultValue="" />
-                                </td>
-                                <td>
-                                    <Input aria-labelledby="header-rolle" defaultValue="" />
-                                </td>
-                                <td><Hovedknapp>Legg til</Hovedknapp></td>
-                            </tr>
+                <AreasContainer>
+                    <div>
+                        <h2>Områder</h2>
+                        <table className="tabell tabell--stripet">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Navn</th>
+                                    <th>Beskrivelse</th>
+                                    <th>Rangering</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {adminAreas.map( area => {
+                                    return (
+                                        <tr>
+                                            <td>{area.id}</td>
+                                            <td>{area.name}</td>
+                                            <td>{area.beskrivelse}</td>
+                                            <td>{area.rangering}</td>
+                                            <td></td>
+                                        </tr>
+                                    )
+                                })}
 
-                        </tbody>
-                    </table>
-                </div>
-            </AreasContainer>
-
+                            </tbody>
+                        </table>
+                    </div>
+                </AreasContainer>
         </AdminContainer>
-    )
+
+        )
+
 }
 
-export default StatusOverview
+export default AdminDashboard
