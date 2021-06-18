@@ -72,6 +72,7 @@ a {
 .tabell th .skjemaelement,
 .tabell .tabell__td .skjemaelement,
 .tabell .tabell__th .skjemaelement {
+    padding-bottom:0 !important ;
   margin: 0;
 }
 .tabell td .skjemaelement__label,

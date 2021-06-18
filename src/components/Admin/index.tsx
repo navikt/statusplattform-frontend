@@ -16,6 +16,7 @@ const AdminContainer = styled.div`
     max-width: 1080px;
     width: 100%;
     padding: 0;
+    margin-top:2%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -80,7 +81,7 @@ const AdminDashboard = () => {
                             <tbody>
                                 {adminAreas.map( area => {
                                     return (
-                                        <tr>
+                                        <tr key={area.id}>
                                             <td>{area.id}</td>
                                             <td>{area.name}</td>
                                             <td>{area.beskrivelse}</td>
@@ -89,6 +90,22 @@ const AdminDashboard = () => {
                                         </tr>
                                     )
                                 })}
+
+                                <tr key="input">
+                                    <td>
+                                        <Input  defaultValue="" />
+                                    </td>
+                                    <td>
+                                        <Input  defaultValue="" />
+                                    </td>
+                                    <td>
+                                        <Input defaultValue="" />
+                                    </td>
+                                    <td>
+                                        <Input  defaultValue="" />
+                                    </td>
+                                    <td><Hovedknapp>Legg til</Hovedknapp></td>
+                                </tr>
 
                             </tbody>
                         </table>
