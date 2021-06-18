@@ -6,7 +6,8 @@ import { useEffect, useState } from "react";
 import NavInfoCircle from 'components/NavInfoCircle'
 import MaintenanceScheduling from 'components/MaintenanceScheduling'
 import { Calender } from '@navikt/ds-icons';
-import { Label, Input } from 'nav-frontend-skjema';
+        import { Bag, Folder, PensionBag, HealthCase, ErrorFilled, WarningFilled, Employer, Information, People, Family, Service, Globe } from '@navikt/ds-icons'
+import { Label, Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { countHealthyServices, countServicesInAreas, mapStatusAndIncidentsToArray } from 'utils/servicesOperations';
@@ -24,6 +25,17 @@ const AdminContainer = styled.div`
         padding: 0 3rem;
     }
 `;
+
+const IconContainer = styled.section`
+        color: var(--navBla);
+        font-size: 2rem;
+`;
+
+const SelectCustomized = styled(Select)`
+
+`;
+
+
 
 const AreasContainer = styled.div`
     border-radius: 20px;
@@ -44,6 +56,10 @@ const AreasContainer = styled.div`
         margin: 0 0 .5rem;
     }
 `;
+
+const getBag = () => {
+        return <IconContainer><Bag /></IconContainer>
+        }
 
 
 
@@ -75,6 +91,7 @@ const AdminDashboard = () => {
                                     <th>Navn</th>
                                     <th>Beskrivelse</th>
                                     <th>Rangering</th>
+                                    <th>Ikon</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -86,6 +103,7 @@ const AdminDashboard = () => {
                                             <td>{area.name}</td>
                                             <td>{area.beskrivelse}</td>
                                             <td>{area.rangering}</td>
+                                            <td><IconContainer><Folder/></IconContainer></td>
                                             <td></td>
                                         </tr>
                                     )
@@ -103,6 +121,15 @@ const AdminDashboard = () => {
                                     </td>
                                     <td>
                                         <Input  defaultValue="" />
+                                    </td>
+                                    <td>
+                                        <SelectCustomized >
+                                            <option value="">  a</option>
+                                            <option value="">  b</option>
+                                            <option value=""> c</option>
+                                        </SelectCustomized>
+
+
                                     </td>
                                     <td><Hovedknapp>Legg til</Hovedknapp></td>
                                 </tr>
