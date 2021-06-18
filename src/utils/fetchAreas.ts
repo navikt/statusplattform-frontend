@@ -10,7 +10,7 @@ export const fetchData = async (): Promise<string[]> => {
         response = await fetch("http://localhost:3001/rest/adminAreas");
     }
     else {
-        response = await fetch("https://portalserver.labs.nais.io/rest/getAdminAreas");
+        response = await fetch("https://portalserver.labs.nais.io/rest/adminAreas");
     }
 
     if (response.ok) {
