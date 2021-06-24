@@ -9,8 +9,11 @@ import { Calender } from '@navikt/ds-icons';
 import { Label, Input } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
+import NavFrontendSpinner from "nav-frontend-spinner";
 import { countHealthyServices, countServicesInAreas, mapStatusAndIncidentsToArray } from 'utils/servicesOperations';
 import { fetchData } from 'utils/fetchAreas'
+import { postAdminAreas } from 'utils/postAreas'
+
 
 const AdminContainer = styled.div`
     max-width: 1080px;
@@ -45,7 +48,10 @@ const AreasContainer = styled.div`
     }
 `;
 
-
+const SpinnerCentered = styled.div`
+    position: absolute;
+    top: 40%;
+`
 
 
 
@@ -55,12 +61,21 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         (async function () {
+            setIsLoading(true)
             const adminAreas = await fetchData()
             const parsedAreas = [...adminAreas]
             setAdminAreas(parsedAreas)
             setIsLoading(false)
         })()
     }, [])
+
+    if (isLoading) {
+        return (
+            <SpinnerCentered>
+                <NavFrontendSpinner type="XXL" />
+            </SpinnerCentered>
+        ) 
+    }
 
         return (
         <AdminContainer>
@@ -104,7 +119,7 @@ const AdminDashboard = () => {
                                     <td>
                                         <Input  defaultValue="" />
                                     </td>
-                                    <td><Hovedknapp>Legg til</Hovedknapp></td>
+                                    <td><Hovedknapp onClick={postAdminAreas}>Legg til</Hovedknapp></td>
                                 </tr>
 
                             </tbody>

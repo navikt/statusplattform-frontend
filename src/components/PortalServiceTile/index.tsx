@@ -21,7 +21,6 @@ const PanelCustomized = styled(Panel)`
             height: 1.778rem;
         }
         h2 {
-            word-break: break-all;
             font-size: 1.25rem;
         }
     }
