@@ -9,8 +9,6 @@ import { Undertittel } from "nav-frontend-typografi";
 
 const PanelCustomized = styled(Panel)`
     color: var(--navBla);
-    background-color: var(--navGraBakgrunn);
-  
 
     h2 svg:first-child {
         display: none;
@@ -41,22 +39,28 @@ const PanelCustomized = styled(Panel)`
     `}
 
 `;
+    /* background-color: var(--navGraBakgrunn); */
 
 const UndertittelCustomized = styled(Undertittel)`
-    display: flex;
-    align-items: center;
-    flex-direction: row;
     border-radius: 10px;
     background-color:white;
-    padding: 1.4rem;
+    height: 100%;
+    /* padding: 1.4rem; */
+    display: flex;
+    /* align-items: center; */
+    flex-direction: row;
+    span:first-child{
+        top: 50%;
+        align-items: center;
+    }
     svg {
         margin-right: 10px;
+        top: 50%;
+        align-items: center;
     }
 `;
 
 const ServicesList = styled.ul`
-    padding: 10%;
-    margin-top: -10%;
     margin-left:0;
     border-radius:0 0 10px 10px;
     color:black;
@@ -171,22 +175,22 @@ export interface PortalServiceTileProps {
 
 
 
-export const PortalServiceTile = ({area }: PortalServiceTileProps) => {
-    const [expanded, setExpanded] = useState(false)
+export const PortalServiceTile = ({area, expanded}: PortalServiceTileProps) => {
+    const [isExpanded, setExpanded] = useState(expanded)
     const handleExpand = () => {
-        setExpanded(!expanded);
+        setExpanded(!isExpanded);
    
     }
     return (
-        <PanelCustomized expanded={expanded} onClick={() => handleExpand()}>
+        <PanelCustomized onClick={() => handleExpand()}>
             <div>
                 
                 <UndertittelCustomized>
-                    <section>{ handleAndSetStatusIcon(area.status)}</section>
-                    <section> {handleAndSetNavIcon(area.name)}</section>
+                    <section>{handleAndSetStatusIcon(area.status)}</section>
+                    <section>{handleAndSetNavIcon(area.name)}</section>
                     <section>{area.name}</section>
                 </UndertittelCustomized> 
-                {expanded &&
+                {isExpanded &&
                 <ServicesList>
                     {area.services.map(service => (
                         <li key={service.name}>

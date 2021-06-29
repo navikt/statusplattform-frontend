@@ -90,7 +90,7 @@ const Dashboard = () => {
                 <PortalServiceTileContainer>
                     {areas.map(area => {
                         return (
-                            <PortalServiceTile key={area.name} area={area} expanded={true}/>
+                            <PortalServiceTile key={area.name} area={area} expanded={false}/>
                             
                         )
                     })}
