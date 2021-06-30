@@ -1,6 +1,7 @@
 import styled from 'styled-components'
 import { useState } from "react";
 
+import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed } from 'styles/trafficLights'
 
 import { Bag, Folder, PensionBag, HealthCase, ErrorFilled, WarningFilled, Employer, Information, People, Family, Service, Globe } from '@navikt/ds-icons'
 import Panel from 'nav-frontend-paneler';
@@ -9,6 +10,7 @@ import { Undertittel } from "nav-frontend-typografi";
 
 const PanelCustomized = styled(Panel)`
     color: var(--navBla);
+    /* background-color: var(--navGraBakgrunn); */
 
     h2 svg:first-child {
         display: none;
@@ -39,15 +41,12 @@ const PanelCustomized = styled(Panel)`
     `}
 
 `;
-    /* background-color: var(--navGraBakgrunn); */
 
 const UndertittelCustomized = styled(Undertittel)`
     border-radius: 10px;
     background-color:white;
     height: 100%;
-    /* padding: 1.4rem; */
     display: flex;
-    /* align-items: center; */
     flex-direction: row;
     span:first-child{
         top: 50%;
@@ -85,42 +84,6 @@ const ServicesList = styled.ul`
     }
 `;
 
-//Element styles
-const SuccessCircleGreen = styled.span`
-    margin-right: 10px;
-    height: 16px;
-    width: 16px;
-    background-color: var(--navGronn);
-    border-radius: 50%;
-    display: inline-block;
-`;
-
-const WarningCircleOrange = styled.span`
-    margin-right: 10px;
-    height: 16px;
-    width: 16px;
-    background-color: var(--navOransje);
-    border-radius: 50%;
-    display: inline-block;
-`;
-
-const ErrorCircleRed = styled.span`
-    margin-right: 10px;
-    height: 16px;
-    width: 16px;
-    background-color: var(--redError);
-    border-radius: 50%;
-    display: inline-block;
-`;
-
-// Remove if decided not to use nav-icons with exclamation-mark ++
-const ErrorFilledColored = styled(ErrorFilled)`
-    color: var(--redError);
-`;
-// Remove if decided not to use nav-icons with exclamation-mark ++
-const WarningFilledColored = styled(WarningFilled)`
-    color: var(--navOransje);
-`;
 
 const handleAndSetNavIcon = (areaName: string) => {
     if (areaName == "Arbeid") {
@@ -191,13 +154,13 @@ export const PortalServiceTile = ({area, expanded}: PortalServiceTileProps) => {
                     <section>{area.name}</section>
                 </UndertittelCustomized> 
                 {isExpanded &&
-                <ServicesList>
-                    {area.services.map(service => (
-                        <li key={service.name}>
-                            <section> {handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
-                        </li>
-                    ))}
-                </ServicesList>
+                    <ServicesList>
+                        {area.services.map(service => (
+                            <li key={service.name}>
+                                <section> {handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
+                            </li>
+                        ))}
+                    </ServicesList>
                 }
 
             </div>
