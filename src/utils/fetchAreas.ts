@@ -6,13 +6,13 @@ export class ResponseError extends Error {
 
 export const fetchData = async (): Promise<string[]> => {
 
-    let endPath = "/rest/adminAreas"
+    let endPath = "/rest/Areas"
     let response;
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch("http://localhost:3001"+endPath);
+        response = await fetch("http://localhost:3001" + endPath);
     }
     else {
-        response = await fetch("https://portalserver.labs.nais.io"+ endPath);
+        response = await fetch("https://portalserver.labs.nais.io" + endPath);
     }
 
     if (response.ok) {
