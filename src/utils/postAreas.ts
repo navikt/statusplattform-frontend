@@ -4,17 +4,19 @@ export class ResponseError extends Error {
     }
 }
 
-export const postAdminAreas = async (adminArea): Promise<string[]> =>{
+export const postAdminAreas = async (adminArea): Promise<Object[]> =>{
     let response;
+    let endPath = "/rest/Areas"
+
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch("http://localhost:3001/rest/adminAreas",
+        response = await fetch("http://localhost:3001" + endPath,
         {
             method: "POST",
             body: JSON.stringify({
-                Id: "2",
-                name: "adminArea.name",
-                beskrivelse: "adminArea.beskrivelse",
-                rangering: 10
+                Id: adminArea.Id,
+                name: adminArea.name,
+                beskrivelse: adminArea.beskrivelse,
+                rangering: adminArea.rangering
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -25,14 +27,14 @@ export const postAdminAreas = async (adminArea): Promise<string[]> =>{
         });
     }
     else {
-        response = await fetch("https://portalserver.labs.nais.io/rest/adminAreas",
+        response = await fetch("https://portalserver.labs.nais.io" + endPath,
         {
             method: "POST",
             body: JSON.stringify({
-                id: "adminArea.id",
-                name: "adminArea.name",
-                beskrivelse: "adminArea.beskrivelse",
-                rangering: 10
+                Id: adminArea.id,
+                name: adminArea.name,
+                beskrivelse: adminArea.beskrivelse,
+                rangering: adminArea.rangering
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"

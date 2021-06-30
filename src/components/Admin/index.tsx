@@ -78,6 +78,12 @@ const getBag = () => {
 const AdminDashboard = () => {
     const [adminAreas, setAdminAreas] = useState([])
     const [isLoading, setIsLoading] = useState(true)
+    const [newAdminArea, updateNewAdminArea] = useState({
+        Id: "",
+        name: "",
+        beskrivelse: "",
+        rangering: 0
+    })
 
     useEffect(() => {
         (async function () {
@@ -102,8 +108,15 @@ const AdminDashboard = () => {
 		<Bag />, <Folder />, <BagFilled />
 	];
 	
-	const defaultOption = 'Ikon...';
+	const defaultOption = 'Ikon...'
 
+    const handleAreaDataChange = (field: keyof typeof newAdminArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
+        const newData = {
+            ...newAdminArea,
+            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
+        updateNewAdminArea(newData)
+    }
+    const { Id, name, beskrivelse, rangering} = newAdminArea
 	return (
         <AdminContainer>
 
@@ -139,16 +152,16 @@ const AdminDashboard = () => {
 
                                 <tr key="input">
                                     <td>
-                                        <Input defaultValue="" />
+                                        <Input type="text" value={Id} onChange={handleAreaDataChange("Id")}/>
                                     </td>
                                     <td>
-                                        <Input defaultValue="" />
+                                        <Input type="text" value={name} onChange={handleAreaDataChange("name")} />
                                     </td>
                                     <td>
-                                        <Input defaultValue="" />
+                                        <Input type="text" value={beskrivelse} onChange={handleAreaDataChange("beskrivelse")}/>
                                     </td>
                                     <td>
-                                        <Input defaultValue="" />
+                                        <Input type="number" value={rangering} onChange={handleAreaDataChange("rangering")}/>
                                     </td>
                                     <td>
                                     	<Dropdown
@@ -165,7 +178,7 @@ const AdminDashboard = () => {
                                             <option value="brukergruppe">Samarbeidspartner</option>
                                         </SelectCustomized>
                                     </td>
-                                    <td><Hovedknapp onClick={postAdminAreas}>Legg til</Hovedknapp></td>
+                                    <td><Hovedknapp onClick={() => postAdminAreas(newAdminArea)}>Legg til</Hovedknapp></td>
                                 </tr>
 
                             </tbody>
