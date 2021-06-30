@@ -7,12 +7,11 @@ export class ResponseError extends Error {
 export const fetchData = async (): Promise<string[]> => {
     let response;
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch("http://localhost:3001/rest/testAreas");
+        response = await fetch("http://localhost:3001/rest/Tiles");
     }
     else {
-        response = await fetch("https://portalserver.labs.nais.io/rest/testAreas");
+        response = await fetch("https://portalserver.labs.nais.io/rest/Tiles");
     }
-
     if (response.ok) {
         return response.json()
     }

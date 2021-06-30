@@ -45,7 +45,7 @@ const PortalServiceTileContainer = styled.div`
 `;
 
 const TilesDescriptionWrapper = styled.div`
-    padding: 3rem 0;
+    padding-top: 3rem;
     width: 100%;
     display: flex;
     justify-content: center;
@@ -94,6 +94,7 @@ const Dashboard = () => {
             </SpinnerCentered>
         ) 
     }
+
     if(!isLoading && areas){
         return (
             <DigitalServicesContainer>
@@ -101,7 +102,7 @@ const Dashboard = () => {
                 <PortalServiceTileContainer>
                     {areas.map(area => {
                         return (
-                            <PortalServiceTile key={area.name} area={area} expanded={false}/>
+                            <PortalServiceTile key={area.area.name} area={area} expanded={false}/>
                             
                         )
                     })}
