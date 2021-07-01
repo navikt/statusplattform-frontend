@@ -17,7 +17,8 @@ const DropdownContainer = styled(Dropdown)`
 export const IconDropDown = () => {
     return (
         <DropdownContainer>
-            <Dropdown options={options} onChange={getBag()} value={defaultOption} placeholder="Select an option" />
+            <Dropdown options={options}  value={defaultOption} placeholder="Select an option" />
+            {/* onChange={getBag()} */}
 
         </DropdownContainer>
     )
