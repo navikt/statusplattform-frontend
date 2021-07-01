@@ -4,7 +4,8 @@ import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
 
 const options = [
-    <Bag />, 'two', 'three'
+    // <Bag />, 'two', 'three'
+    'Bag', 'Folder', 'Pengebag'
   ];
   const defaultOption = options[0];
 
