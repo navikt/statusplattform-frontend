@@ -13,6 +13,7 @@ import { Bag, Folder, PensionBag, HealthCase, ErrorFilled, WarningFilled, Employ
 import { Label, Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import NavFrontendSpinner from "nav-frontend-spinner";
+import { Close } from '@navikt/ds-icons'
 
 // import NavInfoCircle from 'components/NavInfoCircle'
 // import MaintenanceScheduling from 'components/MaintenanceScheduling'
@@ -20,6 +21,7 @@ import NavFrontendSpinner from "nav-frontend-spinner";
 // import { countHealthyServices, countServicesInAreas, mapStatusAndIncidentsToArray } from 'utils/servicesOperations';
 import { fetchData } from 'utils/fetchAreas'
 import { postAdminAreas } from 'utils/postAreas'
+import { deleteArea } from 'utils/deleteArea'
 
 
 
@@ -69,6 +71,15 @@ const SpinnerCentered = styled.div`
     position: absolute;
     top: 40%;
 `
+
+const CloseCustomized = styled(Close)`
+    color: red;
+    :hover {
+        color: grey;
+        border: 1px solid;
+    }
+`
+
 const getBag = () => {
     return <IconContainer><Bag /></IconContainer>
 }
@@ -105,17 +116,38 @@ const AdminDashboard = () => {
 
 
 	const options = [
-		<Bag />, <Folder />, <BagFilled />
+		// <Bag />, <Folder />, <BagFilled />
+        'Bag', 'Folder', 'Pengebag'
 	];
 	
 	const defaultOption = 'Ikon...'
 
     const handleAreaDataChange = (field: keyof typeof newAdminArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const newData = {
+        const newArea = {
             ...newAdminArea,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
-        updateNewAdminArea(newData)
+        updateNewAdminArea(newArea)
     }
+
+    const handlePostAdminArea = (area) => {
+        if(postAdminAreas(newAdminArea)) {
+            adminAreas.push(area)
+            setAdminAreas(adminAreas)
+            return
+        }
+        console.log("Failed to post")
+    }
+
+    const handleDeleteArea = (area) => {
+        if(deleteArea(area)) {
+
+            console.log("deleted")
+            setAdminAreas(adminAreas.splice(adminAreas.indexOf(area), 1))
+            return
+        }
+        console.log("delete failed")
+    }
+
     const { Id, name, beskrivelse, rangering} = newAdminArea
 	return (
         <AdminContainer>
@@ -145,6 +177,7 @@ const AdminDashboard = () => {
                                             <td>{area.rangering}</td>
                                              <td>Privatperson</td>
                                             <td><IconContainer><Folder/></IconContainer></td>
+                                            <td><CloseCustomized onClick={() => handleDeleteArea(area)}/></td>
                                             <td></td>
                                         </tr>
                                     )
@@ -178,7 +211,7 @@ const AdminDashboard = () => {
                                             <option value="brukergruppe">Samarbeidspartner</option>
                                         </SelectCustomized>
                                     </td>
-                                    <td><Hovedknapp onClick={() => postAdminAreas(newAdminArea)}>Legg til</Hovedknapp></td>
+                                    <td><Hovedknapp onClick={() => handlePostAdminArea(newAdminArea)}>Legg til</Hovedknapp></td>
                                 </tr>
 
                             </tbody>
