@@ -222,9 +222,8 @@ const AdminDashboard = () => {
                                             <option value="brukergruppe">Samarbeidspartner</option>
                                         </SelectCustomized>
                                     </td>
-                                    <td><Hovedknapp  onClick={() => handlePostAdminArea(newAdminArea)}>Legg til</Hovedknapp></td>
+                                    <td><Hovedknapp disabled={!id || !name || !beskrivelse || !rangering} onClick={() => handlePostAdminArea(newAdminArea)}>Legg til</Hovedknapp></td>
                                 </tr>
-                                {/* disabled={!id || !name || !beskrivelse || !rangering} */}
 
                             </tbody>
                         </table>
