@@ -77,6 +77,7 @@ const CloseCustomized = styled(Close)`
     :hover {
         color: grey;
         border: 1px solid;
+        cursor: pointer;
     }
 `
 
@@ -177,7 +178,7 @@ const AdminDashboard = () => {
                                             <td>{area.rangering}</td>
                                              <td>Privatperson</td>
                                             <td><IconContainer><Folder/></IconContainer></td>
-                                            <td><CloseCustomized onClick={() => handleDeleteArea(area)}/></td>
+                                            <td><CloseCustomized onClick={() => handleDeleteArea(area)} /></td>
                                             <td></td>
                                         </tr>
                                     )
@@ -211,7 +212,7 @@ const AdminDashboard = () => {
                                             <option value="brukergruppe">Samarbeidspartner</option>
                                         </SelectCustomized>
                                     </td>
-                                    <td><Hovedknapp onClick={() => handlePostAdminArea(newAdminArea)}>Legg til</Hovedknapp></td>
+                                    <td><Hovedknapp disabled={!Id || !name || !beskrivelse || !rangering} onClick={() => handlePostAdminArea(newAdminArea)}>Legg til</Hovedknapp></td>
                                 </tr>
 
                             </tbody>
