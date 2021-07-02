@@ -10,7 +10,9 @@ import { Undertittel } from "nav-frontend-typografi";
 
 const PanelCustomized = styled(Panel)`
     color: var(--navBla);
-    /* background-color: var(--navGraBakgrunn); */
+    width: 250px;
+    margin: 20px;
+    height: 100%;
 
     h2 svg:first-child {
         display: none;
@@ -30,7 +32,7 @@ const PanelCustomized = styled(Panel)`
         }
     }
     :hover {
-        section {
+        span {
             text-decoration: underline;
         }
         -webkit-box-shadow:0px 1px 0 black;
@@ -143,18 +145,18 @@ export interface PortalServiceTileProps {
 
 export const PortalServiceTile = ({area, expanded}: PortalServiceTileProps) => {
     const [isExpanded, setExpanded] = useState(expanded)
-    const handleExpand = () => {
-        setExpanded(!isExpanded);
-   
+    const toggleExpanded = () => {
+        setExpanded(!isExpanded)
     }
+    console.log(isExpanded)
     return (
-        <PanelCustomized onClick={() => handleExpand()}>
+        <PanelCustomized onClick={() => toggleExpanded()}>
             <div>
                 
                 <UndertittelCustomized>
                     <section>{handleAndSetStatusIcon(area.status)}</section>
                     <section>{handleAndSetNavIcon(area.area.name)}</section>
-                    <section>{area.area.name}</section>
+                    <span>{area.area.name}</span>
                 </UndertittelCustomized> 
                 {isExpanded &&
                     <ServicesList>

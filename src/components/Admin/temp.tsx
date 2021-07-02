@@ -96,7 +96,7 @@ import Lenke from 'nav-frontend-lenker';
                 {adminAreas.map( area => {
                 return (
                 <tr>
-                    <td>area.Id</td>
+                    <td>area.id</td>
                     <td>area.name</td>
                     <td>area.beskrivelse</td>
                     <td>area.rangering</td>

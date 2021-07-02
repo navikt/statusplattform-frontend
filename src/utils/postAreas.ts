@@ -13,7 +13,7 @@ export const postAdminAreas = async (adminArea): Promise<Object[]> =>{
         {
             method: "POST",
             body: JSON.stringify({
-                Id: adminArea.Id,
+                id: adminArea.id,
                 name: adminArea.name,
                 beskrivelse: adminArea.beskrivelse,
                 rangering: adminArea.rangering
@@ -31,7 +31,7 @@ export const postAdminAreas = async (adminArea): Promise<Object[]> =>{
         {
             method: "POST",
             body: JSON.stringify({
-                Id: adminArea.id,
+                id: adminArea.id,
                 name: adminArea.name,
                 beskrivelse: adminArea.beskrivelse,
                 rangering: adminArea.rangering

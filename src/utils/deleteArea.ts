@@ -13,7 +13,7 @@ export const deleteArea = async (adminArea): Promise<Object[]> =>{
         {
             method: "DELETE",
             body: JSON.stringify({
-                Id: adminArea.id,
+                id: adminArea.id,
                 name: adminArea.name,
                 beskrivelse: adminArea.beskrivelse,
                 rangering: adminArea.rangering
@@ -31,7 +31,7 @@ export const deleteArea = async (adminArea): Promise<Object[]> =>{
         {
             method: "DELETE",
             body: JSON.stringify({
-                Id: adminArea.id,
+                id: adminArea.id,
                 name: adminArea.name,
                 beskrivelse: adminArea.beskrivelse,
                 rangering: adminArea.rangering

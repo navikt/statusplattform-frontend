@@ -24,23 +24,20 @@ const DigitalServicesContainer = styled.div`
 const PortalServiceTileContainer = styled.div`
     width: 100%;
     flex: 1;
-    display: grid;
+    display: flex;
     justify-content: center;
-    grid-template-columns: repeat(1, 1fr);
-    grid-auto-rows: auto;
-    //grid-template-rows: 1fr 1fr 1fr ;
-    gap: 15px;
+    align-items: space-between;
     padding-top: 30px;
     a {
         padding: 0;
         margin: 0;
     }
     @media (min-width: 468px){
-        grid-template-columns: repeat(2, 1fr);
+        /* grid-template-columns: repeat(2, 1fr); */
     }
     @media (min-width: 768px) {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, 250px);
+        /* display: grid;
+        grid-template-columns: repeat(auto-fit, 250px); */
     }
 `;
 

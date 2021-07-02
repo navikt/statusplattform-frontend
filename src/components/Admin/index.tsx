@@ -91,7 +91,7 @@ const AdminDashboard = () => {
     const [adminAreas, setAdminAreas] = useState([])
     const [isLoading, setIsLoading] = useState(true)
     const [newAdminArea, updateNewAdminArea] = useState({
-        Id: "",
+        id: "",
         name: "",
         beskrivelse: "",
         rangering: 0
@@ -130,26 +130,36 @@ const AdminDashboard = () => {
         updateNewAdminArea(newArea)
     }
 
-    const handlePostAdminArea = (area) => {
-        if(postAdminAreas(newAdminArea)) {
-            adminAreas.push(area)
-            setAdminAreas(adminAreas)
+
+    const handlePostAdminArea = (areaToAdd) => {
+        if(adminAreas.filter(area => area.id = areaToAdd.id)) {
+            console.log(areaToAdd.id)
+            alert("ID fins allerede. Denne må være unik")
             return
         }
-        console.log("Failed to post")
-    }
-
-    const handleDeleteArea = (area) => {
-        if(deleteArea(area)) {
-
-            console.log("deleted")
-            setAdminAreas(adminAreas.splice(adminAreas.indexOf(area), 1))
+        if(postAdminAreas(areaToAdd)) {
+            const newAreas = [...adminAreas]
+            newAreas.push(areaToAdd)
+            setAdminAreas(newAreas)
             return
         }
-        console.log("delete failed")
+        //TODO bedre error-visning trengs
+        alert("Område ble ikke lagt til")
     }
 
-    const { Id, name, beskrivelse, rangering} = newAdminArea
+    const handleDeleteArea = (areaToDelete) => {
+        if(deleteArea(areaToDelete)) {
+            const newAreas = adminAreas.filter(currentArea => 
+                currentArea != areaToDelete
+            )
+            setAdminAreas(newAreas)
+            return
+        }
+        //TODO bedre error-visning trengs
+        alert("Område ble ikke slettet")
+    }
+
+    const { id, name, beskrivelse, rangering} = newAdminArea
 	return (
         <AdminContainer>
 
@@ -176,7 +186,7 @@ const AdminDashboard = () => {
                                             <td>{area.name}</td>
                                             <td>{area.beskrivelse}</td>
                                             <td>{area.rangering}</td>
-                                             <td>Privatperson</td>
+                                            <td>Privatperson</td>
                                             <td><IconContainer><Folder/></IconContainer></td>
                                             <td><CloseCustomized onClick={() => handleDeleteArea(area)} /></td>
                                             <td></td>
@@ -186,16 +196,16 @@ const AdminDashboard = () => {
 
                                 <tr key="input">
                                     <td>
-                                        <Input type="text" value={Id} onChange={handleAreaDataChange("Id")}/>
+                                        <Input type="text" value={id} onChange={handleAreaDataChange("id")} placeholder="ID"/>
                                     </td>
                                     <td>
-                                        <Input type="text" value={name} onChange={handleAreaDataChange("name")} />
+                                        <Input type="text" value={name} onChange={handleAreaDataChange("name")} placeholder="Navn"/>
                                     </td>
                                     <td>
-                                        <Input type="text" value={beskrivelse} onChange={handleAreaDataChange("beskrivelse")}/>
+                                        <Input type="text" value={beskrivelse} onChange={handleAreaDataChange("beskrivelse")} placeholder="Beskrivelse"/>
                                     </td>
                                     <td>
-                                        <Input type="number" value={rangering} onChange={handleAreaDataChange("rangering")}/>
+                                        <Input type="number" value={rangering} onChange={handleAreaDataChange("rangering")} />
                                     </td>
                                     <td>
                                     	<Dropdown
@@ -212,8 +222,9 @@ const AdminDashboard = () => {
                                             <option value="brukergruppe">Samarbeidspartner</option>
                                         </SelectCustomized>
                                     </td>
-                                    <td><Hovedknapp disabled={!Id || !name || !beskrivelse || !rangering} onClick={() => handlePostAdminArea(newAdminArea)}>Legg til</Hovedknapp></td>
+                                    <td><Hovedknapp  onClick={() => handlePostAdminArea(newAdminArea)}>Legg til</Hovedknapp></td>
                                 </tr>
+                                {/* disabled={!id || !name || !beskrivelse || !rangering} */}
 
                             </tbody>
                         </table>
