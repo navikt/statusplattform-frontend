@@ -24,21 +24,16 @@ const DigitalServicesContainer = styled.div`
 const PortalServiceTileContainer = styled.div`
     width: 100%;
     flex: 1;
+    padding-top: 30px;
     display: flex;
     justify-content: center;
     align-items: space-between;
-    padding-top: 30px;
+    flex-flow: row wrap;
     a {
         padding: 0;
         margin: 0;
     }
-    @media (min-width: 468px){
-        /* grid-template-columns: repeat(2, 1fr); */
-    }
-    @media (min-width: 768px) {
-        /* display: grid;
-        grid-template-columns: repeat(auto-fit, 250px); */
-    }
+
 `;
 
 const TilesDescriptionWrapper = styled.div`
