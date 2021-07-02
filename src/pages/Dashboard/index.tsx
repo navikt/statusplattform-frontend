@@ -73,7 +73,7 @@ const Dashboard = () => {
         })()
     }, [])
 
-    console.log(areas)
+
 
     if (!areas) {
         return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>

@@ -148,7 +148,7 @@ export const PortalServiceTile = ({area, expanded}: PortalServiceTileProps) => {
     const toggleExpanded = () => {
         setExpanded(!isExpanded)
     }
-    console.log(isExpanded)
+
     return (
         <PanelCustomized onClick={() => toggleExpanded()}>
             <div>
