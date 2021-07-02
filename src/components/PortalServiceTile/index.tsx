@@ -30,9 +30,12 @@ const PanelCustomized = styled(Panel)`
         }
     }
     :hover {
-        p {
+        section {
             text-decoration: underline;
         }
+        -webkit-box-shadow:0px 1px 0 black;
+        -moz-box-shadow:0px 1px 0 black;
+        box-shadow:0px 1px 0 black;
         cursor: pointer;
     }
     ${({ expanded }) => expanded && `
