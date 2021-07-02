@@ -132,9 +132,9 @@ const AdminDashboard = () => {
 
 
     const handlePostAdminArea = (areaToAdd) => {
-        if(adminAreas.filter(area => area.id = areaToAdd.id)) {
-            console.log(areaToAdd.id)
-            alert("ID fins allerede. Denne må være unik")
+        const newlist = adminAreas.filter(area => area.id === areaToAdd.id)
+        if(newlist.length > 0) {
+            alert("Denne IDen er allerede brukt. Velg en annen")
             return
         }
         if(postAdminAreas(areaToAdd)) {
