@@ -149,7 +149,7 @@ export const PortalServiceTile = ({area, expanded}: PortalServiceTileProps) => {
             <div>
                 
                 <UndertittelCustomized>
-                    <section>{handleAndSetStatusIcon(area.area.status)}</section>
+                    <section>{handleAndSetStatusIcon(area.status)}</section>
                     <section>{handleAndSetNavIcon(area.area.name)}</section>
                     <section>{area.area.name}</section>
                 </UndertittelCustomized> 
