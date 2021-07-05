@@ -10,7 +10,6 @@ import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst, } from "nav-frontend-typografi";
 
 const Nav = styled.div `
-	/* height: 3.75rem; */
 	height: 100%;
 	width: 100%;
 	margin: 0 auto;
@@ -20,7 +19,18 @@ const Nav = styled.div `
 	align-items: center;
 	> ul {
 		padding-left: 0;
-		margin: 0 auto;
+		width: 100%;
+		display: flex;
+		justify-content: center;
+		:first-child {
+			flex-direction: column;
+			align-items: flex-start;
+		}
+		@media(min-width: 400px) {
+			:first-child {
+				flex-direction: row;
+			}	
+		}
 	}
 	> ul > li {
 		display: inline-block;
@@ -42,7 +52,7 @@ const Nav = styled.div `
 
 const LinkWrapper = styled.div`
 	height: 100%;
-    margin: 0 1rem;
+    margin: 0 0.5rem;
     border-bottom: transparent 3px solid;
 	display: flex;
     align-items: center;
@@ -102,7 +112,7 @@ export default function Navbar() {
 	const router = useRouter()
 	const [subscribeModalHidden, setSubscribeModalBoolean] = React.useState(false)
 
-    const onClickHandler = () => {
+    const toggleSubscribeModal = () => {
         setSubscribeModalBoolean(!subscribeModalHidden)
     }
 
@@ -144,11 +154,11 @@ export default function Navbar() {
 				</li>
 			</ul>
 			<span>
-				<SubscribeButton mini onClick={onClickHandler}>Abonner</SubscribeButton>
+				<SubscribeButton mini onClick={toggleSubscribeModal}>Abonner</SubscribeButton>
 			</span>
 			{subscribeModalHidden && 
 				<SubscribeModalWrapper>
-					<SubscribeModal/>
+					<SubscribeModal toggleSubscribeModal={toggleSubscribeModal}/>
 				</SubscribeModalWrapper>
 			}
 		</Nav>

@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Telephone, Email, List } from '@navikt/ds-icons'
+import { Telephone, Email } from '@navikt/ds-icons'
 import { Input } from 'nav-frontend-skjema';
 import { Hovedknapp } from 'nav-frontend-knapper';
 import Lukknapp from 'nav-frontend-lukknapp';
@@ -15,6 +15,7 @@ const SubscribeModalContainer = styled.div`
     max-width: 250px;
     border-bottom-left-radius: 10px;
     border-bottom-right-radius: 10px;
+
     ul > li {
         list-style: none;
         border: solid rgba(0, 0, 0, 25%);
@@ -27,6 +28,8 @@ const SubscribeModalContainer = styled.div`
         padding: 0;
         margin: 0;
         border-bottom: 1px solid #ccc;
+        background-color: var(--navGra40);
+
         font-size: 1.5rem;
         color: white;
         display: flex;
@@ -35,7 +38,6 @@ const SubscribeModalContainer = styled.div`
 `
 
 const ListItemWrapper = styled.li`
-    background-color: var(--navGra40);
     height: 3rem;
     max-width: 6rem;
     //Use !important to override nav-Telephone and nav-Email styles
@@ -107,14 +109,23 @@ const subscribeSources: ISource[] = [
         id: SourceType.close,
         title: "Close",
         content: <CustomLukknapp />,
-        text: "Skal emitte en lukk-kommando. Ikke ferdig implementert"
     }
 ]
 
+interface ClickHandler {
+    toggleSubscribeModal()
+}
 
-const SubscribeModal: React.FC = () => {
+const SubscribeModal: React.FC<ClickHandler> = (props) => {
 
     const [currentActiveSource, setActiveSource] = React.useState<ISource>(subscribeSources[0])
+
+    const handleActiveSourceChange = (source:ISource) => {
+        setActiveSource(source)
+        if(source.id === SourceType.close) {
+            props.toggleSubscribeModal()
+        }
+    }
 
     const handleSubmit = (id, e) => {
         e.preventDefault()
@@ -128,7 +139,7 @@ const SubscribeModal: React.FC = () => {
             <ul>
                 {
                     subscribeSources.map((source) => (
-                        <ListItemWrapper key={source.id} id={source.id} onClick={(e) => setActiveSource(source)}>{source.content} </ListItemWrapper>
+                        <ListItemWrapper key={source.id} id={source.id} onClick={(e) => handleActiveSourceChange(source)}>{source.content} </ListItemWrapper>
                     ))
                 }
             </ul>

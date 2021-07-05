@@ -19,6 +19,7 @@ const PanelCustomized = styled(Panel)`
         h2 svg:first-child {
             width: 1.778rem;
             height: 1.778rem;
+            margin-left: 10px;
         }
         h2 {
             font-size: 1.25rem;

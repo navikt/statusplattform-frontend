@@ -1,8 +1,8 @@
 export interface ISource {
     id: SourceType,
     title: string
-    content?: React.ReactNode,
-    text: string,
+    content: React.ReactNode,
+    text?: string,
 }
 
 export enum SourceType {
