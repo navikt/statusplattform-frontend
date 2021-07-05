@@ -83,6 +83,8 @@ const ServicesList = styled.ul`
             align-items: center;
         }
         section:nth-child(2) {
+            margin-left: 10px;
+
             white-space: normal;
             word-wrap: break-word;
         }

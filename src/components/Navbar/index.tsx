@@ -16,6 +16,7 @@ const Nav = styled.div `
 	padding-top: 0.5rem;
     background-color: white;
 	display: flex;
+	flex-direction: column;
 	align-items: center;
 	> ul {
 		padding-left: 0;
@@ -44,6 +45,9 @@ const Nav = styled.div `
 		&active {
 			border-bottom: var(--navBla) 3px solid;
 		}
+	}
+	@media (min-width: 225px){
+		flex-direction: row;
 	}
 	@media (min-width: 500px){
 		margin-bottom: 50px;
