@@ -1,18 +1,20 @@
 import styled from 'styled-components'
-import React from 'react'
 
 import { Sidetittel } from 'nav-frontend-typografi'
-import { Knapp } from 'nav-frontend-knapper';
 
-import SubscribeModal from 'components/SubscribeModal'
+import TrafficLights from 'components/TrafficLights'
+
+
 
 const CustomHeader = styled.header`
     min-height: 106px;
     height: 100%;
+    padding-bottom: 0.5rem;
     background-color: white;
     border-bottom: 1px solid #c6c2bf;
     display: flex;
     flex-flow: column wrap;
+    align-items: center;
     img {
         max-width: 84px;
         :hover {
@@ -24,21 +26,24 @@ const CustomHeader = styled.header`
         font-size: 1.875rem;
         font-weight: 600;
     }
-    @media (min-width: 350px){
-        padding: 0 3rem;
+
+    @media (min-width: 650px) {
+        padding: 0 0 0 3rem;
         flex-flow: row nowrap;
         align-items: center;
         justify-content: flex-start;
         > span {
             padding-left: 20px;
         }
-        
     }
 `
 const SidetittelCustomized = styled(Sidetittel)`
-    width: 275px;
+    text-align: center;
     @media(min-width: 390px){
         width: 100%;
+    }
+    @media (min-width: 650px) {
+        text-align: start;
     }
 `
 const HeaderContent = styled.span`
@@ -51,35 +56,12 @@ const HeaderContent = styled.span`
         flex-direction: row;
     }
 `
-const SubscribeButton = styled(Knapp)`
-    border-radius: 30px;
-    height: 3rem;
-    transition: 0.4s;
-    :hover {
-        transition: 0.4s;
-        background-color: var(--navBla);
-        color: white;
-    }
-`
-const SubscribeModalWrapper = styled.div`
-    right: 0;
-    top: 170px;
-    position: absolute;
-    @media(min-width: 350px){
-        top: 118px;
-    }
-    @media(min-width: 450px){
-        top: 10%;
-    }
-`
+
+
 
 
 const Header = () => {
-    const [subscribeModalHidden, setSubscribeModalBoolean] = React.useState(false)
-
-    const onClickHandler = () => {
-        setSubscribeModalBoolean(!subscribeModalHidden)
-    }
+    
 
     return (
         <CustomHeader>
@@ -90,15 +72,9 @@ const Header = () => {
                 <SidetittelCustomized>
                     Status digitale tjenester
                 </SidetittelCustomized>
-                <span>
-                    <SubscribeButton mini onClick={onClickHandler}>Abonner</SubscribeButton>
-                </span>
-                {subscribeModalHidden && 
-                    <SubscribeModalWrapper>
-                        <SubscribeModal/>
-                    </SubscribeModalWrapper>
-                }
+            
             </HeaderContent>
+            <TrafficLights />
         </CustomHeader>
     )
 }

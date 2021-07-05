@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useState } from "react";
 
-import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed } from 'styles/trafficLights'
+import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed } from 'components/TrafficLights'
 
 import { Bag, Folder, PensionBag, HealthCase, ErrorFilled, WarningFilled, Employer, Information, People, Family, Service, Globe } from '@navikt/ds-icons'
 import Panel from 'nav-frontend-paneler';
@@ -10,13 +10,11 @@ import { Undertittel } from "nav-frontend-typografi";
 
 const PanelCustomized = styled(Panel)`
     color: var(--navBla);
-    width: 250px;
-    margin: 20px;
-    height: 100%;
+    width: 100%;
+    margin: 5px;
+    min-height: 90px;
+    
 
-    h2 svg:first-child {
-        display: none;
-    }
     > div {
         h2 svg:first-child {
             width: 1.778rem;
@@ -30,6 +28,12 @@ const PanelCustomized = styled(Panel)`
         h2 svg:first-child {
             display: block;
         }
+    }
+    @media (min-width: 500px) {
+        width: 250px;
+    }
+    @media (min-width: 700px) {
+        height: 100%;
     }
     :hover {
         span {

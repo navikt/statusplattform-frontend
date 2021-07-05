@@ -1,25 +1,21 @@
 import { useEffect, useState } from "react";
-import Link from "next/link";
 import styled from 'styled-components'
 
 import { PortalServiceTile } from 'components/PortalServiceTile'
 import StatusOverview from 'components/StatusOverview'
 import { fetchData } from 'utils/fetchServices'
-import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed } from 'styles/trafficLights'
 
-import { LenkepanelBase } from "nav-frontend-lenkepanel";
+// import { LenkepanelBase } from "nav-frontend-lenkepanel";
 import NavFrontendSpinner from "nav-frontend-spinner";
 
 
 const DigitalServicesContainer = styled.div`
     width: 100%;
     padding: 0;
+    padding-bottom: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
-    @media(min-width: 550px){
-        padding: 2rem 3rem;
-    }
 `;
 const PortalServiceTileContainer = styled.div`
     width: 100%;
@@ -36,15 +32,7 @@ const PortalServiceTileContainer = styled.div`
 
 `;
 
-const TilesDescriptionWrapper = styled.div`
-    padding-top: 3rem;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    span {
-        display: flex;
-    }
-`
+
 
 
 
@@ -99,13 +87,7 @@ const Dashboard = () => {
                         )
                     })}
                 </PortalServiceTileContainer>
-                <TilesDescriptionWrapper>
-                    <div>
-                        <span><ErrorCircleRed /> = Feil på tjenesten</span>
-                        <span><WarningCircleOrange /> = Redusert funksjonalitet</span>
-                        <span><SuccessCircleGreen /> = Fungerer normalt</span>
-                    </div>
-                </TilesDescriptionWrapper>
+                
             </DigitalServicesContainer>
         )
     }

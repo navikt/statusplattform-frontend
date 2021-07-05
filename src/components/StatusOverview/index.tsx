@@ -23,12 +23,15 @@ const StatusOverviewContainer = styled.div`
 const StatusBannerContainer = styled.div`
     border-radius: 20px;
     background-color: white;    
-    padding: 2rem 1rem;
+    padding: 1rem 0;
     width: 100%;
     display: flex;
     flex-direction: column;
     div:first-child {
         padding-bottom: 1rem;
+    }
+    @media (min-width: 200px) {
+        padding: 2rem 1rem;
     }
     @media (min-width: 45rem) {
         display: flex;

@@ -1,15 +1,20 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
-
 import styled from 'styled-components'
+import React from 'react'
+
+import SubscribeModal from 'components/SubscribeModal'
 
 import Lenke from 'nav-frontend-lenker';
+import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst, } from "nav-frontend-typografi";
 
 const Nav = styled.div `
-	height: 3.75rem;
+	/* height: 3.75rem; */
+	height: 100%;
 	width: 100%;
 	margin: 0 auto;
+	padding-top: 0.5rem;
     background-color: white;
 	display: flex;
 	align-items: center;
@@ -30,12 +35,8 @@ const Nav = styled.div `
 			border-bottom: var(--navBla) 3px solid;
 		}
 	}
-	@media (min-width: 250px){
-		height: 2.75rem;
+	@media (min-width: 500px){
 		margin-bottom: 50px;
-	}
-	@media (min-width: 450px){
-		margin-bottom: 0;
 	}
 `
 
@@ -69,6 +70,28 @@ const LenkeInner = styled.div`
 	}
 `;
 
+const SubscribeButton = styled(Knapp)`
+    border-radius: 30px;
+    height: 3rem;
+    transition: 0.4s;
+    :hover {
+        transition: 0.4s;
+        background-color: var(--navBla);
+        color: white;
+    }
+`
+const SubscribeModalWrapper = styled.div`
+    right: 0;
+    top: 180px;
+    position: absolute;
+    @media(min-width: 350px){
+        top: 160px;
+    }
+    @media(min-width: 450px){
+        top: 17.5%;
+    }
+`
+
 const NormalTekstCustomized = styled(Normaltekst)`
 	font-size: 1rem;
 	line-height: 1.375rem;
@@ -77,6 +100,11 @@ const NormalTekstCustomized = styled(Normaltekst)`
 
 export default function Navbar() {
 	const router = useRouter()
+	const [subscribeModalHidden, setSubscribeModalBoolean] = React.useState(false)
+
+    const onClickHandler = () => {
+        setSubscribeModalBoolean(!subscribeModalHidden)
+    }
 
 	return (
 		<Nav>
@@ -115,6 +143,14 @@ export default function Navbar() {
 					</LinkWrapper>
 				</li>
 			</ul>
+			<span>
+				<SubscribeButton mini onClick={onClickHandler}>Abonner</SubscribeButton>
+			</span>
+			{subscribeModalHidden && 
+				<SubscribeModalWrapper>
+					<SubscribeModal/>
+				</SubscribeModalWrapper>
+			}
 		</Nav>
 	)
 }
