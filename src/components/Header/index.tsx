@@ -17,9 +17,17 @@ const CustomHeader = styled.header`
     align-items: center;
     img {
         max-width: 84px;
+        max-height: 55px;
         :hover {
             transform: scale(1.05)
         }
+    }
+    a {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 84px;
+        max-height: 55px;
     }
     
     > h1 {
