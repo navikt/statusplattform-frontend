@@ -13,7 +13,7 @@ const Nav = styled.div `
 	height: 100%;
 	width: 100%;
 	margin: 0 auto;
-	padding-top: 0.5rem;
+	padding: 0.2rem 0;
     background-color: white;
 	display: flex;
 	flex-direction: column;
