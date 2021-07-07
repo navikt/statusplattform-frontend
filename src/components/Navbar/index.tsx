@@ -96,13 +96,16 @@ const SubscribeButton = styled(Knapp)`
 `
 const SubscribeModalWrapper = styled.div`
     right: 0;
-    top: 180px;
+    top: 325px;
     position: absolute;
-    @media(min-width: 350px){
-        top: 160px;
+	@media(min-width: 305px){
+        top: 300px;
     }
-    @media(min-width: 450px){
-        top: 17.5%;
+    @media(min-width: 400px){
+        top: 275px;
+    }
+    @media(min-width: 650px){
+        top: 170px;
     }
 `
 
