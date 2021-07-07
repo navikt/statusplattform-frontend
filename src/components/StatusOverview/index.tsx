@@ -158,7 +158,7 @@ const StatusOverview = (props: NavAreaServicesList) => {
                     </StatusSummary>
                     <Undertekst>Sist oppdatert: Ikke implementert</Undertekst>
                 </div>
-                <Link href="/Incidents">
+                <Link href="/IncidentsPage">
                     <LenkeCustomized>
                         <span>Mer om hendelser</span>
                     </LenkeCustomized>

@@ -1,5 +1,5 @@
 import Alertstripe from 'nav-frontend-alertstriper'
-import { NavAreaServicesList } from 'types/navServices'
+import { NavAreaServicesList, NavService } from 'types/navServices'
 
 import { fetchData } from './fetchServices'
 
@@ -30,9 +30,18 @@ export const countHealthyServices = (props: NavAreaServicesList) => {
     let healthyServices: number = 0
     props.tiles.map(area => {
         healthyServices += area.services.filter(
-            (service: any) => service.status !== "DOWN").length
+            (service: NavService) => service.status !== "DOWN").length
     })
     return healthyServices
+}
+
+export const countFailingServices = (props: NavAreaServicesList) => {
+    let failingServices: number = 0
+    props.tiles.map(area => {
+        failingServices += area.services.filter(
+            (service: NavService) => service.status == "DOWN").length
+    })
+    return failingServices
 }
 
 export const getListOfTilesThatFail = (props: NavAreaServicesList) => {
