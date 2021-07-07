@@ -3,13 +3,13 @@ import Link from 'next/link';
 import styled from 'styled-components'
 
 import { fetchData } from 'utils/fetchServices'
-import { NavAreaService, NavAreaServicesList, NavService } from 'types/navServices'
+import { NavAreaTile, NavAreaServicesList, NavService } from 'types/navServices'
 
 import NavInfoCircle from 'components/NavInfoCircle'
 import MaintenanceScheduling from 'components/MaintenanceScheduling'
 import { Calender } from '@navikt/ds-icons';
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
-import { countHealthyServices, countServicesInAreas } from 'utils/servicesOperations';
+import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from 'utils/servicesOperations';
 // mapStatusAndIncidentsToArray
 
 const StatusOverviewContainer = styled.div`
@@ -113,6 +113,13 @@ const MaintenanceContainer = styled.div`
     max-width: none;
 `
 
+const StatusSummary = styled.p`
+    margin: 0;
+    font-size: 1rem;
+    font-weight: bold;
+    display: inline-block;
+`
+
 
 //TODO Create Incidents handler and UI
 
@@ -122,24 +129,37 @@ const StatusOverview = (props: NavAreaServicesList) => {
     // const mappedAreas: Array<String> = mapStatusAndIncidentsToArray(areas)
     const numberOfServices: number = countServicesInAreas(props)
     const numberOfHealthyServices: number = countHealthyServices(props)
-    console.log("Antall services: " + numberOfServices)
-    console.log("Antall services status OK: " + numberOfHealthyServices)
-
+    const tilesThatFail: string[] = getListOfTilesThatFail(props)
+    // console.log(tilesThatFail)
     return (
         <StatusOverviewContainer>
 
             <StatusBannerContainer>
                 <div>
-                    <h2>
-                        {/* {console.log(areas)}Status: 
-                        {areas.services.forEach(area => {
-                            if(true) {
-                                return (
-                                    <p>test</p>
-                                )
-                            }
-                        })} */}
-                    </h2>
+                    <StatusSummary>
+                        {numberOfHealthyServices == numberOfServices ?
+                            (<>
+                                <span>
+                                    Ingen feil å melde
+                                </span>
+                            </>)
+                        :
+                            (<>
+                                <span>
+                                    <span>Feil oppdaget i følgende områder:&nbsp;</span>
+                                    {tilesThatFail.length > 1 ? 
+                                        <span>
+                                            {beautifyListOfStringsForUI(tilesThatFail)} 
+                                        </span>
+                                        :
+                                        <span>
+                                            {" " + tilesThatFail[0] + "."}
+                                        </span>
+                                    }
+                                </span>
+                            </>)
+                        }
+                    </StatusSummary>
                     <Undertekst>Sist oppdatert: Ikke implementert</Undertekst>
                 </div>
                 <Link href="/Incidents">

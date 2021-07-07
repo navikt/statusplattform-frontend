@@ -7,7 +7,7 @@ import { fetchData } from 'utils/fetchServices'
 
 // import { LenkepanelBase } from "nav-frontend-lenkepanel";
 import NavFrontendSpinner from "nav-frontend-spinner";
-import { NavAreaService, NavService } from "types/navServices";
+import { NavAreaTile, NavService } from "types/navServices";
 
 
 const DigitalServicesContainer = styled.div`
@@ -49,12 +49,12 @@ const SpinnerCentered = styled.div`
 `
 
 const Dashboard = () => {
-    const [areas, setAreas] = useState<NavAreaService[]>()
+    const [tiles, setAreas] = useState<NavAreaTile[]>()
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         (async function () {
-            const newAreas: NavAreaService[] = await fetchData()
+            const newAreas: NavAreaTile[] = await fetchData()
             setAreas(newAreas)
             setIsLoading(false)
         })()
@@ -62,7 +62,7 @@ const Dashboard = () => {
 
 
 
-    if (!areas) {
+    if (!tiles) {
         return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
     }
 
@@ -74,14 +74,14 @@ const Dashboard = () => {
         ) 
     }
     
-    if(!isLoading && areas){
+    if(!isLoading && tiles.length > 0){
         return (
             <DigitalServicesContainer>
-                <StatusOverview areas={areas} />
+                <StatusOverview tiles={tiles} />
                 <PortalServiceTileContainer>
-                    {areas.map(area => {
+                    {tiles.map(tile => {
                         return (
-                            <PortalServiceTile key={area.area.name} area={area} expanded={false}/>
+                            <PortalServiceTile key={tile.area.name} tile={tile} expanded={false}/>
                             
                         )
                     })}

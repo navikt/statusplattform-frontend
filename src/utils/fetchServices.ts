@@ -1,4 +1,4 @@
-import { NavAreaService } from "types/navServices";
+import { NavAreaTile } from "types/navServices";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -6,7 +6,7 @@ export class ResponseError extends Error {
     }
 }
 
-export const fetchData = async (): Promise<NavAreaService[]> => {
+export const fetchData = async (): Promise<NavAreaTile[]> => {
     let response;
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001/rest/Tiles");

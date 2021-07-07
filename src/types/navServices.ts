@@ -1,7 +1,7 @@
 export interface NavAreaServicesList {
-    areas: NavAreaService[]
+    tiles: NavAreaTile[]
 }
-export interface NavAreaService {
+export interface NavAreaTile {
     services: NavService[]
     status: string
     area: NavArea

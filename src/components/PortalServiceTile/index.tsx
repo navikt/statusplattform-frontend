@@ -144,13 +144,13 @@ const handleAndSetStatusIcon = (status: string) => {
 }
 
 export interface PortalServiceTileProps {
-    area: any;
+    tile: any;
     expanded:boolean;
 }
 
 
 
-export const PortalServiceTile = ({area, expanded}: PortalServiceTileProps) => {
+export const PortalServiceTile = ({tile, expanded}: PortalServiceTileProps) => {
     const [isExpanded, setExpanded] = useState(expanded)
     const toggleExpanded = () => {
         setExpanded(!isExpanded)
@@ -161,13 +161,13 @@ export const PortalServiceTile = ({area, expanded}: PortalServiceTileProps) => {
             <div>
                 
                 <UndertittelCustomized>
-                    <section>{handleAndSetStatusIcon(area.status)}</section>
-                    <section>{handleAndSetNavIcon(area.area.name)}</section>
-                    <span>{area.area.name}</span>
+                    <section>{handleAndSetStatusIcon(tile.status)}</section>
+                    <section>{handleAndSetNavIcon(tile.area.name)}</section>
+                    <span>{tile.area.name}</span>
                 </UndertittelCustomized> 
                 {isExpanded &&
                     <ServicesList>
-                        {area.services.map(service => (
+                        {tile.services.map(service => (
                             <li key={service.name}>
                                 <section> {handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
                             </li>
