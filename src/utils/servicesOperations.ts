@@ -1,14 +1,15 @@
 import Alertstripe from 'nav-frontend-alertstriper'
+import { NavAreaService, NavAreaServicesList } from 'types/navServices'
 
 import { fetchData } from './fetchServices'
 
-export const mapStatusAndIncidentsToArray = (areas) => {
-    let areasArray: Array<String> = []
-    areas.map(area => {
-        areasArray.push(area)
-    })
-    return areasArray;
-}
+// export const mapStatusAndIncidentsToArray = (areas) => {
+//     let areasArray: Array<String> = []
+//     areas.map(area => {
+//         areasArray.push(area)
+//     })
+//     return areasArray;
+// }
 
 export const retrieveFilteredServiceList = (areas, areaName) => {
     const filteredArea = areas.find(
@@ -17,17 +18,17 @@ export const retrieveFilteredServiceList = (areas, areaName) => {
     return filteredArea
 }
 
-export const countServicesInAreas = (mappedAreas) => {
+export const countServicesInAreas = (props: NavAreaServicesList) => {
     let numberOfServices: number = 0;
-    mappedAreas.forEach(function (area){
+    props.areas.map(function (area){
         numberOfServices += area.services.length
     })
     return numberOfServices
 }
 
-export const countHealthyServices = (mappedAreas) => {
+export const countHealthyServices = (props: NavAreaServicesList) => {
     let healthyServices: number = 0;
-    mappedAreas.map(area => {
+    props.areas.map(area => {
         healthyServices += area.services.filter(
             (service: any) => service.status !== "DOWN").length
     })

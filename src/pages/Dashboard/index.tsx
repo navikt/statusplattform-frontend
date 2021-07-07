@@ -7,6 +7,7 @@ import { fetchData } from 'utils/fetchServices'
 
 // import { LenkepanelBase } from "nav-frontend-lenkepanel";
 import NavFrontendSpinner from "nav-frontend-spinner";
+import { NavAreaService, NavService } from "types/navServices";
 
 
 const DigitalServicesContainer = styled.div`
@@ -47,16 +48,14 @@ const SpinnerCentered = styled.div`
     top: 40%;
 `
 
-
 const Dashboard = () => {
-    const [areas, setAreas] = useState([])
+    const [areas, setAreas] = useState<NavAreaService[]>()
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         (async function () {
-            const newAreas = await fetchData()
-            const parsedAreas = [...newAreas]
-            setAreas(parsedAreas)
+            const newAreas: NavAreaService[] = await fetchData()
+            setAreas(newAreas)
             setIsLoading(false)
         })()
     }, [])
@@ -74,7 +73,7 @@ const Dashboard = () => {
             </SpinnerCentered>
         ) 
     }
-
+    
     if(!isLoading && areas){
         return (
             <DigitalServicesContainer>

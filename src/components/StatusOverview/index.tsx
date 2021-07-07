@@ -2,11 +2,15 @@ import Lenke from 'nav-frontend-lenker';
 import Link from 'next/link';
 import styled from 'styled-components'
 
+import { fetchData } from 'utils/fetchServices'
+import { NavAreaService, NavAreaServicesList, NavService } from 'types/navServices'
+
 import NavInfoCircle from 'components/NavInfoCircle'
 import MaintenanceScheduling from 'components/MaintenanceScheduling'
 import { Calender } from '@navikt/ds-icons';
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
-import { countHealthyServices, countServicesInAreas, mapStatusAndIncidentsToArray } from 'utils/servicesOperations';
+import { countHealthyServices, countServicesInAreas } from 'utils/servicesOperations';
+// mapStatusAndIncidentsToArray
 
 const StatusOverviewContainer = styled.div`
     max-width: 1080px;
@@ -112,19 +116,30 @@ const MaintenanceContainer = styled.div`
 
 //TODO Create Incidents handler and UI
 
-
-const StatusOverview = (props: any) => {
-    let areas: Object = props.areas
-    const mappedAreas: Array<String> = mapStatusAndIncidentsToArray(areas)
-    const numberOfServices: number = countServicesInAreas(mappedAreas)
-    const numberOfHealthyServices: number = countHealthyServices(mappedAreas)
+const StatusOverview = (props: NavAreaServicesList) => {
+    // props: any
+    // let areas: Object = props.areas
+    // const mappedAreas: Array<String> = mapStatusAndIncidentsToArray(areas)
+    const numberOfServices: number = countServicesInAreas(props)
+    const numberOfHealthyServices: number = countHealthyServices(props)
+    console.log("Antall services: " + numberOfServices)
+    console.log("Antall services status OK: " + numberOfHealthyServices)
 
     return (
         <StatusOverviewContainer>
 
             <StatusBannerContainer>
                 <div>
-                    <h2>Status: Ikke implementert</h2>
+                    <h2>
+                        {/* {console.log(areas)}Status: 
+                        {areas.services.forEach(area => {
+                            if(true) {
+                                return (
+                                    <p>test</p>
+                                )
+                            }
+                        })} */}
+                    </h2>
                     <Undertekst>Sist oppdatert: Ikke implementert</Undertekst>
                 </div>
                 <Link href="/Incidents">
