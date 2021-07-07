@@ -124,13 +124,9 @@ const StatusSummary = styled.p`
 //TODO Create Incidents handler and UI
 
 const StatusOverview = (props: NavAreaServicesList) => {
-    // props: any
-    // let areas: Object = props.areas
-    // const mappedAreas: Array<String> = mapStatusAndIncidentsToArray(areas)
     const numberOfServices: number = countServicesInAreas(props)
     const numberOfHealthyServices: number = countHealthyServices(props)
     const tilesThatFail: string[] = getListOfTilesThatFail(props)
-    // console.log(tilesThatFail)
     return (
         <StatusOverviewContainer>
 

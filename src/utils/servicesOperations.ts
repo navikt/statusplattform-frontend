@@ -3,13 +3,13 @@ import { NavAreaServicesList } from 'types/navServices'
 
 import { fetchData } from './fetchServices'
 
-// export const mapStatusAndIncidentsToArray = (areas) => {
-//     let areasArray: Array<String> = []
-//     areas.map(area => {
-//         areasArray.push(area)
-//     })
-//     return areasArray;
-// }
+export const mapStatusAndIncidentsToArray = (props: NavAreaServicesList) => {
+    let areasArray: Array<String> = []
+    props.tiles.map(tile => {
+        areasArray.push(tile.status, "incidentsToBeAdded")
+    })
+    return areasArray;
+}
 
 export const retrieveFilteredServiceList = (areas, areaName) => {
     const filteredArea = areas.find(
