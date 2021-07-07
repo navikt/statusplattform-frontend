@@ -47,7 +47,7 @@ export const countFailingServices = (props: NavAreaServicesList) => {
 export const getListOfTilesThatFail = (props: NavAreaServicesList) => {
     let listOfTilesThatFail: string[] = []
     props.tiles.filter(tile => {
-        if(tile.status === "OK") {
+        if(tile.status === "DOWN") {
             listOfTilesThatFail.push(tile.area.name)
         }else {return}
     })
@@ -56,10 +56,14 @@ export const getListOfTilesThatFail = (props: NavAreaServicesList) => {
 
 export const beautifyListOfStringsForUI = (props: string[]) => {
     props.map((element, index) => {
-        props.length === (index+1) ? 
-            props[index] = element += "."
+        index === 0 ?
+            props[index] = " " + element + ", "
         :
-            props[index] = element += ", "
+
+        props.length === (index+1) ? 
+            props[index] = element + "."
+        :
+            props[index] = element + ", "
     })
     return props
 }

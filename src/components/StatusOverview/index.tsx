@@ -142,7 +142,7 @@ const StatusOverview = (props: NavAreaServicesList) => {
                         :
                             (<>
                                 <span>
-                                    <span>Feil oppdaget i følgende områder:&nbsp;</span>
+                                    <span>Feil oppdaget i følgende områder:</span>
                                     {tilesThatFail.length > 1 ? 
                                         <span>
                                             {beautifyListOfStringsForUI(tilesThatFail)} 
