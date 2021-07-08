@@ -33,6 +33,7 @@ const StatusBannerContainer = styled.div`
     flex-direction: column;
     div:first-child {
         padding-bottom: 1rem;
+        max-width: 700px;
     }
     @media (min-width: 200px) {
         padding: 2rem 1rem;
