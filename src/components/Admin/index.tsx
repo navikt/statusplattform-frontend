@@ -1,11 +1,11 @@
-import Lenke from 'nav-frontend-lenker';
 // import Link from 'next/link';
-import Dropdown from 'react-dropdown';
 import 'react-dropdown/style.css';
-
-
 import styled from 'styled-components'
 import { useEffect, useState } from "react";
+import Dropdown from 'react-dropdown';
+
+
+import Lenke from 'nav-frontend-lenker';
 
 // import { Calender } from '@navikt/ds-icons';
 import { Bag, Folder, PensionBag, HealthCase, ErrorFilled, WarningFilled, Employer, Information, People, Family, Service, Globe, BagFilled } from '@navikt/ds-icons'
@@ -22,24 +22,32 @@ import { Close } from '@navikt/ds-icons'
 import { fetchData } from 'utils/fetchAreas'
 import { postAdminAreas } from 'utils/postAreas'
 import { deleteArea } from 'utils/deleteArea'
-import { Area, Tile } from 'types/navServices';
+import { Area } from 'types/navServices';
 
 
 
 
-const AdminContainer = styled.div`
-    max-width: 1080px;
+const AdminDashboardContainer = styled.div`
     padding: 0;
-    margin-top:2%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    th {
+        span {
+            display: flex;
+            justify-content: center;
+        }
+    }
 	td {
 		width: 100px;
 		height: 75px;
+        span {
+            display: flex;
+            justify-content: center;
+        }
 	}
     @media(min-width: 500px){
-    	padding: 0 3rem;
+    	padding: 0 0 3rem 0;
     }
 `;
 
@@ -53,13 +61,12 @@ const SelectCustomized = styled(Select)`
 `;
 
 const AreasContainer = styled.div`
-    border-radius: 20px;
+    border-radius: 0 0 20px 20px;
     background-color: white;    
     padding: 2rem 1rem;
     display: flex;
     flex-direction: column;
     @media (min-width: 45rem) {
-        display: flex;
         justify-content: space-between;
         flex-direction: row;
     }
@@ -139,7 +146,6 @@ const AdminDashboard = () => {
         }
         if(postAdminAreas(areaToAdd)) {
             const newAreas = [...adminAreas]
-            console.log(areaToAdd)
             newAreas.push(areaToAdd)
             setAdminAreas(newAreas)
             return
@@ -162,7 +168,7 @@ const AdminDashboard = () => {
 
     const { id, name, beskrivelse, rangering} = newAdminArea
 	return (
-        <AdminContainer>
+        <AdminDashboardContainer>
 
                 <AreasContainer>
                     <div>
@@ -170,28 +176,26 @@ const AdminDashboard = () => {
                         <table className="tabell tabell--stripet">
                             <thead>
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Navn</th>
-                                    <th>Beskrivelse</th>
-                                    <th>Rangering</th>
-                                    <th>Ikon</th>
-                                    <th>Dashboard</th>
-                                    <th></th>
+                                    <th><span>ID</span></th>
+                                    <th><span>Navn</span></th>
+                                    <th><span>Beskrivelse</span></th>
+                                    <th><span>Rangering</span></th>
+                                    <th><span>Ikon</span></th>
+                                    <th><span>Slett</span></th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {adminAreas.map( area => {
-                                    console.log(area)
                                     return (
                                         <tr key={area.id}>
-                                            <td>{area.id}</td>
-                                            <td>{area.name}</td>
-                                            <td>{area.beskrivelse}</td>
-                                            <td>{area.rangering}</td>
-                                            <td><IconContainer><Folder/></IconContainer></td>
-                                            <td>Privatperson</td>
-                                            <td><CloseCustomized onClick={() => handleDeleteArea(area)} /></td>
-                                            <td></td>
+                                            <td><span>{area.id}</span></td>
+                                            <td><span>{area.name}</span></td>
+                                            <td><span>{area.beskrivelse}</span></td>
+                                            <td><span>{area.rangering}</span></td>
+                                            <td><span><IconContainer><Folder/></IconContainer></span></td>
+                                            {/* <td>Privatperson</td> */}
+                                            <td><span><CloseCustomized onClick={() => handleDeleteArea(area)} /></span></td>
+                                            {/* <td></td> */}
                                         </tr>
                                     )
                                 })}
@@ -217,13 +221,13 @@ const AdminDashboard = () => {
 											placeholder="Select an option"
 										/>
                                     </td>
-                                    <td>
+                                    {/* <td>
                                         <SelectCustomized>
                                             <option value="brukergruppe">Privatperson</option>
                                             <option value="brukergruppe">Arbeidsgiver</option>
                                             <option value="brukergruppe">Samarbeidspartner</option>
                                         </SelectCustomized>
-                                    </td>
+                                    </td> */}
                                     <td><Hovedknapp disabled={!id || !name || !beskrivelse || !rangering} onClick={() => handlePostAdminArea(newAdminArea)}>Legg til</Hovedknapp></td>
                                 </tr>
 
@@ -231,7 +235,7 @@ const AdminDashboard = () => {
                         </table>
                     </div>
                 </AreasContainer>
-        </AdminContainer>
+        </AdminDashboardContainer>
 
         )
 
