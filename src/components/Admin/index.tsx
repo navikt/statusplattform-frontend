@@ -1,24 +1,16 @@
-// import Link from 'next/link';
 import 'react-dropdown/style.css';
 import styled from 'styled-components'
 import { useEffect, useState } from "react";
 import Dropdown from 'react-dropdown';
 
 
-import Lenke from 'nav-frontend-lenker';
-
-// import { Calender } from '@navikt/ds-icons';
-import { Bag, Folder, PensionBag, HealthCase, ErrorFilled, WarningFilled, Employer, Information, People, Family, Service, Globe, BagFilled } from '@navikt/ds-icons'
-// import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
-import { Label, Input, Select } from 'nav-frontend-skjema';
+import { Bag } from '@navikt/ds-icons'
+import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import NavFrontendSpinner from "nav-frontend-spinner";
 import { Close } from '@navikt/ds-icons'
 
-// import NavInfoCircle from 'components/NavInfoCircle'
-// import MaintenanceScheduling from 'components/MaintenanceScheduling'
 
-// import { countHealthyServices, countServicesInAreas, mapStatusAndIncidentsToArray } from 'utils/servicesOperations';
 import { fetchData } from 'utils/fetchAreas'
 import { postAdminAreas } from 'utils/postAreas'
 import { deleteArea } from 'utils/deleteArea'
@@ -194,7 +186,7 @@ const AdminDashboard = () => {
                                     <th><span>ID</span></th>
                                     <th><span>Navn</span></th>
                                     <th><span>Beskrivelse</span></th>
-                                    <th><span>Rangering</span></th>
+                                    <th aria-sort="descending" role="columnheader"><span>Rangering</span></th>
                                     <th><span>Ikon</span></th>
                                     <th><span>Slett</span></th>
                                 </tr>
