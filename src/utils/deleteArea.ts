@@ -16,7 +16,8 @@ export const deleteArea = async (adminArea): Promise<Object[]> =>{
                 id: adminArea.id,
                 name: adminArea.name,
                 beskrivelse: adminArea.beskrivelse,
-                rangering: adminArea.rangering
+                rangering: adminArea.rangering,
+                ikon: adminArea.icon
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -34,7 +35,8 @@ export const deleteArea = async (adminArea): Promise<Object[]> =>{
                 id: adminArea.id,
                 name: adminArea.name,
                 beskrivelse: adminArea.beskrivelse,
-                rangering: adminArea.rangering
+                rangering: adminArea.rangering,
+                ikon: adminArea.icon
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
