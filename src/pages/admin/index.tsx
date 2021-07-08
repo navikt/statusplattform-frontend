@@ -3,12 +3,16 @@ import styled from 'styled-components'
 import Layout from 'components/Layout';
 import Admin from 'components/Admin';
 import DashboardSelector from 'components/Admin/DashboardSelector';
+import { useState } from 'react';
 
 const AdminContainer = styled.div`
     max-width: 1080px;
 `
 
-export default function Home() {
+ const AdminPage = () => {
+    // [selectedDashboard, changeSelectedDashboard] = useState(0)
+
+
     return (
         <Layout>
             <AdminContainer>
@@ -19,3 +23,4 @@ export default function Home() {
     )
 }
 
+export default AdminPage
