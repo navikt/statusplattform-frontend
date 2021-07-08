@@ -1,18 +1,18 @@
-export interface NavAreaServicesList {
-    tiles: NavAreaTile[]
+export interface AreaServicesList {
+    tiles: Tile[]
 }
-export interface NavAreaTile {
-    services: NavService[]
+export interface Tile {
+    services: Service[]
     status: string
-    area: NavArea
+    area: Area
 }
 
-export interface NavService {
+export interface Service {
     name: string
     status: string
 }
 
-export interface NavArea {
+export interface Area {
     name: string
     id: string
     beskrivelse: string

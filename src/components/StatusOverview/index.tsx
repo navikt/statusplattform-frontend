@@ -3,7 +3,7 @@ import Link from 'next/link';
 import styled from 'styled-components'
 
 import { fetchData } from 'utils/fetchServices'
-import { NavAreaTile, NavAreaServicesList, NavService } from 'types/navServices'
+import { Tile, AreaServicesList, Service } from 'types/navServices'
 
 import NavInfoCircle from 'components/NavInfoCircle'
 import MaintenanceScheduling from 'components/MaintenanceScheduling'
@@ -123,7 +123,7 @@ const StatusSummary = styled.p`
 
 //TODO Create Incidents handler and UI
 
-const StatusOverview = (props: NavAreaServicesList) => {
+const StatusOverview = (props: AreaServicesList) => {
     const numberOfServices: number = countServicesInAreas(props)
     const numberOfHealthyServices: number = countHealthyServices(props)
     const tilesThatFail: string[] = getListOfTilesThatFail(props)

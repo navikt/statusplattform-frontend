@@ -1,9 +1,8 @@
-import Alertstripe from 'nav-frontend-alertstriper'
-import { NavAreaServicesList, NavService } from 'types/navServices'
+import { AreaServicesList, Service } from 'types/navServices'
 
-import { fetchData } from './fetchServices'
 
-export const mapStatusAndIncidentsToArray = (props: NavAreaServicesList) => {
+
+export const mapStatusAndIncidentsToArray = (props: AreaServicesList) => {
     let areasArray: Array<String> = []
     props.tiles.map(tile => {
         areasArray.push(tile.status, "incidentsToBeAdded")
@@ -18,7 +17,7 @@ export const retrieveFilteredServiceList = (areas, areaName) => {
     return filteredArea
 }
 
-export const countServicesInAreas = (props: NavAreaServicesList) => {
+export const countServicesInAreas = (props: AreaServicesList) => {
     let numberOfServices: number = 0
     props.tiles.map(function (area){
         numberOfServices += area.services.length
@@ -26,25 +25,25 @@ export const countServicesInAreas = (props: NavAreaServicesList) => {
     return numberOfServices
 }
 
-export const countHealthyServices = (props: NavAreaServicesList) => {
+export const countHealthyServices = (props: AreaServicesList) => {
     let healthyServices: number = 0
     props.tiles.map(area => {
         healthyServices += area.services.filter(
-            (service: NavService) => service.status !== "DOWN").length
+            (service: Service) => service.status !== "DOWN").length
     })
     return healthyServices
 }
 
-export const countFailingServices = (props: NavAreaServicesList) => {
+export const countFailingServices = (props: AreaServicesList) => {
     let failingServices: number = 0
     props.tiles.map(area => {
         failingServices += area.services.filter(
-            (service: NavService) => service.status == "DOWN").length
+            (service: Service) => service.status == "DOWN").length
     })
     return failingServices
 }
 
-export const getListOfTilesThatFail = (props: NavAreaServicesList) => {
+export const getListOfTilesThatFail = (props: AreaServicesList) => {
     let listOfTilesThatFail: string[] = []
     props.tiles.filter(tile => {
         if(tile.status === "DOWN") {

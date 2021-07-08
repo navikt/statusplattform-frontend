@@ -11,7 +11,7 @@ import NavFrontendSpinner from "nav-frontend-spinner";
 import { Knapp } from 'nav-frontend-knapper'
 import NavInfoCircle from 'components/NavInfoCircle'
 import Alertstripe from 'nav-frontend-alertstriper'
-import { NavAreaServicesList, NavAreaTile } from 'types/navServices'
+import { AreaServicesList, Tile } from 'types/navServices'
 import { Calender, Back } from '@navikt/ds-icons'
 
 const IncidentsContainer = styled.div`
@@ -66,7 +66,7 @@ const SpinnerCentered = styled.div`
     top: 40%;
 `
 
-const Incidents = (props: NavAreaServicesList) => {
+const Incidents = (props: AreaServicesList) => {
 
     const numberOfIncidents: number = countFailingServices(props)
     return (

@@ -1,10 +1,12 @@
+import { Area } from "types/navServices";
+
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
         super(message)
     }
 }
 
-export const fetchData = async (): Promise<string[]> => {
+export const fetchData = async (): Promise<Area[]> => {
 
     let endPath = "/rest/Areas"
     let response;

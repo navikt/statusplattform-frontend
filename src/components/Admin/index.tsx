@@ -22,6 +22,7 @@ import { Close } from '@navikt/ds-icons'
 import { fetchData } from 'utils/fetchAreas'
 import { postAdminAreas } from 'utils/postAreas'
 import { deleteArea } from 'utils/deleteArea'
+import { Area, Tile } from 'types/navServices';
 
 
 
@@ -88,9 +89,9 @@ const getBag = () => {
 
 
 const AdminDashboard = () => {
-    const [adminAreas, setAdminAreas] = useState([])
+    const [adminAreas, setAdminAreas] = useState<Area[]>([])
     const [isLoading, setIsLoading] = useState(true)
-    const [newAdminArea, updateNewAdminArea] = useState({
+    const [newAdminArea, updateNewAdminArea] = useState<Area>({
         id: "",
         name: "",
         beskrivelse: "",
@@ -100,9 +101,8 @@ const AdminDashboard = () => {
     useEffect(() => {
         (async function () {
             setIsLoading(true)
-            const adminAreas = await fetchData()
-            const parsedAreas = [...adminAreas]
-            setAdminAreas(parsedAreas)
+            const adminAreas: Area[] = await fetchData()
+            setAdminAreas(adminAreas)
             setIsLoading(false)
         })()
     }, [])
@@ -131,7 +131,7 @@ const AdminDashboard = () => {
     }
 
 
-    const handlePostAdminArea = (areaToAdd) => {
+    const handlePostAdminArea = (areaToAdd: Area) => {
         const newlist = adminAreas.filter(area => area.id === areaToAdd.id)
         if(newlist.length > 0) {
             alert("Denne IDen er allerede brukt. Velg en annen")
@@ -139,6 +139,7 @@ const AdminDashboard = () => {
         }
         if(postAdminAreas(areaToAdd)) {
             const newAreas = [...adminAreas]
+            console.log(areaToAdd)
             newAreas.push(areaToAdd)
             setAdminAreas(newAreas)
             return
@@ -180,14 +181,15 @@ const AdminDashboard = () => {
                             </thead>
                             <tbody>
                                 {adminAreas.map( area => {
+                                    console.log(area)
                                     return (
                                         <tr key={area.id}>
                                             <td>{area.id}</td>
                                             <td>{area.name}</td>
                                             <td>{area.beskrivelse}</td>
                                             <td>{area.rangering}</td>
-                                            <td>Privatperson</td>
                                             <td><IconContainer><Folder/></IconContainer></td>
+                                            <td>Privatperson</td>
                                             <td><CloseCustomized onClick={() => handleDeleteArea(area)} /></td>
                                             <td></td>
                                         </tr>

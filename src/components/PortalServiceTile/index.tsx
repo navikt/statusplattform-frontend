@@ -42,7 +42,7 @@ const PanelCustomized = styled(Panel)`
         }
         -webkit-box-shadow:0px 1px 0 black;
         -moz-box-shadow:0px 1px 0 black;
-        box-shadow:0px 1px 0 black;
+        box-shadow: #a0a0a0 0 2px 1px 0;
         cursor: pointer;
     }
     ${({ expanded }) => expanded && `
