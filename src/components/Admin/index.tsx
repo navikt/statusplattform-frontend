@@ -23,6 +23,7 @@ import { fetchData } from 'utils/fetchAreas'
 import { postAdminAreas } from 'utils/postAreas'
 import { deleteArea } from 'utils/deleteArea'
 import { Area } from 'types/navServices';
+import { getIconsFromGivenCode } from 'utils/servicesOperations';
 
 
 
@@ -193,7 +194,7 @@ const AdminDashboard = () => {
                                             <td><span>{area.name}</span></td>
                                             <td><span>{area.beskrivelse}</span></td>
                                             <td><span>{area.rangering}</span></td>
-                                            <td><span><IconContainer><Folder/></IconContainer></span></td>
+                                            <td><span><IconContainer>{getIconsFromGivenCode(area.ikon)}</IconContainer></span></td>
                                             {/* <td>Privatperson</td> */}
                                             <td><span><CloseCustomized onClick={() => handleDeleteArea(area)} /></span></td>
                                             {/* <td></td> */}
