@@ -39,8 +39,21 @@ const AdminDashboardContainer = styled.div`
             justify-content: center;
         }
     }
+    tr {
+        td:nth-child(2) {
+            span {
+                text-align: left;
+                display: block;
+            }
+        }
+        td:nth-child(3) {
+            span {
+                text-align: left;
+                display: block;
+            }
+        }
+    }
 	td {
-		width: 100px;
 		height: 75px;
         span {
             display: flex;
@@ -195,9 +208,7 @@ const AdminDashboard = () => {
                                             <td><span>{area.beskrivelse}</span></td>
                                             <td><span>{area.rangering}</span></td>
                                             <td><span><IconContainer>{getIconsFromGivenCode(area.ikon)}</IconContainer></span></td>
-                                            {/* <td>Privatperson</td> */}
                                             <td><span><CloseCustomized onClick={() => handleDeleteArea(area)} /></span></td>
-                                            {/* <td></td> */}
                                         </tr>
                                     )
                                 })}
