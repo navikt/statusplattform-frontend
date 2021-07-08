@@ -2,7 +2,6 @@ import styled from 'styled-components'
 import { useState } from "react";
 
 import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed } from 'components/TrafficLights'
-import { NavIcon, IconType } from 'types/icons';
 import { Tile } from 'types/navServices'
 import { getIconsFromGivenCode } from 'utils/servicesOperations'
 
@@ -100,43 +99,7 @@ const ServicesList = styled.ul`
 `;
 
 
-// {Object.values(IconType).forEach((value) => {
-//     console.log(value)
-   
-// })
-// if (icon.id = "Arbeid") {
-//    return <Bag />
-// }
-// if (areaName == "Pensjon") {
-//    return <PensionBag />
-// }
-// if (areaName == "Helse") {
-//    return <HealthCase />
-// }
-// if (areaName == "Ansatt") {
-//    return <Employer />
-// }
-// if (areaName == "Informasjon") {
-//    return <Information />
-// }
-// if (areaName == "Bruker") {
-//    return <People />
-// }
-// if (areaName == "Familie") {
-//    return <Family />
-// }
-// if (areaName == "EksterneTjenester") {
-//    return <Service />
-// }
-// if (areaName == "Lokasjon") {
-//    return <Globe />
-// }
-// return <Folder />}
-
-
 const handleAndSetNavIcon = (ikon: string) => {
-    // console.log(ikon)
-    // console.log(getIconsFromGivenCode(ikon))
     return getIconsFromGivenCode(ikon)
 }
 
