@@ -102,7 +102,8 @@ const AdminDashboard = () => {
         id: "",
         name: "",
         beskrivelse: "",
-        rangering: 0
+        rangering: 0,
+        ikon: ""
     })
 
     useEffect(() => {

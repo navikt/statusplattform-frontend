@@ -17,4 +17,5 @@ export interface Area {
     id: string
     beskrivelse: string
     rangering: number
+    ikon: string
 }

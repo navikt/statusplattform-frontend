@@ -1,5 +1,26 @@
 import { AreaServicesList, Service } from 'types/navServices'
 
+import { 
+    Bag, Folder, HealthCase, People, Family, Money, FillForms, HandBandage, GuideDog, Calculator,
+    FlowerBladeFall, HealthCaseFilled, SocialAid, Heart, Saving
+} from '@navikt/ds-icons'
+import { IconType, NavIcon } from 'types/icons'
+
+const iconMap: Map<string, any> = new Map<string, any> ([
+    ["0001", <Bag />],
+    ["0002", <Saving />],
+    ["0003", <Heart />],
+    ["0004", <SocialAid />],
+    ["0005", <HandBandage />],
+    ["0006", <FillForms />], //Denne er feil ifht nav.no
+    ["0007", <HealthCase />],
+    ["0008", <GuideDog />],
+    ["0009", <Money />],
+    ["0010", <Calculator />],
+    ["0011", <FillForms />],
+    ["0012", <FlowerBladeFall />],
+
+])
 
 
 export const mapStatusAndIncidentsToArray = (props: AreaServicesList) => {
@@ -16,6 +37,10 @@ export const retrieveFilteredServiceList = (areas, areaName) => {
     )
     return filteredArea
 }
+
+
+
+
 
 export const countServicesInAreas = (props: AreaServicesList) => {
     let numberOfServices: number = 0
@@ -42,6 +67,21 @@ export const countFailingServices = (props: AreaServicesList) => {
     })
     return failingServices
 }
+
+
+
+
+export const getIconsFromGivenCode: any = (ikon: string) => {
+    if(typeof(ikon) != "string") {
+        return <Folder />
+    }
+    if(iconMap.has(ikon)) {
+        return iconMap.get(ikon)
+    }
+}
+
+
+
 
 export const getListOfTilesThatFail = (props: AreaServicesList) => {
     let listOfTilesThatFail: string[] = []

@@ -2,6 +2,9 @@ import styled from 'styled-components'
 import { useState } from "react";
 
 import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed } from 'components/TrafficLights'
+import { NavIcon, IconType } from 'types/icons';
+import { Tile } from 'types/navServices'
+import { getIconsFromGivenCode } from 'utils/servicesOperations'
 
 import { Bag, Folder, PensionBag, HealthCase, ErrorFilled, WarningFilled, Employer, Information, People, Family, Service, Globe } from '@navikt/ds-icons'
 import Panel from 'nav-frontend-paneler';
@@ -97,38 +100,47 @@ const ServicesList = styled.ul`
 `;
 
 
-const handleAndSetNavIcon = (areaName: string) => {
-    if (areaName == "Arbeid") {
-        return <Bag />
-    }
-    if (areaName == "Pensjon") {
-        return <PensionBag />
-    }
-    if (areaName == "Helse") {
-        return <HealthCase />
-    }
-    if (areaName == "Ansatt") {
-        return <Employer />
-    }
-    if (areaName == "Informasjon") {
-        return <Information />
-    }
-    if (areaName == "Bruker") {
-        return <People />
-    }
-    if (areaName == "Familie") {
-        return <Family />
-    }
-    if (areaName == "EksterneTjenester") {
-        return <Service />
-    }
-    if (areaName == "Lokasjon") {
-        return <Globe />
-    }
-    return <Folder />
+// {Object.values(IconType).forEach((value) => {
+//     console.log(value)
+   
+// })
+// if (icon.id = "Arbeid") {
+//    return <Bag />
+// }
+// if (areaName == "Pensjon") {
+//    return <PensionBag />
+// }
+// if (areaName == "Helse") {
+//    return <HealthCase />
+// }
+// if (areaName == "Ansatt") {
+//    return <Employer />
+// }
+// if (areaName == "Informasjon") {
+//    return <Information />
+// }
+// if (areaName == "Bruker") {
+//    return <People />
+// }
+// if (areaName == "Familie") {
+//    return <Family />
+// }
+// if (areaName == "EksterneTjenester") {
+//    return <Service />
+// }
+// if (areaName == "Lokasjon") {
+//    return <Globe />
+// }
+// return <Folder />}
+
+
+const handleAndSetNavIcon = (ikon: string) => {
+    // console.log(ikon)
+    // console.log(getIconsFromGivenCode(ikon))
+    return getIconsFromGivenCode(ikon)
 }
 
-const handleAndSetStatusIcon = (status: string) => {
+const handleAndSetStatusIcon = (status: string): any => {
     if (status == "OK") {
         return <SuccessCircleGreen />
     }
@@ -144,7 +156,7 @@ const handleAndSetStatusIcon = (status: string) => {
 }
 
 export interface PortalServiceTileProps {
-    tile: any;
+    tile: Tile;
     expanded:boolean;
 }
 
@@ -156,13 +168,15 @@ export const PortalServiceTile = ({tile, expanded}: PortalServiceTileProps) => {
         setExpanded(!isExpanded)
     }
 
+
+
     return (
         <PanelCustomized onClick={() => toggleExpanded()}>
             <div>
                 
                 <UndertittelCustomized>
                     <section>{handleAndSetStatusIcon(tile.status)}</section>
-                    <section>{handleAndSetNavIcon(tile.area.name)}</section>
+                    <section>{handleAndSetNavIcon(tile.area.ikon)}</section>
                     <span>{tile.area.name}</span>
                 </UndertittelCustomized> 
                 {isExpanded &&
