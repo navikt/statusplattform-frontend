@@ -48,16 +48,12 @@ const StatusBannerContainer = styled.div`
     }
 `;
 const LenkeCustomized = styled(Lenke)`
+    border-radius: 30px;
     border: 2px solid var(--navBla);
-    border-radius: 15px;
-    line-height: 35px;
+    height: 3rem;
+	width: 7rem;
     padding: 0 1.5rem;
-    min-height: 40px;
-    height: 100%;
-    max-width: 184px;
     transition: 0.4s;
-    display: flex;
-    align-items: center;
     :hover {
         transition: 0.4s;
         background-color: var(--navBla);
