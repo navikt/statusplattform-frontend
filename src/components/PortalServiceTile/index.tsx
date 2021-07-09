@@ -12,11 +12,8 @@ import { Undertittel } from "nav-frontend-typografi";
 
 const PanelCustomized = styled(Panel)`
     color: var(--navBla);
-    width: 100%;
+    width: 100px;
     margin: 5px;
-    min-height: 90px;
-    
-
     > div {
         h2 svg:first-child {
             width: 1.778rem;
@@ -33,7 +30,7 @@ const PanelCustomized = styled(Panel)`
         }
     }
     @media (min-width: 500px) {
-        width: 250px;
+        width: 300px;
     }
     @media (min-width: 700px) {
         height: 100%;
@@ -56,13 +53,13 @@ const PanelCustomized = styled(Panel)`
 
 const UndertittelCustomized = styled(Undertittel)`
     border-radius: 10px;
-    background-color:white;
-    height: 100%;
+    background-color: white;
+    height: 50px;
     display: flex;
     flex-direction: row;
-    span:first-child{
-        top: 50%;
-        align-items: center;
+    span{
+        text-overflow: hidden;
+        overflow: hidden;
     }
     svg {
         margin-right: 10px;
