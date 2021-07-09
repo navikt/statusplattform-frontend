@@ -6,6 +6,7 @@ import Navbar from 'components/Navbar'
 import Footer from 'components/Footer'
 
 
+
 const MainContentContainer = styled.div`
     min-height: 100vh;
     margin-bottom: -100px;
@@ -13,6 +14,7 @@ const MainContentContainer = styled.div`
     flex-direction: column;
     background-color: var(--navGraBakgrunn);
     overflow: hidden;
+    font-family: "Source Sans Pro", Arial, sans-serif;
 `;
 
 const Content = styled.main`
