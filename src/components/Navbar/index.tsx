@@ -30,7 +30,8 @@ const Nav = styled.div `
 		@media(min-width: 400px) {
 			:first-child {
 				flex-direction: row;
-			}	
+			}
+			margin-left: 7rem;
 		}
 	}
 	> ul > li {
@@ -88,6 +89,7 @@ const SubscribeButton = styled(Knapp)`
     border-radius: 30px;
     height: 3rem;
     transition: 0.4s;
+	width: 7rem;
     :hover {
         transition: 0.4s;
         background-color: var(--navBla);
