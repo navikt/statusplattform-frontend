@@ -31,6 +31,8 @@ const Nav = styled.div `
 			:first-child {
 				flex-direction: row;
 			}
+		}
+		@media(min-width: 500px) {
 			margin-left: 7rem;
 		}
 	}
