@@ -9,6 +9,7 @@ import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import NavFrontendSpinner from "nav-frontend-spinner";
 import { Close } from '@navikt/ds-icons'
+import { ToggleKnapp } from 'nav-frontend-toggle';
 
 
 import { fetchData } from 'utils/fetchAreas'
@@ -78,6 +79,8 @@ const AreasContainer = styled.div`
     }
     h2 {
         margin: 0 0 .5rem;
+        display: flex;
+        justify-content: space-between;
     }
 `;
 
@@ -99,7 +102,7 @@ const getBag = () => {
     return <IconContainer><Bag /></IconContainer>
 }
 
-
+let tileOrderingIsDynamic: boolean = false //TODO: DENNE MÅ KOMME FRA REST-API
 
 const AdminDashboard = () => {
     const [adminAreas, setAdminAreas] = useState<Area[]>([])
@@ -111,6 +114,7 @@ const AdminDashboard = () => {
         rangering: 0,
         ikon: ""
     })
+    const [tileOrderIsDynamic, changeTileOrderIsDynamic] = useState(true) //DENNE MÅ ENDRES. Skal komme default fra rest
 
     useEffect(() => {
         (async function () {
@@ -173,13 +177,19 @@ const AdminDashboard = () => {
         alert("Område ble ikke slettet")
     }
 
+    const changeTileOrdering = () => {
+        changeTileOrderIsDynamic(!tileOrderIsDynamic)
+    }
+
     const { id, name, beskrivelse, rangering} = newAdminArea
 	return (
         <AdminDashboardContainer>
 
                 <AreasContainer>
                     <div>
-                        <h2>Områder</h2>
+                        <h2>Områder <ToggleKnapp kompakt onClick={changeTileOrdering}>{
+                            tileOrderIsDynamic ? "Dynamisk sortering" : "Fiksert sortering"}
+                        </ToggleKnapp></h2>
                         <table className="tabell tabell--stripet">
                             <thead>
                                 <tr>
