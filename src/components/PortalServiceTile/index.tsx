@@ -12,8 +12,8 @@ import { Undertittel } from "nav-frontend-typografi";
 
 const PanelCustomized = styled(Panel)`
     color: var(--navBla);
-    width: 100%;
     margin: 5px;
+    width: 100%;
     > div {
         h2 svg:first-child {
             width: 1.778rem;
@@ -29,8 +29,8 @@ const PanelCustomized = styled(Panel)`
             display: block;
         }
     }
-    @media (min-width: 500px) {
-        width: 300px;
+    @media (min-width: 600px) {
+        width: 290px;
     }
     @media (min-width: 700px) {
         height: 100%;

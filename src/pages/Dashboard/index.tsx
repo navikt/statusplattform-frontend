@@ -19,7 +19,6 @@ const DigitalServicesContainer = styled.div`
     align-items: center;
 `;
 const PortalServiceTileContainer = styled.div`
-    width: 100%;
     flex: 1;
     padding-top: 30px;
     display: flex;
@@ -29,6 +28,10 @@ const PortalServiceTileContainer = styled.div`
     a {
         padding: 0;
         margin: 0;
+    }
+    @media (min-width: 500px) {
+        max-width: 1000px;
+        width: 100%;
     }
 
 `;

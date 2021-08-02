@@ -9,7 +9,7 @@ import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import NavFrontendSpinner from "nav-frontend-spinner";
 import { Close } from '@navikt/ds-icons'
-import { ToggleKnapp } from 'nav-frontend-toggle';
+import Knapp from 'nav-frontend-knapper'
 
 
 import { fetchData } from 'utils/fetchAreas'
@@ -57,6 +57,10 @@ const AdminDashboardContainer = styled.div`
     	padding: 0 0 3rem 0;
     }
 `;
+
+const KnappCustomized = styled(Knapp)`
+    width: 200px;
+`
 
 const IconContainer = styled.section`
 	color: var(--navBla);
@@ -187,9 +191,10 @@ const AdminDashboard = () => {
 
                 <AreasContainer>
                     <div>
-                        <h2>Områder <ToggleKnapp kompakt onClick={changeTileOrdering}>{
+                        <h2>Områder <KnappCustomized style={{"font-size": "16px"}} kompakt onClick={changeTileOrdering}>{
                             tileOrderIsDynamic ? "Dynamisk sortering" : "Fiksert sortering"}
-                        </ToggleKnapp></h2>
+                            </KnappCustomized>
+                        </h2>
                         <table className="tabell tabell--stripet">
                             <thead>
                                 <tr>
