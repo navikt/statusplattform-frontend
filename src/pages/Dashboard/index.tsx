@@ -56,6 +56,7 @@ const Dashboard = () => {
     const [tiles, setAreas] = useState<Tile[]>()
     const [isLoading, setIsLoading] = useState(true)
     const [expandAll, changeExpand] = useState(false)
+    // const [rows,setRows] = useState<Tile[][]>([])
 
     useEffect(() => {
         (async function () {
@@ -84,48 +85,44 @@ const Dashboard = () => {
     }
 
 
+
     let tileKey = "false"    
     if(expandAll == true) {
         tileKey = "true"
     }
 
 
+    let numberOfTilesPerRow = tiles.length % 6 == 0? 6: (tiles.length % 5 == 0? 5: (tiles.length % 4 == 0? 4 : (tiles.length % 3 == 0? 3 :  (tiles.length % 2 == 0 ? 2: 1))));
+    let numberOfRows = Math.ceil( tiles.length/numberOfTilesPerRow );
+    
+
+    let rows: Tile[][] = [];
+    for(var i = 0; i < tiles.length; i = i + numberOfTilesPerRow){
+        rows.push(tiles.slice(i,i+ numberOfTilesPerRow));
+ 
+    }
+   
+
+    let maxWidth = window.innerWidth > 1200 ? 1200: (window.innerWidth > 1000? 1000: 600);
+
     if(!isLoading && tiles.length > 0){
         return (
             <DigitalServicesContainer>
                 <StatusOverview tiles={tiles} />
                     <Knapp kompakt onClick={toggleExpand}>Ekspander/lukk feltene</Knapp>
-                {tiles.length % 2 === 0 ? //Hvis antallet tiles er et partall, legg to per rad.
-                    (window.innerWidth > 1200 ? //Men dersom skjermen er bredere enn 1200px, legg 4 per
-                        <PortalServiceTileContainer maxWidth={1200}>
-                            {tiles.map(tile => {
-                                return (
-                                    <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
+       
+                        <PortalServiceTileContainer maxWidth={maxWidth}>
+                            {rows.map(row => {
+                                row.map(tile => {
                                     
-                                )
+                                    return(
+                                        <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
+                                    )
+
+                                })
                             })}
                         </PortalServiceTileContainer>
-                        :
-                        <PortalServiceTileContainer maxWidth={600}>
-                            {tiles.map(tile => {
-                                return (
-                                    <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
-                                    
-                                )
-                            })}
-                        </PortalServiceTileContainer>
-                    )
-                       
-                    :   //ellers legg tre per rad
-                    <PortalServiceTileContainer maxWidth={1000}>
-                        {tiles.map(tile => {
-                            return (
-                                <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
-                                
-                            )
-                        })}
-                    </PortalServiceTileContainer>
-                }
+      
                 
             </DigitalServicesContainer>
         )
