@@ -8,6 +8,7 @@ import { fetchData } from 'utils/fetchServices'
 // import { LenkepanelBase } from "nav-frontend-lenkepanel";
 import NavFrontendSpinner from "nav-frontend-spinner";
 import { Tile, Service } from "types/navServices";
+import { Knapp } from "nav-frontend-knapper";
 
 
 const DigitalServicesContainer = styled.div`
@@ -18,7 +19,8 @@ const DigitalServicesContainer = styled.div`
     flex-direction: column;
     align-items: center;
 `;
-const PortalServiceTileContainer = styled.div`
+
+const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     flex: 1;
     padding-top: 30px;
     display: flex;
@@ -30,15 +32,11 @@ const PortalServiceTileContainer = styled.div`
         margin: 0;
     }
     @media (min-width: 500px) {
-        max-width: 1000px;
+        max-width: ${(props) => props.maxWidth}px;
         width: 100%;
     }
 
 `;
-
-
-
-
 
 const ErrorParagraph = styled.p`
     color: #ff4a4a;
@@ -54,6 +52,7 @@ const SpinnerCentered = styled.div`
 const Dashboard = () => {
     const [tiles, setAreas] = useState<Tile[]>()
     const [isLoading, setIsLoading] = useState(true)
+    const [expandAll, changeExpand] = useState(false)
 
     useEffect(() => {
         (async function () {
@@ -76,19 +75,42 @@ const Dashboard = () => {
             </SpinnerCentered>
         ) 
     }
-    
+
+    const toggleExpand = () => {
+        changeExpand(!expandAll)
+    }
+
+
+    let tileKey = "false"    
+    if(expandAll == true) {
+        tileKey = "true"
+    }
+
+
     if(!isLoading && tiles.length > 0){
         return (
             <DigitalServicesContainer>
                 <StatusOverview tiles={tiles} />
-                <PortalServiceTileContainer>
-                    {tiles.map(tile => {
-                        return (
-                            <PortalServiceTile key={tile.area.name} tile={tile} expanded={false}/>
-                            
-                        )
-                    })}
-                </PortalServiceTileContainer>
+                    <Knapp kompakt onClick={toggleExpand}>Ekspander/lukk feltene</Knapp>
+                {tiles.length % 2 === 0 ? //Hvis antallet tiles er et partall, legg to per rad.
+                    <PortalServiceTileContainer maxWidth={600}>
+                        {tiles.map(tile => {
+                            return (
+                                <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
+                                
+                            )
+                        })}
+                    </PortalServiceTileContainer>    
+                    :   //ellers legg tre per rad
+                    <PortalServiceTileContainer maxWidth={1000}>
+                        {tiles.map(tile => {
+                            return (
+                                <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
+                                
+                            )
+                        })}
+                    </PortalServiceTileContainer>
+                }
                 
             </DigitalServicesContainer>
         )
