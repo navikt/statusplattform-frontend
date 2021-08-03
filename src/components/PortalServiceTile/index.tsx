@@ -5,7 +5,7 @@ import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed } from 'compone
 import { Tile } from 'types/navServices'
 import { getIconsFromGivenCode } from 'utils/servicesOperations'
 
-import { Bag, Folder, PensionBag, HealthCase, ErrorFilled, WarningFilled, Employer, Information, People, Family, Service, Globe } from '@navikt/ds-icons'
+import { Expand, Collapse, Bag, Folder, PensionBag, HealthCase, ErrorFilled, WarningFilled, Employer, Information, People, Family, Service, Globe } from '@navikt/ds-icons'
 import Panel from 'nav-frontend-paneler';
 import { Undertittel } from "nav-frontend-typografi";
 
@@ -95,6 +95,12 @@ const ServicesList = styled.ul`
     }
 `;
 
+const CenteredExpandRetractSpan = styled.span`
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+`
+
 
 const handleAndSetNavIcon = (ikon: string) => {
     return getIconsFromGivenCode(ikon)
@@ -137,14 +143,18 @@ export const PortalServiceTile = ({tile, expanded}: PortalServiceTileProps) => {
                     <section>{handleAndSetNavIcon(tile.area.ikon)}</section>
                     <span>{tile.area.name}</span>
                 </UndertittelCustomized> 
-                {isExpanded &&
-                    <ServicesList>
+                {isExpanded ?
+                    <>
+                        <ServicesList apneTekst="Se mer">
                         {tile.services.map(service => (
                             <li key={service.name}>
                                 <section> {handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
                             </li>
                         ))}
-                    </ServicesList>
+                        </ServicesList>
+                        <CenteredExpandRetractSpan><Collapse /></CenteredExpandRetractSpan>
+                    </>
+                    : <CenteredExpandRetractSpan><Expand /></CenteredExpandRetractSpan>
                 }
 
             </div>
