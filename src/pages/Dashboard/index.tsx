@@ -35,6 +35,9 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
         max-width: ${(props) => props.maxWidth}px;
         width: 100%;
     }
+    @media (min-width: 1200px) {
+        max-width: ${(props) => props.maxWidth}px;
+    }
 
 `;
 
@@ -93,14 +96,26 @@ const Dashboard = () => {
                 <StatusOverview tiles={tiles} />
                     <Knapp kompakt onClick={toggleExpand}>Ekspander/lukk feltene</Knapp>
                 {tiles.length % 2 === 0 ? //Hvis antallet tiles er et partall, legg to per rad.
-                    <PortalServiceTileContainer maxWidth={600}>
-                        {tiles.map(tile => {
-                            return (
-                                <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
-                                
-                            )
-                        })}
-                    </PortalServiceTileContainer>    
+                    (window.innerWidth > 1200 ? //Men dersom skjermen er bredere enn 1200px, legg 4 per
+                        <PortalServiceTileContainer maxWidth={1200}>
+                            {tiles.map(tile => {
+                                return (
+                                    <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
+                                    
+                                )
+                            })}
+                        </PortalServiceTileContainer>
+                        :
+                        <PortalServiceTileContainer maxWidth={600}>
+                            {tiles.map(tile => {
+                                return (
+                                    <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
+                                    
+                                )
+                            })}
+                        </PortalServiceTileContainer>
+                    )
+                       
                     :   //ellers legg tre per rad
                     <PortalServiceTileContainer maxWidth={1000}>
                         {tiles.map(tile => {
