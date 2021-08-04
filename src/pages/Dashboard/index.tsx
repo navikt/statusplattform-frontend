@@ -33,20 +33,28 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     }
     @media (min-width: 500px) {
         max-width: ${(props) => props.maxWidth}px;
-        width: 100%;
+        /* width: 100%; */
     }
     @media (min-width: 1200px) {
-        max-width: ${(props) => props.maxWidth}px;
+        /* max-width: ${(props) => props.maxWidth}px; */
     }
 
 `;
+
+const PortalServiceTileRow = styled.div `
+    width: 100%;
+    margin-bottom: 10px;
+    display: flex;
+    flex-flow: row wrap;
+`
 
 const ErrorParagraph = styled.p`
     color: #ff4a4a;
     font-weight: bold;
     padding: 10px;
     border-radius: 5px;
-`;
+`
+
 const SpinnerCentered = styled.div`
     position: absolute;
     top: 40%;
@@ -56,7 +64,6 @@ const Dashboard = () => {
     const [tiles, setAreas] = useState<Tile[]>()
     const [isLoading, setIsLoading] = useState(true)
     const [expandAll, changeExpand] = useState(false)
-    // const [rows,setRows] = useState<Tile[][]>([])
 
     useEffect(() => {
         (async function () {
@@ -91,19 +98,55 @@ const Dashboard = () => {
         tileKey = "true"
     }
 
+    let maxWidth = window.innerWidth > 
+            1800 ? 1800 : (window.innerWidth > 
+            1200 ? 1200 : (window.innerWidth > 
+            1000 ? 1000 : 600));
 
-    let numberOfTilesPerRow = tiles.length % 6 == 0? 6: (tiles.length % 5 == 0? 5: (tiles.length % 4 == 0? 4 : (tiles.length % 3 == 0? 3 :  (tiles.length % 2 == 0 ? 2: 1))));
-    let numberOfRows = Math.ceil( tiles.length/numberOfTilesPerRow );
-    
+    const estimateNumberOfTilesPerRow = () => {
 
-    let rows: Tile[][] = [];
-    for(var i = 0; i < tiles.length; i = i + numberOfTilesPerRow){
-        rows.push(tiles.slice(i,i+ numberOfTilesPerRow));
- 
+
+/*
+    DENNE metoden skal finne ut hvor mange tiles det skal være per rad
+    Det gjenstår å legge til rette for at det kan endres av brukeren.
+    Gjenstår også å rekursivt decremente antall per rad dersom det ikke er mulig å få plass til det. Det var her krasjtilfellene startet.
+*/
+
+        let numberOfTiles: number = 1
+        console.log(numberOfTiles)
+        
+        let possibleNumberOfTilesPerRow = tiles.length % 6 == 0? 6: (tiles.length % 5 == 0? 5: (tiles.length % 4 == 0? 4 : (tiles.length % 3 == 0? 3 :  (tiles.length % 2 == 0 ? 2: 1))));
+        console.log("checking possible number of tiles")
+        if (possibleNumberOfTilesPerRow === numberOfTiles || numberOfTiles < possibleNumberOfTilesPerRow) {
+            return numberOfTiles
+        }
+        let validNumberOfTilesPerRow = false
+        while (!validNumberOfTilesPerRow && possibleNumberOfTilesPerRow !< 0) {
+            possibleNumberOfTilesPerRow--
+            if(possibleNumberOfTilesPerRow*300 <= maxWidth) {
+                validNumberOfTilesPerRow = true
+                numberOfTiles = possibleNumberOfTilesPerRow
+            }
+        }
+        console.log(numberOfTiles)
+        return numberOfTiles
     }
-   
 
-    let maxWidth = window.innerWidth > 1200 ? 1200: (window.innerWidth > 1000? 1000: 600);
+    const generateRowsOfTiles = () => {
+        //Endre denne oppførselen dersom det er ønskelig å bestemme antall per rad på brukersiden.
+        const numberOfTilesPerRow = estimateNumberOfTilesPerRow()
+        let numberOfRows = Math.ceil( tiles.length/numberOfTilesPerRow );
+        let rows: Tile[][][] = [];
+    
+        for(var i = 0; i < tiles.length; i = i + numberOfTilesPerRow){
+            let row: Tile[][]= []
+            row.push (tiles.slice(i,i+ numberOfTilesPerRow))
+            rows.push(row)
+        }
+        return rows
+    }
+
+    
 
     if(!isLoading && tiles.length > 0){
         return (
@@ -112,15 +155,24 @@ const Dashboard = () => {
                     <Knapp kompakt onClick={toggleExpand}>Ekspander/lukk feltene</Knapp>
        
                         <PortalServiceTileContainer maxWidth={maxWidth}>
-                            {rows.map(row => {
+                            {generateRowsOfTiles().map(row => (
+                                row.map((listOfTilesInRow, index) => (
+                                    <PortalServiceTileRow key={index}>
+                                        {listOfTilesInRow.map(tile => (
+                                            <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
+                                        ))}
+                                    </PortalServiceTileRow>
+                                ))
+                            ))}
+                            {/* {rows.map(row => {
                                 row.map(tile => {
-                                    
-                                    return(
+
+                                        return(
                                         <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
                                     )
 
                                 })
-                            })}
+                            })} */}
                         </PortalServiceTileContainer>
       
                 
