@@ -95,9 +95,6 @@ const Dashboard = () => {
         ) 
     }
 
-    const toggleExpand = () => {
-        changeExpand(!expandAll)
-    }
 
     let maxWidth = width > 
             1800 ? 1800 : (window.innerWidth > 
@@ -143,8 +140,18 @@ const Dashboard = () => {
         }
         return rows
     }
-    const isTileExpandedManually = (rowIndex : number, index : number) => {
+    const isTileExpanded = (rowIndex : number, index : number) => {
         return expandedTiles.includes(rowIndex*numberOfTilesPerRow + index );
+    }
+
+    const toggleExpandAll = () => {
+        if(expandAll) {
+            changeExpand(false)
+            setExpandedTiles([])
+        }else {
+            changeExpand(true)
+            setExpandedTiles(Array.from(Array(tiles.length).keys()))
+        }
     }
 
     let rows = generateRowsOfTiles();
@@ -161,13 +168,13 @@ const Dashboard = () => {
         return (
             <DigitalServicesContainer>
                 <StatusOverview tiles={tiles} />
-                    <Knapp kompakt onClick={toggleExpand}>Ekspander/lukk feltene</Knapp>
+                    <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
        
                         <PortalServiceTileContainer maxWidth={maxWidth}>
                             {rows.map((row, rowIndex) => (
                                 <PortalServiceTileRow key={rowIndex}>
                                     {row.map((tile,index) => ( 
-                                        <PortalServiceTile key={index} toggleTile={toggleTile} tileIndex={rowIndex*numberOfTilesPerRow + index}  tile={tile} expanded={expandAll || isTileExpandedManually(rowIndex, index)  } />
+                                        <PortalServiceTile key={index} toggleTile={toggleTile} tileIndex={rowIndex*numberOfTilesPerRow + index}  tile={tile} expanded={isTileExpanded(rowIndex, index)  } />
                                     ))}
                                 </PortalServiceTileRow>
                             ))
