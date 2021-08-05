@@ -33,9 +33,12 @@ const PanelCustomized = styled(Panel)`
         }
     }
     @media (min-width: 600px) {
-        width: 100%;
+        width: 290px;
     }
-    
+
+    @media (min-width: 700px) {
+        /* height: 100%; */
+    }
     :hover {
         span {
             text-decoration: underline;
@@ -125,14 +128,17 @@ const handleAndSetStatusIcon = (status: string): any => {
 export interface PortalServiceTileProps {
     tile: Tile;
     expanded:boolean;
+    toggleTile: Function;
+    index: number;
 }
 
 
 //expanded kan være true eller false avhengig av dashboard prop. Hvis prop er true, er knappen på dashboard togglet og alle ekspanderes.
-export const PortalServiceTile = ({tile, expanded}: PortalServiceTileProps) => {
+export const PortalServiceTile = ({tile, expanded,toggleTile, index}: PortalServiceTileProps) => {
     const [isExpanded, setExpanded] = useState(expanded)
     const toggleExpanded = () => {
         setExpanded(!isExpanded)
+        toggleTile(index)
     }
 
     return (
@@ -155,7 +161,7 @@ export const PortalServiceTile = ({tile, expanded}: PortalServiceTileProps) => {
                     </>
                 }
             </div>
-            
+
             <CenteredExpandRetractSpan>{isExpanded ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan>
         </PanelCustomized>
     )

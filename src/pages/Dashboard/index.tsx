@@ -46,6 +46,7 @@ const PortalServiceTileRow = styled.div `
     margin-bottom: 10px;
     display: flex;
     flex-flow: row nowrap;
+    justify-content: center;
 `
 
 const ErrorParagraph = styled.p`
@@ -64,6 +65,8 @@ const Dashboard = () => {
     const [tiles, setAreas] = useState<Tile[]>()
     const [isLoading, setIsLoading] = useState(true)
     const [expandAll, changeExpand] = useState(false)
+    const [width, setWidth] = useState(typeof window !== "undefined"? window.innerWidth:0)
+
 
     useEffect(() => {
         (async function () {
@@ -72,6 +75,10 @@ const Dashboard = () => {
             setIsLoading(false)
         })()
     }, [])
+    
+ useEffect(() => {
+    window.addEventListener("resize", () => setWidth(window.innerWidth))
+  }, []);
 
 
 
@@ -98,55 +105,59 @@ const Dashboard = () => {
         tileKey = "true"
     }
 
-    let maxWidth = window.innerWidth > 
+    let maxWidth = width > 
             1800 ? 1800 : (window.innerWidth > 
             1200 ? 1200 : (window.innerWidth > 
             1000 ? 1000 : 600));
 
-            
-            
-            /*
-            DENNE metoden skal finne ut hvor mange tiles det skal være per rad
-            Det gjenstår å legge til rette for at det kan endres av brukeren.
-            Gjenstår også å rekursivt decremente antall per rad dersom det ikke er mulig å få plass til det. Det var her krasjtilfellene startet.
-            */
-           
-    const estimateNumberOfTilesPerRow = (inputFromUser? : number) => {
-        let numberOfTiles: number = 2
-        console.log(numberOfTiles)
-        
-        let possibleNumberOfTilesPerRow = tiles.length % 6 == 0? 6: (tiles.length % 5 == 0? 5: (tiles.length % 4 == 0? 4 : (tiles.length % 3 == 0? 3 :  (tiles.length % 2 == 0 ? 2: 1))));
-        console.log("checking possible number of tiles")
-        if (possibleNumberOfTilesPerRow === numberOfTiles || numberOfTiles < possibleNumberOfTilesPerRow) {
-            return numberOfTiles
-        }
-        let validNumberOfTilesPerRow = false
-        while (!validNumberOfTilesPerRow && possibleNumberOfTilesPerRow !< 0) {
-            possibleNumberOfTilesPerRow--
-            if(possibleNumberOfTilesPerRow*300 <= maxWidth) {
-                validNumberOfTilesPerRow = true
-                numberOfTiles = possibleNumberOfTilesPerRow
+    const biggestModulo = (totalNumberOfTiles: number,maxTilesPerRow: number) => {
+        let calculatedMaxTiles = maxTilesPerRow; 
+        while(calculatedMaxTiles > 1){
+            if(totalNumberOfTiles % calculatedMaxTiles == 0){
+                return calculatedMaxTiles; 
             }
+            calculatedMaxTiles--;
         }
-        console.log(numberOfTiles)
-        return numberOfTiles
+        //Dersom ikke y, og ingen tall mindre enn y, ikke går opp i x, returneres y; 
+        return maxTilesPerRow; 
+
     }
+
+    const calculateNumberOfTilesPerRow = (userRowSize ?: number) => {
+        let widthOfTile = 300; 
+
+        let maxNumberOfTilesPerRow = Math.floor(maxWidth/widthOfTile);
+        let numberOfTilesPerRow = biggestModulo(tiles.length, maxNumberOfTilesPerRow);
+
+        return numberOfTilesPerRow;
+    }
+    let numberOfTilesPerRow = calculateNumberOfTilesPerRow();
 
     const generateRowsOfTiles = () => {
         //Endre denne oppførselen dersom det er ønskelig å bestemme antall per rad på brukersiden.
-        const numberOfTilesPerRow = estimateNumberOfTilesPerRow()
+        
         let numberOfRows = Math.ceil( tiles.length/numberOfTilesPerRow );
-        let rows: Tile[][][] = [];
+        let rows: Tile[][] = [];
     
         for(var i = 0; i < tiles.length; i = i + numberOfTilesPerRow){
-            let row: Tile[][]= []
-            row.push (tiles.slice(i,i+ numberOfTilesPerRow))
-            rows.push(row)
+            rows.push (tiles.slice(i,i+ numberOfTilesPerRow))
+
         }
         return rows
     }
 
-    
+    let rows = generateRowsOfTiles();
+    let expandedTiles = [];
+    const toggleTile = (index : number) => {
+        console.log(index)
+        if(expandedTiles.includes(index)){
+            expandedTiles = expandedTiles.filter(i => i != index)
+        }
+        else{
+            expandedTiles.push(index);
+        }
+        console.log(expandedTiles);
+    }
 
     if(!isLoading && tiles.length > 0){
         return (
@@ -155,24 +166,15 @@ const Dashboard = () => {
                     <Knapp kompakt onClick={toggleExpand}>Ekspander/lukk feltene</Knapp>
        
                         <PortalServiceTileContainer maxWidth={maxWidth}>
-                            {generateRowsOfTiles().map(row => (
-                                row.map((listOfTilesInRow, index) => (
-                                    <PortalServiceTileRow key={index}>
-                                        {listOfTilesInRow.map(tile => (
-                                            <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
-                                        ))}
-                                    </PortalServiceTileRow>
-                                ))
-                            ))}
-                            {/* {rows.map(row => {
-                                row.map(tile => {
+                            {rows.map((row, rowIndex) => (
+                                <PortalServiceTileRow key={rowIndex}>
+                                    {row.map((tile,index) => (
+                                        <PortalServiceTile key={index} index={rowIndex*numberOfTilesPerRow + index}  toggleTile={toggleTile} tile={tile} expanded={expandAll || expandedTiles.includes(rowIndex*numberOfTilesPerRow + index)} />
+                                    ))}
+                                </PortalServiceTileRow>
+                            ))
+                            }
 
-                                        return(
-                                        <PortalServiceTile key={tile.area.name + expandAll} tile={tile} expanded={expandAll}/>
-                                    )
-
-                                })
-                            })} */}
                         </PortalServiceTileContainer>
       
                 
