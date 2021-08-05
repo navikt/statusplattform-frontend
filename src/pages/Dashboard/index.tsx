@@ -46,7 +46,6 @@ const PortalServiceTileRow = styled.div `
     margin-bottom: 10px;
     display: flex;
     flex-flow: row nowrap;
-    align-items: flex-start;
 `
 
 const ErrorParagraph = styled.p`
@@ -112,8 +111,8 @@ const Dashboard = () => {
             Gjenstår også å rekursivt decremente antall per rad dersom det ikke er mulig å få plass til det. Det var her krasjtilfellene startet.
             */
            
-    const estimateNumberOfTilesPerRow = () => {
-        let numberOfTiles: number = 3
+    const estimateNumberOfTilesPerRow = (inputFromUser? : number) => {
+        let numberOfTiles: number = 2
         console.log(numberOfTiles)
         
         let possibleNumberOfTilesPerRow = tiles.length % 6 == 0? 6: (tiles.length % 5 == 0? 5: (tiles.length % 4 == 0? 4 : (tiles.length % 3 == 0? 3 :  (tiles.length % 2 == 0 ? 2: 1))));

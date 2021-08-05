@@ -13,6 +13,10 @@ import { Undertittel } from "nav-frontend-typografi";
 const PanelCustomized = styled(Panel)`
     color: var(--navBla);
     margin: 5px;
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    justify-content: space-between;
     > div {
         h2 svg:first-child {
             width: 1.778rem;
@@ -31,9 +35,7 @@ const PanelCustomized = styled(Panel)`
     @media (min-width: 600px) {
         width: 100%;
     }
-    .not-expanded {
-        height: 0%;
-    }
+    
     :hover {
         span {
             text-decoration: underline;
@@ -43,8 +45,8 @@ const PanelCustomized = styled(Panel)`
         box-shadow: #a0a0a0 0 2px 1px 0;
         cursor: pointer;
     }
-    ${({ expanded }) => expanded && `
-// Dette kan kanskje fjernes
+    ${({ isExpanded }) => isExpanded && `
+        align-self: stretch !important;
     `}
 
 `;
@@ -69,8 +71,8 @@ const UndertittelCustomized = styled(Undertittel)`
 const ServicesList = styled.ul`
     margin-left:0;
     border-radius:0 0 10px 10px;
-    color:black;
-    background-color:white;
+    color: black;
+    background-color: white;
     > li {
         display: flex;
         justify-content: flex-start;
@@ -97,6 +99,7 @@ const CenteredExpandRetractSpan = styled.span`
     margin-top: 20px;
     display: flex;
     justify-content: center;
+    /* align-self: stretch; */
 `
 
 
@@ -133,28 +136,27 @@ export const PortalServiceTile = ({tile, expanded}: PortalServiceTileProps) => {
     }
 
     return (
-        <PanelCustomized onClick={() => toggleExpanded()}>
+        <PanelCustomized isExpanded={isExpanded} onClick={() => toggleExpanded()}>
             <div>
                 <UndertittelCustomized>
                     <section>{handleAndSetStatusIcon(tile.status)}</section>
                     <section>{handleAndSetNavIcon(tile.area.ikon)}</section>
                     <span>{tile.area.name}</span>
                 </UndertittelCustomized> 
-
+                {isExpanded &&
+                    <>
+                        <ServicesList apneTekst="Se mer">
+                        {tile.services.map(service => (
+                            <li key={service.name}>
+                                <section> {handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
+                            </li>
+                        ))}
+                        </ServicesList>
+                    </>
+                }
             </div>
-            {isExpanded ?
-                <>
-                    <ServicesList apneTekst="Se mer">
-                    {tile.services.map(service => (
-                        <li key={service.name}>
-                            <section> {handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
-                        </li>
-                    ))}
-                    </ServicesList>
-                    <CenteredExpandRetractSpan><Collapse /></CenteredExpandRetractSpan>
-                </>
-                : <CenteredExpandRetractSpan><Expand /></CenteredExpandRetractSpan>
-            }
+            
+            <CenteredExpandRetractSpan>{isExpanded ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan>
         </PanelCustomized>
     )
 }
