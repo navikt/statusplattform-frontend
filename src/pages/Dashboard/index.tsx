@@ -77,9 +77,9 @@ const Dashboard = () => {
         })()
     }, [])
     
- useEffect(() => {
-    window.addEventListener("resize", () => setWidth(window.innerWidth))
-  }, []);
+    useEffect(() => {
+        window.addEventListener("resize", () => setWidth(window.innerWidth))
+    }, []);
 
 
 
