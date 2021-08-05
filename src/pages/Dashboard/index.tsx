@@ -65,6 +65,7 @@ const Dashboard = () => {
     const [tiles, setAreas] = useState<Tile[]>()
     const [isLoading, setIsLoading] = useState(true)
     const [expandAll, changeExpand] = useState(false)
+    const [expandedTiles, setExpandedTiles] = useState([]);
     const [width, setWidth] = useState(typeof window !== "undefined"? window.innerWidth:0)
 
 
@@ -98,13 +99,6 @@ const Dashboard = () => {
         changeExpand(!expandAll)
     }
 
-
-
-    let tileKey = "false"    
-    if(expandAll == true) {
-        tileKey = "true"
-    }
-
     let maxWidth = width > 
             1800 ? 1800 : (window.innerWidth > 
             1200 ? 1200 : (window.innerWidth > 
@@ -124,10 +118,14 @@ const Dashboard = () => {
     }
 
     const calculateNumberOfTilesPerRow = (userRowSize ?: number) => {
+        if(width < 600){
+            return 1;
+        }
         let widthOfTile = 300; 
-
+        
         let maxNumberOfTilesPerRow = Math.floor(maxWidth/widthOfTile);
         let numberOfTilesPerRow = biggestModulo(tiles.length, maxNumberOfTilesPerRow);
+      
 
         return numberOfTilesPerRow;
     }
@@ -145,18 +143,18 @@ const Dashboard = () => {
         }
         return rows
     }
+    const isTileExpandedManually = (rowIndex : number, index : number) => {
+        return expandedTiles.includes(rowIndex*numberOfTilesPerRow + index );
+    }
 
     let rows = generateRowsOfTiles();
-    let expandedTiles = [];
-    const toggleTile = (index : number) => {
-        console.log(index)
+    const toggleTile = (index:number) => {
         if(expandedTiles.includes(index)){
-            expandedTiles = expandedTiles.filter(i => i != index)
+            setExpandedTiles(expandedTiles.filter(i => i != index))
         }
         else{
-            expandedTiles.push(index);
+            setExpandedTiles(expandedTiles.concat([index]));
         }
-        console.log(expandedTiles);
     }
 
     if(!isLoading && tiles.length > 0){
@@ -168,8 +166,8 @@ const Dashboard = () => {
                         <PortalServiceTileContainer maxWidth={maxWidth}>
                             {rows.map((row, rowIndex) => (
                                 <PortalServiceTileRow key={rowIndex}>
-                                    {row.map((tile,index) => (
-                                        <PortalServiceTile key={index} index={rowIndex*numberOfTilesPerRow + index}  toggleTile={toggleTile} tile={tile} expanded={expandAll || expandedTiles.includes(rowIndex*numberOfTilesPerRow + index)} />
+                                    {row.map((tile,index) => ( 
+                                        <PortalServiceTile key={index} toggleTile={toggleTile} tileIndex={rowIndex*numberOfTilesPerRow + index}  tile={tile} expanded={expandAll || isTileExpandedManually(rowIndex, index)  } />
                                     ))}
                                 </PortalServiceTileRow>
                             ))

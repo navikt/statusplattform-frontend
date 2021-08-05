@@ -13,6 +13,7 @@ import { Undertittel } from "nav-frontend-typografi";
 const PanelCustomized = styled(Panel)`
     color: var(--navBla);
     margin: 5px;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-self: flex-start;
@@ -129,27 +130,25 @@ export interface PortalServiceTileProps {
     tile: Tile;
     expanded:boolean;
     toggleTile: Function;
-    index: number;
+    tileIndex: number;
 }
 
 
 //expanded kan være true eller false avhengig av dashboard prop. Hvis prop er true, er knappen på dashboard togglet og alle ekspanderes.
-export const PortalServiceTile = ({tile, expanded,toggleTile, index}: PortalServiceTileProps) => {
-    const [isExpanded, setExpanded] = useState(expanded)
+export const PortalServiceTile = ({tile, expanded ,toggleTile, tileIndex}: PortalServiceTileProps) => {
     const toggleExpanded = () => {
-        setExpanded(!isExpanded)
-        toggleTile(index)
+        toggleTile(tileIndex)
     }
 
     return (
-        <PanelCustomized isExpanded={isExpanded} onClick={() => toggleExpanded()}>
+        <PanelCustomized isExpanded={expanded} onClick={() => toggleExpanded()}>
             <div>
                 <UndertittelCustomized>
                     <section>{handleAndSetStatusIcon(tile.status)}</section>
                     <section>{handleAndSetNavIcon(tile.area.ikon)}</section>
                     <span>{tile.area.name}</span>
                 </UndertittelCustomized> 
-                {isExpanded &&
+                {expanded &&
                     <>
                         <ServicesList apneTekst="Se mer">
                         {tile.services.map(service => (
@@ -162,7 +161,7 @@ export const PortalServiceTile = ({tile, expanded,toggleTile, index}: PortalServ
                 }
             </div>
 
-            <CenteredExpandRetractSpan>{isExpanded ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan>
+            <CenteredExpandRetractSpan>{expanded ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan>
         </PanelCustomized>
     )
 }
