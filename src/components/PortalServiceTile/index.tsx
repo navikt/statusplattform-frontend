@@ -141,7 +141,7 @@ export const PortalServiceTile = ({tile, expanded ,toggleTile, tileIndex}: Porta
     }
 
     return (
-        <PanelCustomized isExpanded={expanded} onClick={() => toggleExpanded()}>
+        <PanelCustomized onClick={() => toggleExpanded()}>
             <div>
                 <UndertittelCustomized>
                     <section>{handleAndSetStatusIcon(tile.status)}</section>
