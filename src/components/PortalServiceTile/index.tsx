@@ -31,8 +31,8 @@ const PanelCustomized = styled(Panel)`
     @media (min-width: 600px) {
         width: 100%;
     }
-    @media (min-width: 700px) {
-        height: 100%;
+    .not-expanded {
+        height: 0%;
     }
     :hover {
         span {
@@ -44,8 +44,7 @@ const PanelCustomized = styled(Panel)`
         cursor: pointer;
     }
     ${({ expanded }) => expanded && `
-       
-        
+// Dette kan kanskje fjernes
     `}
 
 `;
@@ -136,27 +135,26 @@ export const PortalServiceTile = ({tile, expanded}: PortalServiceTileProps) => {
     return (
         <PanelCustomized onClick={() => toggleExpanded()}>
             <div>
-                
                 <UndertittelCustomized>
                     <section>{handleAndSetStatusIcon(tile.status)}</section>
                     <section>{handleAndSetNavIcon(tile.area.ikon)}</section>
                     <span>{tile.area.name}</span>
                 </UndertittelCustomized> 
-                {isExpanded ?
-                    <>
-                        <ServicesList apneTekst="Se mer">
-                        {tile.services.map(service => (
-                            <li key={service.name}>
-                                <section> {handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
-                            </li>
-                        ))}
-                        </ServicesList>
-                        <CenteredExpandRetractSpan><Collapse /></CenteredExpandRetractSpan>
-                    </>
-                    : <CenteredExpandRetractSpan><Expand /></CenteredExpandRetractSpan>
-                }
 
             </div>
+            {isExpanded ?
+                <>
+                    <ServicesList apneTekst="Se mer">
+                    {tile.services.map(service => (
+                        <li key={service.name}>
+                            <section> {handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
+                        </li>
+                    ))}
+                    </ServicesList>
+                    <CenteredExpandRetractSpan><Collapse /></CenteredExpandRetractSpan>
+                </>
+                : <CenteredExpandRetractSpan><Expand /></CenteredExpandRetractSpan>
+            }
         </PanelCustomized>
     )
 }

@@ -45,7 +45,8 @@ const PortalServiceTileRow = styled.div `
     width: 100%;
     margin-bottom: 10px;
     display: flex;
-    flex-flow: row wrap;
+    flex-flow: row nowrap;
+    align-items: flex-start;
 `
 
 const ErrorParagraph = styled.p`
@@ -103,16 +104,16 @@ const Dashboard = () => {
             1200 ? 1200 : (window.innerWidth > 
             1000 ? 1000 : 600));
 
+            
+            
+            /*
+            DENNE metoden skal finne ut hvor mange tiles det skal være per rad
+            Det gjenstår å legge til rette for at det kan endres av brukeren.
+            Gjenstår også å rekursivt decremente antall per rad dersom det ikke er mulig å få plass til det. Det var her krasjtilfellene startet.
+            */
+           
     const estimateNumberOfTilesPerRow = () => {
-
-
-/*
-    DENNE metoden skal finne ut hvor mange tiles det skal være per rad
-    Det gjenstår å legge til rette for at det kan endres av brukeren.
-    Gjenstår også å rekursivt decremente antall per rad dersom det ikke er mulig å få plass til det. Det var her krasjtilfellene startet.
-*/
-
-        let numberOfTiles: number = 1
+        let numberOfTiles: number = 3
         console.log(numberOfTiles)
         
         let possibleNumberOfTilesPerRow = tiles.length % 6 == 0? 6: (tiles.length % 5 == 0? 5: (tiles.length % 4 == 0? 4 : (tiles.length % 3 == 0? 3 :  (tiles.length % 2 == 0 ? 2: 1))));
