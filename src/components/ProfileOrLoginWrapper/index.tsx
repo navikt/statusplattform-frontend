@@ -58,7 +58,6 @@ const ProfileOrLogin = () => {
 
     const toggleMenu = () => {
         changeMenuState(!isMenuExpanded)
-        console.log(isMenuExpanded)
     }
     return (
         <ProfileOrLoginContainer>
