@@ -10,7 +10,7 @@ import Panel from 'nav-frontend-paneler';
 import { Undertittel } from "nav-frontend-typografi";
 
 
-const PanelCustomized = styled(Panel)`
+const PanelCustomized = styled(Panel)<{isExpanded: boolean}>`
     color: var(--navBla);
     margin: 5px;
     width: 100%;
@@ -128,7 +128,7 @@ const handleAndSetStatusIcon = (status: string): any => {
 
 export interface PortalServiceTileProps {
     tile: Tile;
-    expanded:boolean;
+    expanded: boolean;
     toggleTile: Function;
     tileIndex: number;
 }
@@ -141,7 +141,7 @@ export const PortalServiceTile = ({tile, expanded ,toggleTile, tileIndex}: Porta
     }
 
     return (
-        <PanelCustomized onClick={() => toggleExpanded()}>
+        <PanelCustomized isExpanded={expanded} onClick={() => toggleExpanded()}>
             <div>
                 <UndertittelCustomized>
                     <section>{handleAndSetStatusIcon(tile.status)}</section>
