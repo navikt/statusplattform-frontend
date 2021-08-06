@@ -25,17 +25,17 @@ const TrafficLightsContainer = styled.div`
     span div {
         border-right: 2px solid;
         border-left: 2px solid;
-        padding: 3px 1px;
+        padding: 2px 1px;
     }
     span:first-child div:first-child {
         border-top: 2px solid;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
     }
     span:last-child div:first-child {
         border-bottom: 2px solid;
-        border-bottom-left-radius: 8px;
-        border-bottom-right-radius: 8px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
     }
 `
 

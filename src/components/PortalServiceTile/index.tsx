@@ -128,7 +128,6 @@ export interface PortalServiceTileProps {
 }
 
 
-//expanded kan være true eller false avhengig av dashboard prop. Hvis prop er true, er knappen på dashboard togglet og alle ekspanderes.
 export const PortalServiceTile = ({tile, expanded ,toggleTile, tileIndex}: PortalServiceTileProps) => {
     const toggleExpanded = () => {
         toggleTile(tileIndex)

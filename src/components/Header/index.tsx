@@ -3,10 +3,11 @@ import styled from 'styled-components'
 import { Sidetittel } from 'nav-frontend-typografi'
 
 import TrafficLights from 'components/TrafficLights'
+import ProfileOrLogin from 'components/ProfileOrLoginWrapper'
 
 
 
-const CustomHeader = styled.header`
+export const CustomHeader = styled.header`
     min-height: 106px;
     height: 100%;
     padding-bottom: 0.5rem;
@@ -83,6 +84,7 @@ const Header = () => {
             
             </HeaderContent>
             <TrafficLights />
+            <ProfileOrLogin />
         </CustomHeader>
     )
 }
