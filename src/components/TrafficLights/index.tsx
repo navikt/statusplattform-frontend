@@ -70,9 +70,9 @@ const TrafficLights = () => {
     return (
         <TrafficLightsContainer>
             <div className="traffic-lights-wrapper">
-                <span><div><ErrorCircleRed /></div><p> = Feil på tjenesten</p></span>
-                <span><div><WarningCircleOrange /></div><p> = Redusert funksjonalitet</p></span>
-                <span><div><SuccessCircleGreen /></div><p> = Fungerer normalt</p></span>
+                <span><div><ErrorCircleRed /></div><p> Feil på tjenesten</p></span>
+                <span><div><WarningCircleOrange /></div><p> Redusert funksjonalitet</p></span>
+                <span><div><SuccessCircleGreen /></div><p> Fungerer normalt</p></span>
             </div>
         </TrafficLightsContainer>
     )

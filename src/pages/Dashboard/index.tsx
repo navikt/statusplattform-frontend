@@ -140,7 +140,7 @@ const Dashboard = () => {
         }
         return rows
     }
-    const isTileExpanded = (rowIndex : number, index : number) => {
+    const isTileExpanded = (rowIndex : number, index : number): boolean => {
         return expandedTiles.includes(rowIndex*numberOfTilesPerRow + index );
     }
 
@@ -174,7 +174,10 @@ const Dashboard = () => {
                             {rows.map((row, rowIndex) => (
                                 <PortalServiceTileRow key={rowIndex}>
                                     {row.map((tile,index) => ( 
-                                        <PortalServiceTile key={index} toggleTile={toggleTile} tileIndex={rowIndex*numberOfTilesPerRow + index}  tile={tile} expanded={isTileExpanded(rowIndex, index)  } />
+                                        <PortalServiceTile key={index} toggleTile={toggleTile}
+                                                            tileIndex={rowIndex*numberOfTilesPerRow + index}
+                                                            tile={tile} expanded={isTileExpanded(rowIndex, index)}
+                                                        />
                                     ))}
                                 </PortalServiceTileRow>
                             ))

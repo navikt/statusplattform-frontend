@@ -10,9 +10,9 @@ import Panel from 'nav-frontend-paneler';
 import { Undertittel } from "nav-frontend-typografi";
 
 
-const PanelCustomized = styled(Panel)<{isExpanded: boolean}>`
+const PanelCustomized = styled(Panel)`
     color: var(--navBla);
-    margin: 5px;
+    margin: 0 5px;
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -36,10 +36,6 @@ const PanelCustomized = styled(Panel)<{isExpanded: boolean}>`
     @media (min-width: 600px) {
         width: 290px;
     }
-
-    @media (min-width: 700px) {
-        /* height: 100%; */
-    }
     :hover {
         span {
             text-decoration: underline;
@@ -49,10 +45,9 @@ const PanelCustomized = styled(Panel)<{isExpanded: boolean}>`
         box-shadow: #a0a0a0 0 2px 1px 0;
         cursor: pointer;
     }
-    ${({ isExpanded }) => isExpanded && `
-        align-self: stretch !important;
-    `}
 
+    //Styrer om panelet skal strekke etter høyden eller ikke basert på prop i render
+    align-self: ${(props) => (props.alignment)};
 `;
 
 const UndertittelCustomized = styled(Undertittel)`
@@ -141,7 +136,7 @@ export const PortalServiceTile = ({tile, expanded ,toggleTile, tileIndex}: Porta
     }
 
     return (
-        <PanelCustomized isExpanded={expanded} onClick={() => toggleExpanded()}>
+        <PanelCustomized alignment={expanded == true ? "stretch" : "flex-start"} onClick={() => toggleExpanded()}>
             <div>
                 <UndertittelCustomized>
                     <section>{handleAndSetStatusIcon(tile.status)}</section>
@@ -153,7 +148,7 @@ export const PortalServiceTile = ({tile, expanded ,toggleTile, tileIndex}: Porta
                         <ServicesList apneTekst="Se mer">
                         {tile.services.map(service => (
                             <li key={service.name}>
-                                <section> {handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
+                                <section>{handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
                             </li>
                         ))}
                         </ServicesList>
