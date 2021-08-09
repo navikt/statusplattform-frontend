@@ -1,4 +1,6 @@
-import { People } from '@navikt/ds-icons'
+import { Logout, People, Settings } from '@navikt/ds-icons'
+import { Knapp } from 'nav-frontend-knapper';
+import Popover, {PopoverOrientering} from 'nav-frontend-popover';
 
 
 import { useState } from "react";
@@ -8,61 +10,114 @@ const ProfileOrLoginContainer = styled.div`
     width: 125px;
     height: 75px;
     margin: 0 20px;
-    border-radius: 50%;
-    border: 1px solid var(--navGra40);
-    background-color: var(--navBakgrunn);
-    transition: 0.2s ease-in-out;
+    z-index: 10;
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-
-    ul {
-        overflow: hidden;
-        /* position: absolute; */
-        .not-expanded {
-            display: none;
-        }
-        .expanded {
-            display: block;
-            position: relative;
-            z-index: 10;
-        }
-    }
-
-    :hover {
-        border: 1px solid transparent;
-        background-color: var(--navGraBakgrunn);
-        cursor: pointer;
-        transition: 0.2s ease-in-out;
-    }
 `
 
 const SignIn = styled.div`
-
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    border: 1px solid var(--navGra40);
+    transition: 0.2s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    :hover {
+        border: 1px solid transparent;
+        background-color: var(--navGraBakgrunn);
+        transition: 0.2s ease-in-out;
+        cursor: pointer;
+    }
+`
+const DropdownLogin = styled.div `
+    height: auto;
+    width: auto;
+    top: 0;
+    right: 0;
+    border: 1px solid black;
+    border-radius: 10px;
+    z-index: 100;
+    position: absolute;
+`
+const PopoverCustomized = styled(Popover)`
+    ul {
+        list-style: none;
+        padding: 0 1.5rem;
+        li {
+            margin: 1rem;
+            padding: 0.5rem;
+            :hover {
+                cursor: pointer;
+                text-decoration: underline;
+            }
+        }
+    }
 `
 
 const Menu = styled.span`
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    border: 1px solid var(--navGra40);
+    transition: 0.2s ease-in-out;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     svg:first-child {
         width: 50px;
         height: 50px;
         color: var(--navGra80);
     }
+    :hover {
+        border: 1px solid transparent;
+        background-color: var(--navGraBakgrunn);
+        transition: 0.2s ease-in-out;
+        cursor: pointer;
+    }
 `
 
 
 const ProfileOrLogin = () => {
-    const [isMenuExpanded, changeMenuState] = useState(false)
-
-    let isLoggedIn: boolean = true;
+    const [isDropdownMenuExpanded, changeMenuState] = useState(false)
+    const [isLoggedIn, changeLoginState] = useState(false)
+    const [anker, setAnker] = useState(undefined)
 
     const toggleMenu = () => {
-        changeMenuState(!isMenuExpanded)
+        changeMenuState(!isDropdownMenuExpanded)
+    }
+
+    const DropdownMenuContainer = () => {
+        if(isLoggedIn) {
+            return (
+                <>
+                    <PopoverCustomized
+                        ankerEl={anker}
+                        orientering={PopoverOrientering.Under}
+                        onRequestClose={() => setAnker(undefined)}
+                    >
+                        <ul>
+                            <strong>Navn: Nordmann, Ola</strong>
+                            <li>Min side</li>
+                            <li>Mine varsler</li>
+                            <li><Settings /> Konfigureringer</li>
+                            <li onClick={() => changeLoginState(false)}><Logout /> Logg ut</li>
+                        </ul>
+                    </PopoverCustomized>
+                </>
+            )
+        }
+        return null
     }
     return (
-        <ProfileOrLoginContainer>
+        <ProfileOrLoginContainer onClick={(e) => setAnker(e.currentTarget)}>
             {!isLoggedIn && 
-                <SignIn>Logg in</SignIn>
+                <>
+                    <SignIn onClick={() => changeLoginState(true)}>Logg in</SignIn>
+                </>
             }
             {isLoggedIn && 
                 <Menu onClick={() => toggleMenu()}>
@@ -71,11 +126,8 @@ const ProfileOrLogin = () => {
                     
                 </Menu>
             }
-            {isLoggedIn && isMenuExpanded && 
-            <ul className={isMenuExpanded ? "expanded" : "not-expanded"}>
-                <li>Profilinnstillinger</li>
-                <li>Konfigureringer</li>
-            </ul>
+            {isLoggedIn && 
+                <DropdownMenuContainer />
             }
         </ProfileOrLoginContainer>
     )
