@@ -33,16 +33,7 @@ const SignIn = styled.div`
         cursor: pointer;
     }
 `
-const DropdownLogin = styled.div `
-    height: auto;
-    width: auto;
-    top: 0;
-    right: 0;
-    border: 1px solid black;
-    border-radius: 10px;
-    z-index: 100;
-    position: absolute;
-`
+
 const PopoverCustomized = styled(Popover)`
     ul {
         list-style: none;
@@ -67,7 +58,7 @@ const Menu = styled.span`
     display: flex;
     justify-content: center;
     align-items: center;
-    svg:first-child {
+    .profil-bilde {
         width: 50px;
         height: 50px;
         color: var(--navGra80);
@@ -121,14 +112,14 @@ const ProfileOrLogin = () => {
             }
             {isLoggedIn && 
                 <Menu onClick={() => toggleMenu()}>
-                    <People />
+                    <People className="profil-bilde"/>
                     {/* TODO: Dette er bare skallet. Mer skal legges til */}
                     
+                    <DropdownMenuContainer />
                 </Menu>
             }
-            {isLoggedIn && 
-                <DropdownMenuContainer />
-            }
+            {/* {isLoggedIn && 
+            } */}
         </ProfileOrLoginContainer>
     )
 }
