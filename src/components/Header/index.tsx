@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Sidetittel } from 'nav-frontend-typografi'
 
 import TrafficLights from 'components/TrafficLights'
-import ProfileOrLogin from 'components/ProfileOrLoginWrapper'
+import ProfileOrLogin from 'components/ProfileOrLogin'
 
 
 
@@ -37,7 +37,7 @@ export const CustomHeader = styled.header`
     }
 
     @media (min-width: 650px) {
-        padding: 0 0 0 3rem;
+        padding: 0 1rem;
         flex-flow: row nowrap;
         align-items: center;
         justify-content: flex-start;

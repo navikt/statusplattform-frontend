@@ -7,19 +7,13 @@ import { useState } from "react";
 import styled from 'styled-components'
 
 const ProfileOrLoginContainer = styled.div`
-    width: 125px;
-    height: 75px;
     margin: 0 20px;
     z-index: 10;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
 `
 
 const SignIn = styled.div`
-    height: 100%;
-    width: 100%;
+    min-height: 75px;
+    min-width: 75px;
     border-radius: 50%;
     border: 1px solid var(--navGra40);
     transition: 0.2s ease-in-out;
@@ -50,8 +44,8 @@ const PopoverCustomized = styled(Popover)`
 `
 
 const Menu = styled.span`
-    height: 100%;
-    width: 100%;
+    min-height: 75px;
+    min-width: 75px;
     border-radius: 50%;
     border: 1px solid var(--navGra40);
     transition: 0.2s ease-in-out;

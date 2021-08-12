@@ -52,9 +52,6 @@ const Nav = styled.div `
 	@media (min-width: 225px){
 		flex-direction: row;
 	}
-	@media (min-width: 500px){
-		margin-bottom: 50px;
-	}
 `
 
 const LinkWrapper = styled.div`

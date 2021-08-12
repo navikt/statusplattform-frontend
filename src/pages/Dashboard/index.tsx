@@ -14,7 +14,6 @@ import { Knapp } from "nav-frontend-knapper";
 const DigitalServicesContainer = styled.div`
     width: 100%;
     padding: 0;
-    padding-bottom: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -22,7 +21,7 @@ const DigitalServicesContainer = styled.div`
 
 const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     flex: 1;
-    padding-top: 30px;
+    padding: 50px 0;
     display: flex;
     justify-content: center;
     align-items: space-between;

@@ -8,7 +8,7 @@ const TrafficLightsContainer = styled.div`
         display: flex;
     }
     span:nth-child(2) {
-        width: 215px;
+        width: 183px;
     }
     @media (min-width: 220px) {
         display: flex;

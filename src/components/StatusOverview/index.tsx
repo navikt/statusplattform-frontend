@@ -10,13 +10,16 @@ import MaintenanceScheduling from 'components/MaintenanceScheduling'
 import { Calender } from '@navikt/ds-icons';
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from 'utils/servicesOperations';
+import Lenkepanel from 'nav-frontend-lenkepanel';
+import Panel from 'nav-frontend-paneler';
+import { Knapp } from 'nav-frontend-knapper';
 // mapStatusAndIncidentsToArray
 
 const StatusOverviewContainer = styled.div`
     max-width: 1080px;
     width: 100%;
     padding: 0;
-    margin-bottom: 10px;
+    margin: 50px;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -31,6 +34,7 @@ const StatusBannerContainer = styled.div`
     padding: 1rem 0;
     width: 100%;
     display: flex;
+    justify-content: space-between;
     flex-direction: column;
     div:first-child {
         padding-bottom: 1rem;
@@ -39,21 +43,17 @@ const StatusBannerContainer = styled.div`
     @media (min-width: 200px) {
         padding: 2rem 1rem;
     }
-    @media (min-width: 45rem) {
-        display: flex;
-        justify-content: space-between;
+    @media (min-width: 350px) {
         flex-direction: row;
     }
     h2 {
         margin: 0 0 .5rem;
     }
 `;
-const LenkeCustomized = styled(Lenke)`
+const KnappCustomized = styled(Knapp)`
     border-radius: 30px;
-    border: 2px solid var(--navBla);
-    height: 3rem;
 	width: 7rem;
-    padding: 0 1.5rem;
+    white-space: normal;
     transition: 0.4s;
     :hover {
         transition: 0.4s;
@@ -62,6 +62,9 @@ const LenkeCustomized = styled(Lenke)`
     }
     @media(min-width: 45rem){
         align-self: center;
+    }
+    span:nth-child(2) {
+        display: none;
     }
 `;
 const OverviewComponents = styled.div`
@@ -157,9 +160,9 @@ const StatusOverview = (props: AreaServicesList) => {
                     <Undertekst>Sist oppdatert: Ikke implementert</Undertekst>
                 </div>
                 <Link href="/IncidentsPage">
-                    <LenkeCustomized>
-                        <span>Mer om hendelser</span>
-                    </LenkeCustomized>
+                    <KnappCustomized>
+                        Mer om hendelser
+                    </KnappCustomized>
                 </Link>
             </StatusBannerContainer>
             {/*
