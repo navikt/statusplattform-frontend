@@ -23,6 +23,11 @@ const StatusOverviewContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    div {
+        p {
+            margin: 5px 0;
+        }
+    }
     @media(min-width: 500px){
         padding: 0 3rem;
     }
@@ -35,6 +40,7 @@ const StatusBannerContainer = styled.div`
     width: 100%;
     display: flex;
     justify-content: space-between;
+    align-items: center;
     flex-direction: column;
     div:first-child {
         padding-bottom: 1rem;
@@ -53,6 +59,7 @@ const StatusBannerContainer = styled.div`
 const KnappCustomized = styled(Knapp)`
     border-radius: 30px;
 	width: 7rem;
+    max-height: 62px;
     white-space: normal;
     transition: 0.4s;
     :hover {
