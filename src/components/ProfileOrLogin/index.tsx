@@ -29,16 +29,24 @@ const SignIn = styled.div`
 `
 
 const PopoverCustomized = styled(Popover)`
+    cursor: default;
     ul {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
         list-style: none;
         padding: 0 1.5rem;
         li {
-            margin: 1rem;
+            margin: 0.5rem;
             padding: 0.5rem;
-            :hover {
-                cursor: pointer;
-                text-decoration: underline;
-            }
+        }
+    }
+    
+    p {
+        margin: 0;
+        :hover {
+            cursor: pointer;
+            text-decoration: underline;
         }
     }
 `
@@ -65,14 +73,26 @@ const Menu = styled.span`
     }
 `
 
+const Configurations = styled.div`
+    max-width: 125px;
+    padding-left: 0.5rem;
+`
+
 
 const ProfileOrLogin = () => {
     const [isDropdownMenuExpanded, changeMenuState] = useState(false)
     const [isLoggedIn, changeLoginState] = useState(false)
     const [anker, setAnker] = useState(undefined)
-
+    const [isSettingsToggled, changeSettingsState] = useState(false)
+    /* Denne skal brukes når vi får mer forståelse av SSO-løsningen.
+    const [maxNumberOfTiles, changeMaxNumberOfTiles] = useState()
+    */
     const toggleMenu = () => {
         changeMenuState(!isDropdownMenuExpanded)
+    }
+
+    const toggleSettings = () => {
+        changeSettingsState(!isSettingsToggled)
     }
 
     const DropdownMenuContainer = () => {
@@ -86,10 +106,26 @@ const ProfileOrLogin = () => {
                     >
                         <ul>
                             <strong>Navn: Nordmann, Ola</strong>
-                            <li>Min side</li>
-                            <li>Mine varsler</li>
-                            <li><Settings /> Konfigureringer</li>
-                            <li onClick={() => changeLoginState(false)}><Logout /> Logg ut</li>
+                            <li><a href="#0"><p>Min side</p></a></li>
+                            <li><a href="#0"><p>Mine varsler</p></a></li>
+                            <li><p onClick={() => toggleSettings()}><Settings /> Konfigureringer</p>
+                                {isSettingsToggled &&
+                                    <Configurations>
+                                        <span>
+                                            {/* Dette skal lages ferdig når vi har bedre forståelse av SSO */}
+                                            Maks elementer per rad: <select name="amountOfTiles" id="">
+                                                <option value="1">1</option>
+                                                <option value="2">2</option>
+                                                <option value="3">3</option>
+                                                <option value="4">4</option>
+                                                <option value="5">5</option>
+                                                <option value="6">6</option>
+                                            </select>
+                                        </span>
+                                    </Configurations>
+                                }
+                            </li>
+                            <li onClick={() => changeLoginState(false)}><p><Logout /> Logg ut</p></li>
                         </ul>
                     </PopoverCustomized>
                 </>

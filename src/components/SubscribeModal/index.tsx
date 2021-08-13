@@ -20,7 +20,6 @@ const SubscribeModalContainer = styled.div`
         list-style: none;
         border: solid rgba(0, 0, 0, 25%);
         border-width: 0 1px;
-        width: 100%;
         padding: 0.5rem 1rem;
         display: inline;
     }
@@ -39,7 +38,7 @@ const SubscribeModalContainer = styled.div`
 
 const ListItemWrapper = styled.li`
     height: 3rem;
-    max-width: 6rem;
+    width: 25%;
     //Use !important to override nav-Telephone and nav-Email styles
     display: flex !important;
     justify-content: center !important;
