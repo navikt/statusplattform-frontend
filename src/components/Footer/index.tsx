@@ -5,19 +5,9 @@ const FooterCustomized = styled.footer`
     margin-top: auto; /*Footer always at bottom (if min.height of container is 100vh)*/
     border-top: 1px solid #eaeaea;
     background-color: white;
-    padding: 1rem;
+    padding: 1.75rem 1rem;
     display: flex;
     flex-direction: column;
-    justify-content: flex-start;
-    
-
-    > ul {
-        padding: 0;
-        display: flex;
-        flex-direction: column;
-        list-style: none;
-    }
-
     img {
         width: 63px;
         :hover {
@@ -27,38 +17,77 @@ const FooterCustomized = styled.footer`
 
     a {
         color: var(--navBla);
-        background: none;
         text-decoration: underline;
-        margin: 20px;
         :hover {
             text-decoration: none;
         }
     }
-
-    @media (min-width: 700px) {
-        flex-flow: row;
-        justify-content: center;
-        align-items: center;
-        > ul {
-            display: flex;
-            flex-direction: row;
-            padding: 0;
-        }
+    p {
+        margin: 0;
+    }
+    @media (min-width: 700px){ 
+        flex-direction: row;
     }
 `;
+
+const Row = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    &.top {
+        /* align-items: center; */
+        /* position: relative; */
+        width: auto;
+    }
+    &.bottom {
+        justify-content: center;
+        flex-direction: column;
+        width: 100%;
+        padding: 0.5rem 10px;
+    }
+    > ul {
+        padding: 0;
+        list-style: none;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        li {
+            padding: 0.625rem 0;
+        }
+    }
+    @media (min-width: 700px) {
+        flex-direction: row;
+        > ul {
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-flow: row wrap;
+            li {
+                margin: 0.375rem 2rem 0 0;
+                padding-top: 0;
+            }
+        }
+    }
+`
 
 const Footer = () => {
     return (
         <FooterCustomized>
-            <a href="https://www.nav.no/no/person#">
-                <img src="/assets/nav-logo/png/black.png" alt="LogoBlack" ></img>
-            </a>
+            <Row className="top">
+                <span>
+                    <a href="https://www.nav.no/no/person#">
+                        <img src="/assets/nav-logo/png/black.png" alt="LogoBlack" ></img>
+                    </a>
+                </span>
+            </Row>
+            <Row className="bottom">
                 <p>Arbeids- og velferdsetaten</p>
-            <ul>
-                <a href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten">Personvern og informasjonskapsler</a>
-                <a href="https://www.nav.no/no/nav-og-samfunn/kontakt-nav/teknisk-brukerstotte/nyttig-a-vite/tilgjengelighet">Tilgjengelighet</a>
-                <a href="https://www.nav.no/no/person#">Del skjerm med veileder</a>
-            </ul>
+                <ul>
+                    <li><a href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten">Personvern og informasjonskapsler</a></li>
+                    <li><a href="https://www.nav.no/no/nav-og-samfunn/kontakt-nav/teknisk-brukerstotte/nyttig-a-vite/tilgjengelighet">Tilgjengelighet</a></li>
+                    <li><a href="https://www.nav.no/no/person#">Del skjerm med veileder</a></li>
+                </ul>
+            </Row>
         </FooterCustomized>
     )
 }
