@@ -1,10 +1,16 @@
 import styled from 'styled-components'
 
-const FooterCustomized = styled.footer`
+const FooterContainer = styled.footer`
     width: 100%;
     margin-top: auto; /*Footer always at bottom (if min.height of container is 100vh)*/
-    border-top: 1px solid #eaeaea;
     background-color: white;
+    border-top: 1px solid #eaeaea;
+    display: flex;
+    justify-content: center;
+`
+const FooterContent = styled.div`
+    width: 100%;
+    max-width: 1200px;
     padding: 1.75rem 1rem;
     display: flex;
     flex-direction: column;
@@ -72,23 +78,25 @@ const Row = styled.div`
 
 const Footer = () => {
     return (
-        <FooterCustomized>
-            <Row className="top">
-                <span>
-                    <a href="https://www.nav.no/no/person#">
-                        <img src="/assets/nav-logo/png/black.png" alt="LogoBlack" ></img>
-                    </a>
-                </span>
-            </Row>
-            <Row className="bottom">
-                <p>Arbeids- og velferdsetaten</p>
-                <ul>
-                    <li><a href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten">Personvern og informasjonskapsler</a></li>
-                    <li><a href="https://www.nav.no/no/nav-og-samfunn/kontakt-nav/teknisk-brukerstotte/nyttig-a-vite/tilgjengelighet">Tilgjengelighet</a></li>
-                    <li><a href="https://www.nav.no/no/person#">Del skjerm med veileder</a></li>
-                </ul>
-            </Row>
-        </FooterCustomized>
+        <FooterContainer>
+            <FooterContent>
+                <Row className="top">
+                    <span>
+                        <a href="https://www.nav.no/no/person#">
+                            <img src="/assets/nav-logo/png/black.png" alt="LogoBlack" ></img>
+                        </a>
+                    </span>
+                </Row>
+                <Row className="bottom">
+                    <p>Arbeids- og velferdsetaten</p>
+                    <ul>
+                        <li><a href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten">Personvern og informasjonskapsler</a></li>
+                        <li><a href="https://www.nav.no/no/nav-og-samfunn/kontakt-nav/teknisk-brukerstotte/nyttig-a-vite/tilgjengelighet">Tilgjengelighet</a></li>
+                        <li><a href="https://www.nav.no/no/person#">Del skjerm med veileder</a></li>
+                    </ul>
+                </Row>
+            </FooterContent>
+        </FooterContainer>
     )
 }
 
