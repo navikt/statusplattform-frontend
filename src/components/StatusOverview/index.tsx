@@ -34,7 +34,7 @@ const StatusOverviewContainer = styled.div`
 `;
 
 const StatusBannerContainer = styled.div`
-    border-radius: 20px;
+    border-radius: 4px;
     background-color: white;    
     padding: 1rem 0;
     width: 100%;
@@ -57,11 +57,11 @@ const StatusBannerContainer = styled.div`
     }
 `;
 const KnappCustomized = styled(Knapp)`
-    border-radius: 30px;
 	width: 7rem;
     max-height: 62px;
     white-space: normal;
     transition: 0.4s;
+    text-transform: none;
     :hover {
         transition: 0.4s;
         background-color: var(--navBla);
@@ -166,11 +166,11 @@ const StatusOverview = (props: AreaServicesList) => {
                     </StatusSummary>
                     <Undertekst>Sist oppdatert: Ikke implementert</Undertekst>
                 </div>
-                <Link href="/IncidentsPage">
+                {/* <Link href="/IncidentsPage"> */}
                     <KnappCustomized>
                         Mer om hendelser
                     </KnappCustomized>
-                </Link>
+                {/* </Link> */}
             </StatusBannerContainer>
             {/*
             <OverviewComponents>

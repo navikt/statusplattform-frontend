@@ -85,10 +85,10 @@ const LenkeInner = styled.div`
 `;
 
 const SubscribeButton = styled(Knapp)`
-    border-radius: 30px;
     height: 3rem;
     transition: 0.4s;
 	width: 7rem;
+	margin-right: 0.5rem;
     :hover {
         transition: 0.4s;
         background-color: var(--navBla);
