@@ -14,7 +14,7 @@ export const fetchData = async (): Promise<Area[]> => {
         response = await fetch("http://localhost:3001" + endPath);
     }
     else {
-        response = await fetch("https://portalserver.labs.nais.io" + endPath);
+        response = await fetch("https://digitalstatus.ekstern.dev.nav.no" + endPath);
     }
 
     if (response.ok) {
