@@ -6,7 +6,7 @@ export class ResponseError extends Error {
     }
 }
 
-export const fetchData = async (): Promise<Area[]> => {
+export const fetchAreas = async (): Promise<Area[]> => {
 
     let endPath = "/rest/Areas"
     let response;

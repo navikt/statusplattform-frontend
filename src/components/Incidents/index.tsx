@@ -4,7 +4,7 @@ import styled from 'styled-components'
 
 import Layout from 'components/Layout'
 import { BackButton } from 'components/BackButton'
-import { fetchData } from 'utils/fetchServices'
+import { fetchServices } from 'utils/fetchServices'
 import { countFailingServices, getListOfTilesThatFail } from 'utils/servicesOperations'
 
 import NavFrontendSpinner from "nav-frontend-spinner";

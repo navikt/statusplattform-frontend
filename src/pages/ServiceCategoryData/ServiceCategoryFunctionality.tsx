@@ -5,7 +5,7 @@ import Link from 'next/link';
 
 import NavFrontendSpinner from 'nav-frontend-spinner';
 
-import { fetchData } from 'utils/fetchServices';
+import { fetchServices } from 'utils/fetchServices';
 import { retrieveFilteredServiceList } from 'utils/servicesOperations';
 import { Ingress, Innholdstittel, Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import { BackButton } from 'components/BackButton';
@@ -84,7 +84,7 @@ const ServiceCategoryFunctionality = () => {
 
     useEffect(() => {
         (async function () {
-            const newAreas = await fetchData()
+            const newAreas = await fetchServices()
             const parsedAreas = [...newAreas]
             setAreas(parsedAreas)
             setIsLoading(false)

@@ -6,11 +6,12 @@ import NavFrontendSpinner from "nav-frontend-spinner";
 import Knapp from 'nav-frontend-knapper'
 
 
-import { fetchData } from 'utils/fetchAreas'
-import { Area } from 'types/navServices';
+import { fetchAreas } from 'utils/fetchAreas'
+import { Area, Service, Tile } from 'types/navServices';
 
 import AreaTable from './AreaTable';
 import TjenesteTable from './TjenesteTable';
+import { fetchServices } from 'utils/fetchServices';
 
 
 
@@ -84,14 +85,18 @@ export interface Props {
 
 const AdminDashboard = ({selectedMenu}: Props) => {
     const [adminAreas, setAdminAreas] = useState<Area[]>([])
+    const [services, setServices] = useState<Service[]>()
     const [isLoading, setIsLoading] = useState(true)
     const [tileOrderIsDynamic, changeTileOrderIsDynamic] = useState(true) //DENNE MÅ ENDRES. Skal komme default fra rest
 
     useEffect(() => {
         (async function () {
             setIsLoading(true)
-            const adminAreas: Area[] = await fetchData()
+            const adminAreas: Area[] = await fetchAreas()
             setAdminAreas(adminAreas)
+            const allAreas: Tile[] = await fetchServices()
+            const allServices: Service[] = allAreas.flatMap(area => area.services.map(service => service))
+            setServices(allServices)
             setIsLoading(false)
         })()
     }, [])
@@ -121,7 +126,7 @@ const AdminDashboard = ({selectedMenu}: Props) => {
                         {selectedMenu === "Områdemeny" ? (
                             <AreaTable adminAreas={adminAreas} setAdminAreas={setAdminAreas} isLoading={isLoading}/>
                             ) : (
-                                <TjenesteTable adminAreas={adminAreas} />
+                                <TjenesteTable services={services} setServices={setServices} />
                             )
                         }
                     </div>

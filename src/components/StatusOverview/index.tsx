@@ -2,7 +2,7 @@ import Lenke from 'nav-frontend-lenker';
 import Link from 'next/link';
 import styled from 'styled-components'
 
-import { fetchData } from 'utils/fetchServices'
+import { fetchServices } from 'utils/fetchServices'
 import { Tile, AreaServicesList, Service } from 'types/navServices'
 
 import NavInfoCircle from 'components/NavInfoCircle'

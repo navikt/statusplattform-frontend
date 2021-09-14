@@ -10,7 +10,7 @@ import { Label, Input } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { countHealthyServices, countServicesInAreas, mapStatusAndIncidentsToArray } from 'utils/servicesOperations';
-import { fetchData } from 'utils/fetchAreas'
+import { fetchAreas } from 'utils/fetchAreas'
 
 const AdminContainer = styled.div`
 max-width: 1080px;
@@ -54,7 +54,7 @@ const AdminDashboard = () => {
 
     useEffect(() => {
     (async function () {
-        const adminAreas = await fetchData()
+        const adminAreas = await fetchAreas()
         const parsedAreas = [...adminAreas]
         setAreas(parsedAreas)
             setIsLoading(false)

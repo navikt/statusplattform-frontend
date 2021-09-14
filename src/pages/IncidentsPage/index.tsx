@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 import Layout from 'components/Layout'
 import Incidents from 'components/Incidents'
-import { fetchData } from 'utils/fetchServices'
+import { fetchServices } from 'utils/fetchServices'
 import { Tile } from 'types/navServices'
 
 import NavFrontendSpinner from "nav-frontend-spinner"
@@ -26,7 +26,7 @@ const IncidentsPage = () => {
 
     useEffect(() => {
         (async function () {
-            const newAreas: Tile[] = await fetchData()
+            const newAreas: Tile[] = await fetchServices()
             setAreas(newAreas)
             setIsLoading(false)
         })()

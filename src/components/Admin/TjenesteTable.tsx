@@ -11,7 +11,7 @@ import { Close } from '@navikt/ds-icons'
 import { Area, Service, Tile } from 'types/navServices';
 import { deleteService } from 'utils/deleteService';
 import { postService } from 'utils/postService'
-import { fetchData } from 'utils/fetchServices';
+import { fetchServices } from 'utils/fetchServices';
 
 
 const CloseCustomized = styled(Close)`
@@ -29,11 +29,11 @@ const SpinnerCentered = styled.div`
 `
 
 export interface Props {
-    adminAreas: Area[]
+    services: Service[]
+    setServices: Function
 }
 
-const TjenesteTable = ({adminAreas}: Props) => {
-    const [services, setServices] = useState<Service[]>()
+const TjenesteTable = ({services, setServices}: Props) => {
     const [newService, updateNewService] = useState<Service>({
         id: "",
         name: "",
@@ -44,25 +44,6 @@ const TjenesteTable = ({adminAreas}: Props) => {
         description: "",
         logglink: ""
     })
-    const [isLoading, setIsLoading] = useState(true)
-
-    useEffect(() => {
-        (async function () {
-            setIsLoading(true)
-            const areas: Tile[] = await fetchData()
-            const allServices: Service[] = areas.flatMap(area => area.services.map(service => service))
-            setServices(allServices)
-            setIsLoading(false)
-        })()
-    }, [])
-
-    if (isLoading) {
-        return (
-            <SpinnerCentered>
-                <NavFrontendSpinner type="XXL" />
-            </SpinnerCentered>
-        ) 
-    }
 
     const handleServiceDataChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const newArea = {
@@ -99,7 +80,6 @@ const TjenesteTable = ({adminAreas}: Props) => {
         //TODO bedre error-visning trengs
         alert("Tjeneste ble ikke slettet")
     }
-
 
     const { id, name, type, team, dependencies, monitorlink, description, logglink, status } = newService
 

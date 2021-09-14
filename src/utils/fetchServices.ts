@@ -6,7 +6,7 @@ export class ResponseError extends Error {
     }
 }
 
-export const fetchData = async (): Promise<Tile[]> => {
+export const fetchServices = async (): Promise<Tile[]> => {
     let response;
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001/rest/Tiles");
