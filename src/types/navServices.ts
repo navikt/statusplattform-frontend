@@ -13,9 +13,9 @@ export interface Service {
     type?: string
     team?: string
     dependencies?: []
-    monitorLink?: string
+    monitorlink?: string
     description?: string
-    loggLink?: string
+    logglink?: string
     status?: string
 }
 

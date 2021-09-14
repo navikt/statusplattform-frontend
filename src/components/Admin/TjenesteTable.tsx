@@ -40,9 +40,9 @@ const TjenesteTable = ({adminAreas}: Props) => {
         type: "",
         team: "",
         dependencies: [],
-        monitorLink: "",
+        monitorlink: "",
         description: "",
-        loggLink: ""
+        logglink: ""
     })
     const [isLoading, setIsLoading] = useState(true)
 
@@ -101,7 +101,7 @@ const TjenesteTable = ({adminAreas}: Props) => {
     }
 
 
-    const { id, name, type, team, dependencies, monitorLink, description, loggLink, status } = newService
+    const { id, name, type, team, dependencies, monitorlink, description, logglink, status } = newService
 
 
     return (
@@ -113,9 +113,9 @@ const TjenesteTable = ({adminAreas}: Props) => {
                     <th><span>Type</span></th>
                     <th><span>Team</span></th>
                     <th><span>Dependencies</span></th>
-                    <th><span>Monitorlink</span></th>
+                    <th><span>monitorlink</span></th>
                     <th><span>Description</span></th>
-                    <th><span>Logglink</span></th>
+                    <th><span>logglink</span></th>
                     <th><span>Slett</span></th>
                 </tr>
             </thead>
@@ -128,9 +128,9 @@ const TjenesteTable = ({adminAreas}: Props) => {
                             <td><span>{service.type}</span></td>
                             <td><span>{service.team}</span></td>
                             <td><span>{service.dependencies}</span></td>
-                            <td><span>{service.monitorLink}</span></td>
+                            <td><span>{service.monitorlink}</span></td>
                             <td><span>{service.description}</span></td>
-                            <td><span>{service.loggLink}</span></td>
+                            <td><span>{service.logglink}</span></td>
                             <td><span><CloseCustomized onClick={() => handleDeleteArea(service)} /></span></td>
                         </tr>
                     )
@@ -154,17 +154,17 @@ const TjenesteTable = ({adminAreas}: Props) => {
                         <Input type="text" value={dependencies} onChange={handleServiceDataChange("dependencies")} placeholder="Avhengigheter"/>
                     </td>
                     <td>
-                        <Input type="text" value={monitorLink} onChange={handleServiceDataChange("monitorLink")} placeholder="Monitorlink"/>
+                        <Input type="text" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
                     </td>
                     <td>
                         <Input type="text" value={description} onChange={handleServiceDataChange("description")} placeholder="Beskrivelse"/>
                     </td>
                     <td>
-                        <Input type="number" value={loggLink} onChange={handleServiceDataChange("loggLink")} placeholder="Logglink" />
+                        <Input type="number" value={logglink} onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
                     </td>
 
                     <td><Hovedknapp disabled={
-                        !id || !name || !type || !team || !dependencies || !monitorLink || !description || !loggLink} 
+                        !id || !name || !type || !team || !dependencies || !monitorlink || !description || !logglink} 
                         onClick={() => handlePostService(newService)}>
                         Legg til</Hovedknapp>
                     </td>

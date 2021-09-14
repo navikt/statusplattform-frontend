@@ -18,9 +18,9 @@ export const deleteService = async (service): Promise<Object[]> =>{
                 type: service.type,
                 team: service.team,
                 dependencies: service.dependencies,
-                monitorLink: service.monitorLink,
+                monitorlink: service.monitorlink,
                 description: service.description,
-                loggLink: service.loggLink
+                logglink: service.logglink
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -40,9 +40,9 @@ export const deleteService = async (service): Promise<Object[]> =>{
                 type: service.type,
                 team: service.team,
                 dependencies: service.dependencies,
-                monitorLink: service.monitorLink,
+                monitorlink: service.monitorlink,
                 description: service.description,
-                loggLink: service.loggLink
+                logglink: service.logglink
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
