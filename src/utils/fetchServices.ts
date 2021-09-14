@@ -12,7 +12,7 @@ export const fetchData = async (): Promise<Tile[]> => {
         response = await fetch("http://localhost:3001/rest/Tiles");
     }
     else {
-        response = await fetch("https://digitalstatus.ekstern.dev.nav.no/rest/tiles");
+        response = await fetch("https://digitalstatus.ekstern.dev.nav.no/rest/Tiles");
     }
     if (response.ok) {
         return response.json()
