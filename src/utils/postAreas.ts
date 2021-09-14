@@ -28,7 +28,7 @@ export const postAdminAreas = async (adminArea): Promise<Object[]> =>{
         });
     }
     else {
-        response = await fetch("https://portalserver.labs.nais.io" + endPath,
+        response = await fetch("https://digitalstatus.ekstern.dev.nav.no" + endPath,
         {
             method: "POST",
             body: JSON.stringify({
