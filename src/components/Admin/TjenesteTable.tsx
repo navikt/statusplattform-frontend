@@ -145,7 +145,7 @@ const TjenesteTable = ({adminAreas}: Props) => {
                         <Input type="text" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn"/>
                     </td>
                     <td>
-                        <Input type="text" value={type} onChange={handleServiceDataChange("name")} placeholder="Type"/>
+                        <Input type="text" value={type} onChange={handleServiceDataChange("type")} placeholder="Type"/>
                     </td>
                     <td>
                         <Input type="text" value={team} onChange={handleServiceDataChange("team")} placeholder="Team"/>
