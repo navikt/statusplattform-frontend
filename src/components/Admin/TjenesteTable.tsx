@@ -160,7 +160,7 @@ const TjenesteTable = ({adminAreas}: Props) => {
                         <Input type="text" value={description} onChange={handleServiceDataChange("description")} placeholder="Beskrivelse"/>
                     </td>
                     <td>
-                        <Input type="number" value={logglink} onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
+                        <Input type="text" value={logglink} onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
                     </td>
 
                     <td><Hovedknapp disabled={
