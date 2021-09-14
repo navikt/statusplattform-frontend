@@ -110,9 +110,12 @@ const TjenesteTable = ({adminAreas}: Props) => {
                 <tr>
                     <th><span>ID</span></th>
                     <th><span>Navn</span></th>
-                    <th><span>Beskrivelse</span></th>
-                    <th aria-sort="descending" role="columnheader"><span>Rangering</span></th>
-                    <th><span>Ikon</span></th>
+                    <th><span>Type</span></th>
+                    <th><span>Team</span></th>
+                    <th><span>Dependencies</span></th>
+                    <th><span>Monitorlink</span></th>
+                    <th><span>Description</span></th>
+                    <th><span>Logglink</span></th>
                     <th><span>Slett</span></th>
                 </tr>
             </thead>
@@ -120,6 +123,7 @@ const TjenesteTable = ({adminAreas}: Props) => {
                 {services.map( service => {
                     return (
                         <tr key={service.id}>
+                            <td><span>{service.id}</span></td>
                             <td><span>{service.name}</span></td>
                             <td><span>{service.type}</span></td>
                             <td><span>{service.team}</span></td>
