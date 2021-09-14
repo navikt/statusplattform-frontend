@@ -2,7 +2,7 @@ import styled from 'styled-components'
 
 import Layout from 'components/Layout';
 import Admin from 'components/Admin';
-import DashboardSelector from 'components/Admin/DashboardSelector';
+import MenuSelector from 'components/Admin/MenuSelector';
 import { useState } from 'react';
 
 const AdminContainer = styled.div`
@@ -10,14 +10,18 @@ const AdminContainer = styled.div`
 `
 
  const AdminPage = () => {
-    // [selectedDashboard, changeSelectedDashboard] = useState(0)
+    const [selectedMenu, changeSelectedMenu] = useState("Områdemeny")
 
+    const onClickChangeSelectedMenu = (newMenu: string) => {
+        console.log(newMenu)
+        changeSelectedMenu(newMenu)
+    }
 
     return (
         <Layout>
             <AdminContainer>
-                <DashboardSelector />
-                <Admin />
+                <MenuSelector currentSelectedMenu = {selectedMenu} onClickSelectedMenu={onClickChangeSelectedMenu}/>
+                <Admin selectedMenu={selectedMenu}/>
             </AdminContainer>
         </Layout>
     )

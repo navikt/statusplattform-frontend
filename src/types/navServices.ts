@@ -8,8 +8,15 @@ export interface Tile {
 }
 
 export interface Service {
+    id?: string
     name: string
-    status: string
+    type?: string
+    team?: string
+    dependencies?: []
+    monitorLink?: string
+    description?: string
+    loggLink?: string
+    status?: string
 }
 
 export interface Area {

@@ -2,6 +2,7 @@ import styled from 'styled-components'
 
 import Tabs from 'nav-frontend-tabs';
 import Panel from 'nav-frontend-paneler'
+import { SyntheticEvent } from 'react';
 
 const DashboardTabMenu = styled.header`
     width: 100%;
@@ -19,26 +20,30 @@ const TabsCustomized = styled(Tabs)`
     
 `
 
+export interface Props {
+    currentSelectedMenu: string
+    onClickSelectedMenu: Function
+}
 
-const DashboardSelector = () => {
+
+const MenuSelector = ({currentSelectedMenu, onClickSelectedMenu}: Props) => {
+
+    const menues = ["Områdemeny", "Tjenestemeny"]
 
     return (
         <DashboardTabMenu>
             <TabsCustomized
                 tabs={[
-                    {"label": "Privatperson"},
-                    {"label": "Samarbeidspartner"},
-                    {"label": "Intern"}
+                    {"label": "Områdemeny"},
+                    {"label": "Tjenestemeny"}
                 ]}
-                onChange={() => {}}
+                onChange={(_, index) =>
+                    onClickSelectedMenu(menues[index])
+                }
+
             />
-            {/* <PanelCustomized border>
-                Innhold her.
-            </PanelCustomized> */}
-
-
         </DashboardTabMenu>
     )
 }
             
-export default DashboardSelector
+export default MenuSelector
