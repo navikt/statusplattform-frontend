@@ -6,7 +6,7 @@ import MenuSelector from 'components/Admin/MenuSelector';
 import { useState } from 'react';
 
 const AdminContainer = styled.div`
-    max-width: 1080px;
+    //margin-top:30px;
 `
 
  const AdminPage = () => {

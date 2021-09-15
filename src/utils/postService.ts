@@ -17,7 +17,7 @@ export const postService = async (service): Promise<Object[]> =>{
                 name: service.name,
                 type: service.type,
                 team: service.team,
-                dependencies: service.dependencies,
+                dependencies: [service.dependencies],
                 monitorlink: service.monitorlink,
                 description: service.description,
                 logglink: service.logglink
@@ -39,7 +39,7 @@ export const postService = async (service): Promise<Object[]> =>{
                 name: service.name,
                 type: service.type,
                 team: service.team,
-                dependencies: service.dependencies,
+                dependencies: [service.dependencies],
                 monitorlink: service.monitorlink,
                 description: service.description,
                 logglink: service.logglink

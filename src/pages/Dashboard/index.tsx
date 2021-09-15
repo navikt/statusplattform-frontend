@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import { PortalServiceTile } from 'components/PortalServiceTile'
 import StatusOverview from 'components/StatusOverview'
-import { fetchServices } from 'utils/fetchServices'
+import { fetchTiles } from 'utils/fetchTiles'
 
 // import { LenkepanelBase } from "nav-frontend-lenkepanel";
 import NavFrontendSpinner from "nav-frontend-spinner";
@@ -70,8 +70,8 @@ const Dashboard = () => {
 
     useEffect(() => {
         (async function () {
-            const newAreas: Tile[] = await fetchServices()
-            setAreas(newAreas)
+            const tiles: Tile[] = await fetchTiles()
+            setAreas(tiles)
             setIsLoading(false)
         })()
     }, [])

@@ -7,7 +7,6 @@ import { SyntheticEvent } from 'react';
 const DashboardTabMenu = styled.header`
     width: 100%;
     background-color: var(--navBakgrunn);
-    border-radius: 20px 20px 0 0;
     height: 50px;
 `
 
