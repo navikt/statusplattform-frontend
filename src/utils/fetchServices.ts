@@ -1,4 +1,4 @@
-import { Tile } from "types/navServices";
+import { Service } from "types/navServices";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -8,7 +8,7 @@ export class ResponseError extends Error {
 
 let endUrl = "/rest/Services";
 
-export const fetchServices = async (): Promise<Tile[]> => {
+export const fetchServices = async (): Promise<Service[]> => {
     let response;
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endUrl);
