@@ -123,7 +123,7 @@ const AdminDashboard = ({selectedMenu}: Props) => {
                             </KnappCustomized>
                         </h2>
                         {selectedMenu === "Områdemeny" ? (
-                            <AreaTable adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading}/>
+                            <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading}/>
                             ) : (
                                 <TjenesteTable services={services} setServices={setServices} />
                             )

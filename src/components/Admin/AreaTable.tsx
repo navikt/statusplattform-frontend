@@ -10,8 +10,9 @@ import { Close } from '@navikt/ds-icons'
 
 import { postAdminAreas } from 'utils/postAreas'
 import { deleteArea } from 'utils/deleteArea'
-import { Area, Tile } from 'types/navServices';
+import { Area, Service, Tile } from 'types/navServices';
 import { getIconsFromGivenCode } from 'utils/servicesOperations';
+import { putServiceToArea } from 'utils/putServiceToArea'
 
 
 const IconContainer = styled.section`
@@ -39,6 +40,13 @@ const CenteredExpandRetractSpan = styled.span`
     justify-content: center;
 `
 
+const NoServicesInAreaNotifier = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
 const getBag = () => {
     return <IconContainer><Bag /></IconContainer>
 }
@@ -47,10 +55,12 @@ export interface Props {
     adminTiles: Tile[]
     setAdminTiles: Function
     isLoading: boolean
+    allServices: Service[]
 }
 
-const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading}: Props) => { 
+const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, allServices}: Props) => { 
     const [expanded, toggleExpanded] = useState<boolean[]>(Array(adminTiles.length).fill(false))
+    const [selectedService, changeCurrentSelectedService] = useState()
     const [newAdminArea, updateNewAdminArea] = useState<Area>({
         id: "",
         name: "",
@@ -126,6 +136,15 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading}: Props) =>
         toggleExpanded(newArray)
     }
 
+
+    const changeSelectedService = (e) => {
+        changeCurrentSelectedService(e.target.value)
+    }
+
+    allServices.flatMap(service => service.name)
+
+    const servicesOptions = ['test1', 'test2']
+
     const { id, name, beskrivelse, rangering} = newAdminArea
 
     return (
@@ -156,7 +175,34 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading}: Props) =>
                                 <td><span><CenteredExpandRetractSpan>{expanded[index] ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan></span></td>
                             </tr>
                             {expanded[index] && 
-                                <tr key={area.id}>test</tr>
+                                tile.services.length === 0 ?
+                                <>
+                                    <NoServicesInAreaNotifier>
+                                        Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste
+                                    </NoServicesInAreaNotifier>
+                                    <tr key="input">
+                                        <td>
+                                            {/* <Input type="text" value={""} placeholder="Logglink" /> */}
+                                            <select value={selectedService} onChange={changeSelectedService}>
+                                                {allServices.map(service => {
+                                                    return (
+                                                        <option value={service.id}>{service.name}</option>
+                                                    )
+                                                })}
+                                            </select>
+                                        </td>
+
+                                        <td>
+                                            <Hovedknapp disabled={!selectedService} onClick={() => putServiceToArea(tile.area.id, selectedService)} >Legg til</Hovedknapp>                                            
+                                        </td>
+                                    </tr>
+                                </>
+                                :(
+                                    tile.services.map((service, x) => {
+                                        // console.log(service.name)
+                                        // <tr key={x}>{service.name}</tr>
+                                    })
+                                )
                             }
                         </>
                     )
