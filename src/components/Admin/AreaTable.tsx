@@ -10,7 +10,7 @@ import { Close } from '@navikt/ds-icons'
 
 import { postAdminAreas } from 'utils/postAreas'
 import { deleteArea } from 'utils/deleteArea'
-import { Area } from 'types/navServices';
+import { Area, Tile } from 'types/navServices';
 import { getIconsFromGivenCode } from 'utils/servicesOperations';
 
 
@@ -38,12 +38,12 @@ const getBag = () => {
 }
 
 export interface Props {
-    adminAreas: Area[]
-    setAdminAreas: Function
+    adminTiles: Tile[]
+    setAdminTiles: Function
     isLoading: boolean
 }
 
-const AreaTable = ({adminAreas, setAdminAreas, isLoading}: Props) => { 
+const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading}: Props) => { 
     const [newAdminArea, updateNewAdminArea] = useState<Area>({
         id: "",
         name: "",
@@ -78,15 +78,16 @@ const AreaTable = ({adminAreas, setAdminAreas, isLoading}: Props) => {
 
 
     const handlePostAdminArea = (areaToAdd: Area) => {
-        const newlist = adminAreas.filter(area => area.id === areaToAdd.id)
+        const newlist = adminTiles.filter(tile => tile.area.id === areaToAdd.id)
         if(newlist.length > 0) {
             alert("Denne IDen er allerede brukt. Velg en annen")
             return
         }
         if(postAdminAreas(areaToAdd)) {
-            const newAreas = [...adminAreas]
-            newAreas.push(areaToAdd)
-            setAdminAreas(newAreas)
+            const newAreas = [...adminTiles]
+            const  newTile:Tile = {services:[], status:'', area:areaToAdd}
+            newAreas.push(newTile)
+            setAdminTiles(newAreas)
             return
         }
         //TODO bedre error-visning trengs
@@ -95,10 +96,10 @@ const AreaTable = ({adminAreas, setAdminAreas, isLoading}: Props) => {
 
     const handleDeleteArea = (areaToDelete) => {
         if(deleteArea(areaToDelete)) {
-            const newAreas = adminAreas.filter(currentArea => 
-                currentArea != areaToDelete
+            const newTiles = adminTiles.filter(tile => 
+                tile.area.id != areaToDelete.id
             )
-            setAdminAreas(newAreas)
+            setAdminTiles(newTiles)
             return
         }
         //TODO bedre error-visning trengs
@@ -120,7 +121,8 @@ const AreaTable = ({adminAreas, setAdminAreas, isLoading}: Props) => {
                 </tr>
             </thead>
             <tbody>
-                {adminAreas.map( area => {
+                {adminTiles.map( tile => {
+                    let area = tile.area
                     return (
                         <tr key={area.id}>
                             <td><span>{area.id}</span></td>

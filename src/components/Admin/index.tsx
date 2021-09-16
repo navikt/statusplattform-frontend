@@ -6,7 +6,7 @@ import NavFrontendSpinner from "nav-frontend-spinner";
 import Knapp from 'nav-frontend-knapper'
 
 
-import { fetchAreas } from 'utils/fetchAreas'
+import { fetchTiles } from 'utils/fetchTiles'
 import { Area, Service, Tile } from 'types/navServices';
 
 import AreaTable from './AreaTable';
@@ -84,7 +84,7 @@ export interface Props {
 }
 
 const AdminDashboard = ({selectedMenu}: Props) => {
-    const [adminAreas, setAdminAreas] = useState<Area[]>([])
+    const [adminTiles, setAdminTiles] = useState<Tile[]>([])
     const [services, setServices] = useState<Service[]>()
     const [isLoading, setIsLoading] = useState(true)
     const [tileOrderIsDynamic, changeTileOrderIsDynamic] = useState(true) //DENNE MÅ ENDRES. Skal komme default fra rest
@@ -92,8 +92,8 @@ const AdminDashboard = ({selectedMenu}: Props) => {
     useEffect(() => {
         (async function () {
             setIsLoading(true)
-            const adminAreas: Area[] = await fetchAreas()
-            setAdminAreas(adminAreas)
+            const tiles: Tile[] = await fetchTiles()
+            setAdminTiles(tiles)
             let allServices: Service[] = await fetchServices()
             setServices(allServices)
             setIsLoading(false)
@@ -123,7 +123,7 @@ const AdminDashboard = ({selectedMenu}: Props) => {
                             </KnappCustomized>
                         </h2>
                         {selectedMenu === "Områdemeny" ? (
-                            <AreaTable adminAreas={adminAreas} setAdminAreas={setAdminAreas} isLoading={isLoading}/>
+                            <AreaTable adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading}/>
                             ) : (
                                 <TjenesteTable services={services} setServices={setServices} />
                             )
