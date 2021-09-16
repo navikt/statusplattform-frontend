@@ -4,7 +4,7 @@ export class ResponseError extends Error {
     }
 }
 
-export const putServiceToArea = async (serviceId, areaId): Promise<Object[]> =>{
+export const putServiceToArea = async (areaId, serviceId): Promise<Object[]> =>{
     let response;
     let endPath = "/rest/ServiceOnArea"
 
