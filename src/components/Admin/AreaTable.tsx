@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Dropdown from 'react-dropdown';
 
-import { Bag } from '@navikt/ds-icons'
+import { Bag, Collapse, Expand } from '@navikt/ds-icons'
 import { Input } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import NavFrontendSpinner from "nav-frontend-spinner";
@@ -33,6 +33,12 @@ const CloseCustomized = styled(Close)`
     }
 `
 
+const CenteredExpandRetractSpan = styled.span`
+    margin-top: 20px;
+    display: flex;
+    justify-content: center;
+`
+
 const getBag = () => {
     return <IconContainer><Bag /></IconContainer>
 }
@@ -44,6 +50,7 @@ export interface Props {
 }
 
 const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading}: Props) => { 
+    const [expanded, toggleExpanded] = useState<boolean[]>(Array(adminTiles.length).fill(false))
     const [newAdminArea, updateNewAdminArea] = useState<Area>({
         id: "",
         name: "",
@@ -51,6 +58,13 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading}: Props) =>
         rangering: 0,
         ikon: ""
     })
+
+    useEffect(() => {
+        (async function () {
+            // const test = Array.from(Array(adminTiles.length).fill(0))
+            // toggleExpanded(Array(adminTiles.length).fill(false))
+        })()
+    }, [])
 
 
     if (isLoading) {
@@ -106,6 +120,12 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading}: Props) =>
         alert("Område ble ikke slettet")
     }
 
+    const toggleAreaExpanded = (index: number) => {
+        const newArray = [...expanded]
+        newArray[index] = !newArray[index]
+        toggleExpanded(newArray)
+    }
+
     const { id, name, beskrivelse, rangering} = newAdminArea
 
     return (
@@ -118,20 +138,27 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading}: Props) =>
                     <th aria-sort="descending" role="columnheader"><span>Rangering</span></th>
                     <th><span>Ikon</span></th>
                     <th><span>Slett</span></th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
-                {adminTiles.map( tile => {
+                {adminTiles.map( (tile, index) => {
                     let area = tile.area
                     return (
-                        <tr key={area.id}>
-                            <td><span>{area.id}</span></td>
-                            <td><span>{area.name}</span></td>
-                            <td><span>{area.beskrivelse}</span></td>
-                            <td><span>{area.rangering}</span></td>
-                            <td><span><IconContainer>{getIconsFromGivenCode(area.ikon)}</IconContainer></span></td>
-                            <td><span><CloseCustomized onClick={() => handleDeleteArea(area)} /></span></td>
-                        </tr>
+                        <>
+                            <tr key={area.id} onClick={() => toggleAreaExpanded(index)}>
+                                <td><span>{area.id}</span></td>
+                                <td><span>{area.name}</span></td>
+                                <td><span>{area.beskrivelse}</span></td>
+                                <td><span>{area.rangering}</span></td>
+                                <td><span><IconContainer>{getIconsFromGivenCode(area.ikon)}</IconContainer></span></td>
+                                <td><span><CloseCustomized onClick={() => handleDeleteArea(area)} /></span></td>
+                                <td><span><CenteredExpandRetractSpan>{expanded[index] ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan></span></td>
+                            </tr>
+                            {expanded[index] && 
+                                <tr key={area.id}>test</tr>
+                            }
+                        </>
                     )
                 })}
 
