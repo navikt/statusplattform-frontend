@@ -53,10 +53,6 @@ const AdminDashboardContainer = styled.div`
     }
 `;
 
-const KnappCustomized = styled(Knapp)`
-    width: 200px;
-`
-
 const AreasContainer = styled.div`
     border-radius: 0 0 20px 20px;
     background-color: white;    
@@ -118,10 +114,7 @@ const AdminDashboard = ({selectedMenu}: Props) => {
 
                 <AreasContainer>
                     <div>
-                        <h2>Områder <KnappCustomized style={{"font-size": "16px"}} kompakt onClick={changeTileOrdering}>{
-                            tileOrderIsDynamic ? "Dynamisk sortering" : "Fiksert sortering"}
-                            </KnappCustomized>
-                        </h2>
+                        <h2>{selectedMenu === "Områdemeny" ? "Områder" : "Tjenester"}</h2>
                         {selectedMenu === "Områdemeny" ? (
                             <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading}/>
                             ) : (
