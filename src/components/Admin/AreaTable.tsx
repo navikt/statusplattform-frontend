@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Dropdown from 'react-dropdown';
 
 import { Bag, Collapse, Expand } from '@navikt/ds-icons'
-import { Input } from 'nav-frontend-skjema';
+import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import NavFrontendSpinner from "nav-frontend-spinner";
 import { Close } from '@navikt/ds-icons'
@@ -46,9 +46,13 @@ const TileDropdownRow = styled.tr`
         border: 0px transparent !important;
         background-color: white !important;
     }
+    select {
+        transform: translateY(-2px);
+    }
 `
 
 const ServicesInAreaList = styled.ul`
+    padding: 0;
     li {
         list-style: none;
     }
@@ -203,13 +207,13 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, allService
                             {expanded[index] && 
                                 <TileDropdownRow key="input">
                                     <td>
-                                        <select value={selectedService} onChange={changeSelectedService}>
+                                        <Select value={selectedService} onChange={changeSelectedService}>
                                             {allServices.map(service => {
                                                 return (
                                                     <option key={service.id} value={service.id}>{service.name}</option>
                                                 )
                                             })}
-                                        </select>
+                                        </Select>
                                     </td>
 
                                     <td>
