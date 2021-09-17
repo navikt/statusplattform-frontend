@@ -40,11 +40,15 @@ const CenteredExpandRetractSpan = styled.span`
     justify-content: center;
 `
 
-const NoServicesInAreaNotifier = styled.td`
+const TileDropdownRow = styled.tr`
     /* width: 100%;
     display: flex;
     justify-content: center;
     align-items: center; */
+    td {
+        border: 0px transparent !important;
+        background-color: white !important;
+    }
 `
 
 const getBag = () => {
@@ -155,12 +159,12 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, allService
                     <th></th>
                 </tr>
             </thead>
-            <tbody>
+            {/* <tbody> */}
                 {adminTiles.map( (tile, index) => {
                     let area = tile.area
                     return (
-                        <>
-                            <tr key={area.id} onClick={() => toggleAreaExpanded(index)}>
+                        <tbody key={area.id}>
+                            <tr onClick={() => toggleAreaExpanded(index)}>
                                 <td><span>{area.id}</span></td>
                                 <td><span>{area.name}</span></td>
                                 <td><span>{area.beskrivelse}</span></td>
@@ -171,9 +175,9 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, allService
                             </tr>
                             {expanded[index] && 
                                 tile.services.length === 0 ?
-                                <NoServicesInAreaNotifier>
-                                    Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste
-                                </NoServicesInAreaNotifier>
+                                <TileDropdownRow>
+                                    <td colSpan={7}>Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste</td>
+                                </TileDropdownRow>
                                 :
                                 (
                                     tile.services.map((service, x) => {
@@ -183,27 +187,27 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, allService
                                 )
                             }
                             {expanded[index] && 
-                                <tr key="input">
+                                <TileDropdownRow key="input">
                                     <td>
                                         {/* <Input type="text" value={""} placeholder="Logglink" /> */}
                                         <select value={selectedService} onChange={changeSelectedService}>
                                             {allServices.map(service => {
                                                 return (
-                                                    <option value={service.id}>{service.name}</option>
+                                                    <option key={service.id} value={service.id}>{service.name}</option>
                                                 )
                                             })}
                                         </select>
                                     </td>
 
-                                    <td>
+                                    <td colSpan={6}>
                                         <Hovedknapp disabled={!selectedService} onClick={() => putServiceToArea(tile.area.id, selectedService)} >Legg til</Hovedknapp>                                            
                                     </td>
-                                </tr>
+                                </TileDropdownRow>
                             }
-                        </>
+                        </tbody>
                     )
                 })}
-
+            <tbody>
                 <tr key="input">
                     <td>
                         <Input type="text" value={id} onChange={handleAreaDataChange("id")} placeholder="ID"/>
