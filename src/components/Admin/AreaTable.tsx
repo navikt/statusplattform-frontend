@@ -17,8 +17,10 @@ import { Element } from 'nav-frontend-typografi';
 
 
 const CustomTBody = styled.tbody `
-    :hover {
-        cursor: pointer;
+    .clickable {
+        :hover {
+            cursor: pointer;
+        }
     }
 `
 
@@ -184,7 +186,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                     let area = tile.area
                     return (
                         <CustomTBody key={area.id}>
-                            <tr onClick={() => toggleAreaExpanded(index)}>
+                            <tr className="clickable" onClick={() => toggleAreaExpanded(index)}>
                                 <td><span>{area.id}</span></td>
                                 <td><span>{area.name}</span></td>
                                 <td><span>{area.beskrivelse}</span></td>
@@ -213,12 +215,12 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                                                 })}
                                         </ServicesInAreaList>
                                     </td>
-                                    <td colSpan={5} onClick={() => toggleAreaExpanded(index)}/>
+                                    <td colSpan={5} className="clickable" onClick={() => toggleAreaExpanded(index)}/>
                                 </TileDropdownRow>)
                             }
                             {expanded[index] && 
                                 <TileDropdownRow key="input">
-                                    <td>
+                                    <td colSpan={2}>
                                         <Select value={selectedService} onChange={changeSelectedService}>
                                             {allServices.map(service => {
                                                 return (
@@ -228,10 +230,10 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                                         </Select>
                                     </td>
 
-                                    <td>
+                                    <td colSpan={2}>
                                         <Hovedknapp disabled={!selectedService} onClick={() => handlePutServiceToArea(tile.area.id, selectedService)} >Legg til</Hovedknapp>                                            
                                     </td>
-                                    <td colSpan={6} onClick={() => toggleAreaExpanded(index)}></td>
+                                    <td colSpan={6} className="clickable" onClick={() => toggleAreaExpanded(index)}></td>
                                 </TileDropdownRow>
                             }
                         </CustomTBody>
