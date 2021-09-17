@@ -116,9 +116,9 @@ const AdminDashboard = ({selectedMenu}: Props) => {
                     <div>
                         <h2>{selectedMenu === "Områdemeny" ? "Områder" : "Tjenester"}</h2>
                         {selectedMenu === "Områdemeny" ? (
-                            <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading}/>
+                            <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading} setIsLoading={setIsLoading}/>
                             ) : (
-                                <TjenesteTable services={services} setServices={setServices} />
+                                <TjenesteTable services={services} setServices={setServices} setIsLoading={setIsLoading} />
                             )
                         }
                     </div>

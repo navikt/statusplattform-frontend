@@ -38,9 +38,9 @@ export const putServiceToArea = async (areaId, serviceId): Promise<Object[]> =>{
             mode: 'cors', // no-cors, *cors, same-origin
         });
     }
-
+    
     if (response.ok) {
-        return response.json()
+        return response
     }
     throw new ResponseError("Failed to post to server", response)
 }

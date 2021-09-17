@@ -48,6 +48,7 @@ const TileDropdownRow = styled.tr`
     }
     select {
         transform: translateY(-2px);
+        min-width: 100px;
     }
 `
 
@@ -66,10 +67,11 @@ export interface Props {
     adminTiles: Tile[]
     setAdminTiles: Function
     isLoading: boolean
+    setIsLoading: Function
     allServices: Service[]
 }
 
-const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, allServices}: Props) => { 
+const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoading, allServices}: Props) => { 
     const [expanded, toggleExpanded] = useState<boolean[]>(Array(adminTiles.length).fill(false))
     const [selectedService, changeCurrentSelectedService] = useState(allServices[0].id)
     const [newAdminArea, updateNewAdminArea] = useState<Area>({
@@ -105,19 +107,23 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, allService
 
 
     const handlePostAdminArea = (areaToAdd: Area) => {
+        setIsLoading(true)
         const newlist = adminTiles.filter(tile => tile.area.id === areaToAdd.id)
         if(newlist.length > 0) {
             alert("Denne IDen er allerede brukt. Velg en annen")
+            setIsLoading(false)
             return
         }
         if(postAdminAreas(areaToAdd)) {
             const newAreas = [...adminTiles]
-            const  newTile:Tile = {services:[], status:'', area:areaToAdd}
+            const newTile:Tile = {services:[], status:'', area:areaToAdd}
             newAreas.push(newTile)
             setAdminTiles(newAreas)
+            setIsLoading(false)
             return
         }
         //TODO bedre error-visning trengs
+        setIsLoading(false)
         alert("Område ble ikke lagt til")
     }
 
@@ -134,17 +140,15 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, allService
     }
 
     const handlePutServiceToArea = async (tileId, serviceId) => {
-        (await putServiceToArea(tileId, serviceId).then(response => {
-            console.log(response)
-        }))
-        // .then((response) => {
-        //     console.log(response)
-            // if(response.ok) {
-            //     alert("success")
-            // }else {
-            //     alert("failed")
-            // }
-        // })
+        setIsLoading(true)
+        putServiceToArea(tileId, serviceId).then((response: any) => {
+            if (response.status >= 200 || response.status <= 210) {
+                alert("Tjenesten har blitt lagt til i området")
+            } else {
+                alert("Tjenesten kunne ikke bli lagt til")
+            }
+        })
+        setIsLoading(false)
     }
 
     const toggleAreaExpanded = (index: number) => {
@@ -197,7 +201,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, allService
                                                 <Element>Tjenester i område: {tile.area.name}</Element>
                                                 {tile.services.map(service => {
                                                     return (
-                                                        <li>{service.name}</li>
+                                                        <li key={service.id}>{service.name}</li>
                                                     )
                                                 })}
                                         </ServicesInAreaList>

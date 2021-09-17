@@ -31,9 +31,10 @@ const SpinnerCentered = styled.div`
 export interface Props {
     services: Service[]
     setServices: Function
+    setIsLoading: Function
 }
 
-const TjenesteTable = ({services, setServices}: Props) => {
+const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
     const [newService, updateNewService] = useState<Service>({
         id: "",
         name: "",
@@ -54,30 +55,37 @@ const TjenesteTable = ({services, setServices}: Props) => {
     
     
     const handlePostService = (serviceToAdd: Service) => {
+        setIsLoading(true)
         const newlist = services.filter(service => service.id === serviceToAdd.name)
         if(newlist.length > 0) {
             alert("Denne IDen er allerede brukt. Velg en annen")
+            setIsLoading(false)
             return
         }
         if(postService(serviceToAdd)) {
             const newServices = [...services]
             newServices.push(serviceToAdd)
             setServices(newServices)
+            setIsLoading(false)
             return
         }
         //TODO bedre error-visning trengs
+        setIsLoading(false)
         alert("Tjeneste ble ikke lagt til")
     }
     
     const handleDeleteArea = (serviceToDelete) => {
+        setIsLoading(true)
         if(deleteService(serviceToDelete)) {
             const newServices = services.filter(currentService => 
                 currentService != serviceToDelete
             )
             setServices(newServices)
+            setIsLoading(false)
             return
         }
         //TODO bedre error-visning trengs
+        setIsLoading(false)
         alert("Tjeneste ble ikke slettet")
     }
 
