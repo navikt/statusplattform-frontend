@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Dropdown from 'react-dropdown';
 
 import { Bag, Collapse, Expand } from '@navikt/ds-icons'
@@ -56,7 +56,11 @@ const ServicesInAreaList = styled.ul`
     padding: 0;
     li {
         list-style: none;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
+    cursor: default;
 `
 
 const getBag = () => {
@@ -195,17 +199,21 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                                     <td colSpan={7}>Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste</td>
                                 </TileDropdownRow>
                                 :
-                                <TileDropdownRow onClick={() => toggleAreaExpanded(index)}>
-                                    <td colSpan={7}>
+                                <TileDropdownRow>
+                                    <td colSpan={2}>
                                         <ServicesInAreaList>
                                                 <Element>Tjenester i område: {tile.area.name}</Element>
                                                 {tile.services.map(service => {
                                                     return (
-                                                        <li key={service.id}>{service.name}</li>
+                                                        <li key={service.id}>{service.name} <CloseCustomized aria-label="Fjern tjenesten fra område"
+                                                            onClick={() =>
+                                                            alert("Mangler endepunkt")}/>
+                                                        </li>
                                                     )
                                                 })}
                                         </ServicesInAreaList>
                                     </td>
+                                    <td colSpan={5} onClick={() => toggleAreaExpanded(index)}/>
                                 </TileDropdownRow>)
                             }
                             {expanded[index] && 
