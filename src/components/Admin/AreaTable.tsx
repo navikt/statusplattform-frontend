@@ -40,11 +40,11 @@ const CenteredExpandRetractSpan = styled.span`
     justify-content: center;
 `
 
-const NoServicesInAreaNotifier = styled.div`
-    width: 100%;
+const NoServicesInAreaNotifier = styled.td`
+    /* width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: center; */
 `
 
 const getBag = () => {
@@ -136,14 +136,9 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, allService
         toggleExpanded(newArray)
     }
 
-
     const changeSelectedService = (e) => {
         changeCurrentSelectedService(e.target.value)
     }
-
-    allServices.flatMap(service => service.name)
-
-    const servicesOptions = ['test1', 'test2']
 
     const { id, name, beskrivelse, rangering} = newAdminArea
 
@@ -176,33 +171,34 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, allService
                             </tr>
                             {expanded[index] && 
                                 tile.services.length === 0 ?
-                                <>
-                                    <NoServicesInAreaNotifier>
-                                        Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste
-                                    </NoServicesInAreaNotifier>
-                                    <tr key="input">
-                                        <td>
-                                            {/* <Input type="text" value={""} placeholder="Logglink" /> */}
-                                            <select value={selectedService} onChange={changeSelectedService}>
-                                                {allServices.map(service => {
-                                                    return (
-                                                        <option value={service.id}>{service.name}</option>
-                                                    )
-                                                })}
-                                            </select>
-                                        </td>
-
-                                        <td>
-                                            <Hovedknapp disabled={!selectedService} onClick={() => putServiceToArea(tile.area.id, selectedService)} >Legg til</Hovedknapp>                                            
-                                        </td>
-                                    </tr>
-                                </>
-                                :(
+                                <NoServicesInAreaNotifier>
+                                    Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste
+                                </NoServicesInAreaNotifier>
+                                :
+                                (
                                     tile.services.map((service, x) => {
                                         // console.log(service.name)
                                         // <tr key={x}>{service.name}</tr>
                                     })
                                 )
+                            }
+                            {expanded[index] && 
+                                <tr key="input">
+                                    <td>
+                                        {/* <Input type="text" value={""} placeholder="Logglink" /> */}
+                                        <select value={selectedService} onChange={changeSelectedService}>
+                                            {allServices.map(service => {
+                                                return (
+                                                    <option value={service.id}>{service.name}</option>
+                                                )
+                                            })}
+                                        </select>
+                                    </td>
+
+                                    <td>
+                                        <Hovedknapp disabled={!selectedService} onClick={() => putServiceToArea(tile.area.id, selectedService)} >Legg til</Hovedknapp>                                            
+                                    </td>
+                                </tr>
                             }
                         </>
                     )
