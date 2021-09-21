@@ -156,7 +156,7 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
                     </td>
 
                     <td><Hovedknapp disabled={
-                        !id || !team} 
+                        !id || !team || !dependencies} 
                         onClick={() => handlePostService(newService)}>
                         Legg til</Hovedknapp>
                     </td>
