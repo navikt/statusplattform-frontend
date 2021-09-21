@@ -68,6 +68,9 @@ const ServicesInAreaList = styled.ul`
 const AddNewAreaTr = styled.tr`
     td {
         vertical-align: bottom;
+        select {
+            min-width: 150px;
+        }
     }
 `
 
