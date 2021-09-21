@@ -102,12 +102,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         ) 
     }
 
-
-	const options = [
-		// <Bag />, <Folder />, <BagFilled />
-        'Bag', 'Folder', 'Pengebag'
-	];
-    const testOptions = [
+    const options = [
         { value: "0001", label: "Bag", icon: <Bag/> },
         { value: "0002", label: "Sparepenger", icon: <Saving/> },
         { value: "0003", label: "Hjerte", icon: <Heart/> },
@@ -119,9 +114,8 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         { value: "0009", label: "Penger", icon: <Money/> },
         { value: "0010", label: "Kalkulator", icon: <Calculator/> },
         { value: "0011", label: "Blomst", icon: <FlowerBladeFall/> },
+        { value: "0012", label: "Mappe", icon: <Folder/> },
 	];
-	
-	const defaultOption = testOptions[0]
 
     const handleAreaDataChange = (field: keyof typeof newAdminArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const newArea = {
@@ -283,8 +277,9 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                         <Select
                             label="Velg ikon til området"
                             onChange={handleAreaIconChange}
+                            defaultValue={options[0].value}
                         >
-                            {testOptions.map(option => {
+                            {options.map(option => {
                                 return (
                                     <option key={option.value} value={option.value}>{option.label}</option>
                                 )
