@@ -143,7 +143,7 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
                         <Input type="text" value={team} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
                     </td>
                     <td>
-                        <Input type="text" value={dependencies} onChange={handleServiceDataChange("dependencies")} placeholder="Avhengigheter"/>
+                        <Input type="text" value={dependencies} onChange={handleServiceDataChange("dependencies")} placeholder="Avhengigheter*"/>
                     </td>
                     <td>
                         <Input type="text" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
