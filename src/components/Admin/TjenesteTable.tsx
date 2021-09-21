@@ -27,6 +27,11 @@ const SpinnerCentered = styled.div`
     position: absolute;
     top: 40%;
 `
+const AddNewServiceTr = styled.tr`
+    td {
+        min-width: 125px;
+    }
+`
 
 export interface Props {
     services: Service[]
@@ -124,10 +129,9 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
                     )
                 })}
 
-                <tr key="input">
-
+                <AddNewServiceTr key="input">
                     <td>
-                        <Input type="text" value={id} onChange={handleServiceDataChange("id")} placeholder="ID"/>
+                        <Input type="text" value={id} required onChange={handleServiceDataChange("id")} placeholder="ID*"/>
                     </td>
                     <td>
                         <Input type="text" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn"/>
@@ -136,7 +140,7 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
                         <Input type="text" value={type} onChange={handleServiceDataChange("type")} placeholder="Type"/>
                     </td>
                     <td>
-                        <Input type="text" value={team} onChange={handleServiceDataChange("team")} placeholder="Team"/>
+                        <Input type="text" value={team} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
                     </td>
                     <td>
                         <Input type="text" value={dependencies} onChange={handleServiceDataChange("dependencies")} placeholder="Avhengigheter"/>
@@ -152,11 +156,11 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
                     </td>
 
                     <td><Hovedknapp disabled={
-                        !id || !name || !type || !team || !dependencies || !monitorlink || !description || !logglink} 
+                        !id || !team} 
                         onClick={() => handlePostService(newService)}>
                         Legg til</Hovedknapp>
                     </td>
-                </tr>
+                </AddNewServiceTr>
 
             </tbody>
         </table>

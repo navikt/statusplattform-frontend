@@ -115,6 +115,7 @@ const AdminDashboard = ({selectedMenu}: Props) => {
                 <AreasContainer>
                     <div>
                         <h2>{selectedMenu === "Områdemeny" ? "Områder" : "Tjenester"}</h2>
+                            <p>Felter markert med * er obligatoriske</p>
                         {selectedMenu === "Områdemeny" ? (
                             <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading} setIsLoading={setIsLoading}/>
                             ) : (

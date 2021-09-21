@@ -265,20 +265,20 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
             <tbody>
                 <AddNewAreaTr key="input">
                     <td>
-                        <Input type="text" value={id} onChange={handleAreaDataChange("id")} placeholder="ID"/>
+                        <Input type="text" required value={id} onChange={handleAreaDataChange("id")} placeholder="ID*"/>
                     </td>
                     <td>
-                        <Input type="text" value={name} onChange={handleAreaDataChange("name")} placeholder="Navn"/>
+                        <Input type="text" required value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*"/>
                     </td>
                     <td>
-                        <Input type="text" value={beskrivelse} onChange={handleAreaDataChange("beskrivelse")} placeholder="Beskrivelse"/>
+                        <Input type="text" required value={beskrivelse} onChange={handleAreaDataChange("beskrivelse")} placeholder="Beskrivelse*"/>
                     </td>
                     <td>
-                        <Input type="number" value={rangering} onChange={handleAreaDataChange("rangering")} />
+                        <Input type="number" required value={rangering} onChange={handleAreaDataChange("rangering")} placeholder="0*" />
                     </td>
                     <td>
                         <Select
-                            label="Velg ikon til området"
+                            label="Velg ikon til området*"
                             onChange={handleAreaIconChange}
                             defaultValue={options[0].value}
                         >
