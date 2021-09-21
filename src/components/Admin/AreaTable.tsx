@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { useState } from "react";
 import Dropdown from 'react-dropdown';
 
-import { Bag, Collapse, Expand } from '@navikt/ds-icons'
+import { Bag, BagFilled, Calculator, Collapse, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Saving, SocialAid } from '@navikt/ds-icons'
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import NavFrontendSpinner from "nav-frontend-spinner";
@@ -65,6 +65,12 @@ const ServicesInAreaList = styled.ul`
     cursor: default;
 `
 
+const AddNewAreaTr = styled.tr`
+    td {
+        vertical-align: bottom;
+    }
+`
+
 const getBag = () => {
     return <IconContainer><Bag /></IconContainer>
 }
@@ -101,13 +107,33 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
 		// <Bag />, <Folder />, <BagFilled />
         'Bag', 'Folder', 'Pengebag'
 	];
+    const testOptions = [
+        { value: "0001", label: "Bag", icon: <Bag/> },
+        { value: "0002", label: "Sparepenger", icon: <Saving/> },
+        { value: "0003", label: "Hjerte", icon: <Heart/> },
+        { value: "0004", label: "Sosialstøtte", icon: <SocialAid/> },
+        { value: "0005", label: "Bandasje", icon: <HandBandage/> },
+        { value: "0006", label: "Skjemautfylt", icon: <FillForms/> },
+        { value: "0007", label: "Førstehjelp", icon: <HealthCase/> },
+        { value: "0008", label: "Guidehund", icon: <GuideDog/> },
+        { value: "0009", label: "Penger", icon: <Money/> },
+        { value: "0010", label: "Kalkulator", icon: <Calculator/> },
+        { value: "0011", label: "Blomst", icon: <FlowerBladeFall/> },
+	];
 	
-	const defaultOption = 'Ikon...'
+	const defaultOption = testOptions[0]
 
     const handleAreaDataChange = (field: keyof typeof newAdminArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const newArea = {
             ...newAdminArea,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
+        updateNewAdminArea(newArea)
+    }
+    const handleAreaIconChange = (event) => {
+        const newArea = {
+            ...newAdminArea,
+        }
+        newArea.ikon = event.target.value
         updateNewAdminArea(newArea)
     }
 
@@ -240,7 +266,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                     )
                 })}
             <tbody>
-                <tr key="input">
+                <AddNewAreaTr key="input">
                     <td>
                         <Input type="text" value={id} onChange={handleAreaDataChange("id")} placeholder="ID"/>
                     </td>
@@ -254,15 +280,19 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                         <Input type="number" value={rangering} onChange={handleAreaDataChange("rangering")} />
                     </td>
                     <td>
-                        <Dropdown
-                            options={options}
-                            onChange={getBag}
-                            value={defaultOption}
-                            placeholder="Select an option"
-                        />
+                        <Select
+                            label="Velg ikon til området"
+                            onChange={handleAreaIconChange}
+                        >
+                            {testOptions.map(option => {
+                                return (
+                                    <option key={option.value} value={option.value}>{option.label}</option>
+                                )
+                            })}
+                        </Select>
                     </td>
                     <td colSpan={2}><Hovedknapp disabled={!id || !name || !beskrivelse || !rangering} onClick={() => handlePostAdminArea(newAdminArea)}>Legg til</Hovedknapp></td>
-                </tr>
+                </AddNewAreaTr>
 
             </tbody>
         </table>
