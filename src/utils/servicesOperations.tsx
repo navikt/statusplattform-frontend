@@ -64,8 +64,8 @@ const iconMap: Map<string, any> = new Map<string, any> ([
     ["0008", <GuideDog />],
     ["0009", <Money />], //Denne er feil ifht nav.no
     ["0010", <Calculator />],
-    ["0011", <FillForms />], //Denne er feil ifht nav.no
-    ["0012", <FlowerBladeFall />],
+    ["0011", <FlowerBladeFall />],
+    ["0012", <Folder />],
 ])
 
 
