@@ -176,6 +176,15 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         setIsLoading(true)
         putServiceToArea(tileId, serviceId).then((response: any) => {
             if (response.status >= 200 || response.status <= 210) {
+                let currentTiles = [...adminTiles]
+                let services = [...allServices]
+                var indexOfTileToUpdate = currentTiles.findIndex(tile => 
+                    tile.area.id = tileId
+                )
+                var indexOfServiceToAdd = services.findIndex(service => 
+                    service.id = serviceId
+                )
+                currentTiles[indexOfTileToUpdate].services.push(services[indexOfServiceToAdd])
                 alert("Tjenesten har blitt lagt til i området")
             } else {
                 alert("Tjenesten kunne ikke bli lagt til")
@@ -232,9 +241,10 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                                     <td colSpan={2}>
                                         <ServicesInAreaList>
                                                 <Element>Tjenester i område: {tile.area.name}</Element>
+                                                <Element>med id: {tile.area.id}</Element>
                                                 {tile.services.map(service => {
                                                     return (
-                                                        <li key={service.id}>{service.name} <CloseCustomized aria-label="Fjern tjenesten fra område"
+                                                        <li key={service.id}>{service.id} <CloseCustomized aria-label="Fjern tjenesten fra område"
                                                             onClick={() =>
                                                             alert("Mangler endepunkt")}/>
                                                         </li>
@@ -251,7 +261,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                                         <Select value={selectedService} onChange={changeSelectedService}>
                                             {allServices.map(service => {
                                                 return (
-                                                    <option key={service.id} value={service.id}>{service.name}</option>
+                                                    <option key={service.id} value={service.id}>{service.id}</option>
                                                 )
                                             })}
                                         </Select>
