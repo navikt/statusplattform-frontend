@@ -140,17 +140,6 @@ export default function Navbar() {
 				</li>
 				<li role="tab">
 					<LinkWrapper>
-						<Link href="/arbeidsgiver">
-							<LenkeCustomized>
-								<LenkeInner className={`${router.pathname === "/arbeidsgiver" ? "active" : ""}`}>
-									<NormalTekstCustomized>Arbeidsgiver</NormalTekstCustomized>
-								</LenkeInner>
-							</LenkeCustomized>
-						</Link>
-					</LinkWrapper>
-				</li>
-				<li role="tab">
-					<LinkWrapper>
 						<Link href="/admin">
 							<LenkeCustomized>
 								<LenkeInner className={`${router.pathname === "/admin" ? "active" : ""}`}>
