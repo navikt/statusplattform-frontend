@@ -1,24 +1,49 @@
 import styled from 'styled-components'
 import Layout from 'components/Layout'
-
-
-const ErrorTitle = styled.h1`
-    color: var(--redError);
-`;
+import { Ingress, Innholdstittel } from 'nav-frontend-typografi';
+import Lenke from 'nav-frontend-lenker';
 
 const ErrorWrapper = styled.div`
+    margin: 2rem 0;
+    background-color: var(--navBakgrunn);
+    border-radius: .25rem;
+    padding: 1.5rem;
+    max-width: 50rem;
     display: flex;
-    justify-content: center;
-    align-items: center;
     flex-flow: column wrap;
+    h1 {
+        border-right: 1px solid rgba(0,0,0,.3);
+        margin-right: 1.5rem;
+        padding-right: 1.5rem;
+        vertical-align: top;
+    }
 `;
+
+const ErrorHeader = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`
 
 export default function Custom404() {
     return (
         <Layout>
             <ErrorWrapper>
-                <ErrorTitle>404 - Page Not Found</ErrorTitle>
-                <p>Denne siden eksisterer dessverre ikke :-(</p>
+                <ErrorHeader>
+                    <Innholdstittel>Fant ikke siden</Innholdstittel><Ingress>Statuskode 404</Ingress>
+                </ErrorHeader>
+                    <div className="error404__content">
+                        <p>
+                            Beklager, siden kan være slettet eller flyttet, eller det var en feil i lenken som førte deg hit.
+                        </p>
+                        <p>Bruk gjerne søket, menyen eller <Lenke href="/">
+                            gå til forsiden
+                            </Lenke>.
+                        </p>
+                        <Lenke href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">
+                            Meld gjerne fra om denne lenken
+                        </Lenke>
+                    </div>
             </ErrorWrapper>
         </Layout>
     )
