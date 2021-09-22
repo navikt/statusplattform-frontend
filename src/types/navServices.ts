@@ -1,3 +1,7 @@
+export interface Dashboard {
+    name: string
+    areaIds: string[]
+}
 export interface AreaServicesList {
     tiles: Tile[]
 }

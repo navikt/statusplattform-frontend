@@ -84,9 +84,10 @@ export interface Props {
     isLoading: boolean
     setIsLoading: Function
     allServices: Service[]
+    reFetchAdminTiles: Function
 }
 
-const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoading, allServices}: Props) => { 
+const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoading, allServices, reFetchAdminTiles}: Props) => { 
     const [expanded, toggleExpanded] = useState<boolean[]>(Array(adminTiles.length).fill(false))
     const [selectedService, changeCurrentSelectedService] = useState(allServices[0].id)
     const [newAdminArea, updateNewAdminArea] = useState<Area>({
@@ -144,10 +145,11 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
             return
         }
         if(postAdminAreas(areaToAdd)) {
-            const newAreas = [...adminTiles]
+            const newTiles = [...adminTiles]
             const newTile:Tile = {services:[], status:'', area:areaToAdd}
-            newAreas.push(newTile)
-            setAdminTiles(newAreas)
+            newTiles.push(newTile)
+            // setAdminTiles(newTiles)
+            // reFetchAdminTiles()
             setIsLoading(false)
             return
         }
@@ -156,15 +158,17 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         alert("Område ble ikke lagt til")
     }
 
-    const handleDeleteArea = (areaToDelete) => {
+    const handleDeleteArea = (areaToDelete, event) => {
         if(deleteArea(areaToDelete)) {
             const newTiles = adminTiles.filter(tile => 
                 tile.area.id != areaToDelete.id
             )
             setAdminTiles(newTiles)
+            event.stopPropagation()
             return
         }
         //TODO bedre error-visning trengs
+        event.stopPropagation()
         alert("Område ble ikke slettet")
     }
 
@@ -215,7 +219,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                                 <td><span>{area.beskrivelse}</span></td>
                                 <td><span>{area.rangering}</span></td>
                                 <td><span><IconContainer>{getIconsFromGivenCode(area.ikon)}</IconContainer></span></td>
-                                <td><span><CloseCustomized onClick={() => handleDeleteArea(area)} /></span></td>
+                                <td><span><CloseCustomized onClick={() => handleDeleteArea(area, event)} /></span></td>
                                 <td><span>{expanded[index] ? <Collapse /> : <Expand />}</span></td>
                             </tr>
                             {expanded[index] && 

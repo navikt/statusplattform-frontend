@@ -7,11 +7,13 @@ import Knapp from 'nav-frontend-knapper'
 
 
 import { fetchTiles } from 'utils/fetchTiles'
-import { Area, Service, Tile } from 'types/navServices';
+import { Area, Service, Tile, Dashboard } from 'types/navServices';
 
 import AreaTable from './AreaTable';
 import TjenesteTable from './TjenesteTable';
 import { fetchServices } from 'utils/fetchServices';
+import { fetchDashboards } from 'utils/fetchDashboards';
+import { Select } from 'nav-frontend-skjema';
 
 
 
@@ -75,11 +77,18 @@ const SpinnerCentered = styled.div`
     top: 40%;
 `
 
+const CustomSelect = styled(Select)`
+    min-width: 100px;
+    max-width: 200px;
+`
+
 export interface Props {
     selectedMenu: string
 }
 
 const AdminDashboard = ({selectedMenu}: Props) => {
+    const [selectedDashboard, updateSelectedDashboard] = useState() //Dette må ikke være type any i lengden. Kan potensielt fjernes også
+    const [dashboards, updateDashboards] = useState()
     const [adminTiles, setAdminTiles] = useState<Tile[]>([])
     const [services, setServices] = useState<Service[]>()
     const [isLoading, setIsLoading] = useState(true)
@@ -89,12 +98,37 @@ const AdminDashboard = ({selectedMenu}: Props) => {
         (async function () {
             setIsLoading(true)
             const tiles: Tile[] = await fetchTiles()
+            const allServices: Service[] = await fetchServices()
+            const retrievedDashboards: Dashboard = await fetchDashboards()
             setAdminTiles(tiles)
-            let allServices: Service[] = await fetchServices()
             setServices(allServices)
+            console.log(retrievedDashboards)
             setIsLoading(false)
         })()
     }, [])
+
+    const changeSelectedDashboard = (event) => {
+        const dashboardId: string = event.target.value
+        console.log(dashboardId)
+        // Kommentert ut det under. Skal her fetche nytt dashboard
+        // useEffect(() => {
+        //     (async function () {
+        //         setIsLoading(true)
+        //         const dashboard: any[] = await fetchDashboard(dashboardId)
+        //         updateSelectedDashboard(dashboard)
+        //         setIsLoading(false)
+        //     })()
+        // }, [])
+    }
+
+    const reFetchAdminTiles = () => {
+        // useEffect(() => {
+        //     (async function () {
+        //         const tiles: Tile[] = await fetchTiles()
+        //         setAdminTiles(tiles)
+        //     })()
+        // }, [])
+    }
 
     if (isLoading) {
         return (
@@ -115,9 +149,14 @@ const AdminDashboard = ({selectedMenu}: Props) => {
                 <AreasContainer>
                     <div>
                         <h2>{selectedMenu === "Områdemeny" ? "Områder" : "Tjenester"}</h2>
-                            <p>Felter markert med * er obligatoriske</p>
+                        <p>Felter markert med * er obligatoriske</p>
+                        <CustomSelect onChange={changeSelectedDashboard} label="Velg Dashbord">
+                            <option value="Privatperson" label="Privatperson" />
+                            <option value="Internt" label="Internt" />
+                            <option value="Arbeidspartner" label="Arbeidspartner" />
+                        </CustomSelect>
                         {selectedMenu === "Områdemeny" ? (
-                            <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading} setIsLoading={setIsLoading}/>
+                            <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading} setIsLoading={setIsLoading} reFetchAdminTiles={reFetchAdminTiles}/>
                             ) : (
                                 <TjenesteTable services={services} setServices={setServices} setIsLoading={setIsLoading} />
                             )
