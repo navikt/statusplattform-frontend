@@ -42,8 +42,10 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
 
 `;
 
-const SelectWrapper = styled.div`
-    width: 600px;
+const SelectWrapper = styled.div<{maxWidth: number}>`
+    /* width: 600px; */
+    /* width: 100%; */
+    width: ${(props) => props.maxWidth}px;
     display: flex;
     select {
         min-width: 100px;
@@ -197,7 +199,7 @@ const NavDashboard = () => {
             <DigitalServicesContainer>
                 <StatusOverview tiles={tiles} />
                     <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
-                        <SelectWrapper>
+                        <SelectWrapper maxWidth={maxWidth}>
                             <Select onChange={changeSelectedDashboard} label="Velg Dashbord">
                                 {dashboards.map((dashboard, index) => (
                                     <option key={index} value={dashboard.name} label={dashboard.name}/>
