@@ -56,7 +56,13 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
     })
 
     const handleDependencyChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        console.log(newService)
+        // console.log(newService)
+        const currentService = {
+            ...newService,
+            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
+        }
+        currentService.dependencies = newService.dependencies
+        console.log(currentService.dependencies)
     }
 
     const handleServiceDataChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -64,7 +70,6 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
             ...newService,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
         }
-        console.log(newArea)
         updateNewService(newArea)
     }
     
@@ -93,17 +98,15 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
         setIsLoading(true)
         console.log(serviceToDelete)
         if(deleteService(serviceToDelete)) {
-            if(!toast.isActive) {
-                toast.success('Tjeneste slettet');
-            }
+            toast.success('Tjeneste slettet');
             const newServices = services.filter(currentService => 
                 currentService != serviceToDelete
             )
             setServices(newServices)
-            console.log("aktivert")
             setIsLoading(false)
             return
         }
+        toast.error('Tjeneste kunne ikke slettes');
         //TODO bedre error-visning trengs
         setIsLoading(false)
         // toast.error('Tjeneste ble ikke slettet', {
@@ -175,7 +178,7 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
                             <Input type="text" value={team} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
                         </td>
                         <td>
-                            <Input type="text" value={dependencies} onChange={handleDependencyChange("dependencies")} placeholder="Avhengigheter*"/>
+                            <Input type="text" value={dependencies} onChange={handleServiceDataChange("dependencies")} placeholder="Avhengigheter*"/>
                         </td>
                         <td>
                             <Input type="text" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
