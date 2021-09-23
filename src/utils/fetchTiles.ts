@@ -12,7 +12,7 @@ export const fetchTiles = async (dashboard: Dashboard): Promise<Tile[]> => {
         response = await fetch("http://localhost:3001/rest/Tiles/" + dashboard.name);
     }
     else {
-        response = await fetch("https://digitalstatus.ekstern.dev.nav.no/rest/Tiles");
+        response = await fetch("https://digitalstatus.ekstern.dev.nav.no/rest/Tiles/" + dashboard.name);
     }
     if (response.ok) {
         return response.json()
