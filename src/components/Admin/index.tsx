@@ -102,7 +102,6 @@ const AdminDashboard = ({selectedMenu}: Props) => {
             const allServices: Service[] = await fetchServices()
             setAdminTiles(tiles)
             setServices(allServices)
-            console.log(dashboards)
             setIsLoading(false)
         })()
     }, [])
