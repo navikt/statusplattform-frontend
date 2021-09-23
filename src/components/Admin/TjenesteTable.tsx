@@ -130,7 +130,6 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
                 draggable
                 pauseOnHover
                 />
-                asdasd
             <ToastContainer />
             <table className="tabell tabell--stripet">
 
