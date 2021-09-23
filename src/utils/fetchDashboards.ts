@@ -6,9 +6,9 @@ export class ResponseError extends Error {
     }
 }
 
-export const fetchDashboards = async (): Promise<Dashboard> => {
+export const fetchDashboards = async (): Promise<Dashboard[]> => {
 
-    let endPath = "/rest/dashboards"
+    let endPath = "/rest/Dashboards"
     let response;
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath);

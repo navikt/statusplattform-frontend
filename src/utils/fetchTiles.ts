@@ -1,4 +1,4 @@
-import { Tile } from "types/navServices";
+import { Tile, Dashboard } from "types/navServices";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -6,10 +6,10 @@ export class ResponseError extends Error {
     }
 }
 
-export const fetchTiles = async (): Promise<Tile[]> => {
+export const fetchTiles = async (dashboard: Dashboard): Promise<Tile[]> => {
     let response;
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch("http://localhost:3001/rest/Tiles");
+        response = await fetch("http://localhost:3001/rest/Tiles/" + dashboard.name);
     }
     else {
         response = await fetch("https://digitalstatus.ekstern.dev.nav.no/rest/Tiles");

@@ -7,8 +7,10 @@ import { fetchTiles } from 'utils/fetchTiles'
 
 // import { LenkepanelBase } from "nav-frontend-lenkepanel";
 import NavFrontendSpinner from "nav-frontend-spinner";
-import { Tile, Service } from "types/navServices";
+import { Tile, Service, Dashboard } from "types/navServices";
 import { Knapp } from "nav-frontend-knapper";
+import { fetchDashboards } from "utils/fetchDashboards";
+import { Select } from "nav-frontend-skjema";
 
 
 const DigitalServicesContainer = styled.div`
@@ -40,6 +42,15 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
 
 `;
 
+const SelectWrapper = styled.div`
+    width: 600px;
+    display: flex;
+    select {
+        min-width: 100px;
+        max-width: 200px;
+    }
+`
+
 const PortalServiceTileRow = styled.div `
     width: 100%;
     margin-bottom: 10px;
@@ -60,7 +71,9 @@ const SpinnerCentered = styled.div`
     top: 40%;
 `
 
-const Dashboard = () => {
+const NavDashboard = () => {
+    const [dashboards, setDashboards] = useState<Dashboard[]>()
+    const [selectedDashboard, setSelectedDash] = useState()
     const [tiles, setAreas] = useState<Tile[]>()
     const [isLoading, setIsLoading] = useState(true)
     const [expandAll, changeExpand] = useState(false)
@@ -70,7 +83,9 @@ const Dashboard = () => {
 
     useEffect(() => {
         (async function () {
-            const tiles: Tile[] = await fetchTiles()
+            const dashboards: Dashboard[] = await fetchDashboards()
+            setDashboards(dashboards)
+            const tiles: Tile[] = await fetchTiles(dashboards[0])
             setAreas(tiles)
             setIsLoading(false)
         })()
@@ -162,21 +177,44 @@ const Dashboard = () => {
             setExpandedTiles(expandedTiles.concat([index]));
         }
     }
+    
+    const changeSelectedDashboard = (event) => {
+        const dashboardId: string = event.target.value
+        console.log(dashboardId)
+        // Kommentert ut det under. Skal her fetche nytt dashboard
+        // useEffect(() => {
+        //     (async function () {
+        //         setIsLoading(true)
+        //         const dashboard: any[] = await fetchDashboard(dashboardId)
+        //         updateSelectedDashboard(dashboard)
+        //         setIsLoading(false)
+        //     })()
+        // }, [])
+    }
 
     if(!isLoading && tiles.length > 0){
         return (
             <DigitalServicesContainer>
                 <StatusOverview tiles={tiles} />
                     <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
-       
+                        <SelectWrapper>
+                            <Select onChange={changeSelectedDashboard} label="Velg Dashbord">
+                                {dashboards.map((dashboard, index) => (
+                                    <option key={index} value={dashboard.name} label={dashboard.name}/>
+                                ))}
+                                {/* <option value="privatperson" label="privatperson" />
+                                <option value="internt" label="nternt" />
+                                <option value="Arbeidspartner" label="Arbeidspartner" /> */}
+                            </Select>
+                        </SelectWrapper>
                         <PortalServiceTileContainer maxWidth={maxWidth}>
                             {rows.map((row, rowIndex) => (
                                 <PortalServiceTileRow key={rowIndex}>
                                     {row.map((tile,index) => ( 
                                         <PortalServiceTile key={index} toggleTile={toggleTile}
-                                                            tileIndex={rowIndex*numberOfTilesPerRow + index}
-                                                            tile={tile} expanded={isTileExpanded(rowIndex, index)}
-                                                        />
+                                            tileIndex={rowIndex*numberOfTilesPerRow + index}
+                                            tile={tile} expanded={isTileExpanded(rowIndex, index)}
+                                        />
                                     ))}
                                 </PortalServiceTileRow>
                             ))
@@ -191,4 +229,4 @@ const Dashboard = () => {
 
 }
 
-export default Dashboard
+export default NavDashboard

@@ -1,11 +1,11 @@
 import Layout from 'components/Layout'
-import Dashboard from './Dashboard'
+import NavDashboard from './NavDashboard'
 
 
 export default function Home() {
     return (
         <Layout>
-            <Dashboard />
+            <NavDashboard />
         </Layout>
     )
 }

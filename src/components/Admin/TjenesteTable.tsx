@@ -2,9 +2,12 @@ import styled from 'styled-components'
 import { useEffect, useState } from "react";
 import Dropdown from 'react-dropdown';
 
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 import { Bag } from '@navikt/ds-icons'
 import { Input } from 'nav-frontend-skjema';
-import { Hovedknapp  } from 'nav-frontend-knapper';
+import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 import NavFrontendSpinner from "nav-frontend-spinner";
 import { Close } from '@navikt/ds-icons'
 
@@ -12,6 +15,7 @@ import { Area, Service, Tile } from 'types/navServices';
 import { deleteService } from 'utils/deleteService';
 import { postService } from 'utils/postService'
 import { fetchServices } from 'utils/fetchServices';
+
 
 
 const CloseCustomized = styled(Close)`
@@ -51,10 +55,16 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
         logglink: ""
     })
 
+    const handleDependencyChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
+        console.log(newService)
+    }
+
     const handleServiceDataChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const newArea = {
             ...newService,
-            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
+            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
+        }
+        console.log(newArea)
         updateNewService(newArea)
     }
     
@@ -79,91 +89,114 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
         alert("Tjeneste ble ikke lagt til")
     }
     
-    const handleDeleteArea = (serviceToDelete) => {
+    const handleServiceArea = (serviceToDelete) => {
         setIsLoading(true)
+        console.log(serviceToDelete)
         if(deleteService(serviceToDelete)) {
+            if(!toast.isActive) {
+                toast.success('Tjeneste slettet');
+            }
             const newServices = services.filter(currentService => 
                 currentService != serviceToDelete
             )
             setServices(newServices)
+            console.log("aktivert")
             setIsLoading(false)
             return
         }
         //TODO bedre error-visning trengs
         setIsLoading(false)
-        alert("Tjeneste ble ikke slettet")
+        // toast.error('Tjeneste ble ikke slettet', {
+
+        // });
+        // alert("Tjeneste ble ikke slettet")
     }
 
     const { id, name, type, team, dependencies, monitorlink, description, logglink, status } = newService
 
-
     return (
-        <table className="tabell tabell--stripet">
-            <thead>
-                <tr>
-                    <th><span>ID</span></th>
-                    <th><span>Navn</span></th>
-                    <th><span>Type</span></th>
-                    <th><span>Team</span></th>
-                    <th><span>Dependencies</span></th>
-                    <th><span>monitorlink</span></th>
-                    <th><span>Description</span></th>
-                    <th><span>logglink</span></th>
-                    <th><span>Slett</span></th>
-                </tr>
-            </thead>
-            <tbody>
-                {services.map( service => {
-                    return (
-                        <tr key={service.id}>
-                            <td><span>{service.id}</span></td>
-                            <td><span>{service.name}</span></td>
-                            <td><span>{service.type}</span></td>
-                            <td><span>{service.team}</span></td>
-                            <td><span>{service.dependencies}</span></td>
-                            <td><span>{service.monitorlink}</span></td>
-                            <td><span>{service.description}</span></td>
-                            <td><span>{service.logglink}</span></td>
-                            <td><span><CloseCustomized onClick={() => handleDeleteArea(service)} /></span></td>
-                        </tr>
-                    )
-                })}
+        <>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={true}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                />
+                asdasd
+            <ToastContainer />
+            <table className="tabell tabell--stripet">
 
-                <AddNewServiceTr key="input">
-                    <td>
-                        <Input type="text" value={id} required onChange={handleServiceDataChange("id")} placeholder="ID*"/>
-                    </td>
-                    <td>
-                        <Input type="text" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn"/>
-                    </td>
-                    <td>
-                        <Input type="text" value={type} onChange={handleServiceDataChange("type")} placeholder="Type"/>
-                    </td>
-                    <td>
-                        <Input type="text" value={team} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
-                    </td>
-                    <td>
-                        <Input type="text" value={dependencies} onChange={handleServiceDataChange("dependencies")} placeholder="Avhengigheter*"/>
-                    </td>
-                    <td>
-                        <Input type="text" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
-                    </td>
-                    <td>
-                        <Input type="text" value={description} onChange={handleServiceDataChange("description")} placeholder="Beskrivelse"/>
-                    </td>
-                    <td>
-                        <Input type="text" value={logglink} onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
-                    </td>
+                <thead>
+                    <tr>
+                        <th><span>ID</span></th>
+                        <th><span>Navn</span></th>
+                        <th><span>Type</span></th>
+                        <th><span>Team</span></th>
+                        <th><span>Dependencies</span></th>
+                        <th><span>monitorlink</span></th>
+                        <th><span>Description</span></th>
+                        <th><span>logglink</span></th>
+                        <th><span>Slett</span></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {services.map( service => {
+                        return (
+                            <tr key={service.id}>
+                                <td><span>{service.id}</span></td>
+                                <td><span>{service.name}</span></td>
+                                <td><span>{service.type}</span></td>
+                                <td><span>{service.team}</span></td>
+                                <td><span>{service.dependencies}</span></td>
+                                <td><span>{service.monitorlink}</span></td>
+                                <td><span>{service.description}</span></td>
+                                <td><span>{service.logglink}</span></td>
+                                <td><span><CloseCustomized onClick={() => handleServiceArea(service)} /></span></td>
+                            </tr>
+                        )
+                    })}
 
-                    <td><Hovedknapp disabled={
-                        !id || !team || !dependencies} 
-                        onClick={() => handlePostService(newService)}>
-                        Legg til</Hovedknapp>
-                    </td>
-                </AddNewServiceTr>
+                    <AddNewServiceTr key="input">
+                        <td>
+                            <Input type="text" value={id} required onChange={handleServiceDataChange("id")} placeholder="ID*"/>
+                        </td>
+                        <td>
+                            <Input type="text" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn"/>
+                        </td>
+                        <td>
+                            <Input type="text" value={type} onChange={handleServiceDataChange("type")} placeholder="Type"/>
+                        </td>
+                        <td>
+                            <Input type="text" value={team} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
+                        </td>
+                        <td>
+                            <Input type="text" value={dependencies} onChange={handleDependencyChange("dependencies")} placeholder="Avhengigheter*"/>
+                        </td>
+                        <td>
+                            <Input type="text" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
+                        </td>
+                        <td>
+                            <Input type="text" value={description} onChange={handleServiceDataChange("description")} placeholder="Beskrivelse"/>
+                        </td>
+                        <td>
+                            <Input type="text" value={logglink} onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
+                        </td>
 
-            </tbody>
-        </table>
+                        <td><Hovedknapp disabled={
+                            !id || !team || !dependencies} 
+                            onClick={() => handlePostService(newService)}>
+                            Legg til</Hovedknapp>
+                        </td>
+                    </AddNewServiceTr>
+
+                </tbody>
+            </table>
+        </>
     )
 }
 

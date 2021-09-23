@@ -88,7 +88,7 @@ export interface Props {
 
 const AdminDashboard = ({selectedMenu}: Props) => {
     const [selectedDashboard, updateSelectedDashboard] = useState() //Dette må ikke være type any i lengden. Kan potensielt fjernes også
-    const [dashboards, updateDashboards] = useState()
+    const [dashboards, setDashboards] = useState<Dashboard[]>()
     const [adminTiles, setAdminTiles] = useState<Tile[]>([])
     const [services, setServices] = useState<Service[]>()
     const [isLoading, setIsLoading] = useState(true)
@@ -97,12 +97,12 @@ const AdminDashboard = ({selectedMenu}: Props) => {
     useEffect(() => {
         (async function () {
             setIsLoading(true)
-            const tiles: Tile[] = await fetchTiles()
+            const dashboards: Dashboard[] = await fetchDashboards()
+            const tiles: Tile[] = await fetchTiles(dashboards[0])
             const allServices: Service[] = await fetchServices()
-            const retrievedDashboards: Dashboard = await fetchDashboards()
             setAdminTiles(tiles)
             setServices(allServices)
-            console.log(retrievedDashboards)
+            console.log(dashboards)
             setIsLoading(false)
         })()
     }, [])
@@ -150,14 +150,17 @@ const AdminDashboard = ({selectedMenu}: Props) => {
                     <div>
                         <h2>{selectedMenu === "Områdemeny" ? "Områder" : "Tjenester"}</h2>
                         <p>Felter markert med * er obligatoriske</p>
-                        <CustomSelect onChange={changeSelectedDashboard} label="Velg Dashbord">
-                            <option value="Privatperson" label="Privatperson" />
-                            <option value="Internt" label="Internt" />
-                            <option value="Arbeidspartner" label="Arbeidspartner" />
-                        </CustomSelect>
                         {selectedMenu === "Områdemeny" ? (
-                            <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading} setIsLoading={setIsLoading} reFetchAdminTiles={reFetchAdminTiles}/>
-                            ) : (
+                            <>
+                                <CustomSelect onChange={changeSelectedDashboard} label="Velg Dashbord">
+                                    <option value="privatperson" label="privatperson" />
+                                    <option value="Internt" label="Internt" />
+                                    <option value="Arbeidspartner" label="Arbeidspartner" />
+                                </CustomSelect>
+                                <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading} setIsLoading={setIsLoading} reFetchAdminTiles={reFetchAdminTiles}/>
+                                )
+                            </>
+                            ):(
                                 <TjenesteTable services={services} setServices={setServices} setIsLoading={setIsLoading} />
                             )
                         }

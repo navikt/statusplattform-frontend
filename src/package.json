@@ -55,6 +55,7 @@
     "react-dropdown": "^1.9.2",
     "react-modal": "^3.14.3",
     "react-select": "^4.3.1",
+    "react-toastify": "^8.0.2",
     "styled-components": "^5.2.1",
     "webpack": "^4.46.0"
   },
