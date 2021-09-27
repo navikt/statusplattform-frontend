@@ -12,7 +12,7 @@ export interface Tile {
 }
 
 export interface Service {
-    id?: string
+    id: string
     name: string
     type?: string
     team?: string

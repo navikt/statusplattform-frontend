@@ -87,8 +87,8 @@ export interface Props {
 }
 
 const AdminDashboard = ({selectedMenu}: Props) => {
-    const [selectedDashboard, updateSelectedDashboard] = useState() //Dette må ikke være type any i lengden. Kan potensielt fjernes også
     const [dashboards, setDashboards] = useState<Dashboard[]>()
+    const [selectedDashboard, updateSelectedDashboard] = useState<Dashboard>() //Dette må ikke være type any i lengden. Kan potensielt fjernes også
     const [adminTiles, setAdminTiles] = useState<Tile[]>([])
     const [services, setServices] = useState<Service[]>()
     const [isLoading, setIsLoading] = useState(true)
@@ -98,6 +98,8 @@ const AdminDashboard = ({selectedMenu}: Props) => {
         (async function () {
             setIsLoading(true)
             const dashboards: Dashboard[] = await fetchDashboards()
+            setDashboards(dashboards)
+            updateSelectedDashboard(dashboards[0])
             const tiles: Tile[] = await fetchTiles(dashboards[0])
             const allServices: Service[] = await fetchServices()
             setAdminTiles(tiles)
@@ -108,7 +110,7 @@ const AdminDashboard = ({selectedMenu}: Props) => {
 
     const changeSelectedDashboard = (event) => {
         const dashboardId: string = event.target.value
-        console.log(dashboardId)
+        // console.log(dashboardId)
         // Kommentert ut det under. Skal her fetche nytt dashboard
         // useEffect(() => {
         //     (async function () {
@@ -152,11 +154,16 @@ const AdminDashboard = ({selectedMenu}: Props) => {
                         {selectedMenu === "Områdemeny" ? (
                             <>
                                 <CustomSelect onChange={changeSelectedDashboard} label="Velg Dashbord">
-                                    <option value="privatperson" label="privatperson" />
+                                    {dashboards.map((dashboard, index) => (
+                                        <option key={index} value={dashboard.name} label={dashboard.name}/>
+                                    ))}
+                                    {/* <option value="privatperson" label="privatperson" />
                                     <option value="Internt" label="Internt" />
-                                    <option value="Arbeidspartner" label="Arbeidspartner" />
+                                    <option value="Arbeidspartner" label="Arbeidspartner" /> */}
                                 </CustomSelect>
-                                <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles} isLoading={isLoading} setIsLoading={setIsLoading} reFetchAdminTiles={reFetchAdminTiles}/>
+                                <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles}
+                                    isLoading={isLoading} setIsLoading={setIsLoading} 
+                                    reFetchAdminTiles={reFetchAdminTiles} selectedDashboard={selectedDashboard}/>
                                 )
                             </>
                             ):(

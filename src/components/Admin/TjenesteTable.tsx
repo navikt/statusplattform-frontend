@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { useEffect, useState } from "react";
 import Dropdown from 'react-dropdown';
 
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Bag } from '@navikt/ds-icons'
@@ -119,18 +119,6 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
 
     return (
         <>
-            <ToastContainer
-                position="top-right"
-                autoClose={5000}
-                hideProgressBar={false}
-                newestOnTop={true}
-                closeOnClick
-                rtl={false}
-                pauseOnFocusLoss
-                draggable
-                pauseOnHover
-                />
-            <ToastContainer />
             <table className="tabell tabell--stripet">
 
                 <thead>

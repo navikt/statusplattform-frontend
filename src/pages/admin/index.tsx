@@ -4,6 +4,9 @@ import Layout from 'components/Layout';
 import Admin from 'components/Admin';
 import MenuSelector from 'components/Admin/MenuSelector';
 import { useState } from 'react';
+import { ToastContainer } from 'react-toastify';
+
+import 'react-toastify/dist/ReactToastify.css';
 
 const AdminContainer = styled.div`
     //margin-top:30px;
@@ -13,7 +16,6 @@ const AdminContainer = styled.div`
     const [selectedMenu, changeSelectedMenu] = useState("Områdemeny")
 
     const onClickChangeSelectedMenu = (newMenu: string) => {
-        console.log(newMenu)
         changeSelectedMenu(newMenu)
     }
 
@@ -23,6 +25,7 @@ const AdminContainer = styled.div`
                 <MenuSelector currentSelectedMenu = {selectedMenu} onClickSelectedMenu={onClickChangeSelectedMenu}/>
                 <Admin selectedMenu={selectedMenu}/>
             </AdminContainer>
+            <ToastContainer/>
         </Layout>
     )
 }

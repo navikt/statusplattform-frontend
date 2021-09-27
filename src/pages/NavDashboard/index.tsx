@@ -43,8 +43,6 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
 `;
 
 const SelectWrapper = styled.div<{maxWidth: number}>`
-    /* width: 600px; */
-    /* width: 100%; */
     width: ${(props) => props.maxWidth}px;
     display: flex;
     select {
@@ -85,6 +83,7 @@ const NavDashboard = () => {
 
     useEffect(() => {
         (async function () {
+            setIsLoading(true)
             const dashboards: Dashboard[] = await fetchDashboards()
             setDashboards(dashboards)
             const tiles: Tile[] = await fetchTiles(dashboards[0])
@@ -97,12 +96,7 @@ const NavDashboard = () => {
         window.addEventListener("resize", () => setWidth(window.innerWidth))
     }, []);
 
-
-
-    if (!tiles) {
-        return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
-    }
-
+    
     if (isLoading) {
         return (
             <SpinnerCentered>
@@ -110,7 +104,10 @@ const NavDashboard = () => {
             </SpinnerCentered>
         ) 
     }
-
+    
+    if (!tiles) {
+        return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
+    }
 
     let maxWidth = width > 
             1800 ? 1800 : (window.innerWidth > 

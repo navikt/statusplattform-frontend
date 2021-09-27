@@ -1,12 +1,14 @@
+import { Dashboard } from "types/navServices";
+
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
         super(message)
     }
 }
 
-export const deleteArea = async (adminArea): Promise<Object[]> =>{
+export const deleteArea = async (adminArea, dashboard: Dashboard): Promise<Object[]> =>{
     let response;
-    let endPath = "/rest/Areas"
+    let endPath = "/rest/Areas/" + dashboard.name
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,

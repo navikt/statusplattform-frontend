@@ -1,25 +1,20 @@
-import { Dashboard } from "types/navServices";
-
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
         super(message)
     }
 }
 
-export const postAdminAreas = async (adminArea, dashboard: Dashboard): Promise<Object[]> =>{
+export const deleteServiceFromArea = async (areaId, serviceId): Promise<Object[]> =>{
     let response;
-    let endPath = "/rest/Areas/" + dashboard.name
+    let endPath = "/rest/ServiceOnArea"
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,
         {
-            method: "POST",
+            method: "DELETE",
             body: JSON.stringify({
-                id: adminArea.id,
-                name: adminArea.name,
-                beskrivelse: adminArea.beskrivelse,
-                rangering: adminArea.rangering,
-                ikon: adminArea.ikon
+                areaId: areaId,
+                serviceId: serviceId,
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -30,15 +25,12 @@ export const postAdminAreas = async (adminArea, dashboard: Dashboard): Promise<O
         });
     }
     else {
-        response = await fetch("https://digitalstatus.ekstern.dev.nav.no" + endPath,
+        response = await fetch("https://portalserver.labs.nais.io" + endPath,
         {
-            method: "POST",
+            method: "DELETE",
             body: JSON.stringify({
-                id: adminArea.id,
-                name: adminArea.name,
-                beskrivelse: adminArea.beskrivelse,
-                rangering: adminArea.rangering,
-                ikon: adminArea.ikon
+                areaId: areaId,
+                serviceId: serviceId,
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
