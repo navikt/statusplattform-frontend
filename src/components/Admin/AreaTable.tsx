@@ -145,7 +145,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         setIsLoading(true)
         const newlist = adminTiles.filter(tile => tile.area.id === areaToAdd.id)
         if(newlist.length > 0) {
-            alert("Denne IDen er allerede brukt. Velg en annen")
+            toast.error("Denne IDen er allerede i bruk")
             setIsLoading(false)
             return
         }
@@ -153,14 +153,14 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
             const newTiles = [...adminTiles]
             const newTile:Tile = {services:[], status:'', area:areaToAdd}
             newTiles.push(newTile)
-            // setAdminTiles(newTiles)
-            // reFetchAdminTiles()
+            setAdminTiles(newTiles)
+            reFetchAdminTiles()
+            toast.success("Området ble lagt til")
             setIsLoading(false)
             return
         }
-        //TODO bedre error-visning trengs
+        toast.warn("Område ble ikke lagt til")
         setIsLoading(false)
-        alert("Område ble ikke lagt til")
     }
 
     const handleDeleteArea = async (areaToDelete, event) => {
@@ -171,7 +171,6 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                     tile.area.id != areaToDelete.id
                 )
                 setAdminTiles(newTiles)
-                // event.stopPropagation()
                 toast.info("Område slettet")
                 return
             }
@@ -214,9 +213,13 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         console.log(currentTiles[tileIndex].services.filter(service => !service.id === serviceId))
         deleteServiceFromArea(areaId, serviceId).then((response: any) => {
             // currentTiles[tileIndex].services.filter(service => !service.id === serviceId)
-            currentTiles[tileIndex].services.splice(serviceIndex, 1)
-            setAdminTiles(currentTiles)
-            toast.success("Tjenestekobling slettet")
+            if (response.status >= 200 || response.status <= 210) {
+                currentTiles[tileIndex].services.splice(serviceIndex, 1)
+                setAdminTiles(currentTiles)
+                toast.success("Tjenestekobling slettet")
+            } else {
+                toast.warn("Tjenestekobling kunne ikke bli slettet")
+            }
         })
     }
 
@@ -258,7 +261,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                                 <td><span>{area.beskrivelse}</span></td>
                                 <td><span>{area.rangering}</span></td>
                                 <td><span><IconContainer>{getIconsFromGivenCode(area.ikon)}</IconContainer></span></td>
-                                <td><span><CloseCustomized onClick={(event) => handleDeleteArea(area, event)} /></span></td>
+                                <td onClick={(event) => event.stopPropagation()}><span><CloseCustomized onClick={(event) => handleDeleteArea(area, event)} /></span></td>
                                 <td><span>{expanded[index] ? <Collapse /> : <Expand />}</span></td>
                             </tr>
 
