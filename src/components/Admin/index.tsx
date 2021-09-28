@@ -164,7 +164,6 @@ const AdminDashboard = ({selectedMenu}: Props) => {
                                 <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles}
                                     isLoading={isLoading} setIsLoading={setIsLoading} 
                                     reFetchAdminTiles={reFetchAdminTiles} selectedDashboard={selectedDashboard}/>
-                                )
                             </>
                             ):(
                                 <TjenesteTable services={services} setServices={setServices} setIsLoading={setIsLoading} />

@@ -179,7 +179,7 @@ const NavDashboard = () => {
     
     const changeSelectedDashboard = (event) => {
         const dashboardId: string = event.target.value
-        console.log(dashboardId)
+        // console.log(dashboardId)
         // Kommentert ut det under. Skal her fetche nytt dashboard
         // useEffect(() => {
         //     (async function () {

@@ -109,7 +109,6 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         ) 
     }
 
-    console.log(selectedDashboard)
 
     const options = [
         { value: "0001", label: "Bag", icon: <Bag/> },
@@ -163,8 +162,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         setIsLoading(false)
     }
 
-    const handleDeleteArea = async (areaToDelete, event) => {
-        console.log(selectedDashboard)
+    const handleDeleteArea = async (areaToDelete: Area) => {
         deleteArea(areaToDelete, selectedDashboard).then((response: any) =>{
             if(response.status >= 200 || response.status <= 210) {
                 const newTiles = adminTiles.filter(tile => 
@@ -175,7 +173,6 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                 return
             }
             else {
-                console.log("hurra")
                 toast.warn("Område ble ikke slettet grunnet feil")
             }
         })
@@ -210,7 +207,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         let currentTiles = [...adminTiles]
         const tileIndex = adminTiles.findIndex(tile => tile.area.id === areaId)
         const serviceIndex = allServices.findIndex(service => service.id === serviceId)
-        console.log(currentTiles[tileIndex].services.filter(service => !service.id === serviceId))
+        // console.log(currentTiles[tileIndex].services.filter(service => !service.id === serviceId))
         deleteServiceFromArea(areaId, serviceId).then((response: any) => {
             // currentTiles[tileIndex].services.filter(service => !service.id === serviceId)
             if (response.status >= 200 || response.status <= 210) {
@@ -261,7 +258,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                                 <td><span>{area.beskrivelse}</span></td>
                                 <td><span>{area.rangering}</span></td>
                                 <td><span><IconContainer>{getIconsFromGivenCode(area.ikon)}</IconContainer></span></td>
-                                <td onClick={(event) => event.stopPropagation()}><span><CloseCustomized onClick={(event) => handleDeleteArea(area, event)} /></span></td>
+                                <td onClick={(event) => event.stopPropagation()}><span><CloseCustomized onClick={() => handleDeleteArea(area)} /></span></td>
                                 <td><span>{expanded[index] ? <Collapse /> : <Expand />}</span></td>
                             </tr>
 
@@ -345,7 +342,11 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                             })}
                         </Select>
                     </td>
-                    <td colSpan={2}><Hovedknapp disabled={!id || !name || !beskrivelse || !rangering} onClick={() => handlePostAdminArea(newAdminArea)}>Legg til</Hovedknapp></td>
+                    <td colSpan={2}>
+                        <Hovedknapp disabled={!id || !name || !beskrivelse || !rangering} onClick={() => handlePostAdminArea(newAdminArea)}>
+                            Legg til
+                        </Hovedknapp>
+                    </td>
                 </AddNewAreaTr>
 
             </tbody>
