@@ -17,6 +17,7 @@ import { getIconsFromGivenCode } from 'utils/servicesOperations';
 import { putServiceToArea } from 'utils/putServiceToArea'
 
 import { toast } from 'react-toastify';
+import AreaTableRow from './AreaTableRow';
 
 
 const CustomTBody = styled.tbody `
@@ -93,7 +94,7 @@ export interface Props {
 
 const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoading, allServices, reFetchAdminTiles, selectedDashboard}: Props) => { 
     const [expanded, toggleExpanded] = useState<boolean[]>(Array(adminTiles.length).fill(false))
-    const [selectedService, changeCurrentSelectedService] = useState(allServices[0].id)
+    // const [selectedService, changeCurrentSelectedService] = useState<String>()
     const [newAdminArea, updateNewAdminArea] = useState<Area>({
         id: "",
         name: "",
@@ -162,73 +163,12 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         setIsLoading(false)
     }
 
-    const handleDeleteArea = async (areaToDelete: Area) => {
-        deleteArea(areaToDelete, selectedDashboard).then((response: any) =>{
-            if(response.status >= 200 || response.status <= 210) {
-                const newTiles = adminTiles.filter(tile => 
-                    tile.area.id != areaToDelete.id
-                )
-                setAdminTiles(newTiles)
-                toast.info("Område slettet")
-                return
-            }
-            else {
-                toast.warn("Område ble ikke slettet grunnet feil")
-            }
-        })
-    }
-
-    const handlePutServiceToArea = async (tileId, serviceId) => {
-        setIsLoading(true)
-        const currentTiles = [...adminTiles]
-        const tileIndex = adminTiles.findIndex(tile => tile.area.id === tileId)
-        const serviceIndex = allServices.findIndex(service => service.id === serviceId)
-
-        if(currentTiles[tileIndex].services.includes(allServices[serviceIndex])) {
-            toast.warn("Denne tjenesten fins allerede i området")
-        }
-
-        else {
-            putServiceToArea(tileId, serviceId).then((response: any) => {
-                if (response.status >= 200 || response.status <= 210) {
-                    currentTiles[tileIndex].services.push(allServices[serviceIndex])
-                    setAdminTiles(currentTiles)
-                    toast.success("Tjenesten har blitt lagt til i området")
-                } else {
-                    toast.warn("Tjenesten kunne ikke bli lagt til")
-                }
-            })
-        }
-        setIsLoading(false)
-    }
 
 
-    const handleDeleteServiceOnArea = async (areaId, serviceId) => {
-        let currentTiles = [...adminTiles]
-        const tileIndex = adminTiles.findIndex(tile => tile.area.id === areaId)
-        const serviceIndex = allServices.findIndex(service => service.id === serviceId)
-        // console.log(currentTiles[tileIndex].services.filter(service => !service.id === serviceId))
-        deleteServiceFromArea(areaId, serviceId).then((response: any) => {
-            // currentTiles[tileIndex].services.filter(service => !service.id === serviceId)
-            if (response.status >= 200 || response.status <= 210) {
-                currentTiles[tileIndex].services.splice(serviceIndex, 1)
-                setAdminTiles(currentTiles)
-                toast.success("Tjenestekobling slettet")
-            } else {
-                toast.warn("Tjenestekobling kunne ikke bli slettet")
-            }
-        })
-    }
 
-    const toggleAreaExpanded = (index: number) => {
-        const newArray = [...expanded]
-        newArray[index] = !newArray[index]
-        toggleExpanded(newArray)
-    }
-
-    const changeSelectedService = (e) => {
-        changeCurrentSelectedService(e.target.value)
-    }
+    // const changeSelectedService = (e) => {
+    //     changeCurrentSelectedService(e.target.value)
+    // }
 
     const { id, name, beskrivelse, rangering} = newAdminArea
 
@@ -246,75 +186,15 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                 </tr>
             </thead>
                 {adminTiles.map( (tile, index) => {
-                    let area = tile.area
-                    const servicesIds = tile.services.map(service => service.id)
-
                     return (
-
-                        <CustomTBody key={area.id}>
-                            <tr className="clickable" onClick={() => toggleAreaExpanded(index)}>
-                                <td><span>{area.id}</span></td>
-                                <td><span>{area.name}</span></td>
-                                <td><span>{area.beskrivelse}</span></td>
-                                <td><span>{area.rangering}</span></td>
-                                <td><span><IconContainer>{getIconsFromGivenCode(area.ikon)}</IconContainer></span></td>
-                                <td onClick={(event) => event.stopPropagation()}><span><CloseCustomized onClick={() => handleDeleteArea(area)} /></span></td>
-                                <td><span>{expanded[index] ? <Collapse /> : <Expand />}</span></td>
-                            </tr>
-
-
-                            {expanded[index] && 
-                                (tile.services.length === 0 ?
-                                <TileDropdownRow onClick={() => toggleAreaExpanded(index)}>
-                                    <td colSpan={7}>Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste</td>
-                                </TileDropdownRow>
-
-                                :
-                                
-                                <TileDropdownRow>
-                                    <td colSpan={2}>
-                                        <ServicesInAreaList>
-                                                <Element>Tjenester i område: {tile.area.name}</Element>
-                                                <Element>med id: {tile.area.id}</Element>
-                                                {tile.services.map(service => {
-                                                    return (
-                                                        <li key={service.id}>{service.id} <CloseCustomized aria-label="Fjern tjenesten fra område"
-                                                            onClick={() =>
-                                                            handleDeleteServiceOnArea(tile.area.id, service.id)}/>
-                                                        </li>
-                                                    )
-                                                })}
-                                        </ServicesInAreaList>
-                                    </td>
-                                    <td colSpan={5} className="clickable" onClick={() => toggleAreaExpanded(index)}/>
-                                </TileDropdownRow>)
-                            }
-
-
-
-                            {expanded[index] && 
-                                <TileDropdownRow key="input">
-                                    <td colSpan={2}>
-                                        <Select value={selectedService} onChange={changeSelectedService}>
-                                            {allServices.filter(service => !servicesIds.includes(service.id)).map(service => {
-                                                return (
-                                                    <option key={service.id} value={service.id}>{service.id}</option>
-                                                )
-                                            })}
-                                        </Select>
-                                    </td>
-
-                                    <td colSpan={2}>
-                                        <Hovedknapp disabled={!selectedService} onClick={() => handlePutServiceToArea(tile.area.id, selectedService)} >Legg til</Hovedknapp>                                            
-                                    </td>
-                                    <td colSpan={6} className="clickable" onClick={() => toggleAreaExpanded(index)}></td>
-                                </TileDropdownRow>
-                            }
-
-
-                        </CustomTBody>
+                        <AreaTableRow key={index} tileIndexProp={index} adminTiles={adminTiles} setAdminTiles={setAdminTiles} tile={tile}
+                            isLoading={isLoading} setIsLoading={setIsLoading} allServices={allServices} reFetchAdminTiles={reFetchAdminTiles}
+                            selectedDashboard={selectedDashboard}
+                        />
                     )
                 })}
+
+
             <tbody>
                 <AddNewAreaTr key="input">
                     <td>
@@ -355,3 +235,73 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
 } 
 
 export default AreaTable
+
+// {adminTiles.map( (tile, index) => {
+//     let area = tile.area
+//     const servicesIds: string[] = tile.services.map(service => service.id)
+//     return (
+
+//         <CustomTBody key={area.id}>
+//             <tr className="clickable" onClick={() => toggleAreaExpanded(index)}>
+//                 <td><span>{area.id}</span></td>
+//                 <td><span>{area.name}</span></td>
+//                 <td><span>{area.beskrivelse}</span></td>
+//                 <td><span>{area.rangering}</span></td>
+//                 <td><span><IconContainer>{getIconsFromGivenCode(area.ikon)}</IconContainer></span></td>
+//                 <td onClick={(event) => event.stopPropagation()}><span><CloseCustomized onClick={() => handleDeleteArea(area)} /></span></td>
+//                 <td><span>{expanded[index] ? <Collapse /> : <Expand />}</span></td>
+//             </tr>
+
+
+//             {expanded[index] && 
+//                 (tile.services.length === 0 ?
+//                 <TileDropdownRow onClick={() => toggleAreaExpanded(index)}>
+//                     <td colSpan={7}>Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste</td>
+//                 </TileDropdownRow>
+
+//                 :
+                
+//                 <TileDropdownRow>
+//                     <td colSpan={2}>
+//                         <ServicesInAreaList>
+//                                 <Element>Tjenester i område: {tile.area.name}</Element>
+//                                 <Element>med id: {tile.area.id}</Element>
+//                                 {tile.services.map(service => {
+//                                     return (
+//                                         <li key={service.id}>{service.id} <CloseCustomized aria-label="Fjern tjenesten fra område"
+//                                             onClick={() =>
+//                                             handleDeleteServiceOnArea(tile.area.id, service.id)}/>
+//                                         </li>
+//                                     )
+//                                 })}
+//                         </ServicesInAreaList>
+//                     </td>
+//                     <td colSpan={5} className="clickable" onClick={() => toggleAreaExpanded(index)}/>
+//                 </TileDropdownRow>)
+//             }
+
+
+
+//             {expanded[index] && 
+//                 <TileDropdownRow key="input">
+//                     <td colSpan={2}>
+//                         <Select value={servicesIds[0]} onChange={(event) => console.log()}>
+//                             {allServices.filter(service => !servicesIds.includes(service.id)).map(service => {
+//                                 return (
+//                                     <option key={service.id} value={service.id}>{service.id}</option>
+//                                 )
+//                             })}
+//                         </Select>
+//                     </td>
+
+//                     <td colSpan={2}>
+//                         <Hovedknapp  onClick={() => handlePutServiceToArea(tile.area.id, servicesIds[0])} >Legg til</Hovedknapp>                                            
+//                     </td>
+//                     <td colSpan={6} className="clickable" onClick={() => toggleAreaExpanded(index)}></td>
+//                 </TileDropdownRow>
+//             }
+
+
+//         </CustomTBody>
+//     )
+// })}

@@ -4,7 +4,7 @@ export class ResponseError extends Error {
     }
 }
 
-export const deleteServiceFromArea = async (areaId, serviceId): Promise<Object[]> =>{
+export const deleteServiceFromArea = async (areaId, serviceId): Promise<void> =>{
     let response;
     let endPath = "/rest/ServiceOnArea"
 
@@ -40,7 +40,7 @@ export const deleteServiceFromArea = async (areaId, serviceId): Promise<Object[]
     }
 
     if (response.ok) {
-        return response.json()
+        return response
     }
     throw new ResponseError("Failed to post to server", response)
 }

@@ -6,7 +6,7 @@ export class ResponseError extends Error {
     }
 }
 
-export const deleteArea = async (adminArea, dashboard: Dashboard): Promise<Object[]> =>{
+export const deleteArea = async (adminArea, dashboard: Dashboard): Promise<void> =>{
     let response;
     let endPath = "/rest/Areas/" + dashboard.name
 
@@ -48,7 +48,7 @@ export const deleteArea = async (adminArea, dashboard: Dashboard): Promise<Objec
     }
 
     if (response.ok) {
-        return response.json()
+        return response
     }
     throw new ResponseError("Failed to post to server", response)
 }
