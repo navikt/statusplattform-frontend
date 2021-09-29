@@ -130,7 +130,6 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
         const currentTiles = [...adminTiles]
         const tileIndex = adminTiles.findIndex(tile => tile.area.id === tileId)
         const serviceIndex = allServices.findIndex(service => service.id === serviceId)
-        console.log(currentTiles.map(tile => tile.services))
 
         if(currentTiles[tileIndex].services.includes(allServices[serviceIndex])) {
             toast.warn("Denne tjenesten fins allerede i området")
