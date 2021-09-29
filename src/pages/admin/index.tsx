@@ -13,7 +13,8 @@ const AdminContainer = styled.div`
 `
 
  const AdminPage = () => {
-    const [selectedMenu, changeSelectedMenu] = useState("Områdemeny")
+    const [selectedMenu, changeSelectedMenu] = useState("Områder")
+    const [adminMenu, setAdminMenu] = useState(["Dashbord", "Områder", "Tjenester"])
 
     const onClickChangeSelectedMenu = (newMenu: string) => {
         changeSelectedMenu(newMenu)
@@ -22,8 +23,8 @@ const AdminContainer = styled.div`
     return (
         <Layout>
             <AdminContainer>
-                <MenuSelector currentSelectedMenu = {selectedMenu} onClickSelectedMenu={onClickChangeSelectedMenu}/>
-                <Admin selectedMenu={selectedMenu}/>
+                <MenuSelector currentSelectedMenu = {selectedMenu} onClickSelectedMenu={onClickChangeSelectedMenu} adminMenu={adminMenu}/>
+                <Admin selectedMenu={selectedMenu} adminMenu={adminMenu}/>
             </AdminContainer>
             <ToastContainer/>
         </Layout>

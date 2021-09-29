@@ -22,22 +22,23 @@ const TabsCustomized = styled(Tabs)`
 export interface Props {
     currentSelectedMenu: string
     onClickSelectedMenu: Function
+    adminMenu: string[]
 }
 
 
-const MenuSelector = ({currentSelectedMenu, onClickSelectedMenu}: Props) => {
-
-    const menues = ["Områdemeny", "Tjenestemeny"]
+const MenuSelector = ({currentSelectedMenu, onClickSelectedMenu, adminMenu}: Props) => {
 
     return (
         <DashboardTabMenu>
             <TabsCustomized
+                defaultAktiv={1}
                 tabs={[
-                    {"label": "Områdemeny"},
-                    {"label": "Tjenestemeny"}
+                    {"label": "Dashbord"},
+                    {"label": "Områder"},
+                    {"label": "Tjenester"}
                 ]}
                 onChange={(_, index) =>
-                    onClickSelectedMenu(menues[index])
+                    onClickSelectedMenu(adminMenu[index])
                 }
 
             />

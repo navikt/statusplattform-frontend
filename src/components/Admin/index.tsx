@@ -14,6 +14,7 @@ import TjenesteTable from './TjenesteTable';
 import { fetchServices } from 'utils/fetchServices';
 import { fetchDashboards } from 'utils/fetchDashboards';
 import { Select } from 'nav-frontend-skjema';
+import DashboardConfig from './DashboardConfig';
 
 
 
@@ -84,15 +85,18 @@ const CustomSelect = styled(Select)`
 
 export interface Props {
     selectedMenu: string
+    adminMenu: string[]
 }
 
-const AdminDashboard = ({selectedMenu}: Props) => {
+const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
     const [dashboards, setDashboards] = useState<Dashboard[]>()
     const [selectedDashboard, updateSelectedDashboard] = useState<Dashboard>() //Dette må ikke være type any i lengden. Kan potensielt fjernes også
     const [adminTiles, setAdminTiles] = useState<Tile[]>([])
     const [services, setServices] = useState<Service[]>()
     const [isLoading, setIsLoading] = useState(true)
     const [tileOrderIsDynamic, changeTileOrderIsDynamic] = useState(true) //DENNE MÅ ENDRES. Skal komme default fra rest
+
+
 
     useEffect(() => {
         (async function () {
@@ -143,32 +147,35 @@ const AdminDashboard = ({selectedMenu}: Props) => {
     const changeTileOrdering = () => {
         changeTileOrderIsDynamic(!tileOrderIsDynamic)
     }
-
+    
 	return (
         <AdminDashboardContainer>
 
                 <AreasContainer>
                     <div>
-                        <h2>{selectedMenu === "Områdemeny" ? "Områder" : "Tjenester"}</h2>
+                        <h2>{selectedMenu}</h2>
                         <p>Felter markert med * er obligatoriske</p>
-                        {selectedMenu === "Områdemeny" ? (
+                        {selectedMenu === "Områder" && 
                             <>
                                 <CustomSelect onChange={changeSelectedDashboard} label="Velg Dashbord">
                                     {dashboards.map((dashboard, index) => (
                                         <option key={index} value={dashboard.name} label={dashboard.name}/>
                                     ))}
-                                    {/* <option value="privatperson" label="privatperson" />
-                                    <option value="Internt" label="Internt" />
-                                    <option value="Arbeidspartner" label="Arbeidspartner" /> */}
+                                    
                                 </CustomSelect>
                                 <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles}
                                     isLoading={isLoading} setIsLoading={setIsLoading} 
                                     reFetchAdminTiles={reFetchAdminTiles} selectedDashboard={selectedDashboard}/>
                             </>
-                            ):(
-                                <TjenesteTable services={services} setServices={setServices} setIsLoading={setIsLoading} />
-                            )
                         }
+                        {selectedMenu === "Tjenester" && 
+                            <TjenesteTable services={services} setServices={setServices} setIsLoading={setIsLoading} />
+                        }
+                        {selectedMenu === "Dashbord" &&
+                                <DashboardConfig />
+                        }
+
+                        )
                     </div>
                 </AreasContainer>
         </AdminDashboardContainer>
