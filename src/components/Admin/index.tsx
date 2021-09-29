@@ -172,7 +172,7 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
                             <TjenesteTable services={services} setServices={setServices} setIsLoading={setIsLoading} />
                         }
                         {selectedMenu === "Dashbord" &&
-                                <DashboardConfig />
+                            <DashboardConfig />
                         }
                     </div>
                 </AreasContainer>
