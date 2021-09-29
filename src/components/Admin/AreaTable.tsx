@@ -2,71 +2,21 @@ import styled from 'styled-components'
 import { useRef, useState } from "react";
 import Dropdown from 'react-dropdown';
 
-import { Bag, BagFilled, Calculator, Collapse, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Saving, SocialAid } from '@navikt/ds-icons'
+import { Bag, Calculator, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Saving, SocialAid } from '@navikt/ds-icons'
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import NavFrontendSpinner from "nav-frontend-spinner";
-import { Close } from '@navikt/ds-icons'
-import { Element } from 'nav-frontend-typografi';
 
 import { postAdminAreas } from 'utils/postAreas'
-import { deleteArea } from 'utils/deleteArea'
-import { deleteServiceFromArea } from 'utils/deleteServiceFromArea'
 import { Area, Dashboard, Service, Tile } from 'types/navServices';
-import { getIconsFromGivenCode } from 'utils/servicesOperations';
-import { putServiceToArea } from 'utils/putServiceToArea'
 
 import { toast } from 'react-toastify';
 import AreaTableRow from './AreaTableRow';
 
 
-const CustomTBody = styled.tbody `
-    .clickable {
-        :hover {
-            cursor: pointer;
-        }
-    }
-`
-
-const IconContainer = styled.section`
-	color: var(--navBla);
-    font-size: 2rem;
-`;
-
 const SpinnerCentered = styled.div`
     position: absolute;
     top: 40%;
-`
-
-const CloseCustomized = styled(Close)`
-    color: red;
-    :hover {
-        color: grey;
-        border: 1px solid;
-        cursor: pointer;
-    }
-`
-
-const TileDropdownRow = styled.tr`
-    td {
-        border: 0px transparent !important;
-        background-color: white !important;
-    }
-    select {
-        transform: translateY(-2px);
-        min-width: 100px;
-    }
-`
-
-const ServicesInAreaList = styled.ul`
-    padding: 0;
-    li {
-        list-style: none;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-    }
-    cursor: default;
 `
 
 const AddNewAreaTr = styled.tr`
@@ -78,9 +28,6 @@ const AddNewAreaTr = styled.tr`
     }
 `
 
-const getBag = () => {
-    return <IconContainer><Bag /></IconContainer>
-}
 
 export interface Props {
     adminTiles: Tile[]
@@ -93,8 +40,6 @@ export interface Props {
 }
 
 const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoading, allServices, reFetchAdminTiles, selectedDashboard}: Props) => { 
-    const [expanded, toggleExpanded] = useState<boolean[]>(Array(adminTiles.length).fill(false))
-    // const [selectedService, changeCurrentSelectedService] = useState<String>()
     const [newAdminArea, updateNewAdminArea] = useState<Area>({
         id: "",
         name: "",
@@ -163,13 +108,6 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         setIsLoading(false)
     }
 
-
-
-
-    // const changeSelectedService = (e) => {
-    //     changeCurrentSelectedService(e.target.value)
-    // }
-
     const { id, name, beskrivelse, rangering} = newAdminArea
 
     return (
@@ -235,73 +173,3 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
 } 
 
 export default AreaTable
-
-// {adminTiles.map( (tile, index) => {
-//     let area = tile.area
-//     const servicesIds: string[] = tile.services.map(service => service.id)
-//     return (
-
-//         <CustomTBody key={area.id}>
-//             <tr className="clickable" onClick={() => toggleAreaExpanded(index)}>
-//                 <td><span>{area.id}</span></td>
-//                 <td><span>{area.name}</span></td>
-//                 <td><span>{area.beskrivelse}</span></td>
-//                 <td><span>{area.rangering}</span></td>
-//                 <td><span><IconContainer>{getIconsFromGivenCode(area.ikon)}</IconContainer></span></td>
-//                 <td onClick={(event) => event.stopPropagation()}><span><CloseCustomized onClick={() => handleDeleteArea(area)} /></span></td>
-//                 <td><span>{expanded[index] ? <Collapse /> : <Expand />}</span></td>
-//             </tr>
-
-
-//             {expanded[index] && 
-//                 (tile.services.length === 0 ?
-//                 <TileDropdownRow onClick={() => toggleAreaExpanded(index)}>
-//                     <td colSpan={7}>Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste</td>
-//                 </TileDropdownRow>
-
-//                 :
-                
-//                 <TileDropdownRow>
-//                     <td colSpan={2}>
-//                         <ServicesInAreaList>
-//                                 <Element>Tjenester i område: {tile.area.name}</Element>
-//                                 <Element>med id: {tile.area.id}</Element>
-//                                 {tile.services.map(service => {
-//                                     return (
-//                                         <li key={service.id}>{service.id} <CloseCustomized aria-label="Fjern tjenesten fra område"
-//                                             onClick={() =>
-//                                             handleDeleteServiceOnArea(tile.area.id, service.id)}/>
-//                                         </li>
-//                                     )
-//                                 })}
-//                         </ServicesInAreaList>
-//                     </td>
-//                     <td colSpan={5} className="clickable" onClick={() => toggleAreaExpanded(index)}/>
-//                 </TileDropdownRow>)
-//             }
-
-
-
-//             {expanded[index] && 
-//                 <TileDropdownRow key="input">
-//                     <td colSpan={2}>
-//                         <Select value={servicesIds[0]} onChange={(event) => console.log()}>
-//                             {allServices.filter(service => !servicesIds.includes(service.id)).map(service => {
-//                                 return (
-//                                     <option key={service.id} value={service.id}>{service.id}</option>
-//                                 )
-//                             })}
-//                         </Select>
-//                     </td>
-
-//                     <td colSpan={2}>
-//                         <Hovedknapp  onClick={() => handlePutServiceToArea(tile.area.id, servicesIds[0])} >Legg til</Hovedknapp>                                            
-//                     </td>
-//                     <td colSpan={6} className="clickable" onClick={() => toggleAreaExpanded(index)}></td>
-//                 </TileDropdownRow>
-//             }
-
-
-//         </CustomTBody>
-//     )
-// })}
