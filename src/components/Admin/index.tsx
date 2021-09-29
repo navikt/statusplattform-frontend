@@ -174,8 +174,6 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
                         {selectedMenu === "Dashbord" &&
                                 <DashboardConfig />
                         }
-
-                        )
                     </div>
                 </AreasContainer>
         </AdminDashboardContainer>
