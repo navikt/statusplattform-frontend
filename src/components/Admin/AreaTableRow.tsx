@@ -81,7 +81,6 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
             
             useEffect(() => {
                 updateServiceIdsInTile(tile.services.map(service => service.id))
-                console.log("gjort useEffect")
             },[tile])
             
 
@@ -94,7 +93,8 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
             if (response.status >= 200 || response.status <= 210) {
                 const oldTile = currentTiles.splice(tileIndex, 1)[0]
                 const newTile = {...oldTile, services: [...oldTile.services.filter(service => service.id !== serviceId)]}
-                setAdminTiles([...currentTiles, newTile])
+                currentTiles.splice(tileIndex, 1, newTile)
+                setAdminTiles([...currentTiles])
                 toast.success("Tjenestekobling slettet")
             } else {
                 toast.warn("Tjenestekobling kunne ikke bli slettet")
@@ -130,7 +130,7 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
         const currentTiles = [...adminTiles]
         const tileIndex = adminTiles.findIndex(tile => tile.area.id === tileId)
         const serviceIndex = allServices.findIndex(service => service.id === serviceId)
-        
+        console.log(currentTiles.map(tile => tile.services))
 
         if(currentTiles[tileIndex].services.includes(allServices[serviceIndex])) {
             toast.warn("Denne tjenesten fins allerede i området")
@@ -142,7 +142,8 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
                 if (response.status >= 200 || response.status <= 210) {
                     const oldTile = currentTiles.splice(tileIndex, 1)[0]
                     const newTile = {...oldTile, services: [...oldTile.services, allServices[serviceIndex]]}
-                    setAdminTiles([...currentTiles, newTile])
+                    currentTiles.splice(tileIndex, 1, newTile)
+                    setAdminTiles([...currentTiles])
                     toast.success("Tjenesten har blitt lagt til i området")
                 } else {
                     toast.warn("Tjenesten kunne ikke bli lagt til")
@@ -176,7 +177,7 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
                 
                 <TileDropdownRow>
                     <td colSpan={2}>
-                        <ServicesInAreaList>
+                        <ServicesInAreaList onClick={(event) => event.stopPropagation()}>
                                 <Element>Tjenester i område: {tile.area.name}</Element>
                                 <Element>med id: {tile.area.id}</Element>
                                 {serviceIdsInTile.map(id => {
@@ -205,7 +206,10 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
     )
 } 
 
-export default AreaTableRow
+
+
+
+
 
 interface DropdownProps {
     allServices: Service[]
@@ -223,25 +227,35 @@ const DropdownRowSelect = ({allServices, serviceIdsInTile, handlePutServiceToAre
         if(availableServices.length > 0){
             updateSelectedService(availableServices[0].id)
         }
+        else {
+            updateSelectedService(null)
+        }
     }, [allServices, serviceIdsInTile])
 
 
     return (
         <TileDropdownRow key="input">
             <td colSpan={2}>
-                <Select value={selectedService} onChange={(event) => updateSelectedService(event.target.value)}>
-                    {availableServices.map(service => {
+                <Select value={selectedService !== null ? selectedService : ""} onChange={(event) => updateSelectedService(event.target.value)}>
+                    {availableServices.length > 0 ?
+                    availableServices.map(service => {
                         return (
                             <option key={service.id} value={service.id}>{service.id}</option>
                         )
-                    })}
+                    })
+                    :
+                        <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
+                    }
                 </Select>
             </td>
 
             <td colSpan={2}>
-                <Hovedknapp onClick={() => handlePutServiceToArea(selectedService)} >Legg til</Hovedknapp>                                            
+                <Hovedknapp disabled={!selectedService} onClick={() => handlePutServiceToArea(selectedService)} >Legg til</Hovedknapp>                                            
             </td>
             <td colSpan={6} className="clickable" onClick={toggleAreaExpanded}></td>
         </TileDropdownRow>
     )
 }
+
+
+export default AreaTableRow
