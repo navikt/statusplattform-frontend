@@ -92,7 +92,7 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
         deleteServiceFromArea(areaId, serviceId).then((response: any) => {
             if (response.status >= 200 || response.status <= 210) {
                 const oldTile = currentTiles.splice(tileIndex, 1)[0]
-                const newTile = {...oldTile, services: [...oldTile.services.filter(service => service.id !== serviceId)]}
+                const newTile = {...oldTile, services: oldTile.services.filter(service => service.id !== serviceId)}
                 currentTiles.splice(tileIndex, 1, newTile)
                 setAdminTiles([...currentTiles])
                 toast.success("Tjenestekobling slettet")
