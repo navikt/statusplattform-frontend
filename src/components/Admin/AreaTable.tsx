@@ -12,12 +12,11 @@ import { Area, Dashboard, Service, Tile } from 'types/navServices';
 
 import { toast } from 'react-toastify';
 import AreaTableRow from './AreaTableRow';
+import { useLoader } from 'utils/useLoader';
+import { fetchDashboards } from 'utils/fetchDashboards';
+import { fetchTiles } from 'utils/fetchTiles';
+import CustomNavSpinner from 'components/CustomNavSpinner';
 
-
-const SpinnerCentered = styled.div`
-    position: absolute;
-    top: 40%;
-`
 
 const AddNewAreaTr = styled.tr`
     td {
@@ -26,20 +25,23 @@ const AddNewAreaTr = styled.tr`
             min-width: 150px;
         }
     }
+    .input-error {
+        input {
+            border: 1px solid red;
+        }
+    }
 `
 
 
 export interface Props {
     adminTiles: Tile[]
     setAdminTiles: Function
-    isLoading: boolean
-    setIsLoading: Function
     allServices: Service[]
     reFetchAdminTiles: Function
     selectedDashboard: Dashboard
 }
 
-const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoading, allServices, reFetchAdminTiles, selectedDashboard}: Props) => { 
+const AreaTable = ({adminTiles: adminTiles, setAdminTiles, allServices, reFetchAdminTiles, selectedDashboard}: Props) => { 
     const [newAdminArea, updateNewAdminArea] = useState<Area>({
         id: "",
         name: "",
@@ -47,12 +49,14 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
         rangering: 0,
         ikon: ""
     })
-    if (isLoading) {
+
+    const { data: tiles, isLoading: loadingTiles, reload } = useLoader(() => fetchTiles(selectedDashboard),[]);
+
+
+    if (loadingTiles) {
         return (
-            <SpinnerCentered>
-                <NavFrontendSpinner type="XXL" />
-            </SpinnerCentered>
-        ) 
+            <CustomNavSpinner />
+        )
     }
 
 
@@ -87,11 +91,11 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
 
 
     const handlePostAdminArea = (areaToAdd: Area) => {
-        setIsLoading(true)
+        // setIsLoading(true)
         const newlist = adminTiles.filter(tile => tile.area.id === areaToAdd.id)
         if(newlist.length > 0) {
             toast.error("Denne IDen er allerede i bruk")
-            setIsLoading(false)
+            // setIsLoading(false)
             return
         }
         if(postAdminAreas(areaToAdd, selectedDashboard)) {
@@ -99,17 +103,25 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
             const newTile:Tile = {services:[], status:'', area:areaToAdd}
             newTiles.push(newTile)
             setAdminTiles(newTiles)
-            reFetchAdminTiles()
+            reload()
             toast.success("Området ble lagt til")
-            setIsLoading(false)
+            // setIsLoading(false)
+            reload()
+            updateNewAdminArea({
+                id: "",
+                name: "",
+                beskrivelse: "",
+                rangering: 0,
+                ikon: ""
+            })
             return
         }
         toast.warn("Område ble ikke lagt til")
-        setIsLoading(false)
+        // setIsLoading(false)
     }
 
     const { id, name, beskrivelse, rangering} = newAdminArea
-
+    
     return (
         <table className="tabell tabell--stripet">
             <thead>
@@ -123,10 +135,11 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                     <th></th>
                 </tr>
             </thead>
+            {/* isLoading={isLoading} setIsLoading={setIsLoading} */}
                 {adminTiles.map( (tile, index) => {
                     return (
                         <AreaTableRow key={index} tileIndexProp={index} adminTiles={adminTiles} setAdminTiles={setAdminTiles} tile={tile}
-                            isLoading={isLoading} setIsLoading={setIsLoading} allServices={allServices} reFetchAdminTiles={reFetchAdminTiles}
+                             allServices={allServices} reFetchAdminTiles={reFetchAdminTiles}
                             selectedDashboard={selectedDashboard}
                         />
                     )
@@ -136,20 +149,22 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
             <tbody>
                 <AddNewAreaTr key="input">
                     <td>
-                        <Input type="text" required value={id} onChange={handleAreaDataChange("id")} placeholder="ID*"/>
+                        <form id="form" action="" onSubmit={() => handlePostAdminArea(newAdminArea)}></form>
+                        <Input form="form" className={id.length == 0 ? "input-error" : ""} type="text" label="ID*" required value={id} onChange={handleAreaDataChange("id")} placeholder="ID*"/>
                     </td>
                     <td>
-                        <Input type="text" required value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*"/>
+                        <Input form="form" type="text" className={name.length == 0 ? "input-error" : ""} label="Navn*" required value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*"/>
                     </td>
                     <td>
-                        <Input type="text" required value={beskrivelse} onChange={handleAreaDataChange("beskrivelse")} placeholder="Beskrivelse*"/>
+                        <Input form="form" type="text" label="Beskrivelse*" className={beskrivelse.length == 0 ? "input-error" : ""} required value={beskrivelse} onChange={handleAreaDataChange("beskrivelse")} placeholder="Beskrivelse*"/>
                     </td>
                     <td>
-                        <Input type="number" required value={rangering} onChange={handleAreaDataChange("rangering")} placeholder="0*" />
+                        <Input form="form" type="number" label="Rangering*" required className={(rangering == 0 || rangering == undefined) ? "input-error" : ""} value={rangering} onChange={handleAreaDataChange("rangering")} placeholder="0*" />
                     </td>
                     <td>
                         <Select
                             label="Velg ikon til området*"
+                            form="form"
                             onChange={handleAreaIconChange}
                             defaultValue={options[0].value}
                         >
@@ -161,7 +176,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, isLoading, setIsLoadi
                         </Select>
                     </td>
                     <td colSpan={2}>
-                        <Hovedknapp disabled={!id || !name || !beskrivelse || !rangering} onClick={() => handlePostAdminArea(newAdminArea)}>
+                        <Hovedknapp form="form" htmlType="submit" disabled={!id || !name || !beskrivelse || !rangering}>
                             Legg til
                         </Hovedknapp>
                     </td>

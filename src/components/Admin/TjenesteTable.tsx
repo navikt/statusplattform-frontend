@@ -17,7 +17,10 @@ import { postService } from 'utils/postService'
 import { fetchServices } from 'utils/fetchServices';
 
 
-
+const TableContainer = styled.div`
+    width: 100%;
+    overflow-x: auto;
+`
 const CloseCustomized = styled(Close)`
     color: red;
     :hover {
@@ -27,13 +30,15 @@ const CloseCustomized = styled(Close)`
     }
 `
 
-const SpinnerCentered = styled.div`
-    position: absolute;
-    top: 40%;
-`
 const AddNewServiceTr = styled.tr`
     td {
         min-width: 125px;
+        vertical-align: bottom;
+    }
+    .input-error {
+        input {
+            border: 1px solid red;
+        }
     }
 `
 
@@ -118,7 +123,7 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
     const { id, name, type, team, dependencies, monitorlink, description, logglink, status } = newService
 
     return (
-        <>
+        <TableContainer>
             <table className="tabell tabell--stripet">
 
                 <thead>
@@ -127,10 +132,10 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
                         <th><span>Navn</span></th>
                         <th><span>Type</span></th>
                         <th><span>Team</span></th>
-                        <th><span>Dependencies</span></th>
-                        <th><span>monitorlink</span></th>
-                        <th><span>Description</span></th>
-                        <th><span>logglink</span></th>
+                        <th><span>Avhengigheter</span></th>
+                        <th><span>Monitorlink</span></th>
+                        <th><span>Beskrivelse</span></th>
+                        <th><span>Logglink</span></th>
                         <th><span>Slett</span></th>
                     </tr>
                 </thead>
@@ -153,40 +158,43 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
 
                     <AddNewServiceTr key="input">
                         <td>
-                            <Input type="text" value={id} required onChange={handleServiceDataChange("id")} placeholder="ID*"/>
+                            <form id="form" onSubmit={() => handlePostService(newService)}><Input type="text" className={name.length == 0 ? "input-error" : ""}
+                                value={id} label="ID*" required onChange={handleServiceDataChange("id")} placeholder="ID*" /></form>
                         </td>
                         <td>
-                            <Input type="text" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn"/>
+                            <Input form="form" type="text" value={name} label="Navn" onChange={handleServiceDataChange("name")} placeholder="Navn"/>
                         </td>
                         <td>
-                            <Input type="text" value={type} onChange={handleServiceDataChange("type")} placeholder="Type"/>
+                            <Input form="form" type="text" value={type} label="Type" onChange={handleServiceDataChange("type")} placeholder="Type"/>
                         </td>
                         <td>
-                            <Input type="text" value={team} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
+                            <Input form="form" type="text" value={team} label="Team*" className={name.length == 0 ? "input-error" : ""} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
                         </td>
                         <td>
-                            <Input type="text" value={dependencies} onChange={handleServiceDataChange("dependencies")} placeholder="Avhengigheter*"/>
+                            <Input form="form" type="text" value={dependencies} label="Avhengigheter" onChange={handleServiceDataChange("dependencies")} placeholder="Avhengigheter*"/>
                         </td>
                         <td>
-                            <Input type="text" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
+                            <Input form="form" type="text" value={monitorlink} label="Monitorlenke" onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
                         </td>
                         <td>
-                            <Input type="text" value={description} onChange={handleServiceDataChange("description")} placeholder="Beskrivelse"/>
+                            <Input form="form" type="text" value={description} label="Beskrivelse" onChange={handleServiceDataChange("description")} placeholder="Beskrivelse"/>
                         </td>
                         <td>
-                            <Input type="text" value={logglink} onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
+                            <Input form="form" type="text" value={logglink} label="Logglenke" onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
                         </td>
 
                         <td><Hovedknapp disabled={
                             !id || !team || !dependencies} 
-                            onClick={() => handlePostService(newService)}>
+                            form="form"
+                            htmlType="submit"
+                            >
                             Legg til</Hovedknapp>
                         </td>
                     </AddNewServiceTr>
 
                 </tbody>
             </table>
-        </>
+        </TableContainer>
     )
 }
 

@@ -67,22 +67,22 @@ export interface Props {
     adminTiles: Tile[]
     setAdminTiles: Function
     tile: Tile
-    isLoading: boolean
-    setIsLoading: Function
+    // isLoading: boolean
+    // setIsLoading: Function
     allServices: Service[]
     reFetchAdminTiles: Function
     selectedDashboard: Dashboard
 }
 
+// isLoading, setIsLoading,
 const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, tile,
-        isLoading, setIsLoading, allServices, reFetchAdminTiles, selectedDashboard}: Props) => { 
+         allServices, reFetchAdminTiles, selectedDashboard}: Props) => { 
             const [expanded, toggleExpanded] = useState<boolean[]>(Array(adminTiles.length).fill(false))
             const [serviceIdsInTile, updateServiceIdsInTile] = useState<string[]>()
-            
-            useEffect(() => {
-                updateServiceIdsInTile(tile.services.map(service => service.id))
-            },[tile])
-            
+    
+    useEffect(() => {
+        updateServiceIdsInTile(tile.services.map(service => service.id))
+    },[tile])
 
     const handleDeleteServiceOnArea = async (areaId, serviceId) => {
         let currentTiles = [...adminTiles]
@@ -125,7 +125,7 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
     }
 
     const handlePutServiceToArea = async (tileId, serviceId) => {
-        setIsLoading(true)
+        // setIsLoading(true)
         // Does service already exist in area
         const currentTiles = [...adminTiles]
         const tileIndex = adminTiles.findIndex(tile => tile.area.id === tileId)
@@ -149,7 +149,7 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
                 }
             })
         }
-        setIsLoading(false)
+        // setIsLoading(false)
     }
     let area = tile.area
     

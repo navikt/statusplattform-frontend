@@ -9,7 +9,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const AdminContainer = styled.div`
-    //margin-top:30px;
+    width: 100%;
 `
 
  const AdminPage = () => {

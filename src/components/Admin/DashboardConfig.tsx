@@ -1,3 +1,4 @@
+import CustomNavSpinner from 'components/CustomNavSpinner'
 import { Hovedknapp } from 'nav-frontend-knapper'
 import { Input } from 'nav-frontend-skjema'
 import NavFrontendSpinner from 'nav-frontend-spinner'
@@ -10,12 +11,16 @@ import { postDashboards } from 'utils/postDashboard'
 import { useLoader } from 'utils/useLoader'
 
 const DashboardConfigContainer = styled.div`
-
-`
-
-const SpinnerCentered = styled.div`
-    position: absolute;
-    top: 40%;
+    width: 100%;
+    overflow-x: auto;
+    .add-new-dashboard {
+        td:nth-child(2) {
+            vertical-align: bottom;
+            .knapp {
+                width: 100%;
+            }
+        }
+    }
 `
 
 
@@ -25,28 +30,20 @@ const DashboardConfig = () => {
 
     if (isLoading) {
         return (
-            <LoaderSpinner/>
+            <CustomNavSpinner/>
         ) 
     }
 
     return (
         <DashboardConfigContainer>
             <DashboardTable dashboards={dashboards} />
-            <AddNewDashboard />
+            <AddNewDashboard reload={reload}/>
         </DashboardConfigContainer>
     )
 }
 
 
 /* Helpers below */
-
-const LoaderSpinner = () => {
-    return (
-        <SpinnerCentered>
-            <NavFrontendSpinner type="XXL" />
-        </SpinnerCentered>
-    )
-}
 
 const DashboardTable: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
     return (
@@ -72,7 +69,7 @@ const DashboardTable: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
 }
 
 
-const AddNewDashboard = () => {
+const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
     const [newDashboard, updateNewDashboard] = useState<Dashboard>({
         name: "",
         areaIds: [""]
@@ -91,6 +88,7 @@ const AddNewDashboard = () => {
     const handlePostNewDashboard = () => {
         // postDashboards(newDashboard)
         toast.info("Kan ikke laste opp enda")
+        reload()
     }
 
     const { name } = newDashboard
@@ -100,10 +98,12 @@ const AddNewDashboard = () => {
             <tbody>
                 <tr>
                     <td colSpan={2}>
-                        <Input type="text" required value={name} onChange={(event) => handleChangeDashboardName(event)} placeholder="Navn*" />
+                        <form onSubmit={() => handlePostNewDashboard()} id="form">
+                            <Input type="text" required label="Navn" value={name} onChange={(event) => handleChangeDashboardName(event)} placeholder="Navn*" />
+                        </form>
                     </td>
                     <td>
-                        <Hovedknapp disabled={!name} value="Legg til dashbord" onClick={() => handlePostNewDashboard()}>Legg til</Hovedknapp>
+                        <Hovedknapp form="form" htmlType="submit" disabled={!name} value="Legg til dashbord">Legg til</Hovedknapp>
                     </td>
                 </tr>
             </tbody>

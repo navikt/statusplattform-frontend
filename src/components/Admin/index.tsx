@@ -2,12 +2,8 @@ import 'react-dropdown/style.css';
 import styled from 'styled-components'
 import { useEffect, useState } from "react";
 
-import NavFrontendSpinner from "nav-frontend-spinner";
-import Knapp from 'nav-frontend-knapper'
-
-
 import { fetchTiles } from 'utils/fetchTiles'
-import { Area, Service, Tile, Dashboard } from 'types/navServices';
+import { Service, Tile, Dashboard } from 'types/navServices';
 
 import AreaTable from './AreaTable';
 import TjenesteTable from './TjenesteTable';
@@ -15,12 +11,15 @@ import { fetchServices } from 'utils/fetchServices';
 import { fetchDashboards } from 'utils/fetchDashboards';
 import { Select } from 'nav-frontend-skjema';
 import DashboardConfig from './DashboardConfig';
+import NavFrontendSpinner from 'nav-frontend-spinner';
+import CustomNavSpinner from 'components/CustomNavSpinner';
 
 
 
 
 const AdminDashboardContainer = styled.div`
     padding: 0;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -56,16 +55,13 @@ const AdminDashboardContainer = styled.div`
     }
 `;
 
-const AreasContainer = styled.div`
+
+
+const AdminConfigsContainer = styled.div`
     border-radius: 0 0 20px 20px;
     background-color: white;    
+    width: 100%;
     padding: 2rem 1rem;
-    display: flex;
-    flex-direction: column;
-    @media (min-width: 45rem) {
-        justify-content: space-between;
-        flex-direction: row;
-    }
     h2 {
         margin: 0 0 .5rem;
         display: flex;
@@ -73,9 +69,9 @@ const AreasContainer = styled.div`
     }
 `;
 
-const SpinnerCentered = styled.div`
-    position: absolute;
-    top: 40%;
+const AreaTableContainer = styled.div`
+    width: 100%;
+    overflow-x: auto;
 `
 
 const CustomSelect = styled(Select)`
@@ -96,34 +92,26 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
     const [isLoading, setIsLoading] = useState(true)
     const [tileOrderIsDynamic, changeTileOrderIsDynamic] = useState(true) //DENNE MÅ ENDRES. Skal komme default fra rest
 
-
+    const fetchData = async () => {
+        setIsLoading(true)
+        const dashboards: Dashboard[] = await fetchDashboards()
+        setDashboards(dashboards)
+        updateSelectedDashboard(dashboards[0])
+        const tiles: Tile[] = await fetchTiles(dashboards[0])
+        const allServices: Service[] = await fetchServices()
+        setAdminTiles(tiles)
+        setServices(allServices)
+        setIsLoading(false)
+    };
 
     useEffect(() => {
-        (async function () {
-            setIsLoading(true)
-            const dashboards: Dashboard[] = await fetchDashboards()
-            setDashboards(dashboards)
-            updateSelectedDashboard(dashboards[0])
-            const tiles: Tile[] = await fetchTiles(dashboards[0])
-            const allServices: Service[] = await fetchServices()
-            setAdminTiles(tiles)
-            setServices(allServices)
-            setIsLoading(false)
-        })()
+        fetchData()
     }, [])
 
-    const changeSelectedDashboard = (event) => {
-        const dashboardId: string = event.target.value
-        // console.log(dashboardId)
-        // Kommentert ut det under. Skal her fetche nytt dashboard
-        // useEffect(() => {
-        //     (async function () {
-        //         setIsLoading(true)
-        //         const dashboard: any[] = await fetchDashboard(dashboardId)
-        //         updateSelectedDashboard(dashboard)
-        //         setIsLoading(false)
-        //     })()
-        // }, [])
+    if(isLoading) {
+        return (
+            <CustomNavSpinner />
+        )
     }
 
     const reFetchAdminTiles = () => {
@@ -135,13 +123,7 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
         // }, [])
     }
 
-    if (isLoading) {
-        return (
-            <SpinnerCentered>
-                <NavFrontendSpinner type="XXL" />
-            </SpinnerCentered>
-        ) 
-    }
+    
 
 
     const changeTileOrdering = () => {
@@ -150,34 +132,33 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
     
 	return (
         <AdminDashboardContainer>
-
-                <AreasContainer>
-                    <div>
-                        <h2>{selectedMenu}</h2>
-                        <p>Felter markert med * er obligatoriske</p>
-                        {selectedMenu === "Områder" && 
-                            <>
-                                <CustomSelect onChange={changeSelectedDashboard} label="Velg Dashbord">
-                                    {dashboards.map((dashboard, index) => (
-                                        <option key={index} value={dashboard.name} label={dashboard.name}/>
-                                    ))}
-                                    
-                                </CustomSelect>
-                                <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles}
-                                    isLoading={isLoading} setIsLoading={setIsLoading} 
-                                    reFetchAdminTiles={reFetchAdminTiles} selectedDashboard={selectedDashboard}/>
-                            </>
-                        }
-                        {selectedMenu === "Tjenester" && 
-                            <TjenesteTable services={services} setServices={setServices} setIsLoading={setIsLoading} />
-                        }
-                        {selectedMenu === "Dashbord" &&
-                            <DashboardConfig />
-                        }
-                    </div>
-                </AreasContainer>
+                <AdminConfigsContainer>
+                    <h2>{selectedMenu}</h2>
+                    {selectedMenu === "Områder" && 
+                        <AreaTableContainer>
+                            <CustomSelect value={selectedDashboard} onChange={event => updateSelectedDashboard(event.target.value)} label="Velg Dashbord">
+                                {dashboards.map((dashboard, index) => (
+                                    <option key={index} value={dashboard.name} label={dashboard.name}/>
+                                ))}
+                                
+                            </CustomSelect>
+                            <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles}
+                                reFetchAdminTiles={reFetchAdminTiles} selectedDashboard={selectedDashboard}/>
+                        </AreaTableContainer>
+                    }
+                    {selectedMenu === "Tjenester" && 
+                        <TjenesteTable services={services} setServices={setServices} setIsLoading={setIsLoading} />
+                    }
+                    {selectedMenu === "Dashbord" &&
+                        <DashboardConfig />
+                    }
+                    <p>Felter markert med * er obligatoriske</p>
+                </AdminConfigsContainer>
         </AdminDashboardContainer>
     )
 }
+
+
+
 
 export default AdminDashboard
