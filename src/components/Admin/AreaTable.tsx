@@ -90,8 +90,9 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, allServices, reFetchA
     }
 
 
-    const handlePostAdminArea = (areaToAdd: Area) => {
+    const handlePostAdminArea = (areaToAdd: Area, event) => {
         // setIsLoading(true)
+        event.preventDefault()
         const newlist = adminTiles.filter(tile => tile.area.id === areaToAdd.id)
         if(newlist.length > 0) {
             toast.error("Denne IDen er allerede i bruk")
@@ -149,7 +150,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, allServices, reFetchA
             <tbody>
                 <AddNewAreaTr key="input">
                     <td>
-                        <form id="form" action="" onSubmit={() => handlePostAdminArea(newAdminArea)}></form>
+                        <form id="form" action="" onSubmit={(event) => handlePostAdminArea(newAdminArea, event)}></form>
                         <Input form="form" className={id.length == 0 ? "input-error" : ""} type="text" label="ID*" required value={id} onChange={handleAreaDataChange("id")} placeholder="ID*"/>
                     </td>
                     <td>

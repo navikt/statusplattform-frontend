@@ -79,8 +79,9 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
     }
     
     
-    const handlePostService = (serviceToAdd: Service) => {
+    const handlePostService = (serviceToAdd: Service, event) => {
         setIsLoading(true)
+        event.preventDefault()
         const newlist = services.filter(service => service.id === serviceToAdd.name)
         if(newlist.length > 0) {
             alert("Denne IDen er allerede brukt. Velg en annen")
@@ -158,7 +159,7 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
 
                     <AddNewServiceTr key="input">
                         <td>
-                            <form id="form" onSubmit={() => handlePostService(newService)}><Input type="text" className={name.length == 0 ? "input-error" : ""}
+                            <form id="form" onSubmit={(event) => handlePostService(newService, event)}><Input type="text" className={name.length == 0 ? "input-error" : ""}
                                 value={id} label="ID*" required onChange={handleServiceDataChange("id")} placeholder="ID*" /></form>
                         </td>
                         <td>

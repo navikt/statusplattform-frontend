@@ -85,8 +85,9 @@ const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
     }
     
 
-    const handlePostNewDashboard = () => {
+    const handlePostNewDashboard = (event) => {
         // postDashboards(newDashboard)
+        event.preventDefault()
         toast.info("Kan ikke laste opp enda")
         reload()
     }
@@ -98,7 +99,7 @@ const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
             <tbody>
                 <tr>
                     <td colSpan={2}>
-                        <form onSubmit={() => handlePostNewDashboard()} id="form">
+                        <form onSubmit={(event) => handlePostNewDashboard(event)} id="form">
                             <Input type="text" required label="Navn" value={name} onChange={(event) => handleChangeDashboardName(event)} placeholder="Navn*" />
                         </form>
                     </td>
