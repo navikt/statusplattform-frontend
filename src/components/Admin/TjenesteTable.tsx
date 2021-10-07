@@ -1,10 +1,10 @@
 import styled from 'styled-components'
-import {useState } from "react";
+import {useEffect, useState } from "react";
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { Input } from 'nav-frontend-skjema';
+import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import { Close } from '@navikt/ds-icons'
 
@@ -54,7 +54,12 @@ const TjenesteTable = () => {
         description: "",
         logglink: ""
     })
+    const [selectedType, updateSelectedType] = useState<string>()
     const { data: services, isLoading: loadingServices, reload: reloadServices } = useLoader(fetchServices,[]);
+
+    // useEffect(() => {
+    //     reloadServices
+    // }, [])
 
     if(loadingServices) {
         return (
@@ -111,7 +116,7 @@ const TjenesteTable = () => {
     }
 
     const { id, name, type, team, dependencies, monitorlink, description, logglink, status } = newService
-
+    const types: string[] = ["Applikasjon", "Ekstern applikasjon", "Intern applikasjon"]
     return (
         <TableContainer>
             <table className="tabell tabell--stripet">
@@ -159,7 +164,19 @@ const TjenesteTable = () => {
                             <Input form="form" type="text" value={name} label="Navn" onChange={handleServiceDataChange("name")} placeholder="Navn"/>
                         </td>
                         <td>
-                            <Input form="form" type="text" value={type} label="Type" onChange={handleServiceDataChange("type")} placeholder="Type"/>
+                            {/* <Input form="form" type="text" value={type} label="Type" onChange={handleServiceDataChange("type")} placeholder="Type"/> */}
+                            <Select value={selectedType !== null ? selectedType : ""} label="Type"
+                                onChange={(event) => updateSelectedType(event.target.value)}>
+                                {services.length > 0 ?
+                                types.map((type, index) => {
+                                    return (
+                                        <option key={index} value={type}>{type}</option>
+                                    )
+                                })
+                                :
+                                    <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
+                                }
+                            </Select>
                         </td>
                         <td>
                             <Input form="form" type="text" value={team} label="Team*" className={name.length == 0 ? "input-error" : ""} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
