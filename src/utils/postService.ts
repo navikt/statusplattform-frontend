@@ -7,6 +7,7 @@ export class ResponseError extends Error {
 export const postService = async (service): Promise<Object[]> =>{
     let response;
     let endPath = "/rest/Service"
+    console.log(service.dependencies)
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,
@@ -17,7 +18,7 @@ export const postService = async (service): Promise<Object[]> =>{
                 name: service.name,
                 type: service.type,
                 team: service.team,
-                dependencies: [service.dependencies],
+                dependencies: service.dependencies,
                 monitorlink: service.monitorlink,
                 description: service.description,
                 logglink: service.logglink
@@ -39,7 +40,7 @@ export const postService = async (service): Promise<Object[]> =>{
                 name: service.name,
                 type: service.type,
                 team: service.team,
-                dependencies: [service.dependencies],
+                dependencies: service.dependencies,
                 monitorlink: service.monitorlink,
                 description: service.description,
                 logglink: service.logglink

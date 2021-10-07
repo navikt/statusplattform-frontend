@@ -16,7 +16,7 @@ export interface Service {
     name: string
     type?: string
     team?: string
-    dependencies?: []
+    dependencies?: string[]
     monitorlink?: string
     description?: string
     logglink?: string

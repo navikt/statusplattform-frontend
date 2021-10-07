@@ -63,21 +63,21 @@ const TjenesteTable = () => {
     }
 
     const handleDependencyChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        // console.log(newService)
+        let currentService = {
+            ...newService,
+            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
+        }
+        const dependenciesList: string[] = evt.target.value.split(",")
+        currentService.dependencies = dependenciesList
+        updateNewService(currentService)
+    }
+
+    const handleServiceDataChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const currentService = {
             ...newService,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
         }
-        currentService.dependencies = newService.dependencies
-        console.log(currentService.dependencies)
-    }
-
-    const handleServiceDataChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const newArea = {
-            ...newService,
-            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
-        }
-        updateNewService(newArea)
+        updateNewService(currentService)
     }
     
     
@@ -137,7 +137,11 @@ const TjenesteTable = () => {
                                 <td><span>{service.name}</span></td>
                                 <td><span>{service.type}</span></td>
                                 <td><span>{service.team}</span></td>
-                                <td><span>{service.dependencies}</span></td>
+                                <td><ul>{service.dependencies.map(dependency => {
+                                    return (
+                                        <li>{dependency}</li>
+                                    )
+                                })}</ul></td>
                                 <td><span>{service.monitorlink}</span></td>
                                 <td><span>{service.description}</span></td>
                                 <td><span>{service.logglink}</span></td>
@@ -161,7 +165,7 @@ const TjenesteTable = () => {
                             <Input form="form" type="text" value={team} label="Team*" className={name.length == 0 ? "input-error" : ""} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
                         </td>
                         <td>
-                            <Input form="form" type="text" value={dependencies} label="Avhengigheter" onChange={handleServiceDataChange("dependencies")} placeholder="Avhengigheter*"/>
+                            <Input form="form" type="text" value={dependencies} label="Avhengigheter" onChange={handleDependencyChange("dependencies")} placeholder="ID1, ID2, ID3..."/>
                         </td>
                         <td>
                             <Input form="form" type="text" value={monitorlink} label="Monitorlenke" onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
