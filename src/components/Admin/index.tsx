@@ -113,16 +113,6 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
             <CustomNavSpinner />
         )
     }
-
-    const reFetchAdminTiles = () => {
-        // useEffect(() => {
-        //     (async function () {
-        //         const tiles: Tile[] = await fetchTiles()
-        //         setAdminTiles(tiles)
-        //     })()
-        // }, [])
-    }
-
     
 
 
@@ -142,8 +132,7 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
                                 ))}
                                 
                             </CustomSelect>
-                            <AreaTable allServices={services} adminTiles={adminTiles} setAdminTiles={setAdminTiles}
-                                reFetchAdminTiles={reFetchAdminTiles} selectedDashboard={selectedDashboard}/>
+                            <AreaTable selectedDashboard={selectedDashboard}/>
                         </AreaTableContainer>
                     }
                     {selectedMenu === "Tjenester" && 

@@ -1,19 +1,15 @@
 import styled from 'styled-components'
-import { useRef, useState } from "react";
-import Dropdown from 'react-dropdown';
+import { useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 
 import { Bag, Calculator, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Saving, SocialAid } from '@navikt/ds-icons'
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
-import NavFrontendSpinner from "nav-frontend-spinner";
 
 import { Area, Dashboard, Service, Tile } from 'types/navServices';
 
 import { postAdminAreas } from 'utils/postAreas'
 import AreaTableRow from './AreaTableRow';
-import { useLoader } from 'utils/useLoader';
-import { fetchDashboards } from 'utils/fetchDashboards';
 import { fetchTiles } from 'utils/fetchTiles';
 import { fetchServices } from 'utils/fetchServices';
 import CustomNavSpinner from 'components/CustomNavSpinner';
@@ -34,34 +30,41 @@ const AddNewAreaTr = styled.tr`
 `
 
 
-export interface Props {
-    adminTiles: Tile[]
-    setAdminTiles: Function
-    allServices: Service[]
-    reFetchAdminTiles: Function
+interface Props {
     selectedDashboard: Dashboard
 }
 
-const AreaTable = ({adminTiles: adminTiles, setAdminTiles, allServices, reFetchAdminTiles, selectedDashboard}: Props) => { 
+const AreaTable = ({selectedDashboard}: Props) => { 
+    const [adminTiles, setAdminTiles] = useState<Tile[]>([])
+    const [allServices, setAllServices] = useState<Service[]>([])
+    const [isLoading, setIsLoading] = useState(false)
     const [newAdminArea, updateNewAdminArea] = useState<Area>({
         id: "",
         name: "",
         beskrivelse: "",
         rangering: 0,
-        ikon: ""
+        ikon: "0001"
     })
+    
 
-    const { data: dashboards, isLoading: loadingDashboards, reload: reloadDashboards } = useLoader(fetchDashboards,[]);
-    const { data: tiles, isLoading: loadingTiles, reload: reloadTiles } = useLoader(() => fetchTiles(selectedDashboard),[]);
-    const { data: services, isLoading: loadingServices, reload: reloadServices } = useLoader(fetchServices,[]);
+    const fetchData = async () => {
+        setIsLoading(true)
+        const tiles: Tile[] = await fetchTiles(selectedDashboard)
+        setAdminTiles(tiles)
+        const services: Service[] = await fetchServices()
+        setAllServices(services)
+        setIsLoading(false)
+    };
 
+    useEffect(() => {
+        fetchData()
+    }, [])
 
-    if (loadingDashboards || loadingTiles || loadingServices) {
+    if (isLoading) {
         return (
             <CustomNavSpinner />
         )
     }
-
 
     const options = [
         { value: "0001", label: "Bag", icon: <Bag/> },
@@ -104,9 +107,8 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, allServices, reFetchA
             const newTiles = [...adminTiles]
             const newTile:Tile = {services:[], status:'', area:areaToAdd}
             newTiles.push(newTile)
-            setAdminTiles(newTiles)
             toast.success("Området ble lagt til")
-            reloadTiles()
+            fetchData()
             updateNewAdminArea({
                 id: "",
                 name: "",
@@ -134,11 +136,10 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, allServices, reFetchA
                     <th></th>
                 </tr>
             </thead>
-            {/* isLoading={isLoading} setIsLoading={setIsLoading} */}
                 {adminTiles.map( (tile, index) => {
                     return (
                         <AreaTableRow key={index} tileIndexProp={index} adminTiles={adminTiles} setAdminTiles={setAdminTiles} tile={tile}
-                            allServices={allServices} reFetchAdminTiles={reFetchAdminTiles} selectedDashboard={selectedDashboard}
+                            allServices={allServices} selectedDashboard={selectedDashboard}
                         />
                     )
                 })}

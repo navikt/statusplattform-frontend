@@ -68,19 +68,18 @@ const CloseCustomized = styled(Close)`
     }
 `
 
-export interface Props {
+interface Props {
     tileIndexProp: any
     adminTiles: Tile[]
     setAdminTiles: Function
     tile: Tile
     allServices: Service[]
-    reFetchAdminTiles: Function
     selectedDashboard: Dashboard
 }
 
-// isLoading, setIsLoading,
+
 const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, tile,
-            allServices, reFetchAdminTiles, selectedDashboard}: Props) => { 
+            allServices, selectedDashboard}: Props) => { 
             const [expanded, toggleExpanded] = useState<boolean[]>(Array(adminTiles.length).fill(false))
             const [serviceIdsInTile, updateServiceIdsInTile] = useState<string[]>()
 
@@ -129,7 +128,6 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
     }
 
     const handlePutServiceToArea = async (tileId, serviceId) => {
-        // setIsLoading(true)
         // Does service already exist in area
         const currentTiles = [...adminTiles]
         const tileIndex = adminTiles.findIndex(tile => tile.area.id === tileId)
@@ -234,7 +232,6 @@ const DropdownRowSelect = ({allServices, serviceIdsInTile, handlePutServiceToAre
             updateSelectedService(null)
         }
     }, [allServices, serviceIdsInTile])
-
 
     return (
         <TileDropdownRow key="input">
