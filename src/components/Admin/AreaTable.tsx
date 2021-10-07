@@ -1,20 +1,21 @@
 import styled from 'styled-components'
 import { useRef, useState } from "react";
 import Dropdown from 'react-dropdown';
+import { toast } from 'react-toastify';
 
 import { Bag, Calculator, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Saving, SocialAid } from '@navikt/ds-icons'
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 import NavFrontendSpinner from "nav-frontend-spinner";
 
-import { postAdminAreas } from 'utils/postAreas'
 import { Area, Dashboard, Service, Tile } from 'types/navServices';
 
-import { toast } from 'react-toastify';
+import { postAdminAreas } from 'utils/postAreas'
 import AreaTableRow from './AreaTableRow';
 import { useLoader } from 'utils/useLoader';
 import { fetchDashboards } from 'utils/fetchDashboards';
 import { fetchTiles } from 'utils/fetchTiles';
+import { fetchServices } from 'utils/fetchServices';
 import CustomNavSpinner from 'components/CustomNavSpinner';
 
 
@@ -50,10 +51,12 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, allServices, reFetchA
         ikon: ""
     })
 
-    const { data: tiles, isLoading: loadingTiles, reload } = useLoader(() => fetchTiles(selectedDashboard),[]);
+    const { data: dashboards, isLoading: loadingDashboards, reload: reloadDashboards } = useLoader(fetchDashboards,[]);
+    const { data: tiles, isLoading: loadingTiles, reload: reloadTiles } = useLoader(() => fetchTiles(selectedDashboard),[]);
+    const { data: services, isLoading: loadingServices, reload: reloadServices } = useLoader(fetchServices,[]);
 
 
-    if (loadingTiles) {
+    if (loadingDashboards || loadingTiles || loadingServices) {
         return (
             <CustomNavSpinner />
         )
@@ -91,12 +94,10 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, allServices, reFetchA
 
 
     const handlePostAdminArea = (areaToAdd: Area, event) => {
-        // setIsLoading(true)
         event.preventDefault()
         const newlist = adminTiles.filter(tile => tile.area.id === areaToAdd.id)
         if(newlist.length > 0) {
             toast.error("Denne IDen er allerede i bruk")
-            // setIsLoading(false)
             return
         }
         if(postAdminAreas(areaToAdd, selectedDashboard)) {
@@ -104,10 +105,8 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, allServices, reFetchA
             const newTile:Tile = {services:[], status:'', area:areaToAdd}
             newTiles.push(newTile)
             setAdminTiles(newTiles)
-            reload()
             toast.success("Området ble lagt til")
-            // setIsLoading(false)
-            reload()
+            reloadTiles()
             updateNewAdminArea({
                 id: "",
                 name: "",
@@ -118,7 +117,6 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, allServices, reFetchA
             return
         }
         toast.warn("Område ble ikke lagt til")
-        // setIsLoading(false)
     }
 
     const { id, name, beskrivelse, rangering} = newAdminArea
@@ -140,8 +138,7 @@ const AreaTable = ({adminTiles: adminTiles, setAdminTiles, allServices, reFetchA
                 {adminTiles.map( (tile, index) => {
                     return (
                         <AreaTableRow key={index} tileIndexProp={index} adminTiles={adminTiles} setAdminTiles={setAdminTiles} tile={tile}
-                             allServices={allServices} reFetchAdminTiles={reFetchAdminTiles}
-                            selectedDashboard={selectedDashboard}
+                            allServices={allServices} reFetchAdminTiles={reFetchAdminTiles} selectedDashboard={selectedDashboard}
                         />
                     )
                 })}

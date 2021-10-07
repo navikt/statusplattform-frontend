@@ -147,7 +147,7 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
                         </AreaTableContainer>
                     }
                     {selectedMenu === "Tjenester" && 
-                        <TjenesteTable services={services} setServices={setServices} setIsLoading={setIsLoading} />
+                        <TjenesteTable />
                     }
                     {selectedMenu === "Dashbord" &&
                         <DashboardConfig />

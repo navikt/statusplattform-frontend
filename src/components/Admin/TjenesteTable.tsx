@@ -1,20 +1,20 @@
 import styled from 'styled-components'
-import { useEffect, useState } from "react";
-import Dropdown from 'react-dropdown';
+import {useState } from "react";
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import { Bag } from '@navikt/ds-icons'
 import { Input } from 'nav-frontend-skjema';
-import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
-import NavFrontendSpinner from "nav-frontend-spinner";
+import { Hovedknapp  } from 'nav-frontend-knapper';
 import { Close } from '@navikt/ds-icons'
 
-import { Area, Service, Tile } from 'types/navServices';
+import { Service } from 'types/navServices';
 import { deleteService } from 'utils/deleteService';
 import { postService } from 'utils/postService'
 import { fetchServices } from 'utils/fetchServices';
+import { useLoader } from 'utils/useLoader';
+import CustomNavSpinner from 'components/CustomNavSpinner';
+
 
 
 const TableContainer = styled.div`
@@ -42,13 +42,8 @@ const AddNewServiceTr = styled.tr`
     }
 `
 
-export interface Props {
-    services: Service[]
-    setServices: Function
-    setIsLoading: Function
-}
 
-const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
+const TjenesteTable = () => {
     const [newService, updateNewService] = useState<Service>({
         id: "",
         name: "",
@@ -59,6 +54,13 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
         description: "",
         logglink: ""
     })
+    const { data: services, isLoading: loadingServices, reload: reloadServices } = useLoader(fetchServices,[]);
+
+    if(loadingServices) {
+        return (
+            <CustomNavSpinner />
+        )
+    }
 
     const handleDependencyChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         // console.log(newService)
@@ -80,45 +82,32 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
     
     
     const handlePostService = (serviceToAdd: Service, event) => {
-        setIsLoading(true)
         event.preventDefault()
         const newlist = services.filter(service => service.id === serviceToAdd.name)
         if(newlist.length > 0) {
-            alert("Denne IDen er allerede brukt. Velg en annen")
-            setIsLoading(false)
+            toast.info("Denne IDen er allerede brukt. Velg en annen")
             return
         }
         if(postService(serviceToAdd)) {
             const newServices = [...services]
             newServices.push(serviceToAdd)
-            setServices(newServices)
-            setIsLoading(false)
+            reloadServices()
+            toast.success("Tjeneste ble lagt til")
             return
         }
-        //TODO bedre error-visning trengs
-        setIsLoading(false)
-        alert("Tjeneste ble ikke lagt til")
+        toast.warn("Tjeneste ble ikke lagt til")
     }
     
-    const handleServiceArea = (serviceToDelete) => {
-        setIsLoading(true)
-        console.log(serviceToDelete)
+    const handleServiceDeletion = (serviceToDelete) => {
         if(deleteService(serviceToDelete)) {
             toast.success('Tjeneste slettet');
             const newServices = services.filter(currentService => 
                 currentService != serviceToDelete
             )
-            setServices(newServices)
-            setIsLoading(false)
+            reloadServices()
             return
         }
         toast.error('Tjeneste kunne ikke slettes');
-        //TODO bedre error-visning trengs
-        setIsLoading(false)
-        // toast.error('Tjeneste ble ikke slettet', {
-
-        // });
-        // alert("Tjeneste ble ikke slettet")
     }
 
     const { id, name, type, team, dependencies, monitorlink, description, logglink, status } = newService
@@ -152,7 +141,7 @@ const TjenesteTable = ({services, setServices, setIsLoading}: Props) => {
                                 <td><span>{service.monitorlink}</span></td>
                                 <td><span>{service.description}</span></td>
                                 <td><span>{service.logglink}</span></td>
-                                <td><span><CloseCustomized onClick={() => handleServiceArea(service)} /></span></td>
+                                <td><span><CloseCustomized onClick={() => handleServiceDeletion(service)} /></span></td>
                             </tr>
                         )
                     })}

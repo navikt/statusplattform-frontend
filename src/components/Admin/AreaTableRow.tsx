@@ -17,12 +17,18 @@ import { getIconsFromGivenCode } from 'utils/servicesOperations';
 import { putServiceToArea } from 'utils/putServiceToArea'
 
 import { toast } from 'react-toastify';
+import { fetchServices } from 'utils/fetchServices';
+import { useLoader } from 'utils/useLoader';
+import CustomNavSpinner from 'components/CustomNavSpinner';
 
 const CustomTBody = styled.tbody `
     .clickable {
         :hover {
             cursor: pointer;
         }
+    }
+    :hover {
+        box-shadow: 0 0 3px black;
     }
 `
 
@@ -67,8 +73,6 @@ export interface Props {
     adminTiles: Tile[]
     setAdminTiles: Function
     tile: Tile
-    // isLoading: boolean
-    // setIsLoading: Function
     allServices: Service[]
     reFetchAdminTiles: Function
     selectedDashboard: Dashboard
@@ -76,10 +80,10 @@ export interface Props {
 
 // isLoading, setIsLoading,
 const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, tile,
-         allServices, reFetchAdminTiles, selectedDashboard}: Props) => { 
+            allServices, reFetchAdminTiles, selectedDashboard}: Props) => { 
             const [expanded, toggleExpanded] = useState<boolean[]>(Array(adminTiles.length).fill(false))
             const [serviceIdsInTile, updateServiceIdsInTile] = useState<string[]>()
-    
+
     useEffect(() => {
         updateServiceIdsInTile(tile.services.map(service => service.id))
     },[tile])
