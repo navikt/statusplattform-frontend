@@ -49,7 +49,7 @@ const TjenesteTable = () => {
         name: "",
         type: "",
         team: "",
-        dependencies: [],
+        dependencies: [""],
         monitorlink: "",
         description: "",
         logglink: ""
@@ -137,9 +137,9 @@ const TjenesteTable = () => {
                                 <td><span>{service.name}</span></td>
                                 <td><span>{service.type}</span></td>
                                 <td><span>{service.team}</span></td>
-                                <td><ul>{service.dependencies.map(dependency => {
+                                <td><ul>{service.dependencies.map((dependency, index) => {
                                     return (
-                                        <li>{dependency}</li>
+                                        <li key={index}>{dependency}</li>
                                     )
                                 })}</ul></td>
                                 <td><span>{service.monitorlink}</span></td>
