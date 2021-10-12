@@ -20,6 +20,7 @@ import { toast } from 'react-toastify';
 import { fetchServices } from 'utils/fetchServices';
 import { useLoader } from 'utils/useLoader';
 import CustomNavSpinner from 'components/CustomNavSpinner';
+import { fetchTiles } from 'utils/fetchTiles';
 
 const CustomTBody = styled.tbody `
     .clickable {
@@ -70,39 +71,85 @@ const CloseCustomized = styled(Close)`
 
 interface Props {
     tileIndexProp: any
-    adminTiles: Tile[]
-    setAdminTiles: Function
-    tile: Tile
-    allServices: Service[]
+    tileProp: Tile
     selectedDashboard: Dashboard
+    lengthOfTiles: number
 }
 
 
-const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, tile,
-            allServices, selectedDashboard}: Props) => { 
-            const [expanded, toggleExpanded] = useState<boolean[]>(Array(adminTiles.length).fill(false))
-            const [serviceIdsInTile, updateServiceIdsInTile] = useState<string[]>()
+const AreaTableRow = ({tileIndexProp, tileProp, selectedDashboard, lengthOfTiles}: Props) => { 
+    const [expanded, toggleExpanded] = useState<boolean[]>(Array(lengthOfTiles).fill(false))
+    const [serviceIdsInTile, updateServiceIdsInTile] = useState<string[]>()
+    const [tile, setTile] = useState<Tile>(tileProp)
+    
+    
+    const { data: allServices, isLoading: loadingServices, reload: reloadServices } = useLoader(fetchServices,[]);
+    const { data: allTiles, isLoading: loadingTiles, reload: reloadTiles } = useLoader(() => fetchTiles(selectedDashboard),[]);
+    
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     (async function () {
+            
+    //     })()
+    // }, [])
+
+    useEffect (() => {
+        // reloadTiles()
+        console.log(tile.services)
         updateServiceIdsInTile(tile.services.map(service => service.id))
+        console.log("Gjort endring i serviceIdsInTile")
+        // console.log(serviceIdsInTile)
     },[tile])
+    
+    if(loadingTiles || loadingServices) {
+        return (
+            <CustomNavSpinner />
+        )
+    }
 
-    const handleDeleteServiceOnArea = async (areaId, serviceId) => {
-        let currentTiles = [...adminTiles]
-        const tileIndex = adminTiles.findIndex(tile => tile.area.id === areaId)
+    const fetchData = async () => {
+        // const tiles: Tile[] = await fetchTiles(selectedDashboard)
+        // setallTiles(tiles)
+        // const services: Service[] = await fetchServices()
+        
+    }
+
+    const handleDeleteServiceOnArea = (areaId, serviceId) => {
+        let currentTiles = [...allTiles]
+        const tileIndex = allTiles.findIndex(tile => tile.area.id === areaId)
         const serviceIndex = allServices.findIndex(service => service.id === serviceId)
+        
 
-        deleteServiceFromArea(areaId, serviceId).then((response: any) => {
-            if (response.status >= 200 || response.status <= 210) {
-                const oldTile = currentTiles.splice(tileIndex, 1)[0]
-                const newTile = {...oldTile, services: oldTile.services.filter(service => service.id !== serviceId)}
-                currentTiles.splice(tileIndex, 1, newTile)
-                setAdminTiles([...currentTiles])
-                toast.success("Tjenestekobling slettet")
-            } else {
+        deleteServiceFromArea(areaId, serviceId)
+            .then(async() => {
+                // const oldTile = currentTiles.splice(tileIndex, 1)[0]
+                // const newTile = {...oldTile, services: oldTile.services.filter(service => service.id !== serviceId)}
+                // currentTiles.splice(tileIndex, 1, newTile)
+                // setallTiles([...currentTiles])
+                // reloadServices()
+                // await 
+                reloadTiles()
+                // const updatedTile = allTiles[tileIndexProp]
+                // setTile(updatedTile)
+                // console.log("i .then")
+                await setTimeout(() => console.log("done"), 3000)
+                console.log("before delete")
+                console.log("After delete")
+                
+                // console.log(tile)
+            })
+            .catch(() => {
                 toast.warn("Tjenestekobling kunne ikke bli slettet")
-            }
-        })
+            })
+            .finally(() => {
+                const updatedTile = allTiles[tileIndexProp]
+                setTile(updatedTile)
+                console.log(updatedTile)
+                toast.success("Tjenestekobling slettet")
+                // console.log("i .finally")
+                // const updatedTile = tileProp
+                // console.log(tile)
+            })
     }
 
     const toggleAreaExpanded = (index: number) => {
@@ -112,25 +159,30 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
     }
 
     const handleDeleteArea = async (areaToDelete: Area) => {
-        deleteArea(areaToDelete, selectedDashboard).then((response: any) =>{
-            if(response.status >= 200 || response.status <= 210) {
-                const newTiles = adminTiles.filter(tile => 
-                    tile.area.id != areaToDelete.id
-                )
-                setAdminTiles(newTiles)
-                toast.info("Område slettet")
-                return
-            }
-            else {
+        deleteArea(areaToDelete, selectedDashboard)
+            .then(() => {
+                // const newTiles = allTiles.filter(tile => 
+                //     tile.area.id != areaToDelete.id
+                // )
+                // setallTiles(newTiles)
+                reloadServices()
+                reloadTiles()
+                
+            })
+            .catch(() => {
                 toast.warn("Område ble ikke slettet grunnet feil")
-            }
-        })
+            })
+            .finally(() => {
+                const updatedTile = allTiles[tileIndexProp]
+                setTile(updatedTile)
+                toast.info("Område slettet")
+            })
     }
 
     const handlePutServiceToArea = async (tileId, serviceId) => {
         // Does service already exist in area
-        const currentTiles = [...adminTiles]
-        const tileIndex = adminTiles.findIndex(tile => tile.area.id === tileId)
+        const currentTiles = [...allTiles]
+        const tileIndex = allTiles.findIndex(tile => tile.area.id === tileId)
         const serviceIndex = allServices.findIndex(service => service.id === serviceId)
 
         if(currentTiles[tileIndex].services.includes(allServices[serviceIndex])) {
@@ -139,20 +191,29 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
         // End of check
 
         else {
-            putServiceToArea(tileId, serviceId).then((response: any) => {
-                if (response.status >= 200 || response.status <= 210) {
-                    const oldTile = currentTiles.splice(tileIndex, 1)[0]
-                    const newTile = {...oldTile, services: [...oldTile.services, allServices[serviceIndex]]}
-                    currentTiles.splice(tileIndex, 1, newTile)
-                    setAdminTiles([...currentTiles])
-                    toast.success("Tjenesten har blitt lagt til i området")
-                } else {
+            putServiceToArea(tileId, serviceId)
+            .then(() => {
+                    // const oldTile = currentTiles.splice(tileIndex, 1)[0]
+                    // const newTile = {...oldTile, services: [...oldTile.services, allServices[serviceIndex]]}
+                    // currentTiles.splice(tileIndex, 1, newTile)
+                    // setallTiles([...currentTiles])
+                    reloadServices()
+                    reloadTiles()
+                })
+                .catch(() => {
                     toast.warn("Tjenesten kunne ikke bli lagt til")
-                }
-            })
+                })
+                .finally(() => {        
+                    // console.log(allTiles)
+                    const updatedTile = allTiles[tileIndexProp]
+                    setTile(updatedTile)
+                    toast.success("Tjenesten har blitt lagt til i området")
+                })
         }
         // setIsLoading(false)
     }
+
+
     let area = tile.area
     
     return (
@@ -209,7 +270,7 @@ const AreaTableRow = ({tileIndexProp, adminTiles: adminTiles, setAdminTiles, til
 
 
 
-
+// ----------------------------------------------------------------------------------------------------
 
 
 interface DropdownProps {

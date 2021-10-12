@@ -46,6 +46,7 @@ const AreaTable = ({selectedDashboard}: Props) => {
         ikon: "0001"
     })
     
+    
 
     const fetchData = async () => {
         setIsLoading(true)
@@ -103,10 +104,8 @@ const AreaTable = ({selectedDashboard}: Props) => {
             toast.error("Denne IDen er allerede i bruk")
             return
         }
-        if(postAdminAreas(areaToAdd, selectedDashboard)) {
-            const newTiles = [...adminTiles]
-            const newTile:Tile = {services:[], status:'', area:areaToAdd}
-            newTiles.push(newTile)
+        if(postAdminAreas(areaToAdd, selectedDashboard).then(() => {
+
             toast.success("Området ble lagt til")
             fetchData()
             updateNewAdminArea({
@@ -116,9 +115,14 @@ const AreaTable = ({selectedDashboard}: Props) => {
                 rangering: 0,
                 ikon: ""
             })
-            return
+        }).catch(() => {
+            toast.warn("Område ble ikke lagt til")
+        })) {
+            // const newTiles = [...adminTiles]
+            // const newTile:Tile = {services:[], status:'', area:areaToAdd}
+            // newTiles.push(newTile)
+            // return
         }
-        toast.warn("Område ble ikke lagt til")
     }
 
     const { id, name, beskrivelse, rangering} = newAdminArea
@@ -138,8 +142,8 @@ const AreaTable = ({selectedDashboard}: Props) => {
             </thead>
                 {adminTiles.map( (tile, index) => {
                     return (
-                        <AreaTableRow key={index} tileIndexProp={index} adminTiles={adminTiles} setAdminTiles={setAdminTiles} tile={tile}
-                            allServices={allServices} selectedDashboard={selectedDashboard}
+                        <AreaTableRow key={index} tileIndexProp={index} tileProp={tile}
+                            selectedDashboard={selectedDashboard} lengthOfTiles={adminTiles.length}
                         />
                     )
                 })}

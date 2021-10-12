@@ -60,6 +60,7 @@ const TjenesteTable = () => {
     // useEffect(() => {
     //     reloadServices
     // }, [])
+    console.log(services)
 
     if(loadingServices) {
         return (
@@ -93,14 +94,12 @@ const TjenesteTable = () => {
             toast.info("Denne IDen er allerede brukt. Velg en annen")
             return
         }
-        if(postService(serviceToAdd)) {
-            const newServices = [...services]
-            newServices.push(serviceToAdd)
+        postService(serviceToAdd).then(() => {
             reloadServices()
             toast.success("Tjeneste ble lagt til")
-            return
-        }
-        toast.warn("Tjeneste ble ikke lagt til")
+        }).catch(() => {
+            toast.warn("Tjeneste ble ikke lagt til")
+        })
     }
     
     const handleServiceDeletion = (serviceToDelete) => {
