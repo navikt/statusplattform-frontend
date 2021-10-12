@@ -45,6 +45,7 @@ const AreaTable = ({selectedDashboard}: Props) => {
         rangering: 0,
         ikon: "0001"
     })
+    const [expanded, toggleExpanded] = useState<number[]>([])
     
     
 
@@ -127,6 +128,14 @@ const AreaTable = ({selectedDashboard}: Props) => {
 
     const { id, name, beskrivelse, rangering} = newAdminArea
     
+    const toggleExpandedFor = (index) => {
+        if(expanded.includes(index)) {
+            toggleExpanded([...expanded.filter(i => i !== index)])
+        } else {
+            toggleExpanded([...expanded, index])
+        }
+    }
+
     return (
         <table className="tabell tabell--stripet">
             <thead>
@@ -142,8 +151,11 @@ const AreaTable = ({selectedDashboard}: Props) => {
             </thead>
                 {adminTiles.map( (tile, index) => {
                     return (
-                        <AreaTableRow key={index} tileIndexProp={index} tileProp={tile}
-                            selectedDashboard={selectedDashboard} lengthOfTiles={adminTiles.length}
+                        <AreaTableRow key={index} tile={tile}
+                            selectedDashboard={selectedDashboard}
+                            allServices={allServices}
+                            reload={fetchData} isExpanded={expanded.includes(index)}
+                            toggleExpanded={() => toggleExpandedFor(index)}
                         />
                     )
                 })}
