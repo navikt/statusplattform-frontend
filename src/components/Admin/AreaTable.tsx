@@ -45,8 +45,8 @@ const AreaTable = ({selectedDashboard}: Props) => {
         rangering: 0,
         ikon: "0001"
     })
-    const [expanded, toggleExpanded] = useState<number[]>([])
-    
+    const [expanded, toggleExpanded] = useState<string[]>([])
+    const [anchorId, setAnchorId] = useState<string>("")
     
 
     const fetchData = async () => {
@@ -61,6 +61,15 @@ const AreaTable = ({selectedDashboard}: Props) => {
     useEffect(() => {
         fetchData()
     }, [])
+
+    useEffect(() => {
+        setTimeout(() => {
+            const element = document.getElementById(anchorId);
+            if (element) {
+              element.scrollIntoView();
+            }
+          }, 300);
+    }, [anchorId])
 
     if (isLoading) {
         return (
@@ -87,7 +96,8 @@ const AreaTable = ({selectedDashboard}: Props) => {
         const newArea = {
             ...newAdminArea,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
-        updateNewAdminArea(newArea)
+            
+            updateNewAdminArea(newArea)
     }
     const handleAreaIconChange = (event) => {
         const newArea = {
@@ -97,7 +107,6 @@ const AreaTable = ({selectedDashboard}: Props) => {
         updateNewAdminArea(newArea)
     }
 
-
     const handlePostAdminArea = (areaToAdd: Area, event) => {
         event.preventDefault()
         const newlist = adminTiles.filter(tile => tile.area.id === areaToAdd.id)
@@ -106,7 +115,7 @@ const AreaTable = ({selectedDashboard}: Props) => {
             return
         }
         if(postAdminAreas(areaToAdd, selectedDashboard).then(() => {
-
+            setAnchorId(areaToAdd.id);
             toast.success("Området ble lagt til")
             fetchData()
             updateNewAdminArea({
@@ -128,11 +137,11 @@ const AreaTable = ({selectedDashboard}: Props) => {
 
     const { id, name, beskrivelse, rangering} = newAdminArea
     
-    const toggleExpandedFor = (index) => {
-        if(expanded.includes(index)) {
-            toggleExpanded([...expanded.filter(i => i !== index)])
+    const toggleExpandedFor = (tileAreaId) => {
+        if(expanded.includes(tileAreaId)) {
+            toggleExpanded([...expanded.filter(i => i !== tileAreaId)])
         } else {
-            toggleExpanded([...expanded, index])
+            toggleExpanded([...expanded, tileAreaId])
         }
     }
 
@@ -154,8 +163,8 @@ const AreaTable = ({selectedDashboard}: Props) => {
                         <AreaTableRow key={index} tile={tile}
                             selectedDashboard={selectedDashboard}
                             allServices={allServices}
-                            reload={fetchData} isExpanded={expanded.includes(index)}
-                            toggleExpanded={() => toggleExpandedFor(index)}
+                            reload={fetchData} isExpanded={expanded.includes(tile.area.id)}
+                            toggleExpanded={() => toggleExpandedFor(tile.area.id)}
                         />
                     )
                 })}

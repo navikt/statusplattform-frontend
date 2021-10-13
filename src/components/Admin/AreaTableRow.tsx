@@ -119,7 +119,7 @@ const AreaTableRow = ({ selectedDashboard, tile, reload, isExpanded, toggleExpan
     
     return (
         <CustomTBody key={areaId}>
-            <tr className="clickable" onClick={toggleExpanded}>
+            <tr id={areaId} className="clickable" onClick={toggleExpanded}>
                 <td><span>{areaId}</span></td>
                 <td><span>{name}</span></td>
                 <td><span>{beskrivelse}</span></td>
