@@ -10,7 +10,7 @@ import {
 
 export const mapStatusAndIncidentsToArray = (props: AreaServicesList) => {
     let areasArray: Array<String> = []
-    props.tiles.map(tile => {
+    props.areas.map(tile => {
         areasArray.push(tile.status, "incidentsToBeAdded")
     })
     return areasArray;
@@ -29,7 +29,7 @@ export const retrieveFilteredServiceList = (areas, areaName) => {
 
 export const countServicesInAreas = (props: AreaServicesList) => {
     let numberOfServices: number = 0
-    props.tiles.map(function (area){
+    props.areas.map(function (area){
         numberOfServices += area.services.length
     })
     return numberOfServices
@@ -37,7 +37,7 @@ export const countServicesInAreas = (props: AreaServicesList) => {
 
 export const countHealthyServices = (props: AreaServicesList) => {
     let healthyServices: number = 0
-    props.tiles.map(area => {
+    props.areas.map(area => {
         healthyServices += area.services.filter(
             (service: Service) => service.status !== "DOWN").length
     })
@@ -46,7 +46,7 @@ export const countHealthyServices = (props: AreaServicesList) => {
 
 export const countFailingServices = (props: AreaServicesList) => {
     let failingServices: number = 0
-    props.tiles.map(area => {
+    props.areas.map(area => {
         failingServices += area.services.filter(
             (service: Service) => service.status == "DOWN").length
     })
@@ -83,9 +83,9 @@ export const getIconsFromGivenCode: any = (ikon: string) => {
 
 export const getListOfTilesThatFail = (props: AreaServicesList) => {
     let listOfTilesThatFail: string[] = []
-    props.tiles.filter(tile => {
-        if(tile.status === "DOWN") {
-            listOfTilesThatFail.push(tile.area.name)
+    props.areas.filter(area => {
+        if(area.status === "DOWN") {
+            listOfTilesThatFail.push(area.name)
         }else {return}
     })
     return listOfTilesThatFail

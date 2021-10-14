@@ -1,13 +1,11 @@
 import CustomNavSpinner from 'components/CustomNavSpinner'
 import { Hovedknapp } from 'nav-frontend-knapper'
 import { Input } from 'nav-frontend-skjema'
-import NavFrontendSpinner from 'nav-frontend-spinner'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
-import { Dashboard } from 'types/navServices'
-import { fetchDashboards } from 'utils/fetchDashboards'
-import { postDashboards } from 'utils/postDashboard'
+import { Dashboard, DashboardsList } from 'types/navServices'
+import { fetchDashboardsList } from 'utils/fetchDashboardsList'
 import { useLoader } from 'utils/useLoader'
 
 const DashboardConfigContainer = styled.div`
@@ -25,7 +23,7 @@ const DashboardConfigContainer = styled.div`
 
 
 const DashboardConfig = () => {
-    const { data: dashboards, isLoading, reload } = useLoader(fetchDashboards,[]);
+    const { data: dashboards, isLoading, reload } = useLoader(fetchDashboardsList,[]);
 
 
     if (isLoading) {
@@ -45,7 +43,7 @@ const DashboardConfig = () => {
 
 /* Helpers below */
 
-const DashboardTable: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
+const DashboardTable: React.FC<{dashboards: DashboardsList[]}> = ({dashboards}) => {
     return (
         <table className="tabell tabell--stripet">
             <thead>
@@ -72,14 +70,14 @@ const DashboardTable: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
 const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
     const [newDashboard, updateNewDashboard] = useState<Dashboard>({
         name: "",
-        areaIds: [""]
+        areas: []
     })
 
 
     const handleChangeDashboardName = (event) => {
         const changedDashboard = {
             name: event.target.value,
-            areaIds: [""]
+            areas: []
         }
         updateNewDashboard(changedDashboard)
     }

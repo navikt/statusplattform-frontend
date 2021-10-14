@@ -2,16 +2,15 @@ import 'react-dropdown/style.css';
 import styled from 'styled-components'
 import { useEffect, useState } from "react";
 
-import { fetchTiles } from 'utils/fetchTiles'
-import { Service, Tile, Dashboard } from 'types/navServices';
+import { fetchDashboard } from 'utils/fetchDashboard'
+import { Service, Tile, Dashboard, Area } from 'types/navServices';
 
 import AreaTable from './AreaTable';
 import TjenesteTable from './TjenesteTable';
 import { fetchServices } from 'utils/fetchServices';
-import { fetchDashboards } from 'utils/fetchDashboards';
+import { fetchDashboardsList } from 'utils/fetchDashboardsList';
 import { Select } from 'nav-frontend-skjema';
 import DashboardConfig from './DashboardConfig';
-import NavFrontendSpinner from 'nav-frontend-spinner';
 import CustomNavSpinner from 'components/CustomNavSpinner';
 
 
@@ -87,19 +86,19 @@ export interface Props {
 const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
     const [dashboards, setDashboards] = useState<Dashboard[]>()
     const [selectedDashboard, updateSelectedDashboard] = useState<Dashboard>() //Dette må ikke være type any i lengden. Kan potensielt fjernes også
-    const [adminTiles, setAdminTiles] = useState<Tile[]>([])
+    const [dashboardAreas, setDashboardAreas] = useState<Area[]>([])
     const [services, setServices] = useState<Service[]>()
     const [isLoading, setIsLoading] = useState(true)
     const [tileOrderIsDynamic, changeTileOrderIsDynamic] = useState(true) //DENNE MÅ ENDRES. Skal komme default fra rest
 
     const fetchData = async () => {
         setIsLoading(true)
-        const dashboards: Dashboard[] = await fetchDashboards()
+        const dashboards: Dashboard[] = await fetchDashboardsList()
         setDashboards(dashboards)
         updateSelectedDashboard(dashboards[0])
-        const tiles: Tile[] = await fetchTiles(dashboards[0])
+        const dashboard: Dashboard = await fetchDashboard(dashboards[0].id)
         const allServices: Service[] = await fetchServices()
-        setAdminTiles(tiles)
+        setDashboardAreas(dashboard.areas)
         setServices(allServices)
         setIsLoading(false)
     };

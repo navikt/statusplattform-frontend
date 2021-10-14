@@ -3,11 +3,11 @@ import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 import Layout from 'components/Layout'
 import Incidents from 'components/Incidents'
-import { Dashboard, Tile } from 'types/navServices'
+import { Area, Dashboard, DashboardsList } from 'types/navServices'
 
 import NavFrontendSpinner from "nav-frontend-spinner"
-import { fetchTiles } from 'utils/fetchTiles'
-import { fetchDashboards } from 'utils/fetchDashboards'
+import { fetchDashboard } from 'utils/fetchDashboard'
+import { fetchDashboardsList } from 'utils/fetchDashboardsList'
 
 
 const ErrorParagraph = styled.p`
@@ -22,21 +22,21 @@ const SpinnerCentered = styled.div`
 `
 
 const IncidentsPage = () => {
-    const [tiles, setAreas] = useState<Tile[]>()
+    const [areas, setAreas] = useState<Area[]>()
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
         (async function () {
-            const dashboards: Dashboard[] = await fetchDashboards()
-            const newAreas: Tile[] = await fetchTiles(dashboards[0])
-            setAreas(newAreas)
+            const dashboards: DashboardsList[] = await fetchDashboardsList()
+            const retrievedDashboard: Dashboard = await fetchDashboard(dashboards[0].id)
+            setAreas(retrievedDashboard.areas)
             setIsLoading(false)
         })()
     }, [])
 
 
 
-    if (!tiles) {
+    if (!areas) {
         return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
     }
 
@@ -50,7 +50,7 @@ const IncidentsPage = () => {
 
     return (
         <Layout>
-            <Incidents tiles={tiles}/>
+            <Incidents areas={areas}/>
         </Layout>
     )
 }

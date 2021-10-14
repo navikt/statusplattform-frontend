@@ -8,9 +8,9 @@ import { Hovedknapp  } from 'nav-frontend-knapper';
 
 import { Area, Dashboard, Service, Tile } from 'types/navServices';
 
-import { postAdminAreas } from 'utils/postAreas'
+import { postAdminArea } from 'utils/postArea'
 import AreaTableRow from './AreaTableRow';
-import { fetchTiles } from 'utils/fetchTiles';
+import { fetchDashboard } from 'utils/fetchDashboard';
 import { fetchServices } from 'utils/fetchServices';
 import CustomNavSpinner from 'components/CustomNavSpinner';
 
@@ -35,15 +35,15 @@ interface Props {
 }
 
 const AreaTable = ({selectedDashboard}: Props) => { 
-    const [adminTiles, setAdminTiles] = useState<Tile[]>([])
+    const [dashboardAreas, setDashboardAreas] = useState<Area[]>([])
     const [allServices, setAllServices] = useState<Service[]>([])
     const [isLoading, setIsLoading] = useState(false)
     const [newAdminArea, updateNewAdminArea] = useState<Area>({
         id: "",
         name: "",
-        beskrivelse: "",
-        rangering: 0,
-        ikon: "0001"
+        description: "",
+        icon: "0001",
+        services: []
     })
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [anchorId, setAnchorId] = useState<string>("")
@@ -51,8 +51,8 @@ const AreaTable = ({selectedDashboard}: Props) => {
 
     const fetchData = async () => {
         setIsLoading(true)
-        const tiles: Tile[] = await fetchTiles(selectedDashboard)
-        setAdminTiles(tiles)
+        const dashboard: Dashboard = await fetchDashboard(selectedDashboard.id)
+        setDashboardAreas(dashboard.areas)
         const services: Service[] = await fetchServices()
         setAllServices(services)
         setIsLoading(false)
@@ -103,27 +103,27 @@ const AreaTable = ({selectedDashboard}: Props) => {
         const newArea = {
             ...newAdminArea,
         }
-        newArea.ikon = event.target.value
+        newArea.icon = event.target.value
         updateNewAdminArea(newArea)
     }
 
     const handlePostAdminArea = (areaToAdd: Area, event) => {
         event.preventDefault()
-        const newlist = adminTiles.filter(tile => tile.area.id === areaToAdd.id)
+        const newlist = dashboardAreas.filter(area =>area.id === areaToAdd.id)
         if(newlist.length > 0) {
             toast.error("Denne IDen er allerede i bruk")
             return
         }
-        if(postAdminAreas(areaToAdd, selectedDashboard).then(() => {
+        if(postAdminArea(areaToAdd).then(() => {
             setAnchorId(areaToAdd.id);
             toast.success("Området ble lagt til")
             fetchData()
             updateNewAdminArea({
                 id: "",
                 name: "",
-                beskrivelse: "",
-                rangering: 0,
-                ikon: ""
+                description: "",
+                icon: "",
+                services: []
             })
         }).catch(() => {
             toast.warn("Område ble ikke lagt til")
@@ -135,7 +135,7 @@ const AreaTable = ({selectedDashboard}: Props) => {
         }
     }
 
-    const { id, name, beskrivelse, rangering} = newAdminArea
+    const { id, name, description: description} = newAdminArea
     
     const toggleExpandedFor = (tileAreaId) => {
         if(expanded.includes(tileAreaId)) {
@@ -149,22 +149,20 @@ const AreaTable = ({selectedDashboard}: Props) => {
         <table className="tabell tabell--stripet">
             <thead>
                 <tr>
-                    <th><span>ID</span></th>
                     <th><span>Navn</span></th>
                     <th><span>Beskrivelse</span></th>
-                    <th aria-sort="descending" role="columnheader"><span>Rangering</span></th>
                     <th><span>Ikon</span></th>
                     <th><span>Slett</span></th>
                     <th></th>
                 </tr>
             </thead>
-                {adminTiles.map( (tile, index) => {
+                {dashboardAreas.map( (area, index) => {
                     return (
-                        <AreaTableRow key={index} tile={tile}
+                        <AreaTableRow key={index} area={area}
                             selectedDashboard={selectedDashboard}
                             allServices={allServices}
-                            reload={fetchData} isExpanded={expanded.includes(tile.area.id)}
-                            toggleExpanded={() => toggleExpandedFor(tile.area.id)}
+                            reload={fetchData} isExpanded={expanded.includes(area.id)}
+                            toggleExpanded={() => toggleExpandedFor(area.id)}
                         />
                     )
                 })}
@@ -174,16 +172,10 @@ const AreaTable = ({selectedDashboard}: Props) => {
                 <AddNewAreaTr key="input">
                     <td>
                         <form id="form" action="" onSubmit={(event) => handlePostAdminArea(newAdminArea, event)}></form>
-                        <Input form="form" className={id.length == 0 ? "input-error" : ""} type="text" label="ID*" required value={id} onChange={handleAreaDataChange("id")} placeholder="ID*"/>
-                    </td>
-                    <td>
                         <Input form="form" type="text" className={name.length == 0 ? "input-error" : ""} label="Navn*" required value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*"/>
                     </td>
                     <td>
-                        <Input form="form" type="text" label="Beskrivelse*" className={beskrivelse.length == 0 ? "input-error" : ""} required value={beskrivelse} onChange={handleAreaDataChange("beskrivelse")} placeholder="Beskrivelse*"/>
-                    </td>
-                    <td>
-                        <Input form="form" type="number" label="Rangering*" required className={(rangering == 0 || rangering == undefined) ? "input-error" : ""} value={rangering} onChange={handleAreaDataChange("rangering")} placeholder="0*" />
+                        <Input form="form" type="text" label="Beskrivelse*" className={description.length == 0 ? "input-error" : ""} required value={description} onChange={handleAreaDataChange("description")} placeholder="Beskrivelse*"/>
                     </td>
                     <td>
                         <Select
@@ -200,7 +192,7 @@ const AreaTable = ({selectedDashboard}: Props) => {
                         </Select>
                     </td>
                     <td colSpan={2}>
-                        <Hovedknapp form="form" htmlType="submit" disabled={!id || !name || !beskrivelse || !rangering}>
+                        <Hovedknapp form="form" htmlType="submit" disabled={!name || !description}>
                             Legg til
                         </Hovedknapp>
                     </td>

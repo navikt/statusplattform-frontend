@@ -6,17 +6,14 @@ export class ResponseError extends Error {
     }
 }
 
-export const fetchDashboards = async (): Promise<Dashboard[]> => {
-
-    let endPath = "/rest/Dashboards"
+export const fetchDashboard = async (dashboardId: string): Promise<Dashboard> => {
     let response;
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch("http://localhost:3001" + endPath);
+        response = await fetch("http://localhost:3001/rest/Dashboard/" + dashboardId);
     }
     else {
-        response = await fetch("https://digitalstatus.ekstern.dev.nav.no" + endPath);
+        response = await fetch("https://digitalstatus.ekstern.dev.nav.no/rest/Dashboard/" + dashboardId);
     }
-
     if (response.ok) {
         return response.json()
     }

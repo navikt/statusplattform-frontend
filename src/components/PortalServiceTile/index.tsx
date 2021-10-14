@@ -2,7 +2,7 @@ import styled from 'styled-components'
 import { useState } from "react";
 
 import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed } from 'components/TrafficLights'
-import { Tile } from 'types/navServices'
+import { Area, Tile } from 'types/navServices'
 import { getIconsFromGivenCode } from 'utils/servicesOperations'
 
 import { Expand, Collapse, Bag, Folder, PensionBag, HealthCase, ErrorFilled, WarningFilled, Employer, Information, People, Family, Service, Globe } from '@navikt/ds-icons'
@@ -121,14 +121,14 @@ const handleAndSetStatusIcon = (status: string): any => {
 }
 
 export interface PortalServiceTileProps {
-    tile: Tile;
+    area: Area;
     expanded: boolean;
     toggleTile: Function;
     tileIndex: number;
 }
 
 
-export const PortalServiceTile = ({tile, expanded ,toggleTile, tileIndex}: PortalServiceTileProps) => {
+export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: PortalServiceTileProps) => {
     const toggleExpanded = () => {
         toggleTile(tileIndex)
     }
@@ -137,14 +137,14 @@ export const PortalServiceTile = ({tile, expanded ,toggleTile, tileIndex}: Porta
         <PanelCustomized alignment={expanded == true ? "stretch" : "flex-start"} onClick={() => toggleExpanded()}>
             <div>
                 <UndertittelCustomized>
-                    <section>{handleAndSetStatusIcon(tile.status)}</section>
-                    <section>{handleAndSetNavIcon(tile.area.ikon)}</section>
-                    <span>{tile.area.name}</span>
+                    <section>{handleAndSetStatusIcon(area.status)}</section>
+                    <section>{handleAndSetNavIcon(area.icon)}</section>
+                    <span>{area.name}</span>
                 </UndertittelCustomized> 
                 {expanded &&
                     <>
                         <ServicesList apneTekst="Se mer">
-                        {tile.services.map(service => (
+                        {area.services.map(service => (
                             <li key={service.name}>
                                 <section>{handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
                             </li>

@@ -1,4 +1,4 @@
-import { Dashboard } from "types/navServices";
+import { DashboardsList } from "types/navServices";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -6,7 +6,7 @@ export class ResponseError extends Error {
     }
 }
 
-export const deleteArea = async (adminArea, dashboard: Dashboard): Promise<void> =>{
+export const deleteArea = async (adminArea, dashboard: DashboardsList): Promise<void> =>{
     let response;
     let endPath = "/rest/Areas/" + dashboard.name
 

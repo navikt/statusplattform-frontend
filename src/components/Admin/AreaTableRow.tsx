@@ -9,7 +9,7 @@ import { Element } from 'nav-frontend-typografi';
 
 import { deleteArea } from 'utils/deleteArea'
 import { deleteServiceFromArea } from 'utils/deleteServiceFromArea'
-import { Dashboard, Service, Tile } from 'types/navServices';
+import { Area, Dashboard, Service, Tile } from 'types/navServices';
 import { getIconsFromGivenCode } from 'utils/servicesOperations';
 import { putServiceToArea } from 'utils/putServiceToArea'
 
@@ -63,7 +63,7 @@ const CloseCustomized = styled(Close)`
 `
 
 interface Props {
-    tile: Tile
+    area: Area
     selectedDashboard: Dashboard
     allServices: Service[]
     reload: () => void
@@ -72,12 +72,12 @@ interface Props {
 }
 
 
-const AreaTableRow = ({ selectedDashboard, tile, reload, isExpanded, toggleExpanded, allServices}: Props) => { 
-    const [serviceIdsInTile, setServiceIdsInTile] = useState<string[]>(() => tile.services.map(service => service.id))
+const AreaTableRow = ({ selectedDashboard, area, reload, isExpanded, toggleExpanded, allServices}: Props) => { 
+    const [serviceIdsInTile, setServiceIdsInTile] = useState<string[]>(() => area.services.map(service => service.id))
     
     const handleDeleteArea = (event) => {
         event.stopPropagation()
-        deleteArea(tile.area, selectedDashboard)
+        deleteArea(area, selectedDashboard)
             .then(() => {
                 reload()
                 toast.info("Område slettet")
@@ -88,7 +88,7 @@ const AreaTableRow = ({ selectedDashboard, tile, reload, isExpanded, toggleExpan
     }
 
     const handleDeleteServiceOnArea = (serviceId) => {
-        deleteServiceFromArea(tile.area.id, serviceId)
+        deleteServiceFromArea(area.id, serviceId)
             .then(() => {
                 setServiceIdsInTile([...serviceIdsInTile.filter(id => id !== serviceId)])
                 toast.info("Tjeneste slettet fra område")
@@ -104,7 +104,7 @@ const AreaTableRow = ({ selectedDashboard, tile, reload, isExpanded, toggleExpan
             return
         }
         
-        putServiceToArea(tile.area.id, serviceId)
+        putServiceToArea(area.id, serviceId)
             .then(() => {
                 setServiceIdsInTile([...serviceIdsInTile, serviceId]);
                 toast.success("Tjenesten har blitt lagt til i området")
@@ -115,15 +115,13 @@ const AreaTableRow = ({ selectedDashboard, tile, reload, isExpanded, toggleExpan
     }
 
 
-    const { id: areaId, name, beskrivelse, rangering, ikon } = tile.area
+    const { id: areaId, name, description: beskrivelse, icon: ikon } = area
     
     return (
         <CustomTBody key={areaId}>
             <tr id={areaId} className="clickable" onClick={toggleExpanded}>
-                <td><span>{areaId}</span></td>
                 <td><span>{name}</span></td>
                 <td><span>{beskrivelse}</span></td>
-                <td><span>{rangering}</span></td>
                 <td><span><IconContainer>{getIconsFromGivenCode(ikon)}</IconContainer></span></td>
                 <td><span><CloseCustomized onClick={handleDeleteArea} /></span></td>
                 <td><span>{isExpanded ? <Collapse /> : <Expand />}</span></td>

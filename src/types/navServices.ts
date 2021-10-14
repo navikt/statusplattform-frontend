@@ -1,9 +1,11 @@
 export interface Dashboard {
+    areas: Area[]
     name: string
-    areaIds: string[]
+    id?: string
 }
+
 export interface AreaServicesList {
-    tiles: Tile[]
+    areas: Area[]
 }
 export interface Tile {
     services: Service[]
@@ -16,7 +18,7 @@ export interface Service {
     name: string
     type?: string
     team?: string
-    dependencies?: string[]
+    dependencies?: Service[]
     monitorlink?: string
     description?: string
     logglink?: string
@@ -24,9 +26,10 @@ export interface Service {
 }
 
 export interface Area {
-    name: string
     id: string
-    beskrivelse: string
-    rangering: number
-    ikon: string
+    name: string
+    description: string
+    icon: string
+    services: Service[]
+    status?: string
 }

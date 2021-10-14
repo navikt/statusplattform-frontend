@@ -1,4 +1,3 @@
-import { Dashboard } from "types/navServices";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -6,20 +5,18 @@ export class ResponseError extends Error {
     }
 }
 
-export const postAdminAreas = async (adminArea, dashboard: Dashboard): Promise<Object[]> =>{
+export const postAdminArea = async (adminArea): Promise<Object[]> =>{
     let response;
-    let endPath = "/rest/Areas/" + dashboard.name
+    let endPath = "/rest/Areas/"
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,
         {
             method: "POST",
             body: JSON.stringify({
-                id: adminArea.id,
                 name: adminArea.name,
-                beskrivelse: adminArea.beskrivelse,
-                rangering: adminArea.rangering,
-                ikon: adminArea.ikon
+                description: adminArea.description,
+                icon: adminArea.icon
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -34,11 +31,9 @@ export const postAdminAreas = async (adminArea, dashboard: Dashboard): Promise<O
         {
             method: "POST",
             body: JSON.stringify({
-                id: adminArea.id,
                 name: adminArea.name,
-                beskrivelse: adminArea.beskrivelse,
-                rangering: adminArea.rangering,
-                ikon: adminArea.ikon
+                description: adminArea.description,
+                icon: adminArea.icon
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"

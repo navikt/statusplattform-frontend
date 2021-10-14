@@ -3,13 +3,12 @@ import styled from 'styled-components'
 
 import { PortalServiceTile } from 'components/PortalServiceTile'
 import StatusOverview from 'components/StatusOverview'
-import { fetchTiles } from 'utils/fetchTiles'
+import { fetchDashboard } from 'utils/fetchDashboard'
 
-// import { LenkepanelBase } from "nav-frontend-lenkepanel";
 import NavFrontendSpinner from "nav-frontend-spinner";
-import { Tile, Service, Dashboard } from "types/navServices";
+import { Area, Dashboard } from "types/navServices";
 import { Knapp } from "nav-frontend-knapper";
-import { fetchDashboards } from "utils/fetchDashboards";
+import { fetchDashboardsList } from "utils/fetchDashboardsList";
 import { Select } from "nav-frontend-skjema";
 
 
@@ -74,7 +73,7 @@ const SpinnerCentered = styled.div`
 const NavDashboard = () => {
     const [dashboards, setDashboards] = useState<Dashboard[]>()
     const [selectedDashboard, setSelectedDash] = useState()
-    const [tiles, setAreas] = useState<Tile[]>()
+    const [areasInDashboard, setAreasInDashboard] = useState<Area[]>()
     const [isLoading, setIsLoading] = useState(true)
     const [expandAll, changeExpand] = useState(false)
     const [expandedTiles, setExpandedTiles] = useState([]);
@@ -84,14 +83,15 @@ const NavDashboard = () => {
     useEffect(() => {
         (async function () {
             setIsLoading(true)
-            const dashboards: Dashboard[] = await fetchDashboards()
+            const dashboards: Dashboard[] = await fetchDashboardsList()
             setDashboards(dashboards)
-            const tiles: Tile[] = await fetchTiles(dashboards[0])
-            setAreas(tiles)
+            const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboards[0].id)
+            setAreasInDashboard(retrievedAreasInDashboard.areas)
             setIsLoading(false)
         })()
     }, [])
     
+
     useEffect(() => {
         window.addEventListener("resize", () => setWidth(window.innerWidth))
     }, []);
@@ -105,7 +105,7 @@ const NavDashboard = () => {
         ) 
     }
     
-    if (!tiles) {
+    if (!areasInDashboard) {
         return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
     }
 
@@ -134,7 +134,7 @@ const NavDashboard = () => {
         let widthOfTile = 300; 
         
         let maxNumberOfTilesPerRow = Math.floor(maxWidth/widthOfTile);
-        let numberOfTilesPerRow = biggestModulo(tiles.length, maxNumberOfTilesPerRow);
+        let numberOfTilesPerRow = biggestModulo(areasInDashboard.length, maxNumberOfTilesPerRow);
       
 
         return numberOfTilesPerRow;
@@ -144,11 +144,11 @@ const NavDashboard = () => {
     const generateRowsOfTiles = () => {
         //Endre denne oppførselen dersom det er ønskelig å bestemme antall per rad på brukersiden.
         
-        let numberOfRows = Math.ceil( tiles.length/numberOfTilesPerRow );
-        let rows: Tile[][] = [];
+        let numberOfRows = Math.ceil( areasInDashboard.length/numberOfTilesPerRow );
+        let rows: Area[][] = [];
     
-        for(var i = 0; i < tiles.length; i = i + numberOfTilesPerRow){
-            rows.push (tiles.slice(i,i+ numberOfTilesPerRow))
+        for(var i = 0; i < areasInDashboard.length; i = i + numberOfTilesPerRow){
+            rows.push (areasInDashboard.slice(i,i+ numberOfTilesPerRow))
 
         }
         return rows
@@ -163,7 +163,7 @@ const NavDashboard = () => {
             setExpandedTiles([])
         }else {
             changeExpand(true)
-            setExpandedTiles(Array.from(Array(tiles.length).keys()))
+            setExpandedTiles(Array.from(Array(areasInDashboard.length).keys()))
         }
     }
 
@@ -191,40 +191,40 @@ const NavDashboard = () => {
         // }, [])
     }
 
-    if(!isLoading && tiles.length > 0){
-        return (
-            <DigitalServicesContainer>
-                <StatusOverview tiles={tiles} />
-                    <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
-                        <SelectWrapper maxWidth={maxWidth}>
-                            <Select onChange={changeSelectedDashboard} label="Velg Dashbord">
-                                {dashboards.map((dashboard, index) => (
-                                    <option key={index} value={dashboard.name} label={dashboard.name}/>
-                                ))}
-                                {/* <option value="privatperson" label="privatperson" />
-                                <option value="internt" label="nternt" />
-                                <option value="Arbeidspartner" label="Arbeidspartner" /> */}
-                            </Select>
-                        </SelectWrapper>
+
+    return (
+        
+        <DigitalServicesContainer>
+            <StatusOverview areas={areasInDashboard} />
+                <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
+                    <SelectWrapper maxWidth={maxWidth}>
+                        <Select onChange={changeSelectedDashboard} label="Velg Dashbord">
+                            {dashboards.map((dashboard, index) => (
+                                <option key={index} value={dashboard.name} label={dashboard.name}/>
+                            ))}
+                        </Select>
+                    </SelectWrapper>
+
+
+                    {areasInDashboard.length > 0 &&
                         <PortalServiceTileContainer maxWidth={maxWidth}>
                             {rows.map((row, rowIndex) => (
                                 <PortalServiceTileRow key={rowIndex}>
-                                    {row.map((tile,index) => ( 
+                                    {row.map((area, index) => ( 
                                         <PortalServiceTile key={index} toggleTile={toggleTile}
                                             tileIndex={rowIndex*numberOfTilesPerRow + index}
-                                            tile={tile} expanded={isTileExpanded(rowIndex, index)}
+                                            area={area} expanded={isTileExpanded(rowIndex, index)}
                                         />
                                     ))}
                                 </PortalServiceTileRow>
-                            ))
-                            }
+                            ))}
 
                         </PortalServiceTileContainer>
-      
-                
-            </DigitalServicesContainer>
-        )
-    }
+                    }
+    
+            
+        </DigitalServicesContainer>
+    )
 
 }
 
