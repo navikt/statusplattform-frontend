@@ -1,11 +1,11 @@
 import styled from 'styled-components'
-import {useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 import { Input, Select } from 'nav-frontend-skjema';
-import { Hovedknapp  } from 'nav-frontend-knapper';
+import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 import { Close } from '@navikt/ds-icons'
 
 import { Service } from 'types/navServices';
@@ -20,6 +20,16 @@ import CustomNavSpinner from 'components/CustomNavSpinner';
 const TableContainer = styled.div`
     width: 100%;
     overflow-x: auto;
+    tbody {
+        .clickable {
+        :hover {
+            cursor: pointer;
+        }
+        }
+        :hover {
+            box-shadow: 0 0 3px black;
+        }
+    }
 `
 const CloseCustomized = styled(Close)`
     color: red;
@@ -30,37 +40,21 @@ const CloseCustomized = styled(Close)`
     }
 `
 
-const AddNewServiceTr = styled.tr`
-    td {
-        min-width: 125px;
-        vertical-align: bottom;
-    }
+const AddNewServiceContainer = styled.div`
     .input-error {
         input {
             border: 1px solid red;
         }
     }
+    .knapp {
+        margin-top: 1rem;
+    }
 `
 
 
 const TjenesteTable = () => {
-    const [newService, updateNewService] = useState<Service>({
-        id: "",
-        name: "",
-        type: "",
-        team: "",
-        dependencies: [""],
-        monitorlink: "",
-        description: "",
-        logglink: ""
-    })
-    const [selectedType, updateSelectedType] = useState<string>()
-    const { data: services, isLoading: loadingServices, reload: reloadServices } = useLoader(fetchServices,[]);
-
-    // useEffect(() => {
-    //     reloadServices
-    // }, [])
-    console.log(services)
+    const [addNewService, changeAddNewService] = useState(false)
+    const { data: services, isLoading: loadingServices, reload } = useLoader(fetchServices,[]);
 
     if(loadingServices) {
         return (
@@ -68,14 +62,109 @@ const TjenesteTable = () => {
         )
     }
 
+    const handleServiceDeletion = (serviceToDelete) => {
+        if(deleteService(serviceToDelete)) {
+            toast.success('Tjeneste slettet');
+            const newServices = services.filter(currentService => 
+                currentService != serviceToDelete
+            )
+            reload()
+            return
+        }
+        toast.error('Tjeneste kunne ikke slettes');
+    }
+
+    
+
+    return (
+        <div>
+
+            <Knapp mini onClick={() => changeAddNewService(!addNewService)}>{addNewService == false ? "Legg til ny tjeneste" : "Avbryt ny tjeneste"}</Knapp>
+            {addNewService &&
+                <AddNewService services={services} reload={reload}/>
+            }
+
+            <TableContainer>
+                <table className="tabell tabell--stripet">
+
+                    <thead>
+                        <tr>
+                            <th><span>Navn</span></th>
+                            <th><span>Type</span></th>
+                            <th><span>Team</span></th>
+                            <th><span>Avhengigheter</span></th>
+                            <th><span>Monitorlink</span></th>
+                            <th><span>Beskrivelse</span></th>
+                            <th><span>Logglink</span></th>
+                            <th><span>Slett</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {services.map( service => {
+                            return (
+                                <tr key={service.id}>
+                                    <td><span>{service.name}</span></td>
+                                    <td><span>{service.type}</span></td>
+                                    <td><span>{service.team}</span></td>
+                                    <td><ul>{service.dependencies.map((dependency, index) => {
+                                        return (
+                                            <li key={index}>{dependency}</li>
+                                        )
+                                    })}</ul></td>
+                                    <td><span>{service.monitorlink}</span></td>
+                                    <td><span>{service.description}</span></td>
+                                    <td><span>{service.logglink}</span></td>
+                                    <td><span><CloseCustomized onClick={() => handleServiceDeletion(service)} /></span></td>
+                                </tr>
+                            )
+                        })}
+
+
+                    </tbody>
+                </table>
+            </TableContainer>
+        </div>
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+interface AddServiceProps {
+    services: Service[]
+    reload: () => void
+}
+
+const AddNewService = ({services, reload}: AddServiceProps) => {
+    const [editDependencies, changeEditDepencendyState] = useState<boolean>(false)
+    const [selectedType, updateSelectedType] = useState<string>("APPLIKASJON")
+    const [newService, updateNewService] = useState<Service>({
+        id: "",
+        name: "",
+        type: "APPLIKASJON",
+        team: "",
+        dependencies: [],
+        monitorlink: "",
+        description: "",
+        logglink: ""
+    })
+
     const handleDependencyChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         let currentService = {
             ...newService,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
         }
-        const dependenciesList: string[] = evt.target.value.split(",")
-        currentService.dependencies = dependenciesList
-        updateNewService(currentService)
+        // const dependenciesList: Service[] = evt.target.value.split(",")
+        // currentService.dependencies = dependenciesList
+        // updateNewService(currentService)
     }
 
     const handleServiceDataChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
@@ -83,6 +172,14 @@ const TjenesteTable = () => {
             ...newService,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
         }
+        updateNewService(currentService)
+    }
+
+    const handleServiceTypeChange = (event) => {
+        let currentService = {...newService}
+        const typeChange: string = event.target.value
+        updateSelectedType(typeChange)
+        currentService.type = typeChange
         updateNewService(currentService)
     }
     
@@ -95,117 +192,141 @@ const TjenesteTable = () => {
             return
         }
         postService(serviceToAdd).then(() => {
-            reloadServices()
+            reload()
             toast.success("Tjeneste ble lagt til")
         }).catch(() => {
             toast.warn("Tjeneste ble ikke lagt til")
         })
     }
-    
-    const handleServiceDeletion = (serviceToDelete) => {
-        if(deleteService(serviceToDelete)) {
-            toast.success('Tjeneste slettet');
-            const newServices = services.filter(currentService => 
-                currentService != serviceToDelete
-            )
-            reloadServices()
-            return
-        }
-        toast.error('Tjeneste kunne ikke slettes');
+
+    const toggleDependencyEditor = () => {
+        changeEditDepencendyState(!editDependencies)
+        console.log("New state " + editDependencies)
     }
+    
+    const { name, type, team, dependencies, monitorlink, description, logglink, status } = newService
+    const types: string[] = ["APPLIKASJON", "TJENESTE"]
+    
+    
+    
 
-    const { id, name, type, team, dependencies, monitorlink, description, logglink, status } = newService
-    const types: string[] = ["Applikasjon", "Ekstern applikasjon", "Intern applikasjon"]
     return (
-        <TableContainer>
-            <table className="tabell tabell--stripet">
+        <AddNewServiceContainer key="input">
+            <form id="form" onSubmit={(event) => handlePostService(newService, event)}>
+                <Input form="form" type="text" value={name} label="Navn" onChange={handleServiceDataChange("name")} placeholder="Navn"/>
 
-                <thead>
-                    <tr>
-                        <th><span>ID</span></th>
-                        <th><span>Navn</span></th>
-                        <th><span>Type</span></th>
-                        <th><span>Team</span></th>
-                        <th><span>Avhengigheter</span></th>
-                        <th><span>Monitorlink</span></th>
-                        <th><span>Beskrivelse</span></th>
-                        <th><span>Logglink</span></th>
-                        <th><span>Slett</span></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {services.map( service => {
-                        return (
-                            <tr key={service.id}>
-                                <td><span>{service.id}</span></td>
-                                <td><span>{service.name}</span></td>
-                                <td><span>{service.type}</span></td>
-                                <td><span>{service.team}</span></td>
-                                <td><ul>{service.dependencies.map((dependency, index) => {
-                                    return (
-                                        <li key={index}>{dependency}</li>
-                                    )
-                                })}</ul></td>
-                                <td><span>{service.monitorlink}</span></td>
-                                <td><span>{service.description}</span></td>
-                                <td><span>{service.logglink}</span></td>
-                                <td><span><CloseCustomized onClick={() => handleServiceDeletion(service)} /></span></td>
-                            </tr>
-                        )
-                    })}
+                <Select value={selectedType !== null ? selectedType : ""} label="Type"
+                    onChange={(event) => handleServiceTypeChange(event)}>
+                    {types.length > 0 ?
+                        types.map((type, index) => {
+                            return (
+                                <option key={index} value={type}>{type}</option>
+                            )
+                        })
+                    :
+                        <option key={undefined} value={""}>Ingen type å legge til</option>
+                    }
+                </Select>
 
-                    <AddNewServiceTr key="input">
-                        <td>
-                            <form id="form" onSubmit={(event) => handlePostService(newService, event)}><Input type="text" className={name.length == 0 ? "input-error" : ""}
-                                value={id} label="ID*" required onChange={handleServiceDataChange("id")} placeholder="ID*" /></form>
-                        </td>
-                        <td>
-                            <Input form="form" type="text" value={name} label="Navn" onChange={handleServiceDataChange("name")} placeholder="Navn"/>
-                        </td>
-                        <td>
-                            {/* <Input form="form" type="text" value={type} label="Type" onChange={handleServiceDataChange("type")} placeholder="Type"/> */}
-                            <Select value={selectedType !== null ? selectedType : ""} label="Type"
-                                onChange={(event) => updateSelectedType(event.target.value)}>
-                                {services.length > 0 ?
-                                types.map((type, index) => {
-                                    return (
-                                        <option key={index} value={type}>{type}</option>
-                                    )
-                                })
-                                :
-                                    <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
-                                }
-                            </Select>
-                        </td>
-                        <td>
-                            <Input form="form" type="text" value={team} label="Team*" className={name.length == 0 ? "input-error" : ""} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
-                        </td>
-                        <td>
-                            <Input form="form" type="text" value={dependencies} label="Avhengigheter" onChange={handleDependencyChange("dependencies")} placeholder="ID1, ID2, ID3..."/>
-                        </td>
-                        <td>
-                            <Input form="form" type="text" value={monitorlink} label="Monitorlenke" onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
-                        </td>
-                        <td>
-                            <Input form="form" type="text" value={description} label="Beskrivelse" onChange={handleServiceDataChange("description")} placeholder="Beskrivelse"/>
-                        </td>
-                        <td>
-                            <Input form="form" type="text" value={logglink} label="Logglenke" onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
-                        </td>
 
-                        <td><Hovedknapp disabled={
-                            !id || !team || !dependencies} 
-                            form="form"
-                            htmlType="submit"
-                            >
-                            Legg til</Hovedknapp>
-                        </td>
-                    </AddNewServiceTr>
 
-                </tbody>
-            </table>
-        </TableContainer>
+                <Input form="form" type="text" value={team} label="Team*" className={name.length == 0 ? "input-error" : ""} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
+                {/* <Input form="form" type="text" value={dependencies} label="Avhengigheter" onChange={handleDependencyChange("dependencies")} placeholder="ID1, ID2, ID3..."/> */}
+
+
+                <Input form="form" type="text" value={monitorlink} label="Monitorlenke" onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
+                <Input form="form" type="text" value={description} label="Beskrivelse" onChange={handleServiceDataChange("description")} placeholder="Beskrivelse"/>
+                <Input form="form" type="text" value={logglink} label="Logglenke" onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
+                
+                <ul>
+                    <li ></li>
+                </ul>
+                <div>
+                    <Knapp onClick={toggleDependencyEditor} mini>Endre avhengigheter</Knapp>
+                    {editDependencies && 
+                        <NewTjenesteDependencyDropdown services={services} toggleDependencyEditor={toggleDependencyEditor} />
+                    }
+                </div>
+
+
+                <Hovedknapp disabled={
+                    !team || !dependencies} 
+                    form="form"
+                    htmlType="submit"
+                    >
+                    Lagre ny tjeneste
+                </Hovedknapp>
+
+
+                
+            </form>
+
+        </AddNewServiceContainer>
     )
 }
+
+
+
+
+
+
+
+
+
+
+
+
+const EditDependeciesContainer = styled.div`
+    select {
+        transform: translateY(-2px);
+        min-width: 100px;
+    }
+`
+
+interface DropdownProps {
+    services: Service[]
+    toggleDependencyEditor: () => void
+}
+
+const NewTjenesteDependencyDropdown = ({services, toggleDependencyEditor}: DropdownProps) => {
+    const [availableServiceDependencies, updateAvailableServiceDependencies] = useState<Service[]>(services)
+    const [selectedService, updateSelectedService] = useState<Service>(availableServiceDependencies[0])
+
+
+
+    const handlePutServiceToArea = (event) => {
+        console.log(event)
+    }
+
+
+
+    return (
+        <EditDependeciesContainer>
+            {services.length !== 0 ?
+                <Select value={selectedService !== null ? selectedService.name : ""} onChange={(event) => updateSelectedService(event.target)}>
+                    {availableServiceDependencies.length > 0 ?
+                    availableServiceDependencies.map(service => {
+                        return (
+                            <option key={service.id} value={service.id}>{service.id}</option>
+                        )
+                    })
+                    :
+                        <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
+                    }
+                </Select>
+                :
+                    <>
+                        Ingen tjeneste å legge til
+                    </>
+            }
+        
+            <Hovedknapp disabled={!selectedService} onClick={() => handlePutServiceToArea(selectedService)} >Legg til</Hovedknapp>                                            
+        </EditDependeciesContainer>
+    )
+}
+
+
+
+
 
 export default TjenesteTable

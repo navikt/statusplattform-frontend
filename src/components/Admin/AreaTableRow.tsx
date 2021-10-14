@@ -64,7 +64,6 @@ const CloseCustomized = styled(Close)`
 
 interface Props {
     area: Area
-    selectedDashboard: Dashboard
     allServices: Service[]
     reload: () => void
     isExpanded: boolean
@@ -72,12 +71,12 @@ interface Props {
 }
 
 
-const AreaTableRow = ({ selectedDashboard, area, reload, isExpanded, toggleExpanded, allServices}: Props) => { 
+const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: Props) => { 
     const [serviceIdsInTile, setServiceIdsInTile] = useState<string[]>(() => area.services.map(service => service.id))
     
     const handleDeleteArea = (event) => {
         event.stopPropagation()
-        deleteArea(area, selectedDashboard)
+        deleteArea(area)
             .then(() => {
                 reload()
                 toast.info("Område slettet")

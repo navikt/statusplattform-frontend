@@ -1,4 +1,4 @@
-import { DashboardsList } from "types/navServices";
+import { Area } from "types/navServices";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -6,20 +6,19 @@ export class ResponseError extends Error {
     }
 }
 
-export const deleteArea = async (adminArea, dashboard: DashboardsList): Promise<void> =>{
+export const deleteArea = async (area: Area): Promise<void> =>{
     let response;
-    let endPath = "/rest/Areas/" + dashboard.name
+    let endPath = "/rest/Area/" + area.id
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,
         {
             method: "DELETE",
             body: JSON.stringify({
-                id: adminArea.id,
-                name: adminArea.name,
-                beskrivelse: adminArea.beskrivelse,
-                rangering: adminArea.rangering,
-                ikon: adminArea.ikon
+                id: area.id,
+                name: area.name,
+                description: area.description,
+                icon: area.icon
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -34,11 +33,10 @@ export const deleteArea = async (adminArea, dashboard: DashboardsList): Promise<
         {
             method: "DELETE",
             body: JSON.stringify({
-                id: adminArea.id,
-                name: adminArea.name,
-                beskrivelse: adminArea.beskrivelse,
-                rangering: adminArea.rangering,
-                ikon: adminArea.ikon
+                id: area.id,
+                name: area.name,
+                description: area.description,
+                icon: area.icon
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"

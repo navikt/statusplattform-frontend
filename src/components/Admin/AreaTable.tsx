@@ -10,9 +10,9 @@ import { Area, Dashboard, Service, Tile } from 'types/navServices';
 
 import { postAdminArea } from 'utils/postArea'
 import AreaTableRow from './AreaTableRow';
-import { fetchDashboard } from 'utils/fetchDashboard';
 import { fetchServices } from 'utils/fetchServices';
 import CustomNavSpinner from 'components/CustomNavSpinner';
+import { fetchAreas } from 'utils/fetchAreas';
 
 
 const AddNewAreaTr = styled.tr`
@@ -30,11 +30,9 @@ const AddNewAreaTr = styled.tr`
 `
 
 
-interface Props {
-    selectedDashboard: Dashboard
-}
 
-const AreaTable = ({selectedDashboard}: Props) => { 
+
+const AreaTable = () => { 
     const [dashboardAreas, setDashboardAreas] = useState<Area[]>([])
     const [allServices, setAllServices] = useState<Service[]>([])
     const [isLoading, setIsLoading] = useState(false)
@@ -51,8 +49,8 @@ const AreaTable = ({selectedDashboard}: Props) => {
 
     const fetchData = async () => {
         setIsLoading(true)
-        const dashboard: Dashboard = await fetchDashboard(selectedDashboard.id)
-        setDashboardAreas(dashboard.areas)
+        const areas: Area[] = await fetchAreas()
+        setDashboardAreas(areas)
         const services: Service[] = await fetchServices()
         setAllServices(services)
         setIsLoading(false)
@@ -159,7 +157,6 @@ const AreaTable = ({selectedDashboard}: Props) => {
                 {dashboardAreas.map( (area, index) => {
                     return (
                         <AreaTableRow key={index} area={area}
-                            selectedDashboard={selectedDashboard}
                             allServices={allServices}
                             reload={fetchData} isExpanded={expanded.includes(area.id)}
                             toggleExpanded={() => toggleExpandedFor(area.id)}

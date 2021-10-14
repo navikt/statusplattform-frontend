@@ -39,6 +39,7 @@ export const postAdminArea = async (adminArea): Promise<Object[]> =>{
                 "Content-type": "application/json; charset=UTF-8"
             },
             mode: 'cors', // no-cors, *cors, same-origin
+            credentials: 'same-origin', // include, *same-origin, omit
         });
     }
 

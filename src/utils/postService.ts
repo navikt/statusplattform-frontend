@@ -1,10 +1,12 @@
+import { Service } from "types/navServices";
+
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
         super(message)
     }
 }
 
-export const postService = async (service): Promise<Object[]> =>{
+export const postService = async (service: Service): Promise<Object[]> =>{
     let response;
     let endPath = "/rest/Service"
 
@@ -13,7 +15,6 @@ export const postService = async (service): Promise<Object[]> =>{
         {
             method: "POST",
             body: JSON.stringify({
-                id: service.id,
                 name: service.name,
                 type: service.type,
                 team: service.team,
@@ -35,7 +36,6 @@ export const postService = async (service): Promise<Object[]> =>{
         {
             method: "POST",
             body: JSON.stringify({
-                id: service.id,
                 name: service.name,
                 type: service.type,
                 team: service.team,

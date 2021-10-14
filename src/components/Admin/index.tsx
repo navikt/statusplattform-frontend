@@ -123,6 +123,7 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
         <AdminDashboardContainer>
                 <AdminConfigsContainer>
                     <h2>{selectedMenu}</h2>
+                    <p>Felter markert med * er obligatoriske</p>
                     {selectedMenu === "Områder" && 
                         <AreaTableContainer>
                             <CustomSelect value={selectedDashboard} onChange={event => updateSelectedDashboard(event.target.value)} label="Velg Dashbord">
@@ -131,7 +132,7 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
                                 ))}
                                 
                             </CustomSelect>
-                            <AreaTable selectedDashboard={selectedDashboard}/>
+                            <AreaTable />
                         </AreaTableContainer>
                     }
                     {selectedMenu === "Tjenester" && 
@@ -140,7 +141,6 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
                     {selectedMenu === "Dashbord" &&
                         <DashboardConfig />
                     }
-                    <p>Felter markert med * er obligatoriske</p>
                 </AdminConfigsContainer>
         </AdminDashboardContainer>
     )
