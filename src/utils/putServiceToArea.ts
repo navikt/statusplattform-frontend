@@ -6,16 +6,12 @@ export class ResponseError extends Error {
 
 export const putServiceToArea = async (areaId, serviceId): Promise<Object[]> =>{
     let response;
-    let endPath = "/rest/ServiceOnArea"
+    let endPath = "/rest/Area/" + areaId + "/" + serviceId
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,
         {
             method: "PUT",
-            body: JSON.stringify({
-                serviceId,
-                areaId
-            }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             },
@@ -28,10 +24,6 @@ export const putServiceToArea = async (areaId, serviceId): Promise<Object[]> =>{
         response = await fetch("https://digitalstatus.ekstern.dev.nav.no" + endPath,
         {
             method: "PUT",
-            body: JSON.stringify({
-                serviceId,
-                areaId
-            }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             },

@@ -9,7 +9,7 @@ import { Element } from 'nav-frontend-typografi';
 
 import { deleteArea } from 'utils/deleteArea'
 import { deleteServiceFromArea } from 'utils/deleteServiceFromArea'
-import { Area, Dashboard, Service, Tile } from 'types/navServices';
+import { Area, Service } from 'types/navServices';
 import { getIconsFromGivenCode } from 'utils/servicesOperations';
 import { putServiceToArea } from 'utils/putServiceToArea'
 
@@ -72,7 +72,7 @@ interface Props {
 
 
 const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: Props) => { 
-    const [serviceIdsInTile, setServiceIdsInTile] = useState<string[]>(() => area.services.map(service => service.id))
+    const [servicesInArea, setServicesInArea] = useState<Service[]>(() => area.services.map(service => service))
     
     const handleDeleteArea = (event) => {
         event.stopPropagation()
@@ -89,7 +89,7 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
     const handleDeleteServiceOnArea = (serviceId) => {
         deleteServiceFromArea(area.id, serviceId)
             .then(() => {
-                setServiceIdsInTile([...serviceIdsInTile.filter(id => id !== serviceId)])
+                setServicesInArea([...servicesInArea.filter(service => service.id !== serviceId)])
                 toast.info("Tjeneste slettet fra område")
             })
             .catch(() => {
@@ -97,15 +97,15 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
             }) 
     }
 
-    const handlePutServiceToArea = (serviceId) => {
-        if(serviceIdsInTile.includes(serviceId)) {
+    const handlePutServiceToArea = (service: Service) => {
+        if(servicesInArea.map(s => s.id).includes(service.id)) {
             toast.warn("Denne tjenesten fins allerede i området")
             return
         }
         
-        putServiceToArea(area.id, serviceId)
+        putServiceToArea(area.id, service.id)
             .then(() => {
-                setServiceIdsInTile([...serviceIdsInTile, serviceId]);
+                setServicesInArea([...servicesInArea, service]);
                 toast.success("Tjenesten har blitt lagt til i området")
             })
             .catch(() => {
@@ -115,6 +115,7 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
 
 
     const { id: areaId, name, description: beskrivelse, icon: ikon } = area
+
     
     return (
         <CustomTBody key={areaId}>
@@ -128,7 +129,7 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
 
 
             {isExpanded && 
-                (serviceIdsInTile.length === 0 ?
+                (servicesInArea.length === 0 ?
                 <TileDropdownRow onClick={toggleExpanded}>
                     <td colSpan={7}>Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste</td>
                 </TileDropdownRow>
@@ -138,12 +139,21 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
                 <TileDropdownRow>
                     <td colSpan={2}>
                         <ServicesInAreaList>
-                            <Element>Tjenester i område: {name}</Element>
-                            <Element>med id: {areaId}</Element>
-                            {serviceIdsInTile.map(id => {
+                            <Element>Tjenester i område</Element>
+                            {/* {area.services.map(service => {
                                 return (
-                                    <li key={id}>{id} <CloseCustomized aria-label="Fjern tjenesten fra område"
-                                        onClick={() => handleDeleteServiceOnArea(id)}/>
+                                    <li key={service.id}>{service.name} <CloseCustomized aria-label="Fjern tjenesten fra område"
+                                        onClick={() => handleDeleteServiceOnArea(service.id, )}/>
+                                    </li>
+                                )
+                            })} */}
+                            {servicesInArea.map(service => {
+                                return (
+                                    <li key={service.id}>
+                                        {service.name} 
+                                        <CloseCustomized aria-label="Fjern tjenesten fra område"
+                                            onClick={() => handleDeleteServiceOnArea(service.id)}
+                                        />
                                     </li>
                                 )
                             })}
@@ -156,7 +166,7 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
             {isExpanded && 
                 <DropdownRowSelect 
                     allServices={allServices}
-                    serviceIdsInTile={serviceIdsInTile} 
+                    servicesInArea={servicesInArea} 
                     handlePutServiceToArea={handlePutServiceToArea}
                     toggleAreaExpanded={toggleExpanded} 
                 />
@@ -172,33 +182,40 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
 
 interface DropdownProps {
     allServices: Service[]
-    serviceIdsInTile: string[]
-    handlePutServiceToArea: (selectedServiceId: string) => void
+    servicesInArea: Service[]
+    handlePutServiceToArea: (selectedServiceId: Service) => void
     toggleAreaExpanded: () => void
 }
 
-const DropdownRowSelect = ({allServices, serviceIdsInTile, handlePutServiceToArea, toggleAreaExpanded}: DropdownProps) => {
-    const [selectedService, updateSelectedService] = useState<string>(serviceIdsInTile[0])
-
-    const availableServices = allServices.filter(service => !serviceIdsInTile.includes(service.id))
+const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handlePutServiceToArea, toggleAreaExpanded}: DropdownProps) => {
+    const availableServices = allServices.filter(service => !servicesInArea.map((s)=>s.id).includes(service.id))
+    
+    const [selectedService, updateSelectedService] = useState<Service>(availableServices[0])
 
     useEffect(() => {
         if(availableServices.length > 0){
-            updateSelectedService(availableServices[0].id)
+            updateSelectedService(availableServices[0])
         }
         else {
             updateSelectedService(null)
         }
-    }, [allServices, serviceIdsInTile])
+    }, [allServices, servicesInArea])
+
+    const handleUpdateSelectedService = (event) => {
+        console.log(event.target.value)
+        const idOfSelectedService: string = event.target.value
+        const newSelectedService: Service = availableServices.find(service => idOfSelectedService === service.id)
+        updateSelectedService(newSelectedService)
+    }
 
     return (
         <TileDropdownRow key="input">
             <td colSpan={2}>
-                <Select value={selectedService !== null ? selectedService : ""} onChange={(event) => updateSelectedService(event.target.value)}>
+                <Select value={selectedService.id !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}>
                     {availableServices.length > 0 ?
                     availableServices.map(service => {
                         return (
-                            <option key={service.id} value={service.id}>{service.id}</option>
+                            <option key={service.id} value={service.id}>{service.name}</option>
                         )
                     })
                     :

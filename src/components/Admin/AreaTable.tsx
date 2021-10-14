@@ -6,7 +6,7 @@ import { Bag, Calculator, FillForms, FlowerBladeFall, Folder, GuideDog, HandBand
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp  } from 'nav-frontend-knapper';
 
-import { Area, Dashboard, Service, Tile } from 'types/navServices';
+import { Area, Service } from 'types/navServices';
 
 import { postAdminArea } from 'utils/postArea'
 import AreaTableRow from './AreaTableRow';

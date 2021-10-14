@@ -12,6 +12,7 @@ import { fetchDashboardsList } from 'utils/fetchDashboardsList';
 import { Select } from 'nav-frontend-skjema';
 import DashboardConfig from './DashboardConfig';
 import CustomNavSpinner from 'components/CustomNavSpinner';
+import { fetchTypes } from 'utils/fetchTypes';
 
 
 
@@ -85,7 +86,6 @@ export interface Props {
 
 const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
     const [dashboards, setDashboards] = useState<Dashboard[]>()
-    const [selectedDashboard, updateSelectedDashboard] = useState<Dashboard>() //Dette må ikke være type any i lengden. Kan potensielt fjernes også
     const [dashboardAreas, setDashboardAreas] = useState<Area[]>([])
     const [services, setServices] = useState<Service[]>()
     const [isLoading, setIsLoading] = useState(true)
@@ -95,11 +95,12 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
         setIsLoading(true)
         const dashboards: Dashboard[] = await fetchDashboardsList()
         setDashboards(dashboards)
-        updateSelectedDashboard(dashboards[0])
+
         const dashboard: Dashboard = await fetchDashboard(dashboards[0].id)
         const allServices: Service[] = await fetchServices()
-        setDashboardAreas(dashboard.areas)
         setServices(allServices)
+
+        setDashboardAreas(dashboard.areas)
         setIsLoading(false)
     };
 
@@ -126,12 +127,12 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
                     <p>Felter markert med * er obligatoriske</p>
                     {selectedMenu === "Områder" && 
                         <AreaTableContainer>
-                            <CustomSelect value={selectedDashboard} onChange={event => updateSelectedDashboard(event.target.value)} label="Velg Dashbord">
+                            {/* <CustomSelect value={selectedDashboard} onChange={event => updateSelectedDashboard(event.target.value)} label="Velg Dashbord">
                                 {dashboards.map((dashboard, index) => (
                                     <option key={index} value={dashboard.name} label={dashboard.name}/>
                                 ))}
                                 
-                            </CustomSelect>
+                            </CustomSelect> */}
                             <AreaTable />
                         </AreaTableContainer>
                     }
