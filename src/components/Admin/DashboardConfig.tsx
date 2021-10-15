@@ -4,7 +4,7 @@ import { Input } from 'nav-frontend-skjema'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
-import { Dashboard, DashboardsList } from 'types/navServices'
+import { Dashboard } from 'types/navServices'
 import { fetchDashboardsList } from 'utils/fetchDashboardsList'
 import { useLoader } from 'utils/useLoader'
 
@@ -43,7 +43,7 @@ const DashboardConfig = () => {
 
 /* Helpers below */
 
-const DashboardTable: React.FC<{dashboards: DashboardsList[]}> = ({dashboards}) => {
+const DashboardTable: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
     return (
         <table className="tabell tabell--stripet">
             <thead>
