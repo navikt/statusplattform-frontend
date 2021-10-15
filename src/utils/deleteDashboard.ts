@@ -6,16 +6,17 @@ export class ResponseError extends Error {
     }
 }
 
-export const postDashboard = async (dashboard: Dashboard): Promise<Object[]> =>{
+export const deleteDashboard = async (dashboard: Dashboard): Promise<void> =>{
     let response;
-    let endPath = "/rest/Dashboard/"
+    let endPath = "/rest/dashboard/" + dashboard.id
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,
         {
-            method: "POST",
+            method: "DELETE",
             body: JSON.stringify({
-                name: dashboard.name
+                id: dashboard.id,
+                name: dashboard.name,
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -28,9 +29,10 @@ export const postDashboard = async (dashboard: Dashboard): Promise<Object[]> =>{
     else {
         response = await fetch("https://digitalstatus.ekstern.dev.nav.no" + endPath,
         {
-            method: "POST",
+            method: "DELETE",
             body: JSON.stringify({
-                name: dashboard.name
+                id: dashboard.id,
+                name: dashboard.name,
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
@@ -40,7 +42,7 @@ export const postDashboard = async (dashboard: Dashboard): Promise<Object[]> =>{
     }
 
     if (response.ok) {
-        return response.json()
+        return response
     }
     throw new ResponseError("Failed to post to server", response)
 }
