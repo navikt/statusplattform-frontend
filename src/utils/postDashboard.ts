@@ -1,4 +1,4 @@
-import { DashboardsList } from "types/navServices";
+import { Dashboard } from "types/navServices";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -6,7 +6,7 @@ export class ResponseError extends Error {
     }
 }
 
-export const postDashboards = async (dashboard: DashboardsList): Promise<Object[]> =>{
+export const postDashboards = async (dashboard: Dashboard): Promise<Object[]> =>{
     let response;
     let endPath = "/rest/Dashboards/"
 

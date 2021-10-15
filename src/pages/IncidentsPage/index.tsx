@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { useEffect, useState } from 'react'
 import Layout from 'components/Layout'
 import Incidents from 'components/Incidents'
-import { Area, Dashboard, DashboardsList } from 'types/navServices'
+import { Area, Dashboard } from 'types/navServices'
 
 import NavFrontendSpinner from "nav-frontend-spinner"
 import { fetchDashboard } from 'utils/fetchDashboard'
@@ -27,7 +27,7 @@ const IncidentsPage = () => {
 
     useEffect(() => {
         (async function () {
-            const dashboards: DashboardsList[] = await fetchDashboardsList()
+            const dashboards: Dashboard[] = await fetchDashboardsList()
             const retrievedDashboard: Dashboard = await fetchDashboard(dashboards[0].id)
             setAreas(retrievedDashboard.areas)
             setIsLoading(false)
