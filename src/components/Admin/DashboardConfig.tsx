@@ -136,6 +136,7 @@ const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
 
     return (
         <form onSubmit={handlePostNewDashboard} id="form">
+            <p>Felter markert med * er obligatoriske</p>
             <AddNewDashboardContainer>
                 <Input type="text" required label="Navn på dashbord" value={name} onChange={(event) => handleChangeDashboardName(event)} placeholder="Navn*" />
                 <Hovedknapp kompakt htmlType="submit" value="Legg til dashbord">Legg til dashbord</Hovedknapp>

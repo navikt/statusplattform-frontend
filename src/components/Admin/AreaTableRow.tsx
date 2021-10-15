@@ -16,6 +16,9 @@ import { putServiceToArea } from 'utils/putServiceToArea'
 import { toast } from 'react-toastify';
 
 const CustomTBody = styled.tbody `
+    span {
+        text-align: center !important;
+    }
     .clickable {
         :hover {
             cursor: pointer;
@@ -140,13 +143,6 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
                     <td colSpan={2}>
                         <ServicesInAreaList>
                             <Element>Tjenester i område</Element>
-                            {/* {area.services.map(service => {
-                                return (
-                                    <li key={service.id}>{service.name} <CloseCustomized aria-label="Fjern tjenesten fra område"
-                                        onClick={() => handleDeleteServiceOnArea(service.id, )}/>
-                                    </li>
-                                )
-                            })} */}
                             {servicesInArea.map(service => {
                                 return (
                                     <li key={service.id}>
@@ -202,7 +198,6 @@ const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handleP
     }, [allServices, servicesInArea])
 
     const handleUpdateSelectedService = (event) => {
-        console.log(event.target.value)
         const idOfSelectedService: string = event.target.value
         const newSelectedService: Service = availableServices.find(service => idOfSelectedService === service.id)
         updateSelectedService(newSelectedService)

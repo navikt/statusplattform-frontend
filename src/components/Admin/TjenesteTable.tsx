@@ -31,6 +31,9 @@ const TableContainer = styled.div`
             box-shadow: 0 0 3px black;
         }
     }
+    span {
+        text-align: center !important;
+    }
 `
 const CloseCustomized = styled(Close)`
     color: red;
@@ -239,6 +242,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
 
     return (
         <AddNewServiceContainer key="input">
+            <p>Felter markert med * er obligatoriske</p>
             <form id="form" onSubmit={(event) => handlePostService(newService, event)}>
                 <NewServiceRow>
                     <NewServiceColumn>
@@ -266,9 +270,6 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
                         <Input type="text" value={logglink} label="Logglenke" onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
                     </NewServiceColumn>
 
-                {/* </NewServiceRow>
-
-                <NewServiceRow> */}
                     <ul>
                         {newService.dependencies.map(service => {
                             <li>

@@ -4,7 +4,7 @@ import { toast } from 'react-toastify';
 
 import { Bag, Calculator, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Saving, SocialAid } from '@navikt/ds-icons'
 import { Input, Select } from 'nav-frontend-skjema';
-import { Hovedknapp  } from 'nav-frontend-knapper';
+import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 
 import { Area, Service } from 'types/navServices';
 
@@ -15,12 +15,16 @@ import CustomNavSpinner from 'components/CustomNavSpinner';
 import { fetchAreas } from 'utils/fetchAreas';
 
 
-const AddNewAreaTr = styled.tr`
-    td {
-        vertical-align: bottom;
-        select {
-            min-width: 150px;
-        }
+const AddNewAreaContainer = styled.div`
+    max-width: 600px;
+    input, .knapp {
+        margin: 1rem 0;
+    }
+    label {
+        margin: 0;
+    }
+    select {
+        min-width: 150px;
     }
     .input-error {
         input {
@@ -36,15 +40,9 @@ const AreaTable = () => {
     const [dashboardAreas, setDashboardAreas] = useState<Area[]>([])
     const [allServices, setAllServices] = useState<Service[]>([])
     const [isLoading, setIsLoading] = useState(false)
-    const [newAdminArea, updateNewAdminArea] = useState<Area>({
-        id: "",
-        name: "",
-        description: "",
-        icon: "0001",
-        services: []
-    })
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [anchorId, setAnchorId] = useState<string>("")
+    const [editNewArea, toggleNewAreaEdit] = useState(false)
     
 
     const fetchData = async () => {
@@ -74,7 +72,72 @@ const AreaTable = () => {
             <CustomNavSpinner />
         )
     }
+    
+    const toggleExpandedFor = (tileAreaId) => {
+        if(expanded.includes(tileAreaId)) {
+            toggleExpanded([...expanded.filter(i => i !== tileAreaId)])
+        } else {
+            toggleExpanded([...expanded, tileAreaId])
+        }
+    }
 
+    return (
+        <div>
+
+
+            <Knapp mini onClick={() => toggleNewAreaEdit(!editNewArea)}>{!editNewArea ? "Legg til nytt område" : "Avbryt nytt område"}</Knapp>
+            {editNewArea &&
+                <AddNewArea dashboardAreas={dashboardAreas} fetchData={fetchData} setAnchorId={setAnchorId} />
+            }
+
+
+            <table className="tabell tabell--stripet">
+                <thead>
+                    <tr>
+                        <th><span>Navn</span></th>
+                        <th><span>Beskrivelse</span></th>
+                        <th><span>Ikon</span></th>
+                        <th><span>Slett</span></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                
+                    {dashboardAreas.map( (area, index) => {
+                        return (
+                            <AreaTableRow key={index} area={area}
+                                allServices={allServices}
+                                reload={fetchData} isExpanded={expanded.includes(area.id)}
+                                toggleExpanded={() => toggleExpandedFor(area.id)}
+                            />
+                        )
+                    })}
+            </table>
+        </div>
+    )
+} 
+
+
+
+
+
+
+
+interface NewAreaProps {
+    dashboardAreas: Area[]
+    fetchData: () => void
+    setAnchorId: Function
+}
+
+
+const AddNewArea = ({dashboardAreas, fetchData, setAnchorId}: NewAreaProps) => {
+    const [newAdminArea, updateNewAdminArea] = useState<Area>({
+        id: "",
+        name: "",
+        description: "",
+        icon: "0001",
+        services: []
+    })
+    
     const options = [
         { value: "0001", label: "Bag", icon: <Bag/> },
         { value: "0002", label: "Sparepenger", icon: <Saving/> },
@@ -90,20 +153,6 @@ const AreaTable = () => {
         { value: "0012", label: "Mappe", icon: <Folder/> },
 	];
 
-    const handleAreaDataChange = (field: keyof typeof newAdminArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const newArea = {
-            ...newAdminArea,
-            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
-            
-            updateNewAdminArea(newArea)
-    }
-    const handleAreaIconChange = (event) => {
-        const newArea = {
-            ...newAdminArea,
-        }
-        newArea.icon = event.target.value
-        updateNewAdminArea(newArea)
-    }
 
     const handlePostAdminArea = (areaToAdd: Area, event) => {
         event.preventDefault()
@@ -126,78 +175,62 @@ const AreaTable = () => {
         }).catch(() => {
             toast.warn("Område ble ikke lagt til")
         })) {
-            // const newTiles = [...adminTiles]
-            // const newTile:Tile = {services:[], status:'', area:areaToAdd}
-            // newTiles.push(newTile)
-            // return
         }
+
+    }
+
+    const handleAreaDataChange = (field: keyof typeof newAdminArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
+        const newArea = {
+            ...newAdminArea,
+            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
+            
+            updateNewAdminArea(newArea)
+    }
+    const handleAreaIconChange = (event) => {
+        const newArea = {
+            ...newAdminArea,
+        }
+        newArea.icon = event.target.value
+        updateNewAdminArea(newArea)
     }
 
     const { id, name, description: description} = newAdminArea
-    
-    const toggleExpandedFor = (tileAreaId) => {
-        if(expanded.includes(tileAreaId)) {
-            toggleExpanded([...expanded.filter(i => i !== tileAreaId)])
-        } else {
-            toggleExpanded([...expanded, tileAreaId])
-        }
-    }
+
 
     return (
-        <table className="tabell tabell--stripet">
-            <thead>
-                <tr>
-                    <th><span>Navn</span></th>
-                    <th><span>Beskrivelse</span></th>
-                    <th><span>Ikon</span></th>
-                    <th><span>Slett</span></th>
-                    <th></th>
-                </tr>
-            </thead>
-                {dashboardAreas.map( (area, index) => {
-                    return (
-                        <AreaTableRow key={index} area={area}
-                            allServices={allServices}
-                            reload={fetchData} isExpanded={expanded.includes(area.id)}
-                            toggleExpanded={() => toggleExpandedFor(area.id)}
-                        />
-                    )
-                })}
+        <AddNewAreaContainer>
+            <p>Felter markert med * er obligatoriske</p>
 
+            <form id="form" action="" onSubmit={(event) => handlePostAdminArea(newAdminArea, event)}>
 
-            <tbody>
-                <AddNewAreaTr key="input">
-                    <td>
-                        <form id="form" action="" onSubmit={(event) => handlePostAdminArea(newAdminArea, event)}></form>
-                        <Input form="form" type="text" className={name.length == 0 ? "input-error" : ""} label="Navn*" required value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*"/>
-                    </td>
-                    <td>
-                        <Input form="form" type="text" label="Beskrivelse*" className={description.length == 0 ? "input-error" : ""} required value={description} onChange={handleAreaDataChange("description")} placeholder="Beskrivelse*"/>
-                    </td>
-                    <td>
-                        <Select
-                            label="Velg ikon til området*"
-                            form="form"
-                            onChange={handleAreaIconChange}
-                            defaultValue={options[0].value}
-                        >
-                            {options.map(option => {
-                                return (
-                                    <option key={option.value} value={option.value}>{option.label}</option>
-                                )
-                            })}
-                        </Select>
-                    </td>
-                    <td colSpan={2}>
-                        <Hovedknapp form="form" htmlType="submit" disabled={!name || !description}>
-                            Legg til
-                        </Hovedknapp>
-                    </td>
-                </AddNewAreaTr>
+                <Input form="form" type="text" className={name.length == 0 ? "input-error" : ""}
+                    label="Navn*" required value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*"
+                />
 
-            </tbody>
-        </table>
+                <Input form="form" type="text" label="Beskrivelse*" className={description.length == 0 ? "input-error" : ""}
+                    required value={description} onChange={handleAreaDataChange("description")} placeholder="Beskrivelse*"
+                />
+
+                <Select
+                    label="Velg ikon til området*"
+                    form="form"
+                    onChange={handleAreaIconChange}
+                    defaultValue={options[0].value}
+                >
+                    {options.map(option => {
+                        return (
+                            <option key={option.value} value={option.value}>{option.label}</option>
+                        )
+                    })}
+                </Select>
+
+                <Hovedknapp htmlType="submit">
+                    Legg til
+                </Hovedknapp>
+
+            </form>
+        </AddNewAreaContainer>
     )
-} 
+}
 
 export default AreaTable
