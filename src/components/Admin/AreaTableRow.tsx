@@ -190,7 +190,7 @@ interface DropdownProps {
 const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handlePutServiceToArea, toggleAreaExpanded}: DropdownProps) => {
     const availableServices = allServices.filter(service => !servicesInArea.map((s)=>s.id).includes(service.id))
     
-    const [selectedService, updateSelectedService] = useState<Service>(availableServices[0])
+    const [selectedService, updateSelectedService] = useState<Service|null>(() => availableServices.length > 0 ? availableServices[0] : null)
 
     useEffect(() => {
         if(availableServices.length > 0){
@@ -211,7 +211,7 @@ const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handleP
     return (
         <TileDropdownRow key="input">
             <td colSpan={2}>
-                <Select value={selectedService.id !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}>
+                <Select value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}>
                     {availableServices.length > 0 ?
                     availableServices.map(service => {
                         return (
