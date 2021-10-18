@@ -1,19 +1,22 @@
-import { Dashboard } from "types/navServices";
-
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
         super(message)
     }
 }
 
-export const deleteDashboard = async (dashboard: Dashboard): Promise<void> =>{
+export const putServiceDependency = async (serviceId, dependencyId): Promise<Object[]> =>{
     let response;
-    let endPath = "/rest/Dashboard/" + dashboard.id
+    let endPath = "/rest/Service/addDependency/" + serviceId + "/" + dependencyId
+    // "/Service/addDependency/:Service_id/:DependentOnService_id"
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,
         {
-            method: "DELETE",
+            method: "PUT",
+            body: JSON.stringify({
+                serviceId: serviceId,
+                dependencyId: dependencyId
+            }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             },
@@ -25,14 +28,18 @@ export const deleteDashboard = async (dashboard: Dashboard): Promise<void> =>{
     else {
         response = await fetch("https://digitalstatus.ekstern.dev.nav.no" + endPath,
         {
-            method: "DELETE",
+            method: "PUT",
+            body: JSON.stringify({
+                serviceId: serviceId,
+                dependencyId: dependencyId
+            }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             },
             mode: 'cors', // no-cors, *cors, same-origin
         });
     }
-
+    
     if (response.ok) {
         return response
     }

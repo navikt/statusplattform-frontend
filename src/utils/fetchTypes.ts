@@ -6,7 +6,7 @@ export class ResponseError extends Error {
     }
 }
 
-let endUrl = "/rest/Services/Typer";
+let endUrl = "/rest/Services/Types";
 
 export const fetchTypes = async (): Promise<string[]> => {
     let response;

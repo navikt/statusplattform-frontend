@@ -15,6 +15,8 @@ import { deleteService } from 'utils/deleteService';
 import { postService } from 'utils/postService'
 import { fetchServices } from 'utils/fetchServices';
 import { fetchTypes } from 'utils/fetchTypes';
+import { putServiceToArea } from 'utils/putServiceToArea';
+import { putServiceDependency } from 'utils/putServiceDependency';
 
 
 
@@ -52,6 +54,7 @@ const AddNewServiceContainer = styled.div`
     }
     .knapp {
         margin-top: 1rem;
+        text-transform: none;
     }
 `
 
@@ -232,7 +235,6 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
 
     const toggleDependencyEditor = () => {
         changeEditDepencendyState(!editDependencies)
-        console.log("New state " + editDependencies)
     }
     
     const { name, type, team, dependencies, monitorlink, description, logglink, status } = newService
@@ -270,24 +272,24 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
                         <Input type="text" value={logglink} label="Logglenke" onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
                     </NewServiceColumn>
 
-                    <ul>
-                        {newService.dependencies.map(service => {
-                            <li>
-                                {service.name}
-                            </li>
-                        })}
-                    </ul>
-                    <div>
-                        <Knapp onClick={toggleDependencyEditor} >Endre avhengigheter</Knapp>
-                        {editDependencies && 
-                            <NewTjenesteDependencyDropdown services={services} toggleDependencyEditor={toggleDependencyEditor} />
-                        }
-                    </div>
+                    <NewServiceColumn>
+                        <div>
+                            <Knapp htmlType="button" onClick={toggleDependencyEditor} >Endre avhengigheter</Knapp>
+                            <ul>
+                                {newService.dependencies.map(service => {
+                                    <li>
+                                        {service.name}
+                                    </li>
+                                })}
+                            </ul>
+                            {editDependencies && 
+                                <NewTjenesteDependencyDropdown services={services} toggleDependencyEditor={toggleDependencyEditor} />
+                            }
+                        </div>
+                    </NewServiceColumn>
+                        
                 </NewServiceRow>
-                <Hovedknapp disabled={
-                    !team || !dependencies} 
-                    htmlType="submit"
-                    >
+                <Hovedknapp htmlType="submit">
                     Lagre ny tjeneste
                 </Hovedknapp>
                 
@@ -318,6 +320,16 @@ const EditDependeciesContainer = styled.div`
         transform: translateY(-2px);
         min-width: 100px;
     }
+    ul {
+        list-style: none;
+        padding: 0;
+        width: 100%;
+        li {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+        }
+    }
 `
 
 interface DropdownProps {
@@ -326,21 +338,48 @@ interface DropdownProps {
 }
 
 const NewTjenesteDependencyDropdown = ({services, toggleDependencyEditor}: DropdownProps) => {
-    const [availableServiceDependencies, updateAvailableServiceDependencies] = useState<Service[]>(services)
+    const availableServiceDependencies: Service[] = [...services].filter(s => !newServiceDependencies.map(service => service.id).includes(s.id))
+    
+    const [newServiceDependencies, setNewServiceDependencies] = useState<Service[]>([])
     const [selectedService, updateSelectedService] = useState<Service>(availableServiceDependencies[0])
+    
+    useEffect(() => {
+        if(availableServiceDependencies.length > 0){
+            updateSelectedService(availableServiceDependencies[0])
+        }
+        else {
+            updateSelectedService(null)
+        }
+    }, [newServiceDependencies])
 
-
-
-    const handlePutDependencyOnService = (event) => {
-        console.log(event)
+    const handlePutDependencyOnNewService = () => {
+        if(selectedService !== null) {    
+            const currentList: Service[] = [...newServiceDependencies, selectedService]
+            setNewServiceDependencies(currentList)
+            toast.success("Tjenesteavhengighet lagt til")
+            return
+        }
+        toast.info("Ingen tjenester å legge til")
     }
 
+    const handleRemoveServiceDependency = (serviceToRemove) => {
+        const filteredDependencyList: Service[] = [...newServiceDependencies].filter(s => s.id !== serviceToRemove.id)
+        setNewServiceDependencies(filteredDependencyList)
+        toast.success("Tjenesteavhengighet fjernet")
+    }
+
+
+    const handleUpdateSelectedService = (event) => {
+        const idOfSelectedService: string = event.target.value
+        const newSelectedService: Service = services.find(service => idOfSelectedService === service.id)
+        updateSelectedService(newSelectedService)
+    }
 
 
     return (
         <EditDependeciesContainer>
             {services.length !== 0 ?
-                <Select value={selectedService !== null ? selectedService.name : ""} onChange={(event) => updateSelectedService(event.target)}>
+                <Select onChange={handleUpdateSelectedService}>
                     {availableServiceDependencies.length > 0 ?
                     availableServiceDependencies.map(service => {
                         return (
@@ -357,7 +396,14 @@ const NewTjenesteDependencyDropdown = ({services, toggleDependencyEditor}: Dropd
                     </>
             }
         
-            <Hovedknapp disabled={!selectedService} onClick={() => handlePutDependencyOnService(selectedService)} >Legg til avhengighet</Hovedknapp>                                            
+            <Knapp htmlType="button" onClick={handlePutDependencyOnNewService}>Legg til avhengighet</Knapp>
+            <ul>
+                {newServiceDependencies.map(service => {
+                    return (
+                        <li key={service.id}>{service.name} <CloseCustomized onClick={() => handleRemoveServiceDependency(service)}/></li>
+                    )
+                })}
+            </ul>
         </EditDependeciesContainer>
     )
 }
