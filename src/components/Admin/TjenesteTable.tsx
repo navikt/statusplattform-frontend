@@ -15,8 +15,6 @@ import { deleteService } from 'utils/deleteService';
 import { postService } from 'utils/postService'
 import { fetchServices } from 'utils/fetchServices';
 import { fetchTypes } from 'utils/fetchTypes';
-import { putServiceToArea } from 'utils/putServiceToArea';
-import { putServiceDependency } from 'utils/putServiceDependency';
 
 
 
@@ -191,16 +189,14 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
         )
     }
 
-    const handleDependencyChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        let currentService = {
-            ...newService,
-            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
-        }
-        // const dependenciesList: Service[] = evt.target.value.split(",")
-        // currentService.dependencies = dependenciesList
-        // updateNewService(currentService)
+    const handleDependencyChange = (newDependencies: Service[]) => {
+        console.log("Triggered correct function")
+        let currentService = {...newService}
+        currentService.dependencies = newDependencies
+        updateNewService(currentService)
     }
-
+    
+    console.log(newService.dependencies)
     const handleServiceDataChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const currentService = {
             ...newService,
@@ -283,7 +279,9 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
                                 })}
                             </ul>
                             {editDependencies && 
-                                <NewTjenesteDependencyDropdown services={services} toggleDependencyEditor={toggleDependencyEditor} />
+                                <NewTjenesteDependencyDropdown services={services} 
+                                    handleDependencyChange={(dependencies) => handleDependencyChange(dependencies)} 
+                                />
                             }
                         </div>
                     </NewServiceColumn>
@@ -334,13 +332,13 @@ const EditDependeciesContainer = styled.div`
 
 interface DropdownProps {
     services: Service[]
-    toggleDependencyEditor: () => void
+    handleDependencyChange: (dependencies) => void
 }
 
-const NewTjenesteDependencyDropdown = ({services, toggleDependencyEditor}: DropdownProps) => {
-    const availableServiceDependencies: Service[] = [...services].filter(s => !newServiceDependencies.map(service => service.id).includes(s.id))
-    
+const NewTjenesteDependencyDropdown = ({services, handleDependencyChange}: DropdownProps) => {
     const [newServiceDependencies, setNewServiceDependencies] = useState<Service[]>([])
+    
+    const availableServiceDependencies: Service[] = [...services].filter(s => !newServiceDependencies.map(service => service.id).includes(s.id))
     const [selectedService, updateSelectedService] = useState<Service>(availableServiceDependencies[0])
     
     useEffect(() => {
@@ -356,6 +354,7 @@ const NewTjenesteDependencyDropdown = ({services, toggleDependencyEditor}: Dropd
         if(selectedService !== null) {    
             const currentList: Service[] = [...newServiceDependencies, selectedService]
             setNewServiceDependencies(currentList)
+            handleDependencyChange(newServiceDependencies)
             toast.success("Tjenesteavhengighet lagt til")
             return
         }
@@ -365,6 +364,7 @@ const NewTjenesteDependencyDropdown = ({services, toggleDependencyEditor}: Dropd
     const handleRemoveServiceDependency = (serviceToRemove) => {
         const filteredDependencyList: Service[] = [...newServiceDependencies].filter(s => s.id !== serviceToRemove.id)
         setNewServiceDependencies(filteredDependencyList)
+        handleDependencyChange(newServiceDependencies)
         toast.success("Tjenesteavhengighet fjernet")
     }
 
