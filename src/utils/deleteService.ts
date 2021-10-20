@@ -40,5 +40,5 @@ export const deleteService = async (service): Promise<Object[]> =>{
     if (response.ok) {
         return response.json()
     }
-    throw new ResponseError("Failed to post to server", response)
+    throw new ResponseError("Failed to send DELETE request to server", response)
 }

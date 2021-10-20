@@ -68,6 +68,7 @@ const TjenesteTable = () => {
     }
 
     const handleServiceDeletion = (serviceToDelete) => {
+
         if(deleteService(serviceToDelete)) {
             toast.success('Tjeneste slettet');
             const newServices = services.filter(currentService => 
@@ -148,9 +149,7 @@ const NewServiceRow = styled.div`
     justify-content: space-between;
 `
 
-const NewServiceColumn = styled.div`
-    /* width: 50%; */
-`
+const NewServiceColumn = styled.div``
 
 interface AddServiceProps {
     services: Service[]
@@ -190,13 +189,11 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
     }
 
     const handleDependencyChange = (newDependencies: Service[]) => {
-        console.log("Triggered correct function")
         let currentService = {...newService}
         currentService.dependencies = newDependencies
         updateNewService(currentService)
     }
     
-    console.log(newService.dependencies)
     const handleServiceDataChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const currentService = {
             ...newService,
