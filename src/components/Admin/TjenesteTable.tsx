@@ -113,7 +113,7 @@ const TjenesteTable = () => {
                                     <td><span>{service.team}</span></td>
                                     <td><ul>{service.dependencies.map((dependency, index) => {
                                         return (
-                                            <li key={index}>{dependency}</li>
+                                            <li key={index}>{dependency.name}</li>
                                         )
                                     })}</ul></td>
                                     <td><span>{service.monitorlink}</span></td>
