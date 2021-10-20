@@ -72,8 +72,6 @@ const DashboardsHeader = styled.div`
 const DashboardRowContainer = styled.div`
     min-height: 4rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
-    /* display: flex;
-    flex-direction: column; */
 `
 
 const DashboardRowInner = styled.div`
@@ -90,6 +88,13 @@ const DashboardRowInner = styled.div`
     }
     span {
         width: 50%;
+    }
+    span:first-child {
+        display: flex;
+        justify-content: space-between;
+    }
+    span:not(first-child) {
+        text-align: right;
     }
 `
 
@@ -142,13 +147,13 @@ const Dashboards: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
                         <DashboardRowInner onClick={() => toggleExpanded(dashboard.id)}>
                             <span>
                                 {dashboard.name}
-                            </span>
-                            <span>
                                 <CloseCustomized aria-label="Fjern tjenesten fra område"
                                     onClick={() => handleDeleteDashboard(dashboard)}
                                 />
                             </span>
-                            <span>{!expanded ? <Collapse /> : <Expand />}</span>
+                            {/* <span> */}
+                            {/* </span> */}
+                            <span>{!expanded.includes(dashboard.id) ? <Collapse /> : <Expand />}</span>
                         </DashboardRowInner>
                         {expanded.includes(dashboard.id) &&
                             <AddAreaToDashboardDropdown dashboardWithoutIdProp={dashboard} allAreas={allAreas}
@@ -233,9 +238,9 @@ const AddAreaToDashboardDropdown = ({dashboardWithoutIdProp, allAreas, toggleExp
     
     if(isLoading) {
         return (
-            <tr><td><CustomNavSpinner /></td></tr>
-            )
-        }
+            <CustomNavSpinner />
+        )
+    }
 
 
     return (
@@ -249,8 +254,10 @@ const AddAreaToDashboardDropdown = ({dashboardWithoutIdProp, allAreas, toggleExp
 
 
 
-const DashboardDropdow = styled.div`
+const DashboardDropRow = styled.div`
     padding: 0 1rem;
+    display: flex;
+    flex-direction: row;
     ul {
         list-style: none;
         padding: 0;
@@ -266,6 +273,11 @@ const DashboardDropdow = styled.div`
 
 const DropdownColumn = styled.div`
     width: 50%;
+    &.clickable {
+        :hover {
+            cursor: pointer;
+        }
+    }
 `
 
 const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAreasToDashboard}: DashboardProps) => {
@@ -290,9 +302,10 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
 
 
     return (
-        <DashboardDropdow>
+        <DashboardDropRow>
+            <DropdownColumn>
             {entireDashboard.areas.length > 0?
-                <DropdownColumn>
+                <div>
                     <b>Områder i dashbord</b>
                     <ul>
                         {entireDashboard.areas.map((area) => {
@@ -301,13 +314,12 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                             )
                         })}
                     </ul>
-                </DropdownColumn>
+                </div>
                 :
                 <div>
                     Ingen områder i dashbord
                 </div>
             }
-            <div>
                 <Select value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
                     {availableAreas ?
                         availableAreas.map(area => {
@@ -322,9 +334,9 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                 <Hovedknapp disabled={!selectedArea} onClick={handleAddAreaToDashboard} >
                     Legg til
                 </Hovedknapp>                                            
-            </div>
-            <div className="clickable" onClick={toggleExpanded}></div>
-        </DashboardDropdow>
+            </DropdownColumn>
+            <DropdownColumn className="clickable" onClick={toggleExpanded}></DropdownColumn>
+        </DashboardDropRow>
     )
 }
 
