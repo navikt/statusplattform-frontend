@@ -176,20 +176,6 @@ const NavDashboard = () => {
             setExpandedTiles(expandedTiles.concat([index]));
         }
     }
-    
-    const changeSelectedDashboard = (event) => {
-        const dashboardId: string = event.target.value
-        // console.log(dashboardId)
-        // Kommentert ut det under. Skal her fetche nytt dashboard
-        // useEffect(() => {
-        //     (async function () {
-        //         setIsLoading(true)
-        //         const dashboard: any[] = await fetchDashboard(dashboardId)
-        //         updateSelectedDashboard(dashboard)
-        //         setIsLoading(false)
-        //     })()
-        // }, [])
-    }
 
 
     return (
@@ -197,13 +183,6 @@ const NavDashboard = () => {
         <DigitalServicesContainer>
             <StatusOverview areas={areasInDashboard} />
                 <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
-                    <SelectWrapper maxWidth={maxWidth}>
-                        <Select onChange={changeSelectedDashboard} label="Velg Dashbord">
-                            {dashboards.map((dashboard, index) => (
-                                <option key={index} value={dashboard.name} label={dashboard.name}/>
-                            ))}
-                        </Select>
-                    </SelectWrapper>
 
 
                     {areasInDashboard.length > 0 &&
