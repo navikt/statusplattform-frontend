@@ -61,7 +61,7 @@ const CloseCustomized = styled(Close)`
     }
 `
 
-/* Helpers below */
+/* ----------------------- Helpers below ----------------------- */
 
 const DashboardTable: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
     const [expanded, setExpanded] = useState<string[]>([])
@@ -119,7 +119,7 @@ const DashboardTable: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
                             {expanded.includes(dashboard.id) &&
                                 <AddAreaToDashboardDropdown dashboardWithoutIdProp={dashboard} allAreas={allAreas}
                                     toggleExpanded={() => toggleExpanded(dashboard.id)}
-                                    handlePutAreasToDashboard={(areasToAdd) => handlePutAreasToDashboard(dashboard.id, areasToAdd)}
+                                    handlePutAreasToDashboard={(dashboardId, areasToAdd) => handlePutAreasToDashboard(dashboardId, areasToAdd)}
                                 />
                             }
                         </tbody>
@@ -250,7 +250,6 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
 
     const handleDeleteAreaFromDashboard = () => {
         const newDashboardAreas: string[] = [...entireDashboard.areas.map(area => area.id)].filter(id => id == selectedArea.id)
-        console.log(newDashboardAreas)
         handlePutAreasToDashboard(entireDashboard.id, newDashboardAreas)
     }
 

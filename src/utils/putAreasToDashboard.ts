@@ -14,9 +14,9 @@ export const putAreasToDashboard = async (dashboardId: string, areasToPut: strin
         response = await fetch("http://localhost:3001" + endPath,
         {
             method: "PUT",
-            body: JSON.stringify([
+            body: JSON.stringify(
                 areasToPut
-            ]),
+            ),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             },
@@ -29,9 +29,9 @@ export const putAreasToDashboard = async (dashboardId: string, areasToPut: strin
         response = await fetch("https://digitalstatus.ekstern.dev.nav.no" + endPath,
         {
             method: "PUT",
-            body: JSON.stringify([
+            body: JSON.stringify(
                 areasToPut
-            ]),
+            ),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
             },
