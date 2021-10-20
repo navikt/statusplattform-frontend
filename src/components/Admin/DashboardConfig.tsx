@@ -1,6 +1,7 @@
 import { Close, Collapse, Expand } from '@navikt/ds-icons'
 import CustomNavSpinner from 'components/CustomNavSpinner'
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper'
+import ModalWrapper from 'nav-frontend-modal'
 import { Input, Select } from 'nav-frontend-skjema'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
@@ -67,6 +68,9 @@ const DashboardsHeader = styled.div`
         flex-direction: row;
         justify-content: space-between;
     }
+    b:nth-child(2) {
+        left: 1rem;
+    }
 `
 
 const DashboardRowContainer = styled.div`
@@ -98,6 +102,28 @@ const DashboardRowInner = styled.div`
     }
 `
 
+const ClickableName = styled.div`
+    height: 100%;
+    width: 50%;
+    display: flex;
+    align-items: center;
+`
+
+const ExpandCollapseWrapper = styled.button`
+    width: 50%;
+    height: 100%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    :hover {
+        color: grey;
+        border: 1px solid;
+        cursor: pointer;
+        border: none;
+    }
+`
+
 const CloseCustomized = styled(Close)`
     color: red;
     :hover {
@@ -109,10 +135,26 @@ const CloseCustomized = styled(Close)`
 
 const Dashboards: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
     const [expanded, setExpanded] = useState<string[]>([])
+    const [toDelete, changeDelete] = useState(false)
+    const [modalIsOpen, setModalIsOpen] = useState(false)
     const { data: allAreas, isLoading, reload } = useLoader(fetchAreas,[]);
 
 
     const handleDeleteDashboard = (dashboard: Dashboard) => {
+        // if(!toDelete) {
+        //     setModalIsOpen(true)
+        //     return (
+        //         <ModalWrapper
+        //             isOpen={modalIsOpen}
+        //             onRequestClose={() => setModalIsOpen(false)}
+        //             closeButton={true}
+        //             contentLabel="Min modalrute"
+        //         >
+        //             <div style={{padding:'2rem 2.5rem'}}>Innhold her</div>
+        //         </ModalWrapper>
+
+        //     )
+        // }
         deleteDashboard(dashboard).then(() => {
             toast.info("Dashbordet ble slettet")
         }).catch(() => {
@@ -144,19 +186,23 @@ const Dashboards: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
             {dashboards.map((dashboard) => {
                 return (
                     <DashboardRowContainer key={dashboard.id}>
-                        <DashboardRowInner onClick={() => toggleExpanded(dashboard.id)}>
-                            <span>
+                        <DashboardRowInner>
+                            <ClickableName onClick={() => toggleExpanded(dashboard.id)}>
                                 {dashboard.name}
-                                <CloseCustomized aria-label="Fjern tjenesten fra område"
-                                    onClick={() => handleDeleteDashboard(dashboard)}
-                                />
-                            </span>
-                            {/* <span> */}
-                            {/* </span> */}
-                            <span>{!expanded.includes(dashboard.id) ? <Collapse /> : <Expand />}</span>
+                            </ClickableName>
+                            <CloseCustomized aria-label="Fjern tjenesten fra område"
+                                onClick={() => handleDeleteDashboard(dashboard)}
+                            />
+                            <ExpandCollapseWrapper aria-expanded={expanded.includes(dashboard.id)}
+                                onClick={() => toggleExpanded(dashboard.id)}>
+                                {!expanded.includes(dashboard.id) 
+                                    ? <Collapse /> 
+                                    : <Expand />
+                                }
+                            </ExpandCollapseWrapper>
                         </DashboardRowInner>
                         {expanded.includes(dashboard.id) &&
-                            <AddAreaToDashboardDropdown dashboardWithoutIdProp={dashboard} allAreas={allAreas}
+                            <AddAreaToDashboardDropdown dashboardWithOnlyIdProp={dashboard} allAreas={allAreas}
                                 toggleExpanded={() => toggleExpanded(dashboard.id)}
                                 handlePutAreasToDashboard={(dashboardId, areasToAdd) => handlePutAreasToDashboard(dashboardId, areasToAdd)}
                             />
@@ -225,14 +271,14 @@ const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
 
 
 interface DashboardProps {
-    dashboardWithoutIdProp?: Dashboard
+    dashboardWithOnlyIdProp?: Dashboard
     allAreas: Area[]
     toggleExpanded: () => void
     entireDashboard?: Dashboard
     handlePutAreasToDashboard: Function
 }
 
-const AddAreaToDashboardDropdown = ({dashboardWithoutIdProp, allAreas, toggleExpanded, handlePutAreasToDashboard}:DashboardProps) => {
+const AddAreaToDashboardDropdown = ({dashboardWithOnlyIdProp: dashboardWithoutIdProp, allAreas, toggleExpanded, handlePutAreasToDashboard}:DashboardProps) => {
     const { data: entireDashboard, isLoading, reload } = useLoader(() => fetchDashboard(dashboardWithoutIdProp.id),[]);
 
     
@@ -244,7 +290,7 @@ const AddAreaToDashboardDropdown = ({dashboardWithoutIdProp, allAreas, toggleExp
 
 
     return (
-        <DropdownContent dashboardWithoutIdProp={dashboardWithoutIdProp}
+        <DropdownContent dashboardWithOnlyIdProp={dashboardWithoutIdProp}
             allAreas={allAreas} entireDashboard={entireDashboard}
             toggleExpanded={toggleExpanded} handlePutAreasToDashboard={handlePutAreasToDashboard}
         />
@@ -291,8 +337,12 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
     }
 
     const handleAddAreaToDashboard = () => {
-        const newDashboardAreas: string[] = [...entireDashboard.areas.map(area => area.id), selectedArea.id]
-        handlePutAreasToDashboard(entireDashboard.id, newDashboardAreas)
+        if(availableAreas.length != 0) {
+            const newDashboardAreas: string[] = [...entireDashboard.areas.map(area => area.id), selectedArea.id]
+            handlePutAreasToDashboard(entireDashboard.id, newDashboardAreas)
+            return
+        }
+        toast.error("Det er ikke flere områder å legge til")
     }
 
     const handleDeleteAreaFromDashboard = () => {
@@ -321,7 +371,7 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                 </div>
             }
                 <Select value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
-                    {availableAreas ?
+                    {availableAreas.length > 0 ?
                         availableAreas.map(area => {
                             return (
                                 <option key={area.id} value={area.id}>{area.name}</option>
@@ -331,7 +381,7 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                         <option key={undefined} value="">Ingen områder å legge til</option>
                     }
                 </Select>
-                <Hovedknapp disabled={!selectedArea} onClick={handleAddAreaToDashboard} >
+                <Hovedknapp onClick={handleAddAreaToDashboard} >
                     Legg til
                 </Hovedknapp>                                            
             </DropdownColumn>
