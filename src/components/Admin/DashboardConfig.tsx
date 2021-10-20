@@ -43,7 +43,7 @@ const DashboardConfig = () => {
             {editNewDashboard &&
                 <AddNewDashboard reload={reload}/>
             }
-            <DashboardTable dashboards={dashboards} />
+            <Dashboards dashboards={dashboards} />
         </DashboardConfigContainer>
     )
 }
@@ -51,6 +51,47 @@ const DashboardConfig = () => {
 
 
 
+
+
+/* ----------------------- Helpers below ----------------------- */
+
+const DashboardsContainer = styled.div``
+
+const DashboardsHeader = styled.div`
+    width: 100%;
+    padding: 0 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    p {
+        width: 50%;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+`
+
+const DashboardRowContainer = styled.div`
+    min-height: 4rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    /* display: flex;
+    flex-direction: column; */
+`
+
+const DashboardRowInner = styled.div`
+    width: 100%;
+    height: 4rem;
+    padding: 0 1rem;
+    background-color: var(--navGraBakgrunn);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    :hover {
+        cursor: pointer;
+    }
+    span {
+        width: 50%;
+    }
+`
 
 const CloseCustomized = styled(Close)`
     color: red;
@@ -61,9 +102,7 @@ const CloseCustomized = styled(Close)`
     }
 `
 
-/* ----------------------- Helpers below ----------------------- */
-
-const DashboardTable: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
+const Dashboards: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
     const [expanded, setExpanded] = useState<string[]>([])
     const { data: allAreas, isLoading, reload } = useLoader(fetchAreas,[]);
 
@@ -93,39 +132,34 @@ const DashboardTable: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
     }
 
     return (
-        <table className="tabell tabell--stripet">
-            <thead>
-                <tr>
-                    <th>Navn på Dashbord</th>
-                    <th>Slett</th>
-                    <th></th>
-                </tr>
-            </thead>
-                {dashboards.map((dashboard) => {
-                    return (
-                        <tbody key={dashboard.id}>
-                            <tr onClick={() => toggleExpanded(dashboard.id)}>
-                                <td>
-                                    {dashboard.name}
-                                </td>
-                                <td>
-                                    <CloseCustomized aria-label="Fjern tjenesten fra område"
-                                        onClick={() => handleDeleteDashboard(dashboard)}
-                                    />
-                                </td>
-                                <td><span>{!expanded ? <Collapse /> : <Expand />}</span></td>
-
-                            </tr>
-                            {expanded.includes(dashboard.id) &&
-                                <AddAreaToDashboardDropdown dashboardWithoutIdProp={dashboard} allAreas={allAreas}
-                                    toggleExpanded={() => toggleExpanded(dashboard.id)}
-                                    handlePutAreasToDashboard={(dashboardId, areasToAdd) => handlePutAreasToDashboard(dashboardId, areasToAdd)}
+        <DashboardsContainer>
+            <DashboardsHeader>
+                <p><b>Navn på Dashbord</b><b>Slett</b></p>
+            </DashboardsHeader>
+            {dashboards.map((dashboard) => {
+                return (
+                    <DashboardRowContainer key={dashboard.id}>
+                        <DashboardRowInner onClick={() => toggleExpanded(dashboard.id)}>
+                            <span>
+                                {dashboard.name}
+                            </span>
+                            <span>
+                                <CloseCustomized aria-label="Fjern tjenesten fra område"
+                                    onClick={() => handleDeleteDashboard(dashboard)}
                                 />
-                            }
-                        </tbody>
-                    )
-                })}
-        </table>
+                            </span>
+                            <span>{!expanded ? <Collapse /> : <Expand />}</span>
+                        </DashboardRowInner>
+                        {expanded.includes(dashboard.id) &&
+                            <AddAreaToDashboardDropdown dashboardWithoutIdProp={dashboard} allAreas={allAreas}
+                                toggleExpanded={() => toggleExpanded(dashboard.id)}
+                                handlePutAreasToDashboard={(dashboardId, areasToAdd) => handlePutAreasToDashboard(dashboardId, areasToAdd)}
+                            />
+                        }
+                    </DashboardRowContainer>
+                )
+            })}
+        </DashboardsContainer>
     )
 }
 
@@ -185,20 +219,6 @@ const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
 
 
 
-
-const DashboardDropdownTr = styled.tr`
-    ul {
-        list-style: none;
-        padding: 0;
-        li {
-            display: flex;
-            justify-content: space-between;
-        }
-    }
-    .knapp {
-        margin: 1rem 0;
-    }
-`
 interface DashboardProps {
     dashboardWithoutIdProp?: Dashboard
     allAreas: Area[]
@@ -219,19 +239,34 @@ const AddAreaToDashboardDropdown = ({dashboardWithoutIdProp, allAreas, toggleExp
 
 
     return (
-        <DashboardDropdownTr>
-            <DropdownContent dashboardWithoutIdProp={dashboardWithoutIdProp}
-                allAreas={allAreas} entireDashboard={entireDashboard}
-                toggleExpanded={toggleExpanded} handlePutAreasToDashboard={handlePutAreasToDashboard}
-            />
-        </DashboardDropdownTr>
+        <DropdownContent dashboardWithoutIdProp={dashboardWithoutIdProp}
+            allAreas={allAreas} entireDashboard={entireDashboard}
+            toggleExpanded={toggleExpanded} handlePutAreasToDashboard={handlePutAreasToDashboard}
+        />
     )
 }
 
 
 
 
+const DashboardDropdow = styled.div`
+    padding: 0 1rem;
+    ul {
+        list-style: none;
+        padding: 0;
+        li {
+            display: flex;
+            justify-content: space-between;
+        }
+    }
+    .knapp {
+        margin: 1rem 0;
+    }
+`
 
+const DropdownColumn = styled.div`
+    width: 50%;
+`
 
 const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAreasToDashboard}: DashboardProps) => {
     const availableAreas: Area[] = allAreas.filter(area => !entireDashboard.areas.map(a => a.id).includes(area.id))
@@ -255,9 +290,9 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
 
 
     return (
-        <td>
+        <DashboardDropdow>
             {entireDashboard.areas.length > 0?
-                <div>
+                <DropdownColumn>
                     <b>Områder i dashbord</b>
                     <ul>
                         {entireDashboard.areas.map((area) => {
@@ -266,7 +301,7 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                             )
                         })}
                     </ul>
-                </div>
+                </DropdownColumn>
                 :
                 <div>
                     Ingen områder i dashbord
@@ -289,7 +324,7 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                 </Hovedknapp>                                            
             </div>
             <div className="clickable" onClick={toggleExpanded}></div>
-        </td>
+        </DashboardDropdow>
     )
 }
 

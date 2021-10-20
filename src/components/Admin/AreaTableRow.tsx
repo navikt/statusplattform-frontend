@@ -155,7 +155,7 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
                             })}
                         </ServicesInAreaList>
                     </td>
-                    <td colSpan={5} className="clickable" onClick={toggleExpanded}/>
+                    <td colSpan={3} className="clickable" onClick={toggleExpanded}/>
                 </TileDropdownRow>)
             }
 
