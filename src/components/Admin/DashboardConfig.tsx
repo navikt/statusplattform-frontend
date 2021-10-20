@@ -37,9 +37,9 @@ const DashboardConfig = () => {
 
     return (
         <DashboardConfigContainer>
-            <p>
-                <Knapp kompakt onClick={() => updateEditNewDashboard(!editNewDashboard)}>{!editNewDashboard ? "Legg til nytt dashbord" : "Avbryt nytt dashbord"}</Knapp>
-            </p>
+            <Knapp mini onClick={() => updateEditNewDashboard(!editNewDashboard)}>{
+                !editNewDashboard ? "Legg til nytt dashbord" : "Avbryt nytt dashbord"}
+            </Knapp>
             {editNewDashboard &&
                 <AddNewDashboard reload={reload}/>
             }
@@ -176,6 +176,9 @@ const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
         </form>
     )
 }
+
+
+
 
 
 
