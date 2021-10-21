@@ -279,7 +279,7 @@ interface DashboardProps {
     toggleExpanded: () => void
     entireDashboard?: Dashboard
     handlePutAreasToDashboard: Function
-    reload: () => void
+    reload?: () => void
 }
 
 const AddAreaToDashboardDropdown = ({dashboardWithOnlyIdProp: dashboardWithoutIdProp, allAreas, toggleExpanded, handlePutAreasToDashboard}:DashboardProps) => {
