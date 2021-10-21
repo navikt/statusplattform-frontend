@@ -1,9 +1,12 @@
 import styled from 'styled-components'
 
 import { Sidetittel } from 'nav-frontend-typografi'
+import { Knapp } from 'nav-frontend-knapper'
 
-import TrafficLights from 'components/TrafficLights'
 import ProfileOrLogin from 'components/ProfileOrLogin'
+import SubscribeModal from 'components/SubscribeModal'
+import { useState } from 'react'
+
 
 
 
@@ -65,12 +68,40 @@ const HeaderContent = styled.span`
         flex-direction: row;
     }
 `
-
+const SubscribeButton = styled(Knapp)`
+    height: 3rem;
+    transition: 0.4s;
+	width: 7rem;
+	margin-right: 0.5rem;
+    :hover {
+        transition: 0.4s;
+        background-color: var(--navBla);
+        color: white;
+    }
+`
+const SubscribeModalWrapper = styled.div`
+    right: 0;
+    top: 325px;
+    position: absolute;
+	@media(min-width: 305px){
+        top: 300px;
+    }
+    @media(min-width: 400px){
+        top: 275px;
+    }
+    @media(min-width: 650px){
+        top: 170px;
+    }
+`
 
 
 
 const Header = () => {
-    
+    const [subscribeModalHidden, setSubscribeModalBoolean] = useState(false)
+
+    const toggleSubscribeModal = () => {
+        setSubscribeModalBoolean(!subscribeModalHidden)
+    }
 
     return (
         <CustomHeader>
@@ -83,7 +114,14 @@ const Header = () => {
                 </SidetittelCustomized>
             
             </HeaderContent>
-            <TrafficLights />
+            <span>
+				<SubscribeButton mini onClick={toggleSubscribeModal}>Abonner</SubscribeButton>
+			</span>
+			{subscribeModalHidden && 
+				<SubscribeModalWrapper>
+					<SubscribeModal toggleSubscribeModal={toggleSubscribeModal}/>
+				</SubscribeModalWrapper>
+			}
             <ProfileOrLogin />
         </CustomHeader>
     )

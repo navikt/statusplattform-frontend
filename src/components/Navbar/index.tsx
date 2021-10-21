@@ -1,68 +1,43 @@
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styled from 'styled-components'
-import React from 'react'
 
-import SubscribeModal from 'components/SubscribeModal'
 
 import Lenke from 'nav-frontend-lenker';
-import { Knapp } from 'nav-frontend-knapper';
 import { Normaltekst, } from "nav-frontend-typografi";
 
 const Nav = styled.div `
-	height: 100%;
-	width: 100%;
-	margin: 0 auto;
-	padding: 0.2rem 0;
+	height: 2.75rem;
     background-color: white;
+	border-bottom: #c6c2bf 1px solid;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
-	> ul {
-		padding-left: 0;
+	ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		height: 100%;
 		width: 100%;
 		display: flex;
 		justify-content: center;
-		:first-child {
-			flex-direction: column;
-			align-items: flex-start;
-		}
-		@media(min-width: 400px) {
-			:first-child {
-				flex-direction: row;
-			}
-		}
-		@media(min-width: 500px) {
-			margin-left: 7rem;
-		}
-	}
-	> ul > li {
-		display: inline-block;
-		outline: none;
-	}
-	a {
-		height: calc(100% + 1px);
-		display: inline-block;
-		text-decoration: none;
-		color: black;
-		&active {
-			border-bottom: var(--navBla) 3px solid;
-		}
-	}
-	@media (min-width: 225px){
-		flex-direction: row;
 	}
 `
 
 const LinkWrapper = styled.div`
 	height: 100%;
-    margin: 0 0.5rem;
-    border-bottom: transparent 3px solid;
+    margin: 0 1rem;
 	display: flex;
     align-items: center;
 	justify-content: center;
 `;
 const LenkeCustomized = styled(Lenke)`
+	text-decoration: none;
+	color: black;
+	height: 100%;
+	&active {
+		border-bottom: var(--navBla) 3px solid;
+	}
 	:focus {
 		background-color: transparent !important;
 	}
@@ -78,37 +53,16 @@ const LenkeCustomized = styled(Lenke)`
 `;
 const LenkeInner = styled.div`
 	border-bottom: transparent 3px solid;
+	height: 100%;
+	display: flex;
+	align-items: center;
 	:hover {
 		border-bottom: var(--navBla) 3px solid;
 		color: var(--navBla);
 	}
 `;
 
-const SubscribeButton = styled(Knapp)`
-    height: 3rem;
-    transition: 0.4s;
-	width: 7rem;
-	margin-right: 0.5rem;
-    :hover {
-        transition: 0.4s;
-        background-color: var(--navBla);
-        color: white;
-    }
-`
-const SubscribeModalWrapper = styled.div`
-    right: 0;
-    top: 325px;
-    position: absolute;
-	@media(min-width: 305px){
-        top: 300px;
-    }
-    @media(min-width: 400px){
-        top: 275px;
-    }
-    @media(min-width: 650px){
-        top: 170px;
-    }
-`
+
 
 const NormalTekstCustomized = styled(Normaltekst)`
 	font-size: 1rem;
@@ -118,11 +72,7 @@ const NormalTekstCustomized = styled(Normaltekst)`
 
 export default function Navbar() {
 	const router = useRouter()
-	const [subscribeModalHidden, setSubscribeModalBoolean] = React.useState(false)
 
-    const toggleSubscribeModal = () => {
-        setSubscribeModalBoolean(!subscribeModalHidden)
-    }
 
 	return (
 		<Nav>
@@ -150,14 +100,6 @@ export default function Navbar() {
 					</LinkWrapper>
 				</li>
 			</ul>
-			<span>
-				<SubscribeButton mini onClick={toggleSubscribeModal}>Abonner</SubscribeButton>
-			</span>
-			{subscribeModalHidden && 
-				<SubscribeModalWrapper>
-					<SubscribeModal toggleSubscribeModal={toggleSubscribeModal}/>
-				</SubscribeModalWrapper>
-			}
 		</Nav>
 	)
 }

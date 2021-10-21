@@ -6,6 +6,10 @@ const TrafficLightsContainer = styled.div`
     padding: 1rem 0;
     span {
         display: flex;
+        p {
+            margin: 0;
+            margin-left: 5px;
+        }
     }
     span:nth-child(2) {
         width: 183px;
@@ -13,10 +17,7 @@ const TrafficLightsContainer = styled.div`
     @media (min-width: 220px) {
         display: flex;
     }
-    p {
-        margin: 0;
-        margin-left: 5px;
-    }
+    
     span {
         padding: 0;
         display: flex;
@@ -40,7 +41,6 @@ const TrafficLightsContainer = styled.div`
 `
 
 export const SuccessCircleGreen = styled.span`
-    /* margin-right: 10px; */
     height: 16px;
     width: 16px;
     background-color: var(--navGronn);
@@ -49,7 +49,6 @@ export const SuccessCircleGreen = styled.span`
 `;
 
 export const WarningCircleOrange = styled.span`
-    /* margin-right: 10px; */
     height: 16px;
     width: 16px;
     background-color: var(--navOransje);
@@ -58,7 +57,6 @@ export const WarningCircleOrange = styled.span`
 `;
 
 export const ErrorCircleRed = styled.span`
-    /* margin-right: 10px; */
     height: 16px;
     width: 16px;
     background-color: var(--redError);

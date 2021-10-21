@@ -1,3 +1,4 @@
+import TrafficLights from 'components/TrafficLights';
 import styled from 'styled-components'
 
 const FooterContainer = styled.footer`
@@ -95,6 +96,9 @@ const Footer = () => {
                         <li><a href="https://www.nav.no/no/person#">Del skjerm med veileder</a></li>
                     </ul>
                 </Row>
+                <div>
+                    <TrafficLights />
+                </div>
             </FooterContent>
         </FooterContainer>
     )

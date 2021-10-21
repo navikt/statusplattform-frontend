@@ -10,11 +10,11 @@ import Footer from 'components/Footer'
 const MainContentContainer = styled.div`
     min-height: 100vh;
     margin-bottom: -100px;
-    display: flex;
-    flex-direction: column;
     background-color: var(--navGraBakgrunn);
     overflow: hidden;
     font-family: "Source Sans Pro", Arial, sans-serif;
+    display: flex;
+    flex-direction: column;
 `;
 
 const Content = styled.main`
@@ -35,8 +35,8 @@ const MainContent = props => {
                 <link rel="icon" href="/favicon.ico" />
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
-            <Header/>
             <Navbar/>
+            <Header/>
             <Content>
                 {props.children}
             </Content>
