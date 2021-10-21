@@ -1,10 +1,14 @@
+import Link from 'next/link'
+import { useRouter } from 'next/router'
+
 import { Logout, People, Settings } from '@navikt/ds-icons'
 import { Knapp } from 'nav-frontend-knapper';
+import Lenke from 'nav-frontend-lenker';
 import Popover, {PopoverOrientering} from 'nav-frontend-popover';
-
 
 import { useState } from "react";
 import styled from 'styled-components'
+import { Normaltekst } from 'nav-frontend-typografi';
 
 const ProfileOrLoginContainer = styled.div`
     margin: 0 20px;
@@ -80,6 +84,8 @@ const Configurations = styled.div`
 
 
 const ProfileOrLogin = () => {
+	const router = useRouter()
+
     const [isDropdownMenuExpanded, changeMenuState] = useState(false)
     const [isLoggedIn, changeLoginState] = useState(false)
     const [anker, setAnker] = useState(undefined)
@@ -124,6 +130,11 @@ const ProfileOrLogin = () => {
                                         </span>
                                     </Configurations>
                                 }
+                            </li>
+                            <li>
+                                <Link href="/admin">
+                                    <Normaltekst>Admin</Normaltekst>
+                                </Link>
                             </li>
                             <li onClick={() => changeLoginState(false)}><p><Logout /> Logg ut</p></li>
                         </ul>
