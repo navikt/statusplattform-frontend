@@ -90,7 +90,7 @@ const SubscribeModalWrapper = styled.div`
         top: 275px;
     }
     @media(min-width: 650px){
-        top: 170px;
+        top: 150px;
     }
 `
 
