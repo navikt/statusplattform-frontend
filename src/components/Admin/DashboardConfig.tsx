@@ -44,7 +44,7 @@ const DashboardConfig = () => {
             {editNewDashboard &&
                 <AddNewDashboard reload={reload}/>
             }
-            <Dashboards dashboards={dashboards} />
+            <Dashboards dashboards={dashboards} reloadDashboards={reload}/>
         </DashboardConfigContainer>
     )
 }
@@ -89,6 +89,7 @@ const DashboardRowInner = styled.div`
     align-items: center;
     :hover {
         cursor: pointer;
+
     }
     span {
         width: 50%;
@@ -112,12 +113,12 @@ const ClickableName = styled.div`
 const ExpandCollapseWrapper = styled.button`
     width: 50%;
     height: 100%;
+    background-color: transparent;
     border: none;
     display: flex;
     align-items: center;
     justify-content: flex-end;
     :hover {
-        color: grey;
         border: 1px solid;
         cursor: pointer;
         border: none;
@@ -133,14 +134,14 @@ const CloseCustomized = styled(Close)`
     }
 `
 
-const Dashboards: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
+const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => void}> = ({dashboards, reloadDashboards}) => {
     const [expanded, setExpanded] = useState<string[]>([])
     const [toDelete, changeDelete] = useState(false)
     const [modalIsOpen, setModalIsOpen] = useState(false)
     const { data: allAreas, isLoading, reload } = useLoader(fetchAreas,[]);
 
 
-    const handleDeleteDashboard = (dashboard: Dashboard) => {
+    const handleDeleteDashboard = (dashboard: Dashboard, event) => {
         // if(!toDelete) {
         //     setModalIsOpen(true)
         //     return (
@@ -157,6 +158,7 @@ const Dashboards: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
         // }
         deleteDashboard(dashboard).then(() => {
             toast.info("Dashbordet ble slettet")
+            reloadDashboards()
         }).catch(() => {
             toast.error("Kunne ikke slette dashbord")
         })
@@ -191,7 +193,7 @@ const Dashboards: React.FC<{dashboards: Dashboard[]}> = ({dashboards}) => {
                                 {dashboard.name}
                             </ClickableName>
                             <CloseCustomized aria-label="Fjern tjenesten fra område"
-                                onClick={() => handleDeleteDashboard(dashboard)}
+                                onClick={(event) => handleDeleteDashboard(dashboard, event)}
                             />
                             <ExpandCollapseWrapper aria-expanded={expanded.includes(dashboard.id)}
                                 onClick={() => toggleExpanded(dashboard.id)}>
@@ -240,19 +242,20 @@ const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
     }
     
 
-    const handlePostNewDashboard = () => {
+    const handlePostNewDashboard = (event) => {
+        event.preventDefault()
         postDashboard(newDashboard).then(() => {
             toast.success("Dashbord lastet opp")
+            reload()
         }).catch(() => {
             toast.error("Klarte ikke å laste opp dashbord")
         })
-        reload()
     }
 
     const { name } = newDashboard
 
     return (
-        <form onSubmit={handlePostNewDashboard} id="form">
+        <form onSubmit={event => handlePostNewDashboard(event)} id="form">
             <p>Felter markert med * er obligatoriske</p>
             <AddNewDashboardContainer>
                 <Input type="text" required label="Navn på dashbord" value={name} onChange={(event) => handleChangeDashboardName(event)} placeholder="Navn*" />
@@ -276,6 +279,7 @@ interface DashboardProps {
     toggleExpanded: () => void
     entireDashboard?: Dashboard
     handlePutAreasToDashboard: Function
+    reload: () => void
 }
 
 const AddAreaToDashboardDropdown = ({dashboardWithOnlyIdProp: dashboardWithoutIdProp, allAreas, toggleExpanded, handlePutAreasToDashboard}:DashboardProps) => {
@@ -293,6 +297,7 @@ const AddAreaToDashboardDropdown = ({dashboardWithOnlyIdProp: dashboardWithoutId
         <DropdownContent dashboardWithOnlyIdProp={dashboardWithoutIdProp}
             allAreas={allAreas} entireDashboard={entireDashboard}
             toggleExpanded={toggleExpanded} handlePutAreasToDashboard={handlePutAreasToDashboard}
+            reload={reload}
         />
     )
 }
@@ -326,7 +331,7 @@ const DropdownColumn = styled.div`
     }
 `
 
-const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAreasToDashboard}: DashboardProps) => {
+const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAreasToDashboard, reload}: DashboardProps) => {
     const availableAreas: Area[] = allAreas.filter(area => !entireDashboard.areas.map(a => a.id).includes(area.id))
     const [selectedArea, changeSelectedArea] = useState<Area|null>(() => availableAreas.length > 0 ? availableAreas[0] : null)
 
@@ -336,18 +341,20 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
         changeSelectedArea(newSelectedArea)
     }
 
-    const handleAddAreaToDashboard = () => {
+    const handleAddAreaToDashboard = async () => {
         if(availableAreas.length != 0) {
             const newDashboardAreas: string[] = [...entireDashboard.areas.map(area => area.id), selectedArea.id]
-            handlePutAreasToDashboard(entireDashboard.id, newDashboardAreas)
+            await handlePutAreasToDashboard(entireDashboard.id, newDashboardAreas)
+            reload()
             return
         }
         toast.error("Det er ikke flere områder å legge til")
     }
 
-    const handleDeleteAreaFromDashboard = () => {
-        const newDashboardAreas: string[] = [...entireDashboard.areas.map(area => area.id)].filter(id => id == selectedArea.id)
-        handlePutAreasToDashboard(entireDashboard.id, newDashboardAreas)
+    const handleDeleteAreaFromDashboard = async (areaToDelete: Area) => {
+        const newDashboardAreas: string[] = [...entireDashboard.areas.map(area => area.id)].filter(id => id != areaToDelete.id)
+        await handlePutAreasToDashboard(entireDashboard.id, newDashboardAreas)
+        reload()
     }
 
 
@@ -360,7 +367,7 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                     <ul>
                         {entireDashboard.areas.map((area) => {
                             return (
-                                <li key={area.id}>{area.name}<CloseCustomized onClick={handleDeleteAreaFromDashboard}/></li>
+                                <li key={area.id}>{area.name}<CloseCustomized onClick={() => handleDeleteAreaFromDashboard(area)}/></li>
                             )
                         })}
                     </ul>
