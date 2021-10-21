@@ -2,8 +2,6 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 
 import { Logout, People, Settings } from '@navikt/ds-icons'
-import { Knapp } from 'nav-frontend-knapper';
-import Lenke from 'nav-frontend-lenker';
 import Popover, {PopoverOrientering} from 'nav-frontend-popover';
 
 import { useState } from "react";
@@ -15,12 +13,13 @@ const ProfileOrLoginContainer = styled.div`
     z-index: 10;
 `
 
-const SignIn = styled.div`
+const SignIn = styled.button`
     min-height: 75px;
     min-width: 75px;
     border-radius: 50%;
     border: 1px solid var(--navGra40);
     transition: 0.2s ease-in-out;
+    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,12 +54,13 @@ const PopoverCustomized = styled(Popover)`
     }
 `
 
-const Menu = styled.span`
+const Menu = styled.button`
     min-height: 75px;
     min-width: 75px;
     border-radius: 50%;
     border: 1px solid var(--navGra40);
     transition: 0.2s ease-in-out;
+    background-color: transparent;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -84,21 +84,25 @@ const Configurations = styled.div`
 
 
 const ProfileOrLogin = () => {
-	const router = useRouter()
+	useRouter()
 
-    const [isDropdownMenuExpanded, changeMenuState] = useState(false)
     const [isLoggedIn, changeLoginState] = useState(false)
     const [anker, setAnker] = useState(undefined)
     const [isSettingsToggled, changeSettingsState] = useState(false)
     /* Denne skal brukes når vi får mer forståelse av SSO-løsningen.
     const [maxNumberOfTiles, changeMaxNumberOfTiles] = useState()
     */
-    const toggleMenu = () => {
-        changeMenuState(!isDropdownMenuExpanded)
-    }
 
     const toggleSettings = () => {
         changeSettingsState(!isSettingsToggled)
+    }
+
+    const togglePopover = (event) => {
+        if(anker) {
+            setAnker(undefined)
+            return
+        }
+        setAnker(event)
     }
 
     const DropdownMenuContainer = () => {
@@ -108,7 +112,7 @@ const ProfileOrLogin = () => {
                     <PopoverCustomized
                         ankerEl={anker}
                         orientering={PopoverOrientering.Under}
-                        onRequestClose={() => setAnker(undefined)}
+                        onRequestClose={togglePopover}
                     >
                         <ul>
                             <strong>Navn: Nordmann, Ola</strong>
@@ -145,14 +149,14 @@ const ProfileOrLogin = () => {
         return null
     }
     return (
-        <ProfileOrLoginContainer onClick={(e) => setAnker(e.currentTarget)}>
+        <ProfileOrLoginContainer onClick={(event) => togglePopover(event.currentTarget)}>
             {!isLoggedIn && 
                 <>
                     <SignIn onClick={() => changeLoginState(true)}>Logg in</SignIn>
                 </>
             }
             {isLoggedIn && 
-                <Menu onClick={() => toggleMenu()}>
+                <Menu aria-expanded={!!anker} onClick={togglePopover}>
                     <People className="profil-bilde"/>
                     {/* TODO: Dette er bare skallet. Mer skal legges til */}
                     
