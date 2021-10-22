@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { Sidetittel } from 'nav-frontend-typografi'
 import { Knapp } from 'nav-frontend-knapper'
 
-import ProfileOrLogin from 'components/ProfileOrLogin'
+import BurgerMenu from 'components/BurgerMenu'
 import SubscribeModal from 'components/SubscribeModal'
 import { useState } from 'react'
 
@@ -25,13 +25,6 @@ export const CustomHeader = styled.header`
         :hover {
             transform: scale(1.05)
         }
-    }
-    a {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        max-width: 84px;
-        max-height: 55px;
     }
     
     > h1 {
@@ -122,7 +115,7 @@ const Header = () => {
 					<SubscribeModal toggleSubscribeModal={toggleSubscribeModal}/>
 				</SubscribeModalWrapper>
 			}
-            <ProfileOrLogin />
+            <BurgerMenu />
         </CustomHeader>
     )
 }

@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, } from "nav-frontend-typografi";
 
-const Nav = styled.div `
+const Nav = styled.nav `
 	height: 2.75rem;
     background-color: white;
 	border-bottom: #c6c2bf 1px solid;
@@ -78,7 +78,7 @@ export default function Navbar() {
 		<Nav>
 			<ul role="tablist">
 				<li role="tab">
-					<LinkWrapper>
+					{/* <LinkWrapper> */}
 						<Link href="/">
 							<LenkeCustomized>
 								<LenkeInner className={`${router.pathname === "/" ? "active" : ""}`}>
@@ -86,7 +86,7 @@ export default function Navbar() {
 								</LenkeInner>
 							</LenkeCustomized>
 						</Link>
-					</LinkWrapper>
+					{/* </LinkWrapper> */}
 				</li>
 				{/* <li role="tab">
 					<LinkWrapper>
