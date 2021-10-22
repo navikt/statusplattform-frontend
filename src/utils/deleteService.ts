@@ -24,7 +24,7 @@ export const deleteService = async (service): Promise<Object[]> =>{
         });
     }
     else {
-        response = await fetch("https://portalserver.labs.nais.io" + endPath,
+        response = await fetch("https://digitalstatus.ekstern.dev.nav.no" + endPath,
         {
             method: "DELETE",
             body: JSON.stringify({
