@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { Hamburger, Login, Settings } from '@navikt/ds-icons'
+import { Close, Hamburger, Login, Settings } from '@navikt/ds-icons'
 import Popover, {PopoverOrientering} from 'nav-frontend-popover';
 
 import { useState } from "react";
@@ -40,13 +40,16 @@ const Menu = styled.button`
     padding: 4px 12px;
     display: flex;
     align-items: center;
-    .hamburger-ikon {
+    .hamburger-ikon, .close-ikon {
         width: 28px;
         height: 24px;
         padding: 0;
-        position: relative;
         margin-right: 0.5em;
+        position: relative;
         display: block;
+    }
+    .closed-burger {
+        display: none;
     }
     .open {
         font-weight: bold;    
@@ -101,7 +104,8 @@ const BurgerMenu = () => {
     return (
         <BurgerMenuContainer onClick={(event) => togglePopover(event.currentTarget)}>
             <Menu aria-expanded={!!anker} onClick={togglePopover}>
-                <span><Hamburger className={!!anker ? "hamburger-ikon open" : "hamburger-ikon"}/></span>
+                <span><Hamburger className={!anker ? "hamburger-ikon" : "closed-burger"}/></span>
+                <span><Close className={!!anker ? "close-ikon" : "closed-burger"}/></span>
                 <span className="menu-text">Meny</span>
             </Menu>
             <DropdownMenuContainer />

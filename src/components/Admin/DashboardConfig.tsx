@@ -21,7 +21,6 @@ import { useLoader } from 'utils/useLoader'
 
 const DashboardConfigContainer = styled.div`
     width: 100%;
-    overflow-x: auto;
     .knapp {
         text-transform: none;
     }
@@ -69,7 +68,18 @@ const DashboardsHeader = styled.div`
 
 const DashboardRowContainer = styled.div`
     min-height: 4rem;
+    padding: 1px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.55);
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    :hover {
+        padding: 0;
+        border-top: 2px solid rgba(0, 0, 0, 0.55);
+        border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+    }
+    :last-child {
+        padding-bottom: 0;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+    }
 `
 
 const DashboardRowInner = styled.div`
