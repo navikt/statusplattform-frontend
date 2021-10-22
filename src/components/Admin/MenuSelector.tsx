@@ -4,6 +4,9 @@ import Tabs from 'nav-frontend-tabs';
 import Panel from 'nav-frontend-paneler'
 import { SyntheticEvent } from 'react';
 
+import { useRouter } from 'next/router'
+
+
 const DashboardTabMenu = styled.header`
     width: 100%;
     background-color: var(--navBakgrunn);
@@ -19,26 +22,35 @@ const TabsCustomized = styled(Tabs)`
     
 `
 
-export interface Props {
-    currentSelectedMenu: string
-    onClickSelectedMenu: Function
-    adminMenu: string[]
+export const adminMenu = ["Dashbord", "Områder", "Tjenester"]
+const defaultAdminMenu = adminMenu[1]
+
+
+export const useFindCurrentTab = (adminMenu: string[]) => {
+    const router = useRouter()
+    const tab = router.query.tab || ""
+    
+    let selected = adminMenu.indexOf(Array.isArray(tab) ? tab[0] : tab)
+    return selected >= 0 ? adminMenu[selected] : defaultAdminMenu
 }
 
 
-const MenuSelector = ({currentSelectedMenu, onClickSelectedMenu, adminMenu}: Props) => {
+const MenuSelector = () => {
+    const router = useRouter()
+
+    const currentSelectedTab = useFindCurrentTab(adminMenu)
 
     return (
         <DashboardTabMenu>
             <TabsCustomized
-                defaultAktiv={1}
-                tabs={[
-                    {"label": "Dashbord"},
-                    {"label": "Områder"},
-                    {"label": "Tjenester"}
-                ]}
+                tabs={adminMenu.map(path => { 
+                    return {
+                        "aktiv": path === currentSelectedTab,
+                        "label": path}
+                    })
+                }
                 onChange={(_, index) =>
-                    onClickSelectedMenu(adminMenu[index])
+                    router.push(router.pathname + "?tab=" + adminMenu[index])
                 }
 
             />

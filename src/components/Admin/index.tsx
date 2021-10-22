@@ -13,6 +13,8 @@ import { Select } from 'nav-frontend-skjema';
 import DashboardConfig from './DashboardConfig';
 import CustomNavSpinner from 'components/CustomNavSpinner';
 import { fetchTypes } from 'utils/fetchTypes';
+import { useRouter } from 'next/router';
+import { adminMenu, useFindCurrentTab } from './MenuSelector';
 
 
 
@@ -80,11 +82,12 @@ const CustomSelect = styled(Select)`
 `
 
 export interface Props {
-    selectedMenu: string
-    adminMenu: string[]
+    selectedMenu?: string
 }
 
-const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
+const AdminDashboard = () => {
+    const selectedMenu = useFindCurrentTab(adminMenu)
+
     const [dashboards, setDashboards] = useState<Dashboard[]>()
     const [dashboardAreas, setDashboardAreas] = useState<Area[]>([])
     const [services, setServices] = useState<Service[]>()
@@ -122,26 +125,26 @@ const AdminDashboard = ({selectedMenu, adminMenu}: Props) => {
     
 	return (
         <AdminDashboardContainer>
-                <AdminConfigsContainer>
-                    <h2>{selectedMenu}</h2>
-                    {selectedMenu === "Områder" && 
-                        <AreaTableContainer>
-                            {/* <CustomSelect value={selectedDashboard} onChange={event => updateSelectedDashboard(event.target.value)} label="Velg Dashbord">
-                                {dashboards.map((dashboard, index) => (
-                                    <option key={index} value={dashboard.name} label={dashboard.name}/>
-                                ))}
-                                
-                            </CustomSelect> */}
-                            <AreaTable />
-                        </AreaTableContainer>
-                    }
-                    {selectedMenu === "Tjenester" && 
-                        <TjenesteTable />
-                    }
-                    {selectedMenu === "Dashbord" &&
-                        <DashboardConfig />
-                    }
-                </AdminConfigsContainer>
+            <AdminConfigsContainer>
+                <h2>{selectedMenu}</h2>
+                {selectedMenu === "Områder" && 
+                    <AreaTableContainer>
+                        {/* <CustomSelect value={selectedDashboard} onChange={event => updateSelectedDashboard(event.target.value)} label="Velg Dashbord">
+                            {dashboards.map((dashboard, index) => (
+                                <option key={index} value={dashboard.name} label={dashboard.name}/>
+                            ))}
+                            
+                        </CustomSelect> */}
+                        <AreaTable />
+                    </AreaTableContainer>
+                }
+                {selectedMenu === "Tjenester" && 
+                    <TjenesteTable />
+                }
+                {selectedMenu === "Dashbord" &&
+                    <DashboardConfig />
+                }
+            </AdminConfigsContainer>
         </AdminDashboardContainer>
     )
 }
