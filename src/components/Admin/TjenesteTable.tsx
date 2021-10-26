@@ -36,7 +36,7 @@ const TjenesteHeader = styled.div`
 const TjenesteContent = styled.div`
     min-height: 5rem;
     padding-left: 1rem;
-    background-color: var(--navGra20);
+    background-color: var(--navGraBakgrunn);
     display: flex;
     * {
         width: 120px;
