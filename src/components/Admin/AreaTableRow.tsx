@@ -36,14 +36,12 @@ const AreaRowContainer = styled.div`
 `
 
 const AreaRow = styled.div`
-    width: 100%;
     min-height: 5rem;
     background-color: var(--navGraBakgrunn);
     
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
     
     button {
         background-color: transparent;
@@ -58,23 +56,28 @@ const AreaRow = styled.div`
     :first-child {
         padding-left: 1rem;
     }
-    
 `
 
 const AreaRowColumn = styled.div`
-    height: 100%;
     display: flex;
     align-items: center;
 `
-
+const AreaElements = styled.div`
+    display: flex;
+    align-items: center;
+`
 const RowElement = styled.span`
-    min-width: 100px;
-    width: 100px;
+    padding-right: 0.5rem;
+    width: 200px;
+    white-space: normal;
+    word-wrap: break-word;
 `
 
 const IconContainer = styled.section`
 	color: var(--navBla);
     font-size: 2rem;
+    display: flex;
+    align-items: center;
 `;
 
 const TileDropdownColumn = styled.div`
@@ -177,9 +180,11 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
         <AreaRowContainer key={areaId}>
             <AreaRow id={areaId} className="clickable" onClick={toggleExpanded}>
                 <AreaRowColumn>
-                    <RowElement>{name}</RowElement>
-                    <RowElement>{beskrivelse}</RowElement>
-                    <RowElement><IconContainer>{getIconsFromGivenCode(ikon)}</IconContainer></RowElement>
+                    <AreaElements>
+                        <RowElement>{name}</RowElement>
+                        <RowElement>{beskrivelse}</RowElement>
+                        <RowElement><IconContainer>{getIconsFromGivenCode(ikon)}</IconContainer></RowElement>
+                    </AreaElements>
                 </AreaRowColumn>
                 <AreaRowColumn>
                     <button><Close onClick={handleDeleteArea} /></button>
