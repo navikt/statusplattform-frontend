@@ -56,6 +56,7 @@ const TjenesteContent = styled.div`
             color: grey;
         }
         flex-grow: 1;
+        justify-content: flex-end;
     }
     border-top: 1px solid rgba(0, 0, 0, 0.55);
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
@@ -121,7 +122,6 @@ const TjenesteTable = () => {
                         <span>Monitorlink</span>
                         <span>Beskrivelse</span>
                         <span>Logglink</span>
-                        <span>Slett</span>
                     </TjenesteHeader>
                     {services.map( service => {
                         return (
