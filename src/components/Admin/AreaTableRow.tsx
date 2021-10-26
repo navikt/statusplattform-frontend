@@ -15,18 +15,61 @@ import { putServiceToArea } from 'utils/putServiceToArea'
 
 import { toast } from 'react-toastify';
 
-const CustomTBody = styled.tbody `
-    span {
-        text-align: center !important;
+const AreaRowContainer = styled.div`
+    padding: 1px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.55);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    :hover {
+        padding: 0;
+        cursor: pointer;
+        border-top: 2px solid rgba(0, 0, 0, 0.55);
+        border-bottom: 2px solid rgba(0, 0, 0, 0.55);
     }
-    .clickable {
+    :last-child {
+        padding-bottom: 1px;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.55);
         :hover {
-            cursor: pointer;
+            padding-bottom: 0;
+            border-bottom: 3px solid rgba(0, 0, 0, 0.55);
         }
     }
-    :hover {
-        box-shadow: 0 0 3px black;
+`
+
+const AreaRow = styled.div`
+    width: 100%;
+    min-height: 5rem;
+    background-color: var(--navGraBakgrunn);
+    
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    
+    button {
+        background-color: transparent;
+        border: none;
+        height: 100%;
+        padding: 0 1rem;
+        :hover {
+            cursor: pointer;
+            color: grey;
+        }
     }
+    :first-child {
+        padding-left: 1rem;
+    }
+    
+`
+
+const AreaRowColumn = styled.div`
+    height: 100%;
+    display: flex;
+    align-items: center;
+`
+
+const RowElement = styled.span`
+    min-width: 100px;
+    width: 100px;
 `
 
 const IconContainer = styled.section`
@@ -34,14 +77,24 @@ const IconContainer = styled.section`
     font-size: 2rem;
 `;
 
-const TileDropdownRow = styled.tr`
-    td {
-        border: 0px transparent !important;
-        background-color: white !important;
-    }
+const TileDropdownColumn = styled.div`
+    min-width: 300px;
+    display: flex;
+    flex-direction: column;
+    cursor: default;
     select {
-        transform: translateY(-2px);
-        min-width: 100px;
+        cursor: pointer;
+        margin: 1rem 0;
+    }
+`
+
+const TileDropdownRow = styled.div`
+    width: 100%;
+    padding: 1rem 0;
+    display: flex;
+    flex-direction: row;
+    .clickable {
+        width: 100%;
     }
 `
 
@@ -53,17 +106,16 @@ const ServicesInAreaList = styled.ul`
         align-items: center;
         justify-content: space-between;
     }
-    cursor: default;
-`
-
-const CloseCustomized = styled(Close)`
-    color: red;
-    :hover {
-        color: grey;
-        border: 1px solid;
-        cursor: pointer;
+    button {
+        background-color: transparent;
+        border: none;
+        :hover {
+            cursor: pointer;
+            color: grey;
+        }
     }
 `
+
 
 interface Props {
     area: Area
@@ -121,53 +173,55 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
 
     
     return (
-        <CustomTBody key={areaId}>
-            <tr id={areaId} className="clickable" onClick={toggleExpanded}>
-                <td><span>{name}</span></td>
-                <td><span>{beskrivelse}</span></td>
-                <td><span><IconContainer>{getIconsFromGivenCode(ikon)}</IconContainer></span></td>
-                <td><span><CloseCustomized onClick={handleDeleteArea} /></span></td>
-                <td><span>{isExpanded ? <Collapse /> : <Expand />}</span></td>
-            </tr>
-
-
+        <AreaRowContainer key={areaId}>
+            <AreaRow id={areaId} className="clickable" onClick={toggleExpanded}>
+                <AreaRowColumn>
+                    <RowElement>{name}</RowElement>
+                    <RowElement>{beskrivelse}</RowElement>
+                    <RowElement><IconContainer>{getIconsFromGivenCode(ikon)}</IconContainer></RowElement>
+                </AreaRowColumn>
+                <AreaRowColumn>
+                    <button><Close onClick={handleDeleteArea} /></button>
+                    <button>{isExpanded ? <Collapse /> : <Expand />}</button>
+                </AreaRowColumn>
+            </AreaRow>
+            
             {isExpanded && 
-                (servicesInArea.length === 0 ?
-                <TileDropdownRow onClick={toggleExpanded}>
-                    <td colSpan={7}>Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste</td>
-                </TileDropdownRow>
-
-                :
-                
                 <TileDropdownRow>
-                    <td colSpan={2}>
-                        <ServicesInAreaList>
-                            <Element>Tjenester i område</Element>
-                            {servicesInArea.map(service => {
-                                return (
-                                    <li key={service.id}>
-                                        {service.name} 
-                                        <CloseCustomized aria-label="Fjern tjenesten fra område"
-                                            onClick={() => handleDeleteServiceOnArea(service.id)}
-                                        />
-                                    </li>
-                                )
-                            })}
-                        </ServicesInAreaList>
-                    </td>
-                    <td colSpan={3} className="clickable" onClick={toggleExpanded}/>
-                </TileDropdownRow>)
+                    <TileDropdownColumn>
+                        {(servicesInArea.length === 0 ?
+                            <TileDropdownColumn>
+                                Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste
+                            </TileDropdownColumn>
+                        :
+                            <ServicesInAreaList>
+                                <Element>Tjenester i område</Element>
+                                {servicesInArea.map(service => {
+                                    return (
+                                        <li key={service.id}>
+                                            {service.name} 
+                                            <button>
+                                                <Close aria-label="Fjern tjenesten fra område"
+                                                    onClick={() => handleDeleteServiceOnArea(service.id)}
+                                                />
+                                            </button>
+                                        </li>
+                                    )
+                                })}
+                            </ServicesInAreaList>
+                        )
+                    }
+                        <DropdownRowSelect 
+                            allServices={allServices}
+                            servicesInArea={servicesInArea} 
+                            handlePutServiceToArea={handlePutServiceToArea}
+                            toggleAreaExpanded={toggleExpanded} 
+                        />
+                    </TileDropdownColumn>
+                    <div className="clickable" onClick={toggleExpanded}/>
+                </TileDropdownRow>
             }
-
-            {isExpanded && 
-                <DropdownRowSelect 
-                    allServices={allServices}
-                    servicesInArea={servicesInArea} 
-                    handlePutServiceToArea={handlePutServiceToArea}
-                    toggleAreaExpanded={toggleExpanded} 
-                />
-            }
-        </CustomTBody>
+        </AreaRowContainer>
     )
 } 
 
@@ -204,26 +258,22 @@ const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handleP
     }
 
     return (
-        <TileDropdownRow key="input">
-            <td colSpan={2}>
-                <Select value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}>
-                    {availableServices.length > 0 ?
-                    availableServices.map(service => {
-                        return (
-                            <option key={service.id} value={service.id}>{service.name}</option>
-                        )
-                    })
-                    :
-                        <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
-                    }
-                </Select>
-            </td>
+        <TileDropdownColumn key="input">
+            <Select value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}>
+                {availableServices.length > 0 ?
+                availableServices.map(service => {
+                    return (
+                        <option key={service.id} value={service.id}>{service.name}</option>
+                    )
+                })
+                :
+                    <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
+                }
+            </Select>
 
-            <td colSpan={2}>
-                <Hovedknapp disabled={!selectedService} onClick={() => handlePutServiceToArea(selectedService)} >Legg til</Hovedknapp>                                            
-            </td>
-            <td colSpan={6} className="clickable" onClick={toggleAreaExpanded}></td>
-        </TileDropdownRow>
+            <Hovedknapp disabled={!selectedService} onClick={() => handlePutServiceToArea(selectedService)} >Legg til</Hovedknapp>                                            
+            <div className="clickable" onClick={toggleAreaExpanded}></div>
+        </TileDropdownColumn>
     )
 }
 

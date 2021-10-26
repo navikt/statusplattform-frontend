@@ -14,27 +14,16 @@ import { fetchServices } from 'utils/fetchServices';
 import CustomNavSpinner from 'components/CustomNavSpinner';
 import { fetchAreas } from 'utils/fetchAreas';
 
-
-const AddNewAreaContainer = styled.div`
-    max-width: 600px;
-    input, .knapp {
-        margin: 1rem 0;
-    }
-    label {
-        margin: 0;
-    }
-    select {
-        min-width: 150px;
-    }
-    .input-error {
-        input {
-            border: 1px solid red;
-        }
+const AreaHeader = styled.div`
+    width: 100%;
+    padding: 1rem;
+    font-weight: bold;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    display: flex;
+    span {
+        min-width: 100px;
     }
 `
-
-
-
 
 const AreaTable = () => { 
     const [dashboardAreas, setDashboardAreas] = useState<Area[]>([])
@@ -83,35 +72,27 @@ const AreaTable = () => {
 
     return (
         <div>
-
-
             <Knapp mini onClick={() => toggleNewAreaEdit(!editNewArea)}>{!editNewArea ? "Legg til nytt område" : "Avbryt nytt område"}</Knapp>
             {editNewArea &&
                 <AddNewArea dashboardAreas={dashboardAreas} fetchData={fetchData} setAnchorId={setAnchorId} />
             }
 
-
-            <table className="tabell tabell--stripet">
-                <thead>
-                    <tr>
-                        <th><span>Navn</span></th>
-                        <th><span>Beskrivelse</span></th>
-                        <th><span>Ikon</span></th>
-                        <th><span>Slett</span></th>
-                        <th></th>
-                    </tr>
-                </thead>
-                
-                    {dashboardAreas.map( (area, index) => {
-                        return (
-                            <AreaTableRow key={index} area={area}
-                                allServices={allServices}
-                                reload={fetchData} isExpanded={expanded.includes(area.id)}
-                                toggleExpanded={() => toggleExpandedFor(area.id)}
-                            />
-                        )
-                    })}
-            </table>
+            <AreaHeader>
+                <span>Navn</span>
+                <span>Beskrivelse</span>
+                <span>Ikon</span>
+            </AreaHeader>
+            <div>
+                {dashboardAreas.map( (area, index) => {
+                    return (
+                        <AreaTableRow key={index} area={area}
+                        allServices={allServices}
+                        reload={fetchData} isExpanded={expanded.includes(area.id)}
+                        toggleExpanded={() => toggleExpandedFor(area.id)}
+                        />
+                    )
+                })}
+            </div>
         </div>
     )
 } 
@@ -120,6 +101,23 @@ const AreaTable = () => {
 
 
 
+const AddNewAreaContainer = styled.div`
+    max-width: 600px;
+    input, .knapp {
+        margin: 1rem 0;
+    }
+    label {
+        margin: 0;
+    }
+    select {
+        min-width: 150px;
+    }
+    .input-error {
+        input {
+            border: 1px solid red;
+        }
+    }
+`
 
 
 interface NewAreaProps {
