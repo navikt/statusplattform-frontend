@@ -67,7 +67,7 @@ const DashboardsHeader = styled.div`
 `
 
 const DashboardRowContainer = styled.div`
-    min-height: 4rem;
+    min-height: 5rem;
     padding: 1px 0;
     border-top: 1px solid rgba(0, 0, 0, 0.55);
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
@@ -84,7 +84,7 @@ const DashboardRowContainer = styled.div`
 
 const DashboardRowInner = styled.div`
     width: 100%;
-    height: 4rem;
+    min-height: 5rem;
     padding-left: 1rem;
     background-color: var(--navGraBakgrunn);
     display: flex;
