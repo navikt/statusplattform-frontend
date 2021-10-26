@@ -17,24 +17,55 @@ import { fetchServices } from 'utils/fetchServices';
 import { fetchTypes } from 'utils/fetchTypes';
 
 
-
-const TableContainer = styled.div`
+const TjenesteHeader = styled.div`
     width: 100%;
-    overflow-x: auto;
-    tbody {
-        .clickable {
-        :hover {
-            cursor: pointer;
-        }
-        }
-        :hover {
-            box-shadow: 0 0 3px black;
-        }
-    }
+    padding: 1rem 0 1rem;
+    padding-left: 1rem;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    display: flex;
+    flex-direction: row;
     span {
-        text-align: center !important;
+        width: 120px;
+        font-weight: bold;
+    }
+    span:last-child {
+        flex-grow: 1;
     }
 `
+
+const TjenesteContent = styled.div`
+    min-height: 5rem;
+    padding-left: 1rem;
+    background-color: var(--navGra20);
+    display: flex;
+    * {
+        width: 120px;
+        padding-right: 0.5rem;
+        word-break: break-all;
+        display: flex;
+        align-items: center;
+    }
+    &:last-child {
+        flex-grow: 1;
+    }
+    button {
+        background-color: transparent;
+        border: none;
+        :hover {
+            cursor: pointer;
+            color: grey;
+        }
+        flex-grow: 1;
+    }
+    border-top: 1px solid rgba(0, 0, 0, 0.55);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+    :last-child {
+        padding-bottom: 0;
+        padding-left: 1rem;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+    }
+`
+
 const CloseCustomized = styled(Close)`
     color: red;
     :hover {
@@ -44,17 +75,7 @@ const CloseCustomized = styled(Close)`
     }
 `
 
-const AddNewServiceContainer = styled.div`
-    .input-error {
-        input {
-            border: 1px solid red;
-        }
-    }
-    .knapp {
-        margin-top: 1rem;
-        text-transform: none;
-    }
-`
+
 
 
 const TjenesteTable = () => {
@@ -90,45 +111,40 @@ const TjenesteTable = () => {
                 <AddNewService services={services} reload={reload}/>
             }
 
-            <TableContainer>
-                <table className="tabell tabell--stripet">
-
-                    <thead>
-                        <tr>
-                            <th><span>Navn</span></th>
-                            <th><span>Type</span></th>
-                            <th><span>Team</span></th>
-                            <th><span>Avhengigheter</span></th>
-                            <th><span>Monitorlink</span></th>
-                            <th><span>Beskrivelse</span></th>
-                            <th><span>Logglink</span></th>
-                            <th><span>Slett</span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {services.map( service => {
-                            return (
-                                <tr key={service.id}>
-                                    <td><span>{service.name}</span></td>
-                                    <td><span>{service.type}</span></td>
-                                    <td><span>{service.team}</span></td>
-                                    <td><ul>{service.dependencies.map((dependency, index) => {
+            <div>
+                <div>
+                    <TjenesteHeader>
+                        <span>Navn</span>
+                        <span>Type</span>
+                        <span>Team</span>
+                        <span>Avhengigheter</span>
+                        <span>Monitorlink</span>
+                        <span>Beskrivelse</span>
+                        <span>Logglink</span>
+                        <span>Slett</span>
+                    </TjenesteHeader>
+                    {services.map( service => {
+                        return (
+                            <TjenesteContent key={service.id}>
+                                <span>{service.name}</span>
+                                <span>{service.type}</span>
+                                <span>{service.team}</span>
+                                <ul>
+                                    {service.dependencies.map((dependency, index) => {
                                         return (
                                             <li key={index}>{dependency.name}</li>
                                         )
-                                    })}</ul></td>
-                                    <td><span>{service.monitorlink}</span></td>
-                                    <td><span>{service.description}</span></td>
-                                    <td><span>{service.logglink}</span></td>
-                                    <td><span><CloseCustomized onClick={() => handleServiceDeletion(service)} /></span></td>
-                                </tr>
-                            )
-                        })}
-
-
-                    </tbody>
-                </table>
-            </TableContainer>
+                                    })}
+                                </ul>
+                                <span>{service.monitorlink}</span>
+                                <span>{service.description}</span>
+                                <span>{service.logglink}</span>
+                                <button><Close onClick={() => handleServiceDeletion(service)} /></button>
+                            </TjenesteContent>
+                        )
+                    })}
+                </div>
+            </div>
         </div>
     )
 }
@@ -139,9 +155,23 @@ const TjenesteTable = () => {
 
 
 
+/* ----------------- --------------------------------------------------- -----------------*/
 
 
 
+
+
+const AddNewServiceContainer = styled.div`
+    .input-error {
+        input {
+            border: 1px solid red;
+        }
+    }
+    .knapp {
+        margin-top: 1rem;
+        text-transform: none;
+    }
+`
 
 const NewServiceRow = styled.div`
     width: 100%;
@@ -303,6 +333,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
 
 
 
+/* ----------------- --------------------------------------------------- -----------------*/
 
 
 
