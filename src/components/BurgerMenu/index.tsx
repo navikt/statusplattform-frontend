@@ -123,8 +123,8 @@ const PopoverContent = () => {
     return (
         <ul>
             <strong>Navn: Nordmann, Ola</strong>
-            <li><a href="#0"><Lenke href="#0">Min side</Lenke></a></li>
-            <li><a href="#0"><Lenke href="#0">Mine varsler</Lenke></a></li>
+            <li><Lenke href="#0">Min side</Lenke></li>
+            <li><Lenke href="#0">Mine varsler</Lenke></li>
             <li onClick={() => toast.info("Ikke implementert innlogging")}>
                 <Lenke href="#0">   
                     <Login className="popover-link-ikon" />
