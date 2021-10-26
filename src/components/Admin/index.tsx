@@ -1,19 +1,11 @@
 import 'react-dropdown/style.css';
 import styled from 'styled-components'
-import { useEffect, useState } from "react";
-
-import { fetchDashboard } from 'utils/fetchDashboard'
-import { Service, Tile, Dashboard, Area } from 'types/navServices';
+import { useState } from "react";
 
 import AreaTable from './AreaTable';
 import TjenesteTable from './TjenesteTable';
-import { fetchServices } from 'utils/fetchServices';
-import { fetchDashboardsList } from 'utils/fetchDashboardsList';
 import { Select } from 'nav-frontend-skjema';
 import DashboardConfig from './DashboardConfig';
-import CustomNavSpinner from 'components/CustomNavSpinner';
-import { fetchTypes } from 'utils/fetchTypes';
-import { useRouter } from 'next/router';
 import { adminMenu, useFindCurrentTab } from './MenuSelector';
 
 
@@ -87,41 +79,6 @@ export interface Props {
 
 const AdminDashboard = () => {
     const selectedMenu = useFindCurrentTab(adminMenu)
-
-    const [dashboards, setDashboards] = useState<Dashboard[]>()
-    const [dashboardAreas, setDashboardAreas] = useState<Area[]>([])
-    const [services, setServices] = useState<Service[]>()
-    const [isLoading, setIsLoading] = useState(true)
-    const [tileOrderIsDynamic, changeTileOrderIsDynamic] = useState(true) //DENNE MÅ ENDRES. Skal komme default fra rest
-
-    const fetchData = async () => {
-        setIsLoading(true)
-        const dashboards: Dashboard[] = await fetchDashboardsList()
-        setDashboards(dashboards)
-
-        const dashboard: Dashboard = await fetchDashboard(dashboards[0].id)
-        const allServices: Service[] = await fetchServices()
-        setServices(allServices)
-
-        setDashboardAreas(dashboard.areas)
-        setIsLoading(false)
-    };
-
-    useEffect(() => {
-        fetchData()
-    }, [])
-
-    if(isLoading) {
-        return (
-            <CustomNavSpinner />
-        )
-    }
-    
-
-
-    const changeTileOrdering = () => {
-        changeTileOrderIsDynamic(!tileOrderIsDynamic)
-    }
     
 	return (
         <AdminDashboardContainer>
@@ -129,12 +86,6 @@ const AdminDashboard = () => {
                 <h2>{selectedMenu}</h2>
                 {selectedMenu === "Områder" && 
                     <AreaTableContainer>
-                        {/* <CustomSelect value={selectedDashboard} onChange={event => updateSelectedDashboard(event.target.value)} label="Velg Dashbord">
-                            {dashboards.map((dashboard, index) => (
-                                <option key={index} value={dashboard.name} label={dashboard.name}/>
-                            ))}
-                            
-                        </CustomSelect> */}
                         <AreaTable />
                     </AreaTableContainer>
                 }
