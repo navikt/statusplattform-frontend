@@ -83,13 +83,11 @@ const DashboardRowContainer = styled.div`
 `
 
 const DashboardRowInner = styled.div`
-    width: 100%;
     min-height: 5rem;
     padding-left: 1rem;
     background-color: var(--navGraBakgrunn);
     display: flex;
     flex-direction: row;
-    align-items: center;
     button {
         background-color: transparent;
         border: none;
@@ -104,8 +102,6 @@ const DashboardRowInner = styled.div`
 `
 
 const ClickableName = styled.div`
-    height: 100%;
-    width: 50%;
     display: flex;
     align-items: center;
     flex-grow: 1;
@@ -115,9 +111,7 @@ const ClickableName = styled.div`
 `
 
 const OptionsInRow = styled.div`
-    height: 100%;
     display: flex;
-    flex-direction: row;
 `
 
 const CustomButton = styled.button`

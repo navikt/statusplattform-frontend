@@ -26,6 +26,7 @@ a {
   /* Colors for basic things like background, boxes, etc */
   --navGra80: #4F4F4F;
   --navGra40: #A0A0A0;
+  --navGra20: #C9C9C9;
   
   /* Interactive colors for items such as links, buttons, active, hover, etc */
   --fokusFarge: #254B6D;

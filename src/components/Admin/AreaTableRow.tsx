@@ -91,6 +91,7 @@ const TileDropdownColumn = styled.div`
 const TileDropdownRow = styled.div`
     width: 100%;
     padding: 1rem 0;
+    padding-left: 1rem;
     display: flex;
     flex-direction: row;
     .clickable {

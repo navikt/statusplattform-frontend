@@ -25,6 +25,8 @@ const AreaHeader = styled.div`
     }
 `
 
+
+
 const AreaTable = () => { 
     const [dashboardAreas, setDashboardAreas] = useState<Area[]>([])
     const [allServices, setAllServices] = useState<Service[]>([])
@@ -86,9 +88,9 @@ const AreaTable = () => {
                 {dashboardAreas.map( (area, index) => {
                     return (
                         <AreaTableRow key={index} area={area}
-                        allServices={allServices}
-                        reload={fetchData} isExpanded={expanded.includes(area.id)}
-                        toggleExpanded={() => toggleExpandedFor(area.id)}
+                            allServices={allServices}
+                            reload={fetchData} isExpanded={expanded.includes(area.id)}
+                            toggleExpanded={() => toggleExpandedFor(area.id)}
                         />
                     )
                 })}
