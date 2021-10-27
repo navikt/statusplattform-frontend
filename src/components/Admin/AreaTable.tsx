@@ -14,14 +14,24 @@ import { fetchServices } from 'utils/fetchServices';
 import CustomNavSpinner from 'components/CustomNavSpinner';
 import { fetchAreas } from 'utils/fetchAreas';
 
+const AreaContainer = styled.div`
+    .table-div {
+        overflow-x: auto;
+        div {
+            min-width: fit-content;
+        }
+    }
+`
+
 const AreaHeader = styled.div`
     width: 100%;
     padding: 1rem;
     font-weight: bold;
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
     display: flex;
+    gap: 5ch;
     span {
-        width: 200px;
+        min-width: 200px;
     }
 `
 
@@ -73,29 +83,32 @@ const AreaTable = () => {
     }
 
     return (
-        <div>
+        <AreaContainer>
             <Knapp mini onClick={() => toggleNewAreaEdit(!editNewArea)}>{!editNewArea ? "Legg til nytt område" : "Avbryt nytt område"}</Knapp>
             {editNewArea &&
                 <AddNewArea dashboardAreas={dashboardAreas} fetchData={fetchData} setAnchorId={setAnchorId} />
             }
-
-            <AreaHeader>
-                <span>Navn</span>
-                <span>Beskrivelse</span>
-                <span>Ikon</span>
-            </AreaHeader>
-            <div>
-                {dashboardAreas.map( (area, index) => {
-                    return (
-                        <AreaTableRow key={index} area={area}
-                            allServices={allServices}
-                            reload={fetchData} isExpanded={expanded.includes(area.id)}
-                            toggleExpanded={() => toggleExpandedFor(area.id)}
-                        />
-                    )
-                })}
+            <div className="table-div">
+                <div>
+                    <AreaHeader>
+                        <span>Navn</span>
+                        <span>Beskrivelse</span>
+                        <span>Ikon</span>
+                    </AreaHeader>
+                    <div>
+                        {dashboardAreas.map( (area, index) => {
+                            return (
+                                <AreaTableRow key={index} area={area}
+                                    allServices={allServices}
+                                    reload={fetchData} isExpanded={expanded.includes(area.id)}
+                                    toggleExpanded={() => toggleExpandedFor(area.id)}
+                                />
+                            )
+                        })}
+                    </div>
+                </div>
             </div>
-        </div>
+        </AreaContainer>
     )
 } 
 

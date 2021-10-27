@@ -65,7 +65,7 @@ const AdminConfigsContainer = styled.div`
 
 const AreaTableContainer = styled.div`
     width: 100%;
-    overflow-x: auto;
+    /* overflow-x: auto; */
 `
 
 const CustomSelect = styled(Select)`

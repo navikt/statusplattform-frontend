@@ -38,7 +38,6 @@ const AreaRowContainer = styled.div`
 const AreaRow = styled.div`
     min-height: 5rem;
     background-color: var(--navGraBakgrunn);
-    
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -65,10 +64,12 @@ const AreaRowColumn = styled.div`
 const AreaElements = styled.div`
     display: flex;
     align-items: center;
+    gap: 5ch;
 `
 const RowElement = styled.span`
     padding-right: 0.5rem;
-    width: 200px;
+    min-width: 200px;
+    flex-basis: 80%;
     white-space: normal;
     word-wrap: break-word;
 `
@@ -233,7 +234,18 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
 
 
 
+
+
+
+
+
+
 // ----------------------------------------------------------------------------------------------------
+
+
+
+
+
 
 
 interface DropdownProps {
