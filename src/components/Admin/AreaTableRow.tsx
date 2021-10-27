@@ -187,7 +187,7 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
                     </AreaElements>
                 </AreaRowColumn>
                 <AreaRowColumn>
-                    <button><Close onClick={handleDeleteArea} /></button>
+                    <button onClick={handleDeleteArea} ><Close/></button>
                     <button>{isExpanded ? <Collapse /> : <Expand />}</button>
                 </AreaRowColumn>
             </AreaRow>
