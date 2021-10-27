@@ -31,6 +31,7 @@ const TjenesteHeader = styled.div`
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
     display: flex;
     flex-direction: row;
+    gap: 5ch;
     & > * {
         flex-basis: 10%;
         min-width: 120px;
@@ -43,6 +44,7 @@ const TjenesteContent = styled.div`
     padding-left: 1rem;
     background-color: var(--navGraBakgrunn);
     display: flex;
+    gap: 5ch;
     * {
         min-width: 120px;
         flex-basis: 10%;
