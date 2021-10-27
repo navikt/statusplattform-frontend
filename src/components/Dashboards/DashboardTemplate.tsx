@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useRouter } from 'next/router'
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
+import { Knapp } from 'nav-frontend-knapper'
+
+import CustomNavSpinner from 'components/CustomNavSpinner'
 import { PortalServiceTile } from 'components/PortalServiceTile'
 import StatusOverview from 'components/StatusOverview'
+import { Area, Dashboard } from 'types/navServices'
 import { fetchDashboard } from 'utils/fetchDashboard'
 
-import NavFrontendSpinner from "nav-frontend-spinner";
-import { Area, Dashboard } from "types/navServices";
-import { Knapp } from "nav-frontend-knapper";
-import { fetchDashboardsList } from "utils/fetchDashboardsList";
-import CustomNavSpinner from "components/CustomNavSpinner";
-
+const DashboardContainer = styled.div`
+    display: flex;
+`
 
 const DigitalServicesContainer = styled.div`
     width: 100%;
@@ -41,14 +43,6 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
 
 `;
 
-const SelectWrapper = styled.div<{maxWidth: number}>`
-    width: ${(props) => props.maxWidth}px;
-    display: flex;
-    select {
-        min-width: 100px;
-        max-width: 200px;
-    }
-`
 
 const PortalServiceTileRow = styled.div `
     width: 100%;
@@ -66,36 +60,40 @@ const ErrorParagraph = styled.p`
 `
 
 
-const NavDashboard = () => {
-    const [areasInDashboard, setAreasInDashboard] = useState<Area[]>()
+interface DashboardProps {
+    dashboard: Dashboard
+}
+
+const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     const [isLoading, setIsLoading] = useState(true)
+    const [areasInDashboard, setAreasInDashboard] = useState<Area[]>()
     const [expandAll, changeExpand] = useState(false)
     const [expandedTiles, setExpandedTiles] = useState([]);
     const [width, setWidth] = useState(typeof window !== "undefined"? window.innerWidth:0)
 
+    const router = useRouter()
+
+    if (!dashboard) {
+        router.push("/Custom404")
+    }
 
     useEffect(() => {
         (async function () {
             setIsLoading(true)
-            const dashboards: Dashboard[] = await fetchDashboardsList()
-            const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboards[0].id)
+            const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
             setAreasInDashboard(retrievedAreasInDashboard.areas)
             setIsLoading(false)
         })()
     }, [])
-    
-
-    useEffect(() => {
-        window.addEventListener("resize", () => setWidth(window.innerWidth))
-    }, []);
 
     
+
     if (isLoading) {
         return (
             <CustomNavSpinner />
         ) 
     }
-    
+
     if (!areasInDashboard) {
         return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
     }
@@ -169,9 +167,16 @@ const NavDashboard = () => {
     }
 
 
+
+
+
+
+
+
+
     return (
-        
-        <DigitalServicesContainer>
+        <DashboardContainer>
+            <DigitalServicesContainer>
             <StatusOverview areas={areasInDashboard} />
                 <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
 
@@ -194,8 +199,8 @@ const NavDashboard = () => {
     
             
         </DigitalServicesContainer>
+        </DashboardContainer>
     )
-
 }
 
-export default NavDashboard
+export default DashboardTemplate
