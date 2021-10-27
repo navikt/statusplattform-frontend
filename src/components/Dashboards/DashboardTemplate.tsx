@@ -9,6 +9,8 @@ import { PortalServiceTile } from 'components/PortalServiceTile'
 import StatusOverview from 'components/StatusOverview'
 import { Area, Dashboard } from 'types/navServices'
 import { fetchDashboard } from 'utils/fetchDashboard'
+import Lenke from 'nav-frontend-lenker'
+import { Ingress, Innholdstittel } from 'nav-frontend-typografi'
 
 const DashboardContainer = styled.div`
     display: flex;
@@ -170,6 +172,11 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
 
 
+    if(areasInDashboard.length == 0) {
+        return (
+            <NoAreasInDashboard />
+        )
+    }
 
 
 
@@ -201,6 +208,53 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
         </DigitalServicesContainer>
         </DashboardContainer>
     )
+}
+
+
+
+
+
+
+
+const ErrorWrapper = styled.div`
+    margin: 2rem 0;
+    background-color: var(--navBakgrunn);
+    border-radius: .25rem;
+    padding: 1.5rem;
+    max-width: 50rem;
+    display: flex;
+    flex-flow: column wrap;
+    h1 {
+        margin-right: 1.5rem;
+        padding-right: 1.5rem;
+        vertical-align: top;
+    }
+`;
+
+const ErrorHeader = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`
+
+
+const NoAreasInDashboard = () => {
+
+    return (
+        <ErrorWrapper>
+            <ErrorHeader>
+                <Innholdstittel>Ingen områder i Dashbord</Innholdstittel>
+            </ErrorHeader>
+                <div className="error404__content">
+                    <p>
+                        Det fins ingen områder i dashbordet enda. Hvis du mener dette er feil, rapporter det til administratorene av statusplattformen.
+                    </p>
+                    <Lenke href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">
+                        Meld gjerne fra her
+                    </Lenke>
+                </div>
+        </ErrorWrapper>
+    )    
 }
 
 export default DashboardTemplate
