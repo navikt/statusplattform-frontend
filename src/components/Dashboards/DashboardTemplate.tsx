@@ -10,10 +10,15 @@ import StatusOverview from 'components/StatusOverview'
 import { Area, Dashboard } from 'types/navServices'
 import { fetchDashboard } from 'utils/fetchDashboard'
 import Lenke from 'nav-frontend-lenker'
-import { Ingress, Innholdstittel } from 'nav-frontend-typografi'
+import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi'
+import Panel from 'nav-frontend-paneler'
+import { toast } from 'react-toastify'
 
 const DashboardContainer = styled.div`
+    width: 90%;
     display: flex;
+    flex-direction: column;
+    align-items: center;
 `
 
 const DigitalServicesContainer = styled.div`
@@ -188,28 +193,34 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
                 <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
 
 
-                    {areasInDashboard.length > 0 &&
-                        <PortalServiceTileContainer maxWidth={maxWidth}>
-                            {rows.map((row, rowIndex) => (
-                                <PortalServiceTileRow key={rowIndex}>
-                                    {row.map((area, index) => ( 
-                                        <PortalServiceTile key={index} toggleTile={toggleTile}
-                                            tileIndex={rowIndex*numberOfTilesPerRow + index}
-                                            area={area} expanded={isTileExpanded(rowIndex, index)}
-                                        />
-                                    ))}
-                                </PortalServiceTileRow>
-                            ))}
+                {areasInDashboard.length > 0 &&
+                    <PortalServiceTileContainer maxWidth={maxWidth}>
+                        {rows.map((row, rowIndex) => (
+                            <PortalServiceTileRow key={rowIndex}>
+                                {row.map((area, index) => ( 
+                                    <PortalServiceTile key={index} toggleTile={toggleTile}
+                                        tileIndex={rowIndex*numberOfTilesPerRow + index}
+                                        area={area} expanded={isTileExpanded(rowIndex, index)}
+                                    />
+                                ))}
+                            </PortalServiceTileRow>
+                        ))}
 
-                        </PortalServiceTileContainer>
-                    }
-    
+                    </PortalServiceTileContainer>
+                }
+
             
-        </DigitalServicesContainer>
+            </DigitalServicesContainer>
+            <MaintenanceScheduling />
         </DashboardContainer>
     )
 }
 
+
+
+
+
+/* --------------------------------------- Helpers below --------------------------------------- */
 
 
 
@@ -256,5 +267,74 @@ const NoAreasInDashboard = () => {
         </ErrorWrapper>
     )    
 }
+
+
+
+
+
+
+
+
+const MaintenanceContainer = styled.div`
+    width: 100%;
+`
+
+const MaintenancePanel = styled(Panel) `
+    width: 100%;
+    max-width: 1080px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    gap: 5ch;
+    & > * {
+        flex-basis: 20% 70% 10%;
+    }
+    button {
+        max-width: 100px;
+        white-space: normal;
+        word-wrap: break-word;
+    }
+`
+
+const MaintenanceHeader = styled.div`
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    span {
+        font-size: 2rem;
+        margin-right: 10px;
+    }
+    margin-top: 10px;
+    @media (min-width: 350px){
+        margin-top: 0;
+    }
+`
+
+const MaintenanceContent = styled.div``
+
+const MaintenanceScheduling = () => {
+
+    const handleRedirect = () => {
+        toast.info("Ikke implementert enda")
+    }
+
+    return (
+        <MaintenanceContainer>
+            <Systemtittel>Planlagt vedlikehold</Systemtittel>
+            <MaintenancePanel>
+                <MaintenanceHeader>
+                    Dato for vedlikehold
+                </MaintenanceHeader>
+                <MaintenanceContent>
+                    {/* Two viewes based on whether theres maintenance scheduled or not */}
+                    Fins ingen støtte for vedlikehold helt enda
+                </MaintenanceContent>
+                <Knapp mini onClick={handleRedirect}>Mer om vedlikehold</Knapp>
+            </MaintenancePanel>
+        </MaintenanceContainer>
+    )
+}
+
 
 export default DashboardTemplate

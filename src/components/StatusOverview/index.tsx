@@ -1,19 +1,11 @@
-import Lenke from 'nav-frontend-lenker';
-import Link from 'next/link';
 import styled from 'styled-components'
 
-import { fetchServices } from 'utils/fetchServices'
-import { Tile, AreaServicesList, Service } from 'types/navServices'
+import { AreaServicesList } from 'types/navServices'
 
-import NavInfoCircle from 'components/NavInfoCircle'
-import MaintenanceScheduling from 'components/MaintenanceScheduling'
-import { Calender } from '@navikt/ds-icons';
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from 'utils/servicesOperations';
-import Lenkepanel from 'nav-frontend-lenkepanel';
-import Panel from 'nav-frontend-paneler';
 import { Knapp } from 'nav-frontend-knapper';
-// mapStatusAndIncidentsToArray
+
 
 const StatusOverviewContainer = styled.div`
     max-width: 1080px;
@@ -27,9 +19,6 @@ const StatusOverviewContainer = styled.div`
         p {
             margin: 5px 0;
         }
-    }
-    @media(min-width: 500px){
-        padding: 0 3rem;
     }
 `;
 
@@ -137,6 +126,7 @@ const StatusOverview = (props: AreaServicesList) => {
     const tilesThatFail: string[] = getListOfTilesThatFail(props)
     return (
         <StatusOverviewContainer>
+            <Systemtittel>Informasjon om avvik</Systemtittel>
 
             <StatusBannerContainer>
                 <div>
@@ -184,7 +174,7 @@ const StatusOverview = (props: AreaServicesList) => {
                             </Systemtittel>
                         </div>
                     </IconHeader>
-                   <CirclesContainer>
+                <CirclesContainer>
 
                         <IncidentsAndStatusCircleWrapper>
                             <NavInfoCircle topText="Hendelser" centerTextLeft="0" centerTextRight="16" bottomText="Siste 24 timene"/>

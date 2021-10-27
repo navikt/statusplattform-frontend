@@ -20,6 +20,7 @@ const MainContentContainer = styled.div`
 const Content = styled.main`
     width: 100%;
     min-height: 100%;
+    margin-bottom: 2rem;
     display: flex;
     align-items: center;
     justify-content: center;
