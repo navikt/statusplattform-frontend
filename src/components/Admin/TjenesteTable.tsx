@@ -17,7 +17,12 @@ import { fetchServices } from 'utils/fetchServices';
 import { fetchTypes } from 'utils/fetchTypes';
 
 const TjenesteTableContainer = styled.div`
-    overflow-x: auto;
+    .table-div {
+        overflow-x: auto;
+        div {
+            min-width: fit-content;
+        }
+    }
 `
 
 const TjenesteHeader = styled.div`
@@ -115,7 +120,7 @@ const TjenesteTable = () => {
                 <AddNewService services={services} reload={reload}/>
             }
 
-            <div>
+            <div className="table-div">
                 <div>
                     <TjenesteHeader>
                         <span>Navn</span>
