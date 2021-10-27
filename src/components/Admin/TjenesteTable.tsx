@@ -16,20 +16,20 @@ import { postService } from 'utils/postService'
 import { fetchServices } from 'utils/fetchServices';
 import { fetchTypes } from 'utils/fetchTypes';
 
+const TjenesteTableContainer = styled.div`
+    overflow-x: auto;
+`
 
 const TjenesteHeader = styled.div`
-    width: 100%;
     padding: 1rem 0 1rem;
     padding-left: 1rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
     display: flex;
     flex-direction: row;
-    span {
-        width: 120px;
+    & > * {
+        flex-basis: 10%;
+        min-width: 120px;
         font-weight: bold;
-    }
-    span:last-child {
-        flex-grow: 1;
     }
 `
 
@@ -39,7 +39,8 @@ const TjenesteContent = styled.div`
     background-color: var(--navGraBakgrunn);
     display: flex;
     * {
-        width: 120px;
+        min-width: 120px;
+        flex-basis: 10%;
         padding-right: 0.5rem;
         word-break: break-all;
         display: flex;
@@ -91,21 +92,23 @@ const TjenesteTable = () => {
 
     const handleServiceDeletion = (serviceToDelete) => {
 
-        if(deleteService(serviceToDelete)) {
+        deleteService(serviceToDelete).then(() => {
             toast.success('Tjeneste slettet');
             const newServices = services.filter(currentService => 
                 currentService != serviceToDelete
             )
             reload()
             return
-        }
-        toast.error('Tjeneste kunne ikke slettes');
+        }) .catch(() => {
+            toast.error('Tjeneste kunne ikke slettes');
+        })
     }
+    
 
     
 
     return (
-        <div>
+        <TjenesteTableContainer>
 
             <Knapp mini onClick={() => changeAddNewService(!addNewService)}>{addNewService == false ? "Legg til ny tjeneste" : "Avbryt ny tjeneste"}</Knapp>
             {addNewService &&
@@ -145,7 +148,7 @@ const TjenesteTable = () => {
                     })}
                 </div>
             </div>
-        </div>
+        </TjenesteTableContainer>
     )
 }
 
