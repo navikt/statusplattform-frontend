@@ -1,15 +1,14 @@
+import ArbeidsgiverDashboard from 'components/Dashboards/Arbeidsgiver';
 import Layout from 'components/Layout'
-import NavDashboard from './NavDashboard'
 
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 
-export default function Home() {
-
+export default function DashboardArbeidsgiver() {
     return (
         <Layout>
-            <NavDashboard />
+            <ArbeidsgiverDashboard />
             <ToastContainer/>
         </Layout>
     )

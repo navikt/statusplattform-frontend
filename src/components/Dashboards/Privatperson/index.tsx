@@ -9,6 +9,7 @@ import NavFrontendSpinner from "nav-frontend-spinner";
 import { Area, Dashboard } from "types/navServices";
 import { Knapp } from "nav-frontend-knapper";
 import { fetchDashboardsList } from "utils/fetchDashboardsList";
+import CustomNavSpinner from "components/CustomNavSpinner";
 
 
 const DigitalServicesContainer = styled.div`
@@ -37,17 +38,7 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     @media (min-width: 1200px) {
         /* max-width: ${(props) => props.maxWidth}px; */
     }
-
 `;
-
-const SelectWrapper = styled.div<{maxWidth: number}>`
-    width: ${(props) => props.maxWidth}px;
-    display: flex;
-    select {
-        min-width: 100px;
-        max-width: 200px;
-    }
-`
 
 const PortalServiceTileRow = styled.div `
     width: 100%;
@@ -69,9 +60,8 @@ const SpinnerCentered = styled.div`
     top: 40%;
 `
 
-const NavDashboard = () => {
-    const [dashboards, setDashboards] = useState<Dashboard[]>()
-    const [selectedDashboard, setSelectedDash] = useState()
+
+const Privatperson = () => {
     const [areasInDashboard, setAreasInDashboard] = useState<Area[]>()
     const [isLoading, setIsLoading] = useState(true)
     const [expandAll, changeExpand] = useState(false)
@@ -83,7 +73,6 @@ const NavDashboard = () => {
         (async function () {
             setIsLoading(true)
             const dashboards: Dashboard[] = await fetchDashboardsList()
-            setDashboards(dashboards)
             const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboards[0].id)
             setAreasInDashboard(retrievedAreasInDashboard.areas)
             setIsLoading(false)
@@ -93,14 +82,12 @@ const NavDashboard = () => {
 
     useEffect(() => {
         window.addEventListener("resize", () => setWidth(window.innerWidth))
-    }, []);
+    }, [])
 
     
     if (isLoading) {
         return (
-            <SpinnerCentered>
-                <NavFrontendSpinner type="XXL" />
-            </SpinnerCentered>
+            <CustomNavSpinner />
         ) 
     }
     
@@ -138,6 +125,8 @@ const NavDashboard = () => {
 
         return numberOfTilesPerRow;
     }
+
+
     let numberOfTilesPerRow = calculateNumberOfTilesPerRow();
 
     const generateRowsOfTiles = () => {
@@ -176,9 +165,7 @@ const NavDashboard = () => {
         }
     }
 
-
     return (
-        
         <DigitalServicesContainer>
             <StatusOverview areas={areasInDashboard} />
                 <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
@@ -203,7 +190,6 @@ const NavDashboard = () => {
             
         </DigitalServicesContainer>
     )
-
 }
 
-export default NavDashboard
+export default Privatperson

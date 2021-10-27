@@ -2,7 +2,6 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styled from 'styled-components'
 
-
 import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, } from "nav-frontend-typografi";
 
@@ -14,6 +13,7 @@ const Nav = styled.nav `
 	flex-direction: column;
 	align-items: center;
 	ul {
+		gap: 1rem;
 		list-style: none;
 		padding: 0;
 		margin: 0;
@@ -24,13 +24,6 @@ const Nav = styled.nav `
 	}
 `
 
-const LinkWrapper = styled.div`
-	height: 100%;
-    margin: 0 1rem;
-	display: flex;
-    align-items: center;
-	justify-content: center;
-`;
 const LenkeCustomized = styled(Lenke)`
 	text-decoration: none;
 	color: black;
@@ -78,15 +71,31 @@ export default function Navbar() {
 		<Nav>
 			<ul role="tablist">
 				<li role="tab">
-					{/* <LinkWrapper> */}
-						<Link href="/">
-							<LenkeCustomized>
-								<LenkeInner className={`${router.pathname === "/" ? "active" : ""}`}>
-									<NormalTekstCustomized>Privatperson</NormalTekstCustomized>
-								</LenkeInner>
-							</LenkeCustomized>
-						</Link>
-					{/* </LinkWrapper> */}
+					<Link href={"/Privatperson"}>
+						<LenkeCustomized>
+							<LenkeInner className={`${(router.pathname === "/" || router.pathname === "/Privatperson") ? "active" : ""}`}>
+								<NormalTekstCustomized>Privatperson</NormalTekstCustomized>
+							</LenkeInner>
+						</LenkeCustomized>
+					</Link>
+				</li>
+				<li role="tab">
+					<Link href="/Arbeidsgiver">
+						<LenkeCustomized>
+							<LenkeInner className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>
+								<NormalTekstCustomized>Arbeidsgiver</NormalTekstCustomized>
+							</LenkeInner>
+						</LenkeCustomized>
+					</Link>
+				</li>
+				<li role="tab">
+					<Link href="/Samarbeidspartner">
+						<LenkeCustomized>
+							<LenkeInner className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>
+								<NormalTekstCustomized>Samarbeidspartner</NormalTekstCustomized>
+							</LenkeInner>
+						</LenkeCustomized>
+					</Link>
 				</li>
 				{/* <li role="tab">
 					<LinkWrapper>
