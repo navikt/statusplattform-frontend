@@ -142,7 +142,7 @@ const TjenesteTable = () => {
                                 <span>{service.monitorlink}</span>
                                 <span>{service.description}</span>
                                 <span>{service.logglink}</span>
-                                <button><Close onClick={() => handleServiceDeletion(service)} /></button>
+                                <button onClick={() => handleServiceDeletion(service)}><Close /></button>
                             </TjenesteContent>
                         )
                     })}
