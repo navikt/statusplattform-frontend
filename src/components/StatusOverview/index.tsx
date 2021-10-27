@@ -5,6 +5,7 @@ import { AreaServicesList } from 'types/navServices'
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from 'utils/servicesOperations';
 import { Knapp } from 'nav-frontend-knapper';
+import { toast } from 'react-toastify';
 
 
 const StatusOverviewContainer = styled.div`
@@ -124,6 +125,11 @@ const StatusOverview = (props: AreaServicesList) => {
     const numberOfServices: number = countServicesInAreas(props)
     const numberOfHealthyServices: number = countHealthyServices(props)
     const tilesThatFail: string[] = getListOfTilesThatFail(props)
+
+    const handleRedirect = () => {
+        toast.info("Ikke implementert enda")
+    }
+
     return (
         <StatusOverviewContainer>
             <Systemtittel>Informasjon om avvik</Systemtittel>
@@ -157,7 +163,7 @@ const StatusOverview = (props: AreaServicesList) => {
                     <Undertekst>Sist oppdatert: Ikke implementert</Undertekst>
                 </div>
                 {/* <Link href="/IncidentsPage"> */}
-                    <KnappCustomized>
+                    <KnappCustomized onClick={handleRedirect}>
                         Mer om hendelser
                     </KnappCustomized>
                 {/* </Link> */}
