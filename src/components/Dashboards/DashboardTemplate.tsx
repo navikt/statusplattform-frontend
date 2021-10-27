@@ -277,6 +277,13 @@ const NoAreasInDashboard = () => {
 
 const MaintenanceContainer = styled.div`
     width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    h2 {
+        width: 100%;
+        max-width: 1080px;
+    }
 `
 
 const MaintenancePanel = styled(Panel) `
@@ -285,6 +292,7 @@ const MaintenancePanel = styled(Panel) `
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
     gap: 5ch;
     & > * {
         flex-basis: 20% 70% 10%;
@@ -293,21 +301,6 @@ const MaintenancePanel = styled(Panel) `
         max-width: 100px;
         white-space: normal;
         word-wrap: break-word;
-    }
-`
-
-const MaintenanceHeader = styled.div`
-    margin-bottom: 2rem;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    span {
-        font-size: 2rem;
-        margin-right: 10px;
-    }
-    margin-top: 10px;
-    @media (min-width: 350px){
-        margin-top: 0;
     }
 `
 
@@ -323,13 +316,13 @@ const MaintenanceScheduling = () => {
         <MaintenanceContainer>
             <Systemtittel>Planlagt vedlikehold</Systemtittel>
             <MaintenancePanel>
-                <MaintenanceHeader>
+                <p>
                     Dato for vedlikehold
-                </MaintenanceHeader>
-                <MaintenanceContent>
+                </p>
+                <p>
                     {/* Two viewes based on whether theres maintenance scheduled or not */}
                     Fins ingen støtte for vedlikehold helt enda
-                </MaintenanceContent>
+                </p>
                 <Knapp mini onClick={handleRedirect}>Mer om vedlikehold</Knapp>
             </MaintenancePanel>
         </MaintenanceContainer>
