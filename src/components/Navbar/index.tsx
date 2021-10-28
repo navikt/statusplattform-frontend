@@ -9,11 +9,8 @@ const Nav = styled.nav `
 	height: 2.75rem;
     background-color: white;
 	border-bottom: #c6c2bf 1px solid;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
+	display: none;
 	ul {
-		gap: 1rem;
 		list-style: none;
 		padding: 0;
 		margin: 0;
@@ -22,40 +19,46 @@ const Nav = styled.nav `
 		display: flex;
 		justify-content: center;
 	}
+	@media (min-width: 768px) {
+		display: block;
+	}
 `
 
-const LenkeCustomized = styled(Lenke)`
-	text-decoration: none;
+
+const LenkeInner = styled(Lenke)`
 	color: black;
 	height: 100%;
-	&active {
-		border-bottom: var(--navBla) 3px solid;
-	}
-	:focus {
-		background-color: transparent !important;
-	}
-	.active {
-		border-bottom-color: var(--fokusFarge) !important;
-		background-color: transparent;
-
-		> p {
-			font-weight: bold !important;
-			color: black !important;
-		}
-	}
-`;
-const LenkeInner = styled.div`
-	border-bottom: transparent 3px solid;
-	height: 100%;
+	text-decoration: none;
 	display: flex;
 	align-items: center;
-	:hover {
-		border-bottom: var(--navBla) 3px solid;
-		color: var(--navBla);
+	.inactive {
+		border-bottom: transparent 3px solid;
+		:hover {
+			border-bottom: var(--navBla) 3px solid;
+		}
+	}
+	:focus, :active {
+		color: black;
+		background-color: transparent;
+		outline: var(--fokusFarge) 3px solid;
+    	box-shadow: 0 0 0 0;
+		outline-offset: -3px;
 	}
 `;
 
-
+const LenkeInnerTest = styled.div`
+	margin: 0 1rem;
+	height: 100%;
+	border-bottom: 3px transparent;
+	display: flex;
+	align-items: center;
+	&.active {
+		border-bottom: var(--navBla) 3px solid;
+		p {
+			font-weight: bold !important;
+		}
+	}
+`
 
 const NormalTekstCustomized = styled(Normaltekst)`
 	font-size: 1rem;
@@ -72,42 +75,31 @@ export default function Navbar() {
 			<ul role="tablist">
 				<li role="tab">
 					<Link href={"/Privatperson"}>
-						<LenkeCustomized>
-							<LenkeInner className={`${(router.pathname === "/" || router.pathname === "/Privatperson") ? "active" : ""}`}>
+						<LenkeInner>
+							<LenkeInnerTest className={`${(router.pathname === "/" || router.pathname === "/Privatperson") ? "active" : "inactive"}`}>
 								<NormalTekstCustomized>Privatperson</NormalTekstCustomized>
-							</LenkeInner>
-						</LenkeCustomized>
+							</LenkeInnerTest>
+						</LenkeInner>
 					</Link>
 				</li>
 				<li role="tab">
-					<Link href="/Arbeidsgiver">
-						<LenkeCustomized>
-							<LenkeInner className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>
+					<Link href={"/Arbeidsgiver"}>
+						<LenkeInner href="/Arbeidsgiver" className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>
+							<LenkeInnerTest className={`${(router.pathname === "/" || router.pathname === "/Arbeidsgiver") ? "active" : "inactive"}`}>
 								<NormalTekstCustomized>Arbeidsgiver</NormalTekstCustomized>
-							</LenkeInner>
-						</LenkeCustomized>
+							</LenkeInnerTest>
+						</LenkeInner>
 					</Link>
 				</li>
 				<li role="tab">
-					<Link href="/Samarbeidspartner">
-						<LenkeCustomized>
-							<LenkeInner className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>
+					<Link href={"/Samarbeidspartner"}>
+						<LenkeInner href="/Samarbeidspartner" className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>
+							<LenkeInnerTest className={`${(router.pathname === "/" || router.pathname === "/Samarbeidspartner") ? "active" : "inactive"}`}>
 								<NormalTekstCustomized>Samarbeidspartner</NormalTekstCustomized>
-							</LenkeInner>
-						</LenkeCustomized>
+							</LenkeInnerTest>
+						</LenkeInner>
 					</Link>
 				</li>
-				{/* <li role="tab">
-					<LinkWrapper>
-						<Link href="/admin">
-							<LenkeCustomized>
-								<LenkeInner className={`${router.pathname === "/admin" ? "active" : ""}`}>
-									<NormalTekstCustomized>Admin</NormalTekstCustomized>
-								</LenkeInner>
-							</LenkeCustomized>
-						</Link>
-					</LinkWrapper>
-				</li> */}
 			</ul>
 		</Nav>
 	)
