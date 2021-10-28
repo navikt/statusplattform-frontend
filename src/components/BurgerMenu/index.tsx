@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 
-import { Close, Hamburger, Login, Settings } from '@navikt/ds-icons'
+import { Close, Hamburger, Login } from '@navikt/ds-icons'
 import Popover, {PopoverOrientering} from 'nav-frontend-popover';
 
 import { useState } from "react";
@@ -15,17 +15,36 @@ const BurgerMenuContainer = styled.div`
 `
 
 const PopoverCustomized = styled(Popover)`
-    ul {
-        padding: 0 2rem;
-        list-style: none;
+    .popover-container {
+        padding: 1rem 2rem;   
+    }
+    .popover-content {
         display: flex;
-        flex-direction: column;
-        align-items: flex-start;
-        li {
-            padding: 1rem 0;
-        }
-        .popover-link-ikon {
-            margin-right: 0.5rem;
+        flex-direction: row;
+    }
+    section {
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 1rem;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            a {
+                color: #0067c5;
+                background: none;
+                text-decoration: underline;
+                cursor: pointer;
+                :hover {
+                    text-decoration: none;
+                }
+            }
+            li {
+                padding: 1rem 0;
+            }
+            .popover-link-ikon {
+                margin-right: 0.5rem;
+            }
         }
     }
 `
@@ -121,17 +140,31 @@ const BurgerMenu = () => {
 
 const PopoverContent = () => {
     return (
-        <ul>
+        <div className="popover-container">
             <strong>Navn: Nordmann, Ola</strong>
-            <li><Lenke href="#0">Min side</Lenke></li>
-            <li><Lenke href="#0">Mine varsler</Lenke></li>
-            <li onClick={() => toast.info("Ikke implementert innlogging")}>
-                <Lenke href="#0">   
-                    <Login className="popover-link-ikon" />
-                    Logg inn
-                </Lenke>
-            </li>
-        </ul>
+            <div className="popover-content">
+                <section>
+                    <ul>
+                        <li><Link href="/Privatperson">Privatperson</Link></li>
+                        <li><Link href="/Arbeidsgiver">Arbeidsgiver</Link></li>
+                        <li><Link href="/Samarbeidspartner">Samarbeidspartner</Link></li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><Lenke href="#0">Min side</Lenke></li>
+                        <li><Lenke href="#0">Mine varsler</Lenke></li>
+                        <li onClick={() => toast.info("Ikke implementert innlogging")}>
+                            <Lenke href="#0">   
+                                <Login className="popover-link-ikon" />
+                                Logg inn
+                            </Lenke>
+                        </li>
+                    </ul>
+                </section>
+            </div>
+        </div>
+                
     )
 }
 
