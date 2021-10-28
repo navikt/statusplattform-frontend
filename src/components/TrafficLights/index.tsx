@@ -1,9 +1,10 @@
 import styled from 'styled-components'
 
+import { AutomaticSystem } from '@navikt/ds-icons'
+
 
 const TrafficLightsContainer = styled.div`
     display: none;
-    padding: 1rem 0;
     span {
         display: flex;
         p {
@@ -11,15 +12,13 @@ const TrafficLightsContainer = styled.div`
             margin-left: 5px;
         }
     }
-    span:nth-child(2) {
-        width: 183px;
-    }
     @media (min-width: 220px) {
+        width: 200px;
         display: flex;
+        flex-direction: column;
     }
     
     span {
-        padding: 0;
         display: flex;
         align-items: center;
     }
@@ -37,6 +36,17 @@ const TrafficLightsContainer = styled.div`
         border-bottom: 2px solid;
         border-bottom-left-radius: 10px;
         border-bottom-right-radius: 10px;
+    }
+    .extra-info-wrapper {
+        display: flex;
+        flex-direction: column;
+        div {
+            display: flex;
+            align-items: center;
+        }
+        span {
+            margin: 0 8px 0 3px;
+        }
     }
 `
 
@@ -64,15 +74,40 @@ export const ErrorCircleRed = styled.span`
     display: inline-block;
 `;
 
+export const NoStatusAvailableCircle = styled.span`
+    height: 16px;
+    width: 16px;
+    /* background-color: var(--navGronn); */
+    border: 4px solid var(--navGronn);
+    border-radius: 50%;
+    display: inline-block;
+`;
+
+export const PlannedMaintenanceCircle = styled.span`
+    height: 16px;
+    width: 16px;
+    background-color: var(--navBlaLighten40);
+    /* border: 4px solid var(--navGronn); */
+    border-radius: 50%;
+    display: inline-block;
+`;
+
 const TrafficLights = () => {
     return (
-        <TrafficLightsContainer>
-            <div className="traffic-lights-wrapper">
-                <span><div><ErrorCircleRed /></div><p> Feil på tjenesten</p></span>
-                <span><div><WarningCircleOrange /></div><p> Redusert funksjonalitet</p></span>
-                <span><div><SuccessCircleGreen /></div><p> Fungerer normalt</p></span>
-            </div>
-        </TrafficLightsContainer>
+        <div>
+            Tegnforklaring:
+            <TrafficLightsContainer>
+                <div className="traffic-lights-wrapper">
+                    <span><div><ErrorCircleRed /></div><p> Feil på tjenesten</p></span>
+                    <span><div><WarningCircleOrange /></div><p> Redusert funksjonalitet</p></span>
+                    <span><div><SuccessCircleGreen /></div><p> Fungerer normalt</p></span>
+                </div>
+                <div className="extra-info-wrapper">
+                    <div><NoStatusAvailableCircle /><p> Status ikke levert av team </p></div>
+                    <div><PlannedMaintenanceCircle><AutomaticSystem /></PlannedMaintenanceCircle><p> Planlagt vedlikehold</p></div>
+                </div>
+            </TrafficLightsContainer>
+        </div>
     )
 }
 

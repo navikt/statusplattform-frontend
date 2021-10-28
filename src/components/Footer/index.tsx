@@ -47,10 +47,12 @@ const Row = styled.div`
         width: auto;
     }
     &.bottom {
-        justify-content: center;
-        flex-direction: column;
         width: 100%;
         padding: 0.5rem 10px;
+        margin: 0;
+        border-right: none;
+        justify-content: center;
+        flex-direction: column;
     }
     > ul {
         padding: 0;
@@ -77,6 +79,17 @@ const Row = styled.div`
     }
 `
 
+const Separator = styled.span`
+    display: none;
+    @media (min-width: 700px) {
+        display: block;
+        border-left: 1px solid var(--navBlaLighten40);
+        height: 100%;
+        width: 1px;
+        padding: 0 5ch;
+    }
+`
+
 const Footer = () => {
     return (
         <FooterContainer>
@@ -96,6 +109,7 @@ const Footer = () => {
                         <li><a href="https://www.nav.no/no/person#">Del skjerm med veileder</a></li>
                     </ul>
                 </Row>
+                        <Separator />
                 <div>
                     <TrafficLights />
                 </div>
