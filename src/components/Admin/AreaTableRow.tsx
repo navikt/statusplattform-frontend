@@ -188,7 +188,7 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
                     </AreaElements>
                 </AreaRowColumn>
                 <AreaRowColumn>
-                    <button onClick={handleDeleteArea} ><Close/></button>
+                    <button onClick={handleDeleteArea} aria-label="Slett område"><Close/></button>
                     <button>{isExpanded ? <Collapse /> : <Expand />}</button>
                 </AreaRowColumn>
             </AreaRow>
@@ -207,10 +207,8 @@ const AreaTableRow = ({ area, reload, isExpanded, toggleExpanded, allServices}: 
                                     return (
                                         <li key={service.id}>
                                             {service.name} 
-                                            <button>
-                                                <Close aria-label="Fjern tjenesten fra område"
-                                                    onClick={() => handleDeleteServiceOnArea(service.id)}
-                                                />
+                                            <button aria-label="Fjern tjenesten fra område" onClick={() => handleDeleteServiceOnArea(service.id)}>
+                                                <Close />
                                             </button>
                                         </li>
                                     )

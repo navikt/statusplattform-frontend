@@ -200,8 +200,8 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
                                 {dashboard.name}
                             </ClickableName>
                             <OptionsInRow>
-                                <CustomButton onClick={() => setDashboardToDelete(dashboard)}>
-                                    <Close aria-label="Fjern tjenesten fra område" />
+                                <CustomButton onClick={() => setDashboardToDelete(dashboard)} aria-label="Fjern dashbord">
+                                    <Close/>
                                 </CustomButton>
                                 <ExpandCollapseWrapper aria-expanded={expanded.includes(dashboard.id)}
                                     onClick={() => toggleExpanded(dashboard.id)}>
@@ -376,7 +376,11 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                     <ul>
                         {entireDashboard.areas.map((area) => {
                             return (
-                                <li key={area.id}>{area.name} <CustomButton onClick={() => handleDeleteAreaFromDashboard(area)}><Close/></CustomButton></li>
+                                <li key={area.id}>{area.name} 
+                                    <CustomButton onClick={() => handleDeleteAreaFromDashboard(area)} aria-label="Fjern område fra dashbord">
+                                        <Close/>
+                                    </CustomButton>
+                                </li>
                             )
                         })}
                     </ul>
