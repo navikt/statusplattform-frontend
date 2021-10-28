@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useState } from "react";
 
-import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed } from 'components/TrafficLights'
+import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed, NoStatusAvailableCircle, PlannedMaintenanceCircle } from 'components/TrafficLights'
 import { Area, Tile } from 'types/navServices'
 import { getIconsFromGivenCode } from 'utils/servicesOperations'
 
@@ -106,18 +106,18 @@ const handleAndSetNavIcon = (ikon: string) => {
 }
 
 const handleAndSetStatusIcon = (status: string): any => {
-    if (status == "OK") {
-        return <SuccessCircleGreen />
+    switch(status) {
+        case 'OK':
+            return <SuccessCircleGreen />
+        case 'DOWN':
+            return <ErrorCircleRed/>
+        case 'ISSUE':
+            return <WarningCircleOrange />
+        case 'MAINTENANCE':
+            return <PlannedMaintenanceCircle />
+        case null:
+            return <NoStatusAvailableCircle />
     }
-    if (status == "DOWN") {
-        // return <ErrorFilledColored />
-        return <ErrorCircleRed/>
-    }
-    if (status == "ISSUE") {
-        // return <WarningFilledColored />
-        return <WarningCircleOrange />
-    }
-    return status
 }
 
 export interface PortalServiceTileProps {
