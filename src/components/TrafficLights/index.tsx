@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { System } from '@navikt/ds-icons'
+import { AutomaticSystem } from '@navikt/ds-icons'
 
 
 const TrafficLightsContainer = styled.div`
@@ -109,7 +109,7 @@ const TrafficLights = ({isInternal}: Props) => {
                 </div>
                 <div className="extra-info-wrapper">
                     {isInternal && <div><NoStatusAvailableCircle /><p> Status ikke levert av team </p></div>}
-                    <div><PlannedMaintenanceCircle><System /></PlannedMaintenanceCircle><p> Planlagt vedlikehold</p></div>
+                    <div><PlannedMaintenanceCircle><AutomaticSystem /></PlannedMaintenanceCircle><p> Planlagt vedlikehold</p></div>
                 </div>
             </TrafficLightsContainer>
         </div>
