@@ -1,18 +1,32 @@
-import Layout from 'components/Layout'
 // import NavDashboard from './NavDashboard' Fjern hele siden under /pages når vi er ferdige med nytt oppsett for dashbordene
 
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
-import Privatperson from 'components/Dashboards/Privatperson';
+import DashboardFromId from './Dashboard/[dashboardId]';
 
 export default function Home() {
+    const router = useRouter()
+    const [atHomePage] = useState(false)
+
+    useEffect(() => {
+        if(router.asPath == "/") {
+            router.push("/Dashboard/Privatperson")
+        }
+    },[router])
+
 
     return (
-        <Layout>
-            <Privatperson />
-            <ToastContainer/>
-        </Layout>
+        <>
+            {atHomePage &&
+                <>
+                    <DashboardFromId/>
+                    <ToastContainer/>
+                </>
+            }
+        </>
     )
 }
 

@@ -69,32 +69,31 @@ const NormalTekstCustomized = styled(Normaltekst)`
 export default function Navbar() {
 	const router = useRouter()
 
-
 	return (
 		<Nav>
 			<ul role="tablist">
 				<li role="tab">
-					<Link href={"/Privatperson"}>
+					<Link href={"/Dashboard/Privatperson"}>
 						<LenkeInner>
-							<LenkeInnerTest className={`${(router.pathname === "/" || router.pathname === "/Privatperson") ? "active" : "inactive"}`}>
+							<LenkeInnerTest className={`${(router.asPath === "/Dashboard/Privatperson") ? "active" : "inactive"}`}>
 								<NormalTekstCustomized>Privatperson</NormalTekstCustomized>
 							</LenkeInnerTest>
 						</LenkeInner>
 					</Link>
 				</li>
 				<li role="tab">
-					<Link href={"/Arbeidsgiver"}>
-						<LenkeInner href="/Arbeidsgiver" className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>
-							<LenkeInnerTest className={`${(router.pathname === "/" || router.pathname === "/Arbeidsgiver") ? "active" : "inactive"}`}>
+					<Link href={"/Dashboard/Arbeidsgiver"}>
+						<LenkeInner href="/Dashboard/Arbeidsgiver" className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>
+							<LenkeInnerTest className={`${(router.asPath === "/Dashboard/Arbeidsgiver") ? "active" : "inactive"}`}>
 								<NormalTekstCustomized>Arbeidsgiver</NormalTekstCustomized>
 							</LenkeInnerTest>
 						</LenkeInner>
 					</Link>
 				</li>
 				<li role="tab">
-					<Link href={"/Samarbeidspartner"}>
-						<LenkeInner href="/Samarbeidspartner" className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>
-							<LenkeInnerTest className={`${(router.pathname === "/" || router.pathname === "/Samarbeidspartner") ? "active" : "inactive"}`}>
+					<Link href={"/Dashboard/Samarbeidspartner"}>
+						<LenkeInner href="/Dashboard/Samarbeidspartner" className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>
+							<LenkeInnerTest className={`${(router.asPath === "/Dashboard/Samarbeidspartner") ? "active" : "inactive"}`}>
 								<NormalTekstCustomized>Samarbeidspartner</NormalTekstCustomized>
 							</LenkeInnerTest>
 						</LenkeInner>
