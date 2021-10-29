@@ -1,4 +1,5 @@
 import TrafficLights from 'components/TrafficLights';
+import { useState } from 'react';
 import styled from 'styled-components'
 
 const FooterContainer = styled.footer`
@@ -91,6 +92,8 @@ const Separator = styled.span`
 `
 
 const Footer = () => {
+    const [isInternal, changePrivilege] = useState(false)
+
     return (
         <FooterContainer>
             <FooterContent>
@@ -111,7 +114,7 @@ const Footer = () => {
                 </Row>
                         <Separator />
                 <div>
-                    <TrafficLights />
+                    <TrafficLights isInternal={isInternal}/>
                 </div>
             </FooterContent>
         </FooterContainer>

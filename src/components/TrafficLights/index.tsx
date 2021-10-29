@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { AutomaticSystem } from '@navikt/ds-icons'
+import { System } from '@navikt/ds-icons'
 
 
 const TrafficLightsContainer = styled.div`
@@ -92,7 +92,12 @@ export const PlannedMaintenanceCircle = styled.span`
     display: inline-block;
 `;
 
-const TrafficLights = () => {
+interface Props {
+    isInternal: boolean
+}
+
+const TrafficLights = ({isInternal}: Props) => {
+
     return (
         <div>
             Tegnforklaring:
@@ -103,8 +108,8 @@ const TrafficLights = () => {
                     <span><div><SuccessCircleGreen /></div><p> Fungerer normalt</p></span>
                 </div>
                 <div className="extra-info-wrapper">
-                    <div><NoStatusAvailableCircle /><p> Status ikke levert av team </p></div>
-                    <div><PlannedMaintenanceCircle><AutomaticSystem /></PlannedMaintenanceCircle><p> Planlagt vedlikehold</p></div>
+                    {isInternal && <div><NoStatusAvailableCircle /><p> Status ikke levert av team </p></div>}
+                    <div><PlannedMaintenanceCircle><System /></PlannedMaintenanceCircle><p> Planlagt vedlikehold</p></div>
                 </div>
             </TrafficLightsContainer>
         </div>

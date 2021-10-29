@@ -13,6 +13,7 @@ import Lenke from 'nav-frontend-lenker'
 import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi'
 import Panel from 'nav-frontend-paneler'
 import { toast } from 'react-toastify'
+import { CheckboksPanelGruppe } from 'nav-frontend-skjema'
 
 const DashboardContainer = styled.div`
     width: 90%;
@@ -28,6 +29,19 @@ const DigitalServicesContainer = styled.div`
     flex-direction: column;
     align-items: center;
 `;
+
+const KnappWrapper = styled.div`
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    button:first-child {
+        margin-bottom: 1rem;
+    }
+    button {
+        max-width: fit-content;
+    }
+`
 
 const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     flex: 1;
@@ -77,6 +91,8 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     const [expandAll, changeExpand] = useState(false)
     const [expandedTiles, setExpandedTiles] = useState([]);
     const [width, setWidth] = useState(typeof window !== "undefined"? window.innerWidth:0)
+    const [showFilters, toggleFilters] = useState(false)
+    const [filters, changeFilters] = useState<string[]>([])
 
     const router = useRouter()
 
@@ -173,7 +189,15 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
         }
     }
 
-
+    const changeCurrentFilters = (filterToAdd: string) => {
+        if(!filters.includes(filterToAdd)) {
+            const newFilters: string[] = [...filters, filterToAdd]
+            changeFilters(newFilters)
+            return
+        }
+        const newFilters: string[] = [...filters.filter(f => f != filterToAdd)]
+        changeFilters(newFilters)
+    }
 
 
 
@@ -184,25 +208,33 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     }
 
 
-
-
     return (
         <DashboardContainer>
             <DigitalServicesContainer>
             <StatusOverview areas={areasInDashboard} />
-                <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
+
+
+                <KnappWrapper>
+                    <Knapp mini onClick={() => toggleFilters(!showFilters)}>
+                        {!showFilters ? "Vis filtre" : "Skjul filtre"}
+                    </Knapp>
+                    {showFilters &&
+                        <FilterContainer filters={filters} changeCurrentFilters={changeCurrentFilters} />
+                    }
+                    <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
+                </KnappWrapper>
 
 
                 {areasInDashboard.length > 0 &&
                     <PortalServiceTileContainer maxWidth={maxWidth}>
                         {rows.map((row, rowIndex) => (
                             <PortalServiceTileRow key={rowIndex}>
-                                {row.map((area, index) => ( 
+                                {row.map((area, index) => 
                                     <PortalServiceTile key={index} toggleTile={toggleTile}
                                         tileIndex={rowIndex*numberOfTilesPerRow + index}
                                         area={area} expanded={isTileExpanded(rowIndex, index)}
                                     />
-                                ))}
+                                )}
                             </PortalServiceTileRow>
                         ))}
 
@@ -221,6 +253,46 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
 
 /* --------------------------------------- Helpers below --------------------------------------- */
+
+
+
+const CheckboksPanelGruppeCustomized = styled(CheckboksPanelGruppe)`
+    width: 100%;
+    margin-bottom: 1rem;
+    text-align: center;
+    & > div{
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        gap: 3ch;
+        & > * {
+            height: 100%;
+        }
+    }
+`
+
+const FilterContainer: React.FC<{changeCurrentFilters: (filterToAdd) => void, filters: string[]}> = ({changeCurrentFilters, filters}) => {
+
+    const handleFilter = (event) => {
+        changeCurrentFilters(event.target.value)
+    }
+
+    return (
+        <CheckboksPanelGruppeCustomized
+            legend={"Filtrer på"}
+            checkboxes={[
+                { label: "OK", value: "ok", id: "okid" , checked: filters.includes("ok")},
+                { label: "Redusert funksjonalitet", value: "redusert", id: "redusertid", checked: filters.includes("redusert")},
+                { label: "Feil", value: "feil", id: "feilid", checked: filters.includes("feil")}
+            ]}
+            onChange={(event) => {handleFilter(event)}}
+        />
+    )
+}
+
+
+
+
 
 
 
@@ -303,8 +375,6 @@ const MaintenancePanel = styled(Panel) `
         word-wrap: break-word;
     }
 `
-
-const MaintenanceContent = styled.div``
 
 const MaintenanceScheduling = () => {
 

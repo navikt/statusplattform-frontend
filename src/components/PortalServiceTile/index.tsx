@@ -105,7 +105,7 @@ const handleAndSetNavIcon = (ikon: string) => {
     return getIconsFromGivenCode(ikon)
 }
 
-const handleAndSetStatusIcon = (status: string): any => {
+const handleAndSetStatusIcon = (status: string, isInternal?: boolean): any => {
     switch(status) {
         case 'OK':
             return <SuccessCircleGreen />
@@ -116,7 +116,11 @@ const handleAndSetStatusIcon = (status: string): any => {
         case 'MAINTENANCE':
             return <PlannedMaintenanceCircle />
         case null:
-            return <NoStatusAvailableCircle />
+            if(isInternal) {
+                return <NoStatusAvailableCircle />
+            }
+        default:
+            return null
     }
 }
 
@@ -137,7 +141,7 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
         <PanelCustomized alignment={expanded == true ? "stretch" : "flex-start"} onClick={() => toggleExpanded()}>
             <div>
                 <UndertittelCustomized>
-                    <section>{handleAndSetStatusIcon(area.status)}</section>
+                    <section>{handleAndSetStatusIcon(area.status, false)}</section>
                     <section>{handleAndSetNavIcon(area.icon)}</section>
                     <span>{area.name}</span>
                 </UndertittelCustomized> 
@@ -146,7 +150,7 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
                         <ServicesList apneTekst="Se mer">
                         {area.services.map(service => (
                             <li key={service.name}>
-                                <section>{handleAndSetStatusIcon(service.status)}</section><section>{service.name}</section>
+                                <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
                             </li>
                         ))}
                         </ServicesList>
@@ -158,5 +162,3 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
         </PanelCustomized>
     )
 }
-
-// export default PortalServiceTile
