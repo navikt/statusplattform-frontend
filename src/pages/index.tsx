@@ -2,7 +2,6 @@
 
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';
 import DashboardFromId from './Dashboard/[dashboardId]';
@@ -23,7 +22,6 @@ export default function Home() {
             {atHomePage &&
                 <>
                     <DashboardFromId/>
-                    <ToastContainer/>
                 </>
             }
         </>

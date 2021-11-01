@@ -4,6 +4,7 @@ import Head from 'next/head'
 import Header from 'components/Header'
 import Navbar from 'components/Navbar'
 import Footer from 'components/Footer'
+import { ToastContainer } from 'react-toastify'
 
 
 
@@ -31,6 +32,7 @@ const Content = styled.main`
 const MainContent = props => {
     return(
         <MainContentContainer>
+            <ToastContainer />
             <Head>
                 <title>Status digitale tjenester</title>
                 <link rel="icon" href="/favicon.ico" />
