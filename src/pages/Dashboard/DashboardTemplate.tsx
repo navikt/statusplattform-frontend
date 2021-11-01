@@ -96,18 +96,24 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
     const router = useRouter()
 
-    // if (!dashboard) {
-    //     router.push("/Custom404")
-    // }
+    
 
     useEffect(() => {
         (async function () {
             setIsLoading(true)
             const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
             setAreasInDashboard(retrievedAreasInDashboard.areas)
+            rerouteIfNoDashboard
             setIsLoading(false)
         })()
     }, [])
+
+    const rerouteIfNoDashboard = () => {
+        if (!dashboard) {
+            router.push("/Custom404")
+        }
+
+    }
 
     
 
