@@ -96,9 +96,9 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
     const router = useRouter()
 
-    if (!dashboard) {
-        router.push("/Custom404")
-    }
+    // if (!dashboard) {
+    //     router.push("/Custom404")
+    // }
 
     useEffect(() => {
         (async function () {
