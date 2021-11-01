@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 
-import { Close, Collapse, Expand } from '@navikt/ds-icons'
+import { Close, Collapse, Expand, Notes } from '@navikt/ds-icons'
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper'
 import ModalWrapper from 'nav-frontend-modal'
 import { Input, Select } from 'nav-frontend-skjema'
@@ -147,6 +147,7 @@ const ModalInner = styled.div`
 const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => void}> = ({dashboards, reloadDashboards}) => {
     const [expanded, setExpanded] = useState<string[]>([]) 
     const [dashboardToDelete, setDashboardToDelete] = useState<Dashboard>()    
+    const [dashboardsToEdit, changeDashboardsToEdit] = useState<string[]>([])
     const { data: allAreas, isLoading, reload } = useLoader(fetchAreas,[]);
 
     const handlePutAreasToDashboard = (dashboardId: string, areasToPut: string[]) => {
@@ -175,6 +176,16 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
         })
     }
 
+    const toggleEditDashboard = (dashboard: Dashboard) => {
+        let edittingDashboards: string[] = [...dashboardsToEdit]
+        if(edittingDashboards.includes(dashboard.id)) {
+            changeDashboardsToEdit(edittingDashboards.filter(d => d != dashboard.id))
+            return
+        }
+        edittingDashboards.push(dashboard.id)
+        changeDashboardsToEdit(edittingDashboards)
+    }
+
     return (
         <DashboardsContainer>
             <ModalWrapper
@@ -195,23 +206,26 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
             {dashboards.map((dashboard) => {
                 return (
                     <DashboardRowContainer key={dashboard.id}>
-                        <DashboardRowInner>
-                            <ClickableName onClick={() => toggleExpanded(dashboard.id)}>
-                                {dashboard.name}
-                            </ClickableName>
-                            <OptionsInRow>
-                                <CustomButton onClick={() => setDashboardToDelete(dashboard)} aria-label="Fjern dashbord">
-                                    <Close/>
-                                </CustomButton>
-                                <ExpandCollapseWrapper aria-expanded={expanded.includes(dashboard.id)}
-                                    onClick={() => toggleExpanded(dashboard.id)}>
-                                    {expanded.includes(dashboard.id) 
-                                        ? <Collapse /> 
-                                        : <Expand />
-                                    }
-                                </ExpandCollapseWrapper>
-                            </OptionsInRow>
-                        </DashboardRowInner>
+
+
+                            {!dashboardsToEdit.includes(dashboard.id) ?
+                                <CurrentDashboardData 
+                                    setDashboardToDelete={() => setDashboardToDelete(dashboard)}
+                                    toggleEditDashboard={() => toggleEditDashboard(dashboard)}
+                                    toggleExpanded={() => toggleExpanded(dashboard.id)}
+                                    expanded={expanded}
+                                    dashboard={dashboard}
+                                />
+                                :
+                                <CurrentlyEdittingDashboard dashboard={dashboard}
+                                        reloadDashboards={reloadDashboards}
+                                        setDashboardToDelete={(dashboard) => setDashboardToDelete(dashboard)}
+                                        toggleEditDashboard={() => toggleEditDashboard(dashboard)}
+                                />
+                            }
+                            
+
+
                         {expanded.includes(dashboard.id) &&
                             <AddAreaToDashboardDropdown dashboardWithOnlyIdProp={dashboard} allAreas={allAreas}
                                 toggleExpanded={() => toggleExpanded(dashboard.id)}
@@ -224,6 +238,113 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
         </DashboardsContainer>
     )
 }
+
+
+
+
+
+
+// --------------------------------------------------------------------------
+
+
+
+
+
+interface CurrentDashboardDataProps {
+    setDashboardToDelete: () => void
+    toggleEditDashboard: () => void
+    toggleExpanded: () => void
+    expanded: string[]
+    dashboard: Dashboard
+}
+
+
+const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggleExpanded, expanded, dashboard}: CurrentDashboardDataProps) => {
+
+    return (
+        <DashboardRowInner>
+            <ClickableName onClick={toggleExpanded}>
+                {dashboard.name}
+            </ClickableName>
+            <div>
+                <CustomButton onClick={toggleEditDashboard}>
+                    <Notes />
+                </CustomButton>
+            </div>
+            <OptionsInRow>
+                <CustomButton onClick={setDashboardToDelete} aria-label="Fjern dashbord">
+                    <Close/>
+                </CustomButton>
+                <ExpandCollapseWrapper aria-expanded={expanded.includes(dashboard.id)}
+                    onClick={toggleExpanded}>
+                    {expanded.includes(dashboard.id) 
+                        ? <Collapse /> 
+                        : <Expand />
+                    }
+                </ExpandCollapseWrapper>
+            </OptionsInRow>
+        </DashboardRowInner>
+    )
+}
+
+
+
+
+
+
+interface EditProps {
+    dashboard: Dashboard
+    reloadDashboards: () => void
+    setDashboardToDelete: (dashboard) => void
+    toggleEditDashboard: (dashboard) => void
+}
+
+
+const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardToDelete, toggleEditDashboard}: EditProps) => {
+    const [updatedDashboard, changeUpdatedDashboard] = useState({
+        name: dashboard.name
+    })
+    console.log(dashboard.name)
+
+    const handleUpdatedDashboard = (event) => {
+        const changedDashboard = {
+            name: event.target.value,
+        }
+        changeUpdatedDashboard(changedDashboard)
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        toast.info("Mangler endepunkt")
+        // Uncomment det nedenfor når endepunkt er implementert
+        // reloadDashboards()
+    }
+
+    const { name } = updatedDashboard
+    return (
+        <form onSubmit={handleSubmit}>
+            <DashboardRowInner>
+                <ClickableName>
+                    <Input value={name} onChange={event => handleUpdatedDashboard(event)} />
+                </ClickableName>
+                <div>
+                    <CustomButton htmlType="button" onClick={() => toggleEditDashboard(dashboard)}>
+                        Avbryt endringer
+                    </CustomButton>
+                    <CustomButton htmlType="button" onClick={() => setDashboardToDelete(dashboard)} aria-label="Fjern dashbord">
+                        <Close/>
+                    </CustomButton>
+                </div>
+            </DashboardRowInner>
+        </form>
+    )
+}
+
+
+
+
+
+
 
 
 
