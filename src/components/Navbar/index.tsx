@@ -99,6 +99,19 @@ export default function Navbar() {
 						</LenkeInner>
 					</Link>
 				</li>
+				<li role="tab">
+					<Link href={"/Dashboard/Internt"}>
+						<LenkeInner href="/Dashboard/Internt" className={`${router.pathname === "/Internt" ? "active" : ""}`}>
+							<LenkeInnerTest className={`${(router.asPath === "/Dashboard/Internt") ? "active" : "inactive"}`}>
+								<NormalTekstCustomized>Internt (Kun for innloggede NAV-brukere)</NormalTekstCustomized>
+							</LenkeInnerTest>
+						</LenkeInner>
+					</Link>
+				</li>
+
+
+
+
 			</ul>
 		</Nav>
 	)
