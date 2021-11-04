@@ -1,5 +1,5 @@
 import { Area } from "types/navServices";
-import { EndPathArea } from "./apiHelper";
+import { EndPathSpecificArea } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -9,7 +9,7 @@ export class ResponseError extends Error {
 
 export const deleteArea = async (area: Area): Promise<void> =>{
     let response;
-    let endPath = EndPathArea() + area.id
+    let endPath = EndPathSpecificArea(area.id)
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,

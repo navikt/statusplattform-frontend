@@ -7,6 +7,10 @@ export const EndPathAreas = () =>  {
     return "/rest/Areas"
 }
 
+export const EndPathSpecificArea = (areaId: string) =>  {
+    return "/rest/Area/" + areaId
+}
+
 export const EndPathServiceToArea = (areaId: string, serviceId: string) =>  {
     return "/rest/Area/" + areaId + "/" + serviceId
 }
