@@ -16,13 +16,10 @@ export default function Home() {
         }
     },[router])
 
-
     return (
         <>
             {atHomePage &&
-                <>
-                    <DashboardFromId/>
-                </>
+                <DashboardFromId/>
             }
         </>
     )

@@ -304,7 +304,6 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
     const [updatedDashboard, changeUpdatedDashboard] = useState({
         name: dashboard.name
     })
-    console.log(dashboard.name)
 
     const handleUpdatedDashboard = (event) => {
         const changedDashboard = {

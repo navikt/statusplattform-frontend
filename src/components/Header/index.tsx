@@ -5,7 +5,10 @@ import { Knapp } from 'nav-frontend-knapper'
 
 import BurgerMenu from 'components/BurgerMenu'
 import SubscribeModal from 'components/SubscribeModal'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
+import { useRouter } from 'next/router'
+import { CheckboksPanelGruppe } from 'nav-frontend-skjema'
+import { FilterContext, FilterOption } from 'components/ContextProviders/FilterContext'
 
 
 
@@ -61,7 +64,7 @@ const HeaderContent = styled.span`
         flex-direction: row;
     }
 `
-const SubscribeButton = styled(Knapp)`
+const CustomButton = styled(Knapp)`
     height: 3rem;
     transition: 0.4s;
 	width: 7rem;
@@ -86,14 +89,23 @@ const SubscribeModalWrapper = styled.div`
         top: 150px;
     }
 `
+const FilterButtonWrapper = styled.div`
+    position: relative;
+`
 
 
 
 const Header = () => {
+    const router = useRouter()
     const [subscribeModalHidden, setSubscribeModalBoolean] = useState(false)
+    const [showFilters, toggleFilters] = useState(false)
 
     const toggleSubscribeModal = () => {
         setSubscribeModalBoolean(!subscribeModalHidden)
+    }
+
+    const handleToggleFilters = () => {
+        toggleFilters(!showFilters)
     }
 
     return (
@@ -108,8 +120,18 @@ const Header = () => {
             
             </HeaderContent>
             <span>
-				<SubscribeButton mini onClick={toggleSubscribeModal}>Abonner</SubscribeButton>
+				<CustomButton mini onClick={toggleSubscribeModal}>Abonner</CustomButton>
 			</span>
+            {router.pathname.includes("Dashboard") &&
+                <FilterButtonWrapper>
+                    <CustomButton mini onClick={handleToggleFilters}>
+                        Filtrer
+                    </CustomButton>
+                    {showFilters &&
+                        <Filters />
+                    }
+                </FilterButtonWrapper>
+            }
 			{subscribeModalHidden && 
 				<SubscribeModalWrapper>
 					<SubscribeModal toggleSubscribeModal={toggleSubscribeModal}/>
@@ -119,5 +141,83 @@ const Header = () => {
         </CustomHeader>
     )
 }
+
+
+
+
+
+
+
+/* ---------------------------------------- Helpers below ---------------------------------------- */
+
+
+
+
+
+
+
+
+
+
+
+
+
+const FilterContainer = styled.div`
+    background-color: white;
+    padding: 1rem;
+    box-shadow: 0 0.05rem 0.25rem 0.125rem rgb(0 0 0 / 8%);
+    border: 1px solid #c9c9c9;
+    border-radius: 2px;
+    position: absolute;
+    & > * {
+        text-align: left;
+        margin: 0;
+        padding: 0;
+    }
+`
+
+const CheckboksPanelGruppeCustomized = styled(CheckboksPanelGruppe)`
+    width: 100%;
+    margin-bottom: 1rem;
+    text-align: center;
+    & > div {
+        & > * {
+            height: 100%;
+        }
+    }
+`
+
+const Filters = () => {
+    const {filters, changeFilters} = useContext(FilterContext)
+    
+
+    const handleFilter = (event) => {
+        const filterOption = event.target.value
+        if(filters.includes(filterOption)) {
+            changeFilters(filters.filter(f => f != filterOption))
+            return
+        }
+        changeFilters([...filters, filterOption])
+    }
+
+
+    return (
+        <FilterContainer>
+            <CheckboksPanelGruppeCustomized
+                legend={"Filtrer på"}
+                checkboxes={
+                    Object.values(FilterOption).map((option) => {
+                        return {
+                            label: option, value: option, checked: filters.includes(option)
+                        }
+                    })
+                }
+                onChange={(event) => {handleFilter(event)}}
+            />
+        </FilterContainer>
+    )
+}
+
+
 
 export default Header

@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 
 import { Knapp } from 'nav-frontend-knapper'
@@ -14,6 +14,10 @@ import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi'
 import Panel from 'nav-frontend-paneler'
 import { toast } from 'react-toastify'
 import { CheckboksPanelGruppe } from 'nav-frontend-skjema'
+import { FilterContext } from 'components/ContextProviders/FilterContext'
+
+/* --------------------------------------- Styles start --------------------------------------- */
+
 
 const DashboardContainer = styled.div`
     width: 90%;
@@ -79,11 +83,15 @@ const ErrorParagraph = styled.p`
     padding: 10px;
     border-radius: 5px;
 `
+/* --------------------------------------- Styles end --------------------------------------- */
 
 
 interface DashboardProps {
     dashboard: Dashboard
 }
+
+
+
 
 const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     const [isLoading, setIsLoading] = useState(true)
@@ -91,8 +99,9 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     const [expandAll, changeExpand] = useState(false)
     const [expandedTiles, setExpandedTiles] = useState([]);
     const [width, setWidth] = useState(typeof window !== "undefined"? window.innerWidth:0)
-    const [showFilters, toggleFilters] = useState(false)
-    const [filters, changeFilters] = useState<string[]>([])
+
+    const {filters} = useContext(FilterContext)
+
 
     const router = useRouter()
 
@@ -107,6 +116,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
             setIsLoading(false)
         })()
     }, [])
+
 
     const rerouteIfNoDashboard = () => {
         if (!dashboard) {
@@ -195,15 +205,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
         }
     }
 
-    const changeCurrentFilters = (filterToAdd: string) => {
-        if(!filters.includes(filterToAdd)) {
-            const newFilters: string[] = [...filters, filterToAdd]
-            changeFilters(newFilters)
-            return
-        }
-        const newFilters: string[] = [...filters.filter(f => f != filterToAdd)]
-        changeFilters(newFilters)
-    }
 
 
 
@@ -212,8 +213,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
             <NoAreasInDashboard />
         )
     }
-
-
+    
     return (
         <DashboardContainer>
             <DigitalServicesContainer>
@@ -221,12 +221,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
 
                 <KnappWrapper>
-                    <Knapp mini onClick={() => toggleFilters(!showFilters)}>
-                        {!showFilters ? "Vis filtre" : "Skjul filtre"}
-                    </Knapp>
-                    {showFilters &&
-                        <FilterContainer filters={filters} changeCurrentFilters={changeCurrentFilters} />
-                    }
                     <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
                 </KnappWrapper>
 
@@ -259,47 +253,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
 
 /* --------------------------------------- Helpers below --------------------------------------- */
-
-
-
-const CheckboksPanelGruppeCustomized = styled(CheckboksPanelGruppe)`
-    width: 100%;
-    margin-bottom: 1rem;
-    text-align: center;
-    & > div{
-        display: flex;
-        flex-flow: row wrap;
-        justify-content: center;
-        gap: 3ch;
-        & > * {
-            height: 100%;
-        }
-    }
-`
-
-const FilterContainer: React.FC<{changeCurrentFilters: (filterToAdd) => void, filters: string[]}> = ({changeCurrentFilters, filters}) => {
-
-    const handleFilter = (event) => {
-        changeCurrentFilters(event.target.value)
-    }
-
-    return (
-        <CheckboksPanelGruppeCustomized
-            legend={"Filtrer på"}
-            checkboxes={[
-                { label: "OK", value: "ok", id: "okid" , checked: filters.includes("ok")},
-                { label: "Redusert funksjonalitet", value: "redusert", id: "redusertid", checked: filters.includes("redusert")},
-                { label: "Feil", value: "feil", id: "feilid", checked: filters.includes("feil")}
-            ]}
-            onChange={(event) => {handleFilter(event)}}
-        />
-    )
-}
-
-
-
-
-
 
 
 
