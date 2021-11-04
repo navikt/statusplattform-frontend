@@ -148,6 +148,7 @@ const PopoverContent = () => {
                         <li><Link href="/Privatperson">Privatperson</Link></li>
                         <li><Link href="/Arbeidsgiver">Arbeidsgiver</Link></li>
                         <li><Link href="/Samarbeidspartner">Samarbeidspartner</Link></li>
+                        <li><Link href="/Internt">Internt (Kun for innloggede nav brukere)</Link></li>
                     </ul>
                 </section>
                 <section>
