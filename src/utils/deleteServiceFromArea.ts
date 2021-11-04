@@ -8,7 +8,7 @@ export class ResponseError extends Error {
 
 export const deleteServiceFromArea = async (areaId, serviceId): Promise<void> =>{
     let response;
-    let endPath = EndPathArea() + areaId + "/" + serviceId
+    let endPath = EndPathArea() + "/"+ areaId + "/" + serviceId
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,

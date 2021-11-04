@@ -1,4 +1,4 @@
-import { EndPathArea } from "./apiHelper";
+import { EndPathArea, EndPathServiceToArea } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -8,7 +8,7 @@ export class ResponseError extends Error {
 
 export const putServiceToArea = async (areaId, serviceId): Promise<Object[]> =>{
     let response;
-    let endPath = EndPathArea + areaId + "/" + serviceId
+    let endPath = EndPathServiceToArea(areaId, serviceId)
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,

@@ -117,6 +117,20 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
         })()
     }, [])
 
+    useEffect(() => {
+        let currentTime = 0
+        const interval = setInterval(async() => {
+            currentTime += 1
+            if(currentTime === 5) {
+                currentTime = 0
+                const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
+                setAreasInDashboard(retrievedAreasInDashboard.areas)
+          }
+        }, 1000)
+        return () => clearInterval(interval)
+      }, []);
+      
+
 
     const rerouteIfNoDashboard = () => {
         if (!dashboard) {
@@ -213,6 +227,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
             <NoAreasInDashboard />
         )
     }
+
     
     return (
         <DashboardContainer>
