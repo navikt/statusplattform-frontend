@@ -11,7 +11,7 @@ export const EndPathAreas = () =>  {
 
 
 export const EndPathPutAreasToDashboard = (dashboardId: string) => {
-    return "/" + EndPathDashboard() + "/" + dashboardId
+    return EndPathDashboard() + "/" + dashboardId
 }
 
 
@@ -24,7 +24,7 @@ export const EndPathSpecificDashboard = (dashboardId: string) => {
 }
 
 export const EndPathDashboardWithArea = (dashboardId: string) => {
-    return "/" + EndPathAreas() + "/" + dashboardId
+    return EndPathAreas() + "/" + dashboardId
 }
 
 export const EndPathDashboards = () => {
