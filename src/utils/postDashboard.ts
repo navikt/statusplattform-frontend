@@ -1,4 +1,5 @@
 import { Dashboard } from "types/navServices";
+import { EndPathDashboard } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -8,7 +9,7 @@ export class ResponseError extends Error {
 
 export const postDashboard = async (dashboard: Dashboard): Promise<Object[]> =>{
     let response;
-    let endPath = "/rest/Dashboard/"
+    let endPath = EndPathDashboard()
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,

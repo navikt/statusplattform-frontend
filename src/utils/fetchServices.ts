@@ -1,4 +1,5 @@
 import { Service } from "types/navServices";
+import { EndPathServices } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -6,7 +7,7 @@ export class ResponseError extends Error {
     }
 }
 
-let endUrl = "/rest/Services";
+let endUrl = EndPathServices();
 
 export const fetchServices = async (): Promise<Service[]> => {
     let response;

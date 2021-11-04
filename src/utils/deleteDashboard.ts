@@ -1,4 +1,5 @@
 import { Dashboard } from "types/navServices";
+import { EndPathSpecificDashboard } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -8,7 +9,7 @@ export class ResponseError extends Error {
 
 export const deleteDashboard = async (dashboard: Dashboard): Promise<void> =>{
     let response;
-    let endPath = "/rest/Dashboard/" + dashboard.id
+    let endPath = EndPathSpecificDashboard(dashboard.id)
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,

@@ -1,4 +1,5 @@
-import { Area, Dashboard } from "types/navServices";
+import { Dashboard } from "types/navServices";
+import { EndPathDashboards } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -7,9 +8,9 @@ export class ResponseError extends Error {
 }
 
 export const fetchDashboardsList = async (): Promise<Dashboard[]> => {
-
-    let endPath = "/rest/Dashboards"
     let response;
+    let endPath = EndPathDashboards()
+
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath);
     }

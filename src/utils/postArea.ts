@@ -1,3 +1,4 @@
+import { EndPathAreas } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -7,7 +8,7 @@ export class ResponseError extends Error {
 
 export const postAdminArea = async (adminArea): Promise<Object[]> =>{
     let response;
-    let endPath = "/rest/Areas/"
+    let endPath = EndPathAreas()
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,

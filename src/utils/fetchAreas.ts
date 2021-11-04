@@ -1,4 +1,5 @@
 import { Area } from "types/navServices";
+import { EndPathAreas } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -7,9 +8,9 @@ export class ResponseError extends Error {
 }
 
 export const fetchAreas = async (): Promise<Area[]> => {
-
-    let endPath = "/rest/Areas"
     let response;
+    let endPath = EndPathAreas()
+
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath);
     }

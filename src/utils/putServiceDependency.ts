@@ -1,3 +1,5 @@
+import { EndPathPutServiceDependency } from "./apiHelper";
+
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
         super(message)
@@ -6,8 +8,8 @@ export class ResponseError extends Error {
 
 export const putServiceDependency = async (serviceId, dependencyId): Promise<Object[]> =>{
     let response;
-    let endPath = "/rest/Service/addDependency/" + serviceId + "/" + dependencyId
-    // "/Service/addDependency/:Service_id/:DependentOnService_id"
+    let endPath = EndPathPutServiceDependency(serviceId, dependencyId)
+
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,

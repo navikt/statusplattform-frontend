@@ -1,4 +1,5 @@
 import { Service } from "types/navServices";
+import { EndPathService } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -8,7 +9,7 @@ export class ResponseError extends Error {
 
 export const postService = async (service: Service): Promise<Object[]> =>{
     let response;
-    let endPath = "/rest/Service"
+    let endPath = EndPathService
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch("http://localhost:3001" + endPath,
