@@ -1,13 +1,14 @@
 import styled from 'styled-components'
-import { useState } from "react";
+import { useContext } from "react";
 
 import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed, NoStatusAvailableCircle, PlannedMaintenanceCircle } from 'components/TrafficLights'
-import { Area, Tile } from 'types/navServices'
+import { Area} from 'types/navServices'
 import { getIconsFromGivenCode } from 'utils/servicesOperations'
 
-import { Expand, Collapse, Bag, Folder, PensionBag, HealthCase, ErrorFilled, WarningFilled, Employer, Information, People, Family, Service, Globe } from '@navikt/ds-icons'
+import { Expand, Collapse } from '@navikt/ds-icons'
 import Panel from 'nav-frontend-paneler';
 import { Undertittel } from "nav-frontend-typografi";
+import { FilterContext } from 'components/ContextProviders/FilterContext';
 
 
 const PanelCustomized = styled(Panel)`
@@ -133,9 +134,15 @@ export interface PortalServiceTileProps {
 
 
 export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: PortalServiceTileProps) => {
+    const {filters, matches} = useContext(FilterContext)
+
     const toggleExpanded = () => {
         toggleTile(tileIndex)
     }
+
+    // console.log(Object.values(filters).map((option)=>option.toString()).includes("Ok"))
+    
+    // console.log(filters)
 
     return (
         <PanelCustomized alignment={expanded == true ? "stretch" : "flex-start"} onClick={() => toggleExpanded()}>
@@ -148,11 +155,24 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
                 {expanded &&
                     <>
                         <ServicesList apneTekst="Se mer">
-                        {area.services.map(service => (
-                            <li key={service.name}>
-                                <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
-                            </li>
-                        ))}
+                        {area.services.map(service => {
+                            if (filters.length == 0) {
+                                return (
+                                    <li key={service.name}>
+                                        <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+                                    </li>
+                                )
+                            }
+                            if(matches(service.status)) {
+                                return (
+                                    <li key={service.name}>
+                                        <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+                                    </li>
+                                )
+                            }
+                            return
+                        }
+                        )}
                         </ServicesList>
                     </>
                 }
