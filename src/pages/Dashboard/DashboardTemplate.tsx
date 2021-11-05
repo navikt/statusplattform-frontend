@@ -121,7 +121,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
         let currentTime = 0
         const interval = setInterval(async() => {
             currentTime += 1
-            if(currentTime === 5) {
+            if(currentTime === 30) {
                 currentTime = 0
                 const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
                 setAreasInDashboard(retrievedAreasInDashboard.areas)
