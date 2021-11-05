@@ -7,8 +7,9 @@ import BurgerMenu from 'components/BurgerMenu'
 import SubscribeModal from 'components/SubscribeModal'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
-import { CheckboksPanelGruppe } from 'nav-frontend-skjema'
+import { CheckboksPanelGruppe, Checkbox } from 'nav-frontend-skjema'
 import { FilterContext, FilterOption } from 'components/ContextProviders/FilterContext'
+import { Collapse, Expand } from '@navikt/ds-icons'
 
 
 
@@ -175,21 +176,39 @@ const FilterContainer = styled.div`
         padding: 0;
     }
 `
+const FilterRow = styled.div`
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
 
-const CheckboksPanelGruppeCustomized = styled(CheckboksPanelGruppe)`
-    width: 100%;
-    margin-bottom: 1rem;
-    text-align: center;
-    & > div {
-        & > * {
-            height: 100%;
-        }
+    & > * {
+        margin: 5px 0;
     }
+`
+
+const FilterCategoryButton = styled.button`
+    font-family: "Source Sans Pro", Arial, sans-serif;
+    font-size: 1rem;
+    font-weight: bold;
+
+    min-width: 200px;
+    margin-bottom: 1rem;
+    line-height: 1.5rem;
+    padding: 0.3rem 1rem;
+    border: 1px solid grey;
+    white-space: nowrap;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 `
 
 const Filters = () => {
     const {filters, changeFilters} = useContext(FilterContext)
+    const [filterCategoriesExpanded, changeFilterCategoryExpanded] = useState([])
     
+
+
 
     const handleFilter = (event) => {
         const filterOption = event.target.value
@@ -201,19 +220,42 @@ const Filters = () => {
     }
 
 
+
+
+    const toggleFilter = (category: string) => {
+        if(filterCategoriesExpanded.includes(category)) {
+            changeFilterCategoryExpanded(filterCategoriesExpanded.filter(f => f!=category))
+            return
+        }
+        changeFilterCategoryExpanded([...filterCategoriesExpanded, category])
+    }
+
+
+
+
     return (
         <FilterContainer>
-            <CheckboksPanelGruppeCustomized
-                legend={"Filtrer på"}
-                checkboxes={
+            <FilterRow>
+                <FilterCategoryButton onClick={() => toggleFilter("Tjenestestatus")}><span>Tjenestestatus({filters.length})</span>
+                    {!filterCategoriesExpanded.includes("Tjenestestatus") ? <Expand/> : <Collapse />}
+                </FilterCategoryButton>
+
+
+                {filterCategoriesExpanded.includes("Tjenestestatus") &&
                     Object.values(FilterOption).map((option) => {
-                        return {
-                            label: option, value: option, checked: filters.includes(option)
-                        }
+                        return (
+                            <Checkbox
+                                aria-checked={filters.includes(option)}
+                                key={option} 
+                                label={option} 
+                                value={option} 
+                                checked={filters.includes(option)} 
+                                onChange={(event) => {handleFilter(event)}} 
+                            />
+                        )
                     })
                 }
-                onChange={(event) => {handleFilter(event)}}
-            />
+            </FilterRow>
         </FilterContainer>
     )
 }
