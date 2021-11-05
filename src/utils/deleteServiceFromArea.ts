@@ -1,4 +1,4 @@
-import { EndPathArea } from "./apiHelper";
+import { EndPathArea, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -11,7 +11,7 @@ export const deleteServiceFromArea = async (areaId, serviceId): Promise<void> =>
     let endPath = EndPathArea() + "/"+ areaId + "/" + serviceId
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch("http://localhost:3001" + endPath,
+        response = await fetch(LocalhostEndpoint + endPath,
         {
             method: "DELETE",
             body: JSON.stringify({
@@ -27,7 +27,7 @@ export const deleteServiceFromArea = async (areaId, serviceId): Promise<void> =>
         });
     }
     else {
-        response = await fetch("https://portalserver.labs.nais.io" + endPath,
+        response = await fetch(PortalDevEndpoint + endPath,
         {
             method: "DELETE",
             body: JSON.stringify({

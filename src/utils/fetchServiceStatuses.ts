@@ -1,5 +1,5 @@
-import { Area } from "types/navServices";
-import { EndPathAreas, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathServiceStatus, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -7,17 +7,16 @@ export class ResponseError extends Error {
     }
 }
 
-export const fetchAreas = async (): Promise<Area[]> => {
-    let response;
-    let endPath = EndPathAreas()
+let endUrl = EndPathServiceStatus;
 
+export const fetchServiceStatuses = async (): Promise<string[]> => {
+    let response;
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch(LocalhostEndpoint + endPath);
+        response = await fetch(LocalhostEndpoint + endUrl);
     }
     else {
-        response = await fetch(PortalDevEndpoint + endPath);
+        response = await fetch(PortalDevEndpoint + endUrl);
     }
-
     if (response.ok) {
         return response.json()
     }

@@ -1,3 +1,10 @@
+export const LocalhostEndpoint = "http://localhost:3001"
+
+
+export const PortalDevEndpoint = "https://digitalstatus.ekstern.dev.nav.no"
+
+
+
 
 export const EndPathArea = () =>  {
     return "/rest/Area"
@@ -50,6 +57,14 @@ export const EndPathService = () => {
 
 export const EndPathServices = () => {
     return "/rest/Services"
+}
+
+export const EndPathServiceTypes = () => {
+    return EndPathServices + "/Types"
+}
+
+export const EndPathServiceStatus = () => {
+    return EndPathServices + "/Status"
 }
 
 export const EndPathSpecificService = (serviceId: string) => {

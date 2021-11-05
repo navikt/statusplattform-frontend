@@ -1,5 +1,5 @@
 import { Area } from "types/navServices";
-import { EndPathSpecificArea } from "./apiHelper";
+import { EndPathSpecificArea, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -12,7 +12,7 @@ export const deleteArea = async (area: Area): Promise<void> =>{
     let endPath = EndPathSpecificArea(area.id)
 
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch("http://localhost:3001" + endPath,
+        response = await fetch(LocalhostEndpoint + endPath,
         {
             method: "DELETE",
             body: JSON.stringify({
@@ -30,7 +30,7 @@ export const deleteArea = async (area: Area): Promise<void> =>{
         });
     }
     else {
-        response = await fetch("https://digitalstatus.ekstern.dev.nav.no" + endPath,
+        response = await fetch(PortalDevEndpoint + endPath,
         {
             method: "DELETE",
             body: JSON.stringify({
