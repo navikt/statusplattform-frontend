@@ -1,15 +1,14 @@
 import styled from 'styled-components'
 import { useContext } from "react";
-import Link from 'next/link'
 
 import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed, NoStatusAvailableCircle, PlannedMaintenanceCircle } from 'components/TrafficLights'
-import { Area} from 'types/navServices'
 import { getIconsFromGivenCode } from 'utils/servicesOperations'
+import { Area} from 'types/navServices'
+import { FilterContext } from 'components/ContextProviders/FilterContext';
 
 import { Expand, Collapse } from '@navikt/ds-icons'
 import Panel from 'nav-frontend-paneler';
 import { Undertittel } from "nav-frontend-typografi";
-import { FilterContext } from 'components/ContextProviders/FilterContext';
 import Lenke from 'nav-frontend-lenker';
 
 
@@ -93,7 +92,9 @@ const ServicesList = styled.ul`
     }
 `;
 
-const CenteredExpandRetractSpan = styled.span`
+const CenteredExpandRetractSpan = styled.button`
+    background-color: white;
+    border: none;
     padding: 1rem;
     display: flex;
     justify-content: center;
@@ -147,9 +148,6 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
         toggleTile(tileIndex)
     }
 
-    // console.log(Object.values(filters).map((option)=>option.toString()).includes("Ok"))
-    
-    // console.log(filters)
 
     return (
         <PanelCustomized alignment={expanded == true ? "stretch" : "flex-start"}>
@@ -161,7 +159,7 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
                 </UndertittelCustomized> 
                 {expanded &&
                     <>
-                        <ServicesList apneTekst="Se mer">
+                        <ServicesList>
                         {area.services.map(service => {
                             if (filters.length == 0) {
                                 return (
@@ -189,7 +187,7 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
                 }
             </div>
 
-            <CenteredExpandRetractSpan onClick={() => toggleExpanded()}>{expanded ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan>
+            <CenteredExpandRetractSpan aria-expanded={expanded} aria-label="Utvid eller lukk panelmeny" onClick={() => toggleExpanded()}>{expanded ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan>
         </PanelCustomized>
     )
 }
