@@ -34,10 +34,9 @@ const MainContent = props => {
         <MainContentContainer>
             <ToastContainer />
             <Head>
-                <title>Status digitale tjenester</title>
                 <link rel="icon" href="/favicon.ico" />
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-                <meta name="description" 
+                <meta name="description" property="og:description"
                     content="Status digitale tjenester er en tjeneste som viser status for alle Navs tjenester.">
                 </meta>
             </Head>

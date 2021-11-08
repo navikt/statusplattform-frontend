@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useEffect, useState } from "react";
+import Head from 'next/head'
 import { toast } from 'react-toastify';
 
 import { Bag, Calculator, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Saving, SocialAid } from '@navikt/ds-icons'
@@ -84,6 +85,9 @@ const AreaTable = () => {
 
     return (
         <AreaContainer>
+            <Head>
+                <title>Admin - Områder</title>
+            </Head>
             <Knapp mini onClick={() => toggleNewAreaEdit(!editNewArea)}>{!editNewArea ? "Legg til nytt område" : "Avbryt nytt område"}</Knapp>
             {editNewArea &&
                 <AddNewArea dashboardAreas={dashboardAreas} fetchData={fetchData} setAnchorId={setAnchorId} />

@@ -1,4 +1,6 @@
 import styled from 'styled-components'
+import Head from 'next/head'
+
 import Layout from 'components/Layout'
 import { Ingress, Innholdstittel } from 'nav-frontend-typografi';
 import Lenke from 'nav-frontend-lenker';
@@ -28,6 +30,9 @@ const ErrorHeader = styled.div`
 export default function Custom404() {
     return (
         <Layout>
+            <Head>
+                <title>Fant ikke siden</title>
+            </Head>
             <ErrorWrapper>
                 <ErrorHeader>
                     <Innholdstittel>Fant ikke siden</Innholdstittel><Ingress>Statuskode 404</Ingress>

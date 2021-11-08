@@ -1,4 +1,5 @@
 import styled from 'styled-components'
+import Head from 'next/head'
 import { useEffect, useState } from "react";
 
 import { toast } from 'react-toastify';
@@ -116,7 +117,9 @@ const TjenesteTable = () => {
 
     return (
         <TjenesteTableContainer>
-
+            <Head>
+                <title>Admin - Tjenester</title>
+            </Head>
             <Knapp mini onClick={() => changeAddNewService(!addNewService)}>{addNewService == false ? "Legg til ny tjeneste" : "Avbryt ny tjeneste"}</Knapp>
             {addNewService &&
                 <AddNewService services={services} reload={reload}/>

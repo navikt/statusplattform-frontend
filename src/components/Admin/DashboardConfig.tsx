@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Head from 'next/head'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 
@@ -40,6 +41,9 @@ const DashboardConfig = () => {
 
     return (
         <DashboardConfigContainer>
+            <Head>
+                <title>Admin - Dashbord</title>
+            </Head>
             <Knapp mini onClick={() => updateEditNewDashboard(!editNewDashboard)}>{
                 !editNewDashboard ? "Legg til nytt dashbord" : "Avbryt nytt dashbord"}
             </Knapp>

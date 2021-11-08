@@ -1,3 +1,5 @@
+import Head from 'next/head'
+
 import Layout from 'components/Layout'
 import TjenesteData from './TjenesteData'
 import CustomNavSpinner from 'components/CustomNavSpinner'
@@ -25,6 +27,7 @@ const ServiceDataComponent: React.FC<{idOfService: string}> = ({idOfService}) =>
 
     return (
         <Layout>
+            <Head><title>Tjeneste: {service.name}</title></Head>
             <TjenesteData service={service}/>
         </Layout>
     )

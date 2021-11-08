@@ -21,9 +21,9 @@ export default class MyDocument extends Document {
 
   render() {
     return (
-      <html>
+      <html prefix="og: https://ogp.me/ns#">
         <Head>
-          <title>My page</title>
+          <title>Status digitale tjenester</title>
           {/* Step 5: Output the styles in the head  */}
           {this.props.styleTags}
         </Head>

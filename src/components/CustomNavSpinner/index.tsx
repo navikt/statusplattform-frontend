@@ -1,5 +1,7 @@
-import NavFrontendSpinner from 'nav-frontend-spinner'
 import styled from 'styled-components'
+import Head from 'next/head'
+
+import NavFrontendSpinner from 'nav-frontend-spinner'
 
 
 const SpinnerCentered = styled.div`
@@ -12,6 +14,9 @@ const SpinnerCentered = styled.div`
 const CustomNavSpinner = () => {
     return (
         <SpinnerCentered>
+            <Head>
+                <title>Laster...</title>
+            </Head>
             <NavFrontendSpinner type="XXL"/>
         </SpinnerCentered>
     )

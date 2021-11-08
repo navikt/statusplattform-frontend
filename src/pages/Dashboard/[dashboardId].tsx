@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import { useRouter } from "next/router"
+import Head from 'next/head'
 
 import CustomNavSpinner from "components/CustomNavSpinner"
 import DashboardTemplate from "./DashboardTemplate"
@@ -48,6 +49,9 @@ const DashboardFromId = () => {
 
     return (
         <Layout>
+            <Head>
+                <title>{retrievedDashboard.name}</title>
+            </Head>
             <DashboardTemplate dashboard={retrievedDashboard}/>
         </Layout>
     )
