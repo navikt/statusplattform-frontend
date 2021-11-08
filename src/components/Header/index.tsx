@@ -96,7 +96,6 @@ const CustomButton = styled(Knapp)`
 const SubscribeModalWrapper = styled.div`
     position: absolute;
     z-index: 100;
-    /* right: 0; */
     @media (min-width: 930px) {
         right: auto;
     }
@@ -260,7 +259,7 @@ const Filters = () => {
     return (
         <FilterContainer>
             <FilterRow>
-                <FilterCategoryButton onClick={() => toggleFilter("Tjenestestatus")}><span>Tjenestestatus({filters.length})</span>
+                <FilterCategoryButton onClick={() => toggleFilter("Tjenestestatus")}><span>Tjenestestatus ({filters.length})</span>
                     {!filterCategoriesExpanded.includes("Tjenestestatus") ? <Expand/> : <Collapse />}
                 </FilterCategoryButton>
 
