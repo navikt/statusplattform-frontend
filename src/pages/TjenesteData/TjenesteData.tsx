@@ -86,7 +86,7 @@ const TjenesteData: React.FC<{service: Service}> = ({service}) => {
 
     return (
         <CategoryContainer>
-            <Link href="/Dashboard/PrivatPerson"><span><BackButton /></span></Link>
+            <Link href="/"><span><BackButton /></span></Link>
             <CenterContent><Innholdstittel>{service.name}</Innholdstittel></CenterContent>
             <ServiceContainer>
                 <ServiceWrapper key={service.name}>
