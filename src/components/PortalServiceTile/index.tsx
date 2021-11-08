@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useContext } from "react";
+import Link from 'next/link'
 
 import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed, NoStatusAvailableCircle, PlannedMaintenanceCircle } from 'components/TrafficLights'
 import { Area} from 'types/navServices'
@@ -9,17 +10,20 @@ import { Expand, Collapse } from '@navikt/ds-icons'
 import Panel from 'nav-frontend-paneler';
 import { Undertittel } from "nav-frontend-typografi";
 import { FilterContext } from 'components/ContextProviders/FilterContext';
+import Lenke from 'nav-frontend-lenker';
 
 
 const PanelCustomized = styled(Panel)`
     color: var(--navBla);
     margin: 0 5px;
+    padding: 0;
     width: 100%;
     display: flex;
     flex-direction: column;
     align-self: flex-start;
     justify-content: space-between;
     > div {
+        padding: 1rem;
         h2 svg:first-child {
             width: 1.778rem;
             height: 1.778rem;
@@ -37,15 +41,7 @@ const PanelCustomized = styled(Panel)`
     @media (min-width: 600px) {
         width: 290px;
     }
-    :hover {
-        span {
-            text-decoration: underline;
-        }
-        -webkit-box-shadow:0px 1px 0 black;
-        -moz-box-shadow:0px 1px 0 black;
-        box-shadow: #a0a0a0 0 2px 1px 0;
-        cursor: pointer;
-    }
+    
 
     //Styrer om panelet skal strekke etter høyden eller ikke basert på prop i render
     align-self: ${(props) => (props.alignment)};
@@ -96,9 +92,18 @@ const ServicesList = styled.ul`
 `;
 
 const CenteredExpandRetractSpan = styled.span`
-    margin-top: 20px;
+    padding: 1rem;
     display: flex;
     justify-content: center;
+    :hover {
+        span {
+            text-decoration: underline;
+        }
+        -webkit-box-shadow:0px 1px 0 black;
+        -moz-box-shadow:0px 1px 0 black;
+        box-shadow: #a0a0a0 0 2px 1px 0;
+        cursor: pointer;
+    }
 `
 
 
@@ -145,7 +150,7 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
     // console.log(filters)
 
     return (
-        <PanelCustomized alignment={expanded == true ? "stretch" : "flex-start"} onClick={() => toggleExpanded()}>
+        <PanelCustomized alignment={expanded == true ? "stretch" : "flex-start"}>
             <div>
                 <UndertittelCustomized>
                     <section>{handleAndSetStatusIcon(area.status, false)}</section>
@@ -159,14 +164,18 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
                             if (filters.length == 0) {
                                 return (
                                     <li key={service.name}>
-                                        <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+                    					<Lenke href={"/TjenesteData/" + service.id}>
+                                            <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+                                        </Lenke>
                                     </li>
                                 )
                             }
                             if(matches(service.status)) {
                                 return (
                                     <li key={service.name}>
-                                        <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+                    					<Lenke href={"/TjenesteData/" + service.id}>
+                                            <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+                                        </Lenke>
                                     </li>
                                 )
                             }
@@ -178,7 +187,7 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
                 }
             </div>
 
-            <CenteredExpandRetractSpan>{expanded ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan>
+            <CenteredExpandRetractSpan onClick={() => toggleExpanded()}>{expanded ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan>
         </PanelCustomized>
     )
 }
