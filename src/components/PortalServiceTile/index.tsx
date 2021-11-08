@@ -14,7 +14,6 @@ import Lenke from 'nav-frontend-lenker';
 
 
 const PanelCustomized = styled(Panel)`
-    color: var(--navBla);
     margin: 0 5px;
     padding: 0;
     width: 100%;
@@ -83,6 +82,9 @@ const ServicesList = styled.ul`
             white-space: normal;
             word-wrap: break-word;
         }
+    }
+    a {
+        display: flex;
     }
     @media (min-width: 250px){
         > li {
