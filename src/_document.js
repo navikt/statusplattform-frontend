@@ -23,7 +23,7 @@ export default class MyDocument extends Document {
     return (
       <html prefix="og: https://ogp.me/ns#">
         <Head>
-          <title>Status digitale tjenester</title>
+          <title>Status Nav digitale tjenester</title>
           {/* Step 5: Output the styles in the head  */}
           {this.props.styleTags}
         </Head>
