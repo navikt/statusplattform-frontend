@@ -18,9 +18,6 @@ export default function Home() {
 
     return (
         <>  
-            <title>
-                Laster...
-            </title>
             {atHomePage &&
                 <DashboardFromId/>
             }

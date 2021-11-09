@@ -14,9 +14,6 @@ const SpinnerCentered = styled.div`
 const CustomNavSpinner = () => {
     return (
         <SpinnerCentered>
-            <Head>
-                <title>Laster...</title>
-            </Head>
             <NavFrontendSpinner type="XXL"/>
         </SpinnerCentered>
     )
