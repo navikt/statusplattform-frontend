@@ -105,7 +105,9 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
     const router = useRouter()
 
-    
+    useEffect(() => {
+        window.addEventListener("resize", () => setWidth(window.innerWidth))
+    }, [width]);    
 
     useEffect(() => {
         (async function () {
