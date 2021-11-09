@@ -39,9 +39,8 @@ const MainContent = props => {
                 <meta name="description" property="og:description"
                     content="Status digitale tjenester er en tjeneste som viser status for alle Navs tjenester.">
                 </meta>
-                <meta property="og:image" content="https://www.youtube.com/img/desktop/yt_1200.png"></meta>
-                <meta property="fb:app_id" content="87741124305"></meta>
-                <link rel="canonical" href="https://www.youtube.com/"></link>
+                <meta property="og:image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"></meta>
+                <link rel="canonical" href="https://portal.labs.nais.io/Dashboard/Privatperson"></link>
             </Head>
             <Navbar/>
             <Header/>
