@@ -21,7 +21,10 @@ const ServiceDataComponent: React.FC<{idOfService: string}> = ({idOfService}) =>
 
     if(isLoading) {
         return (
-            <CustomNavSpinner />
+            <>
+                <Head><title>Laster...</title></Head>
+                <CustomNavSpinner />
+            </>
         )
     }
 

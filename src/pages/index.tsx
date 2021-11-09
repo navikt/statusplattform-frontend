@@ -17,7 +17,10 @@ export default function Home() {
     },[router])
 
     return (
-        <>
+        <>  
+            <title>
+                Laster...
+            </title>
             {atHomePage &&
                 <DashboardFromId/>
             }
