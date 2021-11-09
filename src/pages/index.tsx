@@ -22,6 +22,9 @@ export default function Home() {
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta name="title" content="Navstatus" />
                 <meta name="description" content="Status Nav digitale tjenester er en oversiktsside for Navs ulike tjenester til borgere, arbeidsgivere og samarbeidspartnere." />
+                <meta property="image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
+                <meta property="url" content="https://portal.labs.nais.io/Dashboard/Privatperson" />
+                <meta property="type" content="website" />
 
 
                 {/* <!-- Open Graph / Facebook --> */}
