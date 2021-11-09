@@ -36,11 +36,23 @@ const MainContent = props => {
             <Head>
                 <link rel="icon" href="/favicon.ico" />
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-                <meta name="description" property="og:description"
-                    content="Status digitale tjenester er en tjeneste som viser status for alle Navs tjenester.">
-                </meta>
-                <meta property="og:image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"></meta>
-                <link rel="canonical" href="https://portal.labs.nais.io/Dashboard/Privatperson"></link>
+                <title>Navstatus</title>
+                <meta name="title" content="Navstatus" />
+                <meta name="description" content="" />
+
+                {/* <!-- Open Graph / Facebook --> */}
+                <meta property="og:type" content="website" />
+                <meta property="og:url" content="https://portal.labs.nais.io/" />
+                <meta property="og:title" content="Navstatus" />
+                <meta property="og:description" content="" />
+                <meta property="og:image" content="" />
+
+                {/* <!-- Twitter --> */}
+                <meta property="twitter:card" content="summary_large_image" />
+                <meta property="twitter:url" content="https://portal.labs.nais.io/" />
+                <meta property="twitter:title" content="Navstatus" />
+                <meta property="twitter:description" content="" />
+                <meta property="twitter:image" content="" />
             </Head>
             <Navbar/>
             <Header/>
