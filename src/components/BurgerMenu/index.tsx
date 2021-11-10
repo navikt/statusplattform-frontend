@@ -122,7 +122,7 @@ const BurgerMenu = () => {
     
     return (
         <BurgerMenuContainer onClick={(event) => togglePopover(event.currentTarget)}>
-            <Menu aria-expanded={!!anker} onClick={togglePopover}>
+            <Menu id="menu-container" aria-expanded={!!anker} onClick={togglePopover}>
                 <span><Hamburger className={!anker ? "hamburger-ikon" : "closed-burger"}/></span>
                 <span><Close className={!!anker ? "close-ikon" : "closed-burger"}/></span>
                 <span className="menu-text">Meny</span>

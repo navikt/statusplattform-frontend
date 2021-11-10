@@ -46,7 +46,7 @@ const LenkeInner = styled(Lenke)`
 	}
 `;
 
-const LenkeInnerTest = styled.div`
+const LenkeSpacer = styled.div`
 	margin: 0 1rem;
 	height: 100%;
 	border-bottom: 3px transparent;
@@ -71,41 +71,40 @@ export default function Navbar() {
 
 	return (
 		<Nav>
-			{/* Lag skip links */}
 			<ul role="tablist">
 				<li role="tab">
 					<Link href={"/Dashboard/Privatperson"}>
-						<LenkeInner>
-							<LenkeInnerTest className={`${(router.asPath === "/Dashboard/Privatperson") ? "active" : "inactive"}`}>
+						<LenkeInner href="/Dashboard/Privatperson" className={`${router.pathname === "/Privatperson" ? "active" : ""}`}>
+							<LenkeSpacer className={`${(router.asPath === "/Dashboard/Privatperson") ? "active" : "inactive"}`}>
 								<NormalTekstCustomized>Privatperson</NormalTekstCustomized>
-							</LenkeInnerTest>
+							</LenkeSpacer>
 						</LenkeInner>
 					</Link>
 				</li>
 				<li role="tab">
 					<Link href={"/Dashboard/Arbeidsgiver"}>
 						<LenkeInner href="/Dashboard/Arbeidsgiver" className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>
-							<LenkeInnerTest className={`${(router.asPath === "/Dashboard/Arbeidsgiver") ? "active" : "inactive"}`}>
+							<LenkeSpacer className={`${(router.asPath === "/Dashboard/Arbeidsgiver") ? "active" : "inactive"}`}>
 								<NormalTekstCustomized>Arbeidsgiver</NormalTekstCustomized>
-							</LenkeInnerTest>
+							</LenkeSpacer>
 						</LenkeInner>
 					</Link>
 				</li>
 				<li role="tab">
 					<Link href={"/Dashboard/Samarbeidspartner"}>
 						<LenkeInner href="/Dashboard/Samarbeidspartner" className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>
-							<LenkeInnerTest className={`${(router.asPath === "/Dashboard/Samarbeidspartner") ? "active" : "inactive"}`}>
+							<LenkeSpacer className={`${(router.asPath === "/Dashboard/Samarbeidspartner") ? "active" : "inactive"}`}>
 								<NormalTekstCustomized>Samarbeidspartner</NormalTekstCustomized>
-							</LenkeInnerTest>
+							</LenkeSpacer>
 						</LenkeInner>
 					</Link>
 				</li>
 				<li role="tab">
 					<Link href={"/Dashboard/Internt"}>
 						<LenkeInner href="/Dashboard/Internt" className={`${router.pathname === "/Internt" ? "active" : ""}`}>
-							<LenkeInnerTest className={`${(router.asPath === "/Dashboard/Internt") ? "active" : "inactive"}`}>
+							<LenkeSpacer className={`${(router.asPath === "/Dashboard/Internt") ? "active" : "inactive"}`}>
 								<NormalTekstCustomized>Internt (Kun for innloggede NAV-brukere)</NormalTekstCustomized>
-							</LenkeInnerTest>
+							</LenkeSpacer>
 						</LenkeInner>
 					</Link>
 				</li>
