@@ -71,6 +71,7 @@ export default function Navbar() {
 
 	return (
 		<Nav>
+			{/* Lag skip links */}
 			<ul role="tablist">
 				<li role="tab">
 					<Link href={"/Dashboard/Privatperson"}>
