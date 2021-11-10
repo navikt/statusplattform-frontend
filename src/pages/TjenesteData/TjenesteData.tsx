@@ -1,17 +1,11 @@
-import { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 
-import NavFrontendSpinner from 'nav-frontend-spinner';
 
-import { fetchServices } from 'utils/fetchServices';
-import { retrieveFilteredServiceList } from 'utils/servicesOperations';
+
 import { Innholdstittel, Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import { BackButton } from 'components/BackButton';
 import { ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
-import CustomNavSpinner from 'components/CustomNavSpinner';
-import { fetchServiceFromId } from 'utils/fetchServiceFromId';
 import { Service } from 'types/navServices';
 
 
@@ -75,7 +69,7 @@ const formatStatusMessage = (serviceToFormat) =>   {
 }
 
 const TjenesteData: React.FC<{service: Service}> = ({service}) => {
-    
+
 
     
     if (!service) {
@@ -196,28 +190,22 @@ const Past90Days: React.FC<{service: Service | null}> = ({service}) => {
     // Array er et test-array. Må endres når vi får records inn på rett måte
     const test = Array.from(Array(10).keys())
     
-    console.log(service)
-    let x = -5
     return (
-        <div>
-            <HistoryWrapper>
-            {/* <p className="hover-history">Statushistorikk under utvikling</p> */}
-                {test.map(() => {
-                    x += 8
-                    return (
-                        <div>
-                            <span className={service.status}>
-                                <div className="pointer-wrapper" >
-                                    <div className="pointer-top" />
-                                    <div className="pointer-bottom" />
-                                </div>
-                                <p className="hover-text">Statushistorikk under utvikling</p>
-                            </span>
-                        </div>
-                    )
-                })}
-            </HistoryWrapper>
-        </div>
+        <HistoryWrapper>
+            {test.map(() => {
+                return (
+                    <div>
+                        <span className={service.status}>
+                            <div className="pointer-wrapper" >
+                                <div className="pointer-top" />
+                                <div className="pointer-bottom" />
+                            </div>
+                            <p className="hover-text">Statushistorikk under utvikling</p>
+                        </span>
+                    </div>
+                )
+            })}
+        </HistoryWrapper>
     )
 }
 
