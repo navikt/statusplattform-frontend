@@ -11,10 +11,18 @@ const KnappCustomized = styled(Knapp)`
     transition: 0.4s;
 `
 
+export async function getServerSideProps(context) {
+    return {
+        props: {}, // will be passed to the page component as props
+    }
+}
+
+
 export const BackButton = () => {
     const router = useRouter();
+    var referrer = document.referrer;
 
     return (
-        <KnappCustomized mini onClick={() => router.back()}><Back/>Gå tilbake</KnappCustomized>
+        <KnappCustomized mini onClick={() => router.push(referrer)}><Back/>Gå tilbake</KnappCustomized>
     )
 }
