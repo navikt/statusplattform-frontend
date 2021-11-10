@@ -95,9 +95,9 @@ const TjenesteData: React.FC<{service: Service}> = ({service}) => {
                         Tjenestenavn - {service.name}
                     </Systemtittel>
                     <IncidentsWrapper>
-                        <Undertittel>Hendelsesrapport siste 90 dagene</Undertittel>
+                        <Undertittel>Eksempelrapport</Undertittel>
                         <div>
-                            Ikke implementert
+                            <Past90Days service={service}/>
                         </div>
                     </IncidentsWrapper>
                 </ServiceWrapper>
@@ -106,6 +106,120 @@ const TjenesteData: React.FC<{service: Service}> = ({service}) => {
     )
 }
 
+
+
+
+
+
+
+/*------------------------------------------ Helpers below ------------------------------------------*/
+
+
+
+
+
+
+const CustomSvg = styled.svg`
+    rect {
+        .ok {
+            fill: var(--navGrønn);
+        }
+        .warn {
+            fill: var(--navOransje);
+        }
+        .down {
+            fill: var(--navOransje);
+        }
+    }
+    
+`
+
+
+const HistoryWrapper = styled.div`
+    display: flex;
+    gap: 3px;
+    div {
+        position: relative;
+    }
+    span {
+        position: relative;
+        background-color: grey;
+        height: 34px;
+        width: 7.6px;
+        display: block;
+        p {
+            border: 1px solid black;
+            background-color: white;
+            padding: 1rem;
+            border-radius: 5px;
+            z-index: 100;
+            top: calc(32px/2 + 10px);
+            transform: translateX(-50%);
+            display: none;
+            position: absolute;
+        }
+        .pointer-wrapper {
+            position: absolute;
+            height: 10px;
+            top: 9px;
+            z-index: 1001;
+            width: 0;
+            div {
+                display: none;
+                position: absolute;
+            }
+            .pointer-top {
+                border: 9px solid transparent;
+                border-bottom-color: black;
+                top: calc(31px/2);
+                transform: translateX(-28%);
+                z-index: -10;
+            }
+            .pointer-bottom {
+                border: 8px solid transparent;
+                border-bottom-color: white;
+                margin-left: 1px;
+                margin-bottom: -1px;
+                top: calc(35px/2);
+                transform: translateX(-31%);
+                z-index: 101;
+            }
+        }
+        :hover {
+            .pointer-top, .pointer-bottom, p {
+                display: block;
+            }
+        }
+    }
+`
+const Past90Days: React.FC<{service: Service | null}> = ({service}) => {
+    // Array er et test-array. Må endres når vi får records inn på rett måte
+    const test = Array.from(Array(10).keys())
+    
+    console.log(service)
+    let x = -5
+    return (
+        <div>
+            <HistoryWrapper>
+            {/* <p className="hover-history">Statushistorikk under utvikling</p> */}
+                {test.map(() => {
+                    x += 8
+                    return (
+                        <div>
+                            <span className={service.status}>
+                                <div className="pointer-wrapper" >
+                                    <div className="pointer-top" />
+                                    <div className="pointer-bottom" />
+                                </div>
+                                <p className="hover-text">Statushistorikk under utvikling</p>
+                            </span>
+                        </div>
+                    )
+                })}
+            </HistoryWrapper>
+        </div>
+    )
+}
 
 
 
