@@ -46,10 +46,9 @@ export const EndPathDashboards = () => {
     return "/rest/Dashboards"
 }
 
-
-
-
-
+export const EndPathLoggInNavUser = () => {
+    return "/rest/oauth2"
+}
 
 export const EndPathService = () => {
     return "/rest/Service"
