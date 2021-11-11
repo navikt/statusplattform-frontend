@@ -7,7 +7,7 @@ export class ResponseError extends Error {
     }
 }
 
-let endUrl = EndPathLoggInNavUser;
+let endUrl = EndPathLoggInNavUser();
 
 export const loggInNavUser = async (): Promise<string[]> => {
     let response;
