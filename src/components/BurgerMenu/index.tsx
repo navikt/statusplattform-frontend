@@ -163,8 +163,8 @@ const PopoverContent = () => {
                     <ul>
                         <li><Lenke href="#0">Min side</Lenke></li>
                         <li><Lenke href="#0">Mine varsler</Lenke></li>
-                        <li onClick={loggInNavUserWrapper}>
-                            <Lenke href="#0">   
+                        <li>
+                            <Lenke href="https://digitalstatus.ekstern.dev.nav.no/rest/oauth2">   
                                 <Login className="popover-link-ikon" />
                                 Logg inn
                             </Lenke>
