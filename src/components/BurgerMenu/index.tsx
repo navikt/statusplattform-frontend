@@ -119,7 +119,6 @@ const BurgerMenu = () => {
             </>
         )
     }
-
     
     return (
         <BurgerMenuContainer onClick={(event) => togglePopover(event.currentTarget)}>

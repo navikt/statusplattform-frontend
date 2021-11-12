@@ -109,6 +109,13 @@ const CenteredExpandRetractSpan = styled.button`
     }
 `
 
+const LenkeCustomized = styled(Lenke)`
+    text-decoration: none;
+    :hover {
+        text-decoration: underline;
+    }
+`
+
 
 const handleAndSetNavIcon = (ikon: string) => {
     return getIconsFromGivenCode(ikon)
@@ -164,18 +171,18 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
                             if (filters.length == 0) {
                                 return (
                                     <li key={service.name}>
-                    					<Lenke href={"/TjenesteData/" + service.id}>
+                    					<LenkeCustomized href={"/TjenesteData/" + service.id}>
                                             <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
-                                        </Lenke>
+                                        </LenkeCustomized>
                                     </li>
                                 )
                             }
                             if(matches(service.status)) {
                                 return (
                                     <li key={service.name}>
-                    					<Lenke href={"/TjenesteData/" + service.id}>
+                    					<LenkeCustomized href={"/TjenesteData/" + service.id}>
                                             <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
-                                        </Lenke>
+                                        </LenkeCustomized>
                                     </li>
                                 )
                             }

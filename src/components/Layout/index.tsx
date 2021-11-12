@@ -7,6 +7,7 @@ import Footer from 'components/Footer'
 import Header from 'components/Header'
 import Navbar from 'components/Navbar'
 import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 
 
@@ -64,6 +65,9 @@ const Content = styled.main`
 
 const MainContent = props => {
     const router = useRouter()
+    let currentPath = router.asPath
+    currentPath = currentPath.includes("#") ? currentPath.substring(0, currentPath.indexOf("#")) : currentPath    
+
 
 
     return(
@@ -72,10 +76,10 @@ const MainContent = props => {
             <nav className="skip-links" >
                 <ul>
                     <li>
-                        <Link href="#menu-container" replace={true}><a>Hovedmeny</a></Link>
+                        <Link href={currentPath + "#menu-container"} replace={true}>Hovedmeny</Link>
                     </li>
                     <li>
-                        <Link href="#content" replace={true}><a>Innhold</a></Link>
+                        <Link href={currentPath + "#content"} replace={true}>Innhold</Link>
                     </li>
                 </ul>
             </nav>
