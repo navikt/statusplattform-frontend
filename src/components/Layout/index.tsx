@@ -72,10 +72,10 @@ const MainContent = props => {
             <nav className="skip-links" >
                 <ul>
                     <li>
-                        <Link href="#menu-container" replace={true}><a>that one now works</a></Link>
+                        <Link href="#menu-container" replace={true}><a>Hovedmeny</a></Link>
                     </li>
                     <li>
-                        <Link href="#content" replace={true}><a>that one now works</a></Link>
+                        <Link href="#content" replace={true}><a>Innhold</a></Link>
                     </li>
                 </ul>
             </nav>
