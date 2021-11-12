@@ -65,17 +65,17 @@ const Content = styled.main`
 const MainContent = props => {
     const router = useRouter()
 
-    
+
     return(
         <MainContentContainer>
             <ToastContainer />
             <nav className="skip-links" >
                 <ul>
                     <li>
-                        <Link href="#menu-container" replace={true}>Hovedmeny</Link>
+                        <Link href="#menu-container" replace={true}><a>that one now works</a></Link>
                     </li>
                     <li>
-                        <Link href="#content" replace={true}>Innhold</Link>
+                        <Link href="#content" replace={true}><a>that one now works</a></Link>
                     </li>
                 </ul>
             </nav>
