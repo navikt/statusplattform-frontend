@@ -46,9 +46,8 @@ export const EndPathDashboards = () => {
     return "/rest/Dashboards"
 }
 
-export const EndPathLoggInNavUser = () => {
-    return "/rest/oauth2"
-}
+
+
 
 export const EndPathService = () => {
     return "/rest/Service"
@@ -72,4 +71,10 @@ export const EndPathSpecificService = (serviceId: string) => {
 
 export const EndPathPutServiceDependency = (serviceId: string, dependencyId: string) => {
     return EndPathService() + "/addDependency/" + serviceId + "/" + dependencyId
+}
+
+
+
+export const EndPathLoggInNavUser = () => {
+    return "/rest/oauth2"
 }

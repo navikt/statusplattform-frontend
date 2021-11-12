@@ -1,8 +1,12 @@
+import Link from 'next/link'
+import styled from 'styled-components'
+
+import { ToastContainer } from 'react-toastify'
+
 import Footer from 'components/Footer'
 import Header from 'components/Header'
 import Navbar from 'components/Navbar'
-import { ToastContainer } from 'react-toastify'
-import styled from 'styled-components'
+import { useRouter } from 'next/router'
 
 
 
@@ -59,16 +63,19 @@ const Content = styled.main`
 
 
 const MainContent = props => {
+    const router = useRouter()
+
+    
     return(
         <MainContentContainer>
             <ToastContainer />
             <nav className="skip-links" >
                 <ul>
                     <li>
-                        <a href="#menu-container">Hovedmeny</a>
+                        <Link href="#menu-container" replace={true}>Hovedmeny</Link>
                     </li>
                     <li>
-                        <a href="#content">Innhold</a>
+                        <Link href="#content" replace={true}>Innhold</Link>
                     </li>
                 </ul>
             </nav>
