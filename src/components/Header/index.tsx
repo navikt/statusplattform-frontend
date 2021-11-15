@@ -21,11 +21,13 @@ export const CustomHeader = styled.header`
     background-color: white;
     border-bottom: 1px solid #c6c2bf;
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: row wrap;
+    justify-content: center;
     align-items: center;
     img {
         max-width: 84px;
         max-height: 55px;
+        margin-left: 1rem;
         :hover {
             transform: scale(1.05)
         }
@@ -35,8 +37,13 @@ export const CustomHeader = styled.header`
         font-size: 1.875rem;
         font-weight: 600;
     }
-
+    @media(min-width: 450px) {
+        flex-flow: column wrap;
+    }
     @media (min-width: 650px) {
+        img {
+            margin-left: 0;
+        }
         padding: 0 1rem;
         flex-flow: row nowrap;
         align-items: center;
@@ -48,8 +55,12 @@ export const CustomHeader = styled.header`
 `
 const SidetittelCustomized = styled(Sidetittel)`
     text-align: center;
+    display: none;
     @media(min-width: 390px){
         width: 100%;
+    }
+    @media(min-width: 450px) {
+        display: block;
     }
     @media (min-width: 650px) {
         text-align: start;
@@ -70,8 +81,10 @@ const HeaderOptions = styled.div`
     display: flex;
     justify-content: center;
     flex-grow: 1;
-    justify-content: flex-end;
     flex-wrap: wrap;
+    @media(min-width: 250px) {
+        justify-content: flex-end;
+    }
     @media (min-width: 768px) {
         flex-wrap: none;
     }
@@ -103,9 +116,17 @@ const SubscribeModalWrapper = styled.div`
 
 const SubscribeButtonWrapper = styled.div`
     position: relative;
+    display: none;
+    @media(min-width: 450px) {
+        display: block;
+    }
 `
 const FilterButtonWrapper = styled.div`
     position: relative;
+    display: none;
+    @media(min-width: 450px) {
+        display: block;
+    }
 `
 
 
@@ -136,6 +157,7 @@ const Header = () => {
             </HeaderContent>
             <HeaderOptions>
                 <ButtonsContainer>
+                {router.pathname.includes("Dashboard") &&
                     <SubscribeButtonWrapper>
                         <CustomButton mini onClick={toggleSubscribeModal}>Abonner</CustomButton>
                         {subscribeModalHidden && 
@@ -144,6 +166,7 @@ const Header = () => {
                             </SubscribeModalWrapper>
                         }
                     </SubscribeButtonWrapper>
+                }
                     {router.pathname.includes("Dashboard") &&
                         <FilterButtonWrapper>
                             <CustomButton mini onClick={handleToggleFilters}>
