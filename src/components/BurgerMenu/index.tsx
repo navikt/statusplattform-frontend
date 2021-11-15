@@ -163,7 +163,7 @@ const PopoverContent = () => {
                         <li><Lenke href="#0">Min side</Lenke></li>
                         <li><Lenke href="#0">Mine varsler</Lenke></li>
                         <li>
-                            <Lenke href="https://digitalstatus.ekstern.dev.nav.no/rest/oauth2">   
+                            <Lenke href="/Login">
                                 <Login className="popover-link-ikon" />
                                 Logg inn
                             </Lenke>
