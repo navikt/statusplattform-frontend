@@ -1,4 +1,5 @@
 import TrafficLights from 'components/TrafficLights';
+import { useRouter } from 'next/router';
 import { useState } from 'react';
 import styled from 'styled-components'
 
@@ -94,6 +95,8 @@ const Separator = styled.span`
 const Footer = () => {
     const [isInternal, changePrivilege] = useState(false)
 
+    const router = useRouter()
+
     return (
         <FooterContainer>
             <FooterContent>
@@ -112,10 +115,12 @@ const Footer = () => {
                         <li><a href="https://www.nav.no/no/person#">Del skjerm med veileder</a></li>
                     </ul>
                 </Row>
-                        <Separator />
-                <div>
-                    <TrafficLights isInternal={isInternal}/>
-                </div>
+                <Separator style={{display: router.pathname.includes("Dashboard") ? "block" : "none"}} />
+                {router.pathname.includes("Dashboard") &&
+                    <div>
+                        <TrafficLights isInternal={isInternal}/>
+                    </div>
+                }
             </FooterContent>
         </FooterContainer>
     )

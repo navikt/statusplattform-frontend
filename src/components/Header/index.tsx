@@ -7,14 +7,14 @@ import BurgerMenu from 'components/BurgerMenu'
 import SubscribeModal from 'components/SubscribeModal'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
-import { CheckboksPanelGruppe, Checkbox } from 'nav-frontend-skjema'
+import { Checkbox } from 'nav-frontend-skjema'
 import { FilterContext, FilterOption } from 'components/ContextProviders/FilterContext'
 import { Collapse, Expand } from '@navikt/ds-icons'
 
 
 
 
-export const CustomHeader = styled.header`
+const CustomHeader = styled.header`
     min-height: 106px;
     height: 100%;
     padding-bottom: 0.5rem;

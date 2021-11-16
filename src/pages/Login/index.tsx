@@ -1,4 +1,6 @@
 import styled from 'styled-components'
+import { toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css';
 
 import Layout from 'components/Layout'
 import { Knapp } from 'nav-frontend-knapper'
@@ -14,28 +16,34 @@ const LoginContainer = styled.div`
     border-radius: 5px;
     width: 100%;
     max-width: 768px;
+    box-shadow: 0 3px 6px rgb(0 0 0 / 15%);
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    align-self: center;
+
+    & > * {
+        flex-basis: 100%;
+        margin: 0 auto;
+        max-width: 260px;
+    }
+    
     .external-login {
         display: flex;
         flex-direction: column;
     }
 
-
-    .vertical-separator {
-            display: none;
-        }
-
     .nav-login {
         display: flex;
         flex-direction: column;
     }
+
     form {
         & > * {
             margin: 1rem 0;
         }
     }
+
     input {
         max-width: 300px;
     }
@@ -45,13 +53,21 @@ const LoginContainer = styled.div`
         word-wrap: break-word;
     }
 
+    .separator-wrapper {
+        display: none;
+    }
     @media(min-width: 820px) {
         padding: 2rem;
+        margin-top: 10%;
         flex-direction: row;
-        .vertical-separator {
-            display: block;
-            border-left: 1px solid grey;
-            margin: 0 5rem;
+        .separator-wrapper {
+            display: flex;
+            justify-content: center;
+            max-width: 20%;
+            .vertical-separator {
+                display: block;
+                border-left: 1px solid grey;
+            }
         }
     }
 `
@@ -74,27 +90,38 @@ const LoginPage = () => {
     }
 
     const loginCitizen = (event) => {
-        console.log(event.preventDefault())
+        event.preventDefault()
+        toast.info("Ikke implementert")
     }
 
 
+
+    const { username, password } = citizenLoginCredentials
     return (
         <Layout>
             <LoginContainer>
                 <div className="external-login">
                     <h2>Logg inn som borger</h2>
-                    <form onSubmit={loginCitizen}>
-                        <Input onChange={changeUserCredentials("username")} placeholder="Brukernavn"></Input>
-                        <Input onChange={changeUserCredentials("password")} placeholder="Passord"></Input>
+                    <form name="borger" onSubmit={loginCitizen}>
+                        <Input type="text" label="Brukernavn"
+                            id="password"
+                            onChange={changeUserCredentials("username")}
+                            placeholder="Brukernavn" value={username}>
+                        </Input>
+                        <Input type="text" label="Passord"
+                            id="password"
+                            onChange={changeUserCredentials("password")}
+                            placeholder="Passord" value={password}>
+                        </Input>
                         <Knapp htmlType="submit" mini>Logg inn</Knapp>
                     </form>
                 </div>
                 
-                <span className="vertical-separator"></span>
+                <div className="separator-wrapper"><span className="vertical-separator"></span></div>
 
                 <div className="nav-login">
                     <h2>Logg inn som Nav-ansatt med SSO</h2>
-                    <form>
+                    <form name="ansatt">
                         <a href="https://digitalstatus.ekstern.dev.nav.no/rest/oauth2">
                             <Knapp htmlType="button" mini>Logg inn</Knapp>
                         </a>

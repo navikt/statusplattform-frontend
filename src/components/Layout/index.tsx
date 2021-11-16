@@ -83,8 +83,12 @@ const MainContent = props => {
                     </li>
                 </ul>
             </nav>
-            <Navbar/>
-            <Header/>
+            {!router.pathname.includes("Login") &&
+                <div>
+                    <Navbar/>
+                    <Header/>
+                </div>
+            }
             <Content id="content">
                 {props.children}
             </Content>
