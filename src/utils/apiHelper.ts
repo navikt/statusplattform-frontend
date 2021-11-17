@@ -1,4 +1,4 @@
-export const LocalhostEndpoint = "http://localhost:3001"
+export const LocalhostEndpoint = "http://localhost:3000"
 
 
 export const PortalDevEndpoint = "https://digitalstatus.ekstern.dev.nav.no"
@@ -77,4 +77,8 @@ export const EndPathPutServiceDependency = (serviceId: string, dependencyId: str
 
 export const EndPathLoggInNavUser = () => {
     return "/rest/oauth2"
+}
+
+export const EndPathAccessRights = () => {
+    return "/rest/LoggInNavUser"
 }
