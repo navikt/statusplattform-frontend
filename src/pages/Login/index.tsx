@@ -1,11 +1,14 @@
+import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
+import { loggInNavUser } from 'utils/loggInNavUser';
+
 import Layout from 'components/Layout'
 import { Knapp } from 'nav-frontend-knapper'
 import { Input } from 'nav-frontend-skjema'
-import { useState } from 'react'
+import { useRouter } from 'next/router';
 
 
 
@@ -81,6 +84,15 @@ const LoginPage = () => {
         password: ""
     })
 
+    const router = useRouter()
+
+
+    let currentLocation
+    useEffect(() => {
+        currentLocation = location.hostname
+        console.log(currentLocation)
+    },[router])
+
     const changeUserCredentials = (field: keyof typeof citizenLoginCredentials) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const updatedCitizenCredentials = {
             ...citizenLoginCredentials,
@@ -94,6 +106,9 @@ const LoginPage = () => {
         toast.info("Ikke implementert")
     }
 
+    const handleLogInNavUser = () => {
+        loggInNavUser()
+    }
 
 
     const { username, password } = citizenLoginCredentials
@@ -122,7 +137,12 @@ const LoginPage = () => {
                 <div className="nav-login">
                     <h2>Logg inn som Nav-ansatt med SSO</h2>
                     <form name="ansatt">
-                        <a href="https://digitalstatus.ekstern.dev.nav.no/rest/oauth2">
+                        {/* <a href="https://digitalstatus.ekstern.dev.nav.no/rest/oauth2"> */}
+                        <a href={(
+                            currentLocation === "localhost" || currentLocation === "127.0.0.1") 
+                            ? "http://localhost:3000/rest/oauth2" 
+                            : "https://digitalstatus.ekstern.dev.nav.no/rest/oauth2"}
+                        >
                             <Knapp htmlType="button" mini>Logg inn</Knapp>
                         </a>
                     </form>

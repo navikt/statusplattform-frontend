@@ -192,9 +192,9 @@ const Past90Days: React.FC<{service: Service | null}> = ({service}) => {
     
     return (
         <HistoryWrapper>
-            {test.map(() => {
+            {test.map((e, index) => {
                 return (
-                    <div>
+                    <div key={index}>
                         <span className={service.status}>
                             <div className="pointer-wrapper" >
                                 <div className="pointer-top" />
