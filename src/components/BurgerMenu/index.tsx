@@ -3,7 +3,6 @@ import { useRouter } from 'next/router'
 
 import { Close, Hamburger, Login } from '@navikt/ds-icons'
 import Popover, {PopoverOrientering} from 'nav-frontend-popover';
-import { loggInNavUser } from 'utils/loggInNavUser'
 
 import { useState } from "react";
 import styled from 'styled-components'
@@ -134,16 +133,15 @@ const BurgerMenu = () => {
 
 
 
+
+
+
 /*------------ Helpers below ------------*/
 
-const loggInNavUserWrapper = () => {
-        loggInNavUser().then((user) => {
-        toast.info(user)
-    
-        }).catch(() => {
-        toast.error("Kunne ikke logge på")
-        })
-}
+
+
+
+
 
 const PopoverContent = () => {
     return (
