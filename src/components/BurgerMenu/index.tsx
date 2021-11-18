@@ -6,7 +6,6 @@ import Popover, {PopoverOrientering} from 'nav-frontend-popover';
 
 import { useState } from "react";
 import styled from 'styled-components'
-import { toast } from 'react-toastify';
 import Lenke from 'nav-frontend-lenker';
 
 const BurgerMenuContainer = styled.div`

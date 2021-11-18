@@ -1,3 +1,4 @@
+import { UserData } from "types/userData";
 import { EndPathGetLoginInfo, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
 
 
@@ -7,30 +8,19 @@ export class ResponseError extends Error {
     }
 }
 
-let endUrl = EndPathGetLoginInfo();
 
-export const checkLoginInfoAndState = async (): Promise<string[]> => {
+export const checkLoginInfoAndState = async (): Promise<UserData> => {
     let response;
+    let endPath = EndPathGetLoginInfo();
+
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch(LocalhostEndpoint + endUrl,
-            {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                },
-                mode: 'cors', // no-cors, *cors, same-origin
-        });
+        response = await fetch(LocalhostEndpoint + endPath);
     }
     else {
-        response = await fetch(PortalDevEndpoint + endUrl,
-            {
-                method: "POST",
-                headers: {
-                    "Content-type": "application/json; charset=UTF-8"
-                },
-                mode: 'cors', // no-cors, *cors, same-origin
-        });
+        response = await fetch(PortalDevEndpoint + endPath);
     }
+
+    
     if (response.ok) {
         return response.json()
     }
