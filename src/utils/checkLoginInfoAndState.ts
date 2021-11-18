@@ -1,4 +1,4 @@
-import { EndPathAccessRights, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathGetLoginInfo, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
 
 
 export class ResponseError extends Error {
@@ -7,9 +7,9 @@ export class ResponseError extends Error {
     }
 }
 
-let endUrl = EndPathAccessRights();
+let endUrl = EndPathGetLoginInfo();
 
-export const checkAccessRights = async (): Promise<string[]> => {
+export const checkLoginInfoAndState = async (): Promise<string[]> => {
     let response;
     if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
         response = await fetch(LocalhostEndpoint + endUrl,

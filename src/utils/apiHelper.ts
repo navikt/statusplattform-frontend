@@ -75,10 +75,6 @@ export const EndPathPutServiceDependency = (serviceId: string, dependencyId: str
 
 
 
-export const EndPathLoggInNavUser = () => {
-    return "/rest/oauth2"
-}
-
-export const EndPathAccessRights = () => {
-    return "/rest/LoggInNavUser"
+export const EndPathGetLoginInfo = () => {
+    return "/oauth2/NavUser"
 }
