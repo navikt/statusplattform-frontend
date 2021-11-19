@@ -24,21 +24,21 @@ module.exports = withPlugins(
     ? [
         {
           source: '/oauth2/:path*',
-          destination: `http://localhost:3000/oauth2/:path*`
+          destination: `http://localhost:3005/oauth2/:path*`
         },
         {
           source: '/rest/:path*',
-          destination: `http://localhost:3000/rest/:path*`
+          destination: `http://localhost:3005/rest/:path*`
         },
       ]
     : [
         {
           source: '/oauth2/:path*',
-          destination: `https://digitalstatus.ekstern.dev.nav.no//oauth2/:path*`
+          destination: `https://digitalstatus.ekstern.dev.nav.no/oauth2/:path*`
         },
         {
           source: '/rest/:path*',
-          destination: `https://digitalstatus.ekstern.dev.nav.no//rest/:path*`
+          destination: `https://digitalstatus.ekstern.dev.nav.no/rest/:path*`
         }
       ];
   }
