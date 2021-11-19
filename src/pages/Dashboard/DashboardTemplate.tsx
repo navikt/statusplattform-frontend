@@ -15,6 +15,7 @@ import Panel from 'nav-frontend-paneler'
 import { toast } from 'react-toastify'
 import { CheckboksPanelGruppe } from 'nav-frontend-skjema'
 import { FilterContext } from 'components/ContextProviders/FilterContext'
+import { Expand } from '@navikt/ds-icons'
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
@@ -236,12 +237,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
             <DigitalServicesContainer>
             <StatusOverview areas={areasInDashboard} />
 
-
-                <KnappWrapper>
-                    <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
-                </KnappWrapper>
-
-
                 {areasInDashboard.length > 0 &&
                     <PortalServiceTileContainer maxWidth={maxWidth}>
                         {rows.map((row, rowIndex) => (
@@ -254,7 +249,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
                                 )}
                             </PortalServiceTileRow>
                         ))}
-
+                        <DoubleArrowToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
                     </PortalServiceTileContainer>
                 }
 
@@ -270,6 +265,56 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
 
 /* --------------------------------------- Helpers below --------------------------------------- */
+
+
+
+
+
+
+
+
+
+const ToggleExpandAllButton = styled(Knapp)`
+    display: contents;
+    :hover {
+        color: inherit;
+    }
+    span {
+        transition: ease 0.5s;
+        transform: rotate(0deg);
+        & > * {
+            display: flex;
+            flex-grow: 0;
+            outline: none;
+        }
+        *:first-child {
+            transform: translateY(5px);
+        }
+        *:last-child {
+            transform: translateY(-5px);
+        }
+    }
+    &.expanded {
+        & > * {
+            transition: ease 0.5s;
+            transform: rotate(-180deg);
+        }
+    }
+`
+
+const DoubleArrowToggle: React.FC<{toggleExpandAll: () => void, expanded: boolean}> = ({toggleExpandAll, expanded}) => {
+    return (
+        <ToggleExpandAllButton mini aria-expanded={expanded} onClick={toggleExpandAll} className={expanded ? "expanded" : ""}>
+            <span>
+                <Expand/>
+                <Expand/>
+            </span>
+        </ToggleExpandAllButton>
+    )
+}
+
+
+
 
 
 
