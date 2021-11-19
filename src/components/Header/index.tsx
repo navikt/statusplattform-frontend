@@ -10,6 +10,8 @@ import { useRouter } from 'next/router'
 import { Checkbox } from 'nav-frontend-skjema'
 import { FilterContext, FilterOption } from 'components/ContextProviders/FilterContext'
 import { Collapse, Expand } from '@navikt/ds-icons'
+import { UserStateContext } from 'components/ContextProviders/UserStatusContext'
+import { UserData } from 'types/userData'
 
 
 
@@ -135,6 +137,7 @@ const Header = () => {
     const router = useRouter()
     const [subscribeModalHidden, setSubscribeModalBoolean] = useState(false)
     const [showFilters, toggleFilters] = useState(false)
+    
 
     const toggleSubscribeModal = () => {
         setSubscribeModalBoolean(!subscribeModalHidden)

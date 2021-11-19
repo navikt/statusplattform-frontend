@@ -1,12 +1,14 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
+import { useContext, useState } from "react";
+import styled from 'styled-components'
 
 import { Close, Hamburger, Login } from '@navikt/ds-icons'
 import Popover, {PopoverOrientering} from 'nav-frontend-popover';
-
-import { useState } from "react";
-import styled from 'styled-components'
 import Lenke from 'nav-frontend-lenker';
+
+import { UserStateContext } from 'components/ContextProviders/UserStatusContext';
+import { UserData } from 'types/userData';
 
 const BurgerMenuContainer = styled.div`
     margin: 0 20px;
@@ -143,9 +145,12 @@ const BurgerMenu = () => {
 
 
 const PopoverContent = () => {
+    const user = useContext<UserData>(UserStateContext)
+
+    const { name, navIdent} = user
     return (
         <div className="popover-container">
-            <strong>Navn: Nordmann, Ola</strong>
+            <strong>{name}</strong>
             <div className="popover-content">
                 <section>
                     <ul>
