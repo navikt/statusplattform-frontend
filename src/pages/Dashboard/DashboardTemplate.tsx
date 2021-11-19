@@ -275,7 +275,8 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
 
 const ToggleExpandAllButton = styled(Knapp)`
-    display: contents;
+    margin: 5rem 0;
+    display: flex;
     :hover {
         color: inherit;
     }
