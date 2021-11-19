@@ -105,10 +105,7 @@ const LoginPage = () => {
     }
 
     const handleLogInNavUser = () => {
-        const url = (currentLocation === "localhost" || currentLocation === "127.0.0.1" 
-            ? "http://localhost:3000/oauth2/login"
-            : "https://digitalstatus.ekstern.dev.nav.no/oauth2/login")
-        router.push(url)
+        router.push("/oauth2/login")
     }
 
 
