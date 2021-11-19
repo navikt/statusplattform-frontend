@@ -1,7 +1,7 @@
-export const LocalhostEndpoint = "http://localhost:3000"
+export const LocalhostEndpoint = ""
 
 
-export const PortalDevEndpoint = "https://digitalstatus.ekstern.dev.nav.no"
+export const PortalDevEndpoint = ""
 
 
 

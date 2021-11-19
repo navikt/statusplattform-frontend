@@ -20,7 +20,7 @@ export const checkLoginInfoAndState = async (): Promise<UserData> => {
         response = await fetch(PortalDevEndpoint + endPath);
     }
 
-    
+
     if (response.ok) {
         return response.json()
     }

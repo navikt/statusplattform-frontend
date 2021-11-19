@@ -11,12 +11,7 @@ export const fetchDashboardsList = async (): Promise<Dashboard[]> => {
     let response;
     let endPath = EndPathDashboards()
 
-    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch(LocalhostEndpoint + endPath);
-    }
-    else {
-        response = await fetch(PortalDevEndpoint + endPath);
-    }
+    response = await fetch(endPath);
 
     if (response.ok) {
         return response.json()

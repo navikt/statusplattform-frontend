@@ -16,5 +16,31 @@ module.exports = withPlugins(
     withLess,
     withTM,
   ],
-  {}
+
+{
+  async rewrites() {
+    // sett opp miljøvar
+    return process.env.NODE_ENV !== 'production'
+    ? [
+        {
+          source: '/oauth2/:path*',
+          destination: `http://localhost:3000/oauth2/:path*`
+        },
+        {
+          source: '/rest/:path*',
+          destination: `http://localhost:3000/rest/:path*`
+        },
+      ]
+    : [
+        {
+          source: '/oauth2/:path*',
+          destination: `https://digitalstatus.ekstern.dev.nav.no//oauth2/:path*`
+        },
+        {
+          source: '/rest/:path*',
+          destination: `https://digitalstatus.ekstern.dev.nav.no//rest/:path*`
+        }
+      ];
+  }
+}
 );
