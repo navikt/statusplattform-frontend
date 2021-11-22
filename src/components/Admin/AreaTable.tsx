@@ -59,12 +59,12 @@ const AreaRowContainer = styled.div`
             border-bottom: 3px solid rgba(0, 0, 0, 0.55);
         }
     }
+    &.editting {
+        border-color: var(--navBla);
+    }
 `
 
 const AreaTable = () => { 
-    // const [dashboardAreas, setDashboardAreas] = useState<Area[]>([])
-    // const [allServices, setAllServices] = useState<Service[]>([])
-    const [isLoading, setIsLoading] = useState(false)
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [anchorId, setAnchorId] = useState<string>("")
     const [editNewArea, toggleNewAreaEdit] = useState(false)
@@ -74,22 +74,12 @@ const AreaTable = () => {
     const { data: allServices, isLoading: isLoadingServices, reload: reloadServices } = useLoader(fetchServices,[]);
 
 
-    // const fetchData = async () => {
-    //     setIsLoading(true)
-    //     const areas: Area[] = await fetchAreas()
-    //     setDashboardAreas(areas)
-    //     const services: Service[] = await fetchServices()
-    //     setAllServices(services)
-    //     setIsLoading(false)
-    // };
+
     const reloadAll = () => {
         reloadAll()
         reloadServices()
     }
 
-    useEffect(() => {
-        // fetchData()
-    }, [])
 
     useEffect(() => {
         setTimeout(() => {
@@ -106,8 +96,7 @@ const AreaTable = () => {
         )
     }
 
-    const handleDeleteArea = (area, event) => {
-        event.stopPropagation()
+    const handleDeleteArea = (area) => {
         deleteArea(area)
             .then(() => {
                 reloadAreas()
@@ -156,13 +145,14 @@ const AreaTable = () => {
                     <div>
                         {allAreas.map( (area, index) => {
                             return (
-                                <AreaRowContainer key={index}>
+                                <AreaRowContainer className={areasToEdit.includes(area.id) ? "editting" : ""} key={index}>
                                     {!areasToEdit.includes(area.id) ?
                                         <AreaTableRow area={area}
                                             allServices={allServices}
                                             reloadAll={reloadAll} isExpanded={expanded.includes(area.id)}
                                             toggleExpanded={() => toggleExpandedFor(area.id)}
                                             toggleEditArea={() => toggleEditArea(area)}
+                                            handleDeleteArea={() => handleDeleteArea(area)}
                                        />
                                     :
                                         <CurrentlyEdittingArea area={area}
@@ -218,21 +208,6 @@ const AddNewArea = ({dashboardAreas, reloadAll, setAnchorId}: NewAreaProps) => {
         icon: "0001",
         services: []
     })
-    
-    const options = [
-        { value: "0001", label: "Bag", icon: <Bag/> },
-        { value: "0002", label: "Sparepenger", icon: <Saving/> },
-        { value: "0003", label: "Hjerte", icon: <Heart/> },
-        { value: "0004", label: "Sosialstøtte", icon: <SocialAid/> },
-        { value: "0005", label: "Bandasje", icon: <HandBandage/> },
-        { value: "0006", label: "Skjemautfylt", icon: <FillForms/> },
-        { value: "0007", label: "Førstehjelp", icon: <HealthCase/> },
-        { value: "0008", label: "Guidehund", icon: <GuideDog/> },
-        { value: "0009", label: "Penger", icon: <Money/> },
-        { value: "0010", label: "Kalkulator", icon: <Calculator/> },
-        { value: "0011", label: "Blomst", icon: <FlowerBladeFall/> },
-        { value: "0012", label: "Mappe", icon: <Folder/> },
-	];
 
 
     const handlePostAdminArea = (areaToAdd: Area, event) => {
@@ -318,30 +293,35 @@ const AddNewArea = ({dashboardAreas, reloadAll, setAnchorId}: NewAreaProps) => {
 
 
 
+/* ------------------------------------------- HELPERS BELOW --------------------------------------------------------- */
+
+
+
+
+const options = [
+    { value: "0001", label: "Bag", icon: <Bag/> },
+    { value: "0002", label: "Sparepenger", icon: <Saving/> },
+    { value: "0003", label: "Hjerte", icon: <Heart/> },
+    { value: "0004", label: "Sosialstøtte", icon: <SocialAid/> },
+    { value: "0005", label: "Bandasje", icon: <HandBandage/> },
+    { value: "0006", label: "Skjemautfylt", icon: <FillForms/> },
+    { value: "0007", label: "Førstehjelp", icon: <HealthCase/> },
+    { value: "0008", label: "Guidehund", icon: <GuideDog/> },
+    { value: "0009", label: "Penger", icon: <Money/> },
+    { value: "0010", label: "Kalkulator", icon: <Calculator/> },
+    { value: "0011", label: "Blomst", icon: <FlowerBladeFall/> },
+    { value: "0012", label: "Mappe", icon: <Folder/> },
+];
 
 
 
 
 
-// const AreaRowContainer = styled.div`
-//     padding: 1px 0;
-//     border-top: 1px solid rgba(0, 0, 0, 0.55);
-//     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
-//     :hover {
-//         padding: 0;
-//         cursor: pointer;
-//         border-top: 2px solid rgba(0, 0, 0, 0.55);
-//         border-bottom: 2px solid rgba(0, 0, 0, 0.55);
-//     }
-//     :last-child {
-//         padding-bottom: 1px;
-//         border-bottom: 2px solid rgba(0, 0, 0, 0.55);
-//         :hover {
-//             padding-bottom: 0;
-//             border-bottom: 3px solid rgba(0, 0, 0, 0.55);
-//         }
-//     }
-// `
+
+/* -------------------------------------------  --------------------------------------------------------- */
+
+
+
 
 const AreaRow = styled.div`
     min-height: 5rem;
@@ -447,11 +427,12 @@ interface Props {
     reloadAll: () => void
     isExpanded: boolean
     toggleExpanded: () => void,
-    toggleEditArea: (area) => void
+    toggleEditArea: (area) => void,
+    handleDeleteArea: (area) => void
 }
 
 
-const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices, toggleEditArea}: Props) => { 
+const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices, toggleEditArea, handleDeleteArea}: Props) => { 
     const [servicesInArea, setServicesInArea] = useState<Service[]>(() => area.services.map(service => service))
 
     const handleDeleteServiceOnArea = (serviceId) => {
@@ -611,6 +592,7 @@ const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handleP
 
 
 
+// ----------------------------------------------------------------------------------------------------
 
 
 
@@ -620,20 +602,23 @@ const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handleP
 interface EditProps {
     area: Area
     reloadAreas: () => void
-    setAreaToDelete: (area) => void
     toggleEditArea: (area) => void
     handleDeleteArea: (area) => void
 }
 
-const CurrentlyEdittingArea = ({area, reloadAreas, setAreaToDelete, toggleEditArea, handleDeleteArea}: EditProps) => {
+const CurrentlyEdittingArea = ({area, reloadAreas, toggleEditArea, handleDeleteArea}: EditProps) => {
     const [updatedArea, changeUpdatedArea] = useState({
-        name: area.name
+        name: area.name,
+        description: area.description,
+        icon: area.icon
     })
 
-    const handleUpdatedArea = (event) => {
+
+    const handleUpdatedArea = (field: keyof typeof updatedArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const changedDashboard = {
-            name: event.target.value,
-        }
+            ...updatedArea,
+            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
+            
         changeUpdatedArea(changedDashboard)
     }
 
@@ -644,25 +629,49 @@ const CurrentlyEdittingArea = ({area, reloadAreas, setAreaToDelete, toggleEditAr
         // reloadDashboards()
     }
 
-    const { name, id, description, icon } = area
+    const handleAreaIconChange = (event) => {
+        const newArea = {
+            ...updatedArea,
+        }
+        newArea.icon = event.target.value
+        changeUpdatedArea(newArea)
+    }
+
+
+    const { name, description, icon } = updatedArea
 
     return (
         <form onSubmit={handleSubmit}>
 
-            <AreaRow id={id} className="clickable">
+            <AreaRow id={area.id} className="clickable editting">
                 <AreaRowColumn>
+
                     <AreaElements>
-                        <RowElement>{name}</RowElement>
-                        <RowElement>{description}</RowElement>
+                        <Input label="Endre navn*" value={name} onChange={handleUpdatedArea("name")} />
+                        <Input label="Endre beskrivelse" value={description} onChange={handleUpdatedArea("description")} />
+                        <Select
+                            label="Endre ikon*"
+                            onChange={handleAreaIconChange}
+                            defaultValue={options[0].value}
+                        >
+                            {options.map(option => {
+                                return (
+                                    <option key={option.value} value={option.value}>{option.label}</option>
+                                )
+                            })}
+                        </Select>
                         <RowElement><IconContainer>{getIconsFromGivenCode(icon)}</IconContainer></RowElement>
                     </AreaElements>
+                    
                 </AreaRowColumn>
+
                 <AreaRowColumn>
                     <button type="button" onClick={() => toggleEditArea(area)} aria-label="Fjern dashbord">
                         Avbryt endringer
                     </button>
                     <button onClick={handleDeleteArea} aria-label="Slett område"><Close/></button>
                 </AreaRowColumn>
+
             </AreaRow>
         </form>
     )
