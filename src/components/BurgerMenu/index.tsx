@@ -175,19 +175,21 @@ const PopoverContent = () => {
                                     </Lenke>
                                 </li>
                                 <li>
-                                    <Lenke href="/Login">
+                                    <Lenke href="/Logout">
                                         <Login className="popover-link-ikon" />
-                                        Logg inn
+                                        Logg ut
                                     </Lenke>
                                 </li>
                             </>
                         }
-                        <li>
-                            <Lenke href="/Login">
-                                <Login className="popover-link-ikon" />
-                                Logg inn
-                            </Lenke>
-                        </li>
+                        {!user.name &&
+                            <li>
+                                <Lenke href="/Login">
+                                    <Login className="popover-link-ikon" />
+                                    Logg inn
+                                </Lenke>
+                            </li>
+                        }
                     </ul>
                 </section>
             </div>

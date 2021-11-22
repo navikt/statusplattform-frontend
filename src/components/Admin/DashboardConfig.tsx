@@ -84,6 +84,9 @@ const DashboardRowContainer = styled.div`
         padding-bottom: 0;
         border-bottom: 2px solid rgba(0, 0, 0, 0.55);
     }
+    &.editting {
+        border-color: var(--navBla);
+    }
 `
 
 const DashboardRowInner = styled.div`
@@ -209,7 +212,8 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
             </DashboardsHeader>
             {dashboards.map((dashboard) => {
                 return (
-                    <DashboardRowContainer key={dashboard.id}>
+                    <DashboardRowContainer className={dashboardsToEdit.includes(dashboard.id) ? "editting" : ""} key={dashboard.id}>
+
 
 
                             {!dashboardsToEdit.includes(dashboard.id) ?
