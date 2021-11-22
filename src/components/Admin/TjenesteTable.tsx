@@ -8,7 +8,7 @@ import { useLoader } from 'utils/useLoader';
 
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
-import { Close } from '@navikt/ds-icons'
+import { Close, Notes } from '@navikt/ds-icons'
 import CustomNavSpinner from 'components/CustomNavSpinner';
 
 import { Service } from 'types/navServices';
@@ -18,7 +18,7 @@ import { fetchServices } from 'utils/fetchServices';
 import { fetchTypes } from 'utils/fetchTypes';
 
 const TjenesteTableContainer = styled.div`
-    .table-div {
+    .services-overflow-container {
         overflow-x: auto;
         div {
             min-width: fit-content;
@@ -74,6 +74,9 @@ const TjenesteContent = styled.div`
         padding-left: 1rem;
         border-bottom: 2px solid rgba(0, 0, 0, 0.55);
     }
+    &.editting {
+        border-color: var(--navBla);
+    }
 `
 
 const CloseCustomized = styled(Close)`
@@ -85,11 +88,19 @@ const CloseCustomized = styled(Close)`
     }
 `
 
+const CustomButton = styled.button`
+    background-color: transparent;
+    border: none;
+    :hover {
+        cursor: pointer;
+    }
+`
 
 
 
 const TjenesteTable = () => {
     const [addNewService, changeAddNewService] = useState(false)
+    const [servicesToEdit, changeServicesToEdit] = useState<string[]>([])
     const { data: services, isLoading: loadingServices, reload } = useLoader(fetchServices,[]);
 
     if(loadingServices) {
@@ -107,13 +118,22 @@ const TjenesteTable = () => {
             )
             reload()
             return
-        }) .catch(() => {
+        }).catch(() => {
             toast.error('Tjeneste kunne ikke slettes');
         })
     }
     
+    const toggleEditService = (service: Service) => {
+        let edittingServices: string[] = [...servicesToEdit]
+        if(edittingServices.includes(service.id)) {
+            changeServicesToEdit(edittingServices.filter(d => d != service.id))
+            return
+        }
+        edittingServices.push(service.id)
+        changeServicesToEdit(edittingServices)
+    }
 
-    
+
 
     return (
         <TjenesteTableContainer>
@@ -125,7 +145,7 @@ const TjenesteTable = () => {
                 <AddNewService services={services} reload={reload}/>
             }
 
-            <div className="table-div">
+            <div className="services-overflow-container">
                 <div>
                     <TjenesteHeader>
                         <span>Navn</span>
@@ -138,21 +158,21 @@ const TjenesteTable = () => {
                     </TjenesteHeader>
                     {services.map( service => {
                         return (
-                            <TjenesteContent key={service.id}>
-                                <span>{service.name}</span>
-                                <span>{service.type}</span>
-                                <span>{service.team}</span>
-                                <ul>
-                                    {service.dependencies.map((dependency, index) => {
-                                        return (
-                                            <li key={index}>{dependency.name}</li>
-                                        )
-                                    })}
-                                </ul>
-                                <span>{service.monitorlink}</span>
-                                <span>{service.description}</span>
-                                <span>{service.logglink}</span>
-                                <button onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><Close /></button>
+                            <TjenesteContent key={service.id} className={servicesToEdit.includes(service.id) ? "editting" : ""}>
+                                {!servicesToEdit.includes(service.id) 
+                                    ?
+                                        <ServiceRow 
+                                            service={service}
+                                            toggleEditService={() => toggleEditService(service)}
+                                            handleServiceDeletion={() => handleServiceDeletion(service)} />
+                                    :
+                                        <ServiceRowEditting 
+                                            service={service}
+                                            toggleEditService={() => toggleEditService(service)}
+                                            handleServiceDeletion={() => handleServiceDeletion(service)}
+                                            allServices={services}
+                                        />
+                                }
                             </TjenesteContent>
                         )
                     })}
@@ -161,6 +181,183 @@ const TjenesteTable = () => {
         </TjenesteTableContainer>
     )
 }
+
+
+
+
+
+/* ----------------- --------------------------------------------------- -----------------*/
+
+
+
+
+
+
+interface ServiceRowProps {
+    service: Service,
+    allServices?: Service[],
+    toggleEditService: (service) => void,
+    handleServiceDeletion: (service) => void
+}
+
+const ServiceRow = ({service, toggleEditService, handleServiceDeletion}: ServiceRowProps) => {
+    return (
+        <>
+            <span>{service.name}</span>
+            <span>{service.type}</span>
+            <span>{service.team}</span>
+            <ul>
+                {service.dependencies.map((dependency, index) => {
+                    return (
+                        <li key={index}>{dependency.name}</li>
+                    )
+                })}
+            </ul>
+            <span>{service.monitorlink}</span>
+            <span>{service.description}</span>
+            <span>{service.logglink}</span>
+            <div>
+                <CustomButton onClick={() => toggleEditService(service)}>
+                    <Notes />
+                </CustomButton>
+                <button onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><Close /></button>
+            </div>
+        </>
+    )
+}
+
+
+
+
+
+
+
+/* ----------------- --------------------------------------------------- -----------------*/
+
+
+
+
+
+
+
+const ServiceRowEditting = ({ service, allServices, toggleEditService, handleServiceDeletion } : ServiceRowProps) => {
+    const [updatedService, changeUpdatedService] = useState({
+        name: service.name,
+        type: service.type,
+        team: service.team,
+        monitorlink: service.monitorlink,
+        description: service.description,
+        logglink: service.logglink
+        // description: service.description,
+        // icon: service.icon
+    })
+
+
+    const handleUpdatedService = (field: keyof typeof updatedService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
+        const changedService = {
+            ...updatedService,
+            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
+            
+        changeUpdatedService(changedService)
+    }
+
+    const handleSubmit = (event) => {
+        event.preventDefault()
+        toast.info("Mangler endepunkt")
+        // Uncomment det nedenfor når endepunkt er implementert
+        // reloadDashboards()
+    }
+
+    // const handleServiceIconChange = (event) => {
+    //     const newService = {
+    //         ...updatedService,
+    //     }
+    //     newService.icon = event.target.value
+    //     changeUpdatedService(newService)
+    // }
+
+    const updateServiceDependencies = () => {
+        // TODO
+    }
+
+
+
+    const { name, type, team, monitorlink, description, logglink } = updatedService
+    return (
+        <>
+            <Input value={name} onChange={handleUpdatedService("name")}/>
+            <Input value={type} onChange={handleUpdatedService("type")}/>
+            <Input value={team} onChange={handleUpdatedService("team")}/>
+            {/* håndter liste av dependencies */}
+            <EditTjenesteDependencies updateServiceDependencies={updateServiceDependencies}
+                allServices={allServices}
+            />
+
+            <Input value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
+            <Input value={description} onChange={handleUpdatedService("description")}/>
+            <Input value={logglink} onChange={handleUpdatedService("logglink")}/>
+
+            <ul>
+                {service.dependencies.map((dependency, index) => {
+                    return (
+                        <li key={index}>{dependency.name}</li>
+                    )
+                })}
+            </ul>
+
+            <div>
+                <CustomButton onClick={() => toggleEditService(service)}>
+                    <Notes />
+                </CustomButton>
+                <button onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><Close /></button>
+            </div>
+        </>
+    )
+}
+
+
+/* HELPER FOR CODE ABOVE */
+
+const DependenciesColumn = styled.div`
+    max-width: 200px;
+    display: flex;
+    flex-direction: column;
+`
+
+const EditTjenesteDependencies: React.FC<{updateServiceDependencies: () => void, allServices}> = ({updateServiceDependencies, allServices}) => {
+    const [dependencies, updateDependencies] = useState<Service[]>([])
+    const availableServiceDependencies: Service[] = [...allServices].filter(s => !dependencies.map(service => service.id).includes(s.id))
+    const [selectedService, updateSelectedService] = useState<Service>(allServices[0])
+
+
+    useEffect(() => {
+        if(availableServiceDependencies.length > 0){
+            updateSelectedService(availableServiceDependencies[0])
+        }
+        else {
+            updateSelectedService(null)
+        }
+    }, [dependencies])
+
+    const putServiceToDependencies = () => {
+        const currentDependencies = [...dependencies]
+        currentDependencies.push(selectedService)
+    }
+
+    return (
+        <DependenciesColumn>
+            <ul>
+                {dependencies.map((service) => {
+                    return (
+                        <li key={service.id}>{service.name} <CustomButton><CloseCustomized/></CustomButton></li>
+                    )
+                })}
+            </ul>
+            <Knapp mini onClick={putServiceToDependencies}>Legg til avhengighet</Knapp>
+        </DependenciesColumn>
+    )
+}
+
 
 
 
