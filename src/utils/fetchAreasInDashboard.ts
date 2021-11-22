@@ -1,5 +1,5 @@
 import { Area } from "types/navServices";
-import { EndPathDashboardWithArea, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathDashboardWithArea } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -11,12 +11,8 @@ export const fetchAreasInDashboard = async (dashboardId: string): Promise<Area[]
     let response;
     let endPath = EndPathDashboardWithArea(dashboardId)
 
-    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch(LocalhostEndpoint + endPath);
-    }
-    else {
-        response = await fetch(PortalDevEndpoint + endPath);
-    }
+    response = await fetch(endPath);
+    
     if (response.ok) {
         return response.json()
     }

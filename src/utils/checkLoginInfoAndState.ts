@@ -1,5 +1,5 @@
 import { UserData } from "types/userData";
-import { EndPathGetLoginInfo, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathGetLoginInfo } from "./apiHelper";
 
 
 export class ResponseError extends Error {
@@ -9,17 +9,11 @@ export class ResponseError extends Error {
 }
 
 
-export const checkLoginInfoAndState = async (): Promise<UserData> => {
+export const checkLoginInfoAndState = async (): Promise<UserData | null> => {
     let response;
     let endPath = EndPathGetLoginInfo();
 
-    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch(LocalhostEndpoint + endPath);
-    }
-    else {
-        response = await fetch(PortalDevEndpoint + endPath);
-    }
-
+    response = await fetch(endPath);
 
     if (response.ok) {
         return response.json()

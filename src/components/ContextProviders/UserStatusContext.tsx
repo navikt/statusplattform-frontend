@@ -9,26 +9,30 @@ interface UserStateInterface {
 }
 
 export const UserStateContext = createContext<UserStateInterface>({
-    name: "",
-    navIdent: ""
+    navIdent: "",
+    name: ""
 })
 
 
 export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) => {
-    const [user, setUser] = useState<UserStateInterface>({
-        name: "",
-        navIdent: ""
+    const [user, setUser] = useState<UserStateInterface | null>({
+        navIdent: "",
+        name: ""
     })
+    const [isLoggedIn, changeIsLoggedIn] = useState(false)
     const router = useRouter()
 
     useEffect(() => {
         async function getLoggedInUser() {
             const retrieveduser: UserData = await checkLoginInfoAndState()
-            setUser(retrieveduser)
+
+            if(retrieveduser) {
+                setUser(retrieveduser)
+                changeIsLoggedIn(true)
+            }
         }
         getLoggedInUser()
     },[router])
-
 
     const { name, navIdent} = user
     return (
@@ -39,4 +43,9 @@ export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) =
             {children}
         </UserStateContext.Provider>
     )
+    // }
+    // return (
+    //     <>
+    //     </>
+    // )
 }

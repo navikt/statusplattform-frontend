@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useContext, useState } from "react";
 import styled from 'styled-components'
 
-import { Close, Hamburger, Login } from '@navikt/ds-icons'
+import { Close, Employer, Hamburger, Login } from '@navikt/ds-icons'
 import Popover, {PopoverOrientering} from 'nav-frontend-popover';
 import Lenke from 'nav-frontend-lenker';
 
@@ -147,10 +147,11 @@ const BurgerMenu = () => {
 const PopoverContent = () => {
     const user = useContext<UserData>(UserStateContext)
 
-    const { name, navIdent} = user
+
+
     return (
         <div className="popover-container">
-            <strong>{name}</strong>
+            <strong>{user.name}</strong>
             <div className="popover-content">
                 <section>
                     <ul>
@@ -160,10 +161,27 @@ const PopoverContent = () => {
                         <li><Link href="/Dashboard/Internt">Internt (Kun for innloggede nav brukere)</Link></li>
                     </ul>
                 </section>
+                
                 <section>
                     <ul>
                         <li><Lenke href="#0">Min side</Lenke></li>
                         <li><Lenke href="#0">Mine varsler</Lenke></li>
+                        {user.navIdent &&
+                            <>
+                                <li>
+                                    <Lenke href="/Admin">
+                                        <Employer className="popover-link-ikon" />
+                                        Adminside
+                                    </Lenke>
+                                </li>
+                                <li>
+                                    <Lenke href="/Login">
+                                        <Login className="popover-link-ikon" />
+                                        Logg inn
+                                    </Lenke>
+                                </li>
+                            </>
+                        }
                         <li>
                             <Lenke href="/Login">
                                 <Login className="popover-link-ikon" />

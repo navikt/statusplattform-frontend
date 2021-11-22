@@ -1,5 +1,5 @@
 import { Dashboard } from "types/navServices";
-import { EndPathSpecificDashboard, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathSpecificDashboard } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {

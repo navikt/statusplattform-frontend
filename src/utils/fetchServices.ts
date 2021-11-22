@@ -1,5 +1,5 @@
 import { Service } from "types/navServices";
-import { EndPathServices, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathServices } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -7,16 +7,13 @@ export class ResponseError extends Error {
     }
 }
 
-let endUrl = EndPathServices();
+let endPath = EndPathServices();
 
 export const fetchServices = async (): Promise<Service[]> => {
     let response;
-    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch(LocalhostEndpoint + endUrl);
-    }
-    else {
-        response = await fetch(PortalDevEndpoint + endUrl);
-    }
+
+    response = await fetch(endPath);
+
     if (response.ok) {
         return response.json()
     }
