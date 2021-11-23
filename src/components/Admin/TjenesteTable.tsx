@@ -8,7 +8,7 @@ import { useLoader } from 'utils/useLoader';
 
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
-import { Close, Notes } from '@navikt/ds-icons'
+import { Close, Expand, Notes } from '@navikt/ds-icons'
 import CustomNavSpinner from 'components/CustomNavSpinner';
 
 import { Service } from 'types/navServices';
@@ -34,9 +34,22 @@ const TjenesteHeader = styled.div`
     flex-direction: row;
     gap: 5ch;
     & > * {
-        flex-basis: 10%;
         min-width: 120px;
         font-weight: bold;
+    }
+    .empty-space {
+        padding: 0 calc(3rem + 20px);
+        display: flex;
+        flex-direction: row;
+    }
+    .tjeneste-header-content {
+        flex-grow: 1;
+        display: flex;
+        justify-content: space-between;
+        gap: 5ch;
+        span {
+            width: 100%;
+        }
     }
 `
 
@@ -44,31 +57,12 @@ const TjenesteContent = styled.div`
     min-height: 5rem;
     padding-left: 1rem;
     background-color: var(--navGraBakgrunn);
-    display: flex;
-    gap: 5ch;
-    * {
-        min-width: 120px;
-        flex-basis: 10%;
-        padding-right: 0.5rem;
-        word-break: break-all;
-        display: flex;
-        align-items: center;
-    }
-    &:last-child {
-        flex-grow: 1;
-    }
-    button {
-        background-color: transparent;
-        border: none;
-        :hover {
-            cursor: pointer;
-            color: grey;
-        }
-        flex-grow: 1;
-        justify-content: flex-end;
-    }
+
     border-top: 1px solid rgba(0, 0, 0, 0.55);
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+
+    display: flex;
+    align-items: center;
     :last-child {
         padding-bottom: 0;
         padding-left: 1rem;
@@ -99,6 +93,7 @@ const CustomButton = styled.button`
 
 
 const TjenesteTable = () => {
+    const [expanded, toggleExpanded] = useState<string[]>([])
     const [addNewService, changeAddNewService] = useState(false)
     const [servicesToEdit, changeServicesToEdit] = useState<string[]>([])
     const { data: services, isLoading: loadingServices, reload } = useLoader(fetchServices,[]);
@@ -123,6 +118,14 @@ const TjenesteTable = () => {
         })
     }
     
+    const toggleExpandedFor = (serviceId) => {
+        if(expanded.includes(serviceId)) {
+            toggleExpanded([...expanded.filter(i => i !== serviceId)])
+        } else {
+            toggleExpanded([...expanded, serviceId])
+        }
+    }
+
     const toggleEditService = (service: Service) => {
         let edittingServices: string[] = [...servicesToEdit]
         if(edittingServices.includes(service.id)) {
@@ -148,13 +151,13 @@ const TjenesteTable = () => {
             <div className="services-overflow-container">
                 <div>
                     <TjenesteHeader>
-                        <span>Navn</span>
-                        <span>Type</span>
-                        <span>Team</span>
-                        <span>Avhengigheter</span>
-                        <span>Monitorlink</span>
-                        <span>Beskrivelse</span>
-                        <span>Logglink</span>
+                        <div className="tjeneste-header-content">
+                            <span>Navn</span>
+                            <span>Type</span>
+                            <span>Team</span>
+                            <span>Beskrivelse</span>
+                        </div>
+                        <div className="empty-space"></div>
                     </TjenesteHeader>
                     {services.map( service => {
                         return (
@@ -164,11 +167,15 @@ const TjenesteTable = () => {
                                         <ServiceRow 
                                             service={service}
                                             toggleEditService={() => toggleEditService(service)}
+                                            toggleExpanded={() => toggleExpandedFor(service.id)}
+                                            isExpanded={expanded.includes(service.id)}
                                             handleServiceDeletion={() => handleServiceDeletion(service)} />
                                     :
                                         <ServiceRowEditting 
                                             service={service}
                                             toggleEditService={() => toggleEditService(service)}
+                                            toggleExpanded={() => toggleExpandedFor(service.id)}
+                                            isExpanded={expanded.includes(service.id)}
                                             handleServiceDeletion={() => handleServiceDeletion(service)}
                                             allServices={services}
                                         />
@@ -193,36 +200,148 @@ const TjenesteTable = () => {
 
 
 
+
+const ServiceRowContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    
+    div {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .button-container {
+        display: flex;
+        flex-direction: row;
+    }
+
+    .option {
+        background-color: transparent;
+        border: none;
+        padding: 0 1rem;
+        flex-grow: 1;
+        justify-content: flex-end;
+
+        :hover {
+            cursor: pointer;
+            color: grey;
+        }
+
+        .not-expanded {
+            transition: ease 0.5s;
+            transform: rotate(0deg);
+        }
+
+        .expanded {
+            transition: ease 0.5s;
+            transform: rotate(-180deg);
+        }
+    }
+`
+
+const ServiceRowContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+
+    .top-row {
+        min-height: 5rem;
+        display: flex;
+        align-items: center;
+        flex-grow: 1;
+        & > * {
+            display: flex;
+            flex-basis: 100%;
+        }
+        .service-row-elemenet {
+            flex-basis: 100%;
+            margin-right: 5ch;
+            min-width: 120px;
+        }
+        :hover {
+            cursor: pointer;
+        }
+    }
+    
+    .bottom-row {
+        border-top: 2px solid rgba(0, 0, 0, 0.1);
+        min-height: 5rem;
+        padding: 1rem 0;
+        & > * {
+            display: flex;
+            flex-basis: 100%;
+        }
+        .dependencies {
+            display: flex;
+            flex-direction: column;
+        }
+        .service-row-elemenet {
+            margin-right: 5ch;
+            display: flex;
+            flex-direction: column;
+        }
+        span:first-child {
+            margin: 0 2rem;
+        }
+    }
+`
+
+
+
 interface ServiceRowProps {
     service: Service,
     allServices?: Service[],
     toggleEditService: (service) => void,
+    toggleExpanded: (service) => void,
+    isExpanded: boolean,
     handleServiceDeletion: (service) => void
 }
 
-const ServiceRow = ({service, toggleEditService, handleServiceDeletion}: ServiceRowProps) => {
+const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, handleServiceDeletion}: ServiceRowProps) => {
     return (
-        <>
-            <span>{service.name}</span>
-            <span>{service.type}</span>
-            <span>{service.team}</span>
-            <ul>
-                {service.dependencies.map((dependency, index) => {
-                    return (
-                        <li key={index}>{dependency.name}</li>
-                    )
-                })}
-            </ul>
-            <span>{service.monitorlink}</span>
-            <span>{service.description}</span>
-            <span>{service.logglink}</span>
-            <div>
-                <CustomButton onClick={() => toggleEditService(service)}>
+        <ServiceRowContainer>
+            <ServiceRowContent>
+                <div className="top-row" onClick={() => toggleExpanded(service)}>
+                    <div>
+                        <span className="service-row-elemenet">{service.name}</span>
+                        <span className="service-row-elemenet">{service.type}</span>
+                        <span className="service-row-elemenet">{service.team}</span>
+                        <span className="service-row-elemenet">{service.description}</span>
+                    </div>
+                </div>
+                {isExpanded &&
+                    <div className="bottom-row">
+                        <div className="dependencies"><p><b>Avhengigheter</b></p>
+                            <ul>
+                                {service.dependencies.map((dependency, index) => {
+                                    return (
+                                        <li key={index}>{dependency.name}</li>
+                                        )
+                                    })}
+                            </ul>
+                        </div>
+                        <span className="service-row-elemenet">
+                            <p><b>Monitorlink</b></p>
+                            <p>{service.monitorlink}asd</p>
+                        </span>
+                        <span className="service-row-elemenet">
+                            <p><b>Logglink</b></p>
+                            <p>{service.logglink}asd</p>
+                        </span>
+                    </div>
+                }
+
+            </ServiceRowContent>
+            <div className="button-container">
+                <CustomButton className="option" onClick={() => toggleEditService(service)}>
                     <Notes />
                 </CustomButton>
-                <button onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><Close /></button>
+                <button className="option" onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><Close /></button>
+                <button className="option" onClick={() => toggleExpanded(service)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
-        </>
+            
+        </ServiceRowContainer>
     )
 }
 
@@ -240,7 +359,7 @@ const ServiceRow = ({service, toggleEditService, handleServiceDeletion}: Service
 
 
 
-const ServiceRowEditting = ({ service, allServices, toggleEditService, handleServiceDeletion } : ServiceRowProps) => {
+const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExpanded, isExpanded, handleServiceDeletion } : ServiceRowProps) => {
     const [updatedService, changeUpdatedService] = useState({
         name: service.name,
         type: service.type,
@@ -248,8 +367,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, handleSer
         monitorlink: service.monitorlink,
         description: service.description,
         logglink: service.logglink
-        // description: service.description,
-        // icon: service.icon
     })
 
 
@@ -284,34 +401,77 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, handleSer
 
     const { name, type, team, monitorlink, description, logglink } = updatedService
     return (
-        <>
-            <Input value={name} onChange={handleUpdatedService("name")}/>
-            <Input value={type} onChange={handleUpdatedService("type")}/>
-            <Input value={team} onChange={handleUpdatedService("team")}/>
+        <ServiceRowContainer>
+            <ServiceRowContent>
+
+                <div className="top-row" onClick={() => toggleExpanded(service)}>
+                    <Input className="service-row-elemenet" value={name} onChange={handleUpdatedService("name")}/>
+                    <Input className="service-row-elemenet" value={type} onChange={handleUpdatedService("type")}/>
+                    <Input className="service-row-elemenet" value={team} onChange={handleUpdatedService("team")}/>
+                    <Input className="service-row-elemenet" value={description} onChange={handleUpdatedService("description")}/>
+                </div>
+
+
+            {isExpanded &&
+                // <div className="bottom-row">
+                //     <div className="dependencies"><p><b>Avhengigheter</b></p>
+                //         <ul>
+                //             {service.dependencies.map((dependency, index) => {
+                    //                 return (
+                        //                     <li key={index}>{dependency.name}</li>
+                        //                     )
+                        //                 })}
+                        //         </ul>
+                        //     </div>
+                        //     <span className="service-row-elemenet">
+                        //         <p><b>Monitorlink</b></p>
+                        //         <p>{service.monitorlink}asd</p>
+                        //     </span>
+                        //     <span className="service-row-elemenet">
+                        //         <p><b>Logglink</b></p>
+                        //         <p>{service.logglink}asd</p>
+                        //     </span>
+                        // </div>
+                        
+                        <div className="bottom-row">
+                    <div className="dependencies"><p><b>Avhengigheter</b></p>
+
+                        <EditTjenesteDependencies updateServiceDependencies={updateServiceDependencies}
+                            allServices={allServices}
+                        />
+                    </div>
+                    <span className="service-row-elemenet">
+                        <p><b>Monitorlink</b></p>
+                        <Input value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
+                    </span>
+                    <span className="service-row-elemenet">
+                        <p><b>Logglink</b></p>
+                        <Input className="service-row-elemenet" value={logglink} onChange={handleUpdatedService("logglink")}/>
+                    </span>
+                </div>
+            }
+            </ServiceRowContent>
             {/* håndter liste av dependencies */}
-            <EditTjenesteDependencies updateServiceDependencies={updateServiceDependencies}
-                allServices={allServices}
-            />
-
-            <Input value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
-            <Input value={description} onChange={handleUpdatedService("description")}/>
-            <Input value={logglink} onChange={handleUpdatedService("logglink")}/>
-
-            <ul>
+            {/* <ul>
                 {service.dependencies.map((dependency, index) => {
                     return (
                         <li key={index}>{dependency.name}</li>
                     )
                 })}
-            </ul>
+            </ul> */}
 
-            <div>
-                <CustomButton onClick={() => toggleEditService(service)}>
+
+
+            
+            <div className="button-container">
+                <CustomButton className="option" onClick={() => toggleEditService(service)}>
                     <Notes />
                 </CustomButton>
-                <button onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><Close /></button>
+                <button className="option" onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><Close /></button>
+                <button className="option" onClick={() => toggleExpanded(service)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
-        </>
+
+        </ServiceRowContainer>
     )
 }
 
@@ -346,13 +506,13 @@ const EditTjenesteDependencies: React.FC<{updateServiceDependencies: () => void,
 
     return (
         <DependenciesColumn>
-            <ul>
+            <DependencyList>
                 {dependencies.map((service) => {
                     return (
                         <li key={service.id}>{service.name} <CustomButton><CloseCustomized/></CustomButton></li>
                     )
                 })}
-            </ul>
+            </DependencyList>
             <Knapp mini onClick={putServiceToDependencies}>Legg til avhengighet</Knapp>
         </DependenciesColumn>
     )
@@ -549,23 +709,23 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
 
 
 
-
+const DependencyList = styled.ul`
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    li {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+    }
+`
 
 const EditDependeciesContainer = styled.div`
     select {
         transform: translateY(-2px);
         min-width: 100px;
     }
-    ul {
-        list-style: none;
-        padding: 0;
-        width: 100%;
-        li {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-        }
-    }
+    
 `
 
 interface DropdownProps {
@@ -635,13 +795,13 @@ const NewTjenesteDependencyDropdown = ({services, handleDependencyChange}: Dropd
             }
         
             <Knapp htmlType="button" onClick={handlePutDependencyOnNewService}>Legg til avhengighet</Knapp>
-            <ul>
+            <DependencyList>
                 {newServiceDependencies.map(service => {
                     return (
                         <li key={service.id}>{service.name} <CloseCustomized onClick={() => handleRemoveServiceDependency(service)}/></li>
                     )
                 })}
-            </ul>
+            </DependencyList>
         </EditDependeciesContainer>
     )
 }

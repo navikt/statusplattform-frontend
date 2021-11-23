@@ -58,11 +58,11 @@ export const EndPathServices = () => {
 }
 
 export const EndPathServiceTypes = () => {
-    return EndPathServices + "/Types"
+    return EndPathServices() + "/Types"
 }
 
 export const EndPathServiceStatus = () => {
-    return EndPathServices + "/Status"
+    return EndPathServices() + "/Status"
 }
 
 export const EndPathSpecificService = (serviceId: string) => {
