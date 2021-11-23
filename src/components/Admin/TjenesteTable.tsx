@@ -226,6 +226,8 @@ const ServiceRowContainer = styled.div`
         :hover {
             cursor: pointer;
             color: grey;
+            border-radius: 2pt;
+            box-shadow: 0 0 0 1pt grey;
         }
 
         .not-expanded {
@@ -393,10 +395,10 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
             <ServiceRowContent>
 
                 <div className="top-row" onClick={() => toggleExpanded(service)}>
-                    <Input className="service-row-elemenet" value={name} onChange={handleUpdatedService("name")}/>
-                    <Input className="service-row-elemenet" value={type} onChange={handleUpdatedService("type")}/>
-                    <Input className="service-row-elemenet" value={team} onChange={handleUpdatedService("team")}/>
-                    <Input className="service-row-elemenet" value={description} onChange={handleUpdatedService("description")}/>
+                    <Input className="service-row-elemenet" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
+                    <Input className="service-row-elemenet" value={type} onChange={handleUpdatedService("type")} onClick={(event) => event.stopPropagation()} />
+                    <Input className="service-row-elemenet" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
+                    <Input className="service-row-elemenet" value={description} onChange={handleUpdatedService("description")} onClick={(event) => event.stopPropagation()} />
                 </div>
 
 
@@ -424,7 +426,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
             
             <div className="button-container">
                 <CustomButton className="option" onClick={() => toggleEditService(service)}>
-                    <Notes />
+                    Avbryt endringer
                 </CustomButton>
                 <button className="option" onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><Close /></button>
                 <button className="option" onClick={() => toggleExpanded(service)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
@@ -457,11 +459,12 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
 
 const DependenciesColumn = styled.div`
-    max-width: 200px;
+    margin-right: 5ch;
     display: flex;
     flex-direction: column;
     .add-service {
         margin: 1rem 0;
+        max-width: 250px;
     }
 `
 
@@ -546,7 +549,7 @@ const EditTjenesteDependencies: React.FC<
                         <li key={service.id}>{service.name} 
                             <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + service.name}
                                     onClick={() => handleRemoveEdittedServiceDependency(service)}>
-                            <CloseCustomized/>
+                                <CloseCustomized/>
                             </CustomButton>
                         </li>
                     )
