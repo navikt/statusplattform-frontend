@@ -547,13 +547,15 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                             :
                                 <div className="row-element">
                                     <Element>Tjenester i område</Element>
-                                    {servicesInArea.map(service => {
-                                        return (
-                                            <li key={service.id}>
-                                                {service.name} 
-                                            </li>
-                                        )
-                                    })}
+                                    <ul>
+                                        {servicesInArea.map(service => {
+                                            return (
+                                                <li key={service.id}>
+                                                    {service.name} 
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
                                 </div>
 
                                 
