@@ -35,15 +35,29 @@ const AreaContainer = styled.div`
 `
 
 const AreaHeader = styled.div`
-    width: 100%;
     padding: 1rem;
     font-weight: bold;
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
+
     display: flex;
     gap: 5ch;
-    span {
-        min-width: 200px;
+
+    .area-header-content {
+        flex-grow: 1;
+        display: flex;
+        justify-content: space-between;
+        gap: 5ch;
+        span {
+            width: 100%;
+        }
     }
+
+    .empty-space {
+        padding: 0 calc(3rem + 40px);
+        display: flex;
+        flex-direction: row;
+    }
+
 `
 
 const AreaElementContainer = styled.div`
@@ -69,6 +83,18 @@ const AreaElementContainer = styled.div`
     }
 `
 
+const CloseCustomized = styled(Close)`
+    color: red;
+    :hover {
+        color: grey;
+        border: 1px solid;
+        cursor: pointer;
+    }
+`
+
+
+
+
 const AreaTable = () => { 
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [anchorId, setAnchorId] = useState<string>("")
@@ -81,7 +107,7 @@ const AreaTable = () => {
 
 
     const reloadAll = () => {
-        reloadAll()
+        reloadAreas()
         reloadServices()
     }
 
@@ -143,9 +169,12 @@ const AreaTable = () => {
             <div className="areas-overflow-container">
                 <div>
                     <AreaHeader>
-                        <span>Navn</span>
-                        <span>Beskrivelse</span>
-                        <span>Ikon</span>
+                        <div className="area-header-content">
+                            <span>Navn</span>
+                            <span>Beskrivelse</span>
+                            <span>Ikon</span>
+                        </div>
+                        <div className="empty-space"></div>
                     </AreaHeader>
                     <div>
                         {allAreas.map( (area, index) => {
@@ -185,13 +214,19 @@ const AreaTable = () => {
 
 
 
+/* -------------------------------- -------------------------------- */
+
+
+
+
 const AddNewAreaContainer = styled.div`
-    max-width: 600px;
+    max-width: 400px;
     input, .knapp {
-        margin: 1rem 0;
+        margin-bottom: 1rem;
     }
-    label {
-        margin: 0;
+    .knapp:last-child {
+        margin-bottom: 0;
+        margin-top: 1rem;
     }
     select {
         min-width: 150px;
@@ -222,7 +257,6 @@ const AddNewArea = ({dashboardAreas, reloadAll, setAnchorId}: NewAreaProps) => {
 
 
     const handlePostAdminArea = (areaToAdd: Area, event) => {
-        event.preventDefault()
         const newlist = dashboardAreas.filter(area =>area.id === areaToAdd.id)
         if(newlist.length > 0) {
             toast.error("Denne IDen er allerede i bruk")
@@ -232,6 +266,7 @@ const AddNewArea = ({dashboardAreas, reloadAll, setAnchorId}: NewAreaProps) => {
             setAnchorId(areaToAdd.id);
             toast.success("Området ble lagt til")
             reloadAll()
+
             updateNewAdminArea({
                 id: "",
                 name: "",
@@ -261,7 +296,7 @@ const AddNewArea = ({dashboardAreas, reloadAll, setAnchorId}: NewAreaProps) => {
         updateNewAdminArea(newArea)
     }
 
-    const { id, name, description: description} = newAdminArea
+    const { name, description: description} = newAdminArea
 
 
     return (
@@ -291,7 +326,7 @@ const AddNewArea = ({dashboardAreas, reloadAll, setAnchorId}: NewAreaProps) => {
                     })}
                 </Select>
 
-                <Hovedknapp htmlType="submit">
+                <Hovedknapp htmlType="button" onClick={(event) => handlePostAdminArea(newAdminArea, event)}>
                     Legg til
                 </Hovedknapp>
 
@@ -304,7 +339,7 @@ const AddNewArea = ({dashboardAreas, reloadAll, setAnchorId}: NewAreaProps) => {
 
 
 
-/* ------------------------------------------- HELPERS BELOW --------------------------------------------------------- */
+/* ------------------------------------------- COMMON DATA BELOW --------------------------------------------------------- */
 
 
 
@@ -354,21 +389,24 @@ const AreaRowInner = styled.div`
 
     .top-row {
         min-height: 5rem;
+        padding-right: 5ch;
+
         display: flex;
         align-items: center;
         flex-grow: 1;
         & > * {
             display: flex;
             flex-basis: 100%;
+            
         }
-        .area-row-elemenet {
+        .row-element {
             flex-basis: 100%;
             margin-right: 5ch;
             word-break: break-word;
-            width: 192px;
-            input {
-                width: 142px;
-                padding: 8px;
+            width: 10rem;
+            
+            & > * {
+                width: 20ch;
             }
         }
         :hover {
@@ -380,21 +418,33 @@ const AreaRowInner = styled.div`
         border-top: 2px solid rgba(0, 0, 0, 0.1);
         min-height: 5rem;
         padding: 1rem 0;
+
+        display: flex;
+        flex: row;
+
         & > * {
             display: flex;
             flex-basis: 100%;
         }
-        .dependencies {
+        .bottom-row-column {
             display: flex;
             flex-direction: column;
+            max-width: fit-content;
+
+            p {
+                max-width: fit-content;
+            }
         }
-        .area-row-elemenet {
+        .row-element {
             margin-right: 5ch;
             display: flex;
             flex-direction: column;
         }
         span:first-child {
             margin: 0 2rem;
+        }
+        .clickable {
+            width: 100%;
         }
     }
 
@@ -405,8 +455,6 @@ const AreaRowInner = styled.div`
 const AreaElements = styled.div`
     display: flex;
     align-items: center;
-    gap: 5ch;
-    padding-right: 5ch;
 `
 
 const IconContainer = styled.section`
@@ -417,43 +465,44 @@ const IconContainer = styled.section`
 `;
 
 const TileDropdownColumn = styled.div`
-    min-width: 300px;
+    max-width: 300px;
     display: flex;
     flex-direction: column;
-    cursor: default;
+    :hover {
+        cursor: default;
+    }
     select {
         cursor: pointer;
         margin: 1rem 0;
     }
 `
 
-const TileDropdownRow = styled.div`
-    width: 100%;
-    padding: 1rem 0;
-    padding-left: 1rem;
-    display: flex;
-    flex-direction: row;
-    ul {
-        min-width: 200px;
-        max-width: 500px;
-        word-wrap: wrap;
-    }
-    .clickable {
-        width: 100%;
-    }
-`
-
 const ServicesInAreaList = styled.ul`
-    padding: 0;
+        max-width: 100%;
+        padding: 0;
+
+        word-break: break-word;
+
     li {
         list-style: none;
+
+        border: 1px solid transparent;
+        border-radius: 5px;
+
         display: flex;
         align-items: center;
         justify-content: space-between;
+
+        :hover {
+            
+            border: 1px solid black;
+        }
     }
+
     button {
         background-color: transparent;
         border: none;
+
         :hover {
             cursor: pointer;
             color: grey;
@@ -486,25 +535,24 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
 
     const { id: areaId, name, description: beskrivelse, icon: ikon } = area
 
-
     return (
         <AreaRowContainer id={areaId}>
             <AreaRowInner className="clickable" onClick={toggleExpanded}>
                 <div className="top-row">
-                    <span className="area-row-elemenet">{name}</span>
-                    <span className="area-row-elemenet">{beskrivelse}</span>
-                    <span className="area-row-elemenet"><IconContainer>{getIconsFromGivenCode(ikon)}</IconContainer></span>
+                    <span className="row-element">{name}</span>
+                    <span className="row-element">{beskrivelse}</span>
+                    <span className="row-element"><IconContainer>{getIconsFromGivenCode(ikon)}</IconContainer></span>
                 </div>
         
                 {isExpanded && 
                     <div className="bottom-row">
-                        <TileDropdownColumn>
+                        <div className="bottom-row-column">
                             {servicesInArea.length === 0 ?
-                                <TileDropdownColumn>
+                                <div className="row-element">
                                     Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste
-                                </TileDropdownColumn>
+                                </div>
                             :
-                                <ServicesInAreaList>
+                                <div className="row-element">
                                     <Element>Tjenester i område</Element>
                                     {servicesInArea.map(service => {
                                         return (
@@ -513,12 +561,11 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                                             </li>
                                         )
                                     })}
-                                </ServicesInAreaList>
+                                </div>
 
                                 
                         }
-                        </TileDropdownColumn>
-                        <div className="clickable" onClick={toggleExpanded}/>
+                        </div>
                     </div>
                 }
             </AreaRowInner>
@@ -545,6 +592,30 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
 
 
 
+
+
+
+const EditDependeciesContainer = styled.div`
+    min-width: 100px;
+
+    select {
+        transform: translateY(-2px);
+    }
+`
+
+
+const DependencyList = styled.ul`
+    list-style: none;
+    padding: 0;
+
+    li {
+        height: fit-content;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+`
 
 
 
@@ -578,7 +649,6 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
             .then(() => {
                 setServicesInArea([...servicesInArea.filter(service => service.id !== serviceId)])
                 toast.info("Tjeneste slettet fra område")
-                reloadAreas()
             })
             .catch(() => {
                 toast.warn("Tjeneste ble ikke slettet fra område grunnet feil")
@@ -595,7 +665,6 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
             .then(() => {
                 setServicesInArea([...servicesInArea, service]);
                 toast.success("Tjenesten har blitt lagt til i området")
-                reloadAreas()
             })
             .catch(() => {
                 toast.warn("Tjenesten kunne ikke bli lagt til")
@@ -634,11 +703,11 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
             <AreaRowContainer id={area.id} className="clickable editting">
                 <AreaRowInner>
 
-                    <AreaElements className="top-row">
-                        <Input className="area-row-element editting" value={name} onChange={handleUpdatedArea("name")} onClick={(event) => event.stopPropagation()} />
-                        <Input className="area-row-element editting" value={description} onChange={handleUpdatedArea("description")} onClick={(event) => event.stopPropagation()} />
+                    <AreaElements className="top-row" onClick={toggleExpanded}>
+                        <Input className="row-element editting" value={name} onChange={handleUpdatedArea("name")} onClick={(event) => event.stopPropagation()} />
+                        <Input className="row-element editting" value={description} onChange={handleUpdatedArea("description")} onClick={(event) => event.stopPropagation()} />
                         <Select
-                            className="area-row-element editting"
+                            className="row-element editting"
                             onChange={handleAreaIconChange}
                             defaultValue={options[0].value}
                             onClick={(event) => event.stopPropagation()}
@@ -654,32 +723,46 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
 
                 
                     {isExpanded &&
-                        <TileDropdownRow>
-                            <TileDropdownColumn>
-                                <ServicesInAreaList>
-                                    <Element>Tjenester i område</Element>
-                                    {servicesInArea.map(service => {
-                                        return (
-                                            <li key={service.id}>
-                                                {service.name} 
-                                                <button type="button"
-                                                        aria-label="Fjern tjenesten fra område"
-                                                        onClick={() => handleDeleteServiceOnArea(service.id)}>
-                                                    <Close />
-                                                </button>
-                                            </li>
-                                        )
-                                    })}
-                                </ServicesInAreaList>
+                        <div className="bottom-row">
+                            <div className="bottom-row-column">
+                                {servicesInArea.length === 0 &&
+                                    <p>
+                                        Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste å legge til.
+                                    </p>
+                                }
+
                                 <DropdownRowSelect 
                                     allServices={allServices}
                                     servicesInArea={servicesInArea} 
                                     handlePutServiceToArea={handlePutServiceToArea}
                                     toggleAreaExpanded={toggleExpanded} 
                                 />
-                            </TileDropdownColumn>
+
+                                {servicesInArea.length > 0 &&
+                                    <ServicesInAreaList>
+                                        <EditDependeciesContainer>
+                                            <Element>Tjenester i område:</Element>
+                                            <DependencyList>
+                                                {servicesInArea.map(service => {
+                                                    return (
+                                                        <li key={service.id}>
+                                                            {service.name} 
+                                                            <button type="button"
+                                                                    aria-label="Fjern tjenesten fra område"
+                                                                    onClick={() => handleDeleteServiceOnArea(service.id)}>
+                                                                <CloseCustomized />
+                                                            </button>
+                                                        </li>
+                                                    )
+                                                })}
+                                            </DependencyList>
+                                        </EditDependeciesContainer>
+                                    </ServicesInAreaList>
+                                }
+                            </div>
+                            
                             <div className="clickable" onClick={toggleExpanded}/>
-                        </TileDropdownRow>
+                        </div>
                     }
 
                 </AreaRowInner>
@@ -729,7 +812,7 @@ interface DropdownProps {
 const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handlePutServiceToArea, toggleAreaExpanded}: DropdownProps) => {
     const availableServices = allServices.filter(service => !servicesInArea.map(s => s.id).includes(service.id))
     
-    const [selectedService, updateSelectedService] = useState<Service|null>(() => availableServices.length > 0 ? availableServices[0] : null)
+    const [selectedService, updateSelectedService] = useState<Service | null>(() => availableServices.length > 0 ? availableServices[0] : null)
 
     useEffect(() => {
         if(availableServices.length > 0){

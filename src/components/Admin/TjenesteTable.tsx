@@ -251,7 +251,7 @@ const ServiceRowContent = styled.div`
             display: flex;
             flex-basis: 100%;
         }
-        .service-row-elemenet {
+        .service-row-element {
             flex-basis: 100%;
             margin-right: 5ch;
             word-break: break-word;
@@ -272,20 +272,16 @@ const ServiceRowContent = styled.div`
         padding: 1rem 0;
         & > * {
             display: flex;
-            /* flex-basis: 100%; */
+            flex-basis: 100%;
         }
         .dependencies {
             display: flex;
             flex-direction: column;
         }
-        .service-row-elemenet {
+        .service-row-element {
             margin-right: 5ch;
-            /* width: 150px; */
             display: flex;
             flex-direction: column;
-            /* input {
-                width: 142px;
-            } */
         }
         span:first-child {
             margin: 0 2rem;
@@ -310,10 +306,10 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, han
             <ServiceRowContent>
                 <div className="top-row" onClick={() => toggleExpanded(service)}>
                     <div>
-                        <span className="service-row-elemenet">{service.name}</span>
-                        <span className="service-row-elemenet">{service.type}</span>
-                        <span className="service-row-elemenet">{service.team}</span>
-                        <span className="service-row-elemenet">{service.description}</span>
+                        <span className="service-row-element">{service.name}</span>
+                        <span className="service-row-element">{service.type}</span>
+                        <span className="service-row-element">{service.team}</span>
+                        <span className="service-row-element">{service.description}</span>
                     </div>
                 </div>
                 {isExpanded &&
@@ -327,11 +323,11 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, han
                                     })}
                             </ul>
                         </div>
-                        <span className="service-row-elemenet">
+                        <span className="service-row-element">
                             <p><b>Monitorlink</b></p>
                             <p>{service.monitorlink}asd</p>
                         </span>
-                        <span className="service-row-elemenet">
+                        <span className="service-row-element">
                             <p><b>Logglink</b></p>
                             <p>{service.logglink}asd</p>
                         </span>
@@ -399,10 +395,10 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
             <ServiceRowContent>
 
                 <div className="top-row" onClick={() => toggleExpanded(service)}>
-                    <Input className="service-row-elemenet editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
-                    <Input className="service-row-elemenet editting" value={type} onChange={handleUpdatedService("type")} onClick={(event) => event.stopPropagation()} />
-                    <Input className="service-row-elemenet editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
-                    <Input className="service-row-elemenet editting" value={description} onChange={handleUpdatedService("description")} onClick={(event) => event.stopPropagation()} />
+                    <Input className="service-row-element editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
+                    <Input className="service-row-element editting" value={type} onChange={handleUpdatedService("type")} onClick={(event) => event.stopPropagation()} />
+                    <Input className="service-row-element editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
+                    <Input className="service-row-element editting" value={description} onChange={handleUpdatedService("description")} onClick={(event) => event.stopPropagation()} />
                 </div>
 
 
@@ -415,11 +411,11 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                             allServices={allServices} service={service}
                         />
                     </div>
-                    <span className="service-row-elemenet editting">
+                    <span className="service-row-element editting">
                         <p><b>Monitorlink</b></p>
                         <Input value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
                     </span>
-                    <span className="service-row-elemenet editting">
+                    <span className="service-row-element editting">
                         <p><b>Logglink</b></p>
                         <Input value={logglink} onChange={handleUpdatedService("logglink")}/>
                     </span>
@@ -470,6 +466,17 @@ const DependenciesColumn = styled.div`
     .add-service {
         margin: 1rem 0;
     }
+    ul {
+        max-width: 100%;
+        word-break: break-word;
+        li {
+            border: 1px solid transparent;
+            border-radius: 5px;
+        }
+        li:hover {
+            border: 1px solid black;
+        }
+    }
 `
 
 const EditTjenesteDependencies: React.FC<
@@ -478,7 +485,9 @@ const EditTjenesteDependencies: React.FC<
         ) => {
 
     const [edittedDependencies, updateDependencies] = useState<Service[]>([...service.dependencies])
-    const availableServiceDependencies: Service[] = [...allServices].filter(s => !edittedDependencies.map(service => service.id).includes(s.id))
+    const availableServiceDependencies: Service[] = [...allServices].filter(s => 
+        s.id != service.id && !edittedDependencies.map(service => service.id).includes(s.id)
+    )
     
     const [selectedService, updateSelectedService] = useState<Service | null>(allServices[0])
 
@@ -589,12 +598,24 @@ const AddNewServiceContainer = styled.div`
 `
 
 const NewServiceRow = styled.div`
-    width: 100%;
     display: flex;
     justify-content: space-between;
+    flex-direction: row;
 `
 
-const NewServiceColumn = styled.div``
+const NewServiceColumn = styled.div`
+    ul {
+        max-width: 100%;
+        word-break: break-word;
+        li {
+            border: 1px solid transparent;
+            border-radius: 5px;
+        }
+        li:hover {
+            border: 1px solid black;
+        }
+    }
+`
 
 interface AddServiceProps {
     services: Service[]
@@ -675,7 +696,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
         changeEditDepencendyState(!editDependencies)
     }
     
-    const { name, type, team, dependencies, monitorlink, description, logglink, status } = newService
+    const { name, team, monitorlink, description, logglink} = newService
     
     
     
@@ -777,11 +798,11 @@ const DependencyList = styled.ul`
 `
 
 const EditDependeciesContainer = styled.div`
+    min-width: 100px;
+    max-width: fit-content;
     select {
         transform: translateY(-2px);
-        min-width: 100px;
     }
-    
 `
 
 interface DropdownProps {
@@ -836,12 +857,13 @@ const NewTjenesteDependencyDropdown = ({services, handleDependencyChange}: Dropd
 
             {services.length !== 0 ?
                 <Select onChange={handleUpdateSelectedService}>
-                    {availableServiceDependencies.length > 0 ?
-                    availableServiceDependencies.map(service => {
-                        return (
-                            <option key={service.id} value={service.id}>{service.name}</option>
-                        )
-                    })
+                    {availableServiceDependencies.length > 0
+                    ?
+                        availableServiceDependencies.map(service => {
+                            return (
+                                <option key={service.id} value={service.id}>{service.name}</option>
+                            )
+                        })
                     :
                         <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
                     }
