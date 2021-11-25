@@ -62,11 +62,24 @@ const DashboardTable = () => {
 
 /* ----------------------- Helpers below ----------------------- */
 
-const DashboardsContainer = styled.div``
+
+
+
+
+
+
+
+
+const DashboardsContainer = styled.div`
+    overflow-x: auto;
+    div {
+        min-width: fit-content;
+    }
+`
 
 const DashboardsHeader = styled.div`
-    width: 100%;
     padding: 0 1rem;
+    font-weight: bold;
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
 `
 
@@ -93,14 +106,19 @@ const DashboardRowInner = styled.div`
     min-height: 5rem;
     padding-left: 1rem;
     background-color: var(--navGraBakgrunn);
+
     display: flex;
     flex-direction: row;
+
     button {
         background-color: transparent;
         border: none;
+
         height: 100%;
         padding: 0 1rem;
+
         justify-self: flex-end;
+
         :hover {
             cursor: pointer;
             color: grey;
@@ -109,16 +127,23 @@ const DashboardRowInner = styled.div`
 `
 
 const ClickableName = styled.div`
+    width: 160px;
+    margin-right: 20px;
+
+    &.editting {
+        input {
+
+            width: 152px;
+        }
+    }
+
     display: flex;
     align-items: center;
     flex-grow: 1;
+
     :hover {
         cursor: pointer;
     }
-`
-
-const OptionsInRow = styled.div`
-    display: flex;
 `
 
 const CustomButton = styled.button`
@@ -126,19 +151,6 @@ const CustomButton = styled.button`
     border: none;
     :hover {
         cursor: pointer;
-    }
-`
-
-const ExpandCollapseWrapper = styled.button`
-    height: 100%;
-    background-color: transparent;
-    border: none;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    :hover {
-        border: 1px solid;
-        border: none;
     }
 `
 
@@ -165,11 +177,11 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
         })
     }
 
-    const toggleExpanded = (dashboardId: string) => {
-        if(expanded.includes(dashboardId)) {
-            setExpanded([...expanded.filter(i => i !== dashboardId)])
+    const toggleExpanded = (dashboard: Dashboard) => {
+        if(expanded.includes(dashboard.id)) {
+            setExpanded([...expanded.filter(i => i !== dashboard.id)])
         } else {
-            setExpanded([...expanded, dashboardId])
+            setExpanded([...expanded, dashboard.id])
         }
     }
 
@@ -206,43 +218,49 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
                     <Knapp mini onClick={() => setDashboardToDelete(null)}>Avbryt</Knapp>
                 </ModalInner>
             </ModalWrapper>
+            <div>
+                <DashboardsHeader>
+                    <p><b>Navn på Dashbord</b></p>
+                </DashboardsHeader>
+                {dashboards.map((dashboard) => {
+                    return (
+                        <DashboardRowContainer className={dashboardsToEdit.includes(dashboard.id) ? "editting" : ""} key={dashboard.id}>
 
-            <DashboardsHeader>
-                <p><b>Navn på Dashbord</b></p>
-            </DashboardsHeader>
-            {dashboards.map((dashboard) => {
-                return (
-                    <DashboardRowContainer className={dashboardsToEdit.includes(dashboard.id) ? "editting" : ""} key={dashboard.id}>
 
 
-
-                            {!dashboardsToEdit.includes(dashboard.id) ?
-                                <CurrentDashboardData 
-                                    setDashboardToDelete={() => setDashboardToDelete(dashboard)}
-                                    toggleEditDashboard={() => toggleEditDashboard(dashboard)}
-                                    toggleExpanded={() => toggleExpanded(dashboard.id)}
-                                    expanded={expanded}
-                                    dashboard={dashboard}
-                                />
-                                :
-                                <CurrentlyEdittingDashboard dashboard={dashboard}
-                                        reloadDashboards={reloadDashboards}
-                                        setDashboardToDelete={(dashboard) => setDashboardToDelete(dashboard)}
+                                {!dashboardsToEdit.includes(dashboard.id) ?
+                                    <CurrentDashboardData 
+                                        expanded={expanded}
+                                        dashboard={dashboard}
+                                        setDashboardToDelete={() => setDashboardToDelete(dashboard)}
                                         toggleEditDashboard={() => toggleEditDashboard(dashboard)}
+                                        toggleExpanded={() => toggleExpanded(dashboard)}
+                                    />
+                                    :
+                                    <CurrentlyEdittingDashboard dashboard={dashboard}
+                                        expandedList={expanded}
+                                        reloadDashboards={reloadDashboards}
+                                        setDashboardToDelete={() => setDashboardToDelete(dashboard)}
+                                        toggleEditDashboard={() => toggleEditDashboard(dashboard)}
+                                        toggleExpanded={() => toggleExpanded(dashboard)}
+                                    />
+                                }
+                                
+
+
+                            {expanded.includes(dashboard.id) &&
+                                <AddAreaToDashboardDropdown 
+                                    dashboardWithOnlyIdProp={dashboard} 
+                                    allAreas={allAreas}
+                                    editting={dashboardsToEdit.includes(dashboard.id)}
+                                    toggleExpanded={() => toggleExpanded(dashboard)}
+                                    handlePutAreasToDashboard={(dashboardId, areasToAdd) => handlePutAreasToDashboard(dashboardId, areasToAdd)}
                                 />
                             }
-                            
-
-
-                        {expanded.includes(dashboard.id) &&
-                            <AddAreaToDashboardDropdown dashboardWithOnlyIdProp={dashboard} allAreas={allAreas}
-                                toggleExpanded={() => toggleExpanded(dashboard.id)}
-                                handlePutAreasToDashboard={(dashboardId, areasToAdd) => handlePutAreasToDashboard(dashboardId, areasToAdd)}
-                            />
-                        }
-                    </DashboardRowContainer>
-                )
-            })}
+                        </DashboardRowContainer>
+                    )
+                })}
+            </div>
         </DashboardsContainer>
     )
 }
@@ -274,23 +292,17 @@ const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggle
             <ClickableName onClick={toggleExpanded}>
                 {dashboard.name}
             </ClickableName>
-            <div>
-                <CustomButton onClick={toggleEditDashboard}>
+
+            <div className="button-container">
+                <CustomButton className="option" onClick={toggleEditDashboard}>
                     <Notes />
                 </CustomButton>
+                <button className="option" onClick={setDashboardToDelete} aria-label="Slett område"><Close/></button>
+                <button className="option" onClick={toggleExpanded} aria-expanded={expanded.includes(dashboard.id)}>
+                    {expanded.includes(dashboard.id) ? <Collapse /> : <Expand />}
+                </button>
             </div>
-            <OptionsInRow>
-                <CustomButton onClick={setDashboardToDelete} aria-label="Fjern dashbord">
-                    <Close/>
-                </CustomButton>
-                <ExpandCollapseWrapper aria-expanded={expanded.includes(dashboard.id)}
-                    onClick={toggleExpanded}>
-                    {expanded.includes(dashboard.id) 
-                        ? <Collapse /> 
-                        : <Expand />
-                    }
-                </ExpandCollapseWrapper>
-            </OptionsInRow>
+
         </DashboardRowInner>
     )
 }
@@ -299,16 +311,22 @@ const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggle
 
 
 
+/* ------------------------------------------ ------------------------------------------ */
+
+
+
 
 interface EditProps {
     dashboard: Dashboard
     reloadDashboards: () => void
-    setDashboardToDelete: (dashboard) => void
-    toggleEditDashboard: (dashboard) => void
+    setDashboardToDelete: () => void
+    toggleEditDashboard: () => void
+    toggleExpanded: () => void
+    expandedList: string[]
 }
 
 
-const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardToDelete, toggleEditDashboard}: EditProps) => {
+const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardToDelete, toggleEditDashboard, toggleExpanded, expandedList}: EditProps) => {
     const [updatedDashboard, changeUpdatedDashboard] = useState({
         name: dashboard.name
     })
@@ -331,17 +349,18 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
     return (
         <form onSubmit={handleSubmit}>
             <DashboardRowInner>
-                <ClickableName>
-                    <Input value={name} onChange={event => handleUpdatedDashboard(event)} />
+                <ClickableName className="editting" onClick={toggleExpanded} >
+                    <Input value={name} onChange={event => handleUpdatedDashboard(event)} onClick={(event) => event.stopPropagation()} />
                 </ClickableName>
-                <div>
-                    <CustomButton htmlType="button" onClick={() => toggleEditDashboard(dashboard)}>
+
+                <div className="button-container">
+                    <button type="button" className="option" onClick={toggleEditDashboard} aria-label="Fjern dashbord">
                         Avbryt endringer
-                    </CustomButton>
-                    <CustomButton htmlType="button" onClick={() => setDashboardToDelete(dashboard)} aria-label="Fjern dashbord">
-                        <Close/>
-                    </CustomButton>
+                    </button>
+                    <button type="button" className="option" onClick={setDashboardToDelete} aria-label="Slett område"><Close/></button>
+                    <button type="button" className="option" onClick={toggleExpanded} aria-expanded={expandedList.includes(dashboard.id)}>{expandedList.includes(dashboard.id) ? <Collapse /> : <Expand />}</button>
                 </div>
+
             </DashboardRowInner>
         </form>
     )
@@ -351,7 +370,7 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
 
 
 
-
+/* ------------------------------------------ ------------------------------------------ */
 
 
 
@@ -412,14 +431,15 @@ const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
 
 interface DashboardProps {
     dashboardWithOnlyIdProp?: Dashboard
-    allAreas: Area[]
-    toggleExpanded: () => void
     entireDashboard?: Dashboard
+    allAreas: Area[]
+    editting?: boolean
     handlePutAreasToDashboard: Function
+    toggleExpanded: () => void
     reload?: () => void
 }
 
-const AddAreaToDashboardDropdown = ({dashboardWithOnlyIdProp: dashboardWithoutIdProp, allAreas, toggleExpanded, handlePutAreasToDashboard}:DashboardProps) => {
+const AddAreaToDashboardDropdown = ({dashboardWithOnlyIdProp: dashboardWithoutIdProp, allAreas, editting, toggleExpanded, handlePutAreasToDashboard}:DashboardProps) => {
     const { data: entireDashboard, isLoading, reload } = useLoader(() => fetchDashboard(dashboardWithoutIdProp.id),[]);
 
     
@@ -435,9 +455,20 @@ const AddAreaToDashboardDropdown = ({dashboardWithOnlyIdProp: dashboardWithoutId
             allAreas={allAreas} entireDashboard={entireDashboard}
             toggleExpanded={toggleExpanded} handlePutAreasToDashboard={handlePutAreasToDashboard}
             reload={reload}
+            editting={editting}
         />
     )
 }
+
+
+
+
+
+
+
+/* ------------------------------------------ ------------------------------------------ */
+
+
 
 
 
@@ -454,21 +485,33 @@ const DashboardDropRow = styled.div`
             justify-content: space-between;
         }
     }
+
     .knapp {
         margin: 1rem 0;
     }
-`
 
-const DropdownColumn = styled.div`
-    width: 50%;
-    &.clickable {
+    .clickable {
+        flex-grow: 1;
         :hover {
             cursor: pointer;
         }
     }
 `
 
-const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAreasToDashboard, reload}: DashboardProps) => {
+const DropdownColumn = styled.div`
+    padding: 1rem 0;
+    width: 100%;
+    max-width: 300px;
+
+    display: flex;
+    flex-direction: column;
+
+    select {
+        cursor: pointer;
+    }
+`
+
+const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAreasToDashboard, reload, editting}: DashboardProps) => {
     const availableAreas: Area[] = allAreas.filter(area => !entireDashboard.areas.map(a => a.id).includes(area.id))
     const [selectedArea, changeSelectedArea] = useState<Area|null>(() => availableAreas.length > 0 ? availableAreas[0] : null)
 
@@ -497,44 +540,69 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
 
     return (
         <DashboardDropRow>
-            <DropdownColumn>
-            {entireDashboard.areas.length > 0?
-                <div>
-                    <b>Områder i dashbord</b>
-                    <ul>
-                        {entireDashboard.areas.map((area) => {
-                            return (
-                                <li key={area.id}>{area.name} 
-                                    <CustomButton onClick={() => handleDeleteAreaFromDashboard(area)} aria-label="Fjern område fra dashbord">
-                                        <Close/>
-                                    </CustomButton>
-                                </li>
-                            )
-                        })}
-                    </ul>
-                </div>
+            {editting
+                ?
+                    <DropdownColumn>
+                        {entireDashboard.areas.length == 0 &&
+                            <div>
+                                Ingen områder i dashbord
+                            </div>
+                        }
+                        <Select value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
+                            {availableAreas.length > 0 ?
+                                availableAreas.map(area => {
+                                    return (
+                                        <option key={area.id} value={area.id}>{area.name}</option>
+                                    )
+                                })
+                            :
+                                <option key={undefined} value="">Ingen områder å legge til</option>
+                            }
+                        </Select>
+                        <Hovedknapp onClick={handleAddAreaToDashboard} >
+                            Legg til
+                        </Hovedknapp>
+                        {entireDashboard.areas.length > 0 &&
+                            <div>
+                                <b>Områder i dashbord</b>
+                                <ul>
+                                    {entireDashboard.areas.map((area) => {
+                                        return (
+                                            <li key={area.id}>{area.name} 
+                                                <CustomButton onClick={() => handleDeleteAreaFromDashboard(area)} aria-label="Fjern område fra dashbord">
+                                                    <Close/>
+                                                </CustomButton>
+                                            </li>
+                                        )
+                                    })}
+                                </ul>
+                            </div>
+                        }
+                    </DropdownColumn>
                 :
-                <div>
-                    Ingen områder i dashbord
-                </div>
+                    <DropdownColumn>
+                        {entireDashboard.areas.length == 0
+                        ?
+                            <div>
+                                Ingen områder i dashbord
+                            </div>
+                        :
+                            <div>
+                                <b>Områder i dashbord</b>
+                                <ul>
+                                    {entireDashboard.areas.map((area) => {
+                                        return (
+                                            <li key={area.id}>{area.name}</li>
+                                        )
+                                    })}
+                                </ul>
+                            </div>
+                        }
+                    </DropdownColumn>
             }
-                <Select value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
-                    {availableAreas.length > 0 ?
-                        availableAreas.map(area => {
-                            return (
-                                <option key={area.id} value={area.id}>{area.name}</option>
-                            )
-                        })
-                    :
-                        <option key={undefined} value="">Ingen områder å legge til</option>
-                    }
-                </Select>
-                <Hovedknapp onClick={handleAddAreaToDashboard} >
-                    Legg til
-                </Hovedknapp>                                            
-            </DropdownColumn>
-            <DropdownColumn className="clickable" onClick={toggleExpanded}></DropdownColumn>
+        <div className="clickable" onClick={toggleExpanded}></div>
         </DashboardDropRow>
+        
     )
 }
 
