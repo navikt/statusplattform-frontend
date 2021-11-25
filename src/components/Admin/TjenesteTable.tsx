@@ -8,7 +8,7 @@ import { useLoader } from 'utils/useLoader';
 
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
-import { Close, Expand, Notes } from '@navikt/ds-icons'
+import { Expand, Notes } from '@navikt/ds-icons'
 import CustomNavSpinner from 'components/CustomNavSpinner';
 
 import { Service } from 'types/navServices';
@@ -16,6 +16,7 @@ import { deleteService } from 'utils/deleteService';
 import { postService } from 'utils/postService'
 import { fetchServices } from 'utils/fetchServices';
 import { fetchTypes } from 'utils/fetchTypes';
+import { CloseCustomized } from '.';
 
 const TjenesteTableContainer = styled.div`
     .services-overflow-container {
@@ -98,14 +99,6 @@ const TjenesteContent = styled.div`
     }
 `
 
-const CloseCustomized = styled(Close)`
-    color: red;
-    :hover {
-        color: grey;
-        border: 1px solid;
-        cursor: pointer;
-    }
-`
 
 const CustomButton = styled.button`
     background-color: transparent;
@@ -339,7 +332,7 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, han
                 <CustomButton className="option" onClick={() => toggleEditService(service)}>
                     <Notes />
                 </CustomButton>
-                <button className="option" onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><Close /></button>
+                <button className="option" onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><CloseCustomized /></button>
                 <button className="option" onClick={() => toggleExpanded(service)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
             
@@ -428,7 +421,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                 <CustomButton className="option" onClick={() => toggleEditService(service)}>
                     Avbryt endringer
                 </CustomButton>
-                <button className="option" onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><Close /></button>
+                <button className="option" onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><CloseCustomized /></button>
                 <button className="option" onClick={() => toggleExpanded(service)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
 

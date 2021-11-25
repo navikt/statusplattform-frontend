@@ -3,18 +3,20 @@ import { useEffect, useState } from "react";
 import Head from 'next/head'
 import { toast } from 'react-toastify';
 
-import { Bag, Calculator, Close, Collapse, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, Saving, SocialAid } from '@navikt/ds-icons'
+import { Bag, Calculator, Collapse, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, Saving, SocialAid } from '@navikt/ds-icons'
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 
 import { Area, Service } from 'types/navServices';
+import { Element } from 'nav-frontend-typografi';
+
+import { CloseCustomized } from '.';
+import CustomNavSpinner from 'components/CustomNavSpinner';
 
 import { postAdminArea } from 'utils/postArea'
 import { fetchServices } from 'utils/fetchServices';
-import CustomNavSpinner from 'components/CustomNavSpinner';
 import { fetchAreas } from 'utils/fetchAreas';
 import { getIconsFromGivenCode } from 'utils/servicesOperations';
-import { Element } from 'nav-frontend-typografi';
 import { putServiceToArea } from 'utils/putServiceToArea';
 import { deleteServiceFromArea } from 'utils/deleteServiceFromArea';
 import { deleteArea } from 'utils/deleteArea';
@@ -80,15 +82,6 @@ const AreaElementContainer = styled.div`
     }
     &.editting {
         border-color: var(--navBla);
-    }
-`
-
-const CloseCustomized = styled(Close)`
-    color: red;
-    :hover {
-        color: grey;
-        border: 1px solid;
-        cursor: pointer;
     }
 `
 
@@ -573,7 +566,7 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                 <CustomButton className="option" onClick={toggleEditArea}>
                     <Notes />
                 </CustomButton>
-                <button className="option" onClick={handleDeleteArea} aria-label="Slett område"><Close/></button>
+                <button className="option" onClick={handleDeleteArea} aria-label="Slett område"><CloseCustomized /></button>
                 <button className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>{isExpanded ? <Collapse /> : <Expand />}</button>
             </div>
         </AreaRowContainer>
@@ -771,7 +764,7 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
                     <button type="button" className="option" onClick={() => toggleEditArea(area)} aria-label="Fjern dashbord">
                         Avbryt endringer
                     </button>
-                    <button type="button" className="option" onClick={handleDeleteArea} aria-label="Slett område"><Close/></button>
+                    <button type="button" className="option" onClick={handleDeleteArea} aria-label="Slett område"><CloseCustomized /></button>
                     <button type="button" className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>{isExpanded ? <Collapse /> : <Expand />}</button>
                 </div>
             </AreaRowContainer>

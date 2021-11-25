@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 
-import { Close, Collapse, Expand, Notes } from '@navikt/ds-icons'
+import { Collapse, Expand, Notes } from '@navikt/ds-icons'
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper'
 import ModalWrapper from 'nav-frontend-modal'
 import { Input, Select } from 'nav-frontend-skjema'
@@ -18,6 +18,7 @@ import { postDashboard } from 'utils/postDashboard'
 import { putAreasToDashboard } from 'utils/putAreasToDashboard'
 
 import { useLoader } from 'utils/useLoader'
+import { CloseCustomized } from '.'
 
 
 const DashboardTableContainer = styled.div`
@@ -128,7 +129,7 @@ const DashboardRowInner = styled.div`
 
 const ClickableName = styled.div`
     width: 160px;
-    margin-right: 20px;
+    padding-right: 20px;
 
     &.editting {
         input {
@@ -297,7 +298,7 @@ const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggle
                 <CustomButton className="option" onClick={toggleEditDashboard}>
                     <Notes />
                 </CustomButton>
-                <button className="option" onClick={setDashboardToDelete} aria-label="Slett område"><Close/></button>
+                <button className="option" onClick={setDashboardToDelete} aria-label="Slett område"><CloseCustomized /></button>
                 <button className="option" onClick={toggleExpanded} aria-expanded={expanded.includes(dashboard.id)}>
                     {expanded.includes(dashboard.id) ? <Collapse /> : <Expand />}
                 </button>
@@ -357,7 +358,7 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
                     <button type="button" className="option" onClick={toggleEditDashboard} aria-label="Fjern dashbord">
                         Avbryt endringer
                     </button>
-                    <button type="button" className="option" onClick={setDashboardToDelete} aria-label="Slett område"><Close/></button>
+                    <button type="button" className="option" onClick={setDashboardToDelete} aria-label="Slett område"><CloseCustomized /></button>
                     <button type="button" className="option" onClick={toggleExpanded} aria-expanded={expandedList.includes(dashboard.id)}>{expandedList.includes(dashboard.id) ? <Collapse /> : <Expand />}</button>
                 </div>
 
@@ -474,15 +475,20 @@ const AddAreaToDashboardDropdown = ({dashboardWithOnlyIdProp: dashboardWithoutId
 
 
 const DashboardDropRow = styled.div`
+    border-top: 2px solid rgba(0, 0, 0, 0.1);
+    background-color: var(--navGraBakgrunn);
     padding: 0 1rem;
+
     display: flex;
     flex-direction: row;
-    ul {
-        list-style: none;
-        padding: 0;
-        li {
-            display: flex;
-            justify-content: space-between;
+    .editting {
+        ul {
+            list-style: none;
+            padding: 0;
+            li {
+                display: flex;
+                justify-content: space-between;
+            }
         }
     }
 
@@ -563,14 +569,14 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                             Legg til
                         </Hovedknapp>
                         {entireDashboard.areas.length > 0 &&
-                            <div>
+                            <div className="editting">
                                 <b>Områder i dashbord</b>
                                 <ul>
                                     {entireDashboard.areas.map((area) => {
                                         return (
                                             <li key={area.id}>{area.name} 
                                                 <CustomButton onClick={() => handleDeleteAreaFromDashboard(area)} aria-label="Fjern område fra dashbord">
-                                                    <Close/>
+                                                    <CloseCustomized />
                                                 </CustomButton>
                                             </li>
                                         )

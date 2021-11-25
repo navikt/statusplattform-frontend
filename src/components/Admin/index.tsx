@@ -5,6 +5,7 @@ import AreaTable from './AreaTable';
 import TjenesteTable from './TjenesteTable';
 import DashboardTable from './DashboardTable';
 import { adminMenu, useFindCurrentTab } from './MenuSelector';
+import { Close } from '@navikt/ds-icons';
 
 
 
@@ -92,6 +93,20 @@ const AdminDashboard = () => {
     )
 }
 
+
+
+
+
+/* ----------------------------- HELPER BELOW ----------------------------- */
+
+export const CloseCustomized = styled(Close)`
+    color: red;
+    :hover {
+        color: grey;
+        border: 1px solid;
+        cursor: pointer;
+    }
+`
 
 
 
