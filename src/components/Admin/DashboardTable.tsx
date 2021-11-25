@@ -231,7 +231,7 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
 
                                 {!dashboardsToEdit.includes(dashboard.id) ?
                                     <CurrentDashboardData 
-                                        expanded={expanded}
+                                        expandedList={expanded}
                                         dashboard={dashboard}
                                         setDashboardToDelete={() => setDashboardToDelete(dashboard)}
                                         toggleEditDashboard={() => toggleEditDashboard(dashboard)}
@@ -281,12 +281,12 @@ interface CurrentDashboardDataProps {
     setDashboardToDelete: () => void
     toggleEditDashboard: () => void
     toggleExpanded: () => void
-    expanded: string[]
+    expandedList: string[]
     dashboard: Dashboard
 }
 
 
-const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggleExpanded, expanded, dashboard}: CurrentDashboardDataProps) => {
+const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggleExpanded, expandedList, dashboard}: CurrentDashboardDataProps) => {
 
     return (
         <DashboardRowInner>
@@ -299,8 +299,8 @@ const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggle
                     <Notes />
                 </CustomButton>
                 <button className="option" onClick={setDashboardToDelete} aria-label="Slett område"><CloseCustomized /></button>
-                <button className="option" onClick={toggleExpanded} aria-expanded={expanded.includes(dashboard.id)}>
-                    {expanded.includes(dashboard.id) ? <Collapse /> : <Expand />}
+                <button className="option" onClick={toggleExpanded} aria-expanded={expandedList.includes(dashboard.id)}>
+                    <Expand className={expandedList.includes(dashboard.id) ? "expanded" : "not-expanded"} />
                 </button>
             </div>
 
@@ -359,7 +359,9 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
                         Avbryt endringer
                     </button>
                     <button type="button" className="option" onClick={setDashboardToDelete} aria-label="Slett område"><CloseCustomized /></button>
-                    <button type="button" className="option" onClick={toggleExpanded} aria-expanded={expandedList.includes(dashboard.id)}>{expandedList.includes(dashboard.id) ? <Collapse /> : <Expand />}</button>
+                    <button type="button" className="option" onClick={toggleExpanded} aria-expanded={expandedList.includes(dashboard.id)}>
+                        <Expand className={expandedList.includes(dashboard.id) ? "expanded" : "not-expanded"} />
+                    </button>
                 </div>
 
             </DashboardRowInner>

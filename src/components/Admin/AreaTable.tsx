@@ -567,7 +567,9 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                     <Notes />
                 </CustomButton>
                 <button className="option" onClick={handleDeleteArea} aria-label="Slett område"><CloseCustomized /></button>
-                <button className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>{isExpanded ? <Collapse /> : <Expand />}</button>
+                <button className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>
+                    <Expand className={isExpanded ? "expanded" : "not-expanded"} />
+                </button>
             </div>
         </AreaRowContainer>
     )
@@ -765,7 +767,9 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
                         Avbryt endringer
                     </button>
                     <button type="button" className="option" onClick={handleDeleteArea} aria-label="Slett område"><CloseCustomized /></button>
-                    <button type="button" className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>{isExpanded ? <Collapse /> : <Expand />}</button>
+                    <button type="button" className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>
+                        <Expand className={isExpanded ? "expanded" : "not-expanded"} />
+                    </button>
                 </div>
             </AreaRowContainer>
 
