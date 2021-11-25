@@ -15,6 +15,42 @@ const AdminDashboardContainer = styled.div`
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+
+    .button-container {
+        padding-right: 2px;
+
+        display: flex;
+        flex-direction: row;
+
+        .option {
+            background-color: transparent;
+            border: none;
+            padding: 0 1rem;
+
+            max-width: 75px;
+            
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            :hover {
+                cursor: pointer;
+                color: grey;
+                border-radius: 2pt;
+                box-shadow: 0 0 0 1pt grey;
+            }
+
+            .not-expanded {
+                transition: ease 0.5s;
+                transform: rotate(0deg);
+            }
+
+            .expanded {
+                transition: ease 0.5s;
+                transform: rotate(-180deg);
+            }
+        }
+    }
 `;
 
 

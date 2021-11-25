@@ -33,15 +33,19 @@ const TjenesteHeader = styled.div`
     display: flex;
     flex-direction: row;
     gap: 5ch;
+
     & > * {
-        min-width: 120px;
+        width: 150px;
+        word-break: break-word;
         font-weight: bold;
     }
+
     .empty-space {
         padding: 0 calc(3rem + 20px);
         display: flex;
         flex-direction: row;
     }
+
     .tjeneste-header-content {
         flex-grow: 1;
         display: flex;
@@ -55,19 +59,40 @@ const TjenesteHeader = styled.div`
 
 const TjenesteContent = styled.div`
     min-height: 5rem;
+
     padding-left: 1rem;
+    padding-top: 1px;
+    padding-bottom: 1px;
+
     background-color: var(--navGraBakgrunn);
 
     border-top: 1px solid rgba(0, 0, 0, 0.55);
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
 
+    :hover {
+        padding-top: 0;
+        padding-bottom: 0;
+
+        cursor: pointer;
+
+        border-top: 2px solid rgba(0, 0, 0, 0.55);
+        border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+    }
+
     display: flex;
     align-items: center;
+
     :last-child {
         padding-bottom: 0;
         padding-left: 1rem;
         border-bottom: 2px solid rgba(0, 0, 0, 0.55);
+
+        :hover {
+            padding-bottom: 0;
+            border-bottom: 3px solid rgba(0, 0, 0, 0.55);
+        }
     }
+
     &.editting {
         border-color: var(--navBla);
     }
@@ -210,36 +235,6 @@ const ServiceRowContainer = styled.div`
         display: flex;
         justify-content: space-between;
     }
-
-    .button-container {
-        display: flex;
-        flex-direction: row;
-    }
-
-    .option {
-        background-color: transparent;
-        border: none;
-        padding: 0 1rem;
-        flex-grow: 1;
-        justify-content: flex-end;
-
-        :hover {
-            cursor: pointer;
-            color: grey;
-            border-radius: 2pt;
-            box-shadow: 0 0 0 1pt grey;
-        }
-
-        .not-expanded {
-            transition: ease 0.5s;
-            transform: rotate(0deg);
-        }
-
-        .expanded {
-            transition: ease 0.5s;
-            transform: rotate(-180deg);
-        }
-    }
 `
 
 const ServiceRowContent = styled.div`
@@ -259,7 +254,12 @@ const ServiceRowContent = styled.div`
         .service-row-elemenet {
             flex-basis: 100%;
             margin-right: 5ch;
-            min-width: 120px;
+            word-break: break-word;
+            width: 150px;
+            input {
+                width: 142px;
+                padding: 8px;
+            }
         }
         :hover {
             cursor: pointer;
@@ -272,7 +272,7 @@ const ServiceRowContent = styled.div`
         padding: 1rem 0;
         & > * {
             display: flex;
-            flex-basis: 100%;
+            /* flex-basis: 100%; */
         }
         .dependencies {
             display: flex;
@@ -280,8 +280,12 @@ const ServiceRowContent = styled.div`
         }
         .service-row-elemenet {
             margin-right: 5ch;
+            /* width: 150px; */
             display: flex;
             flex-direction: column;
+            /* input {
+                width: 142px;
+            } */
         }
         span:first-child {
             margin: 0 2rem;
@@ -395,10 +399,10 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
             <ServiceRowContent>
 
                 <div className="top-row" onClick={() => toggleExpanded(service)}>
-                    <Input className="service-row-elemenet" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
-                    <Input className="service-row-elemenet" value={type} onChange={handleUpdatedService("type")} onClick={(event) => event.stopPropagation()} />
-                    <Input className="service-row-elemenet" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
-                    <Input className="service-row-elemenet" value={description} onChange={handleUpdatedService("description")} onClick={(event) => event.stopPropagation()} />
+                    <Input className="service-row-elemenet editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
+                    <Input className="service-row-elemenet editting" value={type} onChange={handleUpdatedService("type")} onClick={(event) => event.stopPropagation()} />
+                    <Input className="service-row-elemenet editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
+                    <Input className="service-row-elemenet editting" value={description} onChange={handleUpdatedService("description")} onClick={(event) => event.stopPropagation()} />
                 </div>
 
 
@@ -411,13 +415,13 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                             allServices={allServices} service={service}
                         />
                     </div>
-                    <span className="service-row-elemenet">
+                    <span className="service-row-elemenet editting">
                         <p><b>Monitorlink</b></p>
                         <Input value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
                     </span>
-                    <span className="service-row-elemenet">
+                    <span className="service-row-elemenet editting">
                         <p><b>Logglink</b></p>
-                        <Input className="service-row-elemenet" value={logglink} onChange={handleUpdatedService("logglink")}/>
+                        <Input value={logglink} onChange={handleUpdatedService("logglink")}/>
                     </span>
                 </div>
             }
@@ -462,9 +466,9 @@ const DependenciesColumn = styled.div`
     margin-right: 5ch;
     display: flex;
     flex-direction: column;
+    max-width: 242px;
     .add-service {
         margin: 1rem 0;
-        max-width: 250px;
     }
 `
 
