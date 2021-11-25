@@ -3,7 +3,7 @@ import styled from 'styled-components'
 
 import AreaTable from './AreaTable';
 import TjenesteTable from './TjenesteTable';
-import DashboardConfig from './DashboardConfig';
+import DashboardTable from './DashboardTable';
 import { adminMenu, useFindCurrentTab } from './MenuSelector';
 
 
@@ -85,7 +85,7 @@ const AdminDashboard = () => {
                     <TjenesteTable />
                 }
                 {selectedMenu === "Dashbord" &&
-                    <DashboardConfig />
+                    <DashboardTable />
                 }
             </AdminConfigsContainer>
         </AdminDashboardContainer>

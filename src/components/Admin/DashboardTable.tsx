@@ -20,7 +20,7 @@ import { putAreasToDashboard } from 'utils/putAreasToDashboard'
 import { useLoader } from 'utils/useLoader'
 
 
-const DashboardConfigContainer = styled.div`
+const DashboardTableContainer = styled.div`
     width: 100%;
     .knapp {
         text-transform: none;
@@ -28,7 +28,7 @@ const DashboardConfigContainer = styled.div`
 `
 
 
-const DashboardConfig = () => {
+const DashboardTable = () => {
     const [editNewDashboard, updateEditNewDashboard] = useState(false)
     const { data: dashboards, isLoading, reload } = useLoader(fetchDashboardsList,[]);
 
@@ -40,7 +40,7 @@ const DashboardConfig = () => {
     }
 
     return (
-        <DashboardConfigContainer>
+        <DashboardTableContainer>
             <Head>
                 <title>Admin - Dashbord</title>
             </Head>
@@ -51,7 +51,7 @@ const DashboardConfig = () => {
                 <AddNewDashboard reload={reload}/>
             }
             <Dashboards dashboards={dashboards} reloadDashboards={reload}/>
-        </DashboardConfigContainer>
+        </DashboardTableContainer>
     )
 }
 
@@ -538,4 +538,4 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
     )
 }
 
-export default DashboardConfig
+export default DashboardTable

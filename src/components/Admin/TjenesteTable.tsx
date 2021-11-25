@@ -313,7 +313,7 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, han
                     </div>
                 </div>
                 {isExpanded &&
-                    <div className="bottom-row">
+                    <div className="bottom-row" onClick={() => toggleExpanded(service)}>
                         <div className="dependencies"><p><b>Avhengigheter</b></p>
                             <ul>
                                 {service.dependencies.map((dependency, index) => {
