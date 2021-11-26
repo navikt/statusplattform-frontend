@@ -67,10 +67,12 @@ const ServicesList = styled.ul`
     border-radius:0 0 10px 10px;
     color: black;
     background-color: white;
+    
     > li {
+        list-style-type: none;
+
         display: flex;
         justify-content: flex-start;
-        list-style-type: none;
         section {
             display: flex;
             align-items: center;
@@ -79,12 +81,14 @@ const ServicesList = styled.ul`
             margin-left: 10px;
 
             white-space: normal;
-            word-wrap: break-word;
+            word-break: break-word;
         }
     }
+
     a {
         display: flex;
     }
+    
     @media (min-width: 250px){
         > li {
             margin: 5px 0px 5px 0px;

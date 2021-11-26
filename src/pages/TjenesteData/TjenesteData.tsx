@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import Link from 'next/link';
-
-
 
 import { Innholdstittel, Systemtittel, Undertittel } from 'nav-frontend-typografi';
 import { BackButton } from 'components/BackButton';
 import { ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
 import { Service } from 'types/navServices';
+import { useContext } from 'react';
+import { UserStateContext } from 'components/ContextProviders/UserStatusContext';
+import Lenke from 'nav-frontend-lenker';
 
 
 const ErrorParagraph = styled.p`
@@ -18,18 +18,25 @@ const ErrorParagraph = styled.p`
 
 const CategoryContainer = styled.div`
     width: 100%;
-    padding: 1rem 3rem;
+    
+    padding: 0;
+    
+    @media (min-width: 560px) {
+        padding: 1rem 3rem;
+    }
 `
 const ServiceContainer = styled.div`
     min-width: 100px;
     min-height: 75px;
-    padding: 1rem 1rem;
+
+    padding: 1rem;
     background-color: var(--navBakgrunn);
     border-radius: 10px;
-    display: grid;
+
+    display: flex;
+    flex-direction: column;
     justify-content: center;
-    gap: 15px;
-    grid-template-columns: repeat(1, 1fr);
+
 `
 const ServiceWrapper = styled.div`
     width: 100%;
@@ -69,7 +76,7 @@ const formatStatusMessage = (serviceToFormat) =>   {
 }
 
 const TjenesteData: React.FC<{service: Service}> = ({service}) => {
-
+    const { name, navIdent } = useContext(UserStateContext)
 
     
     if (!service) {
@@ -77,17 +84,18 @@ const TjenesteData: React.FC<{service: Service}> = ({service}) => {
     }
 
 
-
     return (
         <CategoryContainer>
             <BackButton />
             <CenterContent><Innholdstittel>{service.name}</Innholdstittel></CenterContent>
             <ServiceContainer>
+
                 <ServiceWrapper key={service.name}>
                     <Systemtittel>
                         <StatusIcon>{formatStatusMessage(service)} </StatusIcon>
                         Tjenestenavn - {service.name}
                     </Systemtittel>
+
                     <IncidentsWrapper>
                         <Undertittel>Eksempelrapport</Undertittel>
                         <div>
@@ -95,6 +103,11 @@ const TjenesteData: React.FC<{service: Service}> = ({service}) => {
                         </div>
                     </IncidentsWrapper>
                 </ServiceWrapper>
+
+                {navIdent &&
+                    <ServiceData service={service} />
+                }
+
             </ServiceContainer>
         </CategoryContainer>
     )
@@ -111,22 +124,6 @@ const TjenesteData: React.FC<{service: Service}> = ({service}) => {
 
 
 
-
-
-const CustomSvg = styled.svg`
-    rect {
-        .ok {
-            fill: var(--navGrønn);
-        }
-        .warn {
-            fill: var(--navOransje);
-        }
-        .down {
-            fill: var(--navOransje);
-        }
-    }
-    
-`
 
 
 const HistoryWrapper = styled.div`
@@ -210,6 +207,111 @@ const Past90Days: React.FC<{service: Service | null}> = ({service}) => {
 }
 
 
+
+/*------------------------------------------  ------------------------------------------*/
+
+
+const ServiceDataWrapper = styled.div`
+    .row {
+        padding: 1rem;
+
+        display: flex;
+        flex-flow: row wrap;
+
+        justify-content: center;
+    }
+    
+
+    .column {
+        flex-basis: 50%;
+
+        display: flex;
+        flex-flow: column wrap;
+        align-items: center;
+
+        .element {
+            width: 200px;
+        }
+    }
+`
+
+const ServiceData: React.FC<{service: Service}> = ({service}) => {
+
+    return (
+        <ServiceDataWrapper>
+            {(service.dependencies.length > 0 || service.description.length > 0) &&
+                <div className="row">
+                    {service.dependencies.length > 0 &&
+                        <div className="column">
+                            <div className="element">
+                                <h3>Avhengigheter til tjenesten</h3>
+                                <ul>
+
+                                    {service.dependencies.map(dependency => {
+                                        return (
+                                            <li key={dependency.id}><Lenke href={"/TjenesteData/" + dependency.id} >{dependency.name}</Lenke></li>
+                                        )})
+                                    }
+                                </ul>
+                            </div>
+                        </div>
+                    }
+                    {service.description.length > 0 &&
+                        <div className="column">
+                            <div className="element">
+                                <h3>Beskrivelse</h3>
+                                {service.description}
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            {(service.logglink || service.monitorlink) &&
+                <div className="row">
+                    {service.logglink &&
+                        <div className="column">
+                            <div className="element">
+                                <h3>Logglink</h3>
+                                {service.logglink}
+                            </div>
+                        </div>
+                    }
+                    {service.monitorlink &&
+                        <div className="column">
+                            <div className="element">
+                                <h3>Monitorlink</h3>
+                                {service.monitorlink}
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+
+            {(service.team.length > 0 || service.type) &&
+                <div className="row">
+                    {service.team.length > 0 &&
+                        <div className="column">
+                            <div className="element">
+                                <h3>Team</h3>
+                                {service.team}
+                            </div>
+                        </div>
+                    }
+
+                    {service.type.length > 0 &&
+                        <div className="column">
+                            <div className="element">
+                                <h3>Type</h3>
+                                {service.type}
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </ServiceDataWrapper>
+    )
+}
 
 
 export default TjenesteData
