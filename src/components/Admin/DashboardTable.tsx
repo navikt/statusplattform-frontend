@@ -16,6 +16,7 @@ import { fetchDashboard } from 'utils/fetchDashboard'
 import { fetchDashboardsList } from 'utils/fetchDashboardsList'
 import { postDashboard } from 'utils/postDashboard'
 import { putAreasToDashboard } from 'utils/putAreasToDashboard'
+import { ModalInner } from '.';
 
 import { useLoader } from 'utils/useLoader'
 import { CloseCustomized } from '.'
@@ -155,15 +156,6 @@ const CustomButton = styled.button`
     }
 `
 
-const ModalInner = styled.div`
-    padding: 2rem 2.5rem;
-    display: flex;
-    flex-direction: column;
-    .knapp {
-        margin: 1rem;
-    }
-`
-
 const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => void}> = ({dashboards, reloadDashboards}) => {
     const [expanded, setExpanded] = useState<string[]>([]) 
     const [dashboardToDelete, setDashboardToDelete] = useState<Dashboard>()    
@@ -208,6 +200,8 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
 
     return (
         <DashboardsContainer>
+
+
             <ModalWrapper
                 isOpen={!!dashboardToDelete}
                 onRequestClose={() => setDashboardToDelete(null)}
@@ -219,6 +213,8 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
                     <Knapp mini onClick={() => setDashboardToDelete(null)}>Avbryt</Knapp>
                 </ModalInner>
             </ModalWrapper>
+
+
             <div>
                 <DashboardsHeader>
                     <p><b>Navn på Dashbord</b></p>

@@ -68,6 +68,16 @@ const AdminConfigsContainer = styled.div`
     }
 `;
 
+export const ModalInner = styled.div`
+    padding: 2rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    
+    .knapp {
+        margin: 1rem;
+    }
+`
+
 export interface Props {
     selectedMenu?: string
 }

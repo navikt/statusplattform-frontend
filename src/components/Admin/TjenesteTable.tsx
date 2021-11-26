@@ -16,7 +16,8 @@ import { deleteService } from 'utils/deleteService';
 import { postService } from 'utils/postService'
 import { fetchServices } from 'utils/fetchServices';
 import { fetchTypes } from 'utils/fetchTypes';
-import { CloseCustomized } from '.';
+import { CloseCustomized, ModalInner } from '.';
+import ModalWrapper from 'nav-frontend-modal';
 
 const TjenesteTableContainer = styled.div`
     .services-overflow-container {
@@ -114,6 +115,7 @@ const TjenesteTable = () => {
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [addNewService, changeAddNewService] = useState(false)
     const [servicesToEdit, changeServicesToEdit] = useState<string[]>([])
+    const [serviceToDelete, setServiceToDelete] = useState<Service>()
     const { data: services, isLoading: loadingServices, reload } = useLoader(fetchServices,[]);
 
     if(loadingServices) {
@@ -155,12 +157,37 @@ const TjenesteTable = () => {
     }
 
 
+    const confirmDeleteServiceHandler = () => {
+        deleteService(serviceToDelete).then(() => {
+            toast.info("Dashbordet ble slettet")
+            setServiceToDelete(null);
+            reload()
+        }).catch(() => {
+            toast.error("Kunne ikke slette dashbord")
+        })
+    }
+
+
 
     return (
         <TjenesteTableContainer>
             <Head>
                 <title>Admin - Tjenester</title>
             </Head>
+
+            <ModalWrapper
+                isOpen={!!serviceToDelete}
+                onRequestClose={() => setServiceToDelete(null)}
+                closeButton={true}
+                contentLabel="Min modalrute"
+            >
+                <ModalInner>Ønsker du å slette tjenesten?
+                    <Knapp mini onClick={confirmDeleteServiceHandler}>Slett tjeneste</Knapp>
+                    <Knapp mini onClick={() => setServiceToDelete(null)}>Avbryt</Knapp>
+                </ModalInner>
+            </ModalWrapper>
+
+
             <Knapp mini onClick={() => changeAddNewService(!addNewService)}>{addNewService == false ? "Legg til ny tjeneste" : "Avbryt ny tjeneste"}</Knapp>
             {addNewService &&
                 <AddNewService services={services} reload={reload}/>
@@ -187,14 +214,17 @@ const TjenesteTable = () => {
                                             toggleEditService={() => toggleEditService(service)}
                                             toggleExpanded={() => toggleExpandedFor(service.id)}
                                             isExpanded={expanded.includes(service.id)}
-                                            handleServiceDeletion={() => handleServiceDeletion(service)} />
+                                            // handleServiceDeletion={() => handleServiceDeletion(service)}
+                                            setServiceToDelete={() => setServiceToDelete(service)}
+                                            />
                                     :
                                         <ServiceRowEditting 
                                             service={service}
                                             toggleEditService={() => toggleEditService(service)}
                                             toggleExpanded={() => toggleExpandedFor(service.id)}
                                             isExpanded={expanded.includes(service.id)}
-                                            handleServiceDeletion={() => handleServiceDeletion(service)}
+                                            // handleServiceDeletion={() => handleServiceDeletion(service)}
+                                            setServiceToDelete={() => setServiceToDelete(service)}
                                             allServices={services}
                                         />
                                 }
@@ -290,10 +320,10 @@ interface ServiceRowProps {
     toggleEditService: (service) => void,
     toggleExpanded: (service) => void,
     isExpanded: boolean,
-    handleServiceDeletion: (service) => void
+    setServiceToDelete: (service) => void
 }
 
-const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, handleServiceDeletion}: ServiceRowProps) => {
+const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete }: ServiceRowProps) => {
     return (
         <ServiceRowContainer>
             <ServiceRowContent>
@@ -332,7 +362,7 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, han
                 <CustomButton className="option" onClick={() => toggleEditService(service)}>
                     <Notes />
                 </CustomButton>
-                <button className="option" onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><CloseCustomized /></button>
+                <button className="option" onClick={setServiceToDelete} aria-label="Slett tjeneste"><CloseCustomized /></button>
                 <button className="option" onClick={() => toggleExpanded(service)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
             
@@ -354,7 +384,7 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, han
 
 
 
-const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExpanded, isExpanded, handleServiceDeletion } : ServiceRowProps) => {
+const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete } : ServiceRowProps) => {
     const [updatedService, changeUpdatedService] = useState({
         name: service.name,
         type: service.type,
@@ -421,7 +451,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                 <CustomButton className="option" onClick={() => toggleEditService(service)}>
                     Avbryt endringer
                 </CustomButton>
-                <button className="option" onClick={() => handleServiceDeletion(service)} aria-label="Slett tjeneste"><CloseCustomized /></button>
+                <button className="option" onClick={setServiceToDelete} aria-label="Slett tjeneste"><CloseCustomized /></button>
                 <button className="option" onClick={() => toggleExpanded(service)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
 

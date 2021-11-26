@@ -9,10 +9,12 @@ import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 
 import { Area, Service } from 'types/navServices';
 import { Element } from 'nav-frontend-typografi';
+import ModalWrapper from 'nav-frontend-modal';
 
 import { CloseCustomized } from '.';
 import CustomNavSpinner from 'components/CustomNavSpinner';
 
+import { ModalInner } from '.';
 import { postAdminArea } from 'utils/postArea'
 import { fetchServices } from 'utils/fetchServices';
 import { fetchAreas } from 'utils/fetchAreas';
@@ -93,6 +95,7 @@ const AreaTable = () => {
     const [anchorId, setAnchorId] = useState<string>("")
     const [editNewArea, toggleNewAreaEdit] = useState(false)
     const [areasToEdit, changeAreasToEdit] = useState<string[]>([])
+    const [areaToDelete, setAreaToDelete] = useState<Area>()
     
     const { data: allAreas, isLoading: isLoadingAreas, reload: reloadAreas } = useLoader(fetchAreas,[]);
     const { data: allServices, isLoading: isLoadingServices, reload: reloadServices } = useLoader(fetchServices,[]);
@@ -149,12 +152,37 @@ const AreaTable = () => {
         changeAreasToEdit(edittingAreas)
     }
 
+    const confirmDeleteServiceHandler = () => {
+        deleteArea(areaToDelete).then(() => {
+            toast.info("Dashbordet ble slettet")
+            setAreaToDelete(null);
+            reloadAreas()
+        }).catch(() => {
+            toast.error("Kunne ikke slette dashbord")
+        })
+    }
+
 
     return (
         <AreaContainer>
             <Head>
                 <title>Admin - Områder</title>
             </Head>
+
+            <ModalWrapper
+                isOpen={!!areaToDelete}
+                onRequestClose={() => setAreaToDelete(null)}
+                closeButton={true}
+                contentLabel="Min modalrute"
+            >
+                <ModalInner>Ønsker du å slette området?
+                    <Knapp mini onClick={confirmDeleteServiceHandler}>Slett området</Knapp>
+                    <Knapp mini onClick={() => setAreaToDelete(null)}>Avbryt</Knapp>
+                </ModalInner>
+            </ModalWrapper>
+
+
+
             <Knapp mini onClick={() => toggleNewAreaEdit(!editNewArea)}>{!editNewArea ? "Legg til nytt område" : "Avbryt nytt område"}</Knapp>
             {editNewArea &&
                 <AddNewArea dashboardAreas={allAreas} reloadAll={reloadAll} setAnchorId={setAnchorId} />
@@ -181,7 +209,7 @@ const AreaTable = () => {
                                             isExpanded={expanded.includes(area.id)}
                                             toggleExpanded={() => toggleExpandedFor(area.id)}
                                             toggleEditArea={() => toggleEditArea(area)}
-                                            handleDeleteArea={() => handleDeleteArea(area)}
+                                            setAreaToDelete={() => setAreaToDelete(area)}
                                        />
                                     :
                                         <CurrentlyEdittingArea
@@ -191,7 +219,7 @@ const AreaTable = () => {
                                             isExpanded={expanded.includes(area.id)}
                                             toggleExpanded={() => toggleExpandedFor(area.id)}
                                             toggleEditArea={() => toggleEditArea(area)}
-                                            handleDeleteArea={(dashboard) => handleDeleteArea(dashboard)}
+                                            setAreaToDelete={() => setAreaToDelete(area)}
                                         />}
                                 </AreaElementContainer>
                             )
@@ -519,11 +547,11 @@ interface Props {
     isExpanded: boolean
     toggleExpanded: () => void,
     toggleEditArea: (area) => void,
-    handleDeleteArea: (area) => void
+    setAreaToDelete: (area) => void
 }
 
 
-const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices, toggleEditArea, handleDeleteArea}: Props) => { 
+const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices, toggleEditArea, setAreaToDelete}: Props) => { 
     const [servicesInArea, setServicesInArea] = useState<Service[]>(() => area.services.map(service => service))
 
     const { id: areaId, name, description: beskrivelse, icon: ikon } = area
@@ -568,7 +596,7 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                 <CustomButton className="option" onClick={toggleEditArea}>
                     <Notes />
                 </CustomButton>
-                <button className="option" onClick={handleDeleteArea} aria-label="Slett område"><CloseCustomized /></button>
+                <button className="option" onClick={setAreaToDelete} aria-label="Slett område"><CloseCustomized /></button>
                 <button className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>
                     <Expand className={isExpanded ? "expanded" : "not-expanded"} />
                 </button>
@@ -624,14 +652,14 @@ interface EditProps {
     reloadAreas: () => void
     toggleExpanded: (area) => void
     toggleEditArea: (area) => void
-    handleDeleteArea: (area) => void
+    setAreaToDelete: (area) => void
 }
 
 
 
 
 
-const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, toggleExpanded, toggleEditArea, handleDeleteArea}: EditProps) => {
+const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, toggleExpanded, toggleEditArea, setAreaToDelete}: EditProps) => {
     const [updatedArea, changeUpdatedArea] = useState({
         name: area.name,
         description: area.description,
@@ -768,7 +796,7 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
                     <button type="button" className="option" onClick={() => toggleEditArea(area)} aria-label="Fjern dashbord">
                         Avbryt endringer
                     </button>
-                    <button type="button" className="option" onClick={handleDeleteArea} aria-label="Slett område"><CloseCustomized /></button>
+                    <button type="button" className="option" onClick={setAreaToDelete} aria-label="Slett område"><CloseCustomized /></button>
                     <button type="button" className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>
                         <Expand className={isExpanded ? "expanded" : "not-expanded"} />
                     </button>
