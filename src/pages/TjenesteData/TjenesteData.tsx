@@ -37,6 +37,12 @@ const ServiceContainer = styled.div`
     flex-direction: column;
     justify-content: center;
 
+
+    /* Padding på alle sub-elementer for å ha spacing */
+    & > * {
+        padding: 1rem 0;
+    }
+
 `
 const ServiceWrapper = styled.div`
     width: 100%;
@@ -107,6 +113,8 @@ const TjenesteData: React.FC<{service: Service}> = ({service}) => {
                 {navIdent &&
                     <ServiceData service={service} />
                 }
+
+                <PublicAvailableData service={service} />
 
             </ServiceContainer>
         </CategoryContainer>
@@ -310,6 +318,38 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
                 </div>
             }
         </ServiceDataWrapper>
+    )
+}
+
+
+
+
+
+
+/*------------------------------------------  ------------------------------------------*/
+
+
+const PublicDataContainer = styled.div`
+    display: flex;
+    flex-flow: row;
+
+    justify-content: center;
+`
+
+
+const PublicAvailableData: React.FC<{service: Service}>= ({service}) => {
+    
+    // TODO: Henting av tjenestehistorikkdata som driftsmeldinger og diverse
+
+
+    return (
+        <PublicDataContainer>
+            <div>
+                <h3>Vedlikehold- og avvikshistorikk</h3>
+                Ikke implementert
+            </div>
+
+        </PublicDataContainer>
     )
 }
 
