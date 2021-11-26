@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import Head from 'next/head'
 import { toast } from 'react-toastify';
 
-import { Bag, Calculator, Collapse, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, Saving, SocialAid } from '@navikt/ds-icons'
+import { Bag, Calculator, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, Saving, SocialAid } from '@navikt/ds-icons'
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 
@@ -122,17 +122,6 @@ const AreaTable = () => {
             <CustomNavSpinner />
         )
     }
-
-    const handleDeleteArea = (area) => {
-        deleteArea(area)
-            .then(() => {
-                reloadAreas()
-                toast.info("Område slettet")
-            })
-            .catch(() => {
-                toast.warn("Område ble ikke slettet grunnet feil")
-            })
-    }
     
     const toggleExpandedFor = (tileAreaId) => {
         if(expanded.includes(tileAreaId)) {
@@ -152,13 +141,13 @@ const AreaTable = () => {
         changeAreasToEdit(edittingAreas)
     }
 
-    const confirmDeleteServiceHandler = () => {
+    const confirmDeleteAreaHandler = () => {
         deleteArea(areaToDelete).then(() => {
-            toast.info("Dashbordet ble slettet")
+            toast.info("Området ble slettet")
             setAreaToDelete(null);
             reloadAreas()
         }).catch(() => {
-            toast.error("Kunne ikke slette dashbord")
+            toast.error("Kunne ikke slette området")
         })
     }
 
@@ -173,10 +162,10 @@ const AreaTable = () => {
                 isOpen={!!areaToDelete}
                 onRequestClose={() => setAreaToDelete(null)}
                 closeButton={true}
-                contentLabel="Min modalrute"
+                contentLabel="Slettemodal"
             >
                 <ModalInner>Ønsker du å slette området?
-                    <Knapp mini onClick={confirmDeleteServiceHandler}>Slett området</Knapp>
+                    <Knapp mini onClick={confirmDeleteAreaHandler}>Slett området</Knapp>
                     <Knapp mini onClick={() => setAreaToDelete(null)}>Avbryt</Knapp>
                 </ModalInner>
             </ModalWrapper>

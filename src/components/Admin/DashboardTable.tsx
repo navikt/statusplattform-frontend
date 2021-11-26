@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 
-import { Collapse, Expand, Notes } from '@navikt/ds-icons'
+import { Expand, Notes } from '@navikt/ds-icons'
 import { Hovedknapp, Knapp } from 'nav-frontend-knapper'
 import ModalWrapper from 'nav-frontend-modal'
 import { Input, Select } from 'nav-frontend-skjema'
@@ -206,7 +206,7 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
                 isOpen={!!dashboardToDelete}
                 onRequestClose={() => setDashboardToDelete(null)}
                 closeButton={true}
-                contentLabel="Min modalrute"
+                contentLabel="Slettemodal"
             >
                 <ModalInner>Ønsker du å slette dashbordet?
                     <Knapp mini onClick={confirmDeleteDashboardHandler}>Slett dashbord</Knapp>

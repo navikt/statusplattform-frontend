@@ -123,20 +123,6 @@ const TjenesteTable = () => {
             <CustomNavSpinner />
         )
     }
-
-    const handleServiceDeletion = (serviceToDelete) => {
-
-        deleteService(serviceToDelete).then(() => {
-            toast.success('Tjeneste slettet');
-            const newServices = services.filter(currentService => 
-                currentService != serviceToDelete
-            )
-            reload()
-            return
-        }).catch(() => {
-            toast.error('Tjeneste kunne ikke slettes');
-        })
-    }
     
     const toggleExpandedFor = (serviceId) => {
         if(expanded.includes(serviceId)) {
@@ -159,11 +145,11 @@ const TjenesteTable = () => {
 
     const confirmDeleteServiceHandler = () => {
         deleteService(serviceToDelete).then(() => {
-            toast.info("Dashbordet ble slettet")
+            toast.info("Tjenesten ble slettet")
             setServiceToDelete(null);
             reload()
         }).catch(() => {
-            toast.error("Kunne ikke slette dashbord")
+            toast.error("Kunne ikke slette tjenesten")
         })
     }
 
@@ -179,7 +165,7 @@ const TjenesteTable = () => {
                 isOpen={!!serviceToDelete}
                 onRequestClose={() => setServiceToDelete(null)}
                 closeButton={true}
-                contentLabel="Min modalrute"
+                contentLabel="Slettemodal"
             >
                 <ModalInner>Ønsker du å slette tjenesten?
                     <Knapp mini onClick={confirmDeleteServiceHandler}>Slett tjeneste</Knapp>
@@ -214,7 +200,6 @@ const TjenesteTable = () => {
                                             toggleEditService={() => toggleEditService(service)}
                                             toggleExpanded={() => toggleExpandedFor(service.id)}
                                             isExpanded={expanded.includes(service.id)}
-                                            // handleServiceDeletion={() => handleServiceDeletion(service)}
                                             setServiceToDelete={() => setServiceToDelete(service)}
                                             />
                                     :
@@ -223,7 +208,6 @@ const TjenesteTable = () => {
                                             toggleEditService={() => toggleEditService(service)}
                                             toggleExpanded={() => toggleExpandedFor(service.id)}
                                             isExpanded={expanded.includes(service.id)}
-                                            // handleServiceDeletion={() => handleServiceDeletion(service)}
                                             setServiceToDelete={() => setServiceToDelete(service)}
                                             allServices={services}
                                         />
