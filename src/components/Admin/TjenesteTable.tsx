@@ -18,6 +18,7 @@ import { fetchServices } from 'utils/fetchServices';
 import { fetchTypes } from 'utils/fetchTypes';
 import { CloseCustomized, ModalInner } from '.';
 import ModalWrapper from 'nav-frontend-modal';
+import { updateService } from 'utils/updateService';
 
 const TjenesteTableContainer = styled.div`
     .services-overflow-container {
@@ -210,6 +211,7 @@ const TjenesteTable = () => {
                                             isExpanded={expanded.includes(service.id)}
                                             setServiceToDelete={() => setServiceToDelete(service)}
                                             allServices={services}
+                                            reload={reload}
                                         />
                                 }
                             </TjenesteContent>
@@ -304,7 +306,8 @@ interface ServiceRowProps {
     toggleEditService: (service) => void,
     toggleExpanded: (service) => void,
     isExpanded: boolean,
-    setServiceToDelete: (service) => void
+    setServiceToDelete: (service) => void,
+    reload?: () => void
 }
 
 const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete }: ServiceRowProps) => {
@@ -368,8 +371,9 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
 
 
 
-const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete } : ServiceRowProps) => {
-    const [updatedService, changeUpdatedService] = useState({
+const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete, reload } : ServiceRowProps) => {
+    const [updatedService, changeUpdatedService] = useState<Service>({
+        id: service.id,
         name: service.name,
         type: service.type,
         team: service.team,
@@ -388,12 +392,16 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         changeUpdatedService(changedService)
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        toast.info("Mangler endepunkt")
-        // Uncomment det nedenfor når endepunkt er implementert
-        // reloadDashboards()
+    const handleSubmit = () => {
+        updateService(updatedService).then(() => {
+            reload()
+            toast.success("Oppdatering gjennomført")
+        }).catch(() => {
+            toast.error("Noe gikk galt i oppdatering av område")
+        })
     }
+
+    
 
 
     const { name, type, team, dependencies, monitorlink, description, logglink } = updatedService
@@ -432,6 +440,9 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
             
             <div className="button-container">
+                <button type="button" className="option" onClick={handleSubmit}>
+                    Lagre endringer
+                </button>
                 <CustomButton className="option" onClick={() => toggleEditService(service)}>
                     Avbryt endringer
                 </CustomButton>

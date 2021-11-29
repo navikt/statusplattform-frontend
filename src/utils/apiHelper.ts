@@ -15,11 +15,11 @@ export const EndPathAreas = () =>  {
 }
 
 export const EndPathSpecificArea = (areaId: string) =>  {
-    return "/rest/Area/" + areaId
+    return EndPathArea() + "/" + areaId
 }
 
 export const EndPathServiceToArea = (areaId: string, serviceId: string) =>  {
-    return "/rest/Area/" + areaId + "/" + serviceId
+    return EndPathArea() + "/" + areaId + "/" + serviceId
 }
 
 
@@ -36,6 +36,10 @@ export const EndPathDashboard = () => {
 
 export const EndPathSpecificDashboard = (dashboardId: string) => {
     return EndPathDashboard() + "/" + dashboardId
+}
+
+export const EndPathUpdateDashboard = (dashboardId: string) => {
+    return EndPathDashboard() + "/Update/" + dashboardId
 }
 
 export const EndPathDashboardWithArea = (dashboardId: string) => {
@@ -63,6 +67,10 @@ export const EndPathServiceTypes = () => {
 
 export const EndPathServiceStatus = () => {
     return EndPathServices() + "/Status"
+}
+
+export const EndPathUpdateService = (serviceId: string) => {
+    return EndPathService() + "/" + serviceId
 }
 
 export const EndPathSpecificService = (serviceId: string) => {

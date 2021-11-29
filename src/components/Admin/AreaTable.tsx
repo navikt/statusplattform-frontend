@@ -23,6 +23,7 @@ import { putServiceToArea } from 'utils/putServiceToArea';
 import { deleteServiceFromArea } from 'utils/deleteServiceFromArea';
 import { deleteArea } from 'utils/deleteArea';
 import { useLoader } from 'utils/useLoader';
+import { updateArea } from 'utils/updateArea';
 
 
 
@@ -650,9 +651,11 @@ interface EditProps {
 
 const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, toggleExpanded, toggleEditArea, setAreaToDelete}: EditProps) => {
     const [updatedArea, changeUpdatedArea] = useState({
+        id: area.id,
         name: area.name,
         description: area.description,
-        icon: area.icon
+        icon: area.icon,
+        services: area.services
     })
     const [servicesInArea, setServicesInArea] = useState<Service[]>(() => area.services.map(service => service))
 
@@ -694,10 +697,12 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
     }
 
     const handleSubmit = (event) => {
-        event.preventDefault()
-        toast.info("Mangler endepunkt")
-        // Uncomment det nedenfor når endepunkt er implementert
-        // reloadDashboards()
+        updateArea(updatedArea).then(() => {
+            reloadAreas()
+            toast.success("Oppdatering gjennomført")
+        }).catch(() => {
+            toast.error("Noe gikk galt i oppdatering av område")
+        })
     }
 
     const handleAreaIconChange = (event) => {
@@ -782,6 +787,9 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
                 </AreaRowInner>
 
                 <div className="button-container">
+                    <button type="button" className="option" onClick={handleSubmit}>
+                        Lagre endringer
+                    </button>
                     <button type="button" className="option" onClick={() => toggleEditArea(area)} aria-label="Fjern dashbord">
                         Avbryt endringer
                     </button>

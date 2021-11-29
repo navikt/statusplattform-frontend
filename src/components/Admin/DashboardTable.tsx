@@ -9,6 +9,7 @@ import ModalWrapper from 'nav-frontend-modal'
 import { Input, Select } from 'nav-frontend-skjema'
 
 import CustomNavSpinner from 'components/CustomNavSpinner'
+import { ModalInner } from '.';
 import { Area, Dashboard } from 'types/navServices'
 import { deleteDashboard } from 'utils/deleteDashboard'
 import { fetchAreas } from 'utils/fetchAreas'
@@ -16,7 +17,7 @@ import { fetchDashboard } from 'utils/fetchDashboard'
 import { fetchDashboardsList } from 'utils/fetchDashboardsList'
 import { postDashboard } from 'utils/postDashboard'
 import { putAreasToDashboard } from 'utils/putAreasToDashboard'
-import { ModalInner } from '.';
+import { updateDashboard } from 'utils/updateDashboard'
 
 import { useLoader } from 'utils/useLoader'
 import { CloseCustomized } from '.'
@@ -335,11 +336,13 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
         changeUpdatedDashboard(changedDashboard)
     }
 
-    const handleSubmit = (event) => {
-        event.preventDefault()
-        toast.info("Mangler endepunkt")
-        // Uncomment det nedenfor når endepunkt er implementert
-        // reloadDashboards()
+    const handleSubmit = () => {
+        updateDashboard(dashboard, updatedDashboard.name).then(() => {
+            reloadDashboards()
+            toast.success("Oppdatering gjennomført")
+        }).catch(() => {
+            toast.error("Noe gikk galt i oppdatering av dashbord")
+        })
     }
 
     const { name } = updatedDashboard
@@ -351,10 +354,13 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
                 </ClickableName>
 
                 <div className="button-container">
-                    <button type="button" className="option" onClick={toggleEditDashboard} aria-label="Fjern dashbord">
+                    <button type="button" className="option" onClick={handleSubmit}>
+                        Lagre endringer
+                    </button>
+                    <button type="button" className="option" onClick={toggleEditDashboard} >
                         Avbryt endringer
                     </button>
-                    <button type="button" className="option" onClick={setDashboardToDelete} aria-label="Slett område"><CloseCustomized /></button>
+                    <button type="button" className="option" onClick={setDashboardToDelete} aria-label="Slett dashbord"><CloseCustomized /></button>
                     <button type="button" className="option" onClick={toggleExpanded} aria-expanded={expandedList.includes(dashboard.id)}>
                         <Expand className={expandedList.includes(dashboard.id) ? "expanded" : "not-expanded"} />
                     </button>
