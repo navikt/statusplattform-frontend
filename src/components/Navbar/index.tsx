@@ -110,7 +110,7 @@ export default function Navbar() {
 						<Link href={"/Dashboard/Internt"}>
 							<LenkeInner href="/Dashboard/Internt" className={`${router.pathname === "/Internt" ? "active" : ""}`}>
 								<LenkeSpacer className={`${(router.asPath === "/Dashboard/Internt") ? "active" : "inactive"}`}>
-									<NormalTekstCustomized>Internt (Kun for innloggede NAV-brukere)</NormalTekstCustomized>
+									<NormalTekstCustomized>Internt</NormalTekstCustomized>
 								</LenkeSpacer>
 							</LenkeInner>
 						</Link>

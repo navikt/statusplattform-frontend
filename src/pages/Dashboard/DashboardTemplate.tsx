@@ -122,10 +122,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
             const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
             setAreasInDashboard(retrievedAreasInDashboard.areas)
             rerouteIfNoDashboard()
-            if(router.asPath.includes("Internt")) {
-                rerouteIfNotEmployee()
-            }
-            // rerouteIfNotEmployee()
             setIsLoading(false)
         })()
     }, [])
@@ -150,13 +146,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     const rerouteIfNoDashboard = () => {
         if (!dashboard) {
             router.push("/Custom404")
-        }
-    }
-
-    const rerouteIfNotEmployee = () => {
-        console.log(user.navIdent)
-        if(!user.navIdent) {
-            router.push("/Dashboard/Privatperson")
         }
     }
 

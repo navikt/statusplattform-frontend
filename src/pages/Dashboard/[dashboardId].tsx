@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Head from 'next/head'
 
@@ -9,6 +9,8 @@ import Layout from 'components/Layout'
 import { Dashboard } from "types/navServices"
 import { fetchDashboardsList } from "utils/fetchDashboardsList"
 import Custom404 from "pages/404"
+import { UserData } from "types/userData"
+import { UserStateContext } from "components/ContextProviders/UserStatusContext"
 
 
 const DashboardFromId = () => {
@@ -17,6 +19,11 @@ const DashboardFromId = () => {
 
     const [isLoading, setIsLoading] = useState(true)
     const [retrievedDashboard, setRetrievedDashboard] = useState<Dashboard | undefined>()
+
+
+    const user = useContext<UserData>(UserStateContext)
+
+
 
 
     useEffect(() => {
@@ -30,8 +37,10 @@ const DashboardFromId = () => {
     }, [dashboardTarget])
 
     
-
     if(isLoading) {
+        if(router.asPath.includes("Internt") && !user.navIdent) {
+            router.push("/Dashboard/Privatperson")
+        }
         return (
             <CustomNavSpinner />
         )
