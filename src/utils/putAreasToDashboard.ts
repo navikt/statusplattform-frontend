@@ -1,5 +1,4 @@
-import { Area, Dashboard } from "types/navServices";
-import { EndPathDashboard, EndPathPutAreasToDashboard, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathPutAreasToDashboard} from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -10,35 +9,20 @@ export class ResponseError extends Error {
 export const putAreasToDashboard = async (dashboardId: string, areasToPut: string[]): Promise<Object[]> =>{
     let response;
     let endPath = EndPathPutAreasToDashboard(dashboardId)
+    
+    response = await fetch(endPath,
+    {
+        method: "PUT",
+        body: JSON.stringify(
+            areasToPut
+        ),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        },
+        mode: 'cors', // no-cors, *cors, same-origin,
+        credentials: 'same-origin', // include, *same-origin, omit
 
-    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch(LocalhostEndpoint + endPath,
-        {
-            method: "PUT",
-            body: JSON.stringify(
-                areasToPut
-            ),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin,
-            credentials: 'same-origin', // include, *same-origin, omit
-
-        });
-    }
-    else {
-        response = await fetch(PortalDevEndpoint + endPath,
-        {
-            method: "PUT",
-            body: JSON.stringify(
-                areasToPut
-            ),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin
-        });
-    }
+    });
     
     if (response.ok) {
         return response

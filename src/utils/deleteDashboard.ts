@@ -1,5 +1,5 @@
 import { Dashboard } from "types/navServices";
-import { EndPathSpecificDashboard, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathSpecificDashboard } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -11,28 +11,17 @@ export const deleteDashboard = async (dashboard: Dashboard): Promise<void> =>{
     let response;
     let endPath = EndPathSpecificDashboard(dashboard.id)
 
-    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch(LocalhostEndpoint + endPath,
-        {
-            method: "DELETE",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin,
-            credentials: 'same-origin', // include, *same-origin, omit
+    response = await fetch(endPath,
+    {
+        method: "DELETE",
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        },
+        mode: 'cors', // no-cors, *cors, same-origin,
+        credentials: 'same-origin', // include, *same-origin, omit
 
-        });
-    }
-    else {
-        response = await fetch(PortalDevEndpoint + endPath,
-        {
-            method: "DELETE",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin
-        });
-    }
+    });
+
 
     if (response.ok) {
         return response

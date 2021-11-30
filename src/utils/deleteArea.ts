@@ -1,5 +1,5 @@
 import { Area } from "types/navServices";
-import { EndPathSpecificArea, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathSpecificArea } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -11,40 +11,22 @@ export const deleteArea = async (area: Area): Promise<void> =>{
     let response;
     let endPath = EndPathSpecificArea(area.id)
 
-    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch(LocalhostEndpoint + endPath,
-        {
-            method: "DELETE",
-            body: JSON.stringify({
-                id: area.id,
-                name: area.name,
-                description: area.description,
-                icon: area.icon
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin,
-            credentials: 'same-origin', // include, *same-origin, omit
+    response = await fetch(endPath,
+    {
+        method: "DELETE",
+        body: JSON.stringify({
+            id: area.id,
+            name: area.name,
+            description: area.description,
+            icon: area.icon
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        },
+        mode: 'cors', // no-cors, *cors, same-origin,
+        credentials: 'same-origin', // include, *same-origin, omit
 
-        });
-    }
-    else {
-        response = await fetch(PortalDevEndpoint + endPath,
-        {
-            method: "DELETE",
-            body: JSON.stringify({
-                id: area.id,
-                name: area.name,
-                description: area.description,
-                icon: area.icon
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin
-        });
-    }
+    });
 
     if (response.ok) {
         return response

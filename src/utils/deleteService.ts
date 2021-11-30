@@ -1,4 +1,4 @@
-import { EndPathSpecificService, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathSpecificService } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -8,37 +8,23 @@ export class ResponseError extends Error {
 
 export const deleteService = async (service): Promise<Object[]> =>{
     let response;
+
     let endPath = EndPathSpecificService(service.id)
 
-    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch(LocalhostEndpoint + endPath,
-        {
-            method: "DELETE",
-            body: JSON.stringify({
-                Service_id: service.id,
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin,
-            credentials: 'same-origin', // include, *same-origin, omit
+    response = await fetch(endPath,
+    {
+        method: "DELETE",
+        body: JSON.stringify({
+            Service_id: service.id,
+        }),
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        },
+        mode: 'cors', // no-cors, *cors, same-origin,
+        credentials: 'same-origin', // include, *same-origin, omit
 
-        });
-    }
-    else {
-        response = await fetch(PortalDevEndpoint + endPath,
-        {
-            method: "DELETE",
-            body: JSON.stringify({
-                Service_id: service.id,
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin
-        });
-    }
-
+    });
+    
     if (response.ok) {
         return response.json()
     }
