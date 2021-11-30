@@ -4,6 +4,9 @@ import styled from 'styled-components'
 
 import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, } from "nav-frontend-typografi";
+import { useContext } from 'react';
+import { UserData } from 'types/userData';
+import { UserStateContext } from 'components/ContextProviders/UserStatusContext';
 
 const Nav = styled.nav `
 	height: 2.75rem;
@@ -69,6 +72,9 @@ const NormalTekstCustomized = styled(Normaltekst)`
 export default function Navbar() {
 	const router = useRouter()
 
+    const user = useContext<UserData>(UserStateContext)
+
+
 	return (
 		<Nav>
 			<ul role="tablist">
@@ -99,15 +105,17 @@ export default function Navbar() {
 						</LenkeInner>
 					</Link>
 				</li>
-				<li role="tab">
-					<Link href={"/Dashboard/Internt"}>
-						<LenkeInner href="/Dashboard/Internt" className={`${router.pathname === "/Internt" ? "active" : ""}`}>
-							<LenkeSpacer className={`${(router.asPath === "/Dashboard/Internt") ? "active" : "inactive"}`}>
-								<NormalTekstCustomized>Internt (Kun for innloggede NAV-brukere)</NormalTekstCustomized>
-							</LenkeSpacer>
-						</LenkeInner>
-					</Link>
-				</li>
+				{user.navIdent &&
+					<li role="tab">
+						<Link href={"/Dashboard/Internt"}>
+							<LenkeInner href="/Dashboard/Internt" className={`${router.pathname === "/Internt" ? "active" : ""}`}>
+								<LenkeSpacer className={`${(router.asPath === "/Dashboard/Internt") ? "active" : "inactive"}`}>
+									<NormalTekstCustomized>Internt (Kun for innloggede NAV-brukere)</NormalTekstCustomized>
+								</LenkeSpacer>
+							</LenkeInner>
+						</Link>
+					</li>
+				}
 
 
 

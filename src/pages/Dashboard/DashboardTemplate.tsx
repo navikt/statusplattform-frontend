@@ -16,6 +16,8 @@ import { toast } from 'react-toastify'
 import { CheckboksPanelGruppe } from 'nav-frontend-skjema'
 import { FilterContext } from 'components/ContextProviders/FilterContext'
 import { Expand } from '@navikt/ds-icons'
+import { UserStateContext } from 'components/ContextProviders/UserStatusContext'
+import { UserData } from 'types/userData'
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
@@ -103,6 +105,8 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
     const {filters} = useContext(FilterContext)
 
+    const user = useContext<UserData>(UserStateContext)
+
 
     const router = useRouter()
 
@@ -110,16 +114,24 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
         window.addEventListener("resize", () => setWidth(window.innerWidth))
     }, [width]);    
 
+
+    // initial state
     useEffect(() => {
         (async function () {
             setIsLoading(true)
             const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
             setAreasInDashboard(retrievedAreasInDashboard.areas)
-            rerouteIfNoDashboard
+            rerouteIfNoDashboard()
+            if(router.asPath.includes("Internt")) {
+                rerouteIfNotEmployee()
+            }
+            // rerouteIfNotEmployee()
             setIsLoading(false)
         })()
     }, [])
 
+
+    // Timer for refetch of dashboard states
     useEffect(() => {
         let currentTime = 0
         const interval = setInterval(async() => {
@@ -139,7 +151,13 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
         if (!dashboard) {
             router.push("/Custom404")
         }
+    }
 
+    const rerouteIfNotEmployee = () => {
+        console.log(user.navIdent)
+        if(!user.navIdent) {
+            router.push("/Dashboard/Privatperson")
+        }
     }
 
     
