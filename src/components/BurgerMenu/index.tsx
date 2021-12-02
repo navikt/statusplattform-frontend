@@ -175,7 +175,7 @@ const PopoverContent = () => {
                                     </Lenke>
                                 </li>
                                 <li>
-                                    <Lenke href="/Logout">
+                                    <Lenke href="/oauth2/Logout">
                                         <Login className="popover-link-ikon" />
                                         Logg ut
                                     </Lenke>
