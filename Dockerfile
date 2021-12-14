@@ -14,6 +14,7 @@ RUN npm install
 # Copy all files
 COPY src/ src/
 COPY public/ public/
+COPY next.config.js next.config.js
 
 # Build app
 RUN npm run build
