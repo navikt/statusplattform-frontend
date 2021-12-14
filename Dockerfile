@@ -2,11 +2,11 @@
 FROM node:16-alpine
 
 # Set working directory
-WORKDIR /usr/src/app
+WORKDIR /usr/src
 
 # Copy package.json and package-lock.json before other files
 # Utilise Docker cache to save re-installing dependencies if unchanged
-COPY ./src/package*.json ./
+COPY ./package*.json ./
 
 # Install dependencies
 RUN npm install
