@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Head from 'next/head'
 
-import Layout from 'components/Layout'
+import Layout from '../components/Layout'
 import { Ingress, Innholdstittel } from 'nav-frontend-typografi';
 import Lenke from 'nav-frontend-lenker';
 

@@ -1,12 +1,12 @@
 import Head from 'next/head'
 
-import Layout from 'components/Layout'
+import Layout from '../../components/Layout'
 import TjenesteData from './TjenesteData'
-import CustomNavSpinner from 'components/CustomNavSpinner'
+import CustomNavSpinner from '../../components/CustomNavSpinner'
 
-import { useLoader } from 'utils/useLoader'
-import { useRenderComponentOnQuery } from 'utils/routerHelpers'
-import { fetchServiceFromId } from 'utils/fetchServiceFromId'
+import { useLoader } from '../../utils/useLoader'
+import { useRenderComponentOnQuery } from '../../utils/routerHelpers'
+import { fetchServiceFromId } from '../../utils/fetchServiceFromId'
 
 
 

@@ -2,16 +2,16 @@ import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import Layout from 'components/Layout'
-import { BackButton } from 'components/BackButton'
-import { fetchServices } from 'utils/fetchServices'
-import { countFailingServices, getListOfTilesThatFail } from 'utils/servicesOperations'
+import Layout from '../../components/Layout'
+import { BackButton } from '../../components/BackButton'
+import { fetchServices } from '../../utils/fetchServices'
+import { countFailingServices, getListOfTilesThatFail } from '../../utils/servicesOperations'
 
 import NavFrontendSpinner from "nav-frontend-spinner";
 import { Knapp } from 'nav-frontend-knapper'
-import NavInfoCircle from 'components/NavInfoCircle'
+import NavInfoCircle from '../../components/NavInfoCircle'
 import Alertstripe from 'nav-frontend-alertstriper'
-import { AreaServicesList, Tile } from 'types/navServices'
+import { AreaServicesList, Tile } from '../../types/navServices'
 import { Calender, Back } from '@navikt/ds-icons'
 
 const IncidentsContainer = styled.div`

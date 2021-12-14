@@ -5,19 +5,16 @@
 Add this
 
 node_modules/
-/src/portal-frontend/node_modules
-/src/.pnp
-/src.pnp.js
 
 # testing
 /src/coverage
 
 # next.js
-/src/.next/
+.next/
 /src/out/
 
 # production
-/build
+build/
 
 # misc
 .DS_Store

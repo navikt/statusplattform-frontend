@@ -1,4 +1,4 @@
-import { EndPathServiceStatus, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathServiceStatus } from "./apiHelper";
 
 
 export class ResponseError extends Error {
@@ -7,16 +7,13 @@ export class ResponseError extends Error {
     }
 }
 
-let endUrl = EndPathServiceStatus;
+let endUrl = EndPathServiceStatus();
 
 export const fetchServiceStatuses = async (): Promise<string[]> => {
     let response;
-    if (location.hostname === "localhost" || location.hostname === "127.0.0.1") {
-        response = await fetch(LocalhostEndpoint + endUrl);
-    }
-    else {
-        response = await fetch(PortalDevEndpoint + endUrl);
-    }
+
+    response = await fetch(endUrl);
+
     if (response.ok) {
         return response.json()
     }

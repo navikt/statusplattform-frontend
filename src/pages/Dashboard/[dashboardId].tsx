@@ -2,15 +2,15 @@ import { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Head from 'next/head'
 
-import CustomNavSpinner from "components/CustomNavSpinner"
+import CustomNavSpinner from "../../components/CustomNavSpinner"
 import DashboardTemplate from "./DashboardTemplate"
-import Layout from 'components/Layout'
+import Layout from '../../components/Layout'
 
-import { Dashboard } from "types/navServices"
-import { fetchDashboardsList } from "utils/fetchDashboardsList"
-import Custom404 from "pages/404"
-import { UserData } from "types/userData"
-import { UserStateContext } from "components/ContextProviders/UserStatusContext"
+import { Dashboard } from "../../types/navServices"
+import { fetchDashboardsList } from "../../utils/fetchDashboardsList"
+import Custom404 from "../../pages/404"
+import { UserData } from "../../types/userData"
+import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 
 
 const DashboardFromId = () => {

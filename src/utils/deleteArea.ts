@@ -1,4 +1,4 @@
-import { Area } from "types/navServices";
+import { Area } from "../types/navServices";
 import { EndPathSpecificArea } from "./apiHelper";
 
 export class ResponseError extends Error {

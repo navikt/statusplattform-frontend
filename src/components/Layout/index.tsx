@@ -3,9 +3,9 @@ import styled from 'styled-components'
 
 import { ToastContainer } from 'react-toastify'
 
-import Footer from 'components/Footer'
-import Header from 'components/Header'
-import Navbar from 'components/Navbar'
+import Footer from '../../components/Footer'
+import Header from '../../components/Header'
+import Navbar from '../../components/Navbar'
 import { useRouter } from 'next/router'
 
 import 'react-toastify/dist/ReactToastify.css';

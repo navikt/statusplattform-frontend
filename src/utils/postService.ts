@@ -1,4 +1,4 @@
-import { Service } from "types/navServices";
+import { Service } from "../types/navServices";
 import { EndPathService } from "./apiHelper";
 
 export class ResponseError extends Error {

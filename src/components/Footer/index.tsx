@@ -1,7 +1,9 @@
-import TrafficLights from 'components/TrafficLights';
-import { useRouter } from 'next/router';
-import { useState } from 'react';
 import styled from 'styled-components'
+import { useState } from 'react';
+import { useRouter } from 'next/router';
+import Image from 'next/image'
+
+import TrafficLights from '../../components/TrafficLights';
 
 const FooterContainer = styled.footer`
     width: 100%;
@@ -103,7 +105,7 @@ const Footer = () => {
                 <Row className="top">
                     <span>
                         <a href="https://www.nav.no/no/person#">
-                            <img src="/assets/nav-logo/png/black.png" alt="LogoBlack" ></img>
+                            <img src="/assets/nav-logo/png/black.png" alt="Til forsiden"></img>
                         </a>
                     </span>
                 </Row>

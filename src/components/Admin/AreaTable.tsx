@@ -7,23 +7,23 @@ import { Bag, Calculator, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, 
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 
-import { Area, Service } from 'types/navServices';
+import { Area, Service } from '../../types/navServices';
 import { Element } from 'nav-frontend-typografi';
 import ModalWrapper from 'nav-frontend-modal';
 
 import { CloseCustomized } from '.';
-import CustomNavSpinner from 'components/CustomNavSpinner';
+import CustomNavSpinner from '../../components/CustomNavSpinner';
 
 import { ModalInner } from '.';
-import { postAdminArea } from 'utils/postArea'
-import { fetchServices } from 'utils/fetchServices';
-import { fetchAreas } from 'utils/fetchAreas';
-import { getIconsFromGivenCode } from 'utils/servicesOperations';
-import { putServiceToArea } from 'utils/putServiceToArea';
-import { deleteServiceFromArea } from 'utils/deleteServiceFromArea';
-import { deleteArea } from 'utils/deleteArea';
-import { useLoader } from 'utils/useLoader';
-import { updateArea } from 'utils/updateArea';
+import { postAdminArea } from '../../utils/postArea'
+import { fetchServices } from '../../utils/fetchServices';
+import { fetchAreas } from '../../utils/fetchAreas';
+import { getIconsFromGivenCode } from '../../utils/servicesOperations';
+import { putServiceToArea } from '../../utils/putServiceToArea';
+import { deleteServiceFromArea } from '../../utils/deleteServiceFromArea';
+import { deleteArea } from '../../utils/deleteArea';
+import { useLoader } from '../../utils/useLoader';
+import { updateArea } from '../../utils/updateArea';
 
 
 

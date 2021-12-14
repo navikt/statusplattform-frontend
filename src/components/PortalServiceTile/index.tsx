@@ -1,10 +1,10 @@
 import styled from 'styled-components'
 import { useContext } from "react";
 
-import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed, NoStatusAvailableCircle, PlannedMaintenanceCircle } from 'components/TrafficLights'
-import { getIconsFromGivenCode } from 'utils/servicesOperations'
-import { Area} from 'types/navServices'
-import { FilterContext } from 'components/ContextProviders/FilterContext';
+import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed, NoStatusAvailableCircle, PlannedMaintenanceCircle } from '../../components/TrafficLights'
+import { getIconsFromGivenCode } from '../../utils/servicesOperations'
+import { Area} from '../../types/navServices'
+import { FilterContext } from '../../components/ContextProviders/FilterContext';
 
 import { Expand, Collapse } from '@navikt/ds-icons'
 import Panel from 'nav-frontend-paneler';
@@ -12,7 +12,7 @@ import { Undertittel } from "nav-frontend-typografi";
 import Lenke from 'nav-frontend-lenker';
 
 
-const PanelCustomized = styled(Panel)`
+const PanelCustomized = styled(Panel)<{alignment: string}>`
     margin: 0 5px;
     padding: 0;
     width: 100%;
@@ -40,9 +40,8 @@ const PanelCustomized = styled(Panel)`
         width: 290px;
     }
     
-
     //Styrer om panelet skal strekke etter høyden eller ikke basert på prop i render
-    align-self: ${(props) => (props.alignment)};
+    align-self: ${(props): any => (props.alignment)};
 `;
 
 const UndertittelCustomized = styled(Undertittel)`

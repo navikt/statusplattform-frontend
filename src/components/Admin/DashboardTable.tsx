@@ -8,18 +8,18 @@ import { Hovedknapp, Knapp } from 'nav-frontend-knapper'
 import ModalWrapper from 'nav-frontend-modal'
 import { Input, Select } from 'nav-frontend-skjema'
 
-import CustomNavSpinner from 'components/CustomNavSpinner'
+import CustomNavSpinner from '../../components/CustomNavSpinner'
 import { ModalInner } from '.';
-import { Area, Dashboard } from 'types/navServices'
-import { deleteDashboard } from 'utils/deleteDashboard'
-import { fetchAreas } from 'utils/fetchAreas'
-import { fetchDashboard } from 'utils/fetchDashboard'
-import { fetchDashboardsList } from 'utils/fetchDashboardsList'
-import { postDashboard } from 'utils/postDashboard'
-import { putAreasToDashboard } from 'utils/putAreasToDashboard'
-import { updateDashboard } from 'utils/updateDashboard'
+import { Area, Dashboard } from '../../types/navServices'
+import { deleteDashboard } from '../../utils/deleteDashboard'
+import { fetchAreas } from '../../utils/fetchAreas'
+import { fetchDashboard } from '../../utils/fetchDashboard'
+import { fetchDashboardsList } from '../../utils/fetchDashboardsList'
+import { postDashboard } from '../../utils/postDashboard'
+import { putAreasToDashboard } from '../../utils/putAreasToDashboard'
+import { updateDashboard } from '../../utils/updateDashboard'
 
-import { useLoader } from 'utils/useLoader'
+import { useLoader } from '../../utils/useLoader'
 import { CloseCustomized } from '.'
 
 

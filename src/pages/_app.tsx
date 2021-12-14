@@ -1,6 +1,6 @@
-import 'styles/globals.css'
+import '../styles/globals.css'
 
-import { Providers } from 'components/ContextProviders/Providers'
+import { Providers } from '../components/ContextProviders/Providers'
 import { useEffect } from 'react'
 
 function MyApp({ Component, pageProps }) {

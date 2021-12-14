@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import Lenke from 'nav-frontend-lenker';
 import { Normaltekst, } from "nav-frontend-typografi";
 import { useContext } from 'react';
-import { UserData } from 'types/userData';
-import { UserStateContext } from 'components/ContextProviders/UserStatusContext';
+import { UserData } from '../../types/userData';
+import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 
 const Nav = styled.nav `
 	height: 2.75rem;

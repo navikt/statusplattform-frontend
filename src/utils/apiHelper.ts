@@ -1,11 +1,3 @@
-export const LocalhostEndpoint = ""
-
-
-export const PortalDevEndpoint = ""
-
-
-
-
 export const EndPathArea = () =>  {
     return "/rest/Area"
 }

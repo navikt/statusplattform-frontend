@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
 import { createContext, ReactNode, useEffect, useState } from "react"
-import { UserData } from "types/userData"
-import { checkLoginInfoAndState } from "utils/checkLoginInfoAndState"
+import { UserData } from "../../types/userData"
+import { checkLoginInfoAndState } from "../../utils/checkLoginInfoAndState"
 
 interface UserStateInterface {
     name: string

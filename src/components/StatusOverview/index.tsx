@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 
-import { AreaServicesList } from 'types/navServices'
+import { AreaServicesList } from '../../types/navServices'
 
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
-import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from 'utils/servicesOperations';
+import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from '../../utils/servicesOperations';
 import { Knapp } from 'nav-frontend-knapper';
 import { toast } from 'react-toastify';
 

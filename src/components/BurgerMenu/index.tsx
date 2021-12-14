@@ -7,8 +7,8 @@ import { Close, Employer, Hamburger, Login } from '@navikt/ds-icons'
 import Popover, {PopoverOrientering} from 'nav-frontend-popover';
 import Lenke from 'nav-frontend-lenker';
 
-import { UserStateContext } from 'components/ContextProviders/UserStatusContext';
-import { UserData } from 'types/userData';
+import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
+import { UserData } from '../../types/userData';
 
 const BurgerMenuContainer = styled.div`
     margin: 0 20px;
@@ -106,13 +106,19 @@ const BurgerMenu = () => {
         setAnker(event)
     }
 
+    const closePopover = () => {
+        if(anker) {
+            setAnker(undefined)
+        }
+    }
+
     const DropdownMenuContainer = () => {
         return (
             <>
                 <PopoverCustomized
                     ankerEl={anker}
                     orientering={PopoverOrientering.Under}
-                    onRequestClose={togglePopover}
+                    onRequestClose={closePopover}
                 >
                     <PopoverContent />
                 </PopoverCustomized>

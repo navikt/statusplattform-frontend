@@ -1,4 +1,4 @@
-import { AreaServicesList, Service } from 'types/navServices'
+import { AreaServicesList, Service } from '../types/navServices'
 
 import { 
     Bag, Folder, HealthCase, Money, FillForms, HandBandage, GuideDog, Calculator,

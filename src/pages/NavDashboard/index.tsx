@@ -1,15 +1,14 @@
 import { useEffect, useState } from "react";
 import styled from 'styled-components'
 
-import { PortalServiceTile } from 'components/PortalServiceTile'
-import StatusOverview from 'components/StatusOverview'
-import { fetchDashboard } from 'utils/fetchDashboard'
+import { PortalServiceTile } from '../../components/PortalServiceTile'
+import StatusOverview from '../../components/StatusOverview'
+import { fetchDashboard } from '../../utils/fetchDashboard'
 
-import NavFrontendSpinner from "nav-frontend-spinner";
-import { Area, Dashboard } from "types/navServices";
+import { Area, Dashboard } from "../../types/navServices";
 import { Knapp } from "nav-frontend-knapper";
-import { fetchDashboardsList } from "utils/fetchDashboardsList";
-import CustomNavSpinner from "components/CustomNavSpinner";
+import { fetchDashboardsList } from "../../utils/fetchDashboardsList";
+import CustomNavSpinner from "../../components/CustomNavSpinner";
 
 
 const DigitalServicesContainer = styled.div`

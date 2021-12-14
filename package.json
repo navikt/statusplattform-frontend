@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev -p 3000",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "test": "jest --watch"
   },
   "dependencies": {
     "@navikt/ds-icons": "^0.5.8",
@@ -60,9 +61,51 @@
     "webpack": "^4.46.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.16.0",
+    "@babel/preset-env": "^7.16.4",
+    "@babel/preset-react": "^7.16.0",
+    "@babel/preset-typescript": "^7.16.0",
+    "@testing-library/jest-dom": "^5.16.1",
+    "@testing-library/react": "^12.1.2",
+    "@types/jest": "^27.0.3",
     "@types/node": "^14.14.30",
     "@types/react": "^17.0.2",
+    "@types/styled-components": "^5.1.17",
+    "babel-jest": "^27.4.2",
     "babel-plugin-styled-components": "^1.12.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^27.4.3",
+    "jest-css-modules-transform": "^4.3.0",
+    "jest-svg-transformer": "^1.0.0",
+    "msw": "^0.36.0",
+    "react-test-renderer": "^17.0.2",
+    "ts-jest": "^27.1.0",
     "typescript": "^4.3.5"
+  },
+  "jest": {
+    "globals": {
+      "ts-jest": {
+        "tsconfig": "tsconfig.test.json"
+      }
+    },
+    "preset": "ts-jest",
+    "testEnvironment": "jsdom",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx"
+    ],
+    "transform": {
+      ".+\\.(css|styl|less|sass|scss)$": "jest-css-modules-transform",
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "moduleNameMapper": {
+      "nav-(.*)-style": "<rootDir>/src/__mocks__/mockfile.ts",
+      ".*.css": "<rootDir>/src/__mocks__/styleMock.ts"
+    },
+    "testMatch": [
+      "**/*.(test|spec).(ts|tsx|js|jsx)"
+    ]
   }
 }

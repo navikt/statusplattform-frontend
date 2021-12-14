@@ -4,21 +4,21 @@ import { useEffect, useState } from "react";
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useLoader } from 'utils/useLoader';
+import { useLoader } from '../../utils/useLoader';
 
 import { Input, Select } from 'nav-frontend-skjema';
 import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 import { Expand, Notes } from '@navikt/ds-icons'
-import CustomNavSpinner from 'components/CustomNavSpinner';
+import CustomNavSpinner from '../../components/CustomNavSpinner';
 
-import { Service } from 'types/navServices';
-import { deleteService } from 'utils/deleteService';
-import { postService } from 'utils/postService'
-import { fetchServices } from 'utils/fetchServices';
-import { fetchTypes } from 'utils/fetchTypes';
+import { Service } from '../../types/navServices';
+import { deleteService } from '../../utils/deleteService';
+import { postService } from '../../utils/postService'
+import { fetchServices } from '../../utils/fetchServices';
+import { fetchTypes } from '../../utils/fetchTypes';
 import { CloseCustomized, ModalInner } from '.';
 import ModalWrapper from 'nav-frontend-modal';
-import { updateService } from 'utils/updateService';
+import { updateService } from '../../utils/updateService';
 
 const TjenesteTableContainer = styled.div`
     .services-overflow-container {

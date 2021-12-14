@@ -1,7 +1,7 @@
 import { useRouter } from "next/router"
 import { ReactElement } from "react"
 
-import CustomNavSpinner from "components/CustomNavSpinner"
+import CustomNavSpinner from "../components/CustomNavSpinner"
 
 
 export const useSingleValueQueryParam = (paramName: string): string | undefined => {

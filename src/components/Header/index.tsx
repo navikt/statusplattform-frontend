@@ -3,15 +3,15 @@ import styled from 'styled-components'
 import { Sidetittel } from 'nav-frontend-typografi'
 import { Knapp } from 'nav-frontend-knapper'
 
-import BurgerMenu from 'components/BurgerMenu'
-import SubscribeModal from 'components/SubscribeModal'
+import BurgerMenu from '../../components/BurgerMenu'
+import SubscribeModal from '../../components/SubscribeModal'
 import { useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Checkbox } from 'nav-frontend-skjema'
-import { FilterContext, FilterOption } from 'components/ContextProviders/FilterContext'
+import { FilterContext, FilterOption } from '../ContextProviders/FilterContext'
 import { Collapse, Expand } from '@navikt/ds-icons'
-import { UserStateContext } from 'components/ContextProviders/UserStatusContext'
-import { UserData } from 'types/userData'
+import { UserStateContext } from '../ContextProviders/UserStatusContext'
+import { UserData } from '../../types/userData'
 
 
 
@@ -150,7 +150,7 @@ const Header = () => {
     return (
         <CustomHeader>
             <a href="https://www.nav.no/no/person#">
-                <img src="/assets/nav-logo/png/red.png" alt="LogoRed" />
+                <img src="/assets/nav-logo/png/red.png" alt="Til forsiden" />
             </a>
             <HeaderContent>
                 <SidetittelCustomized>

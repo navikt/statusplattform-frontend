@@ -4,20 +4,20 @@ import styled from 'styled-components'
 
 import { Knapp } from 'nav-frontend-knapper'
 
-import CustomNavSpinner from 'components/CustomNavSpinner'
-import { PortalServiceTile } from 'components/PortalServiceTile'
-import StatusOverview from 'components/StatusOverview'
-import { Area, Dashboard } from 'types/navServices'
-import { fetchDashboard } from 'utils/fetchDashboard'
+import CustomNavSpinner from '../../components/CustomNavSpinner'
+import { PortalServiceTile } from '../../components/PortalServiceTile'
+import StatusOverview from '../../components/StatusOverview'
+import { Area, Dashboard } from '../../types/navServices'
+import { fetchDashboard } from '../../utils/fetchDashboard'
 import Lenke from 'nav-frontend-lenker'
 import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi'
 import Panel from 'nav-frontend-paneler'
 import { toast } from 'react-toastify'
 import { CheckboksPanelGruppe } from 'nav-frontend-skjema'
-import { FilterContext } from 'components/ContextProviders/FilterContext'
+import { FilterContext } from '../../components/ContextProviders/FilterContext'
 import { Expand } from '@navikt/ds-icons'
-import { UserStateContext } from 'components/ContextProviders/UserStatusContext'
-import { UserData } from 'types/userData'
+import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
+import { UserData } from '../../types/userData'
 
 /* --------------------------------------- Styles start --------------------------------------- */
 

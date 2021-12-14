@@ -1,11 +1,11 @@
 import styled from 'styled-components'
 
 import { Innholdstittel, Systemtittel, Undertittel } from 'nav-frontend-typografi';
-import { BackButton } from 'components/BackButton';
+import { BackButton } from '../../components/BackButton';
 import { ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
-import { Service } from 'types/navServices';
+import { Service } from '../../types/navServices';
 import { useContext } from 'react';
-import { UserStateContext } from 'components/ContextProviders/UserStatusContext';
+import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import Lenke from 'nav-frontend-lenker';
 
 

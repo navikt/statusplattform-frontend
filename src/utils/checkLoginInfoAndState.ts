@@ -1,4 +1,4 @@
-import { UserData } from "types/userData";
+import { UserData } from "../types/userData";
 import { EndPathGetLoginInfo } from "./apiHelper";
 
 

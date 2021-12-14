@@ -6,7 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "baseUrl": ".",
+    "baseUrl": "./",
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
@@ -16,15 +16,16 @@
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "isolatedModules": true
   },
   "include": [
     "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-, "pages/TjenesteData"  ],
+    "src/**/*.ts",
+    "src/**/*.tsx"
+  ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "src/__mocks__**/*"
   ]
 }

@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
-import Layout from 'components/Layout'
+import Layout from '../../components/Layout'
 import { Knapp } from 'nav-frontend-knapper'
 import { Input } from 'nav-frontend-skjema'
 import { useRouter } from 'next/router';

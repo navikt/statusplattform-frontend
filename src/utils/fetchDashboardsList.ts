@@ -1,4 +1,4 @@
-import { Dashboard } from "types/navServices";
+import { Dashboard } from "../types/navServices";
 import { EndPathDashboards } from "./apiHelper";
 
 export class ResponseError extends Error {

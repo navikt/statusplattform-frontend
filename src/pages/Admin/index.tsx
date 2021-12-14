@@ -1,8 +1,8 @@
 import styled from 'styled-components'
 
-import Layout from 'components/Layout';
-import Admin from 'components/Admin';
-import MenuSelector from 'components/Admin/MenuSelector';
+import Layout from '../../components/Layout';
+import Admin from '../../components/Admin';
+import MenuSelector from '../../components/Admin/MenuSelector';
 import { ToastContainer } from 'react-toastify';
 
 import 'react-toastify/dist/ReactToastify.css';

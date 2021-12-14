@@ -1,4 +1,4 @@
-import { EndPathServiceTypes, LocalhostEndpoint, PortalDevEndpoint } from "./apiHelper";
+import { EndPathServiceTypes } from "./apiHelper";
 
 
 export class ResponseError extends Error {
