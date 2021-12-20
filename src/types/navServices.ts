@@ -33,3 +33,9 @@ export interface Area {
     services: Service[]
     status?: string
 }
+
+
+export interface MaintenanceObject {
+    isPlanned: boolean,
+    message: string
+}

@@ -162,9 +162,15 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     }
 
     let maxWidth = width > 
-            1800 ? 1800 : (window.innerWidth > 
-            1200 ? 1200 : (window.innerWidth > 
-            1000 ? 1000 : 600));
+            1700 ? 1700 : (
+                window.innerWidth > 
+                    1275 ? 1275 : (
+                        window.innerWidth > 
+                            850 ? 850 : 425
+                        )
+                );
+
+    console.log(maxWidth)
 
     const biggestModulo = (totalNumberOfTiles: number,maxTilesPerRow: number) => {
         let calculatedMaxTiles = maxTilesPerRow; 

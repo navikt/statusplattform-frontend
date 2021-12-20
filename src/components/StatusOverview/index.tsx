@@ -46,8 +46,9 @@ const StatusBannerContainer = styled.div`
         margin: 0 0 .5rem;
     }
 `;
+
 const KnappCustomized = styled(Knapp)`
-	width: 7rem;
+	/* width: 7rem; */
     max-height: 62px;
     white-space: normal;
     transition: 0.4s;
@@ -64,6 +65,7 @@ const KnappCustomized = styled(Knapp)`
         display: none;
     }
 `;
+
 const OverviewComponents = styled.div`
     padding: 2rem 1rem;
     display: flex;
@@ -132,9 +134,9 @@ const StatusOverview = (props: AreaServicesList) => {
 
     return (
         <StatusOverviewContainer>
-            <Systemtittel>Informasjon om avvik</Systemtittel>
 
             <StatusBannerContainer>
+            <Systemtittel>Avvik</Systemtittel>
                 <div>
                     <StatusSummary>
                         {numberOfHealthyServices == numberOfServices ?
@@ -163,8 +165,8 @@ const StatusOverview = (props: AreaServicesList) => {
                     <Undertekst>Sist oppdatert: Ikke implementert</Undertekst>
                 </div>
                 {/* <Link href="/IncidentsPage"> */}
-                    <KnappCustomized onClick={handleRedirect}>
-                        Mer om hendelser
+                    <KnappCustomized mini onClick={handleRedirect}>
+                        Se avvikshistorikk
                     </KnappCustomized>
                 {/* </Link> */}
             </StatusBannerContainer>

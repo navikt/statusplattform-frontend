@@ -3,14 +3,54 @@ import { useContext } from "react";
 
 import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed, NoStatusAvailableCircle, PlannedMaintenanceCircle } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
-import { Area} from '../../types/navServices'
+import { Area, MaintenanceObject} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
 
-import { Expand, Collapse } from '@navikt/ds-icons'
+import { Expand, Collapse, Divide } from '@navikt/ds-icons'
 import Panel from 'nav-frontend-paneler';
 import { Undertittel } from "nav-frontend-typografi";
 import Lenke from 'nav-frontend-lenker';
+import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
+import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-frontend-etiketter';
 
+
+
+
+
+
+const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: string}>`
+    margin: 0 5px;
+    width: 100%;
+
+
+    .top-content {
+        .etikett {
+            margin-right: 5px;
+        }
+    }
+
+    @media (min-width: 425px) {
+        width: 425px;
+        .top-content {
+            .etikett {
+                margin-right: 0;
+            }
+        }
+    }
+
+    display: flex;
+    flex-direction: column;
+
+    //Styrer om panelet skal strekke etter høyden eller ikke basert på prop i render
+    align-self: ${(props): any => (props.alignment)};
+
+    .maintenance-message {
+        font-size: 0.9rem;
+        color: grey;
+    }
+
+    
+`
 
 const PanelCustomized = styled(Panel)<{alignment: string}>`
     margin: 0 5px;
@@ -50,12 +90,15 @@ const UndertittelCustomized = styled(Undertittel)`
     height: 50px;
     display: flex;
     flex-direction: row;
-    span{
-        text-overflow: hidden;
-        overflow: hidden;
+    span {
+        display: flex;
+        align-items: center;
+        /* text-overflow: hidden;
+        overflow: hidden; */
     }
     svg {
         margin-right: 10px;
+            
         top: 50%;
         align-items: center;
     }
@@ -158,46 +201,128 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
         toggleTile(tileIndex)
     }
 
+    const testMaintenanceObject: MaintenanceObject = {isPlanned: true, message: "Planlagt 24. desember"}
 
     return (
-        <PanelCustomized alignment={expanded == true ? "stretch" : "flex-start"}>
-            <div>
-                <UndertittelCustomized>
-                    <section>{handleAndSetStatusIcon(area.status, false)}</section>
-                    <section>{handleAndSetNavIcon(area.icon)}</section>
-                    <span>{area.name}</span>
-                </UndertittelCustomized> 
-                {expanded &&
-                    <>
-                        <ServicesList>
-                        {area.services.map(service => {
-                            if (filters.length == 0) {
-                                return (
-                                    <li key={service.name}>
-                    					<LenkeCustomized href={"/TjenesteData/" + service.id}>
-                                            <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
-                                        </LenkeCustomized>
-                                    </li>
-                                )
-                            }
-                            if(matches(service.status)) {
-                                return (
-                                    <li key={service.name}>
-                    					<LenkeCustomized href={"/TjenesteData/" + service.id}>
-                                            <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
-                                        </LenkeCustomized>
-                                    </li>
-                                )
-                            }
-                            return
-                        }
-                        )}
-                        </ServicesList>
-                    </>
+        <EkspanderbartpanelCustomized
+            alignment={expanded == true ? "stretch" : "flex-start"}
+            tittel={
+                <div className="top-content">
+                    <UndertittelCustomized>
+                        {/* <span>{handleAndSetStatusIcon(area.status, false)}</span> */}
+                        <span>{handleAndSetNavIcon(area.icon)}</span>
+                        <span>{area.name}</span>
+                    </UndertittelCustomized> 
+                    <div>
+                        <SwitchEtikett status={area.status} maintenanceObject={testMaintenanceObject}/>
+                    </div>
+                    <i className="maintenance-message">{testMaintenanceObject.message}</i>
+                </div>
+            }
+            aria-label="Ekspander område"
+            aria-expanded={expanded}
+            apen={expanded}
+            onClick={toggleExpanded}
+        >
+            <ServicesList>
+                {area.services.map(service => {
+                    if (filters.length == 0) {
+                        return (
+                            <li key={service.name}>
+                                <LenkeCustomized href={"/TjenesteData/" + service.id}>
+                                    <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+                                </LenkeCustomized>
+                            </li>
+                        )
+                    }
+                    if(matches(service.status)) {
+                        return (
+                            <li key={service.name}>
+                            <LenkeCustomized href={"/TjenesteData/" + service.id}>
+                                    <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+                                </LenkeCustomized>
+                            </li>
+                        )
+                    }
+                    return
                 }
-            </div>
+                )}
+            </ServicesList>
+        </EkspanderbartpanelCustomized>
+    )
+}
 
-            <CenteredExpandRetractSpan aria-expanded={expanded} aria-label="Utvid eller lukk panelmeny" onClick={() => toggleExpanded()}>{expanded ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan>
-        </PanelCustomized>
+
+
+
+
+        // <PanelCustomized alignment={expanded == true ? "stretch" : "flex-start"}>
+        //     <div>
+        //         <UndertittelCustomized>
+        //             <section>{handleAndSetStatusIcon(area.status, false)}</section>
+        //             <section>{handleAndSetNavIcon(area.icon)}</section>
+        //             <span>{area.name}</span>
+        //         </UndertittelCustomized> 
+        //         {expanded &&
+        //             <>
+        //                 <ServicesList>
+        //                 {area.services.map(service => {
+        //                     if (filters.length == 0) {
+        //                         return (
+        //                             <li key={service.name}>
+        //             					<LenkeCustomized href={"/TjenesteData/" + service.id}>
+        //                                     <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+        //                                 </LenkeCustomized>
+        //                             </li>
+        //                         )
+        //                     }
+        //                     if(matches(service.status)) {
+        //                         return (
+        //                             <li key={service.name}>
+        //             					<LenkeCustomized href={"/TjenesteData/" + service.id}>
+        //                                     <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+        //                                 </LenkeCustomized>
+        //                             </li>
+        //                         )
+        //                     }
+        //                     return
+        //                 }
+        //                 )}
+        //                 </ServicesList>
+        //             </>
+        //         }
+        //     </div>
+
+        //     <CenteredExpandRetractSpan aria-expanded={expanded} aria-label="Utvid eller lukk panelmeny" onClick={() => toggleExpanded()}>{expanded ? <Collapse /> : <Expand />}</CenteredExpandRetractSpan>
+        // </PanelCustomized>
+
+
+
+
+
+const SwitchEtikett: React.FC<{maintenanceObject?: MaintenanceObject, status: string}> = ({maintenanceObject, status}) => {
+    
+    return (
+        <div>
+            {maintenanceObject && 
+                <EtikettInfo>
+                    Planlagt vedlikehold
+                </EtikettInfo>
+            }
+            {(() => {
+                switch (status) {
+                    case 'OK':
+                        return <EtikettSuksess>Suksess</EtikettSuksess>
+
+                    case 'ISSUE':
+                        return <EtikettFokus>Redusert funksjonalitet</EtikettFokus>
+                    case 'DOWN':
+                        return <EtikettAdvarsel>Feil på tjeneste</EtikettAdvarsel>
+                    default:
+                        return null
+                }
+            })()}
+        
+        </div>
     )
 }
