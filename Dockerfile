@@ -16,6 +16,7 @@ COPY src/ src/
 COPY public/ public/
 COPY next.config.js next.config.js
 COPY .babelrc .babelrc
+COPY babel.config.js babel.config.js
 
 # Build app
 RUN npm run build
