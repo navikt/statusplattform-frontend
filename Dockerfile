@@ -15,6 +15,7 @@ RUN npm install
 COPY src/ src/
 COPY public/ public/
 COPY next.config.js next.config.js
+COPY .babelrc .babelrc
 
 # Build app
 RUN npm run build
