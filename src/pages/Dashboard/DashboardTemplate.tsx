@@ -103,6 +103,8 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     const [expandedTiles, setExpandedTiles] = useState([]);
     const [width, setWidth] = useState(typeof window !== "undefined"? window.innerWidth:0)
 
+    const [showAll, toggleShowAll] = useState(false)
+
     const {filters} = useContext(FilterContext)
 
     const user = useContext<UserData>(UserStateContext)
@@ -170,7 +172,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
                     )
             );
 
-    console.log(maxWidth)
 
     const biggestModulo = (totalNumberOfTiles: number,maxTilesPerRow: number) => {
         let calculatedMaxTiles = maxTilesPerRow; 
@@ -226,7 +227,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     }
 
     let rows = generateRowsOfTiles();
-    const toggleTile = (index:number) => {
+    const toggleTile = (index: number) => {
         if(expandedTiles.includes(index)){
             setExpandedTiles(expandedTiles.filter(i => i != index))
         }
@@ -243,6 +244,35 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
             <NoAreasInDashboard />
         )
     }
+
+    const statuses: string[] = areasInDashboard.flatMap(area => area.services.map(
+        service => service.status
+    ))
+
+
+
+    console.log(statuses)
+    if(!statuses.includes("ISSUE") && !statuses.includes("DOWN")) {
+        return (
+            <>
+                <Knapp mini onClick={() => toggleShowAll(!showAll)}>Vis alle områder</Knapp>
+                <Knapp mini onClick={() => toast.info("Ikke implementert enda")}>Se avvikshistorikk</Knapp>
+                {showAll &&
+                    <AllAreas 
+                        expandAll={expandAll}
+                        isTileExpanded={isTileExpanded}
+                        maxWidth={maxWidth}
+                        numberOfTilesPerRow={numberOfTilesPerRow}
+                        rows={rows}
+                        toggleExpandAll={toggleExpandAll}
+                        toggleTile={toggleTile}
+                    />
+                }
+            </>
+        )
+    }
+
+
 
     
     return (
@@ -279,9 +309,41 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
 /* --------------------------------------- Helpers below --------------------------------------- */
 
+interface AllAreasProps {
+    maxWidth: number
+    rows: Area[][]
+    toggleTile: (index) => void
+    numberOfTilesPerRow: number
+    isTileExpanded: (rowIndex, index) => boolean
+    toggleExpandAll: () => void
+    expandAll: boolean
+}
+
+
+const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpanded, toggleExpandAll, expandAll}: AllAreasProps) => {
+    return (
+        <PortalServiceTileContainer maxWidth={maxWidth}>
+            {rows.map((row, rowIndex) => (
+                <PortalServiceTileRow key={rowIndex}>
+                    {row.map((area, index) => 
+                        <PortalServiceTile key={index} toggleTile={toggleTile}
+                            tileIndex={rowIndex*numberOfTilesPerRow + index}
+                            area={area} expanded={isTileExpanded(rowIndex, index)}
+                        />
+                    )}
+                </PortalServiceTileRow>
+            ))}
+            <DoubleArrowToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
+        </PortalServiceTileContainer>
+    )
+}
 
 
 
+
+
+
+/* --------------------------------------- --------------------------------------- */
 
 
 
@@ -330,7 +392,7 @@ const DoubleArrowToggle: React.FC<{toggleExpandAll: () => void, expanded: boolea
 
 
 
-
+/* --------------------------------------- --------------------------------------- */
 
 
 
