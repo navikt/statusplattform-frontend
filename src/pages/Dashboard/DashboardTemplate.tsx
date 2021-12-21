@@ -251,12 +251,12 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
 
 
-    console.log(statuses)
+
     if(!statuses.includes("ISSUE") && !statuses.includes("DOWN")) {
         return (
             <>
-                <Knapp mini onClick={() => toggleShowAll(!showAll)}>Vis alle områder</Knapp>
-                <Knapp mini onClick={() => toast.info("Ikke implementert enda")}>Se avvikshistorikk</Knapp>
+                <Knapp onClick={() => toggleShowAll(!showAll)}>Vis alle områder</Knapp>
+                <Knapp onClick={() => toast.info("Ikke implementert enda")}>Se avvikshistorikk</Knapp>
                 {showAll &&
                     <AllAreas 
                         expandAll={expandAll}
@@ -490,7 +490,7 @@ const MaintenanceScheduling = () => {
                     {/* Two viewes based on whether theres maintenance scheduled or not */}
                     Fins ingen støtte for vedlikehold helt enda
                 </p>
-                <Knapp mini onClick={handleRedirect}>Mer om vedlikehold</Knapp>
+                <Knapp onClick={handleRedirect}>Mer om vedlikehold</Knapp>
             </MaintenancePanel>
         </MaintenanceContainer>
     )

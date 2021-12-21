@@ -6,9 +6,9 @@ import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { Area, MaintenanceObject} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
 
-import { Expand, Collapse, Divide, SuccessStroke } from '@navikt/ds-icons'
+import { Expand, Collapse, Divide, SuccessStroke, AutomaticSystem } from '@navikt/ds-icons'
 import Panel from 'nav-frontend-paneler';
-import { Undertittel } from "nav-frontend-typografi";
+import { Systemtittel, Undertittel } from "nav-frontend-typografi";
 import Lenke from 'nav-frontend-lenker';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-frontend-etiketter';
@@ -47,8 +47,13 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
     align-self: ${(props): any => (props.alignment)};
 
     .maintenance-message {
-        font-size: 0.9rem;
+        padding: 1px;
+        width: 100%;
         color: grey;
+        
+        font-size: 1rem;
+        font-weight: normal;
+        font-style: italic;
     }
 
     
@@ -86,7 +91,7 @@ const PanelCustomized = styled(Panel)<{alignment: string}>`
     align-self: ${(props): any => (props.alignment)};
 `;
 
-const UndertittelCustomized = styled(Undertittel)`
+const SystemtittelCustomized = styled(Systemtittel)`
     border-radius: 10px;
     background-color: white;
     height: 50px;
@@ -176,8 +181,6 @@ const handleAndSetStatusIcon = (status: string, isInternal?: boolean): any => {
     switch(status) {
         case 'OK':
             return <SuccessStrokeCustomized />
-        // case 'OK':
-        //     return <SuccessCircleGreen />
         case 'DOWN':
             return <ErrorCloseCustomized />
         case 'ISSUE':
@@ -215,15 +218,17 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
             alignment={expanded == true ? "stretch" : "flex-start"}
             tittel={
                 <div className="top-content">
-                    <UndertittelCustomized>
+                    <SystemtittelCustomized>
                         {/* <span>{handleAndSetStatusIcon(area.status, false)}</span> */}
                         <span>{handleAndSetNavIcon(area.icon)}</span>
                         <span>{area.name}</span>
-                    </UndertittelCustomized> 
+                    </SystemtittelCustomized> 
                     <div>
                         <SwitchEtikett status={area.status} maintenanceObject={testMaintenanceObject}/>
                     </div>
-                    <i className="maintenance-message">{testMaintenanceObject.message}</i>
+                    {testMaintenanceObject.message &&
+                        <p className="maintenance-message"><AutomaticSystem /> {testMaintenanceObject.message}</p>
+                    }
                 </div>
             }
             aria-label="Ekspander område"
@@ -319,7 +324,7 @@ const SwitchEtikett: React.FC<{maintenanceObject?: MaintenanceObject, status: st
             {(() => {
                 switch (status) {
                     case 'OK':
-                        return <EtikettSuksess>Suksess</EtikettSuksess>
+                        return <EtikettSuksess>Fungerer normalt</EtikettSuksess>
 
                     case 'ISSUE':
                         return <EtikettFokus>Redusert funksjonalitet</EtikettFokus>

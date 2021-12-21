@@ -6,6 +6,7 @@ import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from '../../utils/servicesOperations';
 import { Knapp } from 'nav-frontend-knapper';
 import { toast } from 'react-toastify';
+import { Bell } from '@navikt/ds-icons';
 
 
 const StatusOverviewContainer = styled.div`
@@ -27,19 +28,30 @@ const StatusBannerContainer = styled.div`
     border-radius: 4px;
     background-color: white;    
     padding: 1rem 0;
-    width: 100%;
+
     display: flex;
     justify-content: space-between;
-    align-items: center;
     flex-direction: column;
+
+    .knapp-wrapper {
+        width: min-content;
+        .knapp {
+            width: max-content;
+        }
+        button:first-child {
+            margin-bottom: 16px;
+        }
+    }
+
     div:first-child {
         padding-bottom: 1rem;
         max-width: 700px;
     }
+
     @media (min-width: 200px) {
         padding: 2rem 1rem;
     }
-    @media (min-width: 350px) {
+    @media (min-width: 500px) {
         flex-direction: row;
     }
     h2 {
@@ -136,8 +148,8 @@ const StatusOverview = (props: AreaServicesList) => {
         <StatusOverviewContainer>
 
             <StatusBannerContainer>
-            <Systemtittel>Avvik</Systemtittel>
                 <div>
+                    <Systemtittel>Avvik</Systemtittel>
                     <StatusSummary>
                         {numberOfHealthyServices == numberOfServices ?
                             (<>
@@ -164,10 +176,15 @@ const StatusOverview = (props: AreaServicesList) => {
                     </StatusSummary>
                     <Undertekst>Sist oppdatert: Ikke implementert</Undertekst>
                 </div>
-                {/* <Link href="/IncidentsPage"> */}
-                    <KnappCustomized mini onClick={handleRedirect}>
+                <div className="knapp-wrapper">
+                    <KnappCustomized onClick={handleRedirect}>
                         Se avvikshistorikk
                     </KnappCustomized>
+                    <KnappCustomized onClick={handleRedirect}>
+                        <Bell /> Bli varslet ved avvik
+                    </KnappCustomized>
+                </div>
+                {/* <Link href="/IncidentsPage"> */}
                 {/* </Link> */}
             </StatusBannerContainer>
             {/*

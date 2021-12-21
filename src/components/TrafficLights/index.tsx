@@ -61,7 +61,6 @@ const TrafficLightsContainer = styled.div`
 // `;
 
 export const SuccessStrokeCustomized = styled(SuccessStroke)`
-    fill: var(--navGronn);
     color: var(--navGronn);
     height: 16px;
     width: 16px;
@@ -87,7 +86,9 @@ export const WarningCircleOrange = styled.span`
 export const ErrorCloseCustomized = styled(Close)`
     height: 16px;
     width: 16px;
-    background-color: var(--redError);
+    /* transform: scale(1.2); */
+    color: var(--redError);
+    /* background-color: var(--redError); */
 `
 
 export const NoStatusAvailableCircle = styled.span`

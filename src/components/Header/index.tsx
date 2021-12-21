@@ -162,7 +162,7 @@ const Header = () => {
                 <ButtonsContainer>
                 {router.pathname.includes("Dashboard") &&
                     <SubscribeButtonWrapper>
-                        <CustomButton mini onClick={toggleSubscribeModal}>Abonner</CustomButton>
+                        <CustomButton kompakt onClick={toggleSubscribeModal}>Abonner</CustomButton>
                         {subscribeModalHidden && 
                             <SubscribeModalWrapper>
                                 <SubscribeModal toggleSubscribeModal={toggleSubscribeModal}/>
@@ -172,7 +172,7 @@ const Header = () => {
                 }
                     {router.pathname.includes("Dashboard") &&
                         <FilterButtonWrapper>
-                            <CustomButton mini onClick={handleToggleFilters}>
+                            <CustomButton  onClick={handleToggleFilters}>
                                 Filtrer
                             </CustomButton>
                             {showFilters &&
