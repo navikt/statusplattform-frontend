@@ -1,6 +1,8 @@
 import styled from 'styled-components'
 
-import { AutomaticSystem } from '@navikt/ds-icons'
+import { AutomaticSystem, Close } from '@navikt/ds-icons'
+import { SuccessStroke } from '@navikt/ds-icons'
+
 
 
 const TrafficLightsContainer = styled.div`
@@ -50,13 +52,21 @@ const TrafficLightsContainer = styled.div`
     }
 `
 
-export const SuccessCircleGreen = styled.span`
+// export const SuccessCircleGreen = styled.span`
+//     height: 16px;
+//     width: 16px;
+//     background-color: var(--navGronn);
+//     border-radius: 50%;
+//     display: inline-block;
+// `;
+
+export const SuccessStrokeCustomized = styled(SuccessStroke)`
+    fill: var(--navGronn);
+    color: var(--navGronn);
     height: 16px;
     width: 16px;
-    background-color: var(--navGronn);
-    border-radius: 50%;
-    display: inline-block;
-`;
+    font-weight: bold;
+`
 
 export const WarningCircleOrange = styled.span`
     height: 16px;
@@ -66,13 +76,19 @@ export const WarningCircleOrange = styled.span`
     display: inline-block;
 `;
 
-export const ErrorCircleRed = styled.span`
+// export const ErrorCircleRed = styled.span`
+//     height: 16px;
+//     width: 16px;
+//     background-color: var(--redError);
+//     border-radius: 50%;
+//     display: inline-block;
+// `;
+
+export const ErrorCloseCustomized = styled(Close)`
     height: 16px;
     width: 16px;
     background-color: var(--redError);
-    border-radius: 50%;
-    display: inline-block;
-`;
+`
 
 export const NoStatusAvailableCircle = styled.span`
     height: 16px;
@@ -103,9 +119,9 @@ const TrafficLights = ({isInternal}: Props) => {
             Tegnforklaring:
             <TrafficLightsContainer>
                 <div className="traffic-lights-wrapper">
-                    <span><div><ErrorCircleRed /></div><p> Feil på tjenesten</p></span>
+                    <span><div><ErrorCloseCustomized /></div><p> Feil på tjenesten</p></span>
                     <span><div><WarningCircleOrange /></div><p> Redusert funksjonalitet</p></span>
-                    <span><div><SuccessCircleGreen /></div><p> Fungerer normalt</p></span>
+                    <span><div><SuccessStrokeCustomized /></div><p> Fungerer normalt</p></span>
                 </div>
                 <div className="extra-info-wrapper">
                     {isInternal && <div><NoStatusAvailableCircle /><p> Status ikke levert av team </p></div>}

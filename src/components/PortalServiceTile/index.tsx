@@ -1,12 +1,12 @@
 import styled from 'styled-components'
 import { useContext } from "react";
 
-import { SuccessCircleGreen, WarningCircleOrange, ErrorCircleRed, NoStatusAvailableCircle, PlannedMaintenanceCircle } from '../../components/TrafficLights'
+import { WarningCircleOrange, NoStatusAvailableCircle, PlannedMaintenanceCircle, SuccessStrokeCustomized, ErrorCloseCustomized } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { Area, MaintenanceObject} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
 
-import { Expand, Collapse, Divide } from '@navikt/ds-icons'
+import { Expand, Collapse, Divide, SuccessStroke } from '@navikt/ds-icons'
 import Panel from 'nav-frontend-paneler';
 import { Undertittel } from "nav-frontend-typografi";
 import Lenke from 'nav-frontend-lenker';
@@ -19,20 +19,22 @@ import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-
 
 
 const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: string}>`
-    margin: 0 5px;
+    margin: 0 16px;
     width: 100%;
 
 
     .top-content {
-        .etikett {
+        .etikett-container {
             margin-right: 5px;
+            display: flex;
+            gap: 12px;
         }
     }
 
     @media (min-width: 425px) {
         width: 425px;
         .top-content {
-            .etikett {
+            .etikett-container {
                 margin-right: 0;
             }
         }
@@ -109,6 +111,9 @@ const ServicesList = styled.ul`
     border-radius:0 0 10px 10px;
     color: black;
     background-color: white;
+
+    list-style: none;
+    padding: 0;
     
     > li {
         list-style-type: none;
@@ -170,9 +175,11 @@ const handleAndSetNavIcon = (ikon: string) => {
 const handleAndSetStatusIcon = (status: string, isInternal?: boolean): any => {
     switch(status) {
         case 'OK':
-            return <SuccessCircleGreen />
+            return <SuccessStrokeCustomized />
+        // case 'OK':
+        //     return <SuccessCircleGreen />
         case 'DOWN':
-            return <ErrorCircleRed/>
+            return <ErrorCloseCustomized />
         case 'ISSUE':
             return <WarningCircleOrange />
         case 'MAINTENANCE':
@@ -238,7 +245,7 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
                     if(matches(service.status)) {
                         return (
                             <li key={service.name}>
-                            <LenkeCustomized href={"/TjenesteData/" + service.id}>
+                                <LenkeCustomized href={"/TjenesteData/" + service.id}>
                                     <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
                                 </LenkeCustomized>
                             </li>
@@ -303,10 +310,10 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
 const SwitchEtikett: React.FC<{maintenanceObject?: MaintenanceObject, status: string}> = ({maintenanceObject, status}) => {
     
     return (
-        <div>
+        <div className="etikett-container">
             {maintenanceObject && 
                 <EtikettInfo>
-                    Planlagt vedlikehold
+                    Vedlikehold pågår
                 </EtikettInfo>
             }
             {(() => {

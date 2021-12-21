@@ -74,7 +74,7 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
 
 const PortalServiceTileRow = styled.div `
     width: 100%;
-    margin-bottom: 10px;
+    margin-bottom: 24px;
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
@@ -162,13 +162,13 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     }
 
     let maxWidth = width > 
-            1700 ? 1700 : (
-                window.innerWidth > 
-                    1275 ? 1275 : (
-                        window.innerWidth > 
-                            850 ? 850 : 425
-                        )
-                );
+        1275 ? 1275 : (
+            window.innerWidth > 
+                1275 ? 1275 : (
+                    window.innerWidth > 
+                        850 ? 850 : 425
+                    )
+            );
 
     console.log(maxWidth)
 
