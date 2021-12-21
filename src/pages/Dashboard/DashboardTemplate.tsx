@@ -66,7 +66,7 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
         /* width: 100%; */
     }
     @media (min-width: 1200px) {
-        /* max-width: ${(props) => props.maxWidth}px; */
+        max-width: ${(props) => props.maxWidth}px;
     }
 
 `;
@@ -190,7 +190,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
         if(width < 600){
             return 1;
         }
-        let widthOfTile = 300; 
+        let widthOfTile = 425; 
         
         let maxNumberOfTilesPerRow = Math.floor(maxWidth/widthOfTile);
         let numberOfTilesPerRow = biggestModulo(areasInDashboard.length, maxNumberOfTilesPerRow);
@@ -198,6 +198,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
         return numberOfTilesPerRow;
     }
+
     let numberOfTilesPerRow = calculateNumberOfTilesPerRow();
 
     const generateRowsOfTiles = () => {
@@ -208,10 +209,10 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     
         for(var i = 0; i < areasInDashboard.length; i = i + numberOfTilesPerRow){
             rows.push (areasInDashboard.slice(i,i+ numberOfTilesPerRow))
-
         }
         return rows
     }
+
     const isTileExpanded = (rowIndex : number, index : number): boolean => {
         return expandedTiles.includes(rowIndex*numberOfTilesPerRow + index );
     }
