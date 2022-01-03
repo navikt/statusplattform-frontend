@@ -1,15 +1,17 @@
 import styled from 'styled-components'
+import { toast } from 'react-toastify';
 
 import { AreaServicesList } from '../../types/navServices'
-
-import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from '../../utils/servicesOperations';
+
+import Panel from 'nav-frontend-paneler'
+import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { Knapp } from 'nav-frontend-knapper';
-import { toast } from 'react-toastify';
 import { Bell } from '@navikt/ds-icons';
 
 
-const StatusOverviewContainer = styled.div`
+
+const StatusOverviewContainer = styled(Panel)`
     max-width: 1080px;
     width: 100%;
     padding: 0;
@@ -145,7 +147,7 @@ const StatusOverview = (props: AreaServicesList) => {
     }
 
     return (
-        <StatusOverviewContainer>
+        <StatusOverviewContainer border={true}>
 
             <StatusBannerContainer>
                 <div>
