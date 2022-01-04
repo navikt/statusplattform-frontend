@@ -117,12 +117,12 @@ const Footer = () => {
                         <li><a href="https://www.nav.no/no/person#">Del skjerm med veileder</a></li>
                     </ul>
                 </Row>
-                <Separator style={{display: router.pathname.includes("Dashboard") ? "block" : "none"}} />
+                {/* <Separator style={{display: router.pathname.includes("Dashboard") ? "block" : "none"}} />
                 {router.pathname.includes("Dashboard") &&
                     <div>
                         <TrafficLights isInternal={isInternal}/>
                     </div>
-                }
+                } */}
             </FooterContent>
         </FooterContainer>
     )
