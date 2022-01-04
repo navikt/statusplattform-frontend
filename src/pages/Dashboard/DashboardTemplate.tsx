@@ -481,18 +481,15 @@ const MaintenanceContainer = styled.div`
 const MaintenancePanel = styled(Panel) `
     width: 100%;
     max-width: 1080px;
+
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     gap: 5ch;
+
     & > * {
         flex-basis: 20% 70% 10%;
-    }
-    button {
-        max-width: 100px;
-        white-space: normal;
-        word-wrap: break-word;
     }
 `
 
@@ -506,14 +503,18 @@ const MaintenanceScheduling = () => {
         <MaintenanceContainer>
             <Systemtittel>Planlagt vedlikehold</Systemtittel>
             <MaintenancePanel>
-                <p>
+
+                <BodyShort>
                     Dato for vedlikehold
-                </p>
-                <p>
+                </BodyShort>
+
+                <BodyShort>
                     {/* Two viewes based on whether theres maintenance scheduled or not */}
                     Fins ingen støtte for vedlikehold helt enda
-                </p>
-                <Knapp onClick={handleRedirect}>Mer om vedlikehold</Knapp>
+                </BodyShort>
+
+                <Button variant="secondary" size="medium" onClick={handleRedirect}>Mer om vedlikehold</Button>
+
             </MaintenancePanel>
         </MaintenanceContainer>
     )
