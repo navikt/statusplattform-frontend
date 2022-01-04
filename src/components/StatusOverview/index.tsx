@@ -6,12 +6,11 @@ import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, bea
 
 import Panel from 'nav-frontend-paneler'
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
-import { Knapp } from 'nav-frontend-knapper';
 import { Bell } from '@navikt/ds-icons';
+import { BodyShort, Button } from '@navikt/ds-react';
 
 
-
-const StatusOverviewContainer = styled(Panel)`
+const StatusOverviewContainer = styled.div`
     max-width: 1080px;
     width: 100%;
     padding: 0;
@@ -26,59 +25,34 @@ const StatusOverviewContainer = styled(Panel)`
     }
 `;
 
-const StatusBannerContainer = styled.div`
-    border-radius: 4px;
-    background-color: white;    
-    padding: 1rem 0;
-
+const StatusBannerContainer = styled(Panel)`
     display: flex;
     justify-content: space-between;
     flex-direction: column;
 
     .knapp-wrapper {
-        width: min-content;
-        .knapp {
-            width: max-content;
-        }
+        display: flex;
+        flex-direction: column;
+
+        
         button:first-child {
             margin-bottom: 16px;
         }
     }
 
     div:first-child {
-        padding-bottom: 1rem;
         max-width: 700px;
     }
 
-    @media (min-width: 200px) {
-        padding: 2rem 1rem;
-    }
     @media (min-width: 500px) {
         flex-direction: row;
     }
+    
     h2 {
         margin: 0 0 .5rem;
     }
 `;
 
-const KnappCustomized = styled(Knapp)`
-	/* width: 7rem; */
-    max-height: 62px;
-    white-space: normal;
-    transition: 0.4s;
-    text-transform: none;
-    :hover {
-        transition: 0.4s;
-        background-color: var(--navBla);
-        color: white;
-    }
-    @media(min-width: 45rem){
-        align-self: center;
-    }
-    span:nth-child(2) {
-        display: none;
-    }
-`;
 
 const OverviewComponents = styled.div`
     padding: 2rem 1rem;
@@ -147,9 +121,9 @@ const StatusOverview = (props: AreaServicesList) => {
     }
 
     return (
-        <StatusOverviewContainer border={true}>
+        <StatusOverviewContainer>
 
-            <StatusBannerContainer>
+            <StatusBannerContainer border={true}>
                 <div>
                     <Systemtittel>Avvik</Systemtittel>
                     <StatusSummary>
@@ -179,12 +153,12 @@ const StatusOverview = (props: AreaServicesList) => {
                     <Undertekst>Sist oppdatert: Ikke implementert</Undertekst>
                 </div>
                 <div className="knapp-wrapper">
-                    <KnappCustomized onClick={handleRedirect}>
+                    <Button variant="secondary" size="medium" onClick={handleRedirect}>
                         Se avvikshistorikk
-                    </KnappCustomized>
-                    <KnappCustomized onClick={handleRedirect}>
-                        <Bell /> Bli varslet ved avvik
-                    </KnappCustomized>
+                    </Button>
+                    <Button variant="secondary" size="medium" onClick={handleRedirect}>
+                        <Bell /> <BodyShort>Bli varslet ved avvik</BodyShort>
+                    </Button>
                 </div>
                 {/* <Link href="/IncidentsPage"> */}
                 {/* </Link> */}

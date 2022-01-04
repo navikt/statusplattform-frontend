@@ -1,4 +1,6 @@
 import '../styles/globals.css'
+import "@navikt/ds-css";
+import "@navikt/ds-css-internal";
 
 import { Providers } from '../components/ContextProviders/Providers'
 import { useEffect } from 'react'
