@@ -7,7 +7,7 @@ import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, bea
 import Panel from 'nav-frontend-paneler'
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { Bell } from '@navikt/ds-icons';
-import { BodyShort, Button, Detail } from '@navikt/ds-react';
+import { BodyShort, Button } from '@navikt/ds-react';
 
 
 const StatusOverviewContainer = styled.div`
@@ -129,11 +129,9 @@ const StatusOverview = (props: AreaServicesList) => {
                     <StatusSummary>
                         {numberOfHealthyServices == numberOfServices ?
                             (<>
-                                {/* <span> */}
-                                    <BodyShort>
-                                        Ingen feil å melde
-                                    </BodyShort>
-                                {/* </span> */}
+                                <span>
+                                    Ingen feil å melde
+                                </span>
                             </>)
                         :
                             (<>
@@ -152,8 +150,7 @@ const StatusOverview = (props: AreaServicesList) => {
                             </>)
                         }
                     </StatusSummary>
-                    <Detail size="small">Sist oppdatert: Ikke implementert</Detail>
-                    
+                    <Undertekst>Sist oppdatert: Ikke implementert</Undertekst>
                 </div>
                 <div className="knapp-wrapper">
                     <Button variant="secondary" size="medium" onClick={handleRedirect}>
