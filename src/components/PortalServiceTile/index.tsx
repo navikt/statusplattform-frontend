@@ -19,7 +19,8 @@ import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-
 
 
 const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: string}>`
-    margin: 0 16px;
+    /* margin: 0 16px; */
+
     width: 100%;
 
 

@@ -18,6 +18,7 @@ import { FilterContext } from '../../components/ContextProviders/FilterContext'
 import { Expand } from '@navikt/ds-icons'
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
 import { UserData } from '../../types/userData'
+import { BodyShort, Button } from '@navikt/ds-react'
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
@@ -57,10 +58,19 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     justify-content: center;
     align-items: space-between;
     flex-flow: row wrap;
+
+    .expand-all-wrapper {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+    }
+
     a {
         padding: 0;
         margin: 0;
     }
+
+
     @media (min-width: 500px) {
         max-width: ${(props) => props.maxWidth}px;
         /* width: 100%; */
@@ -73,8 +83,9 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
 
 
 const PortalServiceTileRow = styled.div `
-    width: 100%;
     margin-bottom: 24px;
+    gap: 32px;
+
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
@@ -163,12 +174,14 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
         return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
     }
 
+
+    // +32 because we have a 32px flex-gap between tiles which we need to accomodate for
     let maxWidth = width > 
-        1275 ? 1275 : (
+        1275+32 ? 1275+32 : (
             window.innerWidth > 
-                1275 ? 1275 : (
+                1275+32 ? 1275+32 : (
                     window.innerWidth > 
-                        850 ? 850 : 425
+                        850+32 ? 850+32 : 425
                     )
             );
 
@@ -283,6 +296,11 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
                 {areasInDashboard.length > 0 &&
                     <PortalServiceTileContainer maxWidth={maxWidth}>
+
+                        <span className="expand-all-wrapper">
+                            <ExpandAllToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
+                        </span>
+
                         {rows.map((row, rowIndex) => (
                             <PortalServiceTileRow key={rowIndex}>
                                 {row.map((area, index) => 
@@ -293,7 +311,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
                                 )}
                             </PortalServiceTileRow>
                         ))}
-                        <DoubleArrowToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
                     </PortalServiceTileContainer>
                 }
 
@@ -334,7 +351,7 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
                     )}
                 </PortalServiceTileRow>
             ))}
-            <DoubleArrowToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
+            <ExpandAllToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
         </PortalServiceTileContainer>
     )
 }
@@ -350,41 +367,46 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
 
 
 
-const ToggleExpandAllButton = styled(Knapp)`
-    margin: 5rem 0;
-    display: flex;
+const ToggleExpandAllButton = styled(Button)`
+    margin: 1rem 0;
+
     :hover {
         color: inherit;
     }
+
     span {
-        transition: ease 0.5s;
-        transform: rotate(0deg);
         & > * {
+            transition: ease 0.5s;
+            transform: rotate(0deg);
             display: flex;
             flex-grow: 0;
             outline: none;
         }
-        *:first-child {
-            transform: translateY(5px);
-        }
-        *:last-child {
-            transform: translateY(-5px);
-        }
-    }
-    &.expanded {
-        & > * {
-            transition: ease 0.5s;
-            transform: rotate(-180deg);
+        &.expanded {
+            & > * {
+                transition: ease 0.5s;
+                transform: rotate(-180deg);
+            }
         }
     }
+
 `
 
-const DoubleArrowToggle: React.FC<{toggleExpandAll: () => void, expanded: boolean}> = ({toggleExpandAll, expanded}) => {
+const ExpandAllToggle: React.FC<{toggleExpandAll: () => void, expanded: boolean}> = ({toggleExpandAll, expanded}) => {
     return (
-        <ToggleExpandAllButton mini aria-expanded={expanded} onClick={toggleExpandAll} className={expanded ? "expanded" : ""}>
-            <span>
-                <Expand/>
-                <Expand/>
+        <ToggleExpandAllButton variant="tertiary" size="medium" aria-expanded={expanded} onClick={toggleExpandAll} >
+            {!expanded
+                ?
+                    <BodyShort>
+                        Ekspander områder
+                    </BodyShort>
+                :
+                    <BodyShort>
+                        Trekk sammen områder
+                    </BodyShort>
+            }
+            <span className={expanded ? "expanded" : ""}>
+                <Expand />
             </span>
         </ToggleExpandAllButton>
     )
