@@ -341,6 +341,9 @@ interface AllAreasProps {
 const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpanded, toggleExpandAll, expandAll}: AllAreasProps) => {
     return (
         <PortalServiceTileContainer maxWidth={maxWidth}>
+            <span className="expand-all-wrapper">
+                <ExpandAllToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
+            </span>
             {rows.map((row, rowIndex) => (
                 <PortalServiceTileRow key={rowIndex}>
                     {row.map((area, index) => 
@@ -351,7 +354,6 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
                     )}
                 </PortalServiceTileRow>
             ))}
-            <ExpandAllToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
         </PortalServiceTileContainer>
     )
 }

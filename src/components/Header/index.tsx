@@ -5,13 +5,14 @@ import { Knapp } from 'nav-frontend-knapper'
 
 import BurgerMenu from '../../components/BurgerMenu'
 import SubscribeModal from '../../components/SubscribeModal'
-import { useContext, useState } from 'react'
+import { createRef, useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import { Checkbox } from 'nav-frontend-skjema'
 import { FilterContext, FilterOption } from '../ContextProviders/FilterContext'
 import { Collapse, Expand } from '@navikt/ds-icons'
 import { UserStateContext } from '../ContextProviders/UserStatusContext'
 import { UserData } from '../../types/userData'
+import { Button, Popover } from '@navikt/ds-react'
 
 
 
@@ -84,9 +85,11 @@ const HeaderOptions = styled.div`
     justify-content: center;
     flex-grow: 1;
     flex-wrap: wrap;
+
     @media(min-width: 250px) {
         justify-content: flex-end;
     }
+
     @media (min-width: 768px) {
         flex-wrap: none;
     }
@@ -95,19 +98,10 @@ const HeaderOptions = styled.div`
 const ButtonsContainer = styled.div`
     display: flex;
     justify-content: center;
+    gap: 16px;
 `
 
-const CustomButton = styled(Knapp)`
-    height: 3rem;
-    transition: 0.4s;
-	width: 7rem;
-	margin-right: 0.5rem;
-    :hover {
-        transition: 0.4s;
-        background-color: var(--navBla);
-        color: white;
-    }
-`
+
 const SubscribeModalWrapper = styled.div`
     position: absolute;
     z-index: 100;
@@ -119,6 +113,7 @@ const SubscribeModalWrapper = styled.div`
 const SubscribeButtonWrapper = styled.div`
     position: relative;
     display: none;
+
     @media(min-width: 450px) {
         display: block;
     }
@@ -126,6 +121,7 @@ const SubscribeButtonWrapper = styled.div`
 const FilterButtonWrapper = styled.div`
     position: relative;
     display: none;
+
     @media(min-width: 450px) {
         display: block;
     }
@@ -137,6 +133,12 @@ const Header = () => {
     const router = useRouter()
     const [subscribeModalHidden, setSubscribeModalBoolean] = useState(false)
     const [showFilters, toggleFilters] = useState(false)
+
+    const [anchor, setAnchor] = useState(undefined)
+    
+
+    const filterRef = createRef()
+
     
 
     const toggleSubscribeModal = () => {
@@ -147,22 +149,46 @@ const Header = () => {
         toggleFilters(!showFilters)
     }
 
+
+
+    const openPopover = (event) => {
+        if(anchor) {
+            setAnchor(undefined)
+            return
+        }
+        setAnchor(event)
+    }
+
+    const closePopover = () => {
+        if(anchor) {
+            setAnchor(undefined)
+        }
+    }
+    
+    console.log(anchor)
+
     return (
         <CustomHeader>
             <a href="https://www.nav.no/no/person#">
                 <img src="/assets/nav-logo/png/red.png" alt="Til forsiden" />
             </a>
+
             <HeaderContent>
+
                 <SidetittelCustomized>
                     Status digitale tjenester
                 </SidetittelCustomized>
             
             </HeaderContent>
+
+
             <HeaderOptions>
                 <ButtonsContainer>
                 {router.pathname.includes("Dashboard") &&
                     <SubscribeButtonWrapper>
-                        <CustomButton kompakt onClick={toggleSubscribeModal}>Abonner</CustomButton>
+                        <Button variant="secondary" size="medium" onClick={toggleSubscribeModal}>
+                            Abonner
+                        </Button>
                         {subscribeModalHidden && 
                             <SubscribeModalWrapper>
                                 <SubscribeModal toggleSubscribeModal={toggleSubscribeModal}/>
@@ -170,18 +196,34 @@ const Header = () => {
                         }
                     </SubscribeButtonWrapper>
                 }
+
+
                     {router.pathname.includes("Dashboard") &&
                         <FilterButtonWrapper>
-                            <CustomButton  onClick={handleToggleFilters}>
+                            <Button variant="secondary" size="medium" onClick={(event) => openPopover(event.currentTarget)}>
                                 Filtrer
-                            </CustomButton>
-                            {showFilters &&
-                                <Filters />
-                            }
+                            </Button>
+
+                            {/* <Button ref={filterRef} onClick={() => toggleFilters(!showFilters)}>
+                                Filtrer
+                            </Button> */}
+                            <Popover
+                                open={!!anchor}
+                                onClose={() => closePopover()}
+                                anchorEl={anchor}
+                                placement="bottom"
+                            >
+                                <Popover.Content>
+                                    <Filters />
+                                    {/* Innhold her! */}
+                                </Popover.Content>
+                            </Popover>
+                            {/* {showFilters &&
+                            } */}
                         </FilterButtonWrapper>
                     }
+                    <BurgerMenu />
                 </ButtonsContainer>
-                <BurgerMenu />
             </HeaderOptions>
         </CustomHeader>
     )
@@ -206,25 +248,6 @@ const Header = () => {
 
 
 
-
-const FilterContainer = styled.div`
-    background-color: white;
-    padding: 1rem;
-    box-shadow: 0 0.05rem 0.25rem 0.125rem rgb(0 0 0 / 8%);
-    border: 1px solid #c9c9c9;
-    border-radius: 2px;
-    z-index: 100;
-    right: 0;
-    position: absolute;
-    & > * {
-        text-align: left;
-        margin: 0;
-        padding: 0;
-    }
-    @media (min-width: 930px) {
-        right: auto;
-    }
-`
 const FilterRow = styled.div`
     padding: 1rem;
     display: flex;
@@ -235,7 +258,6 @@ const FilterRow = styled.div`
         margin: 5px 0;
     }
 `
-
 const FilterCategoryButton = styled.button`
     font-family: "Source Sans Pro", Arial, sans-serif;
     font-size: 1rem;
@@ -283,29 +305,26 @@ const Filters = () => {
 
 
     return (
-        <FilterContainer>
-            <FilterRow>
-                <FilterCategoryButton onClick={() => toggleFilter("Tjenestestatus")}><span>Tjenestestatus ({filters.length})</span>
-                    {!filterCategoriesExpanded.includes("Tjenestestatus") ? <Expand/> : <Collapse />}
-                </FilterCategoryButton>
+        <FilterRow>
+            <FilterCategoryButton onClick={() => toggleFilter("Tjenestestatus")}><span>Tjenestestatus ({filters.length})</span>
+                {!filterCategoriesExpanded.includes("Tjenestestatus") ? <Expand/> : <Collapse />}
+            </FilterCategoryButton>
 
-
-                {filterCategoriesExpanded.includes("Tjenestestatus") &&
-                    Object.values(FilterOption).map((option) => {
-                        return (
-                            <Checkbox
-                                aria-checked={filters.includes(option)}
-                                key={option} 
-                                label={option} 
-                                value={option} 
-                                checked={filters.includes(option)} 
-                                onChange={(event) => {handleFilter(event)}} 
-                            />
-                        )
-                    })
-                }
-            </FilterRow>
-        </FilterContainer>
+            {filterCategoriesExpanded.includes("Tjenestestatus") &&
+                Object.values(FilterOption).map((option) => {
+                    return (
+                        <Checkbox
+                            aria-checked={filters.includes(option)}
+                            key={option} 
+                            label={option} 
+                            value={option} 
+                            checked={filters.includes(option)} 
+                            onChange={(event) => {handleFilter(event)}} 
+                        />
+                    )
+                })
+            }
+        </FilterRow>
     )
 }
 

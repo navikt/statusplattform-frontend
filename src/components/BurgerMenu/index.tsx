@@ -9,10 +9,31 @@ import Lenke from 'nav-frontend-lenker';
 
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { UserData } from '../../types/userData';
+import { Button } from '@navikt/ds-react';
 
 const BurgerMenuContainer = styled.div`
-    margin: 0 20px;
     z-index: 10;
+
+    transition: 0.2s ease-in-out;
+
+    background-color: transparent;
+    color: #0067c5;
+
+    .hamburger-ikon, .close-ikon {
+        width: 28px;
+        height: 24px;
+
+        position: relative;
+        display: block;
+    }
+
+    .closed-burger {
+        display: none;
+    }
+    
+    .open {
+        font-weight: bold;
+    }
 `
 
 const PopoverCustomized = styled(Popover)`
@@ -51,41 +72,7 @@ const PopoverCustomized = styled(Popover)`
 `
 
 const Menu = styled.button`
-    height: 45px;
-    transition: 0.2s ease-in-out;
-    border: 1px solid transparent;
-    border-radius: 2px;
-    background-color: transparent;
-    color: #0067c5;
-    padding: 4px 12px;
-    display: flex;
-    align-items: center;
-    .hamburger-ikon, .close-ikon {
-        width: 28px;
-        height: 24px;
-        padding: 0;
-        margin-right: 0.5em;
-        position: relative;
-        display: block;
-    }
-    .closed-burger {
-        display: none;
-    }
-    .open {
-        font-weight: bold;    
-    }
-    .menu-text {
-        margin: 0;
-        font-family: "Source Sans Pro", Arial, sans-serif;
-        font-size: 1.25rem;
-        line-height: 1.5625rem;
-        font-weight: 600;
-    }
-    :hover {
-        border: 1px solid;
-        transition: 0.2s ease-in-out;
-        cursor: pointer;
-    }
+    
 `
 
 
@@ -128,11 +115,11 @@ const BurgerMenu = () => {
     
     return (
         <BurgerMenuContainer onClick={(event) => togglePopover(event.currentTarget)}>
-            <Menu id="menu-container" aria-expanded={!!anker} onClick={togglePopover}>
+            <Button variant="secondary" id="menu-container" aria-expanded={!!anker} onClick={togglePopover}>
                 <span><Hamburger className={!anker ? "hamburger-ikon" : "closed-burger"}/></span>
                 <span><Close className={!!anker ? "close-ikon" : "closed-burger"}/></span>
                 <span className="menu-text">Meny</span>
-            </Menu>
+            </Button>
             <DropdownMenuContainer />
         </BurgerMenuContainer>
     )
