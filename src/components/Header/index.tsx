@@ -119,7 +119,6 @@ const SubscribeButtonWrapper = styled.div`
     }
 `
 const FilterButtonWrapper = styled.div`
-    position: relative;
     display: none;
 
     @media(min-width: 450px) {
@@ -211,7 +210,7 @@ const Header = () => {
                                 open={!!anchor}
                                 onClose={() => closePopover()}
                                 anchorEl={anchor}
-                                placement="bottom"
+                                placement="auto"
                             >
                                 <Popover.Content>
                                     <Filters />
