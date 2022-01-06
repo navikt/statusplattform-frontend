@@ -9,6 +9,8 @@ import Navbar from '../../components/Navbar'
 import { useRouter } from 'next/router'
 
 import 'react-toastify/dist/ReactToastify.css';
+import { BodyShort, Heading } from '@navikt/ds-react'
+import { Home, Next } from '@navikt/ds-icons'
 
 
 
@@ -63,6 +65,8 @@ const Content = styled.main`
     flex-flow: column wrap;
 `;
 
+const NavLink = styled(Link)
+
 
 const MainContent = props => {
     const router = useRouter()
@@ -91,6 +95,7 @@ const MainContent = props => {
                 </div>
             }
             <Content id="content">
+                <PageHeader />
                 {props.children}
             </Content>
 
@@ -100,3 +105,41 @@ const MainContent = props => {
 }
 
 export default MainContent
+
+
+
+
+const PageHeaderContainer = styled.div`
+    .navigator {
+        display: flex;
+        align-items: center;
+        width: 100vw;
+        padding: 0.75rem 3rem;
+
+        .home-svg {
+            margin-right: 12px;
+            color: black;
+        }
+
+        .navds-chevron {
+            color: #78706a;
+        }
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 32px !important;
+    }
+`
+
+
+const PageHeader = () => {
+    return (
+        <PageHeaderContainer>
+            <BodyShort className="navigator"><a href="www.nav.no" className="navds-link"><Home className="home-svg"/> nav.no</a> <Next className="navds-chevron" /> Her skal navbar fra nav.no være</BodyShort>
+            <Heading spacing size="2xlarge" level="1">
+                Status digitale tjenester
+            </Heading>
+        </PageHeaderContainer>
+    )
+}

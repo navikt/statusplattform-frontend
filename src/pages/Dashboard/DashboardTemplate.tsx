@@ -18,7 +18,7 @@ import { FilterContext } from '../../components/ContextProviders/FilterContext'
 import { Expand } from '@navikt/ds-icons'
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
 import { UserData } from '../../types/userData'
-import { BodyShort, Button } from '@navikt/ds-react'
+import { Alert, BodyLong, BodyShort, Button } from '@navikt/ds-react'
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
@@ -28,6 +28,27 @@ const DashboardContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+
+
+
+    
+    .status-only-ok {
+        
+        .status-wrapper {
+            margin-bottom: 60px;
+        }
+
+        .button-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+
+            button {
+                width: max-content;
+            }
+        }
+    }
 `
 
 const DigitalServicesContainer = styled.div`
@@ -97,6 +118,9 @@ const ErrorParagraph = styled.p`
     padding: 10px;
     border-radius: 5px;
 `
+
+
+
 /* --------------------------------------- Styles end --------------------------------------- */
 
 
@@ -265,26 +289,40 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
 
 
-
+    /*----------------- No areas having issues or down START -----------------*/
     if(!statuses.includes("ISSUE") && !statuses.includes("DOWN")) {
         return (
-            <>
-                <Knapp onClick={() => toggleShowAll(!showAll)}>Vis alle områder</Knapp>
-                <Knapp onClick={() => toast.info("Ikke implementert enda")}>Se avvikshistorikk</Knapp>
-                {showAll &&
-                    <AllAreas 
-                        expandAll={expandAll}
-                        isTileExpanded={isTileExpanded}
-                        maxWidth={maxWidth}
-                        numberOfTilesPerRow={numberOfTilesPerRow}
-                        rows={rows}
-                        toggleExpandAll={toggleExpandAll}
-                        toggleTile={toggleTile}
-                    />
-                }
-            </>
+            <DashboardContainer>
+
+                <div className="status-only-ok">
+
+                    <BodyShort className="status-wrapper">
+                        <Alert variant="success">Alle digitale tjenester fungerer som normalt.</Alert>
+                    </BodyShort>
+
+                    <div className="button-container">
+                        <Button variant="secondary" onClick={() => toggleShowAll(!showAll)}>Vis alle områder</Button>
+                        <Button variant="secondary" onClick={() => toast.info("Ikke implementert enda")}>Se avvikshistorikk</Button>
+                    </div>
+
+                    {showAll &&
+                        <AllAreas 
+                            expandAll={expandAll}
+                            isTileExpanded={isTileExpanded}
+                            maxWidth={maxWidth}
+                            numberOfTilesPerRow={numberOfTilesPerRow}
+                            rows={rows}
+                            toggleExpandAll={toggleExpandAll}
+                            toggleTile={toggleTile}
+                        />
+                    }
+
+                </div>
+
+            </DashboardContainer>
         )
     }
+    /*----------------- No area having issues or down END -----------------*/
 
 
 
