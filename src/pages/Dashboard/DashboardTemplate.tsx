@@ -29,13 +29,14 @@ const DashboardContainer = styled.div`
     flex-direction: column;
     align-items: center;
 
-
-
-    
     .status-only-ok {
+        display: flex;
+        flex-direction: column;
         
         .status-wrapper {
             margin-bottom: 60px;
+            max-width: max-content;
+            align-self: center;
         }
 
         .button-container {

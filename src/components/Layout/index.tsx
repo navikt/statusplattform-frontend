@@ -113,8 +113,10 @@ const PageHeaderContainer = styled.div`
     .navigator {
         display: flex;
         align-items: center;
+        flex-flow: row wrap;
+
         width: 100vw;
-        padding: 0.75rem 3rem;
+        padding: 0.75rem 1rem;
 
         .home-svg {
             margin-right: 12px;
@@ -136,7 +138,9 @@ const PageHeaderContainer = styled.div`
 const PageHeader = () => {
     return (
         <PageHeaderContainer>
-            <BodyShort className="navigator"><a href="www.nav.no" className="navds-link"><Home className="home-svg"/> nav.no</a> <Next className="navds-chevron" /> Her skal navbar fra nav.no være</BodyShort>
+            <BodyShort className="navigator"><a href="www.nav.no" className="navds-link">
+                <Home className="home-svg"/> nav.no</a> <Next className="navds-chevron" /> Her skal navbar fra nav.no være
+            </BodyShort>
             <Heading spacing size="2xlarge" level="1">
                 Status digitale tjenester
             </Heading>
