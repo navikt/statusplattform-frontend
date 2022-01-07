@@ -210,7 +210,7 @@ const Header = () => {
                                 open={!!anchor}
                                 onClose={() => closePopover()}
                                 anchorEl={anchor}
-                                placement="auto"
+                                placement="bottom"
                             >
                                 <Popover.Content>
                                     <Filters />

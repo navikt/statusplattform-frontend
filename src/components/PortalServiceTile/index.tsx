@@ -37,6 +37,7 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
 
     @media (min-width: 425px) {
         width: 425px;
+        
         .top-content {
             .etikett-container {
                 margin-right: 0;

@@ -75,13 +75,17 @@ const KnappWrapper = styled.div`
 const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     flex: 1;
     padding: 50px 0;
+    
     display: flex;
     justify-content: center;
     align-items: space-between;
-    flex-flow: row wrap;
+    flex-flow: column wrap;
+
+    & > * {
+        flex-basis: 100%;
+    }
 
     .expand-all-wrapper {
-        width: 100%;
         display: flex;
         justify-content: flex-end;
     }
@@ -199,9 +203,9 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     }
 
 
-    // +32 because we have a 32px flex-gap between tiles which we need to accomodate for
+    // +32 because we have a 32*2px (right and left gaps) flex-gap between tiles which we need to accomodate for
     let maxWidth = width > 
-        1275+32 ? 1275+32 : (
+        1275+64 ? 1275+64 : (
             window.innerWidth > 
                 1275+32 ? 1275+32 : (
                     window.innerWidth > 
@@ -409,12 +413,14 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
 
 const ToggleExpandAllButton = styled(Button)`
     margin: 1rem 0;
+    /* width: 250px; */
 
     :hover {
         color: inherit;
     }
 
     span {
+        margin-right: 0;
         & > * {
             transition: ease 0.5s;
             transform: rotate(0deg);
@@ -422,6 +428,7 @@ const ToggleExpandAllButton = styled(Button)`
             flex-grow: 0;
             outline: none;
         }
+
         &.expanded {
             & > * {
                 transition: ease 0.5s;
@@ -434,7 +441,7 @@ const ToggleExpandAllButton = styled(Button)`
 
 const ExpandAllToggle: React.FC<{toggleExpandAll: () => void, expanded: boolean}> = ({toggleExpandAll, expanded}) => {
     return (
-        <ToggleExpandAllButton variant="tertiary" size="medium" aria-expanded={expanded} onClick={toggleExpandAll} >
+        <ToggleExpandAllButton variant="tertiary" size="small" aria-expanded={expanded} onClick={toggleExpandAll} >
             {!expanded
                 ?
                     <BodyShort>
