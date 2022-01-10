@@ -21,6 +21,7 @@ export interface Service {
     dependencies?: Service[]
     monitorlink?: string
     description?: string
+    pollingUrl?: string
     logglink?: string
     status?: string
 }

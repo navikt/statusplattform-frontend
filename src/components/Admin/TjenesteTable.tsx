@@ -653,6 +653,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
         dependencies: [],
         monitorlink: "",
         description: "",
+        pollingUrl: "",
         logglink: ""
     })
 
@@ -714,7 +715,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
         changeEditDepencendyState(!editDependencies)
     }
     
-    const { name, team, monitorlink, description, logglink} = newService
+    const { name, team, monitorlink, description, pollingUrl, logglink} = newService
     
     
     
@@ -755,6 +756,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
                     <NewServiceColumn>
                         <Input type="text" value={monitorlink} label="Monitorlenke" onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
                         <Input type="text" value={description} label="Beskrivelse" onChange={handleServiceDataChange("description")} placeholder="Beskrivelse"/>
+                        <Input type="text" value={pollingUrl} label="PollingUrl" onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />
                         <Input type="text" value={logglink} label="Logglenke" onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
                     </NewServiceColumn>
 
