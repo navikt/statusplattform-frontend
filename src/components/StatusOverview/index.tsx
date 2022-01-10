@@ -15,14 +15,10 @@ const StatusOverviewContainer = styled.div`
     width: 100%;
     padding: 0;
     margin: 50px;
+
     display: flex;
     flex-direction: column;
     justify-content: space-around;
-    div {
-        p {
-            margin: 5px 0;
-        }
-    }
 `;
 
 const StatusBannerContainer = styled(Panel)`
