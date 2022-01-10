@@ -7,7 +7,7 @@ import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, bea
 import Panel from 'nav-frontend-paneler'
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { Bell } from '@navikt/ds-icons';
-import { BodyShort, Button, Detail } from '@navikt/ds-react';
+import { BodyShort, Button, Detail, Heading } from '@navikt/ds-react';
 
 
 const StatusOverviewContainer = styled.div`
@@ -102,6 +102,10 @@ const StatusSummary = styled.p`
     font-size: 1rem;
     font-weight: bold;
     display: inline-block;
+
+    .bold {
+        font-weight: bold;
+    }
 `
 
 
@@ -121,19 +125,21 @@ const StatusOverview = (props: AreaServicesList) => {
 
             <StatusBannerContainer border={true}>
                 <div>
-                    <Systemtittel>Avvik</Systemtittel>
+                    <Heading spacing size="medium" level="4">
+                        Avvik
+                    </Heading>
                     <StatusSummary>
                         {numberOfHealthyServices == numberOfServices ?
                             (<>
                                 {/* <span> */}
-                                    <BodyShort>
+                                    <BodyShort className="bold" spacing>
                                         Ingen feil å melde
                                     </BodyShort>
                                 {/* </span> */}
                             </>)
                         :
                             (<>
-                                <span>
+                                <BodyShort spacing>
                                     <span>Feil oppdaget i følgende områder:</span>
                                     {tilesThatFail.length > 1 ? 
                                         <span>
@@ -144,11 +150,11 @@ const StatusOverview = (props: AreaServicesList) => {
                                             {" " + tilesThatFail[0] + "."}
                                         </span>
                                     }
-                                </span>
+                                </BodyShort>
                             </>)
                         }
                     </StatusSummary>
-                    <Detail size="small">Sist oppdatert: Ikke implementert</Detail>
+                    <BodyShort size="small">Sist oppdatert: Ikke implementert</BodyShort>
                     
                 </div>
                 <div className="knapp-wrapper">
