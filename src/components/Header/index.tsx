@@ -1,17 +1,14 @@
 import styled from 'styled-components'
-
-import { Sidetittel } from 'nav-frontend-typografi'
-import { Knapp } from 'nav-frontend-knapper'
-
-import BurgerMenu from '../../components/BurgerMenu'
-import SubscribeModal from '../../components/SubscribeModal'
 import { createRef, useContext, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Checkbox } from 'nav-frontend-skjema'
+
+import SubscribeModal from '../../components/SubscribeModal'
+import BurgerMenu from '../../components/BurgerMenu'
 import { FilterContext, FilterOption } from '../ContextProviders/FilterContext'
+
+import { Sidetittel } from 'nav-frontend-typografi'
+import { Checkbox } from 'nav-frontend-skjema'
 import { Collapse, Expand } from '@navikt/ds-icons'
-import { UserStateContext } from '../ContextProviders/UserStatusContext'
-import { UserData } from '../../types/userData'
 import { Button, Popover } from '@navikt/ds-react'
 
 
@@ -173,10 +170,10 @@ const Header = () => {
             </a>
 
             <HeaderContent>
-
-                <SidetittelCustomized>
+                <BurgerMenu />
+                {/* <SidetittelCustomized>
                     Status digitale tjenester
-                </SidetittelCustomized>
+                </SidetittelCustomized> */}
             
             </HeaderContent>
 
@@ -221,7 +218,6 @@ const Header = () => {
                             } */}
                         </FilterButtonWrapper>
                     }
-                    <BurgerMenu />
                 </ButtonsContainer>
             </HeaderOptions>
         </CustomHeader>
