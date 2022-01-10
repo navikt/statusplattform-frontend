@@ -335,11 +335,15 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
                         </div>
                         <span className="service-row-element">
                             <p><b>Monitorlink</b></p>
-                            <p>{service.monitorlink}asd</p>
+                            <p>{service.monitorlink}</p>
+                        </span>
+                        <span className="service-row-element">
+                            <p><b>PollingUrl</b></p>
+                            <p>{service.pollingUrl}</p>
                         </span>
                         <span className="service-row-element">
                             <p><b>Logglink</b></p>
-                            <p>{service.logglink}asd</p>
+                            <p>{service.logglink}</p>
                         </span>
                     </div>
                 }
@@ -380,6 +384,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         dependencies: service.dependencies,
         monitorlink: service.monitorlink,
         description: service.description,
+        pollingUrl: service.pollingUrl,
         logglink: service.logglink
     })
 
@@ -404,7 +409,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
     
 
 
-    const { name, type, team, dependencies, monitorlink, description, logglink } = updatedService
+    const { name, type, team, dependencies, monitorlink, description, pollingUrl, logglink } = updatedService
     return (
         <ServiceRowContainer>
             <ServiceRowContent>
@@ -429,6 +434,10 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                     <span className="service-row-element editting">
                         <p><b>Monitorlink</b></p>
                         <Input value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
+                    </span>
+                    <span className="service-row-element editting">
+                        <p><b>PollingUrl</b></p>
+                        <Input value={pollingUrl} onChange={handleUpdatedService("pollingUrl")}/>
                     </span>
                     <span className="service-row-element editting">
                         <p><b>Logglink</b></p>
