@@ -15,7 +15,8 @@ export const postDashboard = async (dashboard: Dashboard): Promise<Object[]> =>{
     {
         method: "POST",
         body: JSON.stringify({
-            name: dashboard.name
+            name: dashboard.name,
+            areas: dashboard.areas
         }),
         headers: {
             "Content-type": "application/json; charset=UTF-8"

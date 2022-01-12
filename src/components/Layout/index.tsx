@@ -11,6 +11,7 @@ import { useRouter } from 'next/router'
 import 'react-toastify/dist/ReactToastify.css';
 import { BodyShort, Heading } from '@navikt/ds-react'
 import { Home, Next } from '@navikt/ds-icons'
+import { addListener } from 'process'
 
 
 
@@ -136,13 +137,38 @@ const PageHeaderContainer = styled.div`
 
 
 const PageHeader = () => {
+    const router = useRouter()
+    let pageTitle = "Status digitale tjenester"
+
+
+    /*Consider changing this solution to rather use React Context as its cleaner and allows usability in other components, should they need it*/
+    const currentRoute = router.asPath
+
+    switch(currentRoute) {
+        case "/Admin/NewDashboard":
+            pageTitle = "Opprett nytt dashbord"
+            break
+        case "/Admin/NewArea":
+            pageTitle = "Opprett nytt område"
+            break
+        case "/Admin/NewService":
+            pageTitle = "Opprett ny tjeneste"
+            break
+        default:
+            pageTitle = "Status digitale tjenester"
+            break
+    }
+
     return (
         <PageHeaderContainer>
-            <BodyShort className="navigator"><a href="www.nav.no" className="navds-link">
-                <Home className="home-svg"/> nav.no</a> <Next className="navds-chevron" /> Her skal navbar fra nav.no være
+            <BodyShort className="navigator">
+                <a href="www.nav.no" className="navds-link">
+                    <Home className="home-svg"/> nav.no
+                </a> 
+                <Next className="navds-chevron" /> <a href="/">Status digitale tjenester</a>
             </BodyShort>
             <Heading spacing size="2xlarge" level="1">
-                Status digitale tjenester
+                {pageTitle}
             </Heading>
         </PageHeaderContainer>
     )

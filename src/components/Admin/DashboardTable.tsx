@@ -21,20 +21,26 @@ import { updateDashboard } from '../../utils/updateDashboard'
 
 import { useLoader } from '../../utils/useLoader'
 import { CloseCustomized } from '.'
+import { useRouter } from 'next/router'
+import { BodyShort, Button } from '@navikt/ds-react'
 
 
 const DashboardTableContainer = styled.div`
     width: 100%;
-    .knapp {
-        text-transform: none;
+    
+    .centered {
+        display: flex;
+        justify-content: center;
+
+        margin: 60px 0;
     }
 `
 
 
 const DashboardTable = () => {
-    const [editNewDashboard, updateEditNewDashboard] = useState(false)
     const { data: dashboards, isLoading, reload } = useLoader(fetchDashboardsList,[]);
 
+    const router = useRouter()
 
     if (isLoading) {
         return (
@@ -47,12 +53,12 @@ const DashboardTable = () => {
             <Head>
                 <title>Admin - Dashbord</title>
             </Head>
-            <Knapp mini onClick={() => updateEditNewDashboard(!editNewDashboard)}>{
-                !editNewDashboard ? "Legg til nytt dashbord" : "Avbryt nytt dashbord"}
-            </Knapp>
-            {editNewDashboard &&
-                <AddNewDashboard reload={reload}/>
-            }
+            <div className="centered">
+                <Button variant="secondary" 
+                        onClick={() => router.push("/Admin/NewDashbord")}>
+                    <b>Legg til nytt dashbord</b>
+                </Button>
+            </div>
             <Dashboards dashboards={dashboards} reloadDashboards={reload}/>
         </DashboardTableContainer>
     )
@@ -81,7 +87,7 @@ const DashboardsContainer = styled.div`
 `
 
 const DashboardsHeader = styled.div`
-    padding: 0 1rem;
+    padding: 0 16px;
     font-weight: bold;
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
 `
@@ -107,7 +113,7 @@ const DashboardRowContainer = styled.div`
 
 const DashboardRowInner = styled.div`
     min-height: 5rem;
-    padding-left: 1rem;
+    padding-left: 16px;
     background-color: var(--navGraBakgrunn);
 
     display: flex;
@@ -218,7 +224,7 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
 
             <div>
                 <DashboardsHeader>
-                    <p><b>Navn på Dashbord</b></p>
+                    <BodyShort spacing><b>Navn på Dashbord</b></BodyShort>
                 </DashboardsHeader>
                 {dashboards.map((dashboard) => {
                     return (

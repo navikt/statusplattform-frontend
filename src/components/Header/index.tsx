@@ -161,7 +161,6 @@ const Header = () => {
         }
     }
     
-    console.log(anchor)
 
     return (
         <CustomHeader>

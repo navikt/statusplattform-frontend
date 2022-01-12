@@ -58,9 +58,10 @@ const AdminDashboardContainer = styled.div`
 
 const AdminConfigsContainer = styled.div`
     border-radius: 0 0 20px 20px;
-    background-color: white;    
+    background-color: white; 
+       
     width: 100%;
-    padding: 2rem 1rem;
+    padding: 0 1rem;
     h2 {
         margin: 0 0 .5rem;
         display: flex;
@@ -88,7 +89,6 @@ const AdminDashboard = () => {
 	return (
         <AdminDashboardContainer>
             <AdminConfigsContainer>
-                <h2>{selectedMenu}</h2>
                 {selectedMenu === "Områder" && 
                     <AreaTable />
                 }
