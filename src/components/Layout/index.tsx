@@ -118,6 +118,11 @@ const PageHeaderContainer = styled.div`
 
         width: 100vw;
         padding: 0.75rem 1rem;
+        
+        span {
+            display: flex;
+            align-items: center;
+        }
 
         .home-svg {
             margin-right: 12px;
