@@ -247,7 +247,7 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
 
     return (
         <ServiceDataWrapper>
-            {(service.dependencies.length > 0 || service.description.length > 0) &&
+            {(service.dependencies.length > 0) &&
                 <div className="row">
                     {service.dependencies.length > 0 &&
                         <div className="column">
@@ -264,27 +264,11 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
                             </div>
                         </div>
                     }
-                    {service.description.length > 0 &&
-                        <div className="column">
-                            <div className="element">
-                                <h3>Beskrivelse</h3>
-                                {service.description}
-                            </div>
-                        </div>
-                    }
                 </div>
             }
 
-            {(service.logglink || service.monitorlink) &&
+            {service.monitorlink &&
                 <div className="row">
-                    {service.logglink &&
-                        <div className="column">
-                            <div className="element">
-                                <h3>Logglink</h3>
-                                {service.logglink}
-                            </div>
-                        </div>
-                    }
                     {service.monitorlink &&
                         <div className="column">
                             <div className="element">
