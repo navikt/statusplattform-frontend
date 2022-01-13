@@ -3,16 +3,17 @@ import { useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
 
-import { Area, Dashboard } from "src/types/navServices";
-import { postDashboard } from "src/utils/postDashboard";
-import Layout from '../../../components/Layout';
+
 import { Input } from "nav-frontend-skjema";
 import { BodyShort, Button, Detail, Select } from "@navikt/ds-react";
 import { Delete } from "@navikt/ds-icons";
 import { useLoader } from "src/utils/useLoader";
 import { fetchAreas } from "src/utils/fetchAreas";
-import CustomNavSpinner from "src/components/CustomNavSpinner";
 
+import { Area, Dashboard } from "../../../types/navServices";
+import { postDashboard } from "../../../utils/postDashboard";
+import Layout from '../../../components/Layout';
+import CustomNavSpinner from "../../../components/CustomNavSpinner";
 
 
 const NewDashboardContainer = styled.div`
