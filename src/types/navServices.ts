@@ -14,20 +14,18 @@ export interface Tile {
 }
 
 export interface Service {
-    id: string
+    id?: string
     name: string
     type: string
     team?: string
     dependencies?: Service[]
     monitorlink?: string
-    description?: string
     pollingUrl?: string
-    logglink?: string
     status?: string
 }
 
 export interface Area {
-    id: string
+    id?: string
     name: string
     description: string
     icon: string

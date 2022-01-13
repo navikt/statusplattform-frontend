@@ -19,6 +19,8 @@ import { fetchTypes } from '../../utils/fetchTypes';
 import { CloseCustomized, ModalInner } from '.';
 import ModalWrapper from 'nav-frontend-modal';
 import { updateService } from '../../utils/updateService';
+import { Button } from '@navikt/ds-react';
+import router from 'next/router';
 
 const TjenesteTableContainer = styled.div`
     .services-overflow-container {
@@ -26,6 +28,13 @@ const TjenesteTableContainer = styled.div`
         div {
             min-width: fit-content;
         }
+    }
+    
+    .centered {
+        display: flex;
+        justify-content: center;
+
+        margin: 60px 0;
     }
 `
 
@@ -174,8 +183,13 @@ const TjenesteTable = () => {
                 </ModalInner>
             </ModalWrapper>
 
+            <div className="centered">
+                <Button variant="secondary" 
+                        onClick={() => router.push("/Admin/NewTjeneste")}>
+                    <b>Legg til nytt tjeneste</b>
+                </Button>
+            </div>
 
-            <Knapp mini onClick={() => changeAddNewService(!addNewService)}>{addNewService == false ? "Legg til ny tjeneste" : "Avbryt ny tjeneste"}</Knapp>
             {addNewService &&
                 <AddNewService services={services} reload={reload}/>
             }
@@ -187,7 +201,6 @@ const TjenesteTable = () => {
                             <span>Navn</span>
                             <span>Type</span>
                             <span>Team</span>
-                            <span>Beskrivelse</span>
                         </div>
                         <div className="empty-space"></div>
                     </TjenesteHeader>
@@ -319,7 +332,6 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
                         <span className="service-row-element">{service.name}</span>
                         <span className="service-row-element">{service.type}</span>
                         <span className="service-row-element">{service.team}</span>
-                        <span className="service-row-element">{service.description}</span>
                     </div>
                 </div>
                 {isExpanded &&
@@ -340,10 +352,6 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
                         <span className="service-row-element">
                             <p><b>PollingUrl</b></p>
                             <p>{service.pollingUrl}</p>
-                        </span>
-                        <span className="service-row-element">
-                            <p><b>Logglink</b></p>
-                            <p>{service.logglink}</p>
                         </span>
                     </div>
                 }
@@ -383,9 +391,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         team: service.team,
         dependencies: service.dependencies,
         monitorlink: service.monitorlink,
-        description: service.description,
-        pollingUrl: service.pollingUrl,
-        logglink: service.logglink
+        pollingUrl: service.pollingUrl
     })
 
 
@@ -409,7 +415,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
     
 
 
-    const { name, type, team, dependencies, monitorlink, description, pollingUrl, logglink } = updatedService
+    const { name, type, team, dependencies, monitorlink, pollingUrl } = updatedService
     return (
         <ServiceRowContainer>
             <ServiceRowContent>
@@ -418,7 +424,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                     <Input className="service-row-element editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
                     <Input className="service-row-element editting" value={type} onChange={handleUpdatedService("type")} onClick={(event) => event.stopPropagation()} />
                     <Input className="service-row-element editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
-                    <Input className="service-row-element editting" value={description} onChange={handleUpdatedService("description")} onClick={(event) => event.stopPropagation()} />
                 </div>
 
 
@@ -438,10 +443,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                     <span className="service-row-element editting">
                         <p><b>PollingUrl</b></p>
                         <Input value={pollingUrl} onChange={handleUpdatedService("pollingUrl")}/>
-                    </span>
-                    <span className="service-row-element editting">
-                        <p><b>Logglink</b></p>
-                        <Input value={logglink} onChange={handleUpdatedService("logglink")}/>
                     </span>
                 </div>
             }
@@ -661,9 +662,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
         team: "",
         dependencies: [],
         monitorlink: "",
-        description: "",
-        pollingUrl: "",
-        logglink: ""
+        pollingUrl: undefined
     })
 
     useEffect(() => {
@@ -724,7 +723,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
         changeEditDepencendyState(!editDependencies)
     }
     
-    const { name, team, monitorlink, description, pollingUrl, logglink} = newService
+    const { name, team, monitorlink, pollingUrl } = newService
     
     
     
@@ -764,9 +763,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
 
                     <NewServiceColumn>
                         <Input type="text" value={monitorlink} label="Monitorlenke" onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
-                        <Input type="text" value={description} label="Beskrivelse" onChange={handleServiceDataChange("description")} placeholder="Beskrivelse"/>
                         <Input type="text" value={pollingUrl} label="PollingUrl" onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />
-                        <Input type="text" value={logglink} label="Logglenke" onChange={handleServiceDataChange("logglink")} placeholder="Logglink" />
                     </NewServiceColumn>
 
 

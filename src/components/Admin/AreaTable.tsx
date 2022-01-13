@@ -24,6 +24,8 @@ import { deleteServiceFromArea } from '../../utils/deleteServiceFromArea';
 import { deleteArea } from '../../utils/deleteArea';
 import { useLoader } from '../../utils/useLoader';
 import { updateArea } from '../../utils/updateArea';
+import { Button } from '@navikt/ds-react';
+import router from 'next/router';
 
 
 
@@ -36,6 +38,13 @@ const AreaContainer = styled.div`
         div {
             min-width: fit-content;
         }
+    }
+
+    .centered {
+        display: flex;
+        justify-content: center;
+
+        margin: 60px 0;
     }
 `
 
@@ -172,8 +181,13 @@ const AreaTable = () => {
             </ModalWrapper>
 
 
+            <div className="centered">
+                <Button variant="secondary" 
+                        onClick={() => router.push("/Admin/NewOmraade")}>
+                    <b>Legg til nytt område</b>
+                </Button>
+            </div>
 
-            <Knapp mini onClick={() => toggleNewAreaEdit(!editNewArea)}>{!editNewArea ? "Legg til nytt område" : "Avbryt nytt område"}</Knapp>
             {editNewArea &&
                 <AddNewArea dashboardAreas={allAreas} reloadAll={reloadAll} setAnchorId={setAnchorId} />
             }
@@ -355,7 +369,7 @@ const AddNewArea = ({dashboardAreas, reloadAll, setAnchorId}: NewAreaProps) => {
 
 
 
-const options = [
+export const options = [
     { value: "0001", label: "Bag", icon: <Bag/> },
     { value: "0002", label: "Sparepenger", icon: <Saving/> },
     { value: "0003", label: "Hjerte", icon: <Heart/> },

@@ -21,9 +21,7 @@ export const updateService = async (service: Service): Promise<void> =>{
                 team: service.team,
                 dependencies: service.dependencies,
                 monitorlink: service.monitorlink,
-                description: service.description,
-                pollingUrl: service.pollingUrl,
-                logglink: service.logglink,
+                pollingUrl: service.pollingUrl
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
