@@ -162,10 +162,14 @@ const PageHeader = () => {
     return (
         <PageHeaderContainer>
             <BodyShort className="navigator">
-                <a href="www.nav.no" className="navds-link">
-                    <Home className="home-svg"/> nav.no
+                <a href="/" className="navds-link">
+                    <Home className="home-svg"/> Status digitale tjenester
                 </a> 
-                <Next className="navds-chevron" /> <a href="/">Status digitale tjenester</a>
+                {router.asPath.includes("Admin") &&
+                    <span>
+                        <Next className="navds-chevron" /> <a href="/">Admin</a>
+                    </span>
+                }
             </BodyShort>
             <Heading spacing size="2xlarge" level="1">
                 {pageTitle}

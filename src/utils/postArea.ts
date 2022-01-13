@@ -16,7 +16,8 @@ export const postAdminArea = async (adminArea): Promise<Object[]> =>{
         body: JSON.stringify({
             name: adminArea.name,
             description: adminArea.description,
-            icon: adminArea.icon
+            icon: adminArea.icon,
+            services: adminArea.services
         }),
         headers: {
             "Content-type": "application/json; charset=UTF-8"
