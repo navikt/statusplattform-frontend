@@ -7,9 +7,9 @@ import styled from "styled-components"
 import { Input } from "nav-frontend-skjema";
 import { BodyShort, Button, Detail, Select } from "@navikt/ds-react";
 import { Delete } from "@navikt/ds-icons";
-import { useLoader } from "src/utils/useLoader";
-import { fetchAreas } from "src/utils/fetchAreas";
 
+import { fetchAreas } from "../../../utils/fetchAreas";
+import { useLoader } from "../../../utils/useLoader";
 import { Area, Dashboard } from "../../../types/navServices";
 import { postDashboard } from "../../../utils/postDashboard";
 import Layout from '../../../components/Layout';
