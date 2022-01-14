@@ -9,11 +9,11 @@ import { fetchServices } from "../../..//utils/fetchServices";
 import { fetchAreas } from "../../../utils/fetchAreas";
 import { postService } from "../../..//utils/postService";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
+import { fetchTypes } from "../../..//utils/fetchTypes";
 
 import { BodyShort, Button, Detail, Select } from "@navikt/ds-react";
 import { Input } from "nav-frontend-skjema";
 import { Delete } from "@navikt/ds-icons";
-import { fetchTypes } from "src/utils/fetchTypes";
 import { HorizontalSeparator } from "..";
 
 
