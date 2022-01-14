@@ -14,6 +14,7 @@ import { postAdminArea } from "../../..//utils/postArea";
 import { useLoader } from "../../../utils/useLoader";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
+import { HorizontalSeparator } from "..";
 
 
 
@@ -134,6 +135,10 @@ const NewArea = () => {
                         handleDeleteServiceOnArea={(areaToDelete) => handleDeleteServiceOnArea(areaToDelete)}
                         handleAddServiceToArea={(serviceToAdd) => handleAddServiceToArea(serviceToAdd)}
                     />
+
+                    <HorizontalSeparator />
+
+
                     <div className="button-container">
                         <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push("/Admin?tab=Område")}>Avbryt</Button>
                         <Button type="submit" value="Legg til område">Lagre</Button>
@@ -167,7 +172,7 @@ const ServicesContainer = styled.div`
 
     gap: 16px;
 
-    .current-services {
+    .new-list {
         list-style: none;
         padding: 0;
         
@@ -193,10 +198,12 @@ const ServicesContainer = styled.div`
         }
 
         li {
-            width: 100%;
-            margin: 8px 0;
+            p {
+                margin: 8px 0;
 
-            display: flex;
+                display: flex;
+                justify-content: space-between;
+            }
         }
     }
 `
@@ -246,7 +253,7 @@ const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDe
 
             {newArea.services.length > 0
             ?
-                <ul className="current-services">
+                <ul className="new-list">
                     {newArea.services.map(service => {
                         return (
                             <li key={service.id}>

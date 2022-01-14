@@ -22,6 +22,7 @@ export interface Service {
     monitorlink?: string
     pollingUrl?: string
     status?: string
+    areasContainingThisService?: Area[]
 }
 
 export interface Area {

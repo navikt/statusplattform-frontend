@@ -11,6 +11,17 @@ const AdminContainer = styled.div`
     width: 100%;
 `
 
+export const HorizontalSeparator = styled.span`
+    display: block;
+
+    padding: 1px 0;
+    margin: 16px 0;
+
+    width: 100%;
+    height: 100%;
+    background-color: var(--navGra20);
+`
+
  const AdminPage = () => {
 
     return (

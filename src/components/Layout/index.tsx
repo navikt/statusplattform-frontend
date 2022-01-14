@@ -153,10 +153,10 @@ const PageHeader = () => {
         case "/Admin/NewDashboard":
             pageTitle = "Opprett nytt dashbord"
             break
-        case "/Admin/NewArea":
+        case "/Admin/NewOmraade":
             pageTitle = "Opprett nytt område"
             break
-        case "/Admin/NewService":
+        case "/Admin/NewTjeneste":
             pageTitle = "Opprett ny tjeneste"
             break
         default:

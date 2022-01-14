@@ -14,6 +14,7 @@ import { Area, Dashboard } from "../../../types/navServices";
 import { postDashboard } from "../../../utils/postDashboard";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
+import { HorizontalSeparator } from "..";
 
 
 const NewDashboardContainer = styled.div`
@@ -115,6 +116,9 @@ const NewDashboard = () => {
                         handleDeleteAreaOnDashboard={(areaToDelete) => handleDeleteAreaOnDashboard(areaToDelete)}
                         handleAddAreaToDashboard={(areaToAdd) => handleAddAreaToDashboard(areaToAdd)}
                     />
+
+                    <HorizontalSeparator />
+
                     <div className="button-container">
                         <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push("/Admin?tab=Dashbord")}>Avbryt</Button>
                         <Button type="submit" value="Legg til dashbord">Lagre</Button>
@@ -153,7 +157,7 @@ const AreasContainer = styled.div`
 
     gap: 16px;
 
-    .current-areas {
+    .new-list {
         list-style: none;
         padding: 0;
         
@@ -179,10 +183,12 @@ const AreasContainer = styled.div`
         }
 
         li {
-            width: 100%;
-            margin: 8px 0;
+            p {
+                margin: 8px 0;
 
-            display: flex;
+                display: flex;
+                justify-content: space-between;
+            }
         }
     }
 `
@@ -230,7 +236,7 @@ const DashboardAreas = ({newDashboard, allAreas, handleDeleteAreaOnDashboard, ha
 
             {newDashboard.areas.length > 0
             ?
-                <ul className="current-areas">
+                <ul className="new-list">
                     {newDashboard.areas.map(area => {
                         return (
                             <li key={area.id}>

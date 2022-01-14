@@ -26,9 +26,9 @@ const AdminDashboardContainer = styled.div`
         .option {
             background-color: transparent;
             border: none;
-            padding: 0 1rem;
+            padding: 0 16px;
 
-            max-width: 75px;
+            max-width: 100px;
             
             display: flex;
             align-items: center;

@@ -1,26 +1,26 @@
 import styled from 'styled-components'
 import Head from 'next/head'
+import router from 'next/router';
 import { useEffect, useState } from "react";
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useLoader } from '../../utils/useLoader';
 
-import { Input, Select } from 'nav-frontend-skjema';
+import { Input } from 'nav-frontend-skjema';
 import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 import { Expand, Notes } from '@navikt/ds-icons'
-import CustomNavSpinner from '../../components/CustomNavSpinner';
+import { Button, Select } from '@navikt/ds-react';
+import ModalWrapper from 'nav-frontend-modal';
 
+import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Service } from '../../types/navServices';
 import { deleteService } from '../../utils/deleteService';
 import { postService } from '../../utils/postService'
 import { fetchServices } from '../../utils/fetchServices';
 import { fetchTypes } from '../../utils/fetchTypes';
 import { CloseCustomized, ModalInner } from '.';
-import ModalWrapper from 'nav-frontend-modal';
 import { updateService } from '../../utils/updateService';
-import { Button } from '@navikt/ds-react';
-import router from 'next/router';
 
 const TjenesteTableContainer = styled.div`
     .services-overflow-container {
@@ -127,8 +127,10 @@ const TjenesteTable = () => {
     const [servicesToEdit, changeServicesToEdit] = useState<string[]>([])
     const [serviceToDelete, setServiceToDelete] = useState<Service>()
     const { data: services, isLoading: loadingServices, reload } = useLoader(fetchServices,[]);
+    const { data: types, isLoading: loadingTypes, reload: reloadTypes } = useLoader(fetchTypes,[]);
 
-    if(loadingServices) {
+
+    if(loadingServices || loadingTypes) {
         return (
             <CustomNavSpinner />
         )
@@ -215,7 +217,7 @@ const TjenesteTable = () => {
                                             toggleExpanded={() => toggleExpandedFor(service.id)}
                                             isExpanded={expanded.includes(service.id)}
                                             setServiceToDelete={() => setServiceToDelete(service)}
-                                            />
+                                        />
                                     :
                                         <ServiceRowEditting 
                                             service={service}
@@ -225,6 +227,7 @@ const TjenesteTable = () => {
                                             setServiceToDelete={() => setServiceToDelete(service)}
                                             allServices={services}
                                             reload={reload}
+                                            types={types}
                                         />
                                 }
                             </TjenesteContent>
@@ -269,18 +272,28 @@ const ServiceRowContent = styled.div`
         display: flex;
         align-items: center;
         flex-grow: 1;
+
         & > * {
             display: flex;
             flex-basis: 100%;
         }
+
         .service-row-element {
             flex-basis: 100%;
             margin-right: 5ch;
             word-break: break-word;
             width: 150px;
+
             input {
                 width: 142px;
+                min-height: 48px;
                 padding: 8px;
+                margin-top: var(--navds-spacing-2);
+            }
+
+            label {
+                display: hidden;
+                z-index: -1000;
             }
         }
         :hover {
@@ -292,19 +305,28 @@ const ServiceRowContent = styled.div`
         border-top: 2px solid rgba(0, 0, 0, 0.1);
         min-height: 5rem;
         padding: 1rem 0;
+
         & > * {
             display: flex;
             flex-basis: 100%;
         }
+
         .dependencies {
             display: flex;
             flex-direction: column;
         }
+
+        input {
+            min-height: 48px;
+            margin-top: var(--navds-spacing-2);
+        }
+
         .service-row-element {
             margin-right: 5ch;
             display: flex;
             flex-direction: column;
         }
+
         span:first-child {
             margin: 0 2rem;
         }
@@ -321,6 +343,7 @@ interface ServiceRowProps {
     isExpanded: boolean,
     setServiceToDelete: (service) => void,
     reload?: () => void
+    types?: string[]
 }
 
 const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete }: ServiceRowProps) => {
@@ -383,7 +406,7 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
 
 
 
-const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete, reload } : ServiceRowProps) => {
+const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete, reload, types } : ServiceRowProps) => {
     const [updatedService, changeUpdatedService] = useState<Service>({
         id: service.id,
         name: service.name,
@@ -394,6 +417,10 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         pollingUrl: service.pollingUrl
     })
 
+    const [selectedType, updateSelectedType] = useState<string>(service.type)
+
+
+
 
     const handleUpdatedService = (field: keyof typeof updatedService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const changedService = {
@@ -403,10 +430,19 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         changeUpdatedService(changedService)
     }
 
+    const handleServiceTypeChange = (event) => {
+        let currentService = {...updatedService}
+        const typeChange: string = event.target.value
+        updateSelectedType(typeChange)
+        currentService.type = typeChange
+        changeUpdatedService(currentService)
+    }
+
     const handleSubmit = () => {
         updateService(updatedService).then(() => {
             reload()
             toast.success("Oppdatering gjennomført")
+            toggleEditService(service)
         }).catch(() => {
             toast.error("Noe gikk galt i oppdatering av område")
         })
@@ -416,13 +452,30 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
 
     const { name, type, team, dependencies, monitorlink, pollingUrl } = updatedService
+
     return (
         <ServiceRowContainer>
             <ServiceRowContent>
 
                 <div className="top-row" onClick={() => toggleExpanded(service)}>
                     <Input className="service-row-element editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
-                    <Input className="service-row-element editting" value={type} onChange={handleUpdatedService("type")} onClick={(event) => event.stopPropagation()} />
+                    <Select label="Velg type" className="service-row-element editting" 
+                        value={selectedType !== null ? selectedType : ""}
+                        onChange={(event) => handleServiceTypeChange(event)}
+                        onClick={(event) => event.stopPropagation()}
+                    >
+                        {types.length > 0 ?
+                            types.map((type, index) => {
+                                return (
+                                    <option key={index} value={type}>{type}</option>
+                                )
+                            })
+                        :
+                            <option key={undefined} value={""}>Ingen type å legge til</option>
+                        }
+                    </Select>
+
+
                     <Input className="service-row-element editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
                 </div>
 
@@ -488,22 +541,32 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
 const DependenciesColumn = styled.div`
     margin-right: 5ch;
+    max-width: 242px;
+    
     display: flex;
     flex-direction: column;
-    max-width: 242px;
+
     .add-service {
         margin: 1rem 0;
     }
+
     ul {
         max-width: 100%;
         word-break: break-word;
+
         li {
             border: 1px solid transparent;
             border-radius: 5px;
         }
+
         li:hover {
             border: 1px solid black;
         }
+    }
+
+    label {
+        position: absolute;
+        z-index: -1000;
     }
 `
 
@@ -567,7 +630,7 @@ const EditTjenesteDependencies: React.FC<
         <DependenciesColumn>
             {allServices.length !== 0
                 ?
-                    <Select onChange={handleUpdateSelectedService}>
+                    <Select label="Legg til tjenester i område" onChange={handleUpdateSelectedService}>
                         {availableServiceDependencies.length > 0 ?
                         availableServiceDependencies.map(service => {
                             return (
@@ -653,12 +716,12 @@ interface AddServiceProps {
 const AddNewService = ({services, reload}: AddServiceProps) => {
     const [isLoading, setIsLoading] = useState(true)
     const [editDependencies, changeEditDepencendyState] = useState<boolean>(false)
-    const [selectedType, updateSelectedType] = useState<string>("APPLIKASJON")
+    const [selectedType, updateSelectedType] = useState<string>("KOMPONENT")
     const [types, updateTypes] = useState<string[]>()
     const [newService, updateNewService] = useState<Service>({
         id: "",
         name: "",
-        type: "APPLIKASJON",
+        type: "KOMPONENT",
         team: "",
         dependencies: [],
         monitorlink: "",
@@ -882,7 +945,7 @@ const NewTjenesteDependencyDropdown = ({services, handleDependencyChange}: Dropd
 
 
             {services.length !== 0 ?
-                <Select onChange={handleUpdateSelectedService}>
+                <Select label="Legg til tjenesteavhengigheter" onChange={handleUpdateSelectedService}>
                     {availableServiceDependencies.length > 0
                     ?
                         availableServiceDependencies.map(service => {
