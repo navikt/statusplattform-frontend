@@ -184,7 +184,7 @@ const NewService = () => {
                     </Select>
 
                     <Input type="text" required label="Monitorlink*" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink" />
-                    <Input type="text" required label="PollingUrl*" value={pollingUrl} onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />
+                    <Input type="text" label="PollingUrl*" value={pollingUrl} onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />
 
                     <ServiceDependencies 
                         newService={newService}
