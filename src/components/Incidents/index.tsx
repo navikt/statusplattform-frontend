@@ -1,18 +1,17 @@
 import Link from 'next/link'
-import { useEffect, useState } from 'react'
 import styled from 'styled-components'
 
-import Layout from '../../components/Layout'
 import { BackButton } from '../../components/BackButton'
-import { fetchServices } from '../../utils/fetchServices'
 import { countFailingServices, getListOfTilesThatFail } from '../../utils/servicesOperations'
 
-import NavFrontendSpinner from "nav-frontend-spinner";
-import { Knapp } from 'nav-frontend-knapper'
 import NavInfoCircle from '../../components/NavInfoCircle'
 import Alertstripe from 'nav-frontend-alertstriper'
-import { AreaServicesList, Tile } from '../../types/navServices'
-import { Calender, Back } from '@navikt/ds-icons'
+import { AreaServicesList, Service, Tile } from '../../types/navServices'
+import { Calender } from '@navikt/ds-icons'
+import { Heading } from '@navikt/ds-react'
+import { useEffect, useState } from 'react'
+import { fetchServiceFromId } from 'src/utils/fetchServiceFromId'
+import { useRouter } from 'next/router'
 
 const IncidentsContainer = styled.div`
     margin: 20px 0;
@@ -22,26 +21,29 @@ const CenterContent = styled.div`
     margin: 0 auto;
     max-width: 1100px;
     padding: 1rem 1rem;
+
     display: flex;
     flex-direction: column;
+
     @media(min-width:450px){
         padding: 1rem 3rem;
     }
 `
-const KnappCustomized = styled(Knapp)`transition: 0.4s;`
 
 const SectionContainer = styled.div`
+    margin: 10px 0;
+
     display: flex;
     justify-content: center;
     flex-direction: column;
     align-items: flex-start;
-    margin: 10px 0;
 `
 const IconWrapper = styled.div`
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+
     *:first-child{
         margin-right: 20px;
     }
@@ -61,73 +63,30 @@ const WhiteBackgroundContainer = styled.div`
     height: 100%;
 `
 
-const SpinnerCentered = styled.div`
-    position: absolute;
-    top: 40%;
-`
 
-const Incidents = (props: AreaServicesList) => {
+const Incidents = ()  => {
+    const [isLoading, setIsLoading] = useState(false)
+    const [service, setService] = useState<Service>()
+    
+    
+    useEffect(() => {
+        (async () => {
+            setIsLoading(true)
+            const router = await useRouter()
+            console.log(router.asPath)
+            const retrievedService = await fetchServiceFromId("")
+            setIsLoading(false)
+        })()
+    }, [])
 
-    const numberOfIncidents: number = countFailingServices(props)
+
+
     return (
         <IncidentsContainer>
-            <CenterContent>
-                <Link href="/"><span><BackButton/></span></Link>
 
-
-                <SectionContainer>
-                    <IconWrapper>
-                        <Calender style={{"fontSize": "3rem"}} aria-label="Kalender ikon" role="img" focusable="false"/>
-                        <div>
-                            <h3>Hendelser</h3>
-                            <span>Siste 48 timer</span>
-                        </div>
-                    </IconWrapper>
-                </SectionContainer>
-
-            </CenterContent>
-
-
-            {/* TODO: Handle Incidents within this wrapper.  */}
-            <WhiteBackgroundContainer>
-                <CenterContent>
-                    <IncidentsWrapper>
-                        <CenterContent>
-                            {numberOfIncidents > 0 ? (
-                                    <ExistsIncidents>
-                                        <NavInfoCircle topText={"Antall hendelser"} centerText={numberOfIncidents} bottomText="Siste 48 timene" />
-                                    </ExistsIncidents>
-                                ) : (
-                                    <CenterContent>
-                                        <Alertstripe type="suksess">Ingen hendelser registrert!</Alertstripe>
-                                    </CenterContent>
-                                )
-                        }
-                        </CenterContent>
-                    </IncidentsWrapper>
-                </CenterContent>
-            </WhiteBackgroundContainer>
-
-
-            <CenterContent>
-                <SectionContainer>
-                    <IconWrapper>
-                        <Calender style={{"fontSize": "3rem"}} aria-label="Kalender ikon" role="img" focusable="false"/>
-                        <div>
-                            <h3>Hendelser</h3>
-                            <span>Siste 90 dagene</span>
-                        </div>
-                    </IconWrapper>
-                </SectionContainer>
-            </CenterContent>
-            
-
-
-            <CenterContent>
-                <IncidentsWrapper>
-                    BANNER og OPPSUMMERING siste 90 dager
-                </IncidentsWrapper>
-            </CenterContent>
+            <Heading spacing size="xlarge" level="2">
+                <b>Avvikshistorikk: </b> {service.name}
+            </Heading>
 
 
 

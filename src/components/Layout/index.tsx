@@ -177,7 +177,9 @@ const PageHeader = () => {
                 }
             </BodyShort>
             <Heading spacing size="2xlarge" level="1">
-                {pageTitle}
+                {!router.asPath.includes("Avvikshistorikk") &&
+                    pageTitle
+                }
             </Heading>
         </PageHeaderContainer>
     )

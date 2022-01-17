@@ -7,8 +7,10 @@ import { SuccessStroke } from '@navikt/ds-icons'
 
 const TrafficLightsContainer = styled.div`
     display: none;
+    
     span {
         display: flex;
+
         p {
             margin: 0;
             margin-left: 5px;
@@ -52,35 +54,19 @@ const TrafficLightsContainer = styled.div`
     }
 `
 
-// export const SuccessCircleGreen = styled.span`
-//     height: 16px;
-//     width: 16px;
-//     background-color: var(--navGronn);
-//     border-radius: 50%;
-//     display: inline-block;
-// `;
 
 export const SuccessCustomized = styled(Success)`
     color: var(--navGronn) !important;
-    stroke: var(--navds-semantic-color-feedback-success-icon) !important;
+    /* stroke: var(--navds-semantic-color-feedback-success-icon) !important; */
 `
 
 export const WarningCustomized = styled(Warning)`
-    stroke: var(--navds-semantic-color-feedback-warning-icon) !important;
+    /* stroke: var(--navds-semantic-color-feedback-warning-icon) !important; */
     color: var(--navOransje) !important;
 `;
 
-// export const ErrorCircleRed = styled.span`
-//     height: 16px;
-//     width: 16px;
-//     background-color: var(--redError);
-//     border-radius: 50%;
-//     display: inline-block;
-// `;
 
 export const ErrorCloseCustomized = styled(Error)`
-    height: 16px;
-    width: 16px;
     /* transform: scale(1.2); */
     stroke: var(--navds-semantic-color-feedback-error-icon) !important;
     color: var(--redError) !important;

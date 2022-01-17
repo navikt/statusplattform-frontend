@@ -120,6 +120,11 @@ const ServicesList = styled.ul`
 
 const LenkeCustomized = styled(Lenke)`
     text-decoration: none;
+
+    svg {
+        stroke: transparent;
+    }
+
     :hover {
         text-decoration: underline;
     }

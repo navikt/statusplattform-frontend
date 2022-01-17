@@ -5,9 +5,9 @@ import Layout from '../../components/Layout'
 import Incidents from '../../components/Incidents'
 import { Area, Dashboard } from '../../types/navServices'
 
-import NavFrontendSpinner from "nav-frontend-spinner"
 import { fetchDashboard } from '../../utils/fetchDashboard'
 import { fetchDashboardsList } from '../../utils/fetchDashboardsList'
+import CustomNavSpinner from 'src/components/CustomNavSpinner'
 
 
 const ErrorParagraph = styled.p`
@@ -16,10 +16,7 @@ const ErrorParagraph = styled.p`
     padding: 10px;
     border-radius: 5px;
 `;
-const SpinnerCentered = styled.div`
-    position: absolute;
-    top: 40%;
-`
+
 
 const IncidentsPage = () => {
     const [areas, setAreas] = useState<Area[]>()
@@ -36,21 +33,20 @@ const IncidentsPage = () => {
 
 
 
+    
+    if (isLoading) {
+        return (
+            <CustomNavSpinner />
+            ) 
+        }
+        
     if (!areas) {
         return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
     }
 
-    if (isLoading) {
-        return (
-            <SpinnerCentered>
-                <NavFrontendSpinner type="XXL" />
-            </SpinnerCentered>
-        ) 
-    }
-
     return (
         <Layout>
-            <Incidents areas={areas}/>
+            <Incidents />
         </Layout>
     )
 }

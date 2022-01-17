@@ -8,6 +8,7 @@ import Panel from 'nav-frontend-paneler'
 import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { Bell } from '@navikt/ds-icons';
 import { BodyShort, Button, Detail, Heading } from '@navikt/ds-react';
+import { useRouter } from 'next/router';
 
 
 const StatusOverviewContainer = styled.div`
@@ -116,6 +117,8 @@ const StatusOverview = (props: AreaServicesList) => {
     const numberOfHealthyServices: number = countHealthyServices(props)
     const tilesThatFail: string[] = getListOfTilesThatFail(props)
 
+    const router = useRouter()
+
     const handleRedirect = () => {
         toast.info("Ikke implementert enda")
     }
@@ -158,7 +161,7 @@ const StatusOverview = (props: AreaServicesList) => {
                     
                 </div>
                 <div className="knapp-wrapper">
-                    <Button variant="secondary" size="medium" onClick={handleRedirect}>
+                    <Button variant="secondary" size="medium" onClick={() => router.push("/Avvikshistorikk")}>
                         Se avvikshistorikk
                     </Button>
                     <Button variant="secondary" size="medium" onClick={handleRedirect}>
