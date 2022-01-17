@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useContext } from "react";
 
-import { WarningCircleOrange, NoStatusAvailableCircle, PlannedMaintenanceCircle, SuccessStrokeCustomized, ErrorCloseCustomized, SuccessCustomized, WarningCustomized } from '../../components/TrafficLights'
+import { ErrorCloseCustomized, NoStatusAvailableCircle, PlannedMaintenanceCircle, SuccessCustomized, WarningCustomized } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { Area, MaintenanceObject} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';

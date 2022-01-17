@@ -117,8 +117,8 @@ const TrafficLights = ({isInternal}: Props) => {
             <TrafficLightsContainer>
                 <div className="traffic-lights-wrapper">
                     <span><div><ErrorCloseCustomized /></div><p> Feil på tjenesten</p></span>
-                    <span><div><WarningCircleOrange /></div><p> Redusert funksjonalitet</p></span>
-                    <span><div><SuccessStrokeCustomized /></div><p> Fungerer normalt</p></span>
+                    <span><div><WarningCustomized /></div><p> Redusert funksjonalitet</p></span>
+                    <span><div><SuccessCustomized /></div><p> Fungerer normalt</p></span>
                 </div>
                 <div className="extra-info-wrapper">
                     {isInternal && <div><NoStatusAvailableCircle /><p> Status ikke levert av team </p></div>}
