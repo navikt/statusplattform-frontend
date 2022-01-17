@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { AutomaticSystem, Close } from '@navikt/ds-icons'
+import { Wrench, Close, Success, Warning, Error } from '@navikt/ds-icons'
 import { SuccessStroke } from '@navikt/ds-icons'
 
 
@@ -60,19 +60,14 @@ const TrafficLightsContainer = styled.div`
 //     display: inline-block;
 // `;
 
-export const SuccessStrokeCustomized = styled(SuccessStroke)`
-    color: var(--navGronn);
-    height: 16px;
-    width: 16px;
-    font-weight: bold;
+export const SuccessCustomized = styled(Success)`
+    color: var(--navGronn) !important;
+    stroke: var(--navds-semantic-color-feedback-success-icon) !important;
 `
 
-export const WarningCircleOrange = styled.span`
-    height: 16px;
-    width: 16px;
-    background-color: var(--navOransje);
-    border-radius: 50%;
-    display: inline-block;
+export const WarningCustomized = styled(Warning)`
+    stroke: var(--navds-semantic-color-feedback-warning-icon) !important;
+    color: var(--navOransje) !important;
 `;
 
 // export const ErrorCircleRed = styled.span`
@@ -83,11 +78,12 @@ export const WarningCircleOrange = styled.span`
 //     display: inline-block;
 // `;
 
-export const ErrorCloseCustomized = styled(Close)`
+export const ErrorCloseCustomized = styled(Error)`
     height: 16px;
     width: 16px;
     /* transform: scale(1.2); */
-    color: var(--redError);
+    stroke: var(--navds-semantic-color-feedback-error-icon) !important;
+    color: var(--redError) !important;
     /* background-color: var(--redError); */
 `
 
@@ -126,7 +122,7 @@ const TrafficLights = ({isInternal}: Props) => {
                 </div>
                 <div className="extra-info-wrapper">
                     {isInternal && <div><NoStatusAvailableCircle /><p> Status ikke levert av team </p></div>}
-                    <div><PlannedMaintenanceCircle><AutomaticSystem /></PlannedMaintenanceCircle><p> Planlagt vedlikehold</p></div>
+                    <div><PlannedMaintenanceCircle><Wrench /></PlannedMaintenanceCircle><p> Planlagt vedlikehold</p></div>
                 </div>
             </TrafficLightsContainer>
         </div>
