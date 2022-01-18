@@ -66,7 +66,7 @@ export const WarningCustomized = styled(Warning)`
 `;
 
 
-export const ErrorCloseCustomized = styled(Error)`
+export const ErrorCustomized = styled(Error)`
     color: var(--redError) !important;
 `
 
@@ -94,8 +94,8 @@ const Outine = styled.span`
     align-items: center;
 
     svg {
-        width: 18px;
-        height: 18px;
+        width: 16px;
+        height: 16px;
     }
 `
 
@@ -121,7 +121,7 @@ const TrafficLights = ({isInternal}: Props) => {
             Tegnforklaring:
             <TrafficLightsContainer>
                 <div className="traffic-lights-wrapper">
-                    <span><div><ErrorCloseCustomized /></div><p> Feil på tjenesten</p></span>
+                    <span><div><ErrorCustomized /></div><p> Feil på tjenesten</p></span>
                     <span><div><WarningCustomized /></div><p> Redusert funksjonalitet</p></span>
                     <span><div><SuccessCustomized /></div><p> Fungerer normalt</p></span>
                 </div>

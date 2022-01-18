@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useContext } from "react";
 
-import { ErrorCloseCustomized, NoStatusAvailableCircle, OutlinedWrench, SuccessCustomized, WarningCustomized } from '../../components/TrafficLights'
+import { ErrorCustomized, NoStatusAvailableCircle, OutlinedWrench, SuccessCustomized, WarningCustomized } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { Area, MaintenanceObject} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
@@ -140,7 +140,7 @@ const handleAndSetStatusIcon = (status: string, isInternal?: boolean): any => {
         case 'OK':
             return <SuccessCustomized />
         case 'DOWN':
-            return <ErrorCloseCustomized />
+            return <ErrorCustomized />
         case 'ISSUE':
             // return <WarningCircleOrange />
             return <WarningCustomized />

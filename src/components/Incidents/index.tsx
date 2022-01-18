@@ -9,7 +9,7 @@ import { Bell } from '@navikt/ds-icons'
 import { fetchServices } from '../../utils/fetchServices'
 import { Service } from '../../types/navServices'
 import CustomNavSpinner from '../CustomNavSpinner'
-import { OutlinedWrench } from '../TrafficLights'
+import { ErrorCustomized, OutlinedWrench, SuccessCustomized, WarningCustomized } from '../TrafficLights'
 
 
 
@@ -24,9 +24,10 @@ const IncidentsPage = styled.div`
 `
 
 
-const IncidentsContainer = styled(Panel)`
+const IncidentsContainer = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-flow: column wrap;
+    gap: 32px;
 
     .incident-row {
         width: 650px;
@@ -94,9 +95,9 @@ const Incidents = ()  => {
 
 
 
-            <IncidentsContainer border>
+            <IncidentsContainer>
 
-                <div className="incident-row">
+                <Panel border className="incident-row">
                     <Heading spacing size="small" level="3">
                         <OutlinedWrench />
                         Tittel på avvik
@@ -110,7 +111,55 @@ const Incidents = ()  => {
                         It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
                         and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
                     </BodyLong>
-                </div>
+                </Panel>
+
+                <Panel border className="incident-row">
+                    <Heading spacing size="small" level="3">
+                        <span><SuccessCustomized /></span>
+                        Tittel på avvik
+                    </Heading>
+                    
+                    <BodyShort spacing className="time-frame" size="small">Tidsrom det foregikk i</BodyShort>
+                    <BodyLong>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+                        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+                        and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    </BodyLong>
+                </Panel>
+
+                <Panel border className="incident-row">
+                    <Heading spacing size="small" level="3">
+                        <span><WarningCustomized /></span>
+                        Tittel på avvik
+                    </Heading>
+                    
+                    <BodyShort spacing className="time-frame" size="small">Tidsrom det foregikk i</BodyShort>
+                    <BodyLong>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+                        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+                        and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    </BodyLong>
+                </Panel>
+
+                <Panel border className="incident-row">
+                    <Heading spacing size="small" level="3">
+                        <span><ErrorCustomized /></span>
+                        Tittel på avvik
+                    </Heading>
+                    
+                    <BodyShort spacing className="time-frame" size="small">Tidsrom det foregikk i</BodyShort>
+                    <BodyLong>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+                        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+                        and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    </BodyLong>
+                </Panel>
                 
             </IncidentsContainer>
 
