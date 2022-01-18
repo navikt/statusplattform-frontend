@@ -1,96 +1,89 @@
-import Link from 'next/link'
 import styled from 'styled-components'
-
-import { BackButton } from '../../components/BackButton'
-import { countFailingServices, getListOfTilesThatFail } from '../../utils/servicesOperations'
-
-import NavInfoCircle from '../../components/NavInfoCircle'
-import Alertstripe from 'nav-frontend-alertstriper'
-import { AreaServicesList, Service, Tile } from '../../types/navServices'
-import { Calender } from '@navikt/ds-icons'
-import { Heading } from '@navikt/ds-react'
 import { useEffect, useState } from 'react'
-import { fetchServiceFromId } from 'src/utils/fetchServiceFromId'
 import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
+
+import { BodyLong, Button, Heading } from '@navikt/ds-react'
+import { Bell } from '@navikt/ds-icons'
+
+import { fetchServices } from '../../utils/fetchServices'
+import { Service } from '../../types/navServices'
+import CustomNavSpinner from '../CustomNavSpinner'
+
+
+
+const IncidentsPage = styled.div`
+    display: flex;
+    flex-direction: column;
+    
+    .button-to-notifications {
+        max-width: 270px;
+        margin: 32px 0 60px 0;
+    }
+`
+
 
 const IncidentsContainer = styled.div`
-    margin: 20px 0;
-    width: 100%;
-`
-const CenterContent = styled.div`
-    margin: 0 auto;
-    max-width: 1100px;
-    padding: 1rem 1rem;
-
-    display: flex;
-    flex-direction: column;
-
-    @media(min-width:450px){
-        padding: 1rem 3rem;
-    }
-`
-
-const SectionContainer = styled.div`
-    margin: 10px 0;
-
-    display: flex;
-    justify-content: center;
-    flex-direction: column;
-    align-items: flex-start;
-`
-const IconWrapper = styled.div`
     display: flex;
     flex-direction: row;
-    align-items: center;
-    justify-content: center;
 
-    *:first-child{
-        margin-right: 20px;
+
+    .incident-row {
+        width: 650px;
+
+        display: flex;
+        flex-flow: row wrap;
     }
 `
 
-const IncidentsWrapper = styled.div`
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    
-`
-const ExistsIncidents = styled.div``
-
-const WhiteBackgroundContainer = styled.div`
-    background-color: var(--navBakgrunn);
-    width: 100%;
-    height: 100%;
-`
 
 
 const Incidents = ()  => {
     const [isLoading, setIsLoading] = useState(false)
-    const [service, setService] = useState<Service>()
+    const [services, setServices] = useState<Service[]>()
+    const [filteredServices, changeFilteredServices] = useState(services)
     
+    const router = useRouter()
     
     useEffect(() => {
         (async () => {
             setIsLoading(true)
-            const router = await useRouter()
-            console.log(router.asPath)
-            const retrievedService = await fetchServiceFromId("")
+            const retrievedServices = await fetchServices()
+            setServices(retrievedServices)
             setIsLoading(false)
         })()
     }, [])
 
+    if (isLoading) {
+        return <CustomNavSpinner />
+    }
+
+    const handleRedirectNotifications = () => {
+        toast.info("Ikke implementert enda")
+        // router.push("/OpprettVarsling")
+    }
 
 
     return (
-        <IncidentsContainer>
+        <IncidentsPage>
 
             <Heading spacing size="xlarge" level="2">
-                <b>Avvikshistorikk: </b> {service.name}
+                <b>Avvikshistorikk </b>
             </Heading>
 
+            <Button variant="secondary" className="button-to-notifications" onClick={() => handleRedirectNotifications()}><Bell /> Bli varslet ved avvik</Button>
+
+            <IncidentsContainer>
+                <div className="incident-row">
+                    <span>Icon and header</span>
+                    <span>Tidsrom det foregikk i</span>
+                    <BodyLong>Forklarende tekstForklarende tekstForklarende tekstForklarende tekstForklarende tekstForklarende tekst</BodyLong>
+                </div>
+            </IncidentsContainer>
 
 
-        </IncidentsContainer>
+
+        </IncidentsPage>
     )
 }
 

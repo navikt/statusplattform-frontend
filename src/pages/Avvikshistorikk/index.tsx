@@ -1,13 +1,13 @@
 import styled from 'styled-components'
-
 import { useEffect, useState } from 'react'
+
 import Layout from '../../components/Layout'
 import Incidents from '../../components/Incidents'
 import { Area, Dashboard } from '../../types/navServices'
-
 import { fetchDashboard } from '../../utils/fetchDashboard'
 import { fetchDashboardsList } from '../../utils/fetchDashboardsList'
-import CustomNavSpinner from 'src/components/CustomNavSpinner'
+import CustomNavSpinner from '../../components/CustomNavSpinner'
+
 
 
 const ErrorParagraph = styled.p`
