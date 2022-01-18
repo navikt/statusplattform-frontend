@@ -3,12 +3,13 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 
-import { BodyLong, Button, Heading } from '@navikt/ds-react'
+import { BodyLong, BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
 import { Bell } from '@navikt/ds-icons'
 
 import { fetchServices } from '../../utils/fetchServices'
 import { Service } from '../../types/navServices'
 import CustomNavSpinner from '../CustomNavSpinner'
+import { OutlinedWrench } from '../TrafficLights'
 
 
 
@@ -23,16 +24,31 @@ const IncidentsPage = styled.div`
 `
 
 
-const IncidentsContainer = styled.div`
+const IncidentsContainer = styled(Panel)`
     display: flex;
     flex-direction: row;
-
 
     .incident-row {
         width: 650px;
 
         display: flex;
         flex-flow: row wrap;
+
+        h3 {
+            display: flex;
+
+            span {
+                align-self: center;
+            }
+        }
+
+        .time-frame {
+            color: var(--navds-global-color-gray-600);
+        }
+
+        & > * {
+            flex-basis: 100%;
+        }
     }
 `
 
@@ -68,17 +84,33 @@ const Incidents = ()  => {
         <IncidentsPage>
 
             <Heading spacing size="xlarge" level="2">
-                <b>Avvikshistorikk </b>
+                Avvikshistorikk
             </Heading>
 
-            <Button variant="secondary" className="button-to-notifications" onClick={() => handleRedirectNotifications()}><Bell /> Bli varslet ved avvik</Button>
+            <Button variant="secondary" className="button-to-notifications" onClick={() => handleRedirectNotifications()}>
+                <Bell /> Bli varslet ved avvik
+            </Button>
 
-            <IncidentsContainer>
+
+
+            <IncidentsContainer border>
+
                 <div className="incident-row">
-                    <span>Icon and header</span>
-                    <span>Tidsrom det foregikk i</span>
-                    <BodyLong>Forklarende tekstForklarende tekstForklarende tekstForklarende tekstForklarende tekstForklarende tekst</BodyLong>
+                    <Heading spacing size="small" level="3">
+                        <OutlinedWrench />
+                        Tittel på avvik
+                    </Heading>
+                    
+                    <BodyShort spacing className="time-frame" size="small">Tidsrom det foregikk i</BodyShort>
+                    <BodyLong>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+                        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+                        and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                    </BodyLong>
                 </div>
+                
             </IncidentsContainer>
 
 

@@ -67,10 +67,7 @@ export const WarningCustomized = styled(Warning)`
 
 
 export const ErrorCloseCustomized = styled(Error)`
-    /* transform: scale(1.2); */
-    stroke: var(--navds-semantic-color-feedback-error-icon) !important;
     color: var(--redError) !important;
-    /* background-color: var(--redError); */
 `
 
 export const NoStatusAvailableCircle = styled.span`
@@ -82,14 +79,36 @@ export const NoStatusAvailableCircle = styled.span`
     display: inline-block;
 `;
 
-export const PlannedMaintenanceCircle = styled.span`
-    height: 16px;
-    width: 16px;
-    background-color: var(--navBlaLighten40);
-    /* border: 4px solid var(--navGronn); */
+const WrenchCustomized = styled(Wrench)`
+    color: var(--navds-global-color-deepblue-400);
+`
+
+const Outine = styled.span`
     border-radius: 50%;
-    display: inline-block;
-`;
+    border: 1px solid var(--navds-global-color-deepblue-400);
+
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+        width: 18px;
+        height: 18px;
+    }
+`
+
+
+
+export const OutlinedWrench = () => {
+    return (
+        <Outine>
+            <WrenchCustomized />
+        </Outine>
+    )
+    
+} 
 
 interface Props {
     isInternal: boolean
@@ -108,7 +127,7 @@ const TrafficLights = ({isInternal}: Props) => {
                 </div>
                 <div className="extra-info-wrapper">
                     {isInternal && <div><NoStatusAvailableCircle /><p> Status ikke levert av team </p></div>}
-                    <div><PlannedMaintenanceCircle><Wrench /></PlannedMaintenanceCircle><p> Planlagt vedlikehold</p></div>
+                    <div><OutlinedWrench /><p> Planlagt vedlikehold</p></div>
                 </div>
             </TrafficLightsContainer>
         </div>
