@@ -39,6 +39,7 @@ const IncidentsContainer = styled(Panel)`
 
             span {
                 align-self: center;
+                margin-right: 8px;
             }
         }
 
