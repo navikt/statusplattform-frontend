@@ -52,6 +52,10 @@ export const NavigatorProvider: React.FC<{children: ReactNode}> = ({children}) =
                     lastElement: false
             }
 
+            convertedElement.stringifiedPathName = convertedElement.stringifiedPathName.replace(/[^a-zæøåA-ZÆØÅ0-9 ?= ]/g, '')
+
+            // console.log(convertedElement.stringifiedPathName.replace('/#\w+\s*/', ' $1'))
+
             // Mulig løsning: [?]tab[=]
             // convertedElement.stringifiedPathName = element.replace(/[?]tab[=]/g, "/")
             
