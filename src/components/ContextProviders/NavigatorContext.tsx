@@ -29,7 +29,6 @@ export const NavigatorProvider: React.FC<{children: ReactNode}> = ({children}) =
     useEffect(() => {
         (async () => {
             changeRoutes(convertRouteToNavigatorElementList())
-            // console.log(router.)
         })()
     }, [router])
 
@@ -38,16 +37,11 @@ export const NavigatorProvider: React.FC<{children: ReactNode}> = ({children}) =
 
 
     const convertRouteToNavigatorElementList = (): NavigatorElement[] => {
-        // Hent hele routen
         const routerAsPath = router.asPath
-        // console.log(routerAsPath)
 
-        // Split på "/" for å lage liste av route
         let splitList: string[] = routerAsPath.split("/")
 
-        // Lag tom liste av typen NavigatorElement
         const convertedRoute: NavigatorElement[] = []
-        // Gå gjennom liste og konverter til NavigatorElement med path lik det de har
 
         // Dette må trimmes bort også: ?tab=
         splitList.map((element, index) => {
@@ -76,6 +70,7 @@ export const NavigatorProvider: React.FC<{children: ReactNode}> = ({children}) =
                 element: string, index: number, convertedElement: NavigatorElement, splitList: string[], convertedRoute: NavigatorElement[]
             ): NavigatorElement => {
 
+
         switch (index) {
 
             case 0:
@@ -84,7 +79,7 @@ export const NavigatorProvider: React.FC<{children: ReactNode}> = ({children}) =
                 convertedElement.home = true
                 break
 
-            case ((index = splitList.length-1) && (index = 1)):
+            case ((index == splitList.length-1) && (index = 1)):
                 convertedElement.path = convertedRoute[index-1].path + element
                 convertedElement.lastElement = true
                 break

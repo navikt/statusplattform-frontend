@@ -97,6 +97,7 @@ const MainContent = props => {
                 </div>
             }
             <Content id="content">
+                <Navigator />
                 <PageHeader />
                 {props.children}
             </Content>
@@ -111,7 +112,7 @@ export default MainContent
 
 
 
-const Navigator = styled.div`
+const NavigatorContainer = styled.div`
     width: 100%;
     left: 0;
     padding: 0.75rem 1rem;
@@ -151,12 +152,48 @@ const Navigator = styled.div`
 `
 
 
-const PageHeader = () => {
+const Navigator = () => {
     const { navigatorRoutes } = useContext(NavigatorContext)
 
     const router = useRouter()
-    let pageTitle = "Status digitale tjenester"
 
+    const handleNavigatorRedirect = (path) => {
+        if(path == "/Dashboard") {
+            router.push("/")
+        }
+        else {
+            router.push(path)
+        }
+    }
+
+
+    return (
+        <NavigatorContainer>
+
+            {navigatorRoutes.map((element, index) =>    
+                <BodyShort key={index} className="navigator-element">
+                    <span aria-label={"Naviger til " + element.stringifiedPathName} onClick={() => handleNavigatorRedirect(element.path)} className="navds-link">
+                        {element.home &&
+                            <Home className="home-svg"/> 
+                        }
+                        {element.stringifiedPathName}
+                    </span>
+                    {!element.lastElement &&
+                        <span className="navds-chevron">
+                            <Next />
+                        </span>
+                    }
+                </BodyShort>
+            )}
+        </NavigatorContainer>
+    )
+}
+
+
+const PageHeader = () => {
+    const router = useRouter()
+
+    let pageTitle = "Status digitale tjenester"
     /*Consider changing this solution to rather use React Context as its cleaner and allows usability in other components, should they need it*/
     const currentRoute = router.asPath
 
@@ -178,35 +215,11 @@ const PageHeader = () => {
             break
     }
 
-    const handleNavigatorRedirect = (path) => {
-        if(path == "/Dashboard") {
-            router.push("/")
-        }
-        else {
-            router.push(path)
-        }
-    }
-
-
     return (
-        <Navigator>
-
-            {navigatorRoutes.map((element, index) =>    
-                <BodyShort key={index} className="navigator-element">
-                    <span aria-label={"Naviger til " + element.stringifiedPathName} onClick={() => handleNavigatorRedirect(element.path)} className="navds-link">
-                        {element.home &&
-                            <Home className="home-svg"/> 
-                        }
-                        {element.stringifiedPathName}
-                    </span>
-                    {!element.lastElement &&
-                        <span className="navds-chevron">
-                            <Next />
-                        </span>
-                    }
-                </BodyShort>
-            )}
-            
-        </Navigator>
+        <Heading spacing size="2xlarge" level="1">
+            {!router.asPath.includes("Avvikshistorikk") &&
+                pageTitle
+            }
+        </Heading>
     )
 }
