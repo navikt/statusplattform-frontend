@@ -98,7 +98,7 @@ const MaintenanceContainer = styled.div`
     max-width: none;
 `
 
-const StatusSummary = styled.p`
+const StatusSummary = styled.div`
     margin: 0;
     font-size: 1rem;
     font-weight: bold;
@@ -119,9 +119,6 @@ const StatusOverview = (props: AreaServicesList) => {
 
     const router = useRouter()
 
-    const handleRedirect = () => {
-        toast.info("Ikke implementert enda")
-    }
 
     return (
         <StatusOverviewContainer>
@@ -164,7 +161,7 @@ const StatusOverview = (props: AreaServicesList) => {
                     <Button variant="secondary" size="medium" onClick={() => router.push("/Avvikshistorikk")}>
                         Se avvikshistorikk
                     </Button>
-                    <Button variant="secondary" size="medium" onClick={handleRedirect}>
+                    <Button variant="secondary" size="medium" onClick={() => router.push("/OpprettVarsling")}>
                         <Bell /> <BodyShort>Bli varslet ved avvik</BodyShort>
                     </Button>
                 </div>

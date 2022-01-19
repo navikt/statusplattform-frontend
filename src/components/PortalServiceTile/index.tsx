@@ -181,10 +181,12 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
                         {/* <span>{handleAndSetStatusIcon(area.status, false)}</span> */}
                         <span>{handleAndSetNavIcon(area.icon)}</span>
                         <span>{area.name}</span>
+                    
                     </SystemtittelCustomized> 
-                    <BodyShort spacing>
-                        <SwitchEtikett status={area.status} maintenanceObject={testMaintenanceObject}/>
-                    </BodyShort>
+
+
+                    <SwitchEtikett status={area.status} maintenanceObject={testMaintenanceObject} />
+
                     {testMaintenanceObject.message &&
                         <BodyShort className="maintenance-message">
                             <Wrench className="icon" /> {testMaintenanceObject.message}

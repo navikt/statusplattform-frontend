@@ -89,7 +89,7 @@ const Incidents = ()  => {
                 Avvikshistorikk
             </Heading>
 
-            <Button variant="secondary" className="button-to-notifications" onClick={() => handleRedirectNotifications()}>
+            <Button variant="secondary" className="button-to-notifications" onClick={() => router.push("/OpprettVarsling")}>
                 <Bell /> Bli varslet ved avvik
             </Button>
 

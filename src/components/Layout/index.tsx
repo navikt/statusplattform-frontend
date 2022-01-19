@@ -1,17 +1,18 @@
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import styled from 'styled-components'
+import { useContext } from 'react'
 
+import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify'
 
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import Navbar from '../../components/Navbar'
-import { useRouter } from 'next/router'
+import { NavigatorContext } from '../ContextProviders/NavigatorContext'
 
-import 'react-toastify/dist/ReactToastify.css';
 import { BodyShort, Heading } from '@navikt/ds-react'
 import { Home, Next } from '@navikt/ds-icons'
-import { addListener } from 'process'
 
 
 
@@ -110,18 +111,23 @@ export default MainContent
 
 
 
-const PageHeaderContainer = styled.div`
-    .navigator {
-        display: flex;
-        align-items: center;
-        flex-flow: row wrap;
+const Navigator = styled.div`
+    width: 100%;
+    left: 0;
+    padding: 0.75rem 1rem;
 
-        width: 100vw;
-        padding: 0.75rem 1rem;
-        
-        span {
-            display: flex;
-            align-items: center;
+    display: flex;
+    flex-flow: row wrap;
+
+    .navigator-element {
+        width: max-content;
+
+        display: flex;
+
+        .navds-link {
+            :hover {
+                cursor: pointer;
+            }
         }
 
         .home-svg {
@@ -131,6 +137,10 @@ const PageHeaderContainer = styled.div`
 
         .navds-chevron {
             color: #78706a;
+            margin: 0 12px;
+
+            display: flex;
+            align-items: center;
         }
     }
 
@@ -142,16 +152,17 @@ const PageHeaderContainer = styled.div`
 
 
 const PageHeader = () => {
+    const { navigatorRoutes } = useContext(NavigatorContext)
+
     const router = useRouter()
     let pageTitle = "Status digitale tjenester"
-
 
     /*Consider changing this solution to rather use React Context as its cleaner and allows usability in other components, should they need it*/
     const currentRoute = router.asPath
 
     switch(currentRoute) {
         case "/Admin/NewDashboard":
-            pageTitle = "Opprett nytt dashbord"
+            pageTitle = "Opprett nytt Dashboard"
             break
         case "/Admin/NewOmraade":
             pageTitle = "Opprett nytt område"
@@ -159,28 +170,43 @@ const PageHeader = () => {
         case "/Admin/NewTjeneste":
             pageTitle = "Opprett ny tjeneste"
             break
+        case "/OpprettVarsling":
+            pageTitle = "Opprett varsling for digitale tjenester"
+            break
         default:
             pageTitle = "Status digitale tjenester"
             break
     }
 
+    const handleNavigatorRedirect = (path) => {
+        if(path == "/Dashboard") {
+            router.push("/")
+        }
+        else {
+            router.push(path)
+        }
+    }
+
+
     return (
-        <PageHeaderContainer>
-            <BodyShort className="navigator">
-                <a href="/" className="navds-link">
-                    <Home className="home-svg"/> Status digitale tjenester
-                </a> 
-                {router.asPath.includes("Admin") &&
-                    <span>
-                        <Next className="navds-chevron" /> <a href="/">Admin</a>
+        <Navigator>
+
+            {navigatorRoutes.map((element, index) =>    
+                <BodyShort key={index} className="navigator-element">
+                    <span aria-label={"Naviger til " + element.stringifiedPathName} onClick={() => handleNavigatorRedirect(element.path)} className="navds-link">
+                        {element.home &&
+                            <Home className="home-svg"/> 
+                        }
+                        {element.stringifiedPathName}
                     </span>
-                }
-            </BodyShort>
-            <Heading spacing size="2xlarge" level="1">
-                {!router.asPath.includes("Avvikshistorikk") &&
-                    pageTitle
-                }
-            </Heading>
-        </PageHeaderContainer>
+                    {!element.lastElement &&
+                        <span className="navds-chevron">
+                            <Next />
+                        </span>
+                    }
+                </BodyShort>
+            )}
+            
+        </Navigator>
     )
 }
