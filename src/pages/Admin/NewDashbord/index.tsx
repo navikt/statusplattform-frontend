@@ -15,7 +15,7 @@ import { postDashboard } from "../../../utils/postDashboard";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { HorizontalSeparator } from "..";
-import { TitleContext } from "../../components/ContextProviders/TitleContext";
+import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 
 
 const NewDashboardContainer = styled.div`

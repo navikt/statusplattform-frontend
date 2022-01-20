@@ -15,7 +15,7 @@ import { BodyShort, Button, Detail, Select } from "@navikt/ds-react";
 import { Input } from "nav-frontend-skjema";
 import { Delete } from "@navikt/ds-icons";
 import { HorizontalSeparator } from "..";
-import { TitleContext } from "../../components/ContextProviders/TitleContext";
+import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 
 
 const NewServiceContainer = styled.div`
