@@ -19,7 +19,7 @@ import { Expand } from '@navikt/ds-icons'
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
 import { UserData } from '../../types/userData'
 import { Alert, BodyLong, BodyShort, Button } from '@navikt/ds-react'
-import { TitleContext } from 'src/components/ContextProviders/TitleContext'
+import { TitleContext } from '../../components/ContextProviders/TitleContext'
 
 /* --------------------------------------- Styles start --------------------------------------- */
 

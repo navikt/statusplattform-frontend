@@ -7,7 +7,7 @@ import Layout from '../../components/Layout'
 import { Knapp } from 'nav-frontend-knapper'
 import { Input } from 'nav-frontend-skjema'
 import { useRouter } from 'next/router';
-import { TitleContext } from 'src/components/ContextProviders/TitleContext';
+import { TitleContext } from '../../components/ContextProviders/TitleContext';
 
 
 
