@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 
@@ -10,6 +10,7 @@ import { fetchServices } from '../../utils/fetchServices'
 import { Service } from '../../types/navServices'
 import CustomNavSpinner from '../CustomNavSpinner'
 import { ErrorCustomized, OutlinedWrench, SuccessCustomized, WarningCustomized } from '../TrafficLights'
+import { TitleContext } from '../ContextProviders/TitleContext'
 
 
 
@@ -62,9 +63,15 @@ const Incidents = ()  => {
     const [filteredServices, changeFilteredServices] = useState(services)
     
     const router = useRouter()
+
+    const { changeTitle } = useContext(TitleContext)
+    
+    // useEffect(() => {
+    // })
     
     useEffect(() => {
         (async () => {
+            changeTitle("Avvikshistorikk")
             setIsLoading(true)
             const retrievedServices = await fetchServices()
             setServices(retrievedServices)
@@ -84,10 +91,6 @@ const Incidents = ()  => {
 
     return (
         <IncidentsPage>
-
-            <Heading spacing size="xlarge" level="2">
-                Avvikshistorikk
-            </Heading>
 
             <Button variant="secondary" className="button-to-notifications" onClick={() => router.push("/OpprettVarsling")}>
                 <Bell /> Bli varslet ved avvik

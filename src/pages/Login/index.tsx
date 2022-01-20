@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
@@ -7,6 +7,7 @@ import Layout from '../../components/Layout'
 import { Knapp } from 'nav-frontend-knapper'
 import { Input } from 'nav-frontend-skjema'
 import { useRouter } from 'next/router';
+import { TitleContext } from 'src/components/ContextProviders/TitleContext';
 
 
 
@@ -82,10 +83,12 @@ const LoginPage = () => {
         password: ""
     })
     const [currentLocation, setCurrentLocation] = useState<string>()
-
+    const { changeTitle } = useContext(TitleContext)
+    
     const router = useRouter()
-
+    
     useEffect(() => {
+        changeTitle("Logg inn")
         setCurrentLocation(location.hostname)
     },[])
 

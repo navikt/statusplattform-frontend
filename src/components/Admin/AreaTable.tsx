@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Head from 'next/head'
 import { toast } from 'react-toastify';
 
@@ -26,6 +26,7 @@ import { useLoader } from '../../utils/useLoader';
 import { updateArea } from '../../utils/updateArea';
 import { Button } from '@navikt/ds-react';
 import router from 'next/router';
+import { TitleContext } from '../ContextProviders/TitleContext';
 
 
 
@@ -110,6 +111,11 @@ const AreaTable = () => {
     const { data: allAreas, isLoading: isLoadingAreas, reload: reloadAreas } = useLoader(fetchAreas,[]);
     const { data: allServices, isLoading: isLoadingServices, reload: reloadServices } = useLoader(fetchServices,[]);
 
+    const { changeTitle } = useContext(TitleContext)
+
+    useEffect(() => {
+        changeTitle("Admin - Områder")
+    })
 
 
     const reloadAll = () => {

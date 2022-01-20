@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import Head from 'next/head'
 import router from 'next/router';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -21,6 +21,7 @@ import { fetchServices } from '../../utils/fetchServices';
 import { fetchTypes } from '../../utils/fetchTypes';
 import { CloseCustomized, ModalInner } from '.';
 import { updateService } from '../../utils/updateService';
+import { TitleContext } from '../ContextProviders/TitleContext';
 
 const TjenesteTableContainer = styled.div`
     .services-overflow-container {
@@ -129,6 +130,11 @@ const TjenesteTable = () => {
     const { data: services, isLoading: loadingServices, reload } = useLoader(fetchServices,[]);
     const { data: types, isLoading: loadingTypes, reload: reloadTypes } = useLoader(fetchTypes,[]);
 
+    const { changeTitle } = useContext(TitleContext)
+    
+    useEffect(() => {
+        changeTitle("Admin - Tjenester")
+    })
 
     if(loadingServices || loadingTypes) {
         return (
@@ -727,7 +733,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
         monitorlink: "",
         pollingUrl: undefined
     })
-
+    
     useEffect(() => {
         (async function () {
             setIsLoading(true)

@@ -13,6 +13,7 @@ import { NavigatorContext } from '../ContextProviders/NavigatorContext'
 
 import { BodyShort, Heading } from '@navikt/ds-react'
 import { Home, Next } from '@navikt/ds-icons'
+import { TitleContext } from '../ContextProviders/TitleContext';
 
 
 
@@ -71,7 +72,9 @@ const NavLink = styled(Link)
 
 
 const MainContent = props => {
+    const { title } = useContext(TitleContext)
     const router = useRouter()
+
     let currentPath = router.asPath
     currentPath = currentPath.includes("#") ? currentPath.substring(0, currentPath.indexOf("#")) : currentPath    
 
@@ -98,7 +101,7 @@ const MainContent = props => {
             }
             <Content id="content">
                 <Navigator />
-                <PageHeader />
+                <PageHeader title={title} />
                 {props.children}
             </Content>
 
@@ -190,36 +193,11 @@ const Navigator = () => {
 }
 
 
-const PageHeader = () => {
-    const router = useRouter()
-
-    let pageTitle = "Status digitale tjenester"
-    /*Consider changing this solution to rather use React Context as its cleaner and allows usability in other components, should they need it*/
-    const currentRoute = router.asPath
-
-    switch(currentRoute) {
-        case "/Admin/NewDashboard":
-            pageTitle = "Opprett nytt Dashboard"
-            break
-        case "/Admin/NewOmraade":
-            pageTitle = "Opprett nytt område"
-            break
-        case "/Admin/NewTjeneste":
-            pageTitle = "Opprett ny tjeneste"
-            break
-        case "/OpprettVarsling":
-            pageTitle = "Opprett varsling for digitale tjenester"
-            break
-        default:
-            pageTitle = "Status digitale tjenester"
-            break
-    }
+const PageHeader: React.FC<{title: string}> = ({title}) => {
 
     return (
         <Heading spacing size="2xlarge" level="1">
-            {!router.asPath.includes("Avvikshistorikk") &&
-                pageTitle
-            }
+            {title}
         </Heading>
     )
 }

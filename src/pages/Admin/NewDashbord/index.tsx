@@ -1,5 +1,5 @@
 import router from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
 
@@ -15,6 +15,7 @@ import { postDashboard } from "../../../utils/postDashboard";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { HorizontalSeparator } from "..";
+import { TitleContext } from "src/components/ContextProviders/TitleContext";
 
 
 const NewDashboardContainer = styled.div`
@@ -195,10 +196,11 @@ const AreasContainer = styled.div`
 
 const DashboardAreas = ({newDashboard, allAreas, handleDeleteAreaOnDashboard, handleAddAreaToDashboard}: DashboardProps) => {
     const availableAreas: Area[] = allAreas.filter(area => !newDashboard.areas.map(a => a.id).includes(area.id))
-
+    const { changeTitle } = useContext(TitleContext)
     const [selectedArea, changeSelectedArea] = useState<Area | null>(() => availableAreas.length > 0 ? availableAreas[0] : null)
-
+    
     useEffect(() => {
+        changeTitle("Opprett nytt dashbord")
         if(availableAreas.length > 0){
             changeSelectedArea(availableAreas[0])
         }

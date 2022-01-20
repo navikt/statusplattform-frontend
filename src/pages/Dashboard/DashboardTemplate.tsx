@@ -19,6 +19,7 @@ import { Expand } from '@navikt/ds-icons'
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
 import { UserData } from '../../types/userData'
 import { Alert, BodyLong, BodyShort, Button } from '@navikt/ds-react'
+import { TitleContext } from 'src/components/ContextProviders/TitleContext'
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
@@ -146,9 +147,12 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     const [showAll, toggleShowAll] = useState(false)
 
     const {filters} = useContext(FilterContext)
+    
+    const { changeTitle } = useContext(TitleContext)
 
+    
     const user = useContext<UserData>(UserStateContext)
-
+    
 
     const router = useRouter()
 
@@ -161,6 +165,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     useEffect(() => {
         (async function () {
             setIsLoading(true)
+            changeTitle("Status digitale tjenester")
             const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
             setAreasInDashboard(retrievedAreasInDashboard.areas)
             rerouteIfNoDashboard()

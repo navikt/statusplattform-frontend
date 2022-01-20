@@ -1,6 +1,6 @@
 import styled from "styled-components"
 import router from "next/router";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 
 import { Delete } from "@navikt/ds-icons";
 import { BodyShort, Button, Detail, Select } from "@navikt/ds-react";
@@ -15,6 +15,7 @@ import { useLoader } from "../../../utils/useLoader";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { HorizontalSeparator } from "..";
+import { TitleContext } from "src/components/ContextProviders/TitleContext";
 
 
 
@@ -212,10 +213,11 @@ const ServicesContainer = styled.div`
 
 const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDeleteServiceOnArea, handleAddServiceToArea: handleAddServiceToArea}: AreaProps) => {
     const availableServices: Service[] = allServices.filter(area => !newArea.services.map(a => a.id).includes(area.id))
-
+    const { changeTitle } = useContext(TitleContext)
     const [selectedService, changeSelectedService] = useState<Service | null>(() => availableServices.length > 0 ? availableServices[0] : null)
-
+    
     useEffect(() => {
+        changeTitle("Opprett nytt område")
         if(availableServices.length > 0){
             changeSelectedService(availableServices[0])
         }

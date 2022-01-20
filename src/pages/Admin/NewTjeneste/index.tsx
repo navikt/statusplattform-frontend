@@ -1,6 +1,6 @@
 import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import router from "next/router";
 
 import Layout from '../../../components/Layout';
@@ -15,6 +15,7 @@ import { BodyShort, Button, Detail, Select } from "@navikt/ds-react";
 import { Input } from "nav-frontend-skjema";
 import { Delete } from "@navikt/ds-icons";
 import { HorizontalSeparator } from "..";
+import { TitleContext } from "src/components/ContextProviders/TitleContext";
 
 
 const NewServiceContainer = styled.div`
@@ -277,10 +278,12 @@ const DependenciesContainer = styled.div`
 
 const ServiceDependencies = ({newService, allServices, handleDeleteServiceDependency, handleAddServiceDependency}: ServiceProps) => {
     const availableServices: Service[] = allServices.filter(area => !newService.dependencies.map(a => a.id).includes(area.id))
+    const { changeTitle } = useContext(TitleContext)
 
     const [selectedService, changeSelectedService] = useState<Service | null>(() => availableServices.length > 0 ? availableServices[0] : null)
 
     useEffect(() => {
+        changeTitle("Opprett ny tjeneste")
         if(availableServices.length > 0){
             changeSelectedService(availableServices[0])
         }

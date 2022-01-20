@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import Head from 'next/head'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
@@ -23,6 +23,7 @@ import { useLoader } from '../../utils/useLoader'
 import { CloseCustomized } from '.'
 import { useRouter } from 'next/router'
 import { BodyShort, Button } from '@navikt/ds-react'
+import { TitleContext } from '../ContextProviders/TitleContext'
 
 
 const DashboardTableContainer = styled.div`
@@ -39,6 +40,12 @@ const DashboardTableContainer = styled.div`
 
 const DashboardTable = () => {
     const { data: dashboards, isLoading, reload } = useLoader(fetchDashboardsList,[]);
+
+    const { changeTitle } = useContext(TitleContext)
+
+    useEffect(() => {
+        changeTitle("Admin - Dashbord")
+    })
 
     const router = useRouter()
 
