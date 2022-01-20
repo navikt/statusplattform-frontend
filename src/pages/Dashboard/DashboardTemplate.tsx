@@ -307,7 +307,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
                     <div className="button-container">
                         <Button variant="secondary" onClick={() => toggleShowAll(!showAll)}>Vis alle områder</Button>
-                        <Button variant="secondary" onClick={() => toast.info("Ikke implementert enda")}>Se avvikshistorikk</Button>
+                        <Button variant="secondary" onClick={() => router.push("/Avvikshistorikk")}>Se avvikshistorikk</Button>
                     </div>
 
                     {showAll &&
