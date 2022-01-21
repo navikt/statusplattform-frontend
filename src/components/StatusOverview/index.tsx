@@ -5,9 +5,8 @@ import { AreaServicesList } from '../../types/navServices'
 import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from '../../utils/servicesOperations';
 
 import Panel from 'nav-frontend-paneler'
-import { Systemtittel, Undertekst } from 'nav-frontend-typografi';
 import { Bell } from '@navikt/ds-icons';
-import { BodyShort, Button, Detail, Heading } from '@navikt/ds-react';
+import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 
 
@@ -31,6 +30,10 @@ const StatusBannerContainer = styled(Panel)`
         display: flex;
         flex-direction: column;
 
+        span {
+            vertical-align: middle;
+            height: 24px;
+        }
         
         button:first-child {
             margin-bottom: 16px;
@@ -39,64 +42,21 @@ const StatusBannerContainer = styled(Panel)`
 
     div:first-child {
         max-width: 700px;
+        margin-bottom: 16px;
     }
 
     @media (min-width: 500px) {
         flex-direction: row;
+
+        div:first-child {
+            margin-bottom: 0;
+        }
     }
     
     h2 {
         margin: 0 0 .5rem;
     }
 `;
-
-
-const OverviewComponents = styled.div`
-    padding: 2rem 1rem;
-    display: flex;
-    flex-direction: column;
-    @media (min-width: 350px){
-        flex-direction: row;
-        justify-content: space-between;
-    }
-`;
-const StatusContainer = styled.div`
-    width: calc(50% - 1rem);
-    max-width: none;
-`
-
-const IconHeader = styled.div`
-    width: 100%;
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    span {
-        margin-right: 10px;
-        font-size: 2rem;
-    }
-`
-
-const CirclesContainer = styled.div`
-    max-width: 30rem;
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-`;
-
-const IncidentsAndStatusCircleWrapper = styled.div`
-    border: 2px solid transparent;
-    border-radius: 50%;
-`;
-
-const MaintenanceStatusCircleWrapper = styled.div`
-    border: 2px solid transparent;
-    border-radius: 50%;
-`;
-
-const MaintenanceContainer = styled.div`
-    width: calc(50% - 1rem);
-    max-width: none;
-`
 
 const StatusSummary = styled.div`
     margin: 0;
@@ -157,49 +117,18 @@ const StatusOverview = (props: AreaServicesList) => {
                     <BodyShort size="small">Sist oppdatert: Ikke implementert</BodyShort>
                     
                 </div>
+
                 <div className="knapp-wrapper">
                     <Button variant="secondary" size="medium" onClick={() => router.push("/Avvikshistorikk")}>
                         Se avvikshistorikk
                     </Button>
                     <Button variant="secondary" size="medium" onClick={() => router.push("/OpprettVarsling")}>
-                        <Bell /> <BodyShort>Bli varslet ved avvik</BodyShort>
+                        <span><Bell /></span> <BodyShort>Bli varslet ved avvik</BodyShort>
                     </Button>
                 </div>
-                {/* <Link href="/IncidentsPage"> */}
-                {/* </Link> */}
+
             </StatusBannerContainer>
-            {/*
-            <OverviewComponents>
-                <StatusContainer>
-                    <IconHeader>
-                        <span><Calender /></span>
-                        <div>
-                            <Systemtittel>
-                                Hendelser
-                                <Undertekst> siste 48 timene</Undertekst>
-                            </Systemtittel>
-                        </div>
-                    </IconHeader>
-                <CirclesContainer>
-
-                        <IncidentsAndStatusCircleWrapper>
-                            <NavInfoCircle topText="Hendelser" centerTextLeft="0" centerTextRight="16" bottomText="Siste 24 timene"/>
-                        </IncidentsAndStatusCircleWrapper>
-
-                        <MaintenanceStatusCircleWrapper>
-                            <NavInfoCircle topText="Systemer" centerTextLeft={numberOfHealthyServices} centerTextRight={numberOfServices} bottomText="Oppe"/>
-                        </MaintenanceStatusCircleWrapper>
-
-                    </CirclesContainer>
-                </StatusContainer>
-                <MaintenanceContainer>
-                    <IconHeader>
-                        <MaintenanceScheduling />
-                    </IconHeader>
-                </MaintenanceContainer>
-
-            </OverviewComponents>*/}
-
+           
         </StatusOverviewContainer>
     )
 }

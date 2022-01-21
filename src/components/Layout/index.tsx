@@ -24,34 +24,39 @@ const MainContentContainer = styled.div`
     background-color: var(--navGraBakgrunn);
     overflow: hidden;
     font-family: "Source Sans Pro", Arial, sans-serif;
+
     display: flex;
     flex-direction: column;
-
 
     .skip-links {
         background-color: var(--navBla);
         padding: 0.5rem;
-        color: white;
         height: 2.75rem;
         width: 120px;
         transform: translateY(-100%);
         position: absolute;
+        
         ul {
             list-style: none;
+
             li {
                 overflow: hidden;
                 left: 1rem;
                 top: 25%;
                 position: absolute;
+
                 a {
                     opacity: 0;
+
                     :focus {
                         overflow: visible;
                         opacity: 1;
+                        color: white;
                     }
                 }
             }
         }
+
         :focus-within {
             transform: translateY(0%);
         }
@@ -59,16 +64,25 @@ const MainContentContainer = styled.div`
 `;
 
 const Content = styled.main`
-    width: 100%;
     min-height: 100%;
-    margin-bottom: 2rem;
+    margin: 0 10px 2rem;
+    white-space: pre-wrap;
+    
+    h1 {
+        text-align: center;
+    }
+
     display: flex;
+    flex-flow: column wrap;
     align-items: center;
     justify-content: center;
-    flex-flow: column wrap;
-`;
 
-const NavLink = styled(Link)
+    @media(min-width: 400px) {
+        h1 {
+            text-align: left;
+        }
+    }
+`;
 
 
 const MainContent = props => {
@@ -129,6 +143,8 @@ const NavigatorContainer = styled.div`
         display: flex;
 
         .navds-link {
+            margin: .25rem .25rem .25rem 0;
+
             :hover {
                 cursor: pointer;
             }
@@ -136,7 +152,10 @@ const NavigatorContainer = styled.div`
 
         .home-svg {
             margin-right: 12px;
-            color: black;
+            
+            svg {
+                color: black;
+            }
         }
 
         .navds-chevron {
@@ -177,7 +196,9 @@ const Navigator = () => {
                 <BodyShort key={index} className="navigator-element">
                     <span aria-label={"Naviger til " + element.stringifiedPathName} onClick={() => handleNavigatorRedirect(element.path)} className="navds-link">
                         {element.home &&
-                            <Home className="home-svg"/> 
+                            <span className="home-svg">
+                                <Home /> 
+                            </span>
                         }
                         {element.stringifiedPathName}
                     </span>
