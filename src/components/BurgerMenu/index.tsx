@@ -10,7 +10,7 @@ import { Button } from '@navikt/ds-react';
 
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { UserData } from '../../types/userData';
-import { LoginRoute } from '../../types/routes';
+import { Admin, Arbeidsgiver, Internt, LoginRoute, LogoutRoute, Privatperson, Samarbeidspartner } from '../../types/routes';
 
 const BurgerMenuContainer = styled.div`
     z-index: 10;
@@ -149,10 +149,12 @@ const PopoverContent = () => {
             <div className="popover-content">
                 <section>
                     <ul>
-                        <li><Link href="/Dashboard/Privatperson">Privatperson</Link></li>
-                        <li><Link href="/Dashboard/Arbeidsgiver">Arbeidsgiver</Link></li>
-                        <li><Link href="/Dashboard/Samarbeidspartner">Samarbeidspartner</Link></li>
-                        <li><Link href="/Dashboard/Internt">Internt (Kun for innloggede nav brukere)</Link></li>
+                        <li><Link href={Privatperson.PATH}>{Privatperson.NAME}</Link></li>
+                        <li><Link href={Arbeidsgiver.PATH}>{Arbeidsgiver.NAME}</Link></li>
+                        <li><Link href={Samarbeidspartner.PATH}>{Samarbeidspartner.NAME}</Link></li>
+                        {user.navIdent &&
+                            <li><Link href={Internt.PATH}>{Internt.NAME} (Kun for innloggede nav brukere)</Link></li>
+                        }
                     </ul>
                 </section>
                 
@@ -163,16 +165,16 @@ const PopoverContent = () => {
                         {user.navIdent &&
                             <>
                                 <li>
-                                    <Lenke href="/Admin">
+                                    <Lenke href={Admin.PATH}>
                                         <Employer className="popover-link-ikon" />
-                                        Adminside
+                                        {Admin.NAME}
                                     </Lenke>
                                 </li>
 
                                 <li>
-                                    <Lenke href="/oauth2/logout">
+                                    <Lenke href={LogoutRoute.PATH}>
                                         <Login className="popover-link-ikon" />
-                                        Logg ut
+                                        {LogoutRoute.NAME}
                                     </Lenke>
                                 </li>
                             </>

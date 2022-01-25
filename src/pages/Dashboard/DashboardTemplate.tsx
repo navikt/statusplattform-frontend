@@ -59,18 +59,6 @@ const DigitalServicesContainer = styled.div`
     align-items: center;
 `;
 
-const KnappWrapper = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    button:first-child {
-        margin-bottom: 1rem;
-    }
-    button {
-        max-width: fit-content;
-    }
-`
 
 const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     flex: 1;

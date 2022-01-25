@@ -104,9 +104,14 @@ export enum OpprettVarsling {
 
 
 
-// Login
+// Login & Logout
 export enum LoginRoute {
     NAME = "Logg inn",
     PATH = "/Login"
+}
+
+export enum LogoutRoute {
+    NAME = "Logg ut",
+    PATH = "/oauth2/logout"
 }
 // ---
