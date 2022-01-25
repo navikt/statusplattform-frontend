@@ -99,6 +99,11 @@ export enum OpprettVarsling {
     NAME = "Opprett Varsling",
     PATH = "/OpprettVarsling"
 }
+
+export enum ConfirmedCreation {
+    NAME = "Profil opprettet",
+    PATH = "/ProfilOpprettet"
+}
 // ---
 
 

@@ -6,6 +6,7 @@ import { BodyShort, Button, Checkbox, Heading, Radio, RadioGroup, TextField } fr
 import { useRouter } from "next/router"
 import { toast } from "react-toastify"
 import { Refresh } from "@navikt/ds-icons"
+import { ConfirmedCreation } from "../../types/routes"
 
 
 const NotificationsContainer = styled.div`
@@ -148,6 +149,12 @@ const OtpContainer = styled.div`
 
 
 const Otp: React.FC<{phoneNumber: string, changeClickedSendOtp: (state) => void }> = ({phoneNumber, changeClickedSendOtp}) => {
+    const router = useRouter()
+
+    const handleRedirectProfileCreated = () => {
+        router.push(ConfirmedCreation.PATH)
+    }
+
     return (
         <OtpContainer>
             <Heading level="2" size="medium">Fyll inn passordet fra SMS</Heading>
@@ -160,7 +167,7 @@ const Otp: React.FC<{phoneNumber: string, changeClickedSendOtp: (state) => void 
 
             <ButtonContainer>
                 <Button onClick={() => changeClickedSendOtp(false)}>Avbryt</Button>
-                <Button>Opprett profil</Button>
+                <Button onClick={() => handleRedirectProfileCreated()}>Opprett profil</Button>
             </ButtonContainer>
         </OtpContainer>
     )
