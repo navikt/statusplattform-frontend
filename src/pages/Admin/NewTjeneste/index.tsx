@@ -389,7 +389,7 @@ const ConnectServiceToArea = ({newService, allAreas, handleDeleteAreaServiceConn
 
     return (
         <ServiceToAreaContainer>
-            <Select label="Legg til område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
+            <Select label="Legg til i område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
                 {availableAreas.length > 0 ?
                     availableAreas.map(area => {
                         return (
