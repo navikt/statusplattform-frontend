@@ -177,7 +177,7 @@ const Header = () => {
             </HeaderContent>
 
 
-            <HeaderOptions>
+            {/* <HeaderOptions>
                 <ButtonsContainer>
                 {router.pathname.includes("Dashboard") &&
                     <SubscribeButtonWrapper>
@@ -190,19 +190,19 @@ const Header = () => {
                             </SubscribeModalWrapper>
                         }
                     </SubscribeButtonWrapper>
-                }
+                } */}
 
 
-                    {router.pathname.includes("Dashboard") &&
+                    {/* {router.pathname.includes("Dashboard") &&
                         <FilterButtonWrapper>
                             <Button variant="secondary" size="medium" onClick={(event) => openPopover(event.currentTarget)}>
                                 Filtrer
-                            </Button>
+                            </Button> */}
 
                             {/* <Button ref={filterRef} onClick={() => toggleFilters(!showFilters)}>
                                 Filtrer
                             </Button> */}
-                            <Popover
+                            {/* <Popover
                                 open={!!anchor}
                                 onClose={() => closePopover()}
                                 anchorEl={anchor}
@@ -210,15 +210,14 @@ const Header = () => {
                             >
                                 <Popover.Content>
                                     <Filters />
-                                    {/* Innhold her! */}
                                 </Popover.Content>
-                            </Popover>
+                            </Popover> */}
                             {/* {showFilters &&
                             } */}
-                        </FilterButtonWrapper>
-                    }
-                </ButtonsContainer>
-            </HeaderOptions>
+                        {/* </FilterButtonWrapper> */}
+                    {/* } */}
+                {/* </ButtonsContainer> */}
+            {/* </HeaderOptions> */}
         </CustomHeader>
     )
 }

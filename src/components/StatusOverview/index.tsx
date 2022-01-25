@@ -8,6 +8,7 @@ import Panel from 'nav-frontend-paneler'
 import { Bell } from '@navikt/ds-icons';
 import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
+import { Avvikshistorikk, OpprettVarsling } from '../../types/routes';
 
 
 const StatusOverviewContainer = styled.div`
@@ -119,10 +120,10 @@ const StatusOverview = (props: AreaServicesList) => {
                 </div>
 
                 <div className="knapp-wrapper">
-                    <Button variant="secondary" size="medium" onClick={() => router.push("/Avvikshistorikk")}>
+                    <Button variant="secondary" size="medium" onClick={() => router.push(Avvikshistorikk.PATH)}>
                         Se avvikshistorikk
                     </Button>
-                    <Button variant="secondary" size="medium" onClick={() => router.push("/OpprettVarsling")}>
+                    <Button variant="secondary" size="medium" onClick={() => router.push(OpprettVarsling.PATH)}>
                         <span><Bell /></span> <BodyShort>Bli varslet ved avvik</BodyShort>
                     </Button>
                 </div>

@@ -7,6 +7,7 @@ import { Normaltekst, } from "nav-frontend-typografi";
 import { useContext } from 'react';
 import { UserData } from '../../types/userData';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
+import { Arbeidsgiver, Internt, Privatperson, Samarbeidspartner } from '../../types/routes';
 
 const Nav = styled.nav `
 	height: 2.75rem;
@@ -79,38 +80,38 @@ export default function Navbar() {
 		<Nav>
 			<ul role="tablist">
 				<li role="tab">
-					<Link href={"/Dashboard/Privatperson"}>
-						<LenkeInner href="/Dashboard/Privatperson" className={`${router.pathname === "/Privatperson" ? "active" : ""}`}>
-							<LenkeSpacer className={`${(router.asPath === "/Dashboard/Privatperson") ? "active" : "inactive"}`}>
-								<NormalTekstCustomized>Privatperson</NormalTekstCustomized>
+					<Link href={Privatperson.PATH}>
+						<LenkeInner href={Privatperson.PATH} className={`${router.pathname === "/Privatperson" ? "active" : ""}`}>
+							<LenkeSpacer className={`${(router.asPath === Privatperson.PATH) ? "active" : "inactive"}`}>
+								<NormalTekstCustomized>{Privatperson.NAME}</NormalTekstCustomized>
 							</LenkeSpacer>
 						</LenkeInner>
 					</Link>
 				</li>
 				<li role="tab">
-					<Link href={"/Dashboard/Arbeidsgiver"}>
-						<LenkeInner href="/Dashboard/Arbeidsgiver" className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>
-							<LenkeSpacer className={`${(router.asPath === "/Dashboard/Arbeidsgiver") ? "active" : "inactive"}`}>
-								<NormalTekstCustomized>Arbeidsgiver</NormalTekstCustomized>
+					<Link href={Arbeidsgiver.PATH}>
+						<LenkeInner href={Arbeidsgiver.PATH} className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>
+							<LenkeSpacer className={`${(router.asPath === Arbeidsgiver.PATH) ? "active" : "inactive"}`}>
+								<NormalTekstCustomized>{Arbeidsgiver.NAME}</NormalTekstCustomized>
 							</LenkeSpacer>
 						</LenkeInner>
 					</Link>
 				</li>
 				<li role="tab">
-					<Link href={"/Dashboard/Samarbeidspartner"}>
-						<LenkeInner href="/Dashboard/Samarbeidspartner" className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>
-							<LenkeSpacer className={`${(router.asPath === "/Dashboard/Samarbeidspartner") ? "active" : "inactive"}`}>
-								<NormalTekstCustomized>Samarbeidspartner</NormalTekstCustomized>
+					<Link href={Samarbeidspartner.PATH}>
+						<LenkeInner href={Samarbeidspartner.PATH} className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>
+							<LenkeSpacer className={`${(router.asPath === Samarbeidspartner.PATH) ? "active" : "inactive"}`}>
+								<NormalTekstCustomized>{Samarbeidspartner.NAME}</NormalTekstCustomized>
 							</LenkeSpacer>
 						</LenkeInner>
 					</Link>
 				</li>
 				{user.navIdent &&
 					<li role="tab">
-						<Link href={"/Dashboard/Internt"}>
-							<LenkeInner href="/Dashboard/Internt" className={`${router.pathname === "/Internt" ? "active" : ""}`}>
-								<LenkeSpacer className={`${(router.asPath === "/Dashboard/Internt") ? "active" : "inactive"}`}>
-									<NormalTekstCustomized>Internt</NormalTekstCustomized>
+						<Link href={Internt.PATH}>
+							<LenkeInner href={Internt.PATH} className={`${router.pathname === "/Internt" ? "active" : ""}`}>
+								<LenkeSpacer className={`${(router.asPath === Internt.PATH) ? "active" : "inactive"}`}>
+									<NormalTekstCustomized>{Internt.NAME}</NormalTekstCustomized>
 								</LenkeSpacer>
 							</LenkeInner>
 						</Link>

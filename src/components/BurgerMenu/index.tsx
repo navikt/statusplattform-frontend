@@ -6,10 +6,11 @@ import styled from 'styled-components'
 import { Close, Employer, Hamburger, Login } from '@navikt/ds-icons'
 import Popover, {PopoverOrientering} from 'nav-frontend-popover';
 import Lenke from 'nav-frontend-lenker';
+import { Button } from '@navikt/ds-react';
 
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { UserData } from '../../types/userData';
-import { Button } from '@navikt/ds-react';
+import { LoginRoute } from '../../types/routes';
 
 const BurgerMenuContainer = styled.div`
     z-index: 10;
@@ -178,9 +179,9 @@ const PopoverContent = () => {
                         }
                         {!user.name &&
                             <li>
-                                <Lenke href="/Login">
+                                <Lenke href={LoginRoute.PATH}>
                                     <Login className="popover-link-ikon" />
-                                    Logg inn
+                                    {LoginRoute.NAME}
                                 </Lenke>
                             </li>
                         }

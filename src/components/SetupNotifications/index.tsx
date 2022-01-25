@@ -126,6 +126,8 @@ const ButtonContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 24px;
+
+    margin-top: 32px;
     
     @media(min-width: 300px) {
         flex-direction: row;
