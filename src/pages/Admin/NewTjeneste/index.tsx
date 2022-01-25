@@ -184,8 +184,8 @@ const NewService = () => {
                         }
                     </Select>
 
-                    <Input type="text" required label="Monitorlink*" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink" />
-                    <Input type="text" label="PollingUrl*" value={pollingUrl} onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />
+                    <Input type="text" label="Monitorlink" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink" />
+                    <Input type="text" label="PollingUrl" value={pollingUrl} onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />
 
                     <ServiceDependencies 
                         newService={newService}
@@ -401,7 +401,7 @@ const ConnectServiceToArea = ({newService, allAreas, handleDeleteAreaServiceConn
                 }
             </Select>
 
-            <Button variant="secondary" type="button" onClick={() => handleAddAreaServiceConnectsTo(selectedArea)}>Legg til avhengighet</Button>
+            <Button variant="secondary" type="button" onClick={() => handleAddAreaServiceConnectsTo(selectedArea)}>Legg til</Button>
             
 
             {newService.areasContainingThisService.length > 0

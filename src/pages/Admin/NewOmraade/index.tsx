@@ -142,7 +142,7 @@ const NewArea = () => {
 
                     <div className="button-container">
                         <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push("/Admin?tab=Område")}>Avbryt</Button>
-                        <Button type="submit" value="Legg til område">Lagre</Button>
+                        <Button type="submit" value="Legg til">Lagre</Button>
                     </div>
                 </form>
 
