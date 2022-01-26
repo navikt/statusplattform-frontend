@@ -11,6 +11,35 @@ import { fetchDashboardsList } from "../../utils/fetchDashboardsList"
 import Custom404 from "../../pages/404"
 import { UserData } from "../../types/userData"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
+import { GetServerSideProps } from "next"
+import { checkLoginInfoAndState } from "../../utils/checkLoginInfoAndState"
+
+
+// export const getServerSideProps : GetServerSideProps = async () => {
+
+//     let res
+    
+//     if (process.env.NODE_ENV !== 'production') {
+//         res = await fetch(`http://localhost:3000/oauth2/NavUser`)
+//     }
+//     else {
+//         res = await fetch("https://portal.labs.nais.io/oauth2/NavUser")
+//     }
+
+//     // console.log(res.json())
+//     if (res.ok) {
+//         console.log("klart")
+//     }
+
+//     const user: UserData | any = res
+
+//     return {
+//         props: {
+//             user
+//         }
+//     }
+// }
+
 
 
 const DashboardFromId = () => {
@@ -22,6 +51,7 @@ const DashboardFromId = () => {
 
 
     const user = useContext<UserData>(UserStateContext)
+    console.log(user)
 
 
 
@@ -38,9 +68,6 @@ const DashboardFromId = () => {
 
     
     if(isLoading) {
-        if(router.asPath.includes("Internt") && !user.navIdent) {
-            router.push("/Dashboard/Privatperson")
-        }
         return (
             <CustomNavSpinner />
         )
@@ -54,6 +81,9 @@ const DashboardFromId = () => {
         )
     }
 
+    if(router.asPath.includes("Internt") && !user.navIdent) {
+        router.push("/Dashboard/Privatperson")
+    }
     
 
     return (
