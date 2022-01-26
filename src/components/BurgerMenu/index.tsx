@@ -153,7 +153,7 @@ const PopoverContent = () => {
                         <li><Link href={Arbeidsgiver.PATH}>{Arbeidsgiver.NAME}</Link></li>
                         <li><Link href={Samarbeidspartner.PATH}>{Samarbeidspartner.NAME}</Link></li>
                         {user.navIdent &&
-                            <li><Link href={Internt.PATH}>{Internt.NAME} (Kun for innloggede nav brukere)</Link></li>
+                            <li><Link href={Internt.PATH}>{Internt.NAME + " (Kun for innloggede nav brukere)"}</Link></li>
                         }
                     </ul>
                 </section>
