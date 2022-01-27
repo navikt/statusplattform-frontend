@@ -492,7 +492,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                     <div className="dependencies"><p><b>Avhengigheter</b></p>
 
                         <EditTjenesteDependencies
-                            allServices={allServices} service={service}
+                            allServices={allServices} service={service} updatedService={updatedService}
                         />
                     </div>
                     <span className="service-row-element editting">
@@ -577,8 +577,8 @@ const DependenciesColumn = styled.div`
 `
 
 const EditTjenesteDependencies: React.FC<
-                {allServices, service}> = (
-                {allServices, service}
+                {allServices, service, updatedService}> = (
+                {allServices, service, updatedService}
         ) => {
 
     const [edittedDependencies, updateDependencies] = useState<Service[]>([...service.dependencies])
@@ -590,6 +590,7 @@ const EditTjenesteDependencies: React.FC<
 
 
     useEffect(() => {
+        updatedService.dependencies = edittedDependencies
         if(availableServiceDependencies.length > 0){
             updateSelectedService(availableServiceDependencies[0])
         }
@@ -629,7 +630,6 @@ const EditTjenesteDependencies: React.FC<
         toast.info("Avhengighet fjernet")
         
     }
-
 
 
     return (
