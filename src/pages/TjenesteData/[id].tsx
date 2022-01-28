@@ -7,7 +7,7 @@ import CustomNavSpinner from '../../components/CustomNavSpinner'
 import { useLoader } from '../../utils/useLoader'
 import { useRenderComponentOnQuery } from '../../utils/routerHelpers'
 import { fetchServiceFromId } from '../../utils/fetchServiceFromId'
-import Tjenestedata from '../Tjenestedata/Tjenestedata'
+import TjenestedataContent from './TjenestedataComponent'
 
 
 
@@ -32,7 +32,7 @@ const ServiceDataComponent: React.FC<{idOfService: string}> = ({idOfService}) =>
     return (
         <Layout>
             <Head><title>Tjeneste: {service.name}</title></Head>
-            <Tjenestedata service={service}/>
+            <TjenestedataContent service={service}/>
         </Layout>
     )
 }

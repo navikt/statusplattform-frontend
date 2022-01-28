@@ -81,7 +81,7 @@ const formatStatusMessage = (serviceToFormat) =>   {
     }
 }
 
-const Tjenestedata: React.FC<{service: Service}> = ({service}) => {
+const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
     const { name, navIdent } = useContext(UserStateContext)
 
     
@@ -338,4 +338,4 @@ const PublicAvailableData: React.FC<{service: Service}>= ({service}) => {
 }
 
 
-export default Tjenestedata
+export default TjenestedataContent
