@@ -194,7 +194,7 @@ const TjenesteTable = () => {
             <div className="centered">
                 <Button variant="secondary" 
                         onClick={() => router.push("/Admin/NewTjeneste")}>
-                    <b>Legg til nytt tjeneste</b>
+                    <b>Legg til ny tjeneste</b>
                 </Button>
             </div>
 
