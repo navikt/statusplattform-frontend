@@ -105,6 +105,11 @@ export const NavigatorProvider: React.FC<{children: ReactNode}> = ({children}) =
         return convertedElement
     }
 
+
+
+    
+
+
     return (
         <NavigatorContext.Provider value={{
             navigatorRoutes: navigatorRoutes,

@@ -135,7 +135,7 @@ const handleAndSetNavIcon = (ikon: string) => {
     return getIconsFromGivenCode(ikon)
 }
 
-const handleAndSetStatusIcon = (status: string, isInternal?: boolean): any => {
+export const handleAndSetStatusIcon = (status: string, isInternal?: boolean): any => {
     switch(status) {
         case 'OK':
             return <SuccessCustomized />
@@ -204,7 +204,7 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
                     if (filters.length == 0) {
                         return (
                             <li key={service.name}>
-                                <LenkeCustomized href={"/TjenesteData/" + service.id}>
+                                <LenkeCustomized href={"/Tjenestedata/" + service.id}>
                                     <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
                                 </LenkeCustomized>
                             </li>
@@ -213,7 +213,7 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
                     if(matches(service.status)) {
                         return (
                             <li key={service.name}>
-                                <LenkeCustomized href={"/TjenesteData/" + service.id}>
+                                <LenkeCustomized href={"/Tjenestedata/" + service.id}>
                                     <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
                                 </LenkeCustomized>
                             </li>

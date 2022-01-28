@@ -74,9 +74,9 @@ export enum AdminAddTjeneste {
 
 
 // TjensteData
-export enum TjenesteData {
+export enum Tjenestedata {
     NAME = "Admin - Tjenester",
-    PATH = "/TjenesteData/"
+    PATH = "/Tjenestedata/"
 }
 // ---
 

@@ -81,7 +81,7 @@ const formatStatusMessage = (serviceToFormat) =>   {
     }
 }
 
-const TjenesteData: React.FC<{service: Service}> = ({service}) => {
+const Tjenestedata: React.FC<{service: Service}> = ({service}) => {
     const { name, navIdent } = useContext(UserStateContext)
 
     
@@ -257,7 +257,7 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
 
                                     {service.dependencies.map(dependency => {
                                         return (
-                                            <li key={dependency.id}><Lenke href={"/TjenesteData/" + dependency.id} >{dependency.name}</Lenke></li>
+                                            <li key={dependency.id}><Lenke href={"/Tjenestedata/" + dependency.id} >{dependency.name}</Lenke></li>
                                         )})
                                     }
                                 </ul>
@@ -338,4 +338,4 @@ const PublicAvailableData: React.FC<{service: Service}>= ({service}) => {
 }
 
 
-export default TjenesteData
+export default Tjenestedata

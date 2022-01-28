@@ -1,17 +1,19 @@
 import Head from 'next/head'
 
 import Layout from '../../components/Layout'
-import TjenesteData from './TjenesteData'
+
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 
 import { useLoader } from '../../utils/useLoader'
 import { useRenderComponentOnQuery } from '../../utils/routerHelpers'
 import { fetchServiceFromId } from '../../utils/fetchServiceFromId'
+import Tjenestedata from './Tjenestedata'
 
 
 
 
-const TjenesteDataContainer: React.FC = () => useRenderComponentOnQuery("id", (id) => <ServiceDataComponent idOfService={id} />)
+
+const TjenestedataContainer: React.FC = () => useRenderComponentOnQuery("id", (id) => <ServiceDataComponent idOfService={id} />)
 
 
 
@@ -30,7 +32,7 @@ const ServiceDataComponent: React.FC<{idOfService: string}> = ({idOfService}) =>
     return (
         <Layout>
             <Head><title>Tjeneste: {service.name}</title></Head>
-            <TjenesteData service={service}/>
+            <Tjenestedata service={service}/>
         </Layout>
     )
 }
@@ -38,4 +40,4 @@ const ServiceDataComponent: React.FC<{idOfService: string}> = ({idOfService}) =>
 
 
 
-export default TjenesteDataContainer
+export default TjenestedataContainer
