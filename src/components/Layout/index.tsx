@@ -13,7 +13,8 @@ import { NavigatorContext } from '../ContextProviders/NavigatorContext'
 
 import { BodyShort, Heading } from '@navikt/ds-react'
 import { Home, Next } from '@navikt/ds-icons'
-import { TitleContext } from '../ContextProviders/TitleContext';
+import { TitleContext } from '../ContextProviders/TitleContext'
+
 
 
 

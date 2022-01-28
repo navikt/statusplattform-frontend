@@ -11,6 +11,8 @@ import { Service } from '../../types/navServices'
 import CustomNavSpinner from '../CustomNavSpinner'
 import { ErrorCustomized, OutlinedWrench, SuccessCustomized, WarningCustomized } from '../TrafficLights'
 import { TitleContext } from '../ContextProviders/TitleContext'
+import { getIconsFromGivenCode } from '../../utils/servicesOperations'
+import { handleAndSetStatusIcon } from '../PortalServiceTile'
 
 
 
@@ -66,8 +68,6 @@ const Incidents = ()  => {
 
     const { changeTitle } = useContext(TitleContext)
     
-    // useEffect(() => {
-    // })
     
     useEffect(() => {
         (async () => {
@@ -116,59 +116,87 @@ const Incidents = ()  => {
                     </BodyLong>
                 </Panel>
 
-                <Panel border className="incident-row">
-                    <Heading spacing size="small" level="3">
-                        <span><SuccessCustomized /></span>
-                        Tittel på avvik
-                    </Heading>
-                    
-                    <BodyShort spacing className="time-frame" size="small">Tidsrom det foregikk i</BodyShort>
-                    <BodyLong>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-                        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                        and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                    </BodyLong>
-                </Panel>
 
-                <Panel border className="incident-row">
-                    <Heading spacing size="small" level="3">
-                        <span><WarningCustomized /></span>
-                        Tittel på avvik
-                    </Heading>
-                    
-                    <BodyShort spacing className="time-frame" size="small">Tidsrom det foregikk i</BodyShort>
-                    <BodyLong>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-                        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                        and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                    </BodyLong>
-                </Panel>
+                <IncidentCard status='OK' titleOfIncident='Test OK' timeframe='13:37-27.01.2022' descriptionOfIncident="
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                    when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                " />
 
-                <Panel border className="incident-row">
-                    <Heading spacing size="small" level="3">
-                        <span><ErrorCustomized /></span>
-                        Tittel på avvik
-                    </Heading>
-                    
-                    <BodyShort spacing className="time-frame" size="small">Tidsrom det foregikk i</BodyShort>
-                    <BodyLong>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-                        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                        and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                    </BodyLong>
-                </Panel>
+                <IncidentCard status='ISSUE' titleOfIncident='Test ISSUE' timeframe='13:37-27.01.2022' descriptionOfIncident="
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                    when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                " />
+
+                <IncidentCard status='DOWN' titleOfIncident='Test DOWN' timeframe='13:37-27.01.2022' descriptionOfIncident="
+                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
+                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
+                    when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
+                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
+                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
+                " />
                 
             </IncidentsContainer>
 
 
 
         </IncidentsPage>
+    )
+}
+
+
+
+const PanelCustomized = styled(Panel)`
+    width: 650px;
+
+    display: flex;
+    flex-flow: row wrap;
+
+    h3 {
+        display: flex;
+
+        span {
+            align-self: center;
+            margin-right: 8px;
+        }
+    }
+
+    .time-frame {
+        color: var(--navds-global-color-gray-600);
+    }
+
+    & > * {
+        flex-basis: 100%;
+    }
+`
+
+
+export const IncidentCard : React.FC<{
+        status: string
+        titleOfIncident: string,
+        timeframe: string,
+        descriptionOfIncident: string
+    }> = ({status, titleOfIncident, timeframe, descriptionOfIncident}) => {
+
+    return (
+        <PanelCustomized border className="incident-row">
+            <Heading spacing size="small" level="3">
+                <span>{handleAndSetStatusIcon(status)}</span>
+                {titleOfIncident}
+            </Heading>
+            
+            <BodyShort spacing className="time-frame" size="small">{timeframe}</BodyShort>
+
+            <BodyLong>{descriptionOfIncident}</BodyLong>
+        </PanelCustomized>
     )
 }
 
