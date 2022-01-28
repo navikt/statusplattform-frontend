@@ -22,7 +22,6 @@ const DashboardFromId = () => {
 
 
     const user = useContext<UserData>(UserStateContext)
-    console.log(user)
 
 
 

@@ -184,6 +184,9 @@ const Navigator = () => {
         if(path == "/Dashboard") {
             router.push("/")
         }
+        else if (path =="/Tjenestedata") {
+            router.push("/")
+        }
         else {
             router.push(path)
         }
