@@ -219,7 +219,7 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
                     <span className="separator" />
 
                     <BodyShort spacing><b>Monitorlenke</b></BodyShort>
-                    <BodyShort>{service.monitorlink}</BodyShort>
+                    <BodyShort><a href={service.monitorlink}>{service.monitorlink}</a></BodyShort>
                 </ServiceDataContainer>
             }
         </>
