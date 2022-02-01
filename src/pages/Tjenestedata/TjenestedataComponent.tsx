@@ -168,27 +168,32 @@ const ServiceDataContainer = styled.div`
 const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> = ({service, areasContainingService}) => {
     const { navIdent } = useContext(UserStateContext)
 
+    const regex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi)
+
+
+    const { type, dependencies, id, monitorlink, team } = service
+
     return (
         <>
         {navIdent &&
             <ServiceDataContainer>
 
                 <BodyShort spacing><b>Team</b></BodyShort>
-                <BodyShort>{service.team}</BodyShort>
+                <BodyShort>{team}</BodyShort>
                 <span className="separator" />
 
                 <BodyShort spacing><b>Type</b></BodyShort>
-                <BodyShort>{service.type}</BodyShort>
+                <BodyShort>{type}</BodyShort>
                 <span className="separator" />
                     
                     <BodyShort spacing><b>Avhengigheter</b></BodyShort>
 
                     <BodyShort>
-                        {service.dependencies.map((element, index) => {
+                        {dependencies.map((element, index) => {
 
-                            if(service.dependencies.length != index+1) {
+                            if(dependencies.length != index+1) {
                                 return (
-                                    <a key={service.id} href={RouterTjenestedata.PATH + element.id}>
+                                    <a key={id} href={RouterTjenestedata.PATH + element.id}>
                                         {element.name + ", "}
                                     </a>
                                 )
@@ -219,7 +224,7 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
                     <span className="separator" />
 
                     <BodyShort spacing><b>Monitorlenke</b></BodyShort>
-                    <BodyShort><a href={service.monitorlink}>{service.monitorlink}</a></BodyShort>
+                    <BodyShort>{regex.test(monitorlink) ? <a href={monitorlink}>{monitorlink}</a> : "Ikke definert"}</BodyShort>
                 </ServiceDataContainer>
             }
         </>
