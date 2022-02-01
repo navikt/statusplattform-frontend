@@ -160,6 +160,10 @@ const ServiceDataContainer = styled.div`
         margin: 16px 0;
     }
 
+    a {
+        color: var(--navds-semantic-color-link);
+    }
+
     
 `
 
@@ -224,7 +228,7 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
                     <span className="separator" />
 
                     <BodyShort spacing><b>Monitorlenke</b></BodyShort>
-                    <BodyShort>{regex.test(monitorlink) ? <a href={monitorlink}>{monitorlink}</a> : "Ikke definert"}</BodyShort>
+                    <BodyShort>{!regex.test(monitorlink) ? <a href={monitorlink}>{monitorlink}</a> : "Ikke definert"}</BodyShort>
                 </ServiceDataContainer>
             }
         </>
