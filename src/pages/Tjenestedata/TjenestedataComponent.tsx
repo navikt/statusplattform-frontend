@@ -193,22 +193,26 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
                     <BodyShort spacing><b>Avhengigheter</b></BodyShort>
 
                     <BodyShort>
-                        {dependencies.map((element, index) => {
+                        {dependencies.length > 0 ?
+                            dependencies.map((element, index) => {
 
-                            if(dependencies.length != index+1) {
+                                if(dependencies.length != index+1) {
+                                    return (
+                                        <a key={id} href={RouterTjenestedata.PATH + element.id}>
+                                            {element.name + ", "}
+                                        </a>
+                                    )
+                                }
+
                                 return (
-                                    <a key={id} href={RouterTjenestedata.PATH + element.id}>
-                                        {element.name + ", "}
-                                    </a>
+                                    <>
+                                        <a href={RouterTjenestedata.PATH + element.id} >{element.name}</a>
+                                    </>
                                 )
-                            }
-
-                            return (
-                                <>
-                                    <a href={RouterTjenestedata.PATH + element.id} >{element.name}</a>
-                                </>
-                            )
-                        })}
+                            })
+                        :
+                            <BodyShort>Ikke definert</BodyShort>
+                        }
                     </BodyShort>
                     <span className="separator" />
 
