@@ -44,14 +44,17 @@ const ServiceContainer = styled.div`
     }
 
 `
+
 const ServiceWrapper = styled.div`
     width: 100%;
     padding: 1rem 0;
 `
+
 const IncidentsWrapper = styled.span`
     padding: 2rem;
     width: 80%;
 `
+
 const StatusIcon = styled.span`
     .up {
         color: var(--navGronn);
@@ -63,6 +66,7 @@ const StatusIcon = styled.span`
         color: var(--navOransje)
     }
 `
+
 const CenterContent = styled.div`
     text-align: center;
     padding: 1rem;
