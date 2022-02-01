@@ -10,7 +10,7 @@ import { Button } from '@navikt/ds-react';
 
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { UserData } from '../../types/userData';
-import { Admin, Arbeidsgiver, Internt, LoginRoute, LogoutRoute, Privatperson, Samarbeidspartner } from '../../types/routes';
+import { RouterAdmin, RouterArbeidsgiver, RouterInternt, RouterLoginRoute, RouterLogoutRoute, RouterPrivatperson, RouterSamarbeidspartner } from '../../types/routes';
 
 const BurgerMenuContainer = styled.div`
     z-index: 10;
@@ -149,11 +149,11 @@ const PopoverContent = () => {
             <div className="popover-content">
                 <section>
                     <ul>
-                        <li><Link href={Privatperson.PATH}>{Privatperson.NAME}</Link></li>
-                        <li><Link href={Arbeidsgiver.PATH}>{Arbeidsgiver.NAME}</Link></li>
-                        <li><Link href={Samarbeidspartner.PATH}>{Samarbeidspartner.NAME}</Link></li>
+                        <li><Link href={RouterPrivatperson.PATH}>{RouterPrivatperson.NAME}</Link></li>
+                        <li><Link href={RouterArbeidsgiver.PATH}>{RouterArbeidsgiver.NAME}</Link></li>
+                        <li><Link href={RouterSamarbeidspartner.PATH}>{RouterSamarbeidspartner.NAME}</Link></li>
                         {user.navIdent &&
-                            <li><Link href={Internt.PATH}>{Internt.NAME + " (Kun for innloggede nav brukere)"}</Link></li>
+                            <li><Link href={RouterInternt.PATH}>{RouterInternt.NAME + " (Kun for innloggede nav brukere)"}</Link></li>
                         }
                     </ul>
                 </section>
@@ -165,25 +165,25 @@ const PopoverContent = () => {
                         {user.navIdent &&
                             <>
                                 <li>
-                                    <Lenke href={Admin.PATH}>
+                                    <Lenke href={RouterAdmin.PATH}>
                                         <Employer className="popover-link-ikon" />
-                                        {Admin.NAME}
+                                        {RouterAdmin.NAME}
                                     </Lenke>
                                 </li>
 
                                 <li>
-                                    <Lenke href={LogoutRoute.PATH}>
+                                    <Lenke href={RouterLogoutRoute.PATH}>
                                         <Login className="popover-link-ikon" />
-                                        {LogoutRoute.NAME}
+                                        {RouterLogoutRoute.NAME}
                                     </Lenke>
                                 </li>
                             </>
                         }
                         {!user.name &&
                             <li>
-                                <Lenke href={LoginRoute.PATH}>
+                                <Lenke href={RouterLoginRoute.PATH}>
                                     <Login className="popover-link-ikon" />
-                                    {LoginRoute.NAME}
+                                    {RouterLoginRoute.NAME}
                                 </Lenke>
                             </li>
                         }

@@ -53,6 +53,10 @@ export const EndPathServices = () => {
     return "/rest/Services"
 }
 
+export const EndPathAreaContainingServices = (serviceId: string) => {
+    return "/rest/Service/Areas/" + serviceId
+}
+
 export const EndPathServiceTypes = () => {
     return EndPathServices() + "/Types"
 }

@@ -1,5 +1,5 @@
 // Landing page
-export enum HomePage {
+export enum RouterHomePage {
     NAME = "Home",
     PATH = "/"
 }
@@ -9,22 +9,22 @@ export enum HomePage {
 
 
 // Default dashboards
-export enum Privatperson {
+export enum RouterPrivatperson {
     NAME = "Privatperson",
     PATH = "/Dashboard/Privatperson"
 }
 
-export enum Arbeidsgiver {
+export enum RouterArbeidsgiver {
     NAME = "Arbeidsgiver",
     PATH = "/Dashboard/Arbeidsgiver"
 }
 
-export enum Samarbeidspartner {
+export enum RouterSamarbeidspartner {
     NAME = "Samarbeidspartner",
     PATH = "/Dashboard/Samarbeidspartner"
 }
 
-export enum Internt {
+export enum RouterInternt {
     NAME = "Internt",
     PATH = "/Dashboard/Internt"
 }
@@ -33,37 +33,37 @@ export enum Internt {
 
 
 // Admin
-export enum Admin {
+export enum RouterAdmin {
     NAME = "Admin",
     PATH = "/Admin"
 }
 
-export enum AdminDashboards {
+export enum RouterAdminDashboards {
     NAME = "Admin - Dashboards",
     PATH = "/Admin?tab=Dashbord"
 }
 
-export enum AdminAddDashboard {
+export enum RouterAdminAddDashboard {
     NAME = "Admin - NewDashboard",
     PATH = "/Admin/NewDashbord"
 }
 
-export enum AdminOmråder {
+export enum RouterAdminOmråder {
     NAME = "Admin - Områder",
     PATH = "/Admin?tab=Områder"
 }
 
-export enum AdminAddOmråde {
+export enum RouterAdminAddOmråde {
     NAME = "Admin - Områder",
     PATH = "/Admin/NewOmraade"
 }
 
-export enum AdminTjenester {
+export enum RouterAdminTjenester {
     NAME = "Admin - Tjenester",
     PATH = "/Admin?tab=Tjenester"
 }
 
-export enum AdminAddTjeneste {
+export enum RouterAdminAddTjeneste {
     NAME = "Admin - Tjenester",
     PATH = "/Admin/NewTjeneste"
 }
@@ -74,7 +74,7 @@ export enum AdminAddTjeneste {
 
 
 // TjensteData
-export enum Tjenestedata {
+export enum RouterTjenestedata {
     NAME = "Admin - Tjenester",
     PATH = "/Tjenestedata/"
 }
@@ -85,7 +85,7 @@ export enum Tjenestedata {
 
 
 // Avvikshistorikk
-export enum Avvikshistorikk {
+export enum RouterAvvikshistorikk {
     NAME = "Avvikshistorikk",
     PATH = "/Avvikshistorikk"
 }
@@ -95,12 +95,12 @@ export enum Avvikshistorikk {
 
 
 // OpprettVarsling
-export enum OpprettVarsling {
+export enum RouterOpprettVarsling {
     NAME = "Opprett Varsling",
     PATH = "/OpprettVarsling"
 }
 
-export enum ConfirmedCreation {
+export enum RouterConfirmedCreation {
     NAME = "Profil opprettet",
     PATH = "/ProfilOpprettet"
 }
@@ -110,12 +110,12 @@ export enum ConfirmedCreation {
 
 
 // Login & Logout
-export enum LoginRoute {
+export enum RouterLoginRoute {
     NAME = "Logg inn",
     PATH = "/Login"
 }
 
-export enum LogoutRoute {
+export enum RouterLogoutRoute {
     NAME = "Logg ut",
     PATH = "/oauth2/logout"
 }

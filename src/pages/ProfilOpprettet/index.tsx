@@ -4,7 +4,7 @@ import { toast } from 'react-toastify'
 import { TitleContext } from '../../components/ContextProviders/TitleContext'
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import Layout from '../../components/Layout'
-import { HomePage } from '../../types/routes'
+import { RouterHomePage } from '../../types/routes'
 
 const ProfileCreated = () => {
     const { changeTitle } = useContext(TitleContext)
@@ -16,7 +16,7 @@ const ProfileCreated = () => {
     },[])
     
     
-    setTimeout(() => router.push(HomePage.PATH), 6000)
+    setTimeout(() => router.push(RouterHomePage.PATH), 6000)
 
     return (
         <Layout>

@@ -7,7 +7,7 @@ import { Normaltekst, } from "nav-frontend-typografi";
 import { useContext } from 'react';
 import { UserData } from '../../types/userData';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
-import { Arbeidsgiver, Internt, Privatperson, Samarbeidspartner } from '../../types/routes';
+import { RouterArbeidsgiver, RouterInternt, RouterPrivatperson, RouterSamarbeidspartner } from '../../types/routes';
 
 const Nav = styled.nav `
 	height: 2.75rem;
@@ -80,38 +80,38 @@ export default function Navbar() {
 		<Nav>
 			<ul role="tablist">
 				<li role="tab">
-					<Link href={Privatperson.PATH}>
-						<LenkeInner href={Privatperson.PATH} className={`${router.pathname === "/Privatperson" ? "active" : ""}`}>
-							<LenkeSpacer className={`${(router.asPath === Privatperson.PATH) ? "active" : "inactive"}`}>
-								<NormalTekstCustomized>{Privatperson.NAME}</NormalTekstCustomized>
+					<Link href={RouterPrivatperson.PATH}>
+						<LenkeInner href={RouterPrivatperson.PATH} className={`${router.pathname === "/Privatperson" ? "active" : ""}`}>
+							<LenkeSpacer className={`${(router.asPath === RouterPrivatperson.PATH) ? "active" : "inactive"}`}>
+								<NormalTekstCustomized>{RouterPrivatperson.NAME}</NormalTekstCustomized>
 							</LenkeSpacer>
 						</LenkeInner>
 					</Link>
 				</li>
 				<li role="tab">
-					<Link href={Arbeidsgiver.PATH}>
-						<LenkeInner href={Arbeidsgiver.PATH} className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>
-							<LenkeSpacer className={`${(router.asPath === Arbeidsgiver.PATH) ? "active" : "inactive"}`}>
-								<NormalTekstCustomized>{Arbeidsgiver.NAME}</NormalTekstCustomized>
+					<Link href={RouterArbeidsgiver.PATH}>
+						<LenkeInner href={RouterArbeidsgiver.PATH} className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>
+							<LenkeSpacer className={`${(router.asPath === RouterArbeidsgiver.PATH) ? "active" : "inactive"}`}>
+								<NormalTekstCustomized>{RouterArbeidsgiver.NAME}</NormalTekstCustomized>
 							</LenkeSpacer>
 						</LenkeInner>
 					</Link>
 				</li>
 				<li role="tab">
-					<Link href={Samarbeidspartner.PATH}>
-						<LenkeInner href={Samarbeidspartner.PATH} className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>
-							<LenkeSpacer className={`${(router.asPath === Samarbeidspartner.PATH) ? "active" : "inactive"}`}>
-								<NormalTekstCustomized>{Samarbeidspartner.NAME}</NormalTekstCustomized>
+					<Link href={RouterSamarbeidspartner.PATH}>
+						<LenkeInner href={RouterSamarbeidspartner.PATH} className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>
+							<LenkeSpacer className={`${(router.asPath === RouterSamarbeidspartner.PATH) ? "active" : "inactive"}`}>
+								<NormalTekstCustomized>{RouterSamarbeidspartner.NAME}</NormalTekstCustomized>
 							</LenkeSpacer>
 						</LenkeInner>
 					</Link>
 				</li>
 				{user.navIdent &&
 					<li role="tab">
-						<Link href={Internt.PATH}>
-							<LenkeInner href={Internt.PATH} className={`${router.pathname === "/Internt" ? "active" : ""}`}>
-								<LenkeSpacer className={`${(router.asPath === Internt.PATH) ? "active" : "inactive"}`}>
-									<NormalTekstCustomized>{Internt.NAME}</NormalTekstCustomized>
+						<Link href={RouterInternt.PATH}>
+							<LenkeInner href={RouterInternt.PATH} className={`${router.pathname === "/Internt" ? "active" : ""}`}>
+								<LenkeSpacer className={`${(router.asPath === RouterInternt.PATH) ? "active" : "inactive"}`}>
+									<NormalTekstCustomized>{RouterInternt.NAME}</NormalTekstCustomized>
 								</LenkeSpacer>
 							</LenkeInner>
 						</Link>

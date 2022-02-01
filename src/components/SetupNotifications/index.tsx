@@ -6,7 +6,7 @@ import { BodyShort, Button, Checkbox, Heading, Radio, RadioGroup, TextField } fr
 import { useRouter } from "next/router"
 import { toast } from "react-toastify"
 import { Refresh } from "@navikt/ds-icons"
-import { ConfirmedCreation } from "../../types/routes"
+import { RouterConfirmedCreation } from "../../types/routes"
 
 
 const NotificationsContainer = styled.div`
@@ -152,7 +152,7 @@ const Otp: React.FC<{phoneNumber: string, changeClickedSendOtp: (state) => void 
     const router = useRouter()
 
     const handleRedirectProfileCreated = () => {
-        router.push(ConfirmedCreation.PATH)
+        router.push(RouterConfirmedCreation.PATH)
     }
 
     return (

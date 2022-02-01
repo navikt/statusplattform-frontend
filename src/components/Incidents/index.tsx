@@ -13,6 +13,7 @@ import { ErrorCustomized, OutlinedWrench, SuccessCustomized, WarningCustomized }
 import { TitleContext } from '../ContextProviders/TitleContext'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { handleAndSetStatusIcon } from '../PortalServiceTile'
+import { UserStateContext } from '../ContextProviders/UserStatusContext'
 
 
 
@@ -123,8 +124,9 @@ const Incidents = ()  => {
                     when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
                     It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
                     It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                " />
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                    logLink='Loglenke'
+                />
 
                 <IncidentCard status='ISSUE' titleOfIncident='Test ISSUE' timeframe='13:37-27.01.2022' descriptionOfIncident="
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
@@ -132,8 +134,9 @@ const Incidents = ()  => {
                     when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
                     It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
                     It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                " />
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                    logLink='Loglenke'
+                />
 
                 <IncidentCard status='DOWN' titleOfIncident='Test DOWN' timeframe='13:37-27.01.2022' descriptionOfIncident="
                     Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
@@ -141,8 +144,9 @@ const Incidents = ()  => {
                     when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
                     It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
                     It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                " />
+                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
+                    logLink='Loglenke'
+                />
                 
             </IncidentsContainer>
 
@@ -183,8 +187,11 @@ export const IncidentCard : React.FC<{
         status: string
         titleOfIncident: string,
         timeframe: string,
-        descriptionOfIncident: string
-    }> = ({status, titleOfIncident, timeframe, descriptionOfIncident}) => {
+        descriptionOfIncident: string,
+        logLink: string
+    }> = ({status, titleOfIncident, timeframe, descriptionOfIncident, logLink}) => {
+    
+    const { navIdent } = useContext(UserStateContext)
 
     return (
         <PanelCustomized border className="incident-row">
@@ -195,7 +202,15 @@ export const IncidentCard : React.FC<{
             
             <BodyShort spacing className="time-frame" size="small">{timeframe}</BodyShort>
 
-            <BodyLong>{descriptionOfIncident}</BodyLong>
+            <BodyShort spacing>{descriptionOfIncident}</BodyShort>
+
+            {navIdent &&
+                <>
+                    <BodyShort spacing><b>Loglenke</b></BodyShort>
+                    
+                    <BodyShort spacing>{logLink}</BodyShort>
+                </>
+            }
         </PanelCustomized>
     )
 }

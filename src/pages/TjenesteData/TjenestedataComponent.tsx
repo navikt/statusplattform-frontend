@@ -1,12 +1,20 @@
 import styled from 'styled-components'
+import { useContext, useEffect, useState } from 'react';
+import Link from 'next/link'
 
-import { Innholdstittel, Systemtittel, Undertittel } from 'nav-frontend-typografi';
-import { BackButton } from '../../components/BackButton';
-import { ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
-import { Service } from '../../types/navServices';
-import { useContext } from 'react';
-import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import Lenke from 'nav-frontend-lenker';
+import { Innholdstittel, Systemtittel, Undertittel } from 'nav-frontend-typografi';
+import { Bell, ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
+import { BodyShort, Button, Heading } from '@navikt/ds-react';
+
+import { Area, Service } from '../../types/navServices';
+import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
+import { RouterOpprettVarsling, RouterTjenestedata } from '../../types/routes';
+import { useRouter } from 'next/router';
+import { IncidentCard } from '../../components/Incidents';
+import { fetchAreasContainingService } from '../../utils/fetchAreasContainingService';
+import { useLoader } from '../../utils/useLoader';
+import CustomNavSpinner from '../../components/CustomNavSpinner';
 
 
 const ErrorParagraph = styled.p`
@@ -18,19 +26,24 @@ const ErrorParagraph = styled.p`
 
 const CategoryContainer = styled.div`
     width: 100%;
-    
     padding: 0;
+
+    button {
+        margin: 32px 0 40px 0;
+    }
     
-    @media (min-width: 560px) {
+    @media (min-width: 650px) {
+        width: 650px;
         padding: 1rem 3rem;
     }
 `
+
 const ServiceContainer = styled.div`
     min-width: 100px;
     min-height: 75px;
 
     padding: 1rem;
-    background-color: var(--navBakgrunn);
+    /* background-color: var(--navBakgrunn); */
     border-radius: 10px;
 
     display: flex;
@@ -47,12 +60,6 @@ const ServiceContainer = styled.div`
 
 const ServiceWrapper = styled.div`
     width: 100%;
-    padding: 1rem 0;
-`
-
-const IncidentsWrapper = styled.span`
-    padding: 2rem;
-    width: 80%;
 `
 
 const StatusIcon = styled.span`
@@ -86,9 +93,18 @@ const formatStatusMessage = (serviceToFormat) =>   {
 }
 
 const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
-    const { name, navIdent } = useContext(UserStateContext)
+    const [showHistory, changeShowHistory] = useState(false)
 
-    
+    const {data: areasContainingService, isLoading, reload} = useLoader(() => fetchAreasContainingService(service.id), [])
+
+    const router = useRouter()
+
+    if(isLoading) {
+        return (
+            <CustomNavSpinner />
+        )
+    }
+
     if (!service) {
         return <ErrorParagraph>Kunne ikke hente tjenesten. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
     }
@@ -96,31 +112,26 @@ const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
 
     return (
         <CategoryContainer>
-            <BackButton />
             <CenterContent><Innholdstittel>{service.name}</Innholdstittel></CenterContent>
+
+            <Button variant="secondary" onClick={() => router.push(RouterOpprettVarsling.PATH)}><Bell/> Bli varslet ved avvik</Button> 
+    
+            <IncidentCard descriptionOfIncident="Beskrivelse" status={service.status} timeframe='Tidsrom' titleOfIncident='Tittel' logLink='Loglenke' />
+
             <ServiceContainer>
-
-                <ServiceWrapper key={service.name}>
-                    <Systemtittel>
-                        <StatusIcon>{formatStatusMessage(service)} </StatusIcon>
-                        Tjenestenavn - {service.name}
-                    </Systemtittel>
-
-                    <IncidentsWrapper>
-                        <Undertittel>Eksempelrapport</Undertittel>
-                        <div>
-                            <Past90Days service={service}/>
-                        </div>
-                    </IncidentsWrapper>
+                <ServiceWrapper>
+                    <ServiceData service={service} areasContainingService={areasContainingService} />
                 </ServiceWrapper>
-
-                {navIdent &&
-                    <ServiceData service={service} />
-                }
-
-                <PublicAvailableData service={service} />
-
             </ServiceContainer>
+
+
+            <Button onClick={() => changeShowHistory(!showHistory)} variant="secondary">
+                {showHistory ? "- Skjul tidligere avvik" : "+ Vis tidligere avvik"}
+            </Button>
+            
+            {showHistory &&
+                <ServiceIncidentHistory service={service} />
+            }
         </CategoryContainer>
     )
 }
@@ -136,8 +147,132 @@ const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
 
 
 
+const ServiceDataContainer = styled.div`
+    &, .classified {
+        display: flex;
+        flex-direction: column;
+    }    
+
+    .separator {
+        width: 100%;
+        height: 1px;
+        background-color: var(--navds-global-color-gray-400);
+        margin: 16px 0;
+    }
+
+    
+`
 
 
+
+const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> = ({service, areasContainingService}) => {
+    const { navIdent } = useContext(UserStateContext)
+
+    return (
+        <>
+        {navIdent &&
+            <ServiceDataContainer>
+
+                <BodyShort spacing><b>Team</b></BodyShort>
+                <BodyShort>{service.team}</BodyShort>
+                <span className="separator" />
+
+                <BodyShort spacing><b>Type</b></BodyShort>
+                <BodyShort>{service.type}</BodyShort>
+                <span className="separator" />
+                    
+                    <BodyShort spacing><b>Avhengigheter</b></BodyShort>
+
+                    <BodyShort>
+                        {service.dependencies.map((element, index) => {
+
+                            if(service.dependencies.length != index+1) {
+                                return (
+                                    <a key={service.id} href={RouterTjenestedata.PATH + element.id}>
+                                        {element.name + ", "}
+                                    </a>
+                                )
+                            }
+
+                            return (
+                                <>
+                                    <a href={RouterTjenestedata.PATH + element.id} >{element.name}</a>
+                                </>
+                            )
+                        })}
+                    </BodyShort>
+                    <span className="separator" />
+
+                    <BodyShort spacing><b>Områder</b></BodyShort>
+                        {areasContainingService.map((element, index) => {
+                            if(areasContainingService.length != index+1) {
+                                return (
+                                    element.name + ", "
+                                )
+                            }return (
+                                element.name
+                            )
+                        })}
+                    <BodyShort>
+                    
+                    </BodyShort>
+                    <span className="separator" />
+
+                    <BodyShort spacing><b>Monitorlenke</b></BodyShort>
+                    <BodyShort>{service.monitorlink}</BodyShort>
+                </ServiceDataContainer>
+            }
+        </>
+    )
+}
+
+
+
+
+
+/*------------------------------------------  ------------------------------------------*/
+
+
+const PublicDataContainer = styled.div`
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+`
+
+
+const ServiceIncidentHistory: React.FC<{service: Service}>= ({service}) => {
+    
+    // TODO: Henting av tjenestehistorikkdata som driftsmeldinger og diverse
+
+
+    return (
+        <PublicDataContainer>
+            <span>
+                <Heading size="medium" level="2" spacing>Vedlikehold- og avvikshistorikk</Heading>
+            </span>
+
+            <div>
+                <IncidentCard descriptionOfIncident='Beskrivelse' status='DOWN' timeframe='Tidsrom' titleOfIncident='Tittel' logLink='Loglenke' />
+            </div>
+
+        </PublicDataContainer>
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// OLD, Might use later
 const HistoryWrapper = styled.div`
     display: flex;
     gap: 3px;
@@ -217,129 +352,7 @@ const Past90Days: React.FC<{service: Service | null}> = ({service}) => {
         </HistoryWrapper>
     )
 }
-
-
-
-/*------------------------------------------  ------------------------------------------*/
-
-
-const ServiceDataWrapper = styled.div`
-    .row {
-        padding: 1rem;
-
-        display: flex;
-        flex-flow: row wrap;
-
-        justify-content: center;
-    }
-    
-
-    .column {
-        flex-basis: 50%;
-
-        display: flex;
-        flex-flow: column wrap;
-        align-items: center;
-
-        .element {
-            width: 200px;
-        }
-    }
-`
-
-const ServiceData: React.FC<{service: Service}> = ({service}) => {
-
-    return (
-        <ServiceDataWrapper>
-            {(service.dependencies.length > 0) &&
-                <div className="row">
-                    {service.dependencies.length > 0 &&
-                        <div className="column">
-                            <div className="element">
-                                <h3>Avhengigheter til tjenesten</h3>
-                                <ul>
-
-                                    {service.dependencies.map(dependency => {
-                                        return (
-                                            <li key={dependency.id}><Lenke href={"/Tjenestedata/" + dependency.id} >{dependency.name}</Lenke></li>
-                                        )})
-                                    }
-                                </ul>
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-
-            {service.monitorlink &&
-                <div className="row">
-                    {service.monitorlink &&
-                        <div className="column">
-                            <div className="element">
-                                <h3>Monitorlink</h3>
-                                {service.monitorlink}
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-
-            {(service.team.length > 0 || service.type) &&
-                <div className="row">
-                    {service.team.length > 0 &&
-                        <div className="column">
-                            <div className="element">
-                                <h3>Team</h3>
-                                {service.team}
-                            </div>
-                        </div>
-                    }
-
-                    {service.type.length > 0 &&
-                        <div className="column">
-                            <div className="element">
-                                <h3>Type</h3>
-                                {service.type}
-                            </div>
-                        </div>
-                    }
-                </div>
-            }
-        </ServiceDataWrapper>
-    )
-}
-
-
-
-
-
-
-/*------------------------------------------  ------------------------------------------*/
-
-
-const PublicDataContainer = styled.div`
-    display: flex;
-    flex-flow: row;
-
-    justify-content: center;
-`
-
-
-const PublicAvailableData: React.FC<{service: Service}>= ({service}) => {
-    
-    // TODO: Henting av tjenestehistorikkdata som driftsmeldinger og diverse
-
-
-    return (
-        <PublicDataContainer>
-            <div>
-                <h3>Vedlikehold- og avvikshistorikk</h3>
-                Ikke implementert
-            </div>
-
-        </PublicDataContainer>
-    )
-}
+// ---
 
 
 export default TjenestedataContent
