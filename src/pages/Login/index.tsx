@@ -9,6 +9,7 @@ import { Input } from 'nav-frontend-skjema'
 import { useRouter } from 'next/router';
 import { TitleContext } from '../../components/ContextProviders/TitleContext';
 import { RouterOauthLogin } from '../../types/routes';
+import CustomNavSpinner from '../../components/CustomNavSpinner';
 
 
 
@@ -84,16 +85,23 @@ const LoginPage = () => {
         password: ""
     })
     const [currentLocation, setCurrentLocation] = useState<string>()
+    const [isLoading, setIsLoading] = useState(false)
     const { changeTitle } = useContext(TitleContext)
     
     const router = useRouter()
     
     useEffect(() => {
+        setIsLoading(true)
         changeTitle("Logg inn")
         setCurrentLocation(location.hostname)
+        setIsLoading(false)
     },[])
 
-
+    if(isLoading) {
+        return (
+            <CustomNavSpinner />
+        )
+    }
 
     const changeUserCredentials = (field: keyof typeof citizenLoginCredentials) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const updatedCitizenCredentials = {
