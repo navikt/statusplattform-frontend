@@ -14,6 +14,7 @@ import { NavigatorContext } from '../ContextProviders/NavigatorContext'
 import { BodyShort, Heading } from '@navikt/ds-react'
 import { Home, Next } from '@navikt/ds-icons'
 import { TitleContext } from '../ContextProviders/TitleContext'
+import { RouterHomePage } from '../../types/routes';
 
 
 
@@ -182,10 +183,10 @@ const Navigator = () => {
 
     const handleNavigatorRedirect = (path) => {
         if(path == "/Dashboard") {
-            router.push("/")
+            router.push(RouterHomePage.PATH)
         }
         else if (path =="/Tjenestedata") {
-            router.push("/")
+            router.push(router.asPath)
         }
         else {
             router.push(path)

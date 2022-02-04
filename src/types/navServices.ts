@@ -25,12 +25,26 @@ export interface Service {
     areasContainingThisService?: Area[]
 }
 
+
+export interface Component {
+    id?: string
+    name: string
+    type: string
+    team?: string
+    dependencies?: Component[]
+    monitorlink?: string
+    pollingUrl?: string
+    status?: string
+    areasContainingThisComponent?: Area[]
+}
+
 export interface Area {
     id?: string
     name: string
     description: string
     icon: string
     services: Service[]
+    components: Component[]
     status?: string
 }
 

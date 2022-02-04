@@ -15,18 +15,14 @@ import { CloseCustomized } from '.';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
 import { ModalInner } from '.';
-import { postAdminArea } from '../../utils/postArea'
-import { fetchServices } from '../../utils/fetchServices';
-import { fetchAreas } from '../../utils/fetchAreas';
 import { getIconsFromGivenCode } from '../../utils/servicesOperations';
-import { putServiceToArea } from '../../utils/putServiceToArea';
-import { deleteServiceFromArea } from '../../utils/deleteServiceFromArea';
-import { deleteArea } from '../../utils/deleteArea';
 import { useLoader } from '../../utils/useLoader';
-import { updateArea } from '../../utils/updateArea';
 import { Button } from '@navikt/ds-react';
 import router from 'next/router';
 import { TitleContext } from '../ContextProviders/TitleContext';
+import { deleteArea, deleteServiceFromArea, fetchAreas, postAdminArea, putServiceToArea, updateArea } from '../../utils/areasAPI';
+import { fetchServices } from '../../utils/servicesAPI';
+import { RouterAdminAddOmråde } from '../../types/routes';
 
 
 
@@ -189,7 +185,7 @@ const AreaTable = () => {
 
             <div className="centered">
                 <Button variant="secondary" 
-                        onClick={() => router.push("/Admin/NewOmraade")}>
+                        onClick={() => router.push(RouterAdminAddOmråde.PATH)}>
                     <b>Legg til nytt område</b>
                 </Button>
             </div>
@@ -283,7 +279,8 @@ const AddNewArea = ({dashboardAreas, reloadAll, setAnchorId}: NewAreaProps) => {
         name: "",
         description: "",
         icon: "0001",
-        services: []
+        services: [],
+        components: []
     })
 
 
@@ -303,7 +300,8 @@ const AddNewArea = ({dashboardAreas, reloadAll, setAnchorId}: NewAreaProps) => {
                 name: "",
                 description: "",
                 icon: "",
-                services: []
+                services: [],
+                components: []
             })
         }).catch(() => {
             toast.warn("Område ble ikke lagt til")
@@ -675,7 +673,8 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
         name: area.name,
         description: area.description,
         icon: area.icon,
-        services: area.services
+        services: area.services,
+        components: area.components
     })
     const [servicesInArea, setServicesInArea] = useState<Service[]>(() => area.services.map(service => service))
 

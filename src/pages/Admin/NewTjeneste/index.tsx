@@ -5,9 +5,6 @@ import router from "next/router";
 
 import Layout from '../../../components/Layout';
 import { Area, Service } from "../../../types/navServices";
-import { fetchServices } from "../../..//utils/fetchServices";
-import { fetchAreas } from "../../../utils/fetchAreas";
-import { postService } from "../../..//utils/postService";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { fetchTypes } from "../../..//utils/fetchTypes";
 
@@ -16,6 +13,9 @@ import { Input } from "nav-frontend-skjema";
 import { Delete } from "@navikt/ds-icons";
 import { HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
+import { fetchServices, postService } from "../../../utils/servicesAPI";
+import { fetchAreas } from "../../../utils/areasAPI";
+import { RouterAdminTjenester } from "../../../types/routes";
 
 
 const NewServiceContainer = styled.div`
@@ -153,7 +153,7 @@ const NewService = () => {
         event.preventDefault()
         postService(newService).then(() => {
             toast.success("Område lastet opp")
-            router.push("/Admin?tab=Område")
+            router.push(RouterAdminTjenester.PATH)
         }).catch(() => {
             toast.error("Klarte ikke å laste opp område")
         })
@@ -207,8 +207,8 @@ const NewService = () => {
 
 
                     <div className="button-container">
-                        <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push("/Admin?tab=Område")}>Avbryt</Button>
-                        <Button type="submit" value="Legg til område">Lagre</Button>
+                        <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push(RouterAdminTjenester.PATH)}>Avbryt</Button>
+                        <Button type="submit" value="Legg til i område">Lagre</Button>
                     </div>
                 </form>
             </NewServiceContainer>

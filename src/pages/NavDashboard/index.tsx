@@ -3,12 +3,11 @@ import styled from 'styled-components'
 
 import { PortalServiceTile } from '../../components/PortalServiceTile'
 import StatusOverview from '../../components/StatusOverview'
-import { fetchDashboard } from '../../utils/fetchDashboard'
 
 import { Area, Dashboard } from "../../types/navServices";
 import { Knapp } from "nav-frontend-knapper";
-import { fetchDashboardsList } from "../../utils/fetchDashboardsList";
 import CustomNavSpinner from "../../components/CustomNavSpinner";
+import { fetchDashboard, fetchDashboardsList } from "../../utils/dashboardsAPI";
 
 
 const DigitalServicesContainer = styled.div`

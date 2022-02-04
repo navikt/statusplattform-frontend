@@ -12,9 +12,9 @@ import { UserStateContext } from '../../components/ContextProviders/UserStatusCo
 import { RouterOpprettVarsling, RouterTjenestedata } from '../../types/routes';
 import { useRouter } from 'next/router';
 import { IncidentCard } from '../../components/Incidents';
-import { fetchAreasContainingService } from '../../utils/fetchAreasContainingService';
 import { useLoader } from '../../utils/useLoader';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
+import { fetchAreasContainingService } from '../../utils/areasAPI';
 
 
 const ErrorParagraph = styled.p`

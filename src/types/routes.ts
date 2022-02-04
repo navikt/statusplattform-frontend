@@ -67,6 +67,16 @@ export enum RouterAdminAddTjeneste {
     NAME = "Admin - Tjenester",
     PATH = "/Admin/NewTjeneste"
 }
+
+export enum RouterAdminKomponenter {
+    NAME = "Admin - Komponenter",
+    PATH = "/Admin?tab=Komponenter"
+}
+
+export enum RouterAdminAddKomponent {
+    NAME = "Admin - Komponenter",
+    PATH = "/Admin/NewKomponent"
+}
 // ---
 
 
@@ -110,13 +120,26 @@ export enum RouterConfirmedCreation {
 
 
 // Login & Logout
-export enum RouterLoginRoute {
+export enum RouterLogin {
     NAME = "Logg inn",
     PATH = "/Login"
 }
 
-export enum RouterLogoutRoute {
+export enum RouterOauthLogin {
+    NAME = "LoginAzure",
+    PATH = "/oauth2/login"
+}
+
+export enum RouterLogout {
     NAME = "Logg ut",
     PATH = "/oauth2/logout"
+}
+// ---
+
+
+// Error
+export enum RouterError {
+    NAME = "Error side",
+    PATH = "/Custom404"
 }
 // ---

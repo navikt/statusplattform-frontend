@@ -6,7 +6,7 @@ import { BodyShort, Button, Checkbox, Heading, Radio, RadioGroup, TextField } fr
 import { useRouter } from "next/router"
 import { toast } from "react-toastify"
 import { Refresh } from "@navikt/ds-icons"
-import { RouterConfirmedCreation } from "../../types/routes"
+import { RouterConfirmedCreation, RouterHomePage } from "../../types/routes"
 
 
 const NotificationsContainer = styled.div`
@@ -110,7 +110,7 @@ const CreateNotifications = () => {
                 <Checkbox value={acceptsTerms} onChange={event => handleUpdateAcceptsTerms(event)} >Jeg godtar <Link href="#">personvernerklæring og vilkår for bruk</Link></Checkbox>
                 
                 <ButtonContainer>
-                    <Button onClick={() => router.push("/")}>Avbryt</Button>
+                    <Button onClick={() => router.push(RouterHomePage.PATH)}>Avbryt</Button>
 
                     <Button onClick={() => changeClickedSendOtp(true)}>Send passord på {emailSelected ? "Epost" : "SMS"}</Button>
                 </ButtonContainer>

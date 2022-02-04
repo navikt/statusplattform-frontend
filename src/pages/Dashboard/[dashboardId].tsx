@@ -7,10 +7,11 @@ import DashboardTemplate from "./DashboardTemplate"
 import Layout from '../../components/Layout'
 
 import { Dashboard } from "../../types/navServices"
-import { fetchDashboardsList } from "../../utils/fetchDashboardsList"
 import Custom404 from "../../pages/404"
 import { UserData } from "../../types/userData"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
+import { fetchDashboardsList } from "../../utils/dashboardsAPI"
+import { RouterPrivatperson } from "../../types/routes"
 
 
 const DashboardFromId = () => {
@@ -52,7 +53,7 @@ const DashboardFromId = () => {
     }
 
     if(router.asPath.includes("Internt") && !user.navIdent) {
-        router.push("/Dashboard/Privatperson")
+        router.push(RouterPrivatperson.PATH)
     }
     
 

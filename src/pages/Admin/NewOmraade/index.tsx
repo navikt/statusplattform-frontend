@@ -9,13 +9,14 @@ import { toast, ToastContainer } from "react-toastify"
 
 import { options } from "../../..//components/Admin/AreaTable";
 import { Area, Service } from "../../../types/navServices";
-import { fetchServices } from "../../..//utils/fetchServices";
-import { postAdminArea } from "../../..//utils/postArea";
 import { useLoader } from "../../../utils/useLoader";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
+import { fetchServices } from "../../../utils/servicesAPI";
+import { postAdminArea } from "../../../utils/areasAPI";
+import { RouterAdminOmråder } from "../../../types/routes";
 
 
 
@@ -41,7 +42,8 @@ const NewArea = () => {
         name: "",
         description: "",
         icon: "0001",
-        services: []
+        services: [],
+        components: []
     })
 
     const { data, isLoading, reload } = useLoader(fetchServices,[]);
@@ -52,7 +54,7 @@ const NewArea = () => {
         )
     }
 
-    const { name, description, icon, services } = newArea
+    const { name, description, icon, services, components } = newArea
 
     const handleAreaDataChange = (field: keyof typeof newArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const updatedNewArea = {
@@ -69,7 +71,7 @@ const NewArea = () => {
         }
         const updatedList = [...newArea.services, serviceToAdd]
         const updatedArea: Area = {
-            name: name, services: updatedList, description: description, icon: icon
+            name: name, services: updatedList, components: components, description: description, icon: icon
         }
         updateNewArea(updatedArea)
         toast.success("Lagt område til område")
@@ -78,7 +80,7 @@ const NewArea = () => {
     const handleDeleteServiceOnArea = (serviceToDelete: Service) => {
         const newServicesList: Service[] = [...newArea.services.filter(service => service != serviceToDelete)]
         const updatedArea: Area = {
-            name: name, description: description, icon: icon, services: newServicesList
+            name: name, description: description, components: components, icon: icon, services: newServicesList
         }
         updateNewArea(updatedArea)
         toast.success("Fjernet område fra område")
@@ -89,7 +91,7 @@ const NewArea = () => {
         event.preventDefault()
         postAdminArea(newArea).then(() => {
             toast.success("Område lastet opp")
-            router.push("/Admin?tab=Område")
+            router.push(RouterAdminOmråder.PATH)
         }).catch(() => {
             toast.error("Klarte ikke å laste opp område")
         })
@@ -141,7 +143,7 @@ const NewArea = () => {
 
 
                     <div className="button-container">
-                        <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push("/Admin?tab=Område")}>Avbryt</Button>
+                        <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push(RouterAdminOmråder.PATH)}>Avbryt</Button>
                         <Button type="submit" value="Legg til">Lagre</Button>
                     </div>
                 </form>
@@ -238,7 +240,7 @@ const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDe
     return (
         <ServicesContainer>
             
-            <Select label="Legg til område" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedArea}>
+            <Select label="Legg til i område" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedArea}>
                 {availableServices.length > 0 ?
                     availableServices.map(area => {
                         return (

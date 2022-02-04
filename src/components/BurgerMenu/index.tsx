@@ -10,7 +10,7 @@ import { Button } from '@navikt/ds-react';
 
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { UserData } from '../../types/userData';
-import { RouterAdmin, RouterArbeidsgiver, RouterInternt, RouterLoginRoute, RouterLogoutRoute, RouterPrivatperson, RouterSamarbeidspartner } from '../../types/routes';
+import { RouterAdmin, RouterArbeidsgiver, RouterInternt, RouterLogin, RouterLogout, RouterPrivatperson, RouterSamarbeidspartner } from '../../types/routes';
 
 const BurgerMenuContainer = styled.div`
     z-index: 10;
@@ -172,18 +172,18 @@ const PopoverContent = () => {
                                 </li>
 
                                 <li>
-                                    <Lenke href={RouterLogoutRoute.PATH}>
+                                    <Lenke href={RouterLogout.PATH}>
                                         <Login className="popover-link-ikon" />
-                                        {RouterLogoutRoute.NAME}
+                                        {RouterLogout.NAME}
                                     </Lenke>
                                 </li>
                             </>
                         }
                         {!user.name &&
                             <li>
-                                <Lenke href={RouterLoginRoute.PATH}>
+                                <Lenke href={RouterLogin.PATH}>
                                     <Login className="popover-link-ikon" />
-                                    {RouterLoginRoute.NAME}
+                                    {RouterLogin.NAME}
                                 </Lenke>
                             </li>
                         }

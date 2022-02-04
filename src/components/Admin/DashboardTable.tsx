@@ -1,4 +1,5 @@
 import { useContext, useEffect, useState } from 'react'
+import { useRouter } from 'next/router'
 import Head from 'next/head'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
@@ -11,19 +12,14 @@ import { Input, Select } from 'nav-frontend-skjema'
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import { ModalInner } from '.';
 import { Area, Dashboard } from '../../types/navServices'
-import { deleteDashboard } from '../../utils/deleteDashboard'
-import { fetchAreas } from '../../utils/fetchAreas'
-import { fetchDashboard } from '../../utils/fetchDashboard'
-import { fetchDashboardsList } from '../../utils/fetchDashboardsList'
-import { postDashboard } from '../../utils/postDashboard'
-import { putAreasToDashboard } from '../../utils/putAreasToDashboard'
-import { updateDashboard } from '../../utils/updateDashboard'
 
 import { useLoader } from '../../utils/useLoader'
 import { CloseCustomized } from '.'
-import { useRouter } from 'next/router'
 import { BodyShort, Button } from '@navikt/ds-react'
 import { TitleContext } from '../ContextProviders/TitleContext'
+import { deleteDashboard, fetchDashboard, fetchDashboardsList, postDashboard, updateDashboard } from '../../utils/dashboardsAPI'
+import { fetchAreas, putAreasToDashboard } from '../../utils/areasAPI'
+import { RouterAdminAddDashboard } from '../../types/routes'
 
 
 const DashboardTableContainer = styled.div`
@@ -62,7 +58,7 @@ const DashboardTable = () => {
             </Head>
             <div className="centered">
                 <Button variant="secondary" 
-                        onClick={() => router.push("/Admin/NewDashbord")}>
+                        onClick={() => router.push(RouterAdminAddDashboard.PATH)}>
                     <b>Legg til nytt dashbord</b>
                 </Button>
             </div>
@@ -212,6 +208,9 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
         changeDashboardsToEdit(edittingDashboards)
     }
 
+
+
+
     return (
         <DashboardsContainer>
 
@@ -233,6 +232,8 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
                 <DashboardsHeader>
                     <BodyShort spacing><b>Navn på Dashbord</b></BodyShort>
                 </DashboardsHeader>
+
+                
                 {dashboards.map((dashboard) => {
                     return (
                         <DashboardRowContainer className={dashboardsToEdit.includes(dashboard.id) ? "editting" : ""} key={dashboard.id}>

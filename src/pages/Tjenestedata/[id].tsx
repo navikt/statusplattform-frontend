@@ -6,8 +6,8 @@ import CustomNavSpinner from '../../components/CustomNavSpinner'
 
 import { useLoader } from '../../utils/useLoader'
 import { useRenderComponentOnQuery } from '../../utils/routerHelpers'
-import { fetchServiceFromId } from '../../utils/fetchServiceFromId'
 import TjenestedataContent from './TjenestedataComponent'
+import { fetchServiceFromId } from '../../utils/servicesAPI'
 
 
 

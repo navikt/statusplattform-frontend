@@ -6,6 +6,7 @@ import TjenesteTable from './TjenesteTable';
 import DashboardTable from './DashboardTable';
 import { adminMenu, useFindCurrentTab } from './MenuSelector';
 import { Close } from '@navikt/ds-icons';
+import KomponentTable from './KomponentTable';
 
 
 
@@ -69,6 +70,16 @@ const AdminConfigsContainer = styled.div`
     }
 `;
 
+
+export const NoContentContainer = styled.div`
+    height: 100px;
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+`
+
+
 export const ModalInner = styled.div`
     padding: 2rem 2.5rem;
     display: flex;
@@ -97,6 +108,9 @@ const AdminDashboard = () => {
                 }
                 {selectedMenu === "Dashbord" &&
                     <DashboardTable />
+                }
+                {selectedMenu === "Komponenter" &&
+                    <KomponentTable />
                 }
             </AdminConfigsContainer>
         </AdminDashboardContainer>

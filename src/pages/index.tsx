@@ -3,6 +3,7 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react';
 
 import DashboardFromId from './Dashboard/[dashboardId]';
+import { RouterPrivatperson } from '../types/routes';
 
 export default function Home() {
     const router = useRouter()
@@ -10,7 +11,7 @@ export default function Home() {
 
     useEffect(() => {
         if(router.asPath == "/") {
-            router.push("/Dashboard/Privatperson")
+            router.push(RouterPrivatperson.PATH)
         }
     },[router])
 

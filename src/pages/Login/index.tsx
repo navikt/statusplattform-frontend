@@ -8,6 +8,7 @@ import { Knapp } from 'nav-frontend-knapper'
 import { Input } from 'nav-frontend-skjema'
 import { useRouter } from 'next/router';
 import { TitleContext } from '../../components/ContextProviders/TitleContext';
+import { RouterOauthLogin } from '../../types/routes';
 
 
 
@@ -108,7 +109,7 @@ const LoginPage = () => {
     }
 
     const handleLogInNavUser = () => {
-        router.push("/oauth2/login")
+        router.push(RouterOauthLogin.PATH)
     }
 
 

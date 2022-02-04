@@ -10,19 +10,20 @@ import { useLoader } from '../../utils/useLoader';
 import { Input } from 'nav-frontend-skjema';
 import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 import { Expand, Notes } from '@navikt/ds-icons'
-import { Button, Heading, Select } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Select } from '@navikt/ds-react';
 import ModalWrapper from 'nav-frontend-modal';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
-import { Service } from '../../types/navServices';
+import { Component } from '../../types/navServices';
+import { deleteComponent, fetchComponents, postComponent, updateComponent } from '../../utils/componentsAPI';
 import { fetchTypes } from '../../utils/fetchTypes';
 import { CloseCustomized, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';
-import { deleteService, fetchServices, postService, updateService } from '../../utils/servicesAPI';
-import { RouterAdminAddTjeneste } from '../../types/routes';
+import Header from '@navikt/ds-react/esm/table/Header';
+import { RouterAdminAddKomponent } from '../../types/routes';
 
-const TjenesteTableContainer = styled.div`
-    .services-overflow-container {
+const KomponentTableContainer = styled.div`
+    .components-overflow-container {
         overflow-x: auto;
         div {
             min-width: fit-content;
@@ -57,7 +58,7 @@ const TjenesteHeader = styled.div`
         flex-direction: row;
     }
 
-    .tjeneste-header-content {
+    .komponent-header-content {
         flex-grow: 1;
         display: flex;
         justify-content: space-between;
@@ -120,21 +121,21 @@ const CustomButton = styled.button`
 
 
 
-const TjenesteTable = () => {
+const KomponentTable = () => {
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [addNewService, changeAddNewService] = useState(false)
     const [servicesToEdit, changeServicesToEdit] = useState<string[]>([])
-    const [serviceToDelete, setServiceToDelete] = useState<Service>()
-    const { data: services, isLoading: loadingServices, reload } = useLoader(fetchServices,[]);
+    const [serviceToDelete, setServiceToDelete] = useState<Component>()
+    const { data: components, isLoading: loadingComponents, reload } = useLoader(fetchComponents,[]);
     const { data: types, isLoading: loadingTypes, reload: reloadTypes } = useLoader(fetchTypes,[]);
 
     const { changeTitle } = useContext(TitleContext)
     
     useEffect(() => {
-        changeTitle("Admin - Tjenester")
+        changeTitle("Admin - Komponenter")
     })
 
-    if(loadingServices || loadingTypes) {
+    if(loadingComponents || loadingTypes) {
         return (
             <CustomNavSpinner />
         )
@@ -148,7 +149,7 @@ const TjenesteTable = () => {
         }
     }
 
-    const toggleEditService = (service: Service) => {
+    const toggleEditService = (service: Component) => {
         let edittingServices: string[] = [...servicesToEdit]
         if(edittingServices.includes(service.id)) {
             changeServicesToEdit(edittingServices.filter(d => d != service.id))
@@ -160,19 +161,19 @@ const TjenesteTable = () => {
 
 
     const confirmDeleteServiceHandler = () => {
-        deleteService(serviceToDelete).then(() => {
-            toast.info("Tjenesten ble slettet")
+        deleteComponent(serviceToDelete).then(() => {
+            toast.info("Komponenten ble slettet")
             setServiceToDelete(null);
             reload()
         }).catch(() => {
-            toast.error("Kunne ikke slette tjenesten")
+            toast.error("Kunne ikke slette komponenten")
         })
     }
 
 
 
     return (
-        <TjenesteTableContainer>
+        <KomponentTableContainer>
             <Head>
                 <title>Admin - Tjenester</title>
             </Head>
@@ -183,65 +184,69 @@ const TjenesteTable = () => {
                 closeButton={true}
                 contentLabel="Slettemodal"
             >
-                <ModalInner>Ønsker du å slette tjenesten?
-                    <Knapp mini onClick={confirmDeleteServiceHandler}>Slett tjeneste</Knapp>
+                <ModalInner>Ønsker du å slette komponenten?
+                    <Knapp mini onClick={confirmDeleteServiceHandler}>Slett komponent</Knapp>
                     <Knapp mini onClick={() => setServiceToDelete(null)}>Avbryt</Knapp>
                 </ModalInner>
             </ModalWrapper>
 
 
 
-            
+
+
 
             <div className="centered">
                 <Button variant="secondary" 
-                        onClick={() => router.push(RouterAdminAddTjeneste.PATH)}>
-                    <b>Legg til ny tjeneste</b>
+                        onClick={() => router.push(RouterAdminAddKomponent.PATH)}>
+                    <b>Legg til ny komponent</b>
                 </Button>
             </div>
 
             {addNewService &&
-                <AddNewService services={services} reload={reload}/>
+                <AddNewService components={components} reload={reload}/>
             }
 
 
 
 
 
-
-            <div className="services-overflow-container">
+            <div className="components-overflow-container">
                 <div>
-                    {services
-                        ?
+                    {components
+                    ?
                         <div>
                             <TjenesteHeader>
-                                <div className="tjeneste-header-content">
+                                <div className="komponent-header-content">
                                     <span>Navn</span>
                                     <span>Type</span>
                                     <span>Team</span>
                                 </div>
                                 <div className="empty-space"></div>
                             </TjenesteHeader>
-                            {services.map( service => {
+
+
+
+
+                            {components.map( component => {
                                 return (
-                                    <TjenesteContent key={service.id} className={servicesToEdit.includes(service.id) ? "editting" : ""}>
-                                        {!servicesToEdit.includes(service.id) 
+                                    <TjenesteContent key={component.id} className={servicesToEdit.includes(component.id) ? "editting" : ""}>
+                                        {!servicesToEdit.includes(component.id) 
                                             ?
                                                 <ServiceRow 
-                                                    service={service}
-                                                    toggleEditService={() => toggleEditService(service)}
-                                                    toggleExpanded={() => toggleExpandedFor(service.id)}
-                                                    isExpanded={expanded.includes(service.id)}
-                                                    setServiceToDelete={() => setServiceToDelete(service)}
+                                                    service={component}
+                                                    toggleEditService={() => toggleEditService(component)}
+                                                    toggleExpanded={() => toggleExpandedFor(component.id)}
+                                                    isExpanded={expanded.includes(component.id)}
+                                                    setServiceToDelete={() => setServiceToDelete(component)}
                                                 />
                                             :
                                                 <ServiceRowEditting 
-                                                    service={service}
-                                                    toggleEditService={() => toggleEditService(service)}
-                                                    toggleExpanded={() => toggleExpandedFor(service.id)}
-                                                    isExpanded={expanded.includes(service.id)}
-                                                    setServiceToDelete={() => setServiceToDelete(service)}
-                                                    allServices={services}
+                                                    service={component}
+                                                    toggleEditService={() => toggleEditService(component)}
+                                                    toggleExpanded={() => toggleExpandedFor(component.id)}
+                                                    isExpanded={expanded.includes(component.id)}
+                                                    setServiceToDelete={() => setServiceToDelete(component)}
+                                                    allServices={components}
                                                     reload={reload}
                                                     types={types}
                                                 />
@@ -250,16 +255,16 @@ const TjenesteTable = () => {
                                 )
                             })}
                         </div>
-                    :
+                    : 
                         <NoContentContainer>
                             <Heading size="medium" level="3">
-                                Ingen tjenester eksisterer
+                                Ingen komponenter eksisterer
                             </Heading>
                         </NoContentContainer>
                     }
                 </div>
             </div>
-        </TjenesteTableContainer>
+        </KomponentTableContainer>
     )
 }
 
@@ -360,8 +365,8 @@ const ServiceRowContent = styled.div`
 
 
 interface ServiceRowProps {
-    service: Service,
-    allServices?: Service[],
+    service: Component,
+    allServices?: Component[],
     toggleEditService: (service) => void,
     toggleExpanded: (service) => void,
     isExpanded: boolean,
@@ -408,7 +413,7 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
                 <CustomButton className="option" onClick={() => toggleEditService(service)}>
                     <Notes />
                 </CustomButton>
-                <button className="option" onClick={setServiceToDelete} aria-label="Slett tjeneste"><CloseCustomized /></button>
+                <button className="option" onClick={setServiceToDelete} aria-label="Slett komponent"><CloseCustomized /></button>
                 <button className="option" onClick={() => toggleExpanded(service)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
             
@@ -431,7 +436,7 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
 
 
 const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete, reload, types } : ServiceRowProps) => {
-    const [updatedService, changeUpdatedService] = useState<Service>({
+    const [updatedService, changeUpdatedService] = useState<Component>({
         id: service.id,
         name: service.name,
         type: service.type,
@@ -463,7 +468,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
     }
 
     const handleSubmit = () => {
-        updateService(updatedService).then(() => {
+        updateComponent(updatedService).then(() => {
             reload()
             toast.success("Oppdatering gjennomført")
             toggleEditService(service)
@@ -533,7 +538,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                 <CustomButton className="option" onClick={() => toggleEditService(service)}>
                     Avbryt endringer
                 </CustomButton>
-                <button className="option" onClick={setServiceToDelete} aria-label="Slett tjeneste"><CloseCustomized /></button>
+                <button className="option" onClick={setServiceToDelete} aria-label="Slett komponent"><CloseCustomized /></button>
                 <button className="option" onClick={() => toggleExpanded(service)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
 
@@ -599,12 +604,12 @@ const EditTjenesteDependencies: React.FC<
                 {allServices, service, updatedService}
         ) => {
 
-    const [edittedDependencies, updateDependencies] = useState<Service[]>([...service.dependencies])
-    const availableServiceDependencies: Service[] = [...allServices].filter(s => 
+    const [edittedDependencies, updateDependencies] = useState<Component[]>([...service.dependencies])
+    const availableServiceDependencies: Component[] = [...allServices].filter(s => 
         s.id != service.id && !edittedDependencies.map(service => service.id).includes(s.id)
     )
     
-    const [selectedService, updateSelectedService] = useState<Service | null>(allServices[0])
+    const [selectedService, updateSelectedService] = useState<Component | null>(allServices[0])
 
 
     useEffect(() => {
@@ -620,7 +625,7 @@ const EditTjenesteDependencies: React.FC<
 
     const handleUpdateSelectedService = (event) => {
         const idOfSelectedService: string = event.target.value
-        const newSelectedService: Service = allServices.find(service => idOfSelectedService === service.id)
+        const newSelectedService: Component = allServices.find(service => idOfSelectedService === service.id)
         updateSelectedService(newSelectedService)
     }
 
@@ -628,19 +633,19 @@ const EditTjenesteDependencies: React.FC<
 
     const handlePutEdittedServiceDependency = () => {
         if(selectedService !== null) {    
-            const updatedEdittedDependencies: Service[] = [...edittedDependencies, selectedService]
+            const updatedEdittedDependencies: Component[] = [...edittedDependencies, selectedService]
             updateDependencies(updatedEdittedDependencies)
             toast.success("Tjenesteavhengighet lagt til")
             return
         }
-        toast.info("Ingen tjenester å legge til")
+        toast.info("Ingen komponenter å legge til")
     }
 
 
 
-    const handleRemoveEdittedServiceDependency = (service: Service) => {
+    const handleRemoveEdittedServiceDependency = (service: Component) => {
         if(!edittedDependencies.includes(service)) {
-            toast.error("Tjeneste eksisterer ikke i avhengighetene. Noe har gått galt med innlesingen")
+            toast.error("Komponent eksisterer ikke i avhengighetene. Noe har gått galt med innlesingen")
             return
         }
         const updatedEdittedDependencies = edittedDependencies.filter(s => s.id != service.id)
@@ -654,7 +659,7 @@ const EditTjenesteDependencies: React.FC<
         <DependenciesColumn>
             {allServices.length !== 0
                 ?
-                    <Select label="Legg til tjenester i område" onChange={handleUpdateSelectedService}>
+                    <Select label="Legg til komponenter i område" onChange={handleUpdateSelectedService}>
                         {availableServiceDependencies.length > 0 ?
                         availableServiceDependencies.map(service => {
                             return (
@@ -662,12 +667,12 @@ const EditTjenesteDependencies: React.FC<
                             )
                         })
                         :
-                            <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
+                            <option key={undefined} value={""}>Ingen komponent å legge til</option>
                         }
                     </Select>
                 :
                     <>
-                        Ingen tjeneste å legge til
+                        Ingen komponent å legge til
                     </>
             }
             <Knapp className="add-service" mini onClick={handlePutEdittedServiceDependency}>Legg til avhengighet</Knapp>
@@ -733,16 +738,16 @@ const NewServiceColumn = styled.div`
 `
 
 interface AddServiceProps {
-    services: Service[]
+    components: Component[]
     reload: () => void
 }
 
-const AddNewService = ({services, reload}: AddServiceProps) => {
+const AddNewService = ({components, reload}: AddServiceProps) => {
     const [isLoading, setIsLoading] = useState(true)
     const [editDependencies, changeEditDepencendyState] = useState<boolean>(false)
     const [selectedType, updateSelectedType] = useState<string>("KOMPONENT")
     const [types, updateTypes] = useState<string[]>()
-    const [newService, updateNewService] = useState<Service>({
+    const [newService, updateNewService] = useState<Component>({
         id: "",
         name: "",
         type: "KOMPONENT",
@@ -768,7 +773,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
         )
     }
 
-    const handleDependencyChange = (newDependencies: Service[]) => {
+    const handleDependencyChange = (newDependencies: Component[]) => {
         let currentService = {...newService}
         currentService.dependencies = newDependencies
         updateNewService(currentService)
@@ -791,18 +796,18 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
     }
     
     
-    const handlePostService = (serviceToAdd: Service, event) => {
+    const handlePostService = (serviceToAdd: Component, event) => {
         event.preventDefault()
-        const newlist = services.filter(service => service.id === serviceToAdd.name)
+        const newlist = components.filter(service => service.id === serviceToAdd.name)
         if(newlist.length > 0) {
             toast.info("Denne IDen er allerede brukt. Velg en annen")
             return
         }
-        postService(serviceToAdd).then(() => {
+        postComponent(serviceToAdd).then(() => {
             reload()
-            toast.success("Tjeneste ble lagt til")
+            toast.success("Komponent ble lagt til")
         }).catch(() => {
-            toast.warn("Tjeneste ble ikke lagt til")
+            toast.warn("Komponent ble ikke lagt til")
         })
     }
 
@@ -867,7 +872,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
                                 })}
                             </ul>
                             {editDependencies && 
-                                <NewTjenesteDependencyDropdown services={services} 
+                                <NewTjenesteDependencyDropdown components={components} 
                                     handleDependencyChange={(dependencies) => handleDependencyChange(dependencies)} 
                                 />
                             }
@@ -878,7 +883,7 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
 
                 </NewServiceRow>
                 <Hovedknapp htmlType="submit">
-                    Lagre ny tjeneste
+                    Lagre ny komponent
                 </Hovedknapp>
 
             </form>
@@ -919,15 +924,15 @@ const EditDependeciesContainer = styled.div`
 `
 
 interface DropdownProps {
-    services: Service[]
+    components: Component[]
     handleDependencyChange: (dependencies) => void
 }
 
-const NewTjenesteDependencyDropdown = ({services, handleDependencyChange}: DropdownProps) => {
-    const [newServiceDependencies, setNewServiceDependencies] = useState<Service[]>([])
+const NewTjenesteDependencyDropdown = ({components, handleDependencyChange}: DropdownProps) => {
+    const [newServiceDependencies, setNewServiceDependencies] = useState<Component[]>([])
     
-    const availableServiceDependencies: Service[] = [...services].filter(s => !newServiceDependencies.map(service => service.id).includes(s.id))
-    const [selectedService, updateSelectedService] = useState<Service>(availableServiceDependencies[0])
+    const availableServiceDependencies: Component[] = [...components].filter(s => !newServiceDependencies.map(service => service.id).includes(s.id))
+    const [selectedService, updateSelectedService] = useState<Component>(availableServiceDependencies[0])
     
     useEffect(() => {
         if(availableServiceDependencies.length > 0){
@@ -940,17 +945,17 @@ const NewTjenesteDependencyDropdown = ({services, handleDependencyChange}: Dropd
 
     const handlePutDependencyOnNewService = () => {
         if(selectedService !== null) {    
-            const currentList: Service[] = [...newServiceDependencies, selectedService]
+            const currentList: Component[] = [...newServiceDependencies, selectedService]
             setNewServiceDependencies(currentList)
             handleDependencyChange(newServiceDependencies)
             toast.success("Tjenesteavhengighet lagt til")
             return
         }
-        toast.info("Ingen tjenester å legge til")
+        toast.info("Ingen komponenter å legge til")
     }
 
     const handleRemoveServiceDependency = (serviceToRemove) => {
-        const filteredDependencyList: Service[] = [...newServiceDependencies].filter(s => s.id !== serviceToRemove.id)
+        const filteredDependencyList: Component[] = [...newServiceDependencies].filter(s => s.id !== serviceToRemove.id)
         setNewServiceDependencies(filteredDependencyList)
         handleDependencyChange(newServiceDependencies)
         toast.success("Tjenesteavhengighet fjernet")
@@ -959,7 +964,7 @@ const NewTjenesteDependencyDropdown = ({services, handleDependencyChange}: Dropd
 
     const handleUpdateSelectedService = (event) => {
         const idOfSelectedService: string = event.target.value
-        const newSelectedService: Service = services.find(service => idOfSelectedService === service.id)
+        const newSelectedService: Component = components.find(service => idOfSelectedService === service.id)
         updateSelectedService(newSelectedService)
     }
 
@@ -968,7 +973,7 @@ const NewTjenesteDependencyDropdown = ({services, handleDependencyChange}: Dropd
 
 
 
-            {services.length !== 0 ?
+            {components.length !== 0 ?
                 <Select label="Legg til tjenesteavhengigheter" onChange={handleUpdateSelectedService}>
                     {availableServiceDependencies.length > 0
                     ?
@@ -978,12 +983,12 @@ const NewTjenesteDependencyDropdown = ({services, handleDependencyChange}: Dropd
                             )
                         })
                     :
-                        <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
+                        <option key={undefined} value={""}>Ingen komponent å legge til</option>
                     }
                 </Select>
                 :
                     <>
-                        Ingen tjeneste å legge til
+                        Ingen komponent å legge til
                     </>
             }
         
@@ -1015,4 +1020,4 @@ const NewTjenesteDependencyDropdown = ({services, handleDependencyChange}: Dropd
 
 
 
-export default TjenesteTable
+export default KomponentTable

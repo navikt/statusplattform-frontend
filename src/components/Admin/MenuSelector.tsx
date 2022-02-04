@@ -22,7 +22,7 @@ const TabsCustomized = styled(Tabs)`
     
 `
 
-export const adminMenu = ["Dashbord", "Områder", "Tjenester"]
+export const adminMenu = ["Dashbord", "Områder", "Tjenester", "Komponenter"]
 const defaultAdminMenu = adminMenu[1]
 
 

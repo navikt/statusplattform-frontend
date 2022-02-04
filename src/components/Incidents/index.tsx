@@ -6,7 +6,6 @@ import { toast } from 'react-toastify'
 import { BodyLong, BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
 import { Bell } from '@navikt/ds-icons'
 
-import { fetchServices } from '../../utils/fetchServices'
 import { Service } from '../../types/navServices'
 import CustomNavSpinner from '../CustomNavSpinner'
 import { ErrorCustomized, OutlinedWrench, SuccessCustomized, WarningCustomized } from '../TrafficLights'
@@ -14,6 +13,8 @@ import { TitleContext } from '../ContextProviders/TitleContext'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { handleAndSetStatusIcon } from '../PortalServiceTile'
 import { UserStateContext } from '../ContextProviders/UserStatusContext'
+import { fetchServices } from '../../utils/servicesAPI'
+import { RouterOpprettVarsling } from '../../types/routes'
 
 
 
@@ -84,16 +85,11 @@ const Incidents = ()  => {
         return <CustomNavSpinner />
     }
 
-    const handleRedirectNotifications = () => {
-        toast.info("Ikke implementert enda")
-        // router.push("/OpprettVarsling")
-    }
-
 
     return (
         <IncidentsPage>
 
-            <Button variant="secondary" className="button-to-notifications" onClick={() => router.push("/OpprettVarsling")}>
+            <Button variant="secondary" className="button-to-notifications" onClick={() => router.push(RouterOpprettVarsling.PATH)}>
                 <Bell /> Bli varslet ved avvik
             </Button>
 

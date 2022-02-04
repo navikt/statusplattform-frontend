@@ -13,11 +13,12 @@ import CustomNavSpinner from '../../components/CustomNavSpinner'
 import { PortalServiceTile } from '../../components/PortalServiceTile'
 import StatusOverview from '../../components/StatusOverview'
 import { Area, Dashboard } from '../../types/navServices'
-import { fetchDashboard } from '../../utils/fetchDashboard'
 import { FilterContext } from '../../components/ContextProviders/FilterContext'
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
 import { UserData } from '../../types/userData'
 import { TitleContext } from '../../components/ContextProviders/TitleContext'
+import { fetchDashboard } from '../../utils/dashboardsAPI'
+import { RouterAvvikshistorikk, RouterError } from '../../types/routes'
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
@@ -178,7 +179,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
     const rerouteIfNoDashboard = () => {
         if (!dashboard) {
-            router.push("/Custom404")
+            router.push(RouterError.PATH)
         }
     }
 
@@ -298,7 +299,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
                     <div className="button-container">
                         <Button variant="secondary" onClick={() => toggleShowAll(!showAll)}>Vis alle områder</Button>
-                        <Button variant="secondary" onClick={() => router.push("/Avvikshistorikk")}>Se avvikshistorikk</Button>
+                        <Button variant="secondary" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk</Button>
                     </div>
 
                     {showAll &&

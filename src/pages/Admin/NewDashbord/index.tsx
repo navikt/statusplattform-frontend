@@ -8,14 +8,15 @@ import { Input } from "nav-frontend-skjema";
 import { BodyShort, Button, Detail, Select } from "@navikt/ds-react";
 import { Delete } from "@navikt/ds-icons";
 
-import { fetchAreas } from "../../../utils/fetchAreas";
 import { useLoader } from "../../../utils/useLoader";
 import { Area, Dashboard } from "../../../types/navServices";
-import { postDashboard } from "../../../utils/postDashboard";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
+import { postDashboard } from "../../../utils/dashboardsAPI";
+import { fetchAreas } from "../../../utils/areasAPI";
+import { RouterAdminDashboards } from "../../../types/routes";
 
 
 const NewDashboardContainer = styled.div`
@@ -91,7 +92,7 @@ const NewDashboard = () => {
         event.preventDefault()
         postDashboard(newDashboard).then(() => {
             toast.success("Dashbord lastet opp")
-            router.push("/Admin?tab=Dashbord")
+            router.push(RouterAdminDashboards.PATH)
         }).catch(() => {
             toast.error("Klarte ikke å laste opp dashbord")
         })
@@ -121,7 +122,7 @@ const NewDashboard = () => {
                     <HorizontalSeparator />
 
                     <div className="button-container">
-                        <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push("/Admin?tab=Dashbord")}>Avbryt</Button>
+                        <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push(RouterAdminDashboards.PATH)}>Avbryt</Button>
                         <Button type="submit" value="Legg til dashbord">Lagre</Button>
                     </div>
                 </form>

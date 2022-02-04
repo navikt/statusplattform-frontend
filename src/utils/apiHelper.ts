@@ -1,3 +1,4 @@
+// Areas
 export const EndPathArea = () =>  {
     return "/rest/Area"
 }
@@ -13,14 +14,14 @@ export const EndPathSpecificArea = (areaId: string) =>  {
 export const EndPathServiceToArea = (areaId: string, serviceId: string) =>  {
     return EndPathArea() + "/" + areaId + "/" + serviceId
 }
+// ---
 
 
 
-
+// Dashboards
 export const EndPathPutAreasToDashboard = (dashboardId: string) => {
     return EndPathDashboard() + "/" + dashboardId
 }
-
 
 export const EndPathDashboard = () => {
     return "/rest/Dashboard"
@@ -41,10 +42,11 @@ export const EndPathDashboardWithArea = (dashboardId: string) => {
 export const EndPathDashboards = () => {
     return "/rest/Dashboards"
 }
+// ---
 
 
 
-
+// Services
 export const EndPathService = () => {
     return "/rest/Service"
 }
@@ -76,9 +78,46 @@ export const EndPathSpecificService = (serviceId: string) => {
 export const EndPathPutServiceDependency = (serviceId: string, dependencyId: string) => {
     return EndPathService() + "/addDependency/" + serviceId + "/" + dependencyId
 }
+// ---
 
 
+// Components
+export const EndPathComponent = () => {
+    return "/rest/Component"
+}
 
+export const EndPathComponents = () => {
+    return "/rest/Components"
+}
+
+export const EndPathAreaContainingComponents = (componentId: string) => {
+    return "/rest/Component/Areas/" + componentId
+}
+
+export const EndPathComponentTypes = () => {
+    return EndPathServices() + "/Types"
+}
+
+export const EndPathComponentStatus = () => {
+    return EndPathServices() + "/Status"
+}
+
+export const EndPathUpdateComponent = (componentId: string) => {
+    return EndPathService() + "/" + componentId
+}
+
+export const EndPathSpecificComponent = (componentId: string) => {
+    return "/rest/Component/" + componentId
+}
+
+export const EndPathPutComponentDependency = (componentId: string, dependencyId: string) => {
+    return EndPathService() + "/addDependency/" + componentId + "/" + dependencyId
+}
+// ---
+
+
+// Login
 export const EndPathGetLoginInfo = () => {
     return "/oauth2/NavUser"
 }
+// ---
