@@ -7,7 +7,7 @@ import Lenke from 'nav-frontend-lenker'
 import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi'
 import Panel from 'nav-frontend-paneler'
 import { Expand } from '@navikt/ds-icons'
-import { Alert, BodyShort, Button } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react'
 
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import { PortalServiceTile } from '../../components/PortalServiceTile'
@@ -84,10 +84,14 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
         margin: 0;
     }
 
+    .centered-element {
+        align-self: center;
+        margin-bottom: 16px;
+    }
+
 
     @media (min-width: 500px) {
         max-width: ${(props) => props.maxWidth}px;
-        /* width: 100%; */
     }
     @media (min-width: 1200px) {
         max-width: ${(props) => props.maxWidth}px;
@@ -131,6 +135,9 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     const [expandedTiles, setExpandedTiles] = useState([]);
     const [width, setWidth] = useState(typeof window !== "undefined"? window.innerWidth:0)
 
+    const [showAreasStatusOK, changeShowAreasStatusOK] = useState(false)
+    const [areasWithoutStatusOK, setAreaswithoutStatusOK] = useState<Area[]>()
+    const [areasStatusOK, setAreasStatusOK] = useState<Area[]>()
     const [showAll, toggleShowAll] = useState(false)
 
     const {filters} = useContext(FilterContext)
@@ -153,8 +160,10 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
         (async function () {
             setIsLoading(true)
             changeTitle("Status digitale tjenester")
+
             const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
             setAreasInDashboard(retrievedAreasInDashboard.areas)
+
             rerouteIfNoDashboard()
             setIsLoading(false)
         })()
@@ -193,6 +202,11 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
     if (!areasInDashboard) {
         return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
+    }
+
+    if(!areasWithoutStatusOK && !areasStatusOK) {
+        setAreaswithoutStatusOK(areasInDashboard.filter(area => area.status != "OK"))
+        setAreasStatusOK(areasInDashboard.filter(area => area.status == "OK"))
     }
 
 
@@ -260,6 +274,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
             setExpandedTiles(Array.from(Array(areasInDashboard.length).keys()))
         }
     }
+    console.log(expandedTiles)
 
     let rows = generateRowsOfTiles();
     const toggleTile = (index: number) => {
@@ -283,10 +298,11 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     const statuses: string[] = areasInDashboard.flatMap(area => area.services.map(
         service => service.status
     ))
+    
 
 
 
-    /*----------------- No areas having issues or down START -----------------*/
+    /*----------------- No areas having ISSUE or DOWN -----------------*/
     if(!statuses.includes("ISSUE") && !statuses.includes("DOWN")) {
         return (
             <DashboardContainer>
@@ -306,11 +322,11 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
                         <AllAreas 
                             expandAll={expandAll}
                             isTileExpanded={isTileExpanded}
+                            toggleExpandAll={toggleExpandAll}
+                            toggleTile={toggleTile}
                             maxWidth={maxWidth}
                             numberOfTilesPerRow={numberOfTilesPerRow}
                             rows={rows}
-                            toggleExpandAll={toggleExpandAll}
-                            toggleTile={toggleTile}
                         />
                     }
 
@@ -319,10 +335,10 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
             </DashboardContainer>
         )
     }
-    /*----------------- No area having issues or down END -----------------*/
+    /*----------------- No area having ISSUE or DOWN -----------------*/
 
 
-
+    
     
     return (
         <DashboardContainer>
@@ -331,21 +347,33 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
                 {areasInDashboard.length > 0 &&
                     <PortalServiceTileContainer maxWidth={maxWidth}>
+                        
+                        
+                        <AreasWithoutOK 
+                            expandAll={expandAll}
+                            isTileExpanded={isTileExpanded}
+                            toggleExpandAll={toggleExpandAll}
+                            toggleTile={toggleTile}
+                            areasWithoutOK={areasWithoutStatusOK}
+                            numberOfTilesPerRow={numberOfTilesPerRow}
+                        />
 
-                        <span className="expand-all-wrapper">
-                            <ExpandAllToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
-                        </span>
+                        {showAreasStatusOK &&
+                            <AreasStatusOK
+                                expandAll={expandAll}
+                                isTileExpanded={isTileExpanded}
+                                toggleExpandAll={toggleExpandAll}
+                                toggleTile={toggleTile}
+                                areasStatusOK={areasStatusOK}
+                                numberOfTilesPerRow={numberOfTilesPerRow}
+                            />
+                        }
 
-                        {rows.map((row, rowIndex) => (
-                            <PortalServiceTileRow key={rowIndex}>
-                                {row.map((area, index) => 
-                                    <PortalServiceTile key={index} toggleTile={toggleTile}
-                                        tileIndex={rowIndex*numberOfTilesPerRow + index}
-                                        area={area} expanded={isTileExpanded(rowIndex, index)}
-                                    />
-                                )}
-                            </PortalServiceTileRow>
-                        ))}
+
+                        <div className="centered-element">
+                            <Button variant="secondary" onClick={() => changeShowAreasStatusOK(!showAreasStatusOK)}>{showAreasStatusOK ? "Skjul områder uten avvik" : "Vis alle områder"}</Button>
+                        </div>
+
                     </PortalServiceTileContainer>
                 }
 
@@ -396,6 +424,103 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
 
 
 
+// -------------
+
+
+
+
+const AreasWithoutOK: React.FC<{expandAll, isTileExpanded, toggleExpandAll: () => void, toggleTile, areasWithoutOK: Area[], numberOfTilesPerRow: number}> = (
+    { expandAll, isTileExpanded, toggleExpandAll, toggleTile, areasWithoutOK, numberOfTilesPerRow}
+    ) => {
+
+
+    const generateRowsOfTiles = () => {
+        //Endre denne oppførselen dersom det er ønskelig å bestemme antall per rad på brukersiden.
+        
+        let numberOfRows = Math.ceil( areasWithoutOK.length/numberOfTilesPerRow );
+        let rows: Area[][] = [];
+    
+        for(var i = 0; i < areasWithoutOK.length; i = i + numberOfTilesPerRow){
+            rows.push (areasWithoutOK.slice(i,i+ numberOfTilesPerRow))
+        }
+        return rows
+    }
+
+    let rows: Area[][] = generateRowsOfTiles()
+
+    return (
+        <>
+            <div className="centered-element">
+                <Heading size="medium" level="3">Områder med avvik</Heading>
+            </div>
+
+
+            <span className="expand-all-wrapper">
+                <ExpandAllToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
+            </span>
+
+            {rows.map((row, rowIndex) => (
+                <PortalServiceTileRow key={rowIndex}>
+                    {row.map((area, index) => 
+                        <PortalServiceTile key={index} toggleTile={toggleTile}
+                            tileIndex={rowIndex*numberOfTilesPerRow + index}
+                            area={area} expanded={isTileExpanded(rowIndex, index)}
+                        />
+                    )}
+                </PortalServiceTileRow>
+            ))}
+        </>
+    )
+}
+
+
+
+// -------------
+
+
+
+const AreasStatusOK: React.FC<{expandAll, isTileExpanded, toggleExpandAll, toggleTile, areasStatusOK: Area[], numberOfTilesPerRow: number}> = (
+    {expandAll, isTileExpanded, toggleExpandAll, toggleTile, areasStatusOK, numberOfTilesPerRow}
+    ) => {
+
+
+    const generateRowsOfTiles = () => {
+        //Endre denne oppførselen dersom det er ønskelig å bestemme antall per rad på brukersiden.
+        
+        let numberOfRows = Math.ceil( areasStatusOK.length/numberOfTilesPerRow );
+        let rows: Area[][] = [];
+    
+        for(var i = 0; i < areasStatusOK.length; i = i + numberOfTilesPerRow){
+            rows.push (areasStatusOK.slice(i,i+ numberOfTilesPerRow))
+        }
+        return rows
+    }
+
+    let rows: Area[][] = generateRowsOfTiles()
+
+    return (
+        <>
+            <div className="centered-element">
+                <Heading spacing size="medium" level="3">Områder uten avvik</Heading>
+            </div>
+
+            {rows.map((row, rowIndex) => (
+                <PortalServiceTileRow key={rowIndex}>
+                    {row.map((area, index) => 
+                        <PortalServiceTile key={index} toggleTile={toggleTile}
+                            tileIndex={rowIndex*numberOfTilesPerRow + index}
+                            area={area} expanded={isTileExpanded(rowIndex, index)}
+                        />
+                    )}
+                </PortalServiceTileRow>
+            ))}
+        </>
+    )
+}
+
+
+
+
 
 
 /* --------------------------------------- --------------------------------------- */
@@ -405,8 +530,7 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
 
 
 const ToggleExpandAllButton = styled(Button)`
-    margin: 1rem 0;
-    /* width: 250px; */
+    margin: 0 0 16px 0;
 
     :hover {
         color: inherit;
