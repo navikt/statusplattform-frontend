@@ -396,7 +396,7 @@ interface AllAreasProps {
     rows: Area[][]
     toggleTile: (index) => void
     numberOfTilesPerRow: number
-    isTileExpanded: (rowIndex, index) => boolean
+    isTileExpanded: (rowIndex, index, startingIndex) => boolean
     toggleExpandAll: () => void
     expandAll: boolean
 }
@@ -413,7 +413,7 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
                     {row.map((area, index) => 
                         <PortalServiceTile key={index} toggleTile={toggleTile}
                             tileIndex={rowIndex*numberOfTilesPerRow + index}
-                            area={area} expanded={isTileExpanded(rowIndex, index,0)}
+                            area={area} expanded={isTileExpanded(rowIndex, index, 0)}
                         />
                     )}
                 </PortalServiceTileRow>
