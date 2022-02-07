@@ -365,6 +365,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
                                 toggleExpandAll={toggleExpandAll}
                                 toggleTile={toggleTile}
                                 areasStatusOK={areasStatusOK}
+                                numberOfAreasWithoutOK={areasWithoutStatusOK.length}
                                 numberOfTilesPerRow={numberOfTilesPerRow}
                             />
                         }
@@ -479,8 +480,8 @@ const AreasWithoutOK: React.FC<{expandAll, isTileExpanded, toggleExpandAll: () =
 
 
 
-const AreasStatusOK: React.FC<{expandAll, isTileExpanded, toggleExpandAll, toggleTile, areasStatusOK: Area[], numberOfTilesPerRow: number}> = (
-    {expandAll, isTileExpanded, toggleExpandAll, toggleTile, areasStatusOK, numberOfTilesPerRow}
+const AreasStatusOK: React.FC<{expandAll, isTileExpanded, toggleExpandAll, toggleTile, areasStatusOK: Area[], numberOfTilesPerRow: number, numberOfAreasWithoutOK:number}> = (
+    {expandAll, isTileExpanded, toggleExpandAll, toggleTile, areasStatusOK, numberOfTilesPerRow,numberOfAreasWithoutOK}
     ) => {
 
 
@@ -508,7 +509,7 @@ const AreasStatusOK: React.FC<{expandAll, isTileExpanded, toggleExpandAll, toggl
                 <PortalServiceTileRow key={rowIndex}>
                     {row.map((area, index) => 
                         <PortalServiceTile key={index} toggleTile={toggleTile}
-                            tileIndex={rowIndex*numberOfTilesPerRow + index}
+                            tileIndex={numberOfAreasWithoutOK + rowIndex*numberOfTilesPerRow + index}
                             area={area} expanded={isTileExpanded(rowIndex, index)}
                         />
                     )}
