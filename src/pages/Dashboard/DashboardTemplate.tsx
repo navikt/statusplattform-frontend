@@ -261,8 +261,8 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
         return rows
     }
 
-    const isTileExpanded = (rowIndex : number, index : number): boolean => {
-        return expandedTiles.includes(rowIndex*numberOfTilesPerRow + index );
+    const isTileExpanded = (rowIndex : number, index : number, startingIndex: number): boolean => {
+        return expandedTiles.includes(startingIndex + rowIndex*numberOfTilesPerRow + index );
     }
 
     const toggleExpandAll = () => {
@@ -413,7 +413,7 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
                     {row.map((area, index) => 
                         <PortalServiceTile key={index} toggleTile={toggleTile}
                             tileIndex={rowIndex*numberOfTilesPerRow + index}
-                            area={area} expanded={isTileExpanded(rowIndex, index)}
+                            area={area} expanded={isTileExpanded(rowIndex, index,0)}
                         />
                     )}
                 </PortalServiceTileRow>
@@ -465,7 +465,7 @@ const AreasWithoutOK: React.FC<{expandAll, isTileExpanded, toggleExpandAll: () =
                     {row.map((area, index) => 
                         <PortalServiceTile key={index} toggleTile={toggleTile}
                             tileIndex={rowIndex*numberOfTilesPerRow + index}
-                            area={area} expanded={isTileExpanded(rowIndex, index)}
+                            area={area} expanded={isTileExpanded(rowIndex, index,0)}
                         />
                     )}
                 </PortalServiceTileRow>
@@ -510,7 +510,7 @@ const AreasStatusOK: React.FC<{expandAll, isTileExpanded, toggleExpandAll, toggl
                     {row.map((area, index) => 
                         <PortalServiceTile key={index} toggleTile={toggleTile}
                             tileIndex={numberOfAreasWithoutOK + rowIndex*numberOfTilesPerRow + index}
-                            area={area} expanded={isTileExpanded(rowIndex, index)}
+                            area={area} expanded={isTileExpanded(rowIndex, index,numberOfAreasWithoutOK)}
                         />
                     )}
                 </PortalServiceTileRow>
