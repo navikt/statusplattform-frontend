@@ -45,6 +45,7 @@ const NewComponent = () => {
     const [newComponent, updateNewComponent] = useState<Component>({
         name: "",
         team: "",
+        type: "KOMPONENT",
         dependencies: [],
         monitorlink: "",
         pollingUrl: "",
@@ -76,7 +77,7 @@ const NewComponent = () => {
         )
     }
 
-    const { name, team, dependencies, monitorlink, pollingUrl, areasContainingThisComponent } = newComponent
+    const { name, team, type, dependencies, monitorlink, pollingUrl, areasContainingThisComponent } = newComponent
 
 
 
@@ -90,6 +91,14 @@ const NewComponent = () => {
             updateNewComponent(updatedNewArea)
     }
 
+    const handleComponentTypeChange = (event) => {
+        let currentComponent = {...newComponent}
+        const typeChange: string = event.target.value
+        updateSelectedType(typeChange)
+        currentComponent.type = typeChange
+        updateNewComponent(currentComponent)
+    }
+
     /*Handlers for adding componentDependencies START*/
 
     const handleAddComponentDependency = (componentToAdd: Component) => {
@@ -99,7 +108,7 @@ const NewComponent = () => {
         }
         const newComponentsList = [...newComponent.dependencies, componentToAdd]
         const updatedComponent: Component = {
-            name: name, team: team, dependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisComponent: areasContainingThisComponent
+            name: name, team: team, type: type, dependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisComponent: areasContainingThisComponent
         }
         updateNewComponent(updatedComponent)
         toast.success("Lagt til tjenesteavhengighet")
@@ -108,7 +117,7 @@ const NewComponent = () => {
     const handleDeleteComponentDependency = (componentToDelete: Component) => {
         const newComponentsList: Component[] = [...newComponent.dependencies.filter(component => component != componentToDelete)]
         const updatedComponent: Component = {
-            name: name, team: team, dependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisComponent: areasContainingThisComponent
+            name: name, team: team, type: type, dependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisComponent: areasContainingThisComponent
         }
         updateNewComponent(updatedComponent)
         toast.success("Fjernet område fra område")
@@ -161,6 +170,19 @@ const NewComponent = () => {
 
                     <Input type="text" required label="Navn på tjeneste" value={name} onChange={handleComponentDataChange("name")} placeholder="Navn*" />
                     <Input type="text" required label="Team*" value={team} onChange={handleComponentDataChange("team")} placeholder="Team" />
+
+                    <Select value={selectedType !== null ? selectedType : ""} label="Type"
+                        onChange={(event) => handleComponentTypeChange(event)}>
+                        {types.length > 0 ?
+                            types.map((type, index) => {
+                                return (
+                                    <option key={index} value={type}>{type}</option>
+                                )
+                            })
+                        :
+                            <option key={undefined} value={""}>Ingen type å legge til</option>
+                        }
+                    </Select>
 
                     <Input type="text" label="Monitorlink" value={monitorlink} onChange={handleComponentDataChange("monitorlink")} placeholder="Monitorlink" />
                     <Input type="text" label="PollingUrl" value={pollingUrl} onChange={handleComponentDataChange("pollingUrl")} placeholder="PollingUrl" />

@@ -16,6 +16,7 @@ export interface Tile {
 export interface Service {
     id?: string
     name: string
+    type: string
     team?: string
     dependencies?: Service[]
     monitorlink?: string
@@ -28,6 +29,7 @@ export interface Service {
 export interface Component {
     id?: string
     name: string
+    type: string
     team?: string
     dependencies?: Component[]
     monitorlink?: string
