@@ -32,7 +32,6 @@ export const postComponent = async (component: Component): Promise<Object[]> =>{
         method: "POST",
         body: JSON.stringify({
             name: component.name,
-            type: component.type,
             team: component.team,
             dependencies: component.dependencies,
             monitorlink: component.monitorlink,
@@ -92,7 +91,6 @@ export const updateComponent = async (component: Component): Promise<void> =>{
             body: JSON.stringify({
                 id: component.id,
                 name: component.name,
-                type: component.type,
                 team: component.team,
                 dependencies: component.dependencies,
                 monitorlink: component.monitorlink,

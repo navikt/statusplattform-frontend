@@ -45,7 +45,6 @@ const NewService = () => {
     const [newService, updateNewService] = useState<Service>({
         name: "",
         team: "",
-        type: "KOMPONENT",
         dependencies: [],
         monitorlink: "",
         pollingUrl: "",
@@ -77,7 +76,7 @@ const NewService = () => {
         )
     }
 
-    const { name, team, type, dependencies, monitorlink, pollingUrl, areasContainingThisService } = newService
+    const { name, team, dependencies, monitorlink, pollingUrl, areasContainingThisService } = newService
 
 
 
@@ -91,14 +90,6 @@ const NewService = () => {
             updateNewService(updatedNewArea)
     }
 
-    const handleServiceTypeChange = (event) => {
-        let currentService = {...newService}
-        const typeChange: string = event.target.value
-        updateSelectedType(typeChange)
-        currentService.type = typeChange
-        updateNewService(currentService)
-    }
-
     /*Handlers for adding serviceDependencies START*/
 
     const handleAddServiceDependency = (serviceToAdd: Service) => {
@@ -108,7 +99,7 @@ const NewService = () => {
         }
         const newServicesList = [...newService.dependencies, serviceToAdd]
         const updatedService: Service = {
-            name: name, team: team, type: type, dependencies: newServicesList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
+            name: name, team: team, dependencies: newServicesList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
         }
         updateNewService(updatedService)
         toast.success("Lagt til tjenesteavhengighet")
@@ -117,7 +108,7 @@ const NewService = () => {
     const handleDeleteServiceDependency = (serviceToDelete: Service) => {
         const newServicesList: Service[] = [...newService.dependencies.filter(service => service != serviceToDelete)]
         const updatedService: Service = {
-            name: name, team: team, type: type, dependencies: newServicesList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
+            name: name, team: team, dependencies: newServicesList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
         }
         updateNewService(updatedService)
         toast.success("Fjernet område fra område")
@@ -170,19 +161,6 @@ const NewService = () => {
 
                     <Input type="text" required label="Navn på tjeneste" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn*" />
                     <Input type="text" required label="Team*" value={team} onChange={handleServiceDataChange("team")} placeholder="Team" />
-
-                    <Select value={selectedType !== null ? selectedType : ""} label="Type"
-                        onChange={(event) => handleServiceTypeChange(event)}>
-                        {types.length > 0 ?
-                            types.map((type, index) => {
-                                return (
-                                    <option key={index} value={type}>{type}</option>
-                                )
-                            })
-                        :
-                            <option key={undefined} value={""}>Ingen type å legge til</option>
-                        }
-                    </Select>
 
                     <Input type="text" label="Monitorlink" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink" />
                     <Input type="text" label="PollingUrl" value={pollingUrl} onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />

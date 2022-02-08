@@ -175,7 +175,7 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
     const regex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi)
 
 
-    const { type, dependencies, id, monitorlink, team } = service
+    const { dependencies, id, monitorlink, team } = service
 
     return (
         <>
@@ -184,10 +184,6 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
 
                 <BodyShort spacing><b>Team</b></BodyShort>
                 <BodyShort>{team}</BodyShort>
-                <span className="separator" />
-
-                <BodyShort spacing><b>Type</b></BodyShort>
-                <BodyShort>{type}</BodyShort>
                 <span className="separator" />
                     
                     <BodyShort spacing><b>Avhengigheter</b></BodyShort>

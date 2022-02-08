@@ -33,7 +33,6 @@ export const postService = async (service: Service): Promise<Object[]> =>{
         method: "POST",
         body: JSON.stringify({
             name: service.name,
-            type: service.type,
             team: service.team,
             dependencies: service.dependencies,
             monitorlink: service.monitorlink,
@@ -93,7 +92,6 @@ export const updateService = async (service: Service): Promise<void> =>{
             body: JSON.stringify({
                 id: service.id,
                 name: service.name,
-                type: service.type,
                 team: service.team,
                 dependencies: service.dependencies,
                 monitorlink: service.monitorlink,

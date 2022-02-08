@@ -217,7 +217,6 @@ const TjenesteTable = () => {
                             <TjenesteHeader>
                                 <div className="tjeneste-header-content">
                                     <span>Navn</span>
-                                    <span>Type</span>
                                     <span>Team</span>
                                 </div>
                                 <div className="empty-space"></div>
@@ -377,7 +376,6 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
                 <div className="top-row" onClick={() => toggleExpanded(service)}>
                     <div>
                         <span className="service-row-element">{service.name}</span>
-                        <span className="service-row-element">{service.type}</span>
                         <span className="service-row-element">{service.team}</span>
                     </div>
                 </div>
@@ -434,14 +432,11 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
     const [updatedService, changeUpdatedService] = useState<Service>({
         id: service.id,
         name: service.name,
-        type: service.type,
         team: service.team,
         dependencies: service.dependencies,
         monitorlink: service.monitorlink,
         pollingUrl: service.pollingUrl
     })
-
-    const [selectedType, updateSelectedType] = useState<string>(service.type)
 
 
 
@@ -452,14 +447,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
             
         changeUpdatedService(changedService)
-    }
-
-    const handleServiceTypeChange = (event) => {
-        let currentService = {...updatedService}
-        const typeChange: string = event.target.value
-        updateSelectedType(typeChange)
-        currentService.type = typeChange
-        changeUpdatedService(currentService)
     }
 
     const handleSubmit = () => {
@@ -475,7 +462,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
     
 
 
-    const { name, type, team, dependencies, monitorlink, pollingUrl } = updatedService
+    const { name, team, dependencies, monitorlink, pollingUrl } = updatedService
 
     return (
         <ServiceRowContainer>
@@ -483,22 +470,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
                 <div className="top-row" onClick={() => toggleExpanded(service)}>
                     <Input className="service-row-element editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
-                    <Select label="Velg type" className="service-row-element editting" 
-                        value={selectedType !== null ? selectedType : ""}
-                        onChange={(event) => handleServiceTypeChange(event)}
-                        onClick={(event) => event.stopPropagation()}
-                    >
-                        {types.length > 0 ?
-                            types.map((type, index) => {
-                                return (
-                                    <option key={index} value={type}>{type}</option>
-                                )
-                            })
-                        :
-                            <option key={undefined} value={""}>Ingen type å legge til</option>
-                        }
-                    </Select>
-
 
                     <Input className="service-row-element editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
                 </div>
@@ -745,7 +716,6 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
     const [newService, updateNewService] = useState<Service>({
         id: "",
         name: "",
-        type: "KOMPONENT",
         team: "",
         dependencies: [],
         monitorlink: "",
@@ -779,14 +749,6 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
             ...newService,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
         }
-        updateNewService(currentService)
-    }
-
-    const handleServiceTypeChange = (event) => {
-        let currentService = {...newService}
-        const typeChange: string = event.target.value
-        updateSelectedType(typeChange)
-        currentService.type = typeChange
         updateNewService(currentService)
     }
     
@@ -828,20 +790,6 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
 
                     <NewServiceColumn>
                         <Input form="form" type="text" value={name} label="Navn" onChange={handleServiceDataChange("name")} placeholder="Navn"/>
-
-                        <Select value={selectedType !== null ? selectedType : ""} label="Type"
-                            onChange={(event) => handleServiceTypeChange(event)}>
-                            {types.length > 0 ?
-                                types.map((type, index) => {
-                                    return (
-                                        <option key={index} value={type}>{type}</option>
-                                    )
-                                })
-                            :
-                                <option key={undefined} value={""}>Ingen type å legge til</option>
-                            }
-                        </Select>
-
 
 
                         <Input type="text" value={team} label="Team*" className={name.length == 0 ? "input-error" : ""} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
