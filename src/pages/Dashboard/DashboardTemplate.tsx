@@ -274,7 +274,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
             setExpandedTiles(Array.from(Array(areasInDashboard.length).keys()))
         }
     }
-    console.log(expandedTiles)
 
     let rows = generateRowsOfTiles();
     const toggleTile = (index: number) => {
@@ -304,14 +303,15 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
     /*----------------- No areas having ISSUE or DOWN -----------------*/
     if(!statuses.includes("ISSUE") && !statuses.includes("DOWN")) {
+        console.log("Nå skal AllAreas vises")
         return (
             <DashboardContainer>
 
                 <div className="status-only-ok">
 
-                    <BodyShort className="status-wrapper">
+                    <div className="status-wrapper">
                         <Alert variant="success">Alle digitale tjenester fungerer som normalt.</Alert>
-                    </BodyShort>
+                    </div>
 
                     <div className="button-container">
                         <Button variant="secondary" onClick={() => toggleShowAll(!showAll)}>Vis alle områder</Button>
@@ -338,7 +338,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     /*----------------- No area having ISSUE or DOWN -----------------*/
 
 
-    
+    console.log("Nå vises ikke AllAreas")
     
     return (
         <DashboardContainer>
