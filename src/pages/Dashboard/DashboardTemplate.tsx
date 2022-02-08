@@ -182,7 +182,15 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
           }
         }, 1000)
         return () => clearInterval(interval)
-      }, []);
+      }, [])
+
+
+    useEffect(() => {
+        if(areasInDashboard) {
+            setAreaswithoutStatusOK(areasInDashboard.filter(area => area.status != "OK"))
+            setAreasStatusOK(areasInDashboard.filter(area => area.status == "OK"))
+        }
+    },[areasInDashboard])
       
 
 
@@ -202,11 +210,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
     if (!areasInDashboard) {
         return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
-    }
-
-    if(!areasWithoutStatusOK && !areasStatusOK) {
-        setAreaswithoutStatusOK(areasInDashboard.filter(area => area.status != "OK"))
-        setAreasStatusOK(areasInDashboard.filter(area => area.status == "OK"))
     }
 
 
@@ -303,7 +306,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
 
     /*----------------- No areas having ISSUE or DOWN -----------------*/
     if(!statuses.includes("ISSUE") && !statuses.includes("DOWN")) {
-        console.log("Nå skal AllAreas vises")
         return (
             <DashboardContainer>
 
@@ -314,7 +316,7 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
                     </div>
 
                     <div className="button-container">
-                        <Button variant="secondary" onClick={() => toggleShowAll(!showAll)}>Vis alle områder</Button>
+                        <Button variant="secondary" onClick={() => toggleShowAll(!showAll)}>{showAll ? "Skjul alle områder" : "Vis alle områder"}</Button>
                         <Button variant="secondary" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk</Button>
                     </div>
 
@@ -337,8 +339,6 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     }
     /*----------------- No area having ISSUE or DOWN -----------------*/
 
-
-    console.log("Nå vises ikke AllAreas")
     
     return (
         <DashboardContainer>
