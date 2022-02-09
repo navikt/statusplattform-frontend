@@ -237,18 +237,18 @@ const SwitchEtikett: React.FC<{maintenanceObject?: MaintenanceObject, status: st
         <div className="etikett-container">
             {maintenanceObject && 
                 <EtikettInfo>
-                    Vedlikehold pågår
+                    <OutlinedWrench /> Vedlikehold pågår
                 </EtikettInfo>
             }
             {(() => {
                 switch (status) {
                     case 'OK':
-                        return <EtikettSuksess>Fungerer normalt</EtikettSuksess>
+                        return <EtikettSuksess><SuccessCustomized/> Fungerer normalt</EtikettSuksess>
 
                     case 'ISSUE':
-                        return <EtikettFokus>Redusert funksjonalitet</EtikettFokus>
+                        return <EtikettFokus><WarningCustomized/>Redusert funksjonalitet</EtikettFokus>
                     case 'DOWN':
-                        return <EtikettAdvarsel>Feil på tjeneste</EtikettAdvarsel>
+                        return <EtikettAdvarsel><ErrorCustomized/>Feil på tjeneste</EtikettAdvarsel>
                     default:
                         return null
                 }
