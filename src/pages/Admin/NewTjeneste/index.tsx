@@ -91,14 +91,6 @@ const NewService = () => {
             updateNewService(updatedNewArea)
     }
 
-    const handleServiceTypeChange = (event) => {
-        let currentService = {...newService}
-        const typeChange: string = event.target.value
-        updateSelectedType(typeChange)
-        currentService.type = typeChange
-        updateNewService(currentService)
-    }
-
     /*Handlers for adding serviceDependencies START*/
 
     const handleAddServiceDependency = (serviceToAdd: Service) => {
@@ -170,19 +162,6 @@ const NewService = () => {
 
                     <Input type="text" required label="Navn på tjeneste" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn*" />
                     <Input type="text" required label="Team*" value={team} onChange={handleServiceDataChange("team")} placeholder="Team" />
-
-                    <Select value={selectedType !== null ? selectedType : ""} label="Type"
-                        onChange={(event) => handleServiceTypeChange(event)}>
-                        {types.length > 0 ?
-                            types.map((type, index) => {
-                                return (
-                                    <option key={index} value={type}>{type}</option>
-                                )
-                            })
-                        :
-                            <option key={undefined} value={""}>Ingen type å legge til</option>
-                        }
-                    </Select>
 
                     <Input type="text" label="Monitorlink" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink" />
                     <Input type="text" label="PollingUrl" value={pollingUrl} onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />

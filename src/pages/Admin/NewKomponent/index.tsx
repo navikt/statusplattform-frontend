@@ -91,14 +91,6 @@ const NewComponent = () => {
             updateNewComponent(updatedNewArea)
     }
 
-    const handleComponentTypeChange = (event) => {
-        let currentComponent = {...newComponent}
-        const typeChange: string = event.target.value
-        updateSelectedType(typeChange)
-        currentComponent.type = typeChange
-        updateNewComponent(currentComponent)
-    }
-
     /*Handlers for adding componentDependencies START*/
 
     const handleAddComponentDependency = (componentToAdd: Component) => {
@@ -170,19 +162,6 @@ const NewComponent = () => {
 
                     <Input type="text" required label="Navn på tjeneste" value={name} onChange={handleComponentDataChange("name")} placeholder="Navn*" />
                     <Input type="text" required label="Team*" value={team} onChange={handleComponentDataChange("team")} placeholder="Team" />
-
-                    <Select value={selectedType !== null ? selectedType : ""} label="Type"
-                        onChange={(event) => handleComponentTypeChange(event)}>
-                        {types.length > 0 ?
-                            types.map((type, index) => {
-                                return (
-                                    <option key={index} value={type}>{type}</option>
-                                )
-                            })
-                        :
-                            <option key={undefined} value={""}>Ingen type å legge til</option>
-                        }
-                    </Select>
 
                     <Input type="text" label="Monitorlink" value={monitorlink} onChange={handleComponentDataChange("monitorlink")} placeholder="Monitorlink" />
                     <Input type="text" label="PollingUrl" value={pollingUrl} onChange={handleComponentDataChange("pollingUrl")} placeholder="PollingUrl" />

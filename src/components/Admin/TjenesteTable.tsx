@@ -15,7 +15,6 @@ import ModalWrapper from 'nav-frontend-modal';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Service } from '../../types/navServices';
-import { fetchTypes } from '../../utils/fetchTypes';
 import { CloseCustomized, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { deleteService, fetchServices, postService, updateService } from '../../utils/servicesAPI';
@@ -126,7 +125,6 @@ const TjenesteTable = () => {
     const [servicesToEdit, changeServicesToEdit] = useState<string[]>([])
     const [serviceToDelete, setServiceToDelete] = useState<Service>()
     const { data: services, isLoading: loadingServices, reload } = useLoader(fetchServices,[]);
-    const { data: types, isLoading: loadingTypes, reload: reloadTypes } = useLoader(fetchTypes,[]);
 
     const { changeTitle } = useContext(TitleContext)
     
@@ -134,7 +132,7 @@ const TjenesteTable = () => {
         changeTitle("Admin - Tjenester")
     })
 
-    if(loadingServices || loadingTypes) {
+    if(loadingServices) {
         return (
             <CustomNavSpinner />
         )
@@ -217,7 +215,6 @@ const TjenesteTable = () => {
                             <TjenesteHeader>
                                 <div className="tjeneste-header-content">
                                     <span>Navn</span>
-                                    <span>Type</span>
                                     <span>Team</span>
                                 </div>
                                 <div className="empty-space"></div>
@@ -243,7 +240,6 @@ const TjenesteTable = () => {
                                                     setServiceToDelete={() => setServiceToDelete(service)}
                                                     allServices={services}
                                                     reload={reload}
-                                                    types={types}
                                                 />
                                         }
                                     </TjenesteContent>
@@ -367,7 +363,6 @@ interface ServiceRowProps {
     isExpanded: boolean,
     setServiceToDelete: (service) => void,
     reload?: () => void
-    types?: string[]
 }
 
 const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete }: ServiceRowProps) => {
@@ -377,7 +372,6 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
                 <div className="top-row" onClick={() => toggleExpanded(service)}>
                     <div>
                         <span className="service-row-element">{service.name}</span>
-                        <span className="service-row-element">{service.type}</span>
                         <span className="service-row-element">{service.team}</span>
                     </div>
                 </div>
@@ -430,7 +424,7 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
 
 
 
-const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete, reload, types } : ServiceRowProps) => {
+const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExpanded, isExpanded, setServiceToDelete, reload } : ServiceRowProps) => {
     const [updatedService, changeUpdatedService] = useState<Service>({
         id: service.id,
         name: service.name,
@@ -441,8 +435,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         pollingUrl: service.pollingUrl
     })
 
-    const [selectedType, updateSelectedType] = useState<string>(service.type)
-
 
 
 
@@ -452,14 +444,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
             
         changeUpdatedService(changedService)
-    }
-
-    const handleServiceTypeChange = (event) => {
-        let currentService = {...updatedService}
-        const typeChange: string = event.target.value
-        updateSelectedType(typeChange)
-        currentService.type = typeChange
-        changeUpdatedService(currentService)
     }
 
     const handleSubmit = () => {
@@ -483,22 +467,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
                 <div className="top-row" onClick={() => toggleExpanded(service)}>
                     <Input className="service-row-element editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
-                    <Select label="Velg type" className="service-row-element editting" 
-                        value={selectedType !== null ? selectedType : ""}
-                        onChange={(event) => handleServiceTypeChange(event)}
-                        onClick={(event) => event.stopPropagation()}
-                    >
-                        {types.length > 0 ?
-                            types.map((type, index) => {
-                                return (
-                                    <option key={index} value={type}>{type}</option>
-                                )
-                            })
-                        :
-                            <option key={undefined} value={""}>Ingen type å legge til</option>
-                        }
-                    </Select>
-
 
                     <Input className="service-row-element editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
                 </div>
@@ -740,8 +708,6 @@ interface AddServiceProps {
 const AddNewService = ({services, reload}: AddServiceProps) => {
     const [isLoading, setIsLoading] = useState(true)
     const [editDependencies, changeEditDepencendyState] = useState<boolean>(false)
-    const [selectedType, updateSelectedType] = useState<string>("KOMPONENT")
-    const [types, updateTypes] = useState<string[]>()
     const [newService, updateNewService] = useState<Service>({
         id: "",
         name: "",
@@ -751,15 +717,6 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
         monitorlink: "",
         pollingUrl: undefined
     })
-    
-    useEffect(() => {
-        (async function () {
-            setIsLoading(true)
-            const retrievedTypes: string[] = await fetchTypes()
-            updateTypes(retrievedTypes)
-            setIsLoading(false)
-        })()
-    }, [])
 
 
     if (isLoading) {
@@ -779,14 +736,6 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
             ...newService,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
         }
-        updateNewService(currentService)
-    }
-
-    const handleServiceTypeChange = (event) => {
-        let currentService = {...newService}
-        const typeChange: string = event.target.value
-        updateSelectedType(typeChange)
-        currentService.type = typeChange
         updateNewService(currentService)
     }
     
@@ -828,21 +777,6 @@ const AddNewService = ({services, reload}: AddServiceProps) => {
 
                     <NewServiceColumn>
                         <Input form="form" type="text" value={name} label="Navn" onChange={handleServiceDataChange("name")} placeholder="Navn"/>
-
-                        <Select value={selectedType !== null ? selectedType : ""} label="Type"
-                            onChange={(event) => handleServiceTypeChange(event)}>
-                            {types.length > 0 ?
-                                types.map((type, index) => {
-                                    return (
-                                        <option key={index} value={type}>{type}</option>
-                                    )
-                                })
-                            :
-                                <option key={undefined} value={""}>Ingen type å legge til</option>
-                            }
-                        </Select>
-
-
 
                         <Input type="text" value={team} label="Team*" className={name.length == 0 ? "input-error" : ""} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
 
