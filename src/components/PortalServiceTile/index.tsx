@@ -56,6 +56,11 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
         font-size: 1rem;
         font-style: italic;
     }
+    .empty-space {
+        height: 15px;
+
+        display: block;
+    }
 `
 
 const SystemtittelCustomized = styled(Systemtittel)`
@@ -186,10 +191,12 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
 
                     <SwitchEtikett status={area.status} maintenanceObject={testMaintenanceObject} />
 
-                    {(testMaintenanceObject.message && testMaintenanceObject.isPlanned) &&
+                    {(testMaintenanceObject.message && testMaintenanceObject.isPlanned) ?
                         <BodyShort className="maintenance-message">
                             <Wrench className="icon" /> {testMaintenanceObject.message}
                         </BodyShort>
+                        :
+                        <span className="empty-space"></span>
                     }
                 </div>
             }
