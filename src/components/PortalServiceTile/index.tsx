@@ -245,9 +245,9 @@ const SwitchEtikett: React.FC<{maintenanceObject?: MaintenanceObject, status: st
                         return <EtikettSuksess><SuccessFilledCustomized/> Fungerer normalt</EtikettSuksess>
 
                     case 'ISSUE':
-                        return <EtikettFokus><WarningFilledCustomized/>Redusert funksjonalitet</EtikettFokus>
+                        return <EtikettFokus><WarningFilledCustomized/> Redusert funksjonalitet</EtikettFokus>
                     case 'DOWN':
-                        return <EtikettAdvarsel><ErrorFilledCustomized/>Feil på tjeneste</EtikettAdvarsel>
+                        return <EtikettAdvarsel><ErrorFilledCustomized/> Feil på tjeneste</EtikettAdvarsel>
                     default:
                         return null
                 }
