@@ -1,17 +1,19 @@
 import { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 import Head from 'next/head'
+import styled from "styled-components"
 
 import CustomNavSpinner from "../../components/CustomNavSpinner"
 import DashboardTemplate from "./DashboardTemplate"
 import Layout from '../../components/Layout'
-
-import { Dashboard } from "../../types/navServices"
 import Custom404 from "../../pages/404"
 import { UserData } from "../../types/userData"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import { fetchDashboardsList } from "../../utils/dashboardsAPI"
 import { RouterPrivatperson } from "../../types/routes"
+import { Dashboard } from "../../types/navServices"
+
+import { Button } from "@navikt/ds-react"
 
 
 const DashboardFromId = () => {
@@ -20,7 +22,7 @@ const DashboardFromId = () => {
 
     const [isLoading, setIsLoading] = useState(true)
     const [retrievedDashboard, setRetrievedDashboard] = useState<Dashboard | undefined>()
-
+    const [isFullScreen, changeIsFullScreen] = useState(false)
 
     const user = useContext<UserData>(UserStateContext)
 
@@ -55,7 +57,17 @@ const DashboardFromId = () => {
     if(router.asPath.includes("Internt") && !user.navIdent) {
         router.push(RouterPrivatperson.PATH)
     }
-    
+
+    if(isFullScreen) {
+        return (
+            <>
+                <FullScreenButton isFullScreen={isFullScreen} changeIsFullScreen={(changed: boolean) => changeIsFullScreen(changed)} />
+                <DashboardTemplate dashboard={retrievedDashboard} isFullScreen={isFullScreen} />
+            </>
+        )
+    }
+
+
 
     return (
         <Layout>
@@ -86,9 +98,37 @@ const DashboardFromId = () => {
                 <meta property="twitter:description" content="Status Nav digitale tjenester er en oversiktsside for Navs ulike tjenester til borgere, arbeidsgivere og samarbeidspartnere." />
                 <meta property="twitter:image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
             </Head>
-            <DashboardTemplate dashboard={retrievedDashboard}/>
+            <FullScreenButton isFullScreen={isFullScreen} changeIsFullScreen={(changed: boolean) => changeIsFullScreen(changed)} />
+            <DashboardTemplate dashboard={retrievedDashboard} isFullScreen={isFullScreen}/>
         </Layout>
     )
 }
+
+
+
+
+
+
+const FullScreenFixedButton = styled(Button)`
+    display: none;
+
+    @media(min-width: 1000px) {
+        display: block;
+        position: absolute;
+        right: 5ch;
+        top: 20ch;
+    }
+`
+
+
+export const FullScreenButton: React.FC<{isFullScreen: boolean, changeIsFullScreen: (changed: boolean) => void}> = ({isFullScreen, changeIsFullScreen}) => {
+    return (
+        <FullScreenFixedButton onClick={() => changeIsFullScreen(!isFullScreen)}>{isFullScreen ? "Lukk fullskjerm" : "Åpne i fullskjerm"}</FullScreenFixedButton>
+    )
+}
+
+
+
+
 
 export default DashboardFromId

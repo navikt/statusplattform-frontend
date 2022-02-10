@@ -123,12 +123,13 @@ const ErrorParagraph = styled.p`
 
 interface DashboardProps {
     dashboard: Dashboard
+    isFullScreen: boolean
 }
 
 
 
 
-const DashboardTemplate = ({ dashboard }: DashboardProps) => {
+const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
     const [isLoading, setIsLoading] = useState(true)
     const [areasInDashboard, setAreasInDashboard] = useState<Area[]>()
     const [expandAll, changeExpand] = useState(false)
@@ -300,6 +301,21 @@ const DashboardTemplate = ({ dashboard }: DashboardProps) => {
     const statuses: string[] = areasInDashboard.flatMap(area => area.services.map(
         service => service.status
     ))
+
+
+    
+    if(isFullScreen) {
+        return (
+            <FullScreen 
+                expandAll={expandAll}
+                isTileExpanded={isTileExpanded}
+                toggleExpandAll={toggleExpandAll}
+                toggleTile={toggleTile}
+                numberOfTilesPerRow={numberOfTilesPerRow}
+                rows={rows}
+            />
+        )
+    }
     
 
 
@@ -426,6 +442,71 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
 
 
 // -------------
+
+
+
+
+const FullScreenTileContainer = styled.div`
+    background-color: var(--navGraBakgrunn);
+    min-height: 100vh;
+
+    display: flex;
+    flex-direction: column;
+
+    .content {
+        margin-top: 25.5ch;
+    }
+`
+
+const FullScreenTileRow = styled.div `
+    margin-bottom: 24px;
+    gap: 32px;
+
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: center;
+`
+
+
+interface FullScreenProps {
+    rows: Area[][]
+    toggleTile: (index) => void
+    numberOfTilesPerRow: number
+    isTileExpanded: (rowIndex, index, startingIndex) => boolean
+    toggleExpandAll: () => void
+    expandAll: boolean
+}
+
+
+const FullScreen = ({ rows, toggleTile, numberOfTilesPerRow, isTileExpanded, toggleExpandAll, expandAll}: FullScreenProps) => {
+
+    useEffect(() => {
+        toggleExpandAll()
+    },[])
+
+    return (
+        <FullScreenTileContainer>
+            <div className="content">
+                {rows.map((row, rowIndex) => (
+                    <FullScreenTileRow key={rowIndex}>
+                        {row.map((area, index) => 
+                            <PortalServiceTile key={index} toggleTile={toggleTile}
+                                tileIndex={rowIndex*numberOfTilesPerRow + index}
+                                area={area} expanded={isTileExpanded(rowIndex, index, 0)}
+                            />
+                        )}
+                    </FullScreenTileRow>
+                ))}
+            </div>
+        </FullScreenTileContainer>
+    )
+}
+
+
+
+
+
+
 
 
 

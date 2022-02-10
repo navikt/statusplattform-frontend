@@ -167,7 +167,7 @@ export interface PortalServiceTileProps {
 }
 
 
-export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: PortalServiceTileProps) => {
+export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: PortalServiceTileProps) => {
     const {filters, matches} = useContext(FilterContext)
 
     const toggleExpanded = () => {
