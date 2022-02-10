@@ -186,7 +186,7 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
 
                     <SwitchEtikett status={area.status} maintenanceObject={testMaintenanceObject} />
 
-                    {testMaintenanceObject.message &&
+                    {(testMaintenanceObject.message && testMaintenanceObject.isPlanned) &&
                         <BodyShort className="maintenance-message">
                             <Wrench className="icon" /> {testMaintenanceObject.message}
                         </BodyShort>
