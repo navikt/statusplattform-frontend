@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useContext } from "react";
 
-import { ErrorCustomized, NoStatusAvailableCircle, OutlinedWrench, SuccessCustomized, WarningCustomized } from '../../components/TrafficLights'
+import { ErrorCustomized, ErrorFilledCustomized, FilledWrench, NoStatusAvailableCircle, OutlinedWrench, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { Area, MaintenanceObject} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
@@ -142,7 +142,6 @@ export const handleAndSetStatusIcon = (status: string, isInternal?: boolean): an
         case 'DOWN':
             return <ErrorCustomized />
         case 'ISSUE':
-            // return <WarningCircleOrange />
             return <WarningCustomized />
         case 'MAINTENANCE':
             return <OutlinedWrench />
@@ -170,7 +169,7 @@ export const PortalServiceTile = ({area, expanded ,toggleTile, tileIndex}: Porta
         toggleTile(tileIndex)
     }
 
-    const testMaintenanceObject: MaintenanceObject = {isPlanned: true, message: "Planlagt 24. desember"}
+    const testMaintenanceObject: MaintenanceObject = {isPlanned: false, message: "Planlagt 24. desember"}
 
     return (
         <EkspanderbartpanelCustomized
@@ -235,20 +234,20 @@ const SwitchEtikett: React.FC<{maintenanceObject?: MaintenanceObject, status: st
     
     return (
         <div className="etikett-container">
-            {maintenanceObject && 
+            {maintenanceObject.isPlanned && 
                 <EtikettInfo>
-                    <OutlinedWrench /> Vedlikehold pågår
+                    <FilledWrench /> Vedlikehold pågår
                 </EtikettInfo>
             }
             {(() => {
                 switch (status) {
                     case 'OK':
-                        return <EtikettSuksess><SuccessCustomized/> Fungerer normalt</EtikettSuksess>
+                        return <EtikettSuksess><SuccessFilledCustomized/> Fungerer normalt</EtikettSuksess>
 
                     case 'ISSUE':
-                        return <EtikettFokus><WarningCustomized/>Redusert funksjonalitet</EtikettFokus>
+                        return <EtikettFokus><WarningFilledCustomized/>Redusert funksjonalitet</EtikettFokus>
                     case 'DOWN':
-                        return <EtikettAdvarsel><ErrorCustomized/>Feil på tjeneste</EtikettAdvarsel>
+                        return <EtikettAdvarsel><ErrorFilledCustomized/>Feil på tjeneste</EtikettAdvarsel>
                     default:
                         return null
                 }

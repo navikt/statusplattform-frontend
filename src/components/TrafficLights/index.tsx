@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Wrench, Close, Success, Warning, Error } from '@navikt/ds-icons'
+import { Wrench, Close, Success, Warning, Error, SuccessFilled, WarningFilled, ErrorFilled } from '@navikt/ds-icons'
 import { SuccessStroke } from '@navikt/ds-icons'
 
 
@@ -57,18 +57,36 @@ const TrafficLightsContainer = styled.div`
 
 export const SuccessCustomized = styled(Success)`
     color: var(--navGronn) !important;
-    /* stroke: var(--navds-semantic-color-feedback-success-icon) !important; */
 `
 
+export const SuccessFilledCustomized = styled(SuccessFilled)`
+    color: var(--navGronn) !important;
+`
+
+
+
+
 export const WarningCustomized = styled(Warning)`
-    /* stroke: var(--navds-semantic-color-feedback-warning-icon) !important; */
     color: var(--navOransje) !important;
 `;
+
+export const WarningFilledCustomized = styled(WarningFilled)`
+    color: var(--navOransje) !important;
+`
+
+
 
 
 export const ErrorCustomized = styled(Error)`
     color: var(--redError) !important;
 `
+
+export const ErrorFilledCustomized = styled(ErrorFilled)`
+    color: var(--redError) !important;
+`
+
+
+
 
 export const NoStatusAvailableCircle = styled.span`
     height: 16px;
@@ -80,12 +98,32 @@ export const NoStatusAvailableCircle = styled.span`
 `;
 
 const WrenchCustomized = styled(Wrench)`
-    color: var(--navds-global-color-deepblue-400);
+    /* color: var(--navds-global-color-deepblue-400); */
+    color: var(--navds-global-color-deepblue-100);
 `
+
+
 
 const Outine = styled.span`
     border-radius: 50%;
     border: 1px solid var(--navds-global-color-deepblue-400);
+
+    width: 24px;
+    height: 24px;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+
+    svg {
+        width: 16px;
+        height: 16px;
+    }
+`
+
+const Fill = styled.span`
+    border-radius: 50%;
+    border: 1px solid var(--navds-global-color-deepblue-400);
+    background-color: var(--navds-global-color-deepblue-400);
 
     width: 24px;
     height: 24px;
@@ -107,8 +145,15 @@ export const OutlinedWrench = () => {
             <WrenchCustomized />
         </Outine>
     )
-    
-} 
+}
+
+export const FilledWrench = () => {
+    return (
+        <Fill>
+            <WrenchCustomized />
+        </Fill>
+    )
+}
 
 interface Props {
     isInternal: boolean
