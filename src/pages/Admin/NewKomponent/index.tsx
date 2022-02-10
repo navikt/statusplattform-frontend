@@ -262,7 +262,7 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
     const [selectedComponent, changeSelectedComponent] = useState<Component | null>(() => availableComponents.length > 0 ? availableComponents[0] : null)
 
     useEffect(() => {
-        changeTitle("Opprett ny tjeneste")
+        changeTitle("Opprett ny komponent")
         if(availableComponents.length > 0){
             changeSelectedComponent(availableComponents[0])
         }
