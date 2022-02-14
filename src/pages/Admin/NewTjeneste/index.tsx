@@ -39,13 +39,13 @@ const NewService = () => {
     const [allAreas, setAllAreas] = useState<Area[]>()
     const [allServices, setAllServices] = useState<Service[]>()
     const [types, updateTypes] = useState<string[]>()
-    const [selectedType, updateSelectedType] = useState<string>("KOMPONENT")
+    const [selectedType, updateSelectedType] = useState<string>("TJENESTE")
     const [isLoading, setIsLoading] = useState(true)
 
     const [newService, updateNewService] = useState<Service>({
         name: "",
         team: "",
-        type: "KOMPONENT",
+        type: "TJENESTE",
         dependencies: [],
         monitorlink: "",
         pollingUrl: "",
@@ -278,6 +278,15 @@ const ServiceDependencies = ({newService, allServices, handleDeleteServiceDepend
         const newSelectedService: Service = availableServices.find(area => idOfSelectedArea === area.id)
         changeSelectedService(newSelectedService)
     }
+
+
+    const dependencyHandler = () => {
+        if(!selectedService) {
+            toast.info("Ingen tjeneste valgt")
+            return
+        }
+        handleAddServiceDependency(selectedService)
+    }
     
 
     return (
@@ -295,7 +304,7 @@ const ServiceDependencies = ({newService, allServices, handleDeleteServiceDepend
                 }
             </Select>
 
-            <Button variant="secondary" type="button" onClick={() => handleAddServiceDependency(selectedService)}>Legg til</Button>
+            <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
             
 
             {newService.dependencies.length > 0

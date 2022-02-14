@@ -85,7 +85,7 @@ export const ModalInner = styled.div`
     display: flex;
     flex-direction: column;
     
-    .knapp {
+    button {
         margin: 1rem;
     }
 `

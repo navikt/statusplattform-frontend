@@ -8,7 +8,6 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useLoader } from '../../utils/useLoader';
 
 import { Input } from 'nav-frontend-skjema';
-import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 import { Expand, Notes } from '@navikt/ds-icons'
 import { Button, Heading, Select } from '@navikt/ds-react';
 import ModalWrapper from 'nav-frontend-modal';
@@ -182,8 +181,8 @@ const TjenesteTable = () => {
                 contentLabel="Slettemodal"
             >
                 <ModalInner>Ønsker du å slette tjenesten?
-                    <Knapp mini onClick={confirmDeleteServiceHandler}>Slett tjeneste</Knapp>
-                    <Knapp mini onClick={() => setServiceToDelete(null)}>Avbryt</Knapp>
+                    <Button variant="secondary" onClick={confirmDeleteServiceHandler}>Slett tjeneste</Button>
+                    <Button variant="secondary" onClick={() => setServiceToDelete(null)}>Avbryt</Button>
                 </ModalInner>
             </ModalWrapper>
 
@@ -197,10 +196,6 @@ const TjenesteTable = () => {
                     <b>Legg til ny tjeneste</b>
                 </Button>
             </div>
-
-            {addNewService &&
-                <AddNewService services={services} reload={reload}/>
-            }
 
 
 
@@ -527,7 +522,18 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
 
 
-
+const DependencyList = styled.ul`
+    list-style: none;
+    padding: 0;
+    width: 100%;
+    li {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: fit-content;
+    }
+`
 
 
 
@@ -638,7 +644,7 @@ const EditTjenesteDependencies: React.FC<
                         Ingen tjeneste å legge til
                     </>
             }
-            <Knapp className="add-service" mini onClick={handlePutEdittedServiceDependency}>Legg til avhengighet</Knapp>
+            <Button variant="secondary" className="add-service" onClick={handlePutEdittedServiceDependency}>Legg til avhengighet</Button>
             <DependencyList>
                 {edittedDependencies.map((service) => {
                     return (
@@ -654,298 +660,6 @@ const EditTjenesteDependencies: React.FC<
         </DependenciesColumn>
     )
 }
-
-
-
-
-
-
-
-
-/* ----------------- --------------------------------------------------- -----------------*/
-
-
-
-
-
-const AddNewServiceContainer = styled.div`
-    .input-error {
-        input {
-            border: 1px solid red;
-        }
-    }
-    .knapp {
-        margin-top: 1rem;
-        text-transform: none;
-    }
-`
-
-const NewServiceRow = styled.div`
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-`
-
-const NewServiceColumn = styled.div`
-    ul {
-        max-width: 100%;
-        word-break: break-word;
-        li {
-            border: 1px solid transparent;
-            border-radius: 5px;
-        }
-        li:hover {
-            border: 1px solid black;
-        }
-    }
-`
-
-interface AddServiceProps {
-    services: Service[]
-    reload: () => void
-}
-
-const AddNewService = ({services, reload}: AddServiceProps) => {
-    const [isLoading, setIsLoading] = useState(true)
-    const [editDependencies, changeEditDepencendyState] = useState<boolean>(false)
-    const [newService, updateNewService] = useState<Service>({
-        id: "",
-        name: "",
-        type: "KOMPONENT",
-        team: "",
-        dependencies: [],
-        monitorlink: "",
-        pollingUrl: undefined
-    })
-
-
-    if (isLoading) {
-        return (
-            <CustomNavSpinner />
-        )
-    }
-
-    const handleDependencyChange = (newDependencies: Service[]) => {
-        let currentService = {...newService}
-        currentService.dependencies = newDependencies
-        updateNewService(currentService)
-    }
-    
-    const handleServiceDataChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const currentService = {
-            ...newService,
-            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
-        }
-        updateNewService(currentService)
-    }
-    
-    
-    const handlePostService = (serviceToAdd: Service, event) => {
-        event.preventDefault()
-        const newlist = services.filter(service => service.id === serviceToAdd.name)
-        if(newlist.length > 0) {
-            toast.info("Denne IDen er allerede brukt. Velg en annen")
-            return
-        }
-        postService(serviceToAdd).then(() => {
-            reload()
-            toast.success("Tjeneste ble lagt til")
-        }).catch(() => {
-            toast.warn("Tjeneste ble ikke lagt til")
-        })
-    }
-
-    const toggleDependencyEditor = () => {
-        changeEditDepencendyState(!editDependencies)
-    }
-    
-    const { name, team, monitorlink, pollingUrl } = newService
-    
-    
-    
-
-    return (
-        <AddNewServiceContainer key="input">
-
-            <p>Felter markert med * er obligatoriske</p>
-
-
-            <form id="form" onSubmit={(event) => handlePostService(newService, event)}>
-                <NewServiceRow>
-
-
-
-                    <NewServiceColumn>
-                        <Input form="form" type="text" value={name} label="Navn" onChange={handleServiceDataChange("name")} placeholder="Navn"/>
-
-                        <Input type="text" value={team} label="Team*" className={name.length == 0 ? "input-error" : ""} required onChange={handleServiceDataChange("team")} placeholder="Team*"/>
-
-                    </NewServiceColumn>
-
-                    <NewServiceColumn>
-                        <Input type="text" value={monitorlink} label="Monitorlenke" onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink"/>
-                        <Input type="text" value={pollingUrl} label="PollingUrl" onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />
-                    </NewServiceColumn>
-
-
-
-
-                    <NewServiceColumn>
-                        <div>
-                            <Knapp htmlType="button" onClick={toggleDependencyEditor} >Endre avhengigheter</Knapp>
-                            <ul>
-                                {newService.dependencies.map(service => {
-                                    <li>
-                                        {service.name}
-                                    </li>
-                                })}
-                            </ul>
-                            {editDependencies && 
-                                <NewTjenesteDependencyDropdown services={services} 
-                                    handleDependencyChange={(dependencies) => handleDependencyChange(dependencies)} 
-                                />
-                            }
-                        </div>
-                    </NewServiceColumn>
-                        
-
-
-                </NewServiceRow>
-                <Hovedknapp htmlType="submit">
-                    Lagre ny tjeneste
-                </Hovedknapp>
-
-            </form>
-
-        </AddNewServiceContainer>
-    )
-}
-
-
-
-
-
-/* ----------------- --------------------------------------------------- -----------------*/
-
-
-
-
-
-const DependencyList = styled.ul`
-    list-style: none;
-    padding: 0;
-    width: 100%;
-    li {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: fit-content;
-    }
-`
-
-const EditDependeciesContainer = styled.div`
-    min-width: 100px;
-    max-width: fit-content;
-    select {
-        transform: translateY(-2px);
-    }
-`
-
-interface DropdownProps {
-    services: Service[]
-    handleDependencyChange: (dependencies) => void
-}
-
-const NewTjenesteDependencyDropdown = ({services, handleDependencyChange}: DropdownProps) => {
-    const [newServiceDependencies, setNewServiceDependencies] = useState<Service[]>([])
-    
-    const availableServiceDependencies: Service[] = [...services].filter(s => !newServiceDependencies.map(service => service.id).includes(s.id))
-    const [selectedService, updateSelectedService] = useState<Service>(availableServiceDependencies[0])
-    
-    useEffect(() => {
-        if(availableServiceDependencies.length > 0){
-            updateSelectedService(availableServiceDependencies[0])
-        }
-        else {
-            updateSelectedService(null)
-        }
-    }, [newServiceDependencies])
-
-    const handlePutDependencyOnNewService = () => {
-        if(selectedService !== null) {    
-            const currentList: Service[] = [...newServiceDependencies, selectedService]
-            setNewServiceDependencies(currentList)
-            handleDependencyChange(newServiceDependencies)
-            toast.success("Tjenesteavhengighet lagt til")
-            return
-        }
-        toast.info("Ingen tjenester å legge til")
-    }
-
-    const handleRemoveServiceDependency = (serviceToRemove) => {
-        const filteredDependencyList: Service[] = [...newServiceDependencies].filter(s => s.id !== serviceToRemove.id)
-        setNewServiceDependencies(filteredDependencyList)
-        handleDependencyChange(newServiceDependencies)
-        toast.success("Tjenesteavhengighet fjernet")
-    }
-
-
-    const handleUpdateSelectedService = (event) => {
-        const idOfSelectedService: string = event.target.value
-        const newSelectedService: Service = services.find(service => idOfSelectedService === service.id)
-        updateSelectedService(newSelectedService)
-    }
-
-    return (
-        <EditDependeciesContainer>
-
-
-
-            {services.length !== 0 ?
-                <Select label="Legg til tjenesteavhengigheter" onChange={handleUpdateSelectedService}>
-                    {availableServiceDependencies.length > 0
-                    ?
-                        availableServiceDependencies.map(service => {
-                            return (
-                                <option key={service.id} value={service.id}>{service.name}</option>
-                            )
-                        })
-                    :
-                        <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
-                    }
-                </Select>
-                :
-                    <>
-                        Ingen tjeneste å legge til
-                    </>
-            }
-        
-
-
-            <Knapp htmlType="button" onClick={handlePutDependencyOnNewService}>Legg til avhengighet</Knapp>
-
-
-
-            <DependencyList>
-                {newServiceDependencies.map(service => {
-                    return (
-                        <li key={service.id}>{service.name} 
-                            <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + service.name}>
-                                <CloseCustomized onClick={() => handleRemoveServiceDependency(service)}/>
-                            </CustomButton>
-                        </li>
-                    )
-                })}
-            </DependencyList>
-
-
-
-        </EditDependeciesContainer>
-    )
-}
-
-
 
 
 

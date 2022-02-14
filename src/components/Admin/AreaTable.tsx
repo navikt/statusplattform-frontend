@@ -5,7 +5,6 @@ import { toast } from 'react-toastify';
 
 import { Bag, Calculator, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, Saving, SocialAid } from '@navikt/ds-icons'
 import { Input, Select } from 'nav-frontend-skjema';
-import { Hovedknapp, Knapp  } from 'nav-frontend-knapper';
 
 import { Area, Service } from '../../types/navServices';
 import { Element } from 'nav-frontend-typografi';
@@ -177,8 +176,8 @@ const AreaTable = () => {
                 contentLabel="Slettemodal"
             >
                 <ModalInner>Ønsker du å slette området?
-                    <Knapp mini onClick={confirmDeleteAreaHandler}>Slett området</Knapp>
-                    <Knapp mini onClick={() => setAreaToDelete(null)}>Avbryt</Knapp>
+                    <Button variant="secondary" onClick={confirmDeleteAreaHandler}>Slett området</Button>
+                    <Button variant="secondary" onClick={() => setAreaToDelete(null)}>Avbryt</Button>
                 </ModalInner>
             </ModalWrapper>
 
@@ -190,9 +189,7 @@ const AreaTable = () => {
                 </Button>
             </div>
 
-            {editNewArea &&
-                <AddNewArea dashboardAreas={allAreas} reloadAll={reloadAll} setAnchorId={setAnchorId} />
-            }
+
             <div className="areas-overflow-container">
                 <div>
                     <AreaHeader>
@@ -237,132 +234,6 @@ const AreaTable = () => {
     )
 } 
 
-
-
-
-
-/* -------------------------------- -------------------------------- */
-
-
-
-
-const AddNewAreaContainer = styled.div`
-    max-width: 400px;
-    input, .knapp {
-        margin-bottom: 1rem;
-    }
-    .knapp:last-child {
-        margin-bottom: 0;
-        margin-top: 1rem;
-    }
-    select {
-        min-width: 150px;
-    }
-    .input-error {
-        input {
-            border: 1px solid red;
-        }
-    }
-`
-
-
-interface NewAreaProps {
-    dashboardAreas: Area[]
-    reloadAll: () => void
-    setAnchorId: Function
-}
-
-
-const AddNewArea = ({dashboardAreas, reloadAll, setAnchorId}: NewAreaProps) => {
-    const [newAdminArea, updateNewAdminArea] = useState<Area>({
-        id: "",
-        name: "",
-        description: "",
-        icon: "0001",
-        services: [],
-        components: []
-    })
-
-
-    const handlePostAdminArea = (areaToAdd: Area, event) => {
-        const newlist = dashboardAreas.filter(area =>area.id === areaToAdd.id)
-        if(newlist.length > 0) {
-            toast.error("Denne IDen er allerede i bruk")
-            return
-        }
-        if(postAdminArea(areaToAdd).then(() => {
-            setAnchorId(areaToAdd.id);
-            toast.success("Området ble lagt til")
-            reloadAll()
-
-            updateNewAdminArea({
-                id: "",
-                name: "",
-                description: "",
-                icon: "",
-                services: [],
-                components: []
-            })
-        }).catch(() => {
-            toast.warn("Område ble ikke lagt til")
-        })) {
-        }
-
-    }
-
-    const handleAreaDataChange = (field: keyof typeof newAdminArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const newArea = {
-            ...newAdminArea,
-            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
-            
-            updateNewAdminArea(newArea)
-    }
-    const handleAreaIconChange = (event) => {
-        const newArea = {
-            ...newAdminArea,
-        }
-        newArea.icon = event.target.value
-        updateNewAdminArea(newArea)
-    }
-
-    const { name, description: description} = newAdminArea
-
-
-    return (
-        <AddNewAreaContainer>
-            <p>Felter markert med * er obligatoriske</p>
-
-            <form id="form" action="" onSubmit={(event) => handlePostAdminArea(newAdminArea, event)}>
-
-                <Input form="form" type="text" className={name.length == 0 ? "input-error" : ""}
-                    label="Navn*" required value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*"
-                />
-
-                <Input form="form" type="text" label="Beskrivelse*" className={description.length == 0 ? "input-error" : ""}
-                    required value={description} onChange={handleAreaDataChange("description")} placeholder="Beskrivelse*"
-                />
-
-                <Select
-                    label="Velg ikon til området*"
-                    form="form"
-                    onChange={handleAreaIconChange}
-                    defaultValue={options[0].value}
-                >
-                    {options.map(option => {
-                        return (
-                            <option key={option.value} value={option.value}>{option.label}</option>
-                        )
-                    })}
-                </Select>
-
-                <Hovedknapp htmlType="button" onClick={(event) => handlePostAdminArea(newAdminArea, event)}>
-                    Legg til
-                </Hovedknapp>
-
-            </form>
-        </AddNewAreaContainer>
-    )
-}
 
 
 
@@ -497,12 +368,18 @@ const TileDropdownColumn = styled.div`
     max-width: 300px;
     display: flex;
     flex-direction: column;
+
     :hover {
         cursor: default;
     }
+
     select {
         cursor: pointer;
         margin: 1rem 0;
+    }
+
+    button {
+        max-width: 148px;
     }
 `
 
@@ -872,6 +749,17 @@ const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handleP
         updateSelectedService(newSelectedService)
     }
 
+
+    const putHandler = () => {
+        if(!selectedService) {
+            toast.info("Ingen tjeneste valgt")
+            return
+        }
+        handlePutServiceToArea(selectedService)
+    }
+
+
+
     return (
         <TileDropdownColumn key="input">
             <Select value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}>
@@ -886,7 +774,7 @@ const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handleP
                 }
             </Select>
 
-            <Hovedknapp htmlType="button" disabled={!selectedService} onClick={() => handlePutServiceToArea(selectedService)} >Legg til</Hovedknapp>
+            <Button type="button" onClick={putHandler} >Legg til</Button>
             <div className="clickable" onClick={toggleAreaExpanded}></div>
         </TileDropdownColumn>
     )

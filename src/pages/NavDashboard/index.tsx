@@ -5,9 +5,9 @@ import { PortalServiceTile } from '../../components/PortalServiceTile'
 import StatusOverview from '../../components/StatusOverview'
 
 import { Area, Dashboard } from "../../types/navServices";
-import { Knapp } from "nav-frontend-knapper";
 import CustomNavSpinner from "../../components/CustomNavSpinner";
 import { fetchDashboard, fetchDashboardsList } from "../../utils/dashboardsAPI";
+import { Button } from "@navikt/ds-react";
 
 
 const DigitalServicesContainer = styled.div`
@@ -171,7 +171,7 @@ const NavDashboard = () => {
         
         <DigitalServicesContainer>
             <StatusOverview areas={areasInDashboard} />
-                <Knapp kompakt onClick={toggleExpandAll}>Ekspander/lukk feltene</Knapp>
+                <Button variant="secondary" onClick={toggleExpandAll}>Ekspander/lukk feltene</Button>
 
 
                     {areasInDashboard.length > 0 &&

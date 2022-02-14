@@ -1,15 +1,9 @@
 
 import { useRouter } from 'next/router';
-import styled from 'styled-components'
-
 
 import { Back } from "@navikt/ds-icons"
-import { Knapp } from "nav-frontend-knapper"
+import { Button } from '@navikt/ds-react';
 
-
-const KnappCustomized = styled(Knapp)`
-    transition: 0.4s;
-`
 
 export async function getServerSideProps(context) {
     return {
@@ -23,6 +17,6 @@ export const BackButton = () => {
     var referrer = document.referrer;
 
     return (
-        <KnappCustomized mini onClick={() => router.push(referrer)}><Back/>Gå tilbake</KnappCustomized>
+        <Button variant="secondary" onClick={() => router.push(referrer)}><Back/>Gå tilbake</Button>
     )
 }

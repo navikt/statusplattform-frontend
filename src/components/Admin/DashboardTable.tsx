@@ -5,7 +5,6 @@ import { toast } from 'react-toastify'
 import styled from 'styled-components'
 
 import { Expand, Notes } from '@navikt/ds-icons'
-import { Hovedknapp, Knapp } from 'nav-frontend-knapper'
 import ModalWrapper from 'nav-frontend-modal'
 import { Input, Select } from 'nav-frontend-skjema'
 
@@ -222,8 +221,8 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
                 contentLabel="Slettemodal"
             >
                 <ModalInner>Ønsker du å slette dashbordet?
-                    <Knapp mini onClick={confirmDeleteDashboardHandler}>Slett dashbord</Knapp>
-                    <Knapp mini onClick={() => setDashboardToDelete(null)}>Avbryt</Knapp>
+                    <Button variant="secondary" onClick={confirmDeleteDashboardHandler}>Slett dashbord</Button>
+                    <Button variant="secondary" onClick={() => setDashboardToDelete(null)}>Avbryt</Button>
                 </ModalInner>
             </ModalWrapper>
 
@@ -434,7 +433,7 @@ const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
             <p>Felter markert med * er obligatoriske</p>
             <AddNewDashboardContainer>
                 <Input type="text" required label="Navn på dashbord" value={name} onChange={(event) => handleChangeDashboardName(event)} placeholder="Navn*" />
-                <Hovedknapp kompakt htmlType="submit" value="Legg til dashbord">Legg til dashbord</Hovedknapp>
+                <Button type="submit" value="Legg til dashbord">Legg til dashbord</Button>
             </AddNewDashboardContainer>
         </form>
     )
@@ -499,6 +498,7 @@ const DashboardDropRow = styled.div`
 
     display: flex;
     flex-direction: row;
+
     .editting {
         ul {
             list-style: none;
@@ -510,7 +510,7 @@ const DashboardDropRow = styled.div`
         }
     }
 
-    .knapp {
+    .add-button {
         margin: 1rem 0;
     }
 
@@ -567,6 +567,7 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
             {editting
                 ?
                     <DropdownColumn>
+
                         {entireDashboard.areas.length == 0 &&
                             <div>
                                 Ingen områder i dashbord
@@ -583,9 +584,12 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                                 <option key={undefined} value="">Ingen områder å legge til</option>
                             }
                         </Select>
-                        <Hovedknapp onClick={handleAddAreaToDashboard} >
+                        <Button className="add-button" onClick={handleAddAreaToDashboard} >
                             Legg til
-                        </Hovedknapp>
+                        </Button>
+
+
+
                         {entireDashboard.areas.length > 0 &&
                             <div className="editting">
                                 <b>Områder i dashbord</b>
