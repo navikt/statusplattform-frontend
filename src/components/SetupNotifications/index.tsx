@@ -110,7 +110,7 @@ const CreateNotifications = () => {
                 <Checkbox value={acceptsTerms} onChange={event => handleUpdateAcceptsTerms(event)} >Jeg godtar <Link href="#">personvernerklæring og vilkår for bruk</Link></Checkbox>
                 
                 <ButtonContainer>
-                    <Button onClick={() => router.push(RouterHomePage.PATH)}>Avbryt</Button>
+                    <Button type="button" onClick={() => router.push(RouterHomePage.PATH)}>Avbryt</Button>
 
                     <Button onClick={() => changeClickedSendOtp(true)}>Send passord på {emailSelected ? "Epost" : "SMS"}</Button>
                 </ButtonContainer>
@@ -143,6 +143,23 @@ const OtpContainer = styled.div`
     > * {
         margin-bottom: 20px;
     }
+
+    .colored {
+        color: var(--navds-global-color-blue-500);
+    }
+
+    .linkify {
+        text-decoration: underline;
+
+        :hover {
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        :active {
+            color: black;
+        }
+    }
 `
 
 
@@ -161,7 +178,7 @@ const Otp: React.FC<{phoneNumber: string, changeClickedSendOtp: (state) => void 
             
             <BodyShort>Fyll inn engangspassordet du mottok på SMS.</BodyShort>
 
-            <BodyShort>Mottok du ikke passordet? <Refresh /> <span onClick={() => toast.info("Nytt passord sent")}>Send passordet på nytt</span></BodyShort>
+            <BodyShort>Mottok du ikke passordet? <span className="colored"> <Refresh /> <span className="linkify" onClick={() => toast.info("Nytt passord sent")}>Send passordet på nytt</span></span></BodyShort>
 
             <TextField label="Engangspassord fra SMS" />
 

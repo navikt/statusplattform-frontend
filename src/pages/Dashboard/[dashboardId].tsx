@@ -11,9 +11,10 @@ import { UserData } from "../../types/userData"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import { fetchDashboardsList } from "../../utils/dashboardsAPI"
 import { RouterPrivatperson } from "../../types/routes"
-import { Dashboard } from "../../types/navServices"
+import { Dashboard, SubArea } from "../../types/navServices"
 
 import { Button } from "@navikt/ds-react"
+import { fetchSubAreas } from "../../utils/areasAPI"
 
 
 const DashboardFromId = () => {
@@ -33,8 +34,10 @@ const DashboardFromId = () => {
         (async function () {
             setIsLoading(true)
             const dashboards: Dashboard[] = await fetchDashboardsList()
-            const arbeidsGiverDashboard: Dashboard | undefined = (dashboards.find(dashboard => dashboard.name == dashboardTarget ? dashboard : undefined))
-            setRetrievedDashboard(arbeidsGiverDashboard)
+            const subAreas: SubArea[] = await fetchSubAreas()
+            console.log(subAreas)
+            const dashboardMatchingTarget: Dashboard | undefined = (dashboards.find(dashboard => dashboard.name == dashboardTarget ? dashboard : undefined))
+            setRetrievedDashboard(dashboardMatchingTarget)
             setIsLoading(false)
         })()
     }, [dashboardTarget])

@@ -1,15 +1,18 @@
 import styled from 'styled-components'
 import { createRef, useContext, useState } from 'react'
 import { useRouter } from 'next/router'
+import { toast } from 'react-toastify'
+
+import { Sidetittel } from 'nav-frontend-typografi'
+import { Checkbox } from 'nav-frontend-skjema'
+import { Collapse, Expand, Logout, PeopleFilled } from '@navikt/ds-icons'
+import { BodyShort, Button, Popover } from '@navikt/ds-react'
 
 import SubscribeModal from '../../components/SubscribeModal'
 import BurgerMenu from '../../components/BurgerMenu'
 import { FilterContext, FilterOption } from '../ContextProviders/FilterContext'
-
-import { Sidetittel } from 'nav-frontend-typografi'
-import { Checkbox } from 'nav-frontend-skjema'
-import { Collapse, Expand } from '@navikt/ds-icons'
-import { Button, Popover } from '@navikt/ds-react'
+import { RouterLogin, RouterLogout } from '../../types/routes'
+import { UserStateContext } from '../ContextProviders/UserStatusContext'
 
 
 
@@ -68,10 +71,13 @@ const SidetittelCustomized = styled(Sidetittel)`
     }
 `
 const HeaderContent = styled.span`
+    width: 100%;
+
     display: flex;
     flex-direction: column;
     justify-content: space-between;
     align-items: center;
+
     @media (min-width: 450px){
         flex-direction: row;
     }
@@ -131,6 +137,8 @@ const Header = () => {
     const [showFilters, toggleFilters] = useState(false)
 
     const [anchor, setAnchor] = useState(undefined)
+
+    const { name, navIdent } = useContext(UserStateContext)
     
 
     const filterRef = createRef()
@@ -173,6 +181,7 @@ const Header = () => {
                 {/* <SidetittelCustomized>
                     Status digitale tjenester
                 </SidetittelCustomized> */}
+                <ProfileOrLogin name={name} navIdent={navIdent} />
             
             </HeaderContent>
 
@@ -320,6 +329,120 @@ const Filters = () => {
         </FilterRow>
     )
 }
+
+
+
+
+
+
+
+
+
+// ---
+
+const ProfileButton = styled(Button)`
+    border-radius: 50px;
+    min-width: 148px;
+`
+
+
+const LoginButton = styled(Button)`
+    border-radius: 50px;
+    min-width: 148px;
+`
+
+
+const PopoverCustomized = styled(Popover)`
+    ul {
+        padding: 0;
+        margin: 1rem;
+    }
+    
+    ul > li {
+        color: black;
+        list-style: none;
+        text-align: left;
+    }
+
+    li {
+        padding: 1rem 0;
+    }
+
+
+    /* FJERN DENNE */
+    .navds-link {
+        cursor: pointer;
+    }
+`
+
+
+
+
+const ProfileOrLogin: React.FC<{name: string, navIdent: string}> = ({name, navIdent}) => {
+    const router = useRouter()
+
+    const [open, setOpen] = useState(false)
+    const [anchorEl, setAnchorEl] = useState(undefined)
+
+    const handleSetOpen = (event) => {
+        setOpen(!open)
+        if(anchorEl) {
+            setAnchorEl(undefined)
+            return
+        }
+        setAnchorEl(event)
+    }
+
+    const closePopover = () => {
+        setOpen(!open)
+        if(anchorEl) {
+            setAnchorEl(undefined)
+        }
+    }
+
+    return (
+        <>
+            {(name && navIdent)
+            ?
+                <>
+                    <ProfileButton variant="secondary" onClick={(event) => handleSetOpen(event.currentTarget)} aria-expanded={!!anchorEl} >
+                        <PeopleFilled />
+                    </ProfileButton>
+                    <PopoverCustomized
+                        open={open}
+                        onClose={closePopover}
+                        anchorEl={anchorEl}
+                        placement="bottom"
+                    >
+                        <PopoverCustomized.Content>
+                            <strong>{name}</strong>
+                            <ul>
+                                <li>
+                                    <span className="navds-link" onClick={() => toast.info("Ikke implementert enda")}>Min side</span>
+                                </li>
+                                <li>
+                                    <span className="navds-link" onClick={() => toast.info("Ikke implementert enda")}>Mine varsler</span>
+                                </li>
+                                <li>
+                                    <a className="navds-link" href={RouterLogout.PATH}> <Logout /> Logg ut</a>
+                                </li>
+                            </ul>
+                        </PopoverCustomized.Content>
+                    </PopoverCustomized>
+                </>
+            :
+                <LoginButton 
+                    onClick={() => router.push(RouterLogin.PATH)}
+                >
+                    <BodyShort>
+                        Logg inn
+                    </BodyShort>
+                </LoginButton>
+            }
+        </>
+    )
+}
+
 
 
 

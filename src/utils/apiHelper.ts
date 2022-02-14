@@ -121,3 +121,10 @@ export const EndPathGetLoginInfo = () => {
     return "/oauth2/NavUser"
 }
 // ---
+
+
+
+// SubAreas
+export const EndPathSubAreas = () => {
+    return "/rest/SubAreas/"
+}

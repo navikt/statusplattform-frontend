@@ -1,5 +1,5 @@
-import { Area } from "../types/navServices";
-import { EndPathArea, EndPathAreaContainingServices, EndPathAreas, EndPathDashboardWithArea, EndPathPutAreasToDashboard, EndPathServiceToArea, EndPathSpecificArea } from "./apiHelper";
+import { Area, SubArea } from "../types/navServices";
+import { EndPathArea, EndPathAreaContainingServices, EndPathAreas, EndPathDashboardWithArea, EndPathPutAreasToDashboard, EndPathServiceToArea, EndPathSpecificArea, EndPathSubAreas } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -220,4 +220,24 @@ export const putServiceToArea = async (areaId, serviceId): Promise<Object[]> =>{
         return response
     }
     throw new ResponseError("Failed to post to server", response)
+}
+
+
+
+
+
+// SubAreas
+
+export const fetchSubAreas = async(): Promise<SubArea[]> => {
+    let response;
+    let endPath = EndPathSubAreas()
+
+    response = await fetch(endPath)
+
+    if (response.ok) {
+        return response.json()
+    }
+
+    throw new ResponseError("Failed to post to server", response)
+
 }

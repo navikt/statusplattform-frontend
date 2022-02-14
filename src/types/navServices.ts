@@ -46,6 +46,13 @@ export interface Area {
     services: Service[]
     components: Component[]
     status?: string
+    subAreas?: SubArea
+}
+
+export interface SubArea {
+    id?: string
+    name: string
+    services: Service[]
 }
 
 

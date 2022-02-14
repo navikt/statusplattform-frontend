@@ -1,12 +1,12 @@
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
+import { useRouter } from 'next/router';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 
+import { Button, TextField } from '@navikt/ds-react';
+
 import Layout from '../../components/Layout'
-import { Knapp } from 'nav-frontend-knapper'
-import { Input } from 'nav-frontend-skjema'
-import { useRouter } from 'next/router';
 import { TitleContext } from '../../components/ContextProviders/TitleContext';
 import { RouterOauthLogin } from '../../types/routes';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
@@ -97,11 +97,14 @@ const LoginPage = () => {
         setIsLoading(false)
     },[])
 
+
+
     if(isLoading) {
         return (
             <CustomNavSpinner />
         )
     }
+
 
     const changeUserCredentials = (field: keyof typeof citizenLoginCredentials) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const updatedCitizenCredentials = {
@@ -111,43 +114,60 @@ const LoginPage = () => {
         changeCitizenLoginCredentials(updatedCitizenCredentials)
     }
 
+
+
     const loginCitizen = (event) => {
         event.preventDefault()
         toast.info("Ikke implementert")
     }
+
+
 
     const handleLogInNavUser = () => {
         router.push(RouterOauthLogin.PATH)
     }
 
 
+
+
+
     const { username, password } = citizenLoginCredentials
+
+
+
+
     return (
         <Layout>
             <LoginContainer>
                 <div className="external-login">
                     <h2>Logg inn som borger</h2>
                     <form name="borger" onSubmit={loginCitizen}>
-                        <Input type="text" label="Brukernavn"
+                        <TextField
+                            type="text" label="Brukernavn"
                             id="password"
                             onChange={changeUserCredentials("username")}
-                            placeholder="Brukernavn" value={username}>
-                        </Input>
-                        <Input type="text" label="Passord"
+                            placeholder="Brukernavn" value={username}
+                        />
+                        <TextField
+                            type="text" label="Passord"
                             id="password"
                             onChange={changeUserCredentials("password")}
-                            placeholder="Passord" value={password}>
-                        </Input>
-                        <Knapp htmlType="submit" mini>Logg inn</Knapp>
+                            placeholder="Passord" value={password}
+                        />
+                        <Button type="submit">Logg inn</Button>
                     </form>
                 </div>
+
+
                 
                 <div className="separator-wrapper"><span className="vertical-separator"></span></div>
+
+
 
                 <div className="nav-login">
                     <h2>Logg inn som Nav-ansatt med SSO</h2>
                     <form name="ansatt">
-                        <Knapp htmlType="button" mini onClick={handleLogInNavUser}>Logg inn</Knapp>
+                        <Button type="button" onClick={handleLogInNavUser}>Logg inn</Button>
                     </form>
                 </div>
             </LoginContainer>

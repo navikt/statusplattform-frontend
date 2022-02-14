@@ -3,7 +3,7 @@ import { useRouter } from 'next/router'
 import { useContext, useState } from "react";
 import styled from 'styled-components'
 
-import { Close, Employer, Hamburger, Login } from '@navikt/ds-icons'
+import { Close, Employer, Hamburger, Login, Logout } from '@navikt/ds-icons'
 import Popover, {PopoverOrientering} from 'nav-frontend-popover';
 import Lenke from 'nav-frontend-lenker';
 import { Button } from '@navikt/ds-react';
@@ -145,7 +145,6 @@ const PopoverContent = () => {
 
     return (
         <div className="popover-container">
-            <strong>{user.name}</strong>
             <div className="popover-content">
                 <section>
                     <ul>
@@ -160,8 +159,6 @@ const PopoverContent = () => {
                 
                 <section>
                     <ul>
-                        <li><Lenke href="#0">Min side</Lenke></li>
-                        <li><Lenke href="#0">Mine varsler</Lenke></li>
                         {user.navIdent &&
                             <>
                                 <li>
@@ -170,22 +167,7 @@ const PopoverContent = () => {
                                         {RouterAdmin.NAME}
                                     </Lenke>
                                 </li>
-
-                                <li>
-                                    <Lenke href={RouterLogout.PATH}>
-                                        <Login className="popover-link-ikon" />
-                                        {RouterLogout.NAME}
-                                    </Lenke>
-                                </li>
                             </>
-                        }
-                        {!user.name &&
-                            <li>
-                                <Lenke href={RouterLogin.PATH}>
-                                    <Login className="popover-link-ikon" />
-                                    {RouterLogin.NAME}
-                                </Lenke>
-                            </li>
                         }
                     </ul>
                 </section>
