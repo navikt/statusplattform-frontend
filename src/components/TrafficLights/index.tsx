@@ -98,8 +98,8 @@ export const NoStatusAvailableCircle = styled.span`
 `;
 
 const WrenchCustomized = styled(Wrench)`
-    /* color: var(--navds-global-color-deepblue-400); */
-    color: var(--navds-global-color-deepblue-100);
+    color: var(--navds-global-color-deepblue-400);
+
 `
 
 
