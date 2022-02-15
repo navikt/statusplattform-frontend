@@ -1,11 +1,11 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { Telephone, Email } from '@navikt/ds-icons'
-import { Input } from 'nav-frontend-skjema';
-import { Hovedknapp } from 'nav-frontend-knapper';
-import Lukknapp from 'nav-frontend-lukknapp';
 import { ISource, SourceType } from '../../types/source';
+
+import { Telephone, Email } from '@navikt/ds-icons'
+import Lukknapp from 'nav-frontend-lukknapp';
+import { Button, TextField } from '@navikt/ds-react';
 
 
 const SubscribeModalContainer = styled.div`
@@ -148,7 +148,7 @@ const SubscribeModal: React.FC<ClickHandler> = (props) => {
                         <>
                             <form>
                                 <p>{currentActiveSource.text}</p>
-                                <Hovedknapp onClick={(e) => handleSlack(e)}>Abonner</Hovedknapp>
+                                <Button onClick={(e) => handleSlack(e)}>Abonner</Button>
                             </form>
                         </>
                     ) :
@@ -156,8 +156,8 @@ const SubscribeModal: React.FC<ClickHandler> = (props) => {
                         <>
                             <p>{currentActiveSource.text}</p>
                             <form>
-                                <Input label={currentActiveSource.title}></Input>
-                                <Hovedknapp onClick={(e) => handleSubmit(currentActiveSource.id, e)}>Abonner</Hovedknapp>
+                                <TextField label={currentActiveSource.title} />
+                                <Button onClick={(e) => handleSubmit(currentActiveSource.id, e)}>Abonner</Button>
                             </form>
                         </>
                     )

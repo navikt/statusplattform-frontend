@@ -7,9 +7,8 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useLoader } from '../../utils/useLoader';
 
-import { Input } from 'nav-frontend-skjema';
 import { Expand, Notes } from '@navikt/ds-icons'
-import { Button, Heading, Select } from '@navikt/ds-react';
+import { Button, Heading, Select, TextField } from '@navikt/ds-react';
 import ModalWrapper from 'nav-frontend-modal';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
@@ -461,9 +460,9 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
             <ServiceRowContent>
 
                 <div className="top-row" onClick={() => toggleExpanded(service)}>
-                    <Input className="service-row-element editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
+                    <TextField label="Navn" hideLabel className="service-row-element editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
 
-                    <Input className="service-row-element editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
+                    <TextField label="Team" hideLabel className="service-row-element editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
                 </div>
 
 
@@ -478,11 +477,11 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                     </div>
                     <span className="service-row-element editting">
                         <p><b>Monitorlink</b></p>
-                        <Input value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
+                        <TextField label="Monitorlink" hideLabel value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
                     </span>
                     <span className="service-row-element editting">
                         <p><b>PollingUrl</b></p>
-                        <Input value={pollingUrl} onChange={handleUpdatedService("pollingUrl")}/>
+                        <TextField label="Pollingurl" hideLabel value={pollingUrl} onChange={handleUpdatedService("pollingUrl")}/>
                     </span>
                 </div>
             }

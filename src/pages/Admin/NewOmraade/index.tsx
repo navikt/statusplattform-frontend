@@ -3,8 +3,7 @@ import router from "next/router";
 import { useContext, useEffect, useState } from "react";
 
 import { Delete } from "@navikt/ds-icons";
-import { BodyShort, Button, Detail, Select } from "@navikt/ds-react";
-import { Input } from "nav-frontend-skjema";
+import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
 import { toast, ToastContainer } from "react-toastify"
 
 import { options } from "../../..//components/Admin/AreaTable";
@@ -116,8 +115,8 @@ const NewArea = () => {
 
                     <Detail size="small" spacing>Felter markert med * er obligatoriske</Detail>
                     
-                    <Input type="text" required label="Navn på område" value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*" />
-                    <Input type="text" required label="Beskrivelse" value={description} onChange={handleAreaDataChange("description")} placeholder="Beskrivelse" />
+                    <TextField type="text" required label="Navn på område" value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*" />
+                    <TextField type="text" required label="Beskrivelse" value={description} onChange={handleAreaDataChange("description")} placeholder="Beskrivelse" />
                     <Select
                         size="small"
                         label="Velg ikon til området*"

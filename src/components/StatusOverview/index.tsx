@@ -27,7 +27,7 @@ const StatusBannerContainer = styled(Panel)`
     justify-content: space-between;
     flex-direction: column;
 
-    .knapp-wrapper {
+    .button-wrapper {
         display: flex;
         flex-direction: column;
 
@@ -119,7 +119,7 @@ const StatusOverview = (props: AreaServicesList) => {
                     
                 </div>
 
-                <div className="knapp-wrapper">
+                <div className="button-wrapper">
                     <Button variant="secondary" size="medium" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>
                         Se avvikshistorikk
                     </Button>

@@ -8,8 +8,7 @@ import { Area, Service } from "../../../types/navServices";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { fetchTypes } from "../../..//utils/fetchTypes";
 
-import { BodyShort, Button, Detail, Select } from "@navikt/ds-react";
-import { Input } from "nav-frontend-skjema";
+import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
 import { Delete } from "@navikt/ds-icons";
 import { HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
@@ -160,11 +159,11 @@ const NewService = () => {
 
                     <Detail size="small" spacing>Felter markert med * er obligatoriske</Detail>
 
-                    <Input type="text" required label="Navn på tjeneste" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn*" />
-                    <Input type="text" required label="Team*" value={team} onChange={handleServiceDataChange("team")} placeholder="Team" />
+                    <TextField type="text" required label="Navn på tjeneste" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn*" />
+                    <TextField type="text" required label="Team*" value={team} onChange={handleServiceDataChange("team")} placeholder="Team" />
 
-                    <Input type="text" label="Monitorlink" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink" />
-                    <Input type="text" label="PollingUrl" value={pollingUrl} onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />
+                    <TextField type="text" label="Monitorlink" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink" />
+                    <TextField type="text" label="PollingUrl" value={pollingUrl} onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />
 
                     <ServiceDependencies 
                         newService={newService}

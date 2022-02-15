@@ -4,7 +4,6 @@ import Head from 'next/head'
 import { toast } from 'react-toastify';
 
 import { Bag, Calculator, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, Saving, SocialAid } from '@navikt/ds-icons'
-import { Input, Select } from 'nav-frontend-skjema';
 
 import { Area, Service } from '../../types/navServices';
 import { Element } from 'nav-frontend-typografi';
@@ -16,7 +15,7 @@ import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { ModalInner } from '.';
 import { getIconsFromGivenCode } from '../../utils/servicesOperations';
 import { useLoader } from '../../utils/useLoader';
-import { Button } from '@navikt/ds-react';
+import { Button, Select, TextField } from '@navikt/ds-react';
 import router from 'next/router';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { deleteArea, deleteServiceFromArea, fetchAreas, postAdminArea, putServiceToArea, updateArea } from '../../utils/areasAPI';
@@ -619,9 +618,11 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
                 <AreaRowInner>
 
                     <AreaElements className="top-row" onClick={toggleExpanded}>
-                        <Input className="row-element editting" value={name} onChange={handleUpdatedArea("name")} onClick={(event) => event.stopPropagation()} />
-                        <Input className="row-element editting" value={description} onChange={handleUpdatedArea("description")} onClick={(event) => event.stopPropagation()} />
+                        <TextField label="Navn" hideLabel className="row-element editting" value={name} onChange={handleUpdatedArea("name")} onClick={(event) => event.stopPropagation()} />
+                        <TextField label="Beskrivelse" hideLabel className="row-element editting" value={description} onChange={handleUpdatedArea("description")} onClick={(event) => event.stopPropagation()} />
                         <Select
+                            label="Velg ikon"
+                            hideLabel
                             className="row-element editting"
                             onChange={handleAreaIconChange}
                             defaultValue={options[0].value}
@@ -762,7 +763,11 @@ const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handleP
 
     return (
         <TileDropdownColumn key="input">
-            <Select value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}>
+            <Select
+                value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}
+                label="Velg tjenesteavhengighet"
+                hideLabel
+            >
                 {availableServices.length > 0 ?
                 availableServices.map(service => {
                     return (

@@ -2,14 +2,12 @@ import styled from 'styled-components'
 import Head from 'next/head'
 import router from 'next/router';
 import { useContext, useEffect, useState } from "react";
-
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useLoader } from '../../utils/useLoader';
 
-import { Input } from 'nav-frontend-skjema';
 import { Expand, Notes } from '@navikt/ds-icons'
-import { BodyShort, Button, Heading, Select } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Select, TextField } from '@navikt/ds-react';
 import ModalWrapper from 'nav-frontend-modal';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
@@ -18,6 +16,7 @@ import { deleteComponent, fetchComponents, postComponent, updateComponent } from
 import { CloseCustomized, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { RouterAdminAddKomponent } from '../../types/routes';
+
 
 const KomponentTableContainer = styled.div`
     .components-overflow-container {
@@ -464,9 +463,9 @@ const ComponentRowEditting = ({ component, allComponents: allServices, toggleEdi
             <ComponentRowContent>
 
                 <div className="top-row" onClick={() => toggleExpanded(component)}>
-                    <Input className="component-row-element editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
+                    <TextField label="Navn" hideLabel className="component-row-element editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
 
-                    <Input className="component-row-element editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
+                    <TextField label="Team" hideLabel className="component-row-element editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
                 </div>
 
 
@@ -481,11 +480,11 @@ const ComponentRowEditting = ({ component, allComponents: allServices, toggleEdi
                     </div>
                     <span className="component-row-element editting">
                         <p><b>Monitorlink</b></p>
-                        <Input value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
+                        <TextField label="Monitorlink" hideLabel value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
                     </span>
                     <span className="component-row-element editting">
                         <p><b>PollingUrl</b></p>
-                        <Input value={pollingUrl} onChange={handleUpdatedService("pollingUrl")}/>
+                        <TextField label="Pollingurl" hideLabel value={pollingUrl} onChange={handleUpdatedService("pollingUrl")}/>
                     </span>
                 </div>
             }

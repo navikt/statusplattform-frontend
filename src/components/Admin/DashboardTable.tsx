@@ -6,19 +6,18 @@ import styled from 'styled-components'
 
 import { Expand, Notes } from '@navikt/ds-icons'
 import ModalWrapper from 'nav-frontend-modal'
-import { Input, Select } from 'nav-frontend-skjema'
+import { BodyShort, Button, Select, TextField } from '@navikt/ds-react'
 
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import { ModalInner } from '.';
-import { Area, Dashboard } from '../../types/navServices'
-
-import { useLoader } from '../../utils/useLoader'
 import { CloseCustomized } from '.'
-import { BodyShort, Button } from '@navikt/ds-react'
+import { Area, Dashboard } from '../../types/navServices'
+import { useLoader } from '../../utils/useLoader'
 import { TitleContext } from '../ContextProviders/TitleContext'
 import { deleteDashboard, fetchDashboard, fetchDashboardsList, postDashboard, updateDashboard } from '../../utils/dashboardsAPI'
 import { fetchAreas, putAreasToDashboard } from '../../utils/areasAPI'
 import { RouterAdminAddDashboard } from '../../types/routes'
+
 
 
 const DashboardTableContainer = styled.div`
@@ -363,7 +362,7 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
         <form onSubmit={handleSubmit}>
             <DashboardRowInner>
                 <ClickableName className="editting" onClick={toggleExpanded} >
-                    <Input value={name} onChange={event => handleUpdatedDashboard(event)} onClick={(event) => event.stopPropagation()} />
+                    <TextField label="Navn" hideLabel value={name} onChange={event => handleUpdatedDashboard(event)} onClick={(event) => event.stopPropagation()} />
                 </ClickableName>
 
                 <div className="button-container">
@@ -523,7 +522,9 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                             Ingen områder i dashbord
                         </div>
                     }
-                    <Select value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
+                    <Select value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}
+                        label="Velg område å legge til dashbord" hideLabel
+                    >
                         {availableAreas.length > 0 ?
                             availableAreas.map(area => {
                                 return (

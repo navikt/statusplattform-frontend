@@ -4,8 +4,7 @@ import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
 
 
-import { Input } from "nav-frontend-skjema";
-import { BodyShort, Button, Detail, Select } from "@navikt/ds-react";
+import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
 import { Delete } from "@navikt/ds-icons";
 
 import { useLoader } from "../../../utils/useLoader";
@@ -110,7 +109,7 @@ const NewDashboard = () => {
 
                     <Detail size="small" spacing>Felter markert med * er obligatoriske</Detail>
                     
-                    <Input type="text" required label="Navn på dashbord" value={name} onChange={(event) => handleChangeDashboardName(event)} placeholder="Navn*" />
+                    <TextField type="text" required label="Navn på dashbord" value={name} onChange={(event) => handleChangeDashboardName(event)} placeholder="Navn*" />
 
                     <DashboardAreas 
                         newDashboard={newDashboard}
