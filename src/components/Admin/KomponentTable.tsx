@@ -564,6 +564,7 @@ const DependencyList = styled.ul`
     list-style: none;
     padding: 0;
     width: 100%;
+    
     li {
         width: 100%;
         display: flex;
@@ -634,22 +635,22 @@ const EditDependenciesTowardServices: React.FC<
     return (
         <DependenciesColumn>
             {allServices.length !== 0
-                ?
-                    <Select label="Legg til komponenter i område" onChange={handleUpdateSelectedService}>
-                        {availableServiceDependencies.length > 0 ?
-                        availableServiceDependencies.map(component => {
-                            return (
-                                <option key={component.id} value={component.id}>{component.name}</option>
-                            )
-                        })
-                        :
-                            <option key={undefined} value={""}>Ingen komponent å legge til</option>
-                        }
-                    </Select>
-                :
-                    <>
-                        Ingen komponent å legge til
-                    </>
+            ?
+                <Select label="Legg til komponenter i område" onChange={handleUpdateSelectedService}>
+                    {availableServiceDependencies.length > 0 ?
+                    availableServiceDependencies.map(component => {
+                        return (
+                            <option key={component.id} value={component.id}>{component.name}</option>
+                        )
+                    })
+                    :
+                        <option key={undefined} value={""}>Ingen komponent å legge til</option>
+                    }
+                </Select>
+            :
+                <>
+                    Ingen komponent å legge til
+                </>
             }
 
             <div>

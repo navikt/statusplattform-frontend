@@ -448,6 +448,7 @@ const DashboardDropRow = styled.div`
         ul {
             list-style: none;
             padding: 0;
+            
             li {
                 display: flex;
                 justify-content: space-between;
@@ -457,10 +458,12 @@ const DashboardDropRow = styled.div`
 
     .add-button {
         margin: 1rem 0;
+        min-width: 148px;
     }
 
     .clickable {
         flex-grow: 1;
+
         :hover {
             cursor: pointer;
         }
@@ -474,9 +477,11 @@ const DropdownColumn = styled.div`
 
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 
     select {
         cursor: pointer;
+        margin: 1rem 0;
     }
 `
 
@@ -510,69 +515,71 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
     return (
         <DashboardDropRow>
             {editting
-                ?
-                    <DropdownColumn>
+            ?
+                <DropdownColumn>
 
-                        {entireDashboard.areas.length == 0 &&
-                            <div>
-                                Ingen områder i dashbord
-                            </div>
-                        }
-                        <Select value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
-                            {availableAreas.length > 0 ?
-                                availableAreas.map(area => {
-                                    return (
-                                        <option key={area.id} value={area.id}>{area.name}</option>
-                                    )
-                                })
-                            :
-                                <option key={undefined} value="">Ingen områder å legge til</option>
-                            }
-                        </Select>
-
+                    {entireDashboard.areas.length == 0 &&
                         <div>
-                            <Button variant="secondary" className="add-button" onClick={handleAddAreaToDashboard}>Legg til</Button>
+                            Ingen områder i dashbord
                         </div>
-
-
-
-                        {entireDashboard.areas.length > 0 &&
-                            <div className="editting">
-                                <b>Områder i dashbord</b>
-                                <ul>
-                                    {entireDashboard.areas.map((area) => {
-                                        return (
-                                            <li key={area.id}>{area.name} 
-                                                <CustomButton onClick={() => handleDeleteAreaFromDashboard(area)} aria-label="Fjern område fra dashbord">
-                                                    <CloseCustomized />
-                                                </CustomButton>
-                                            </li>
-                                        )
-                                    })}
-                                </ul>
-                            </div>
-                        }
-                    </DropdownColumn>
-                :
-                    <DropdownColumn>
-                        {entireDashboard.areas.length == 0
-                        ?
-                            <div>
-                                Ingen områder i dashbord
-                            </div>
+                    }
+                    <Select value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
+                        {availableAreas.length > 0 ?
+                            availableAreas.map(area => {
+                                return (
+                                    <option key={area.id} value={area.id}>{area.name}</option>
+                                )
+                            })
                         :
-                            <div>
-                                <b>Områder i dashbord</b>
-                                <ul>
-                                    {entireDashboard.areas.map((area) => {
-                                        return (
-                                            <li key={area.id}>{area.name}</li>
-                                        )
-                                    })}
-                                </ul>
-                            </div>
+                            <option key={undefined} value="">Ingen områder å legge til</option>
                         }
-                    </DropdownColumn>
+                    </Select>
+
+                    <div>
+                        <Button variant="secondary" className="add-button" onClick={handleAddAreaToDashboard}>Legg til</Button>
+                    </div>
+
+
+
+                    {entireDashboard.areas.length > 0 &&
+                        <div className="editting">
+                            <b>Områder i dashbord</b>
+                            <ul>
+                                {entireDashboard.areas.map((area) => {
+                                    return (
+                                        <li key={area.id}>{area.name} 
+                                            <CustomButton onClick={() => handleDeleteAreaFromDashboard(area)} aria-label="Fjern område fra dashbord">
+                                                <CloseCustomized />
+                                            </CustomButton>
+                                        </li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                    }
+                </DropdownColumn>
+
+            :
+            
+                <DropdownColumn>
+                    {entireDashboard.areas.length == 0
+                    ?
+                        <div>
+                            Ingen områder i dashbord
+                        </div>
+                    :
+                        <div>
+                            <b>Områder i dashbord</b>
+                            <ul>
+                                {entireDashboard.areas.map((area) => {
+                                    return (
+                                        <li key={area.id}>{area.name}</li>
+                                    )
+                                })}
+                            </ul>
+                        </div>
+                    }
+                </DropdownColumn>
             }
         <div className="clickable" onClick={toggleExpanded}></div>
         </DashboardDropRow>
