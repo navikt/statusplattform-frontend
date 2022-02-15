@@ -60,6 +60,7 @@ const ComponentHeader = styled.div`
         display: flex;
         justify-content: space-between;
         gap: 5ch;
+
         span {
             width: 100%;
         }
@@ -650,18 +651,31 @@ const EditDependenciesTowardServices: React.FC<
                         Ingen komponent å legge til
                     </>
             }
-            <Button variant="secondary" className="add-component" onClick={handlePutEdittedServiceDependency}>Legg til avhengighet</Button>
+
+            <div>
+                <Button variant="secondary" className="add-component" onClick={handlePutEdittedServiceDependency}>Legg til</Button>
+            </div>
+
             <DependencyList>
-                {edittedDependencies.map((component) => {
-                    return (
-                        <li key={component.id}>{component.name} 
-                            <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + component.name}
-                                    onClick={() => handleRemoveEdittedServiceDependency(component)}>
-                                <CloseCustomized/>
-                            </CustomButton>
-                        </li>
-                    )
-                })}
+                {edittedDependencies.length === 0
+                ?
+                    <>
+                        Komponenten er ikke koblet mot noen tjenester
+                    </>
+                :
+                    <>
+                        {edittedDependencies.map((component) => {
+                            return (
+                                <li key={component.id}>{component.name} 
+                                    <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + component.name}
+                                            onClick={() => handleRemoveEdittedServiceDependency(component)}>
+                                        <CloseCustomized/>
+                                    </CustomButton>
+                                </li>
+                            )
+                        })}
+                    </>
+                }
             </DependencyList>
         </DependenciesColumn>
     )

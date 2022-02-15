@@ -626,6 +626,11 @@ const EditTjenesteDependencies: React.FC<
 
     return (
         <DependenciesColumn>
+            {edittedDependencies.length === 0 &&
+                <p>
+                    Ingen tjenesteavhengigheter eksisterer. Legg til nedenfor
+                </p>
+            }
             {allServices.length !== 0
                 ?
                     <Select label="Legg til tjenester i område" onChange={handleUpdateSelectedService}>
@@ -644,7 +649,11 @@ const EditTjenesteDependencies: React.FC<
                         Ingen tjeneste å legge til
                     </>
             }
-            <Button variant="secondary" className="add-service" onClick={handlePutEdittedServiceDependency}>Legg til avhengighet</Button>
+            
+            <div>
+                <Button variant="secondary" className="add-service" onClick={handlePutEdittedServiceDependency}>Legg til</Button>
+            </div>
+
             <DependencyList>
                 {edittedDependencies.map((service) => {
                     return (

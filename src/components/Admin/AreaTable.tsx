@@ -455,7 +455,7 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                         <div className="bottom-row-column">
                             {servicesInArea.length === 0 ?
                                 <div className="row-element">
-                                    Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste
+                                    Ingen tjenester er knyttet til området.
                                 </div>
                             :
                                 <div className="row-element">
@@ -774,7 +774,10 @@ const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handleP
                 }
             </Select>
 
-            <Button type="button" onClick={putHandler} >Legg til</Button>
+            <div>
+                <Button variant="secondary" type="button" onClick={putHandler} >Legg til</Button>
+            </div>
+
             <div className="clickable" onClick={toggleAreaExpanded}></div>
         </TileDropdownColumn>
     )

@@ -392,61 +392,6 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
 
 
 
-
-const AddNewDashboardContainer = styled.div`
-    max-width: 500px;
-    input {
-        margin-bottom: 1rem;
-    }
-`
-
-const AddNewDashboard: React.FC<{reload: Function}> = ({reload}) => {
-    const [newDashboard, updateNewDashboard] = useState<Dashboard>({
-        name: "",
-        areas: []
-    })
-
-
-    const handleChangeDashboardName = (event) => {
-        const changedDashboard = {
-            name: event.target.value,
-            areas: []
-        }
-        updateNewDashboard(changedDashboard)
-    }
-    
-
-    const handlePostNewDashboard = (event) => {
-        event.preventDefault()
-        postDashboard(newDashboard).then(() => {
-            toast.success("Dashbord lastet opp")
-            reload()
-        }).catch(() => {
-            toast.error("Klarte ikke å laste opp dashbord")
-        })
-    }
-
-    const { name } = newDashboard
-
-    return (
-        <form onSubmit={event => handlePostNewDashboard(event)} id="form">
-            <p>Felter markert med * er obligatoriske</p>
-            <AddNewDashboardContainer>
-                <Input type="text" required label="Navn på dashbord" value={name} onChange={(event) => handleChangeDashboardName(event)} placeholder="Navn*" />
-                <Button type="submit" value="Legg til dashbord">Legg til dashbord</Button>
-            </AddNewDashboardContainer>
-        </form>
-    )
-}
-
-
-
-
-
-
-
-
-
 interface DashboardProps {
     dashboardWithOnlyIdProp?: Dashboard
     entireDashboard?: Dashboard
@@ -525,7 +470,7 @@ const DashboardDropRow = styled.div`
 const DropdownColumn = styled.div`
     padding: 1rem 0;
     width: 100%;
-    max-width: 300px;
+    max-width: 242px;
 
     display: flex;
     flex-direction: column;
@@ -584,9 +529,10 @@ const DropdownContent = ({allAreas, toggleExpanded, entireDashboard, handlePutAr
                                 <option key={undefined} value="">Ingen områder å legge til</option>
                             }
                         </Select>
-                        <Button className="add-button" onClick={handleAddAreaToDashboard} >
-                            Legg til
-                        </Button>
+
+                        <div>
+                            <Button variant="secondary" className="add-button" onClick={handleAddAreaToDashboard}>Legg til</Button>
+                        </div>
 
 
 
