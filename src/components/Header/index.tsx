@@ -11,7 +11,7 @@ import { BodyShort, Button, Popover } from '@navikt/ds-react'
 import SubscribeModal from '../../components/SubscribeModal'
 import BurgerMenu from '../../components/BurgerMenu'
 import { FilterContext, FilterOption } from '../ContextProviders/FilterContext'
-import { RouterLogin, RouterLogout } from '../../types/routes'
+import { RouterHomePage, RouterLogin, RouterLogout } from '../../types/routes'
 import { UserStateContext } from '../ContextProviders/UserStatusContext'
 
 
@@ -56,6 +56,7 @@ const CustomHeader = styled.header`
         }
     }
 `
+
 const SidetittelCustomized = styled(Sidetittel)`
     text-align: center;
     display: none;
@@ -70,6 +71,7 @@ const SidetittelCustomized = styled(Sidetittel)`
         white-space: normal;
     }
 `
+
 const HeaderContent = styled.span`
     width: 100%;
 
@@ -172,7 +174,7 @@ const Header = () => {
 
     return (
         <CustomHeader>
-            <a href="https://www.nav.no/no/person#">
+            <a href={RouterHomePage.PATH}>
                 <img src="/assets/nav-logo/png/red.png" alt="Til forsiden" />
             </a>
 
