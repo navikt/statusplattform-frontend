@@ -446,8 +446,9 @@ const ComponentRowEditting = ({ component, allComponents: allServices, toggleEdi
     const handleSubmit = () => {
         updateComponent(updatedService).then(() => {
             reload()
-            toast.success("Oppdatering gjennomført")
+            toggleExpanded(component)
             toggleEditService(component)
+            toast.success("Oppdatering gjennomført")
         }).catch(() => {
             toast.error("Noe gikk galt i oppdatering av område")
         })

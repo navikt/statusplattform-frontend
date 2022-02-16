@@ -443,8 +443,9 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
     const handleSubmit = () => {
         updateService(updatedService).then(() => {
             reload()
-            toast.success("Oppdatering gjennomført")
             toggleEditService(service)
+            toggleExpanded(service)
+            toast.success("Oppdatering gjennomført")
         }).catch(() => {
             toast.error("Noe gikk galt i oppdatering av område")
         })

@@ -351,6 +351,8 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
     const handleSubmit = () => {
         updateDashboard(dashboard, updatedDashboard.name).then(() => {
             reloadDashboards()
+            toggleEditDashboard()
+            toggleExpanded()
             toast.success("Oppdatering gjennomført")
         }).catch(() => {
             toast.error("Noe gikk galt i oppdatering av dashbord")

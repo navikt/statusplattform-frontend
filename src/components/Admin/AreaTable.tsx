@@ -594,6 +594,8 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
     const handleSubmit = (event) => {
         updateArea(updatedArea).then(() => {
             reloadAreas()
+            toggleEditArea(area)
+            toggleExpanded(area)
             toast.success("Oppdatering gjennomført")
         }).catch(() => {
             toast.error("Noe gikk galt i oppdatering av område")
