@@ -5,7 +5,6 @@ import styled from 'styled-components'
 
 import { Close, Employer, Hamburger, Login, Logout } from '@navikt/ds-icons'
 import Popover, {PopoverOrientering} from 'nav-frontend-popover';
-import Lenke from 'nav-frontend-lenker';
 import { Button } from '@navikt/ds-react';
 
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
@@ -162,10 +161,10 @@ const PopoverContent = () => {
                         {user.navIdent &&
                             <>
                                 <li>
-                                    <Lenke href={RouterAdmin.PATH}>
+                                    <Link href={RouterAdmin.PATH}>
                                         <Employer className="popover-link-ikon" />
                                         {RouterAdmin.NAME}
-                                    </Lenke>
+                                    </Link>
                                 </li>
                             </>
                         }

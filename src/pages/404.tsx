@@ -1,9 +1,9 @@
 import styled from 'styled-components'
 import Head from 'next/head'
+import Link from 'next/link'
 
 import Layout from '../components/Layout'
 import { Ingress, Innholdstittel } from 'nav-frontend-typografi';
-import Lenke from 'nav-frontend-lenker';
 
 const ErrorWrapper = styled.div`
     margin: 2rem 0;
@@ -41,13 +41,13 @@ export default function Custom404() {
                         <p>
                             Beklager, siden kan være slettet eller flyttet, eller det var en feil i lenken som førte deg hit.
                         </p>
-                        <p>Bruk gjerne søket, menyen eller <Lenke href="/">
+                        <p>Bruk gjerne søket, menyen eller <Link href="/">
                             gå til forsiden
-                            </Lenke>.
+                            </Link>.
                         </p>
-                        <Lenke href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">
+                        <Link href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">
                             Meld gjerne fra om denne lenken
-                        </Lenke>
+                        </Link>
                     </div>
             </ErrorWrapper>
         </Layout>

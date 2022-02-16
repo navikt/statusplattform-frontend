@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useContext } from "react";
+import Link from 'next/link'
 
 import { ErrorCustomized, ErrorFilledCustomized, FilledWrench, NoStatusAvailableCircle, OutlinedWrench, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
@@ -8,7 +9,6 @@ import { FilterContext } from '../../components/ContextProviders/FilterContext';
 
 import { Warning, Wrench } from '@navikt/ds-icons'
 import { Systemtittel } from "nav-frontend-typografi";
-import Lenke from 'nav-frontend-lenker';
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-frontend-etiketter';
 import { BodyShort } from '@navikt/ds-react';
@@ -100,13 +100,22 @@ const ServicesList = styled.ul`
         justify-content: flex-start;
 
         section {
+            color: var(--navds-link-color-text);
+
             display: flex;
             align-items: center;
+
+            svg {
+                margin-right: 8px;
+            }
+
+            :hover {
+                text-decoration: underline;
+                cursor: pointer;
+            }
         }
         
         section:nth-child(2) {
-            margin-left: 10px;
-
             white-space: normal;
             word-break: break-word;
         }
@@ -123,12 +132,8 @@ const ServicesList = styled.ul`
     }
 `;
 
-const LenkeCustomized = styled(Lenke)`
+const LenkeCustomized = styled(Link)`
     text-decoration: none;
-
-    svg {
-        stroke: transparent;
-    }
 
     :hover {
         text-decoration: underline;
@@ -182,7 +187,6 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
             tittel={
                 <div className="top-content">
                     <SystemtittelCustomized>
-                        {/* <span>{handleAndSetStatusIcon(area.status, false)}</span> */}
                         <span>{handleAndSetNavIcon(area.icon)}</span>
                         <span>{area.name}</span>
                     
@@ -211,7 +215,7 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
                         return (
                             <li key={service.name}>
                                 <LenkeCustomized href={"/Tjenestedata/" + service.id}>
-                                    <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+                                    <section>{handleAndSetStatusIcon(service.status, false)} {service.name}</section>
                                 </LenkeCustomized>
                             </li>
                         )
@@ -220,7 +224,7 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
                         return (
                             <li key={service.name}>
                                 <LenkeCustomized href={"/Tjenestedata/" + service.id}>
-                                    <section>{handleAndSetStatusIcon(service.status, false)}</section><section>{service.name}</section>
+                                    <section>{handleAndSetStatusIcon(service.status, false)} {service.name}</section>
                                 </LenkeCustomized>
                             </li>
                         )

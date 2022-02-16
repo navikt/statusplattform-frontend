@@ -63,6 +63,12 @@ const MainContentContainer = styled.div`
             transform: translateY(0%);
         }
     }
+
+    a {
+        :hover {
+            text-decoration: none;
+        }
+    }
 `;
 
 const Content = styled.main`

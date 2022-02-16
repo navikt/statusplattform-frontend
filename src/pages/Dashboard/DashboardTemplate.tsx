@@ -2,12 +2,11 @@ import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { toast } from 'react-toastify'
+import Link from 'next/link'
 
-import Lenke from 'nav-frontend-lenker'
 import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi'
-import Panel from 'nav-frontend-paneler'
 import { Expand } from '@navikt/ds-icons'
-import { Alert, BodyShort, Button, Heading } from '@navikt/ds-react'
+import { Alert, BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
 
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import { PortalServiceTile } from '../../components/PortalServiceTile'
@@ -704,9 +703,9 @@ const NoAreasInDashboard = () => {
                     <p>
                         Det fins ingen områder i dashbordet enda. Hvis du mener dette er feil, rapporter det til administratorene av statusplattformen.
                     </p>
-                    <Lenke href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">
+                    <Link href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">
                         Meld gjerne fra her
-                    </Lenke>
+                    </Link>
                 </div>
         </ErrorWrapper>
     )    

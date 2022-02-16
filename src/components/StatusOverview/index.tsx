@@ -4,9 +4,8 @@ import { toast } from 'react-toastify';
 import { AreaServicesList } from '../../types/navServices'
 import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from '../../utils/servicesOperations';
 
-import Panel from 'nav-frontend-paneler'
 import { Bell } from '@navikt/ds-icons';
-import { BodyShort, Button, Heading } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Panel } from '@navikt/ds-react';
 import { useRouter } from 'next/router';
 import { RouterAvvikshistorikk, RouterOpprettVarsling } from '../../types/routes';
 

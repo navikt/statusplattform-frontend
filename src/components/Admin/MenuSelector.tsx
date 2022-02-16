@@ -1,10 +1,8 @@
 import styled from 'styled-components'
+import { useRouter } from 'next/router'
 
 import Tabs from 'nav-frontend-tabs';
-import Panel from 'nav-frontend-paneler'
-import { SyntheticEvent } from 'react';
 
-import { useRouter } from 'next/router'
 
 
 const DashboardTabMenu = styled.header`

@@ -1,10 +1,9 @@
 import styled from 'styled-components'
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import Link from 'next/link'
 
-import Lenke from 'nav-frontend-lenker';
-import { Innholdstittel, Systemtittel, Undertittel } from 'nav-frontend-typografi';
-import { Bell, ErrorFilled, SuccessFilled, WarningFilled } from '@navikt/ds-icons';
+import { Innholdstittel } from 'nav-frontend-typografi';
+import { Bell } from '@navikt/ds-icons';
 import { BodyShort, Button, Heading } from '@navikt/ds-react';
 
 import { Area, Service } from '../../types/navServices';
@@ -62,35 +61,10 @@ const ServiceWrapper = styled.div`
     width: 100%;
 `
 
-const StatusIcon = styled.span`
-    .up {
-        color: var(--navGronn);
-    }
-    .down {
-        color: var(--redError)
-    }
-    .issue {
-        color: var(--navOransje)
-    }
-`
-
 const CenterContent = styled.div`
     text-align: center;
     padding: 1rem;
 `
-
-const formatStatusMessage = (serviceToFormat) =>   {
-    switch (serviceToFormat.status) {
-        case "OK":
-            return (<SuccessFilled className="up" />)
-        case "DOWN":
-            return (<ErrorFilled className="down" />)
-        case "ISSUE":
-            return (<WarningFilled className="issue" />)
-        default:
-            break
-    }
-}
 
 const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
     const [showHistory, changeShowHistory] = useState(false)
