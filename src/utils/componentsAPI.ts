@@ -34,7 +34,7 @@ export const postComponent = async (component: Component): Promise<Object[]> =>{
             name: component.name,
             type: component.type,
             team: component.team,
-            dependencies: component.dependencies,
+            dependencies: component.componentDependencies,
             monitorlink: component.monitorlink,
             pollingUrl: component.pollingUrl
         }),
@@ -94,7 +94,7 @@ export const updateComponent = async (component: Component): Promise<void> =>{
                 name: component.name,
                 type: component.type,
                 team: component.team,
-                dependencies: component.dependencies,
+                componentDependencies: component.componentDependencies,
                 monitorlink: component.monitorlink,
                 pollingUrl: component.pollingUrl
             }),

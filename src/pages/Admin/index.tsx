@@ -22,6 +22,48 @@ export const HorizontalSeparator = styled.span`
     background-color: var(--navGra20);
 `
 
+export const DynamicListContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    gap: 16px;
+
+    .new-list {
+        list-style: none;
+        padding: 0;
+        
+        section {
+            display: inline-block;
+        }
+
+        .colored {
+            color: var(--navBla);
+            text-decoration: underline;
+            background-color: none;
+            border: none;
+
+            label {
+                position: absolute;
+                z-index: -1000;
+            }
+
+            :hover {
+                text-decoration: none;
+                cursor: pointer;
+            }
+        }
+
+        li {
+            p {
+                margin: 8px 0;
+
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    }
+`
+
  const AdminPage = () => {
 
     return (

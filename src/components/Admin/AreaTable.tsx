@@ -75,7 +75,7 @@ const AreaElementContainer = styled.div`
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
     :hover {
         padding: 0;
-        cursor: pointer;
+
         border-top: 2px solid rgba(0, 0, 0, 0.55);
         border-bottom: 2px solid rgba(0, 0, 0, 0.55);
     }
@@ -328,7 +328,7 @@ const AreaRowInner = styled.div`
         .bottom-row-column {
             display: flex;
             flex-direction: column;
-            max-width: fit-content;
+            max-width: 275px;
 
             p {
                 max-width: fit-content;
@@ -344,11 +344,18 @@ const AreaRowInner = styled.div`
         }
         .clickable {
             width: 100%;
+
+            :hover {
+                cursor: pointer;
+            }
         }
     }
 
     &.clickable {
         flex-grow: 1;
+        :hover {
+            cursor: pointer;
+        }
     }
 `
 const AreaElements = styled.div`
@@ -438,6 +445,14 @@ interface Props {
 const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices, toggleEditArea, setAreaToDelete}: Props) => { 
     const [servicesInArea, setServicesInArea] = useState<Service[]>(() => area.services.map(service => service))
 
+
+    const handleToggleEditArea = () => {
+        if(!isExpanded) {
+            toggleExpanded()
+        }
+        toggleEditArea(area)
+    }
+
     const { id: areaId, name, description: beskrivelse, icon: ikon } = area
 
     return (
@@ -477,7 +492,7 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                 }
             </AreaRowInner>
             <div className="button-container">
-                <CustomButton className="option" onClick={toggleEditArea}>
+                <CustomButton className="option" onClick={() => handleToggleEditArea()}>
                     <Notes />
                 </CustomButton>
                 <button className="option" onClick={setAreaToDelete} aria-label="Slett område"><CloseCustomized /></button>
@@ -594,12 +609,21 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
     const handleSubmit = (event) => {
         updateArea(updatedArea).then(() => {
             reloadAreas()
+            if(isExpanded) {
+                toggleExpanded(area)
+            }
             toggleEditArea(area)
-            toggleExpanded(area)
             toast.success("Oppdatering gjennomført")
         }).catch(() => {
             toast.error("Noe gikk galt i oppdatering av område")
         })
+    }
+
+    const handleDisableEditArea = (area) => {
+        if(isExpanded) {
+            toggleExpanded(area)
+        }
+        toggleEditArea(area)
     }
 
     const handleAreaIconChange = (event) => {
@@ -689,7 +713,7 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
                     <button type="button" className="option" onClick={handleSubmit}>
                         Lagre endringer
                     </button>
-                    <button type="button" className="option" onClick={() => toggleEditArea(area)} aria-label="Fjern dashbord">
+                    <button type="button" className="option" onClick={() => handleDisableEditArea(area)} aria-label="Fjern dashbord">
                         Avbryt endringer
                     </button>
                     <button type="button" className="option" onClick={setAreaToDelete} aria-label="Slett område"><CloseCustomized /></button>

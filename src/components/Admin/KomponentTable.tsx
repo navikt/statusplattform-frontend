@@ -12,7 +12,7 @@ import ModalWrapper from 'nav-frontend-modal';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Component } from '../../types/navServices';
-import { deleteComponent, fetchComponents, postComponent, updateComponent } from '../../utils/componentsAPI';
+import { deleteComponent, fetchComponents, updateComponent } from '../../utils/componentsAPI';
 import { CloseCustomized, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { RouterAdminAddKomponent } from '../../types/routes';
@@ -21,8 +21,9 @@ import { RouterAdminAddKomponent } from '../../types/routes';
 const KomponentTableContainer = styled.div`
     .components-overflow-container {
         overflow-x: auto;
+
         div {
-            min-width: fit-content;
+            min-width: max-content;
         }
     }
     
@@ -81,8 +82,6 @@ const ComponentContent = styled.div`
     :hover {
         padding-top: 0;
         padding-bottom: 0;
-
-        cursor: pointer;
 
         border-top: 2px solid rgba(0, 0, 0, 0.55);
         border-bottom: 2px solid rgba(0, 0, 0, 0.55);
@@ -314,6 +313,7 @@ const ComponentRowContent = styled.div`
                 z-index: -1000;
             }
         }
+
         :hover {
             cursor: pointer;
         }
@@ -330,6 +330,9 @@ const ComponentRowContent = styled.div`
         }
 
         .dependencies {
+            margin-right: 5ch;
+            max-width: 275px;
+
             display: flex;
             flex-direction: column;
         }
@@ -349,6 +352,12 @@ const ComponentRowContent = styled.div`
             margin: 0 2rem;
         }
     }
+
+    .clickable {
+        :hover {
+            cursor: pointer;
+        }
+    }
 `
 
 
@@ -363,7 +372,15 @@ interface ComponentRowProps {
     reload?: () => void
 }
 
-const ComponentRow = ({component, toggleEditComponent: toggleEditComponent, toggleExpanded, isExpanded, setComponentToDelete: setComponentToDelete }: ComponentRowProps) => {
+const ComponentRow = ({component, toggleEditComponent, toggleExpanded, isExpanded, setComponentToDelete }: ComponentRowProps) => {
+
+    const handleEditComponent = (component) => {
+        if(!isExpanded) {
+            toggleExpanded(component)
+        }
+        toggleEditComponent(component)
+    }
+
     return (
         <ComponentRowContainer>
             <ComponentRowContent>
@@ -373,31 +390,34 @@ const ComponentRow = ({component, toggleEditComponent: toggleEditComponent, togg
                         <span className="component-row-element">{component.team}</span>
                     </div>
                 </div>
+
                 {isExpanded &&
-                    <div className="bottom-row" onClick={() => toggleExpanded(component)}>
-                        <div className="dependencies"><p><b>Avhengigheter</b></p>
+                    <div className="bottom-row clickable" onClick={() => toggleExpanded(component)}>
+                        <div className="dependencies">
+                            <BodyShort><b>Tjenester avhengig denne</b></BodyShort>
                             <ul>
-                                {component.dependencies.map((dependency, index) => {
+                                {component.componentDependencies.map((dependency, index) => {
                                     return (
                                         <li key={index}>{dependency.name}</li>
                                         )
                                     })}
                             </ul>
                         </div>
+                        
                         <span className="component-row-element">
-                            <p><b>Monitorlink</b></p>
-                            <p>{component.monitorlink}</p>
+                            <BodyShort><b>Monitorlink</b></BodyShort>
+                            <BodyShort>{component.monitorlink}</BodyShort>
                         </span>
                         <span className="component-row-element">
-                            <p><b>PollingUrl</b></p>
-                            <p>{component.pollingUrl}</p>
+                            <BodyShort><b>PollingUrl</b></BodyShort>
+                            <BodyShort>{component.pollingUrl}</BodyShort>
                         </span>
                     </div>
                 }
 
             </ComponentRowContent>
             <div className="button-container">
-                <CustomButton className="option" onClick={() => toggleEditComponent(component)}>
+                <CustomButton className="option" onClick={() => handleEditComponent(component)}>
                     <Notes />
                 </CustomButton>
                 <button className="option" onClick={setComponentToDelete} aria-label="Slett komponent"><CloseCustomized /></button>
@@ -422,32 +442,33 @@ const ComponentRow = ({component, toggleEditComponent: toggleEditComponent, togg
 
 
 
-const ComponentRowEditting = ({ component, allComponents: allServices, toggleEditComponent: toggleEditService, toggleExpanded, isExpanded, setComponentToDelete: setServiceToDelete, reload } : ComponentRowProps) => {
-    const [updatedService, changeUpdatedService] = useState<Component>({
+const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, toggleExpanded, isExpanded, setComponentToDelete, reload } : ComponentRowProps) => {
+    const [updatedComponent, changeUpdatedComponent] = useState<Component>({
         id: component.id,
         name: component.name,
         type: component.type,
         team: component.team,
-        dependencies: component.dependencies,
+        componentDependencies: component.componentDependencies,
         monitorlink: component.monitorlink,
-        pollingUrl: component.pollingUrl
+        pollingUrl: component.pollingUrl,
+        areasContainingThisComponent: component.areasContainingThisComponent
     })
 
 
 
-    const handleUpdatedService = (field: keyof typeof updatedService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
+    const handleUpdatedComponent = (field: keyof typeof updatedComponent) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const changedService = {
-            ...updatedService,
+            ...updatedComponent,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
             
-        changeUpdatedService(changedService)
+        changeUpdatedComponent(changedService)
     }
 
     const handleSubmit = () => {
-        updateComponent(updatedService).then(() => {
+        updateComponent(updatedComponent).then(() => {
             reload()
             toggleExpanded(component)
-            toggleEditService(component)
+            toggleEditComponent(component)
             toast.success("Oppdatering gjennomført")
         }).catch(() => {
             toast.error("Noe gikk galt i oppdatering av område")
@@ -457,35 +478,36 @@ const ComponentRowEditting = ({ component, allComponents: allServices, toggleEdi
     
 
 
-    const { name, type, team, dependencies, monitorlink, pollingUrl } = updatedService
+    const { name, type, team, componentDependencies, monitorlink, pollingUrl, areasContainingThisComponent } = updatedComponent
 
     return (
         <ComponentRowContainer>
             <ComponentRowContent>
 
                 <div className="top-row" onClick={() => toggleExpanded(component)}>
-                    <TextField label="Navn" hideLabel className="component-row-element editting" value={name} onChange={handleUpdatedService("name")} onClick={(event) => event.stopPropagation()} />
+                    <TextField label="Navn" hideLabel className="component-row-element editting" value={name} onChange={handleUpdatedComponent("name")} onClick={(event) => event.stopPropagation()} />
 
-                    <TextField label="Team" hideLabel className="component-row-element editting" value={team} onChange={handleUpdatedService("team")} onClick={(event) => event.stopPropagation()} />
+                    <TextField label="Team" hideLabel className="component-row-element editting" value={team} onChange={handleUpdatedComponent("team")} onClick={(event) => event.stopPropagation()} />
                 </div>
 
 
             {isExpanded &&
                         
                 <div className="bottom-row">
-                    <div className="dependencies"><p><b>Avhengigheter</b></p>
+                    <div className="dependencies">
+                        <BodyShort><b>Tjenester avhengig denne</b></BodyShort>
 
                         <EditDependenciesTowardServices
-                            allServices={allServices} component={component} updatedService={updatedService}
+                            allComponents={allComponents} component={component} updatedService={updatedComponent}
                         />
                     </div>
                     <span className="component-row-element editting">
-                        <p><b>Monitorlink</b></p>
-                        <TextField label="Monitorlink" hideLabel value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
+                        <BodyShort><b>Monitorlink</b></BodyShort>
+                        <TextField label="Monitorlink" hideLabel value={monitorlink} onChange={handleUpdatedComponent("monitorlink")}/>
                     </span>
                     <span className="component-row-element editting">
-                        <p><b>PollingUrl</b></p>
-                        <TextField label="Pollingurl" hideLabel value={pollingUrl} onChange={handleUpdatedService("pollingUrl")}/>
+                        <BodyShort><b>PollingUrl</b></BodyShort>
+                        <TextField label="Pollingurl" hideLabel value={pollingUrl} onChange={handleUpdatedComponent("pollingUrl")}/>
                     </span>
                 </div>
             }
@@ -496,10 +518,10 @@ const ComponentRowEditting = ({ component, allComponents: allServices, toggleEdi
                 <button type="button" className="option" onClick={handleSubmit}>
                     Lagre endringer
                 </button>
-                <CustomButton className="option" onClick={() => toggleEditService(component)}>
+                <CustomButton className="option" onClick={() => toggleEditComponent(component)}>
                     Avbryt endringer
                 </CustomButton>
-                <button className="option" onClick={setServiceToDelete} aria-label="Slett komponent"><CloseCustomized /></button>
+                <button className="option" onClick={setComponentToDelete} aria-label="Slett komponent"><CloseCustomized /></button>
                 <button className="option" onClick={() => toggleExpanded(component)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
 
@@ -577,40 +599,40 @@ const DependencyList = styled.ul`
 
 
 const EditDependenciesTowardServices: React.FC<
-                {allServices, component, updatedService}> = (
-                {allServices, component, updatedService}
+                {allComponents, component, updatedService}> = (
+                {allComponents, component, updatedService}
         ) => {
 
-    const [edittedDependencies, updateDependencies] = useState<Component[]>([...component.dependencies])
-    const availableServiceDependencies: Component[] = [...allServices].filter(s => 
+    const [edittedDependencies, updateDependencies] = useState<Component[]>([...component.componentDependencies])
+    const availableServiceDependencies: Component[] = [...allComponents].filter(s => 
         s.id != component.id && !edittedDependencies.map(component => component.id).includes(s.id)
     )
     
-    const [selectedService, updateSelectedService] = useState<Component | null>(allServices[0])
+    const [selectedComponent, updateSelectedComponent] = useState<Component | null>(allComponents[0])
 
 
     useEffect(() => {
         updatedService.dependencies = edittedDependencies
         if(availableServiceDependencies.length > 0){
-            updateSelectedService(availableServiceDependencies[0])
+            updateSelectedComponent(availableServiceDependencies[0])
         }
         else {
-            updateSelectedService(null)
+            updateSelectedComponent(null)
         }
     }, [edittedDependencies])
 
 
-    const handleUpdateSelectedService = (event) => {
+    const handleUpdateSelectedComponent = (event) => {
         const idOfSelectedService: string = event.target.value
-        const newSelectedService: Component = allServices.find(component => idOfSelectedService === component.id)
-        updateSelectedService(newSelectedService)
+        const newSelectedService: Component = allComponents.find(component => idOfSelectedService === component.id)
+        updateSelectedComponent(newSelectedService)
     }
 
 
 
     const handlePutEdittedServiceDependency = () => {
-        if(selectedService !== null) {    
-            const updatedEdittedDependencies: Component[] = [...edittedDependencies, selectedService]
+        if(selectedComponent !== null) {    
+            const updatedEdittedDependencies: Component[] = [...edittedDependencies, selectedComponent]
             updateDependencies(updatedEdittedDependencies)
             toast.success("Tjenesteavhengighet lagt til")
             return
@@ -634,9 +656,9 @@ const EditDependenciesTowardServices: React.FC<
 
     return (
         <DependenciesColumn>
-            {allServices.length !== 0
+            {allComponents.length !== 0
             ?
-                <Select label="Legg til komponenter i område" onChange={handleUpdateSelectedService}>
+                <Select label="Legg til komponenter i område" onChange={handleUpdateSelectedComponent}>
                     {availableServiceDependencies.length > 0 ?
                     availableServiceDependencies.map(component => {
                         return (

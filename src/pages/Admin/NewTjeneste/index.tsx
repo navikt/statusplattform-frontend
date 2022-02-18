@@ -4,17 +4,18 @@ import { useContext, useEffect, useState } from "react";
 import router from "next/router";
 
 import Layout from '../../../components/Layout';
-import { Area, Service } from "../../../types/navServices";
+import { Area, Component, Service } from "../../../types/navServices";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { fetchTypes } from "../../..//utils/fetchTypes";
 
 import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
 import { Delete } from "@navikt/ds-icons";
-import { HorizontalSeparator } from "..";
+import { DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 import { fetchServices, postService } from "../../../utils/servicesAPI";
 import { fetchAreas } from "../../../utils/areasAPI";
 import { RouterAdminTjenester } from "../../../types/routes";
+import { fetchComponents } from "../../../utils/componentsAPI";
 
 
 const NewServiceContainer = styled.div`
@@ -37,15 +38,15 @@ const NewServiceContainer = styled.div`
 const NewService = () => {
     const [allAreas, setAllAreas] = useState<Area[]>()
     const [allServices, setAllServices] = useState<Service[]>()
-    const [types, updateTypes] = useState<string[]>()
-    const [selectedType, updateSelectedType] = useState<string>("TJENESTE")
+    const [allComponents, setAllComponents] = useState<Component[]>()
     const [isLoading, setIsLoading] = useState(true)
 
     const [newService, updateNewService] = useState<Service>({
         name: "",
         team: "",
         type: "TJENESTE",
-        dependencies: [],
+        serviceDependencies: [],
+        componentDependencies: [],
         monitorlink: "",
         pollingUrl: "",
         areasContainingThisService: []
@@ -59,11 +60,11 @@ const NewService = () => {
     useEffect(() => {
         (async function () {
             const retrievedServices: Service[] = await fetchServices()
+            const retrievedComponents: Component[] = await fetchComponents()
             const retrievedAreas: Area[] = await fetchAreas()
-            const retrievedTypes: string[] = await fetchTypes()
             setAllServices(retrievedServices)
+            setAllComponents(retrievedComponents)
             setAllAreas(retrievedAreas)
-            updateTypes(retrievedTypes)
             setIsLoading(false)
         })()
     }, [])
@@ -76,7 +77,7 @@ const NewService = () => {
         )
     }
 
-    const { name, team, type, dependencies, monitorlink, pollingUrl, areasContainingThisService } = newService
+    const { name, team, type, serviceDependencies, componentDependencies: componentdependencies, monitorlink, pollingUrl, areasContainingThisService } = newService
 
 
 
@@ -93,28 +94,55 @@ const NewService = () => {
     /*Handlers for adding serviceDependencies START*/
 
     const handleAddServiceDependency = (serviceToAdd: Service) => {
-        if(dependencies.includes(serviceToAdd)) {
+        if(serviceDependencies.includes(serviceToAdd)) {
             toast.warn("Tjenesteavhengighet " + serviceToAdd.name + " er allerede lagt til")
             return
         }
-        const newServicesList = [...newService.dependencies, serviceToAdd]
+        const newServicesList = [...newService.serviceDependencies, serviceToAdd]
         const updatedService: Service = {
-            name: name, team: team, type: type, dependencies: newServicesList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
+            name: name, team: team, type: type, serviceDependencies: newServicesList, componentDependencies: componentdependencies, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
         }
         updateNewService(updatedService)
         toast.success("Lagt til tjenesteavhengighet")
     }
 
     const handleDeleteServiceDependency = (serviceToDelete: Service) => {
-        const newServicesList: Service[] = [...newService.dependencies.filter(service => service != serviceToDelete)]
+        const newServicesList: Service[] = [...newService.serviceDependencies.filter(service => service != serviceToDelete)]
         const updatedService: Service = {
-            name: name, team: team, type: type, dependencies: newServicesList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
+            name: name, team: team, type: type, serviceDependencies: newServicesList, componentDependencies: componentdependencies, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
         }
         updateNewService(updatedService)
         toast.success("Fjernet område fra område")
     }
     /*Handlers for adding serviceDependencies END*/
 
+
+
+
+    /*Handlers for adding componentDependencies START*/
+
+    const handleAddComponentDependency = (componentToAdd: Component) => {
+        if(componentdependencies.includes(componentToAdd)) {
+            toast.warn("Tjenesteavhengighet " + componentToAdd.name + " er allerede lagt til")
+            return
+        }
+        const newComponentsList = [...newService.componentDependencies, componentToAdd]
+        const updatedService: Service = {
+            name: name, team: team, type: type, serviceDependencies: serviceDependencies, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
+        }
+        updateNewService(updatedService)
+        toast.success("Lagt til tjenesteavhengighet")
+    }
+
+    const handleDeleteComponentDependency = (componentToAdd: Component) => {
+        const newComponentsList: Component[] = [...newService.serviceDependencies.filter(component => component != componentToAdd)]
+        const updatedService: Service = {
+            name: name, team: team, type: type, serviceDependencies: serviceDependencies, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
+        }
+        updateNewService(updatedService)
+        toast.success("Fjernet område fra område")
+    }
+    /*Handlers for adding componentDependencies END*/
 
 
 
@@ -143,10 +171,10 @@ const NewService = () => {
     const handlePostNewService = (event) => {
         event.preventDefault()
         postService(newService).then(() => {
-            toast.success("Område lastet opp")
+            toast.success("Tjeneste lastet opp")
             router.push(RouterAdminTjenester.PATH)
         }).catch(() => {
-            toast.error("Klarte ikke å laste opp område")
+            toast.error("Klarte ikke å laste opp tjeneste")
         })
     }
 
@@ -170,6 +198,15 @@ const NewService = () => {
                         allServices={allServices}
                         handleAddServiceDependency={(serviceToAdd) => handleAddServiceDependency(serviceToAdd)}
                         handleDeleteServiceDependency={(serviceToAdd) => handleDeleteServiceDependency(serviceToAdd)}
+                    />
+
+                    <HorizontalSeparator />
+
+                    <ComponentDependencies 
+                        newService={newService}
+                        allComponents={allComponents}
+                        handleAddComponentDependency={(componentToAdd) => handleAddComponentDependency(componentToAdd)}
+                        handleDeleteComponentDependency={(componentToAdd) => handleDeleteComponentDependency(componentToAdd)}
                     />
 
                     <HorizontalSeparator />
@@ -210,52 +247,9 @@ interface ServiceProps {
 }
 
 
-const DependenciesContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-
-    gap: 16px;
-
-    .new-list {
-        list-style: none;
-        padding: 0;
-        
-        section {
-            display: inline-block;
-        }
-
-        .colored {
-            color: var(--navBla);
-            text-decoration: underline;
-            background-color: none;
-            border: none;
-
-            label {
-                position: absolute;
-                z-index: -1000;
-            }
-
-            :hover {
-                text-decoration: none;
-                cursor: pointer;
-            }
-        }
-
-        li {
-            p {
-                margin: 8px 0;
-
-                display: flex;
-                justify-content: space-between;
-            }
-        }
-    }
-`
-
-
 
 const ServiceDependencies = ({newService, allServices, handleDeleteServiceDependency, handleAddServiceDependency}: ServiceProps) => {
-    const availableServices: Service[] = allServices.filter(area => !newService.dependencies.map(a => a.id).includes(area.id))
+    const availableServices: Service[] = allServices.filter(area => !newService.serviceDependencies.map(a => a.id).includes(area.id))
     const { changeTitle } = useContext(TitleContext)
 
     const [selectedService, changeSelectedService] = useState<Service | null>(() => availableServices.length > 0 ? availableServices[0] : null)
@@ -268,7 +262,7 @@ const ServiceDependencies = ({newService, allServices, handleDeleteServiceDepend
         else {
             changeSelectedService(null)
         }
-    }, [allServices, newService.dependencies])
+    }, [allServices, newService.serviceDependencies])
     
 
 
@@ -289,7 +283,7 @@ const ServiceDependencies = ({newService, allServices, handleDeleteServiceDepend
     
 
     return (
-        <DependenciesContainer>
+        <DynamicListContainer>
             
             <Select label="Legg til tjenesteavhengighet" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedArea}>
                 {availableServices.length > 0 ?
@@ -306,10 +300,10 @@ const ServiceDependencies = ({newService, allServices, handleDeleteServiceDepend
             <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
             
 
-            {newService.dependencies.length > 0
+            {newService.serviceDependencies.length > 0
             ?
                 <ul className="new-list">
-                    {newService.dependencies.map(service => {
+                    {newService.serviceDependencies.map(service => {
                         return (
                             <li key={service.id}>
                                 <BodyShort>
@@ -327,7 +321,98 @@ const ServiceDependencies = ({newService, allServices, handleDeleteServiceDepend
                 <BodyShort spacing><b>Ingen tjenester igjen i listen</b></BodyShort>
             }
 
-        </DependenciesContainer>
+        </DynamicListContainer>
+    )
+}
+// ---
+
+
+
+
+
+interface ComponentProps {
+    newService: Service
+    allComponents: Component[]
+    handleAddComponentDependency: (componentToAdd) => void
+    handleDeleteComponentDependency: (serviceToAdd) => void
+}
+
+
+
+const ComponentDependencies = ({newService, allComponents, handleAddComponentDependency, handleDeleteComponentDependency}: ComponentProps) => {
+    const availableComponents: Component[] | null = allComponents.filter(area => !newService.componentDependencies.map(a => a.id).includes(area.id))
+    const { changeTitle } = useContext(TitleContext)
+
+    const [selectedComponent, changeSelectedComponent] = useState<Component | null>(() => availableComponents.length > 0 ? availableComponents[0] : null)
+
+    useEffect(() => {
+        changeTitle("Opprett ny tjeneste")
+        if(availableComponents.length > 0){
+            changeSelectedComponent(availableComponents[0])
+        }
+        else {
+            changeSelectedComponent(null)
+        }
+    }, [allComponents, newService.componentDependencies])
+    
+
+
+    const handleUpdateSelectedArea = (event) => {
+        const idOfSelectedArea: string = event.target.value
+        const newSelectedComponent: Component = availableComponents.find(area => idOfSelectedArea === area.id)
+        changeSelectedComponent(newSelectedComponent)
+    }
+
+
+    const dependencyHandler = () => {
+        if(!selectedComponent) {
+            toast.info("Ingen tjeneste valgt")
+            return
+        }
+        handleAddComponentDependency(selectedComponent)
+    }
+    
+
+    return (
+        <DynamicListContainer>
+            
+            <Select label="Legg til komponentavhengighet" value={selectedComponent !== null ? selectedComponent.id : ""} onChange={handleUpdateSelectedArea}>
+                {availableComponents.length > 0 ?
+                    availableComponents.map(service => {
+                        return (
+                            <option key={service.id} value={service.id}>{service.name}</option>
+                        )
+                    })
+                :
+                    <option key={undefined} value="">Ingen tilgjengelige områder</option>
+                }
+            </Select>
+
+            <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
+            
+
+            {newService.componentDependencies.length > 0
+            ?
+                <ul className="new-list">
+                    {newService.componentDependencies.map(component => {
+                        return (
+                            <li key={component.id}>
+                                <BodyShort>
+                                    {component.name}
+                                    <button className="colored" type="button" onClick={() => handleDeleteComponentDependency(component)}>
+                                        <label>{component.name}</label>
+                                        <Delete/> Slett
+                                    </button>
+                                </BodyShort>
+                            </li>
+                        )
+                    })}
+                </ul>
+            :
+                <BodyShort spacing><b>Ingen tjenester igjen i listen</b></BodyShort>
+            }
+
+        </DynamicListContainer>
     )
 }
 
@@ -336,11 +421,8 @@ const ServiceDependencies = ({newService, allServices, handleDeleteServiceDepend
 
 
 
+// ---
 
-
-
-
-const ServiceToAreaContainer = styled(DependenciesContainer)``
 
 
 interface ServiceConnectionProps {
@@ -375,7 +457,7 @@ const ConnectServiceToArea = ({newService, allAreas, handleDeleteAreaServiceConn
 
 
     return (
-        <ServiceToAreaContainer>
+        <DynamicListContainer>
             <Select label="Legg til i område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
                 {availableAreas.length > 0 ?
                     availableAreas.map(area => {
@@ -411,7 +493,7 @@ const ConnectServiceToArea = ({newService, allAreas, handleDeleteAreaServiceConn
             :
                 <BodyShort spacing><b>Ingen områder lagt til</b></BodyShort>
             }
-        </ServiceToAreaContainer>
+        </DynamicListContainer>
     )
 }
 

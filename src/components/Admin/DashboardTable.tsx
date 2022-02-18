@@ -296,6 +296,13 @@ interface CurrentDashboardDataProps {
 
 
 const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggleExpanded, expandedList, dashboard}: CurrentDashboardDataProps) => {
+    const handleEditDashboard = () => {
+        if(!expandedList.includes(dashboard.id)) {
+            toggleExpanded()
+        }
+        toggleEditDashboard()
+    }
+
 
     return (
         <DashboardRowInner>
@@ -304,7 +311,7 @@ const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggle
             </ClickableName>
 
             <div className="button-container">
-                <CustomButton className="option" onClick={toggleEditDashboard}>
+                <CustomButton className="option" onClick={handleEditDashboard}>
                     <Notes />
                 </CustomButton>
                 <button className="option" onClick={setDashboardToDelete} aria-label="Slett område"><CloseCustomized /></button>
@@ -351,12 +358,22 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
     const handleSubmit = () => {
         updateDashboard(dashboard, updatedDashboard.name).then(() => {
             reloadDashboards()
+            if(expandedList.includes(dashboard.id)) {
+                toggleExpanded()
+            }
             toggleEditDashboard()
-            toggleExpanded()
             toast.success("Oppdatering gjennomført")
         }).catch(() => {
             toast.error("Noe gikk galt i oppdatering av dashbord")
         })
+    }
+
+    const handleDisableEdit = () => {
+        if(expandedList.includes(dashboard.id)) {
+            toggleExpanded()
+        }
+        toggleEditDashboard()
+
     }
 
     const { name } = updatedDashboard
@@ -371,7 +388,7 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
                     <button type="button" className="option" onClick={handleSubmit}>
                         Lagre endringer
                     </button>
-                    <button type="button" className="option" onClick={toggleEditDashboard} >
+                    <button type="button" className="option" onClick={handleDisableEdit} >
                         Avbryt endringer
                     </button>
                     <button type="button" className="option" onClick={setDashboardToDelete} aria-label="Slett dashbord"><CloseCustomized /></button>

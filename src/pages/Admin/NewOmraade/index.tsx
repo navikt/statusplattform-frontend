@@ -11,7 +11,7 @@ import { Area, Service } from "../../../types/navServices";
 import { useLoader } from "../../../utils/useLoader";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
-import { HorizontalSeparator } from "..";
+import { DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 import { fetchServices } from "../../../utils/servicesAPI";
 import { postAdminArea } from "../../../utils/areasAPI";
@@ -168,48 +168,6 @@ interface AreaProps {
 }
 
 
-const ServicesContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-
-    gap: 16px;
-
-    .new-list {
-        list-style: none;
-        padding: 0;
-        
-        section {
-            display: inline-block;
-        }
-
-        .colored {
-            color: var(--navBla);
-            text-decoration: underline;
-            background-color: none;
-            border: none;
-
-            label {
-                position: absolute;
-                z-index: -1000;
-            }
-
-            :hover {
-                text-decoration: none;
-                cursor: pointer;
-            }
-        }
-
-        li {
-            p {
-                margin: 8px 0;
-
-                display: flex;
-                justify-content: space-between;
-            }
-        }
-    }
-`
-
 
 
 const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDeleteServiceOnArea, handleAddServiceToArea: handleAddServiceToArea}: AreaProps) => {
@@ -237,7 +195,7 @@ const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDe
     
 
     return (
-        <ServicesContainer>
+        <DynamicListContainer>
             
             <Select label="Legg til i område" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedArea}>
                 {availableServices.length > 0 ?
@@ -275,7 +233,7 @@ const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDe
                 <BodyShort spacing><b>Ingen områder lagt til</b></BodyShort>
             }
 
-        </ServicesContainer>
+        </DynamicListContainer>
     )
 }
 

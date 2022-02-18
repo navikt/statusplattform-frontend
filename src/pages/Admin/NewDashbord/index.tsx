@@ -11,7 +11,7 @@ import { useLoader } from "../../../utils/useLoader";
 import { Area, Dashboard } from "../../../types/navServices";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
-import { HorizontalSeparator } from "..";
+import { DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 import { postDashboard } from "../../../utils/dashboardsAPI";
 import { fetchAreas } from "../../../utils/areasAPI";
@@ -22,23 +22,14 @@ const NewDashboardContainer = styled.div`
     display: flex;
     flex-direction: column;
 
-    input {
+    input, select {
         margin: 1rem 0;
-        width: 100%;
     }
 
     .button-container {
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
-
-        flex: 1 1 40%;
-    }
-
-    @media (min-width: 280px) {
-        input {
-            min-width: 280px;
-        }
     }
 `
 
@@ -152,47 +143,7 @@ interface DashboardProps {
 
 
 
-const AreasContainer = styled.div`
-    display: flex;
-    flex-direction: column;
 
-    gap: 16px;
-
-    .new-list {
-        list-style: none;
-        padding: 0;
-        
-        section {
-            display: inline-block;
-        }
-
-        .colored {
-            color: var(--navBla);
-            text-decoration: underline;
-            background-color: none;
-            border: none;
-
-            label {
-                position: absolute;
-                z-index: -1000;
-            }
-
-            :hover {
-                text-decoration: none;
-                cursor: pointer;
-            }
-        }
-
-        li {
-            p {
-                margin: 8px 0;
-
-                display: flex;
-                justify-content: space-between;
-            }
-        }
-    }
-`
 
 const DashboardAreas = ({newDashboard, allAreas, handleDeleteAreaOnDashboard, handleAddAreaToDashboard}: DashboardProps) => {
     const availableAreas: Area[] = allAreas.filter(area => !newDashboard.areas.map(a => a.id).includes(area.id))
@@ -219,7 +170,7 @@ const DashboardAreas = ({newDashboard, allAreas, handleDeleteAreaOnDashboard, ha
     
 
     return (
-        <AreasContainer>
+        <DynamicListContainer>
             
             <Select label="Legg til område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
                 {availableAreas.length > 0 ?
@@ -257,7 +208,7 @@ const DashboardAreas = ({newDashboard, allAreas, handleDeleteAreaOnDashboard, ha
                 <BodyShort spacing><b>Ingen områder lagt til</b></BodyShort>
             }
 
-        </AreasContainer>
+        </DynamicListContainer>
     )
 }
 

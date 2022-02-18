@@ -10,7 +10,7 @@ import { fetchTypes } from "../../..//utils/fetchTypes";
 
 import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
 import { Delete } from "@navikt/ds-icons";
-import { HorizontalSeparator } from "..";
+import { DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 import { fetchAreas } from "../../../utils/areasAPI";
 import { fetchComponents, postComponent } from "../../../utils/componentsAPI";
@@ -45,7 +45,7 @@ const NewComponent = () => {
         name: "",
         team: "",
         type: "KOMPONENT",
-        dependencies: [],
+        componentDependencies: [],
         monitorlink: "",
         pollingUrl: "",
         areasContainingThisComponent: []
@@ -76,7 +76,7 @@ const NewComponent = () => {
         )
     }
 
-    const { name, team, type, dependencies, monitorlink, pollingUrl, areasContainingThisComponent } = newComponent
+    const { name, team, type, componentDependencies: dependencies, monitorlink, pollingUrl, areasContainingThisComponent } = newComponent
 
 
 
@@ -97,18 +97,18 @@ const NewComponent = () => {
             toast.warn("Tjenesteavhengighet " + componentToAdd.name + " er allerede lagt til")
             return
         }
-        const newComponentsList = [...newComponent.dependencies, componentToAdd]
+        const newComponentsList = [...newComponent.componentDependencies, componentToAdd]
         const updatedComponent: Component = {
-            name: name, team: team, type: type, dependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisComponent: areasContainingThisComponent
+            name: name, team: team, type: type, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisComponent: areasContainingThisComponent
         }
         updateNewComponent(updatedComponent)
         toast.success("Lagt til tjenesteavhengighet")
     }
 
     const handleDeleteComponentDependency = (componentToDelete: Component) => {
-        const newComponentsList: Component[] = [...newComponent.dependencies.filter(component => component != componentToDelete)]
+        const newComponentsList: Component[] = [...newComponent.componentDependencies.filter(component => component != componentToDelete)]
         const updatedComponent: Component = {
-            name: name, team: team, type: type, dependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisComponent: areasContainingThisComponent
+            name: name, team: team, type: type, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisComponent: areasContainingThisComponent
         }
         updateNewComponent(updatedComponent)
         toast.success("Fjernet område fra område")
@@ -210,52 +210,9 @@ interface ComponentProps {
 }
 
 
-const DependenciesContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-
-    gap: 16px;
-
-    .new-list {
-        list-style: none;
-        padding: 0;
-        
-        section {
-            display: inline-block;
-        }
-
-        .colored {
-            color: var(--navBla);
-            text-decoration: underline;
-            background-color: none;
-            border: none;
-
-            label {
-                position: absolute;
-                z-index: -1000;
-            }
-
-            :hover {
-                text-decoration: none;
-                cursor: pointer;
-            }
-        }
-
-        li {
-            p {
-                margin: 8px 0;
-
-                display: flex;
-                justify-content: space-between;
-            }
-        }
-    }
-`
-
-
 
 const ComponentDependencies = ({newComponent, allComponents, handleDeleteComponentDependency, handleAddComponentDependency}: ComponentProps) => {
-    const availableComponents: Component[] = allComponents.filter(area => !newComponent.dependencies.map(a => a.id).includes(area.id))
+    const availableComponents: Component[] = allComponents.filter(area => !newComponent.componentDependencies.map(a => a.id).includes(area.id))
     const { changeTitle } = useContext(TitleContext)
 
     const [selectedComponent, changeSelectedComponent] = useState<Component | null>(() => availableComponents.length > 0 ? availableComponents[0] : null)
@@ -268,7 +225,7 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
         else {
             changeSelectedComponent(null)
         }
-    }, [allComponents, newComponent.dependencies])
+    }, [allComponents, newComponent.componentDependencies])
     
 
 
@@ -280,7 +237,7 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
     
 
     return (
-        <DependenciesContainer>
+        <DynamicListContainer>
             
             <Select label="Legg til tjenesteavhengighet" value={selectedComponent !== null ? selectedComponent.id : ""} onChange={handleUpdateSelectedArea}>
                 {availableComponents.length > 0 ?
@@ -297,10 +254,10 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
             <Button variant="secondary" type="button" onClick={() => handleAddComponentDependency(selectedComponent)}>Legg til</Button>
             
 
-            {newComponent.dependencies.length > 0
+            {newComponent.componentDependencies.length > 0
             ?
                 <ul className="new-list">
-                    {newComponent.dependencies.map(component => {
+                    {newComponent.componentDependencies.map(component => {
                         return (
                             <li key={component.id}>
                                 <BodyShort>
@@ -318,7 +275,7 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
                 <BodyShort spacing><b>Ingen tjenester igjen i listen</b></BodyShort>
             }
 
-        </DependenciesContainer>
+        </DynamicListContainer>
     )
 }
 
@@ -331,7 +288,7 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
 
 
 
-const ComponentToAreaContainer = styled(DependenciesContainer)``
+const ComponentToAreaContainer = styled(DynamicListContainer)``
 
 
 interface ComponentConnectionProps {

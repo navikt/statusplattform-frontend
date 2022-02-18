@@ -1,4 +1,4 @@
-import { Service } from "../types/navServices";
+import { Component, Service } from "../types/navServices";
 import { EndPathPutServiceDependency, EndPathService, EndPathServices, EndPathServiceStatus, EndPathSpecificService, EndPathUpdateService } from "./apiHelper";
 
 export class ResponseError extends Error {
@@ -27,7 +27,7 @@ export const fetchServices = async (): Promise<Service[]> => {
 export const postService = async (service: Service): Promise<Object[]> =>{
     let response;
     let endPath = EndPathService()
-
+    
     response = await fetch(endPath,
     {
         method: "POST",
@@ -35,9 +35,11 @@ export const postService = async (service: Service): Promise<Object[]> =>{
             name: service.name,
             type: service.type,
             team: service.team,
-            dependencies: service.dependencies,
+            serviceDependencies: service.serviceDependencies,
+            componentDependencies: service.componentDependencies,
             monitorlink: service.monitorlink,
-            pollingUrl: service.pollingUrl
+            pollingUrl: service.pollingUrl,
+            areasContainingThisService: service.areasContainingThisService
         }),
         headers: {
             "Content-type": "application/json; charset=UTF-8"
@@ -95,7 +97,8 @@ export const updateService = async (service: Service): Promise<void> =>{
                 name: service.name,
                 type: service.type,
                 team: service.team,
-                dependencies: service.dependencies,
+                serviceDependencies: service.serviceDependencies,
+                componentDependencies: service.componentDependencies,
                 monitorlink: service.monitorlink,
                 pollingUrl: service.pollingUrl
             }),

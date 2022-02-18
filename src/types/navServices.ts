@@ -18,20 +18,20 @@ export interface Service {
     name: string
     type: string
     team?: string
-    dependencies?: Service[]
+    serviceDependencies?: Service[]
+    componentDependencies?: Component[]
     monitorlink?: string
     pollingUrl?: string
     status?: string
-    areasContainingThisService?: Area[]
+    areasContainingThisService: Area[]
 }
-
 
 export interface Component {
     id?: string
     name: string
     type: string
     team?: string
-    dependencies?: Component[]
+    componentDependencies?: Component[]
     monitorlink?: string
     pollingUrl?: string
     status?: string
