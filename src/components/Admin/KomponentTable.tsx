@@ -475,6 +475,13 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
         })
     }
 
+    const handleCancelEditting = (component) => {
+        if(isExpanded) {
+            toggleExpanded(component)
+        }
+        toggleEditComponent(component)
+    }
+
     
 
 
@@ -518,7 +525,7 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
                 <button type="button" className="option" onClick={handleSubmit}>
                     Lagre endringer
                 </button>
-                <CustomButton className="option" onClick={() => toggleEditComponent(component)}>
+                <CustomButton className="option" onClick={() => handleCancelEditting(component)}>
                     Avbryt endringer
                 </CustomButton>
                 <button className="option" onClick={setComponentToDelete} aria-label="Slett komponent"><CloseCustomized /></button>
