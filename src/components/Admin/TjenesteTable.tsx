@@ -8,8 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useLoader } from '../../utils/useLoader';
 
 import { Expand, Notes } from '@navikt/ds-icons'
-import { BodyShort, Button, Heading, Select, TextField } from '@navikt/ds-react';
-import ModalWrapper from 'nav-frontend-modal';
+import { BodyShort, Button, Heading, Modal, Select, TextField } from '@navikt/ds-react';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Area, Component, Service } from '../../types/navServices';
@@ -172,17 +171,15 @@ const TjenesteTable = () => {
                 <title>Admin - Tjenester</title>
             </Head>
 
-            <ModalWrapper
-                isOpen={!!serviceToDelete}
-                onRequestClose={() => setServiceToDelete(null)}
-                closeButton={true}
-                contentLabel="Slettemodal"
+            <Modal
+                open={!!serviceToDelete}
+                onClose={() => setServiceToDelete(null)}
             >
                 <ModalInner>Ønsker du å slette tjenesten?
                     <Button variant="secondary" onClick={confirmDeleteServiceHandler}>Slett tjeneste</Button>
                     <Button variant="secondary" onClick={() => setServiceToDelete(null)}>Avbryt</Button>
                 </ModalInner>
-            </ModalWrapper>
+            </Modal>
 
 
 

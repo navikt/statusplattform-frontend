@@ -7,8 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useLoader } from '../../utils/useLoader';
 
 import { Expand, Notes } from '@navikt/ds-icons'
-import { BodyShort, Button, Heading, Select, TextField } from '@navikt/ds-react';
-import ModalWrapper from 'nav-frontend-modal';
+import { BodyShort, Button, Heading, Modal, Select, TextField } from '@navikt/ds-react';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Component } from '../../types/navServices';
@@ -172,17 +171,15 @@ const KomponentTable = () => {
                 <title>Admin - Tjenester</title>
             </Head>
 
-            <ModalWrapper
-                isOpen={!!componentToDelete}
-                onRequestClose={() => setComponentToDelete(null)}
-                closeButton={true}
-                contentLabel="Slettemodal"
+            <Modal
+                open={!!componentToDelete}
+                onClose={() => setComponentToDelete(null)}
             >
                 <ModalInner>Ønsker du å slette komponenten?
                     <Button variant="secondary" onClick={confirmDeleteComponentHandler}>Slett komponent</Button>
                     <Button variant="secondary" onClick={() => setComponentToDelete(null)}>Avbryt</Button>
                 </ModalInner>
-            </ModalWrapper>
+            </Modal>
 
 
 

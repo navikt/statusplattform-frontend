@@ -7,7 +7,6 @@ import { Bag, Calculator, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, 
 
 import { Area, Service } from '../../types/navServices';
 import { Element } from 'nav-frontend-typografi';
-import ModalWrapper from 'nav-frontend-modal';
 
 import { CloseCustomized, DependencyList } from '.';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
@@ -15,7 +14,7 @@ import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { ModalInner } from '.';
 import { getIconsFromGivenCode } from '../../utils/servicesOperations';
 import { useLoader } from '../../utils/useLoader';
-import { BodyShort, Button, Select, TextField } from '@navikt/ds-react';
+import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react';
 import router from 'next/router';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { deleteArea, deleteServiceFromArea, fetchAreas, postAdminArea, putServiceToArea, updateArea } from '../../utils/areasAPI';
@@ -167,17 +166,15 @@ const AreaTable = () => {
                 <title>Admin - Områder</title>
             </Head>
 
-            <ModalWrapper
-                isOpen={!!areaToDelete}
-                onRequestClose={() => setAreaToDelete(null)}
-                closeButton={true}
-                contentLabel="Slettemodal"
+            <Modal
+                open={!!areaToDelete}
+                onClose={() => setAreaToDelete(null)}
             >
                 <ModalInner>Ønsker du å slette området?
                     <Button variant="secondary" onClick={confirmDeleteAreaHandler}>Slett området</Button>
                     <Button variant="secondary" onClick={() => setAreaToDelete(null)}>Avbryt</Button>
                 </ModalInner>
-            </ModalWrapper>
+            </Modal>
 
 
             <div className="centered">

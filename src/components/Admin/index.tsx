@@ -82,7 +82,7 @@ export const NoContentContainer = styled.div`
 
 
 export const ModalInner = styled.div`
-    padding: 2rem 2.5rem;
+    padding: 2rem 4.5rem;
     display: flex;
     flex-direction: column;
     

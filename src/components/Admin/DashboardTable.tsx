@@ -5,8 +5,7 @@ import { toast } from 'react-toastify'
 import styled from 'styled-components'
 
 import { Expand, Notes } from '@navikt/ds-icons'
-import ModalWrapper from 'nav-frontend-modal'
-import { BodyShort, Button, Select, TextField } from '@navikt/ds-react'
+import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react'
 
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import { ModalInner } from '.';
@@ -213,17 +212,15 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
         <DashboardsContainer>
 
 
-            <ModalWrapper
-                isOpen={!!dashboardToDelete}
-                onRequestClose={() => setDashboardToDelete(null)}
-                closeButton={true}
-                contentLabel="Slettemodal"
+            <Modal
+                open={!!dashboardToDelete}
+                onClose={() => setDashboardToDelete(null)}
             >
                 <ModalInner>Ønsker du å slette dashbordet?
                     <Button variant="secondary" onClick={confirmDeleteDashboardHandler}>Slett dashbord</Button>
                     <Button variant="secondary" onClick={() => setDashboardToDelete(null)}>Avbryt</Button>
                 </ModalInner>
-            </ModalWrapper>
+            </Modal>
 
 
             <div>
