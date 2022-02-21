@@ -83,7 +83,7 @@ export const EndPathPutServiceDependency = (serviceId: string, dependencyId: str
 
 // Components
 export const EndPathComponent = () => {
-    return "/rest/Component"
+    return "/rest/Service"
 }
 
 export const EndPathComponents = () => {

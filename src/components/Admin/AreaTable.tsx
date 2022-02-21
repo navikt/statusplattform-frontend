@@ -98,7 +98,6 @@ const AreaElementContainer = styled.div`
 const AreaTable = () => { 
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [anchorId, setAnchorId] = useState<string>("")
-    const [editNewArea, toggleNewAreaEdit] = useState(false)
     const [areasToEdit, changeAreasToEdit] = useState<string[]>([])
     const [areaToDelete, setAreaToDelete] = useState<Area>()
     

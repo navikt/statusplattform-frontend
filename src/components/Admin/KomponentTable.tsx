@@ -119,7 +119,6 @@ const CustomButton = styled.button`
 
 const KomponentTable = () => {
     const [expanded, toggleExpanded] = useState<string[]>([])
-    const [addNewComponent, changeAddNewComponent] = useState(false)
     const [componentsToEdit, changeComponentsToEdit] = useState<string[]>([])
     const [componentToDelete, setComponentToDelete] = useState<Component>()
     const { data: components, isLoading: loadingComponents, reload } = useLoader(fetchComponents,[]);
@@ -394,14 +393,24 @@ const ComponentRow = ({component, toggleEditComponent, toggleExpanded, isExpande
                 {isExpanded &&
                     <div className="bottom-row clickable" onClick={() => toggleExpanded(component)}>
                         <div className="dependencies">
-                            <BodyShort><b>Tjenester avhengig denne</b></BodyShort>
-                            <ul>
-                                {component.componentDependencies.map((dependency, index) => {
-                                    return (
-                                        <li key={index}>{dependency.name}</li>
-                                        )
-                                    })}
-                            </ul>
+                            {component.componentDependencies.length == 0
+                                ?
+                                    <>
+                                        <BodyShort spacing><b>Tjenester avhengig denne</b></BodyShort>
+                                        <BodyShort>Ingen tjenester avhengher denne komponenten</BodyShort>
+                                    </>
+                                :
+                                    <>
+                                        <BodyShort><b>Tjenester avhengig denne</b></BodyShort>
+                                        <ul>
+                                            {component.componentDependencies.map((dependency, index) => {
+                                                return (
+                                                    <li key={index}>{dependency.name}</li>
+                                                    )
+                                                })}
+                                        </ul>
+                                    </>
+                            }
                         </div>
                         
                         <span className="component-row-element">
@@ -505,7 +514,7 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
                         <BodyShort><b>Tjenester avhengig denne</b></BodyShort>
 
                         <EditDependenciesTowardServices
-                            allComponents={allComponents} component={component} updatedService={updatedComponent}
+                            allComponents={allComponents} component={component} updatedComponent={updatedComponent}
                         />
                     </div>
                     <span className="component-row-element editting">
@@ -606,8 +615,8 @@ const DependencyList = styled.ul`
 
 
 const EditDependenciesTowardServices: React.FC<
-                {allComponents, component, updatedService}> = (
-                {allComponents, component, updatedService}
+                {allComponents: Component[], component: Component, updatedComponent: Component}> = (
+                {allComponents, component, updatedComponent}
         ) => {
 
     const [edittedDependencies, updateDependencies] = useState<Component[]>([...component.componentDependencies])
@@ -619,7 +628,7 @@ const EditDependenciesTowardServices: React.FC<
 
 
     useEffect(() => {
-        updatedService.dependencies = edittedDependencies
+        updatedComponent.componentDependencies = edittedDependencies
         if(availableServiceDependencies.length > 0){
             updateSelectedComponent(availableServiceDependencies[0])
         }

@@ -118,7 +118,6 @@ const CustomButton = styled.button`
 
 const TjenesteTable = () => {
     const [expanded, toggleExpanded] = useState<string[]>([])
-    const [addNewService, changeAddNewService] = useState(false)
     const [servicesToEdit, changeServicesToEdit] = useState<string[]>([])
     const [serviceToDelete, setServiceToDelete] = useState<Service>()
     const { data: services, isLoading: loadingServices, reload } = useLoader(fetchServices,[]);
