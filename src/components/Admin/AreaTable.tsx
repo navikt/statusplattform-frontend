@@ -15,7 +15,7 @@ import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { ModalInner } from '.';
 import { getIconsFromGivenCode } from '../../utils/servicesOperations';
 import { useLoader } from '../../utils/useLoader';
-import { Button, Select, TextField } from '@navikt/ds-react';
+import { BodyShort, Button, Select, TextField } from '@navikt/ds-react';
 import router from 'next/router';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { deleteArea, deleteServiceFromArea, fetchAreas, postAdminArea, putServiceToArea, updateArea } from '../../utils/areasAPI';
@@ -295,6 +295,7 @@ const AreaRowInner = styled.div`
         display: flex;
         align-items: center;
         flex-grow: 1;
+
         & > * {
             display: flex;
             flex-basis: 100%;
@@ -340,6 +341,10 @@ const AreaRowInner = styled.div`
             margin-right: 5ch;
             display: flex;
             flex-direction: column;
+
+            ul {
+                margin-top: 0;
+            }
         }
         span:first-child {
             margin: 0 2rem;
@@ -475,7 +480,7 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                                 </div>
                             :
                                 <div className="row-element">
-                                    <Element>Tjenester i område</Element>
+                                    <BodyShort spacing><b>Tjenester i område</b></BodyShort>
                                     <ul>
                                         {servicesInArea.map(service => {
                                             return (

@@ -63,6 +63,7 @@ const AdminConfigsContainer = styled.div`
        
     width: 100%;
     padding: 0 1rem;
+    
     h2 {
         margin: 0 0 .5rem;
         display: flex;
@@ -124,7 +125,6 @@ export const DependenciesColumn = styled.div`
 export const DependencyList = styled.ul`
     list-style: none;
     padding: 0;
-    /* width: 100%; */
     
     li {
         width: 100%;

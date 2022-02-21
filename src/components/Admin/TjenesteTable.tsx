@@ -332,6 +332,10 @@ const ServiceRowContent = styled.div`
 
             display: flex;
             flex-direction: column;
+
+            ul {
+                margin-top: 0;
+            }
         }
 
         input {
@@ -348,6 +352,8 @@ const ServiceRowContent = styled.div`
         }
 
         .service-data-element {
+            margin-bottom: 18px;
+
             display: flex;
             flex-direction: column;
         }
@@ -388,52 +394,72 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
 
                 {isExpanded &&
                     <div className="bottom-row" onClick={() => toggleExpanded(service)}>
+
                         <div className="service-row-column">
                             <div className="dependencies">
-                                <BodyShort><b>Tjenesteavhengigheter</b></BodyShort>
-                                <ul>
-                                    {service.serviceDependencies.map((dependency, index) => {
-                                        return (
-                                            <li key={index}>{dependency.name}</li>
-                                        )
-                                    })}
-                                </ul>
+                                <BodyShort spacing><b>Tjenesteavhengigheter</b></BodyShort>
+                                {service.serviceDependencies.length != 0
+                                ?
+                                    <ul>
+                                        {service.serviceDependencies.map((dependency, index) => {
+                                            return (
+                                                <li key={index}>{dependency.name}</li>
+                                            )
+                                        })}
+                                    </ul>
+                                :
+                                    <BodyShort spacing>Ingen tjenesteavhengigheter lagt til</BodyShort>
+                                }
                             </div>
 
                             <div className="dependencies">
-                                <BodyShort><b>Komponentavhengigheter</b></BodyShort>
-                                <ul>
-                                    {service.componentDependencies.map((dependency, index) => {
-                                        return (
-                                            <li key={index}>{dependency.name}</li>
-                                        )
-                                    })}
-                                </ul>
+                                <BodyShort spacing><b>Komponentavhengigheter</b></BodyShort>
+                                {service.componentDependencies.length != 0
+                                ?
+                                    <ul>
+                                        {service.componentDependencies.map((dependency, index) => {
+                                            return (
+                                                <li key={index}>{dependency.name}</li>
+                                            )
+                                        })}
+                                    </ul>
+                                :
+                                    <BodyShort spacing>
+                                        Ingen komponentavhengigheter lagt til
+                                    </BodyShort>
+                                }
                             </div>
                         </div>
 
                         <div className="service-row-column">
                             <div className="dependencies">
-                                <BodyShort><b>Koblet til område</b></BodyShort>
-                                <ul>
-                                    {service.areasContainingThisService.map((area, index) => {
-                                        return (
-                                            <li key={index}>{area.name}</li>
-                                        )
-                                    })}
-                                </ul>
+                                <BodyShort spacing><b>Koblet til område</b></BodyShort>
+                                {service.areasContainingThisService.length != 0
+                                ?
+                                    <ul>
+                                        {service.areasContainingThisService.map((area, index) => {
+                                            return (
+                                                <li key={index}>{area.name}</li>
+                                            )
+                                        })}
+                                    </ul>
+                                :
+                                        <BodyShort spacing>
+                                            Ingen områder inneholder denne tjenesten
+                                        </BodyShort>
+                                }
                             </div>
                         </div>
 
                         <div className="service-row-column">
                             <span className="service-data-element">
-                                <p><b>Monitorlink</b></p>
-                                <p>{service.monitorlink}</p>
+                                <BodyShort spacing><b>Monitorlink</b></BodyShort>
+                                <BodyShort>{service.monitorlink}</BodyShort>
                             </span>
 
                             <span className="service-data-element">
-                                <p><b>PollingUrl</b></p>
-                                <p>{service.pollingUrl}</p>
+                                <BodyShort spacing><b>PollingUrl</b></BodyShort>
+                                <BodyShort>{service.pollingUrl}</BodyShort>
                             </span>
                         </div>
                     </div>
@@ -560,12 +586,12 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
                     <div className="service-row-column">
                         <span className="service-data-element editting">
-                            <p><b>Monitorlink</b></p>
+                            <BodyShort spacing><b>Monitorlink</b></BodyShort>
                             <TextField label="Monitorlink" hideLabel value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
                         </span>
                         
                         <span className="service-data-element editting">
-                            <p><b>PollingUrl</b></p>
+                            <BodyShort spacing><b>PollingUrl</b></BodyShort>
                             <TextField label="Pollingurl" hideLabel value={pollingUrl} onChange={handleUpdatedService("pollingUrl")}/>
                         </span>
                     </div>

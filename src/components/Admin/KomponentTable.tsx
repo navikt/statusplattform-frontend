@@ -331,9 +331,14 @@ const ComponentRowContent = styled.div`
         .dependencies {
             margin-right: 5ch;
             max-width: 275px;
+            margin-top: 0;
 
             display: flex;
             flex-direction: column;
+            
+            ul {
+                margin-top: 0;
+            }
         }
 
         input {
@@ -397,11 +402,11 @@ const ComponentRow = ({component, toggleEditComponent, toggleExpanded, isExpande
                                 ?
                                     <>
                                         <BodyShort spacing><b>Tjenester avhengig denne</b></BodyShort>
-                                        <BodyShort>Ingen tjenester avhengher denne komponenten</BodyShort>
+                                        <BodyShort spacing>Ingen tjenester avhengher denne komponenten</BodyShort>
                                     </>
                                 :
                                     <>
-                                        <BodyShort><b>Tjenester avhengig denne</b></BodyShort>
+                                        <BodyShort spacing><b>Tjenester avhengig denne</b></BodyShort>
                                         <ul>
                                             {component.componentDependencies.map((dependency, index) => {
                                                 return (
