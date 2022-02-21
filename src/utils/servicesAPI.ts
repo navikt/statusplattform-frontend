@@ -100,7 +100,8 @@ export const updateService = async (service: Service): Promise<void> =>{
                 serviceDependencies: service.serviceDependencies,
                 componentDependencies: service.componentDependencies,
                 monitorlink: service.monitorlink,
-                pollingUrl: service.pollingUrl
+                pollingUrl: service.pollingUrl,
+                areasContainingThisService: service.areasContainingThisService
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"

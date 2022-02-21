@@ -9,7 +9,7 @@ import { Area, Service } from '../../types/navServices';
 import { Element } from 'nav-frontend-typografi';
 import ModalWrapper from 'nav-frontend-modal';
 
-import { CloseCustomized } from '.';
+import { CloseCustomized, DependencyList } from '.';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
 import { ModalInner } from '.';
@@ -198,6 +198,9 @@ const AreaTable = () => {
                         </div>
                         <div className="empty-space"></div>
                     </AreaHeader>
+
+
+                    
                     <div>
                         {allAreas.map( (area, index) => {
                             return (
@@ -523,20 +526,6 @@ const EditDependeciesContainer = styled.div`
 
     select {
         transform: translateY(-2px);
-    }
-`
-
-
-const DependencyList = styled.ul`
-    list-style: none;
-    padding: 0;
-
-    li {
-        height: fit-content;
-
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
     }
 `
 

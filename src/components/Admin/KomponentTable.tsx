@@ -13,7 +13,7 @@ import ModalWrapper from 'nav-frontend-modal';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Component } from '../../types/navServices';
 import { deleteComponent, fetchComponents, updateComponent } from '../../utils/componentsAPI';
-import { CloseCustomized, ModalInner, NoContentContainer } from '.';
+import { CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { RouterAdminAddKomponent } from '../../types/routes';
 
@@ -567,52 +567,6 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
 
 
 
-const DependenciesColumn = styled.div`
-    margin-right: 5ch;
-    max-width: 242px;
-    
-    display: flex;
-    flex-direction: column;
-
-    .add-component {
-        margin: 1rem 0;
-    }
-
-    ul {
-        max-width: 100%;
-        word-break: break-word;
-
-        li {
-            border: 1px solid transparent;
-            border-radius: 5px;
-        }
-
-        li:hover {
-            border: 1px solid black;
-        }
-    }
-
-    label {
-        position: absolute;
-        z-index: -1000;
-    }
-`
-
-const DependencyList = styled.ul`
-    list-style: none;
-    padding: 0;
-    width: 100%;
-    
-    li {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: fit-content;
-    }
-`
-
-
 
 const EditDependenciesTowardServices: React.FC<
                 {allComponents: Component[], component: Component, updatedComponent: Component}> = (
@@ -692,7 +646,7 @@ const EditDependenciesTowardServices: React.FC<
             }
 
             <div>
-                <Button variant="secondary" className="add-component" onClick={handlePutEdittedServiceDependency}>Legg til</Button>
+                <Button variant="secondary" className="add-element" onClick={handlePutEdittedServiceDependency}>Legg til</Button>
             </div>
 
             <DependencyList>

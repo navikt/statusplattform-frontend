@@ -90,6 +90,55 @@ export const ModalInner = styled.div`
     }
 `
 
+export const DependenciesColumn = styled.div`
+    margin-right: 5ch;
+    max-width: 242px;
+    
+    display: flex;
+    flex-direction: column;
+
+    .add-element {
+        margin: 1rem 0;
+    }
+
+    ul {
+        max-width: 100%;
+        word-break: break-word;
+
+        li {
+            border: 1px solid transparent;
+            border-radius: 5px;
+        }
+
+        li:hover {
+            border: 1px solid black;
+        }
+    }
+
+    label {
+        position: absolute;
+        z-index: -1000;
+    }
+`
+
+export const DependencyList = styled.ul`
+    list-style: none;
+    padding: 0;
+    /* width: 100%; */
+    
+    li {
+        width: 100%;
+        
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: fit-content;
+    }
+`
+
+
+
+
 export interface Props {
     selectedMenu?: string
 }

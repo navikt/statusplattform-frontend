@@ -12,12 +12,13 @@ import { BodyShort, Button, Heading, Select, TextField } from '@navikt/ds-react'
 import ModalWrapper from 'nav-frontend-modal';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
-import { Component, Service } from '../../types/navServices';
-import { CloseCustomized, ModalInner, NoContentContainer } from '.';
+import { Area, Component, Service } from '../../types/navServices';
+import { CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { deleteService, fetchServices, postService, updateService } from '../../utils/servicesAPI';
 import { RouterAdminAddTjeneste } from '../../types/routes';
 import { fetchComponents } from '../../utils/componentsAPI';
+import { fetchAreas } from '../../utils/areasAPI';
 
 const TjenesteTableContainer = styled.div`
     .services-overflow-container {
@@ -479,9 +480,10 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
     })
 
     const { data: allComponents, isLoading, reload: reloadComponents } = useLoader(fetchComponents,[]);
+    const { data: allAreas, isLoading: loadingAreas, reload: reloadAreas } = useLoader(fetchAreas,[]);
 
 
-    if(isLoading) {
+    if(isLoading || loadingAreas) {
         return(
             <CustomNavSpinner />
         )
@@ -549,6 +551,13 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                         />
                     </div>
 
+                    <div className="dependencies">
+                        <BodyShort><b>Komponentavhengigheter</b></BodyShort>
+                        <EditConnectedAreas
+                            allAreas={allAreas} service={service} updatedService={updatedService}
+                        />
+                    </div>
+
                     <div className="service-row-column">
                         <span className="service-data-element editting">
                             <p><b>Monitorlink</b></p>
@@ -598,53 +607,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
 
 
-const DependencyList = styled.ul`
-    list-style: none;
-    padding: 0;
-    width: 100%;
-    
-    li {
-        width: 100%;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        height: fit-content;
-    }
-`
-
-
-
-const DependenciesColumn = styled.div`
-    margin-right: 5ch;
-    max-width: 242px;
-    width: 100%;
-    
-    display: flex;
-    flex-direction: column;
-
-    .add-service {
-        margin: 1rem 0;
-    }
-
-    ul {
-        max-width: 100%;
-        word-break: break-word;
-
-        li {
-            border: 1px solid transparent;
-            border-radius: 5px;
-        }
-
-        li:hover {
-            border: 1px solid black;
-        }
-    }
-
-    label {
-        position: absolute;
-        z-index: -1000;
-    }
-`
 // -----------
 const EditTjenesteDependencies: React.FC<
                 {allServices: Service[], service: Service, updatedService: Service}> = (
@@ -730,7 +692,7 @@ const EditTjenesteDependencies: React.FC<
             }
             
             <div>
-                <Button variant="secondary" className="add-service" onClick={handlePutEdittedServiceDependency}>Legg til</Button>
+                <Button variant="secondary" className="add-element" onClick={handlePutEdittedServiceDependency}>Legg til</Button>
             </div>
 
             <DependencyList>
@@ -838,7 +800,7 @@ const EditComponentDependencies: React.FC<
             }
             
             <div>
-                <Button variant="secondary" className="add-service" onClick={handlePutEdittedComponentDependency}>Legg til</Button>
+                <Button variant="secondary" className="add-element" onClick={handlePutEdittedComponentDependency}>Legg til</Button>
             </div>
 
             <DependencyList>
@@ -859,7 +821,122 @@ const EditComponentDependencies: React.FC<
 
 // ---
 
+
+
+
+
+
+
 // -----------
+const EditConnectedAreas: React.FC<
+                {allAreas: Area[], service: Service, updatedService: Service}> = (
+                {allAreas, service, updatedService}
+        ) => {
+
+    const [isLoading, setIsLoading] = useState(false)
+    const [edittedConnectedAreas, updateConnectedAreas] = useState<Area[]>([...service.areasContainingThisService])
+    
+    const availableAreas: Area[] = [...allAreas].filter(a => 
+        a.id != service.id && !edittedConnectedAreas.map(area => area.id).includes(a.id)
+    )
+    
+    const [selectedArea, updateSelectedArea] = useState<Area | null>(allAreas[0])
+
+
+    useEffect(() => {
+        updatedService.areasContainingThisService = edittedConnectedAreas
+        if(availableAreas.length > 0){
+            updateSelectedArea(availableAreas[0])
+        }
+        else {
+            updateSelectedArea(null)
+        }
+    }, [edittedConnectedAreas])
+
+
+    const handleUpdateSelectedArea = (event) => {
+        const idOfSelectedArea: string = event.target.value
+        const newSelectedArea: Area = allAreas.find(area => idOfSelectedArea === area.id)
+        updateSelectedArea(newSelectedArea)
+    }
+
+
+
+    const handlePutEdittedConnectedArea = () => {
+        if(selectedArea !== null) {    
+            const updatedEdittedDependencies: Area[] = [...edittedConnectedAreas, selectedArea]
+            updateConnectedAreas(updatedEdittedDependencies)
+            toast.success("Kobling mot område lagt til")
+            console.log(updatedEdittedDependencies)
+            return
+        }
+        toast.info("Ingen områder å koble tjenesten mot")
+    }
+
+
+
+    const handleRemoveEdittedConnectedArea = (area: Area) => {
+        if(!edittedConnectedAreas.includes(area)) {
+            toast.error("Tjeneste eksisterer ikke i avhengighetene. Noe har gått galt med innlesingen")
+            return
+        }
+        const updatedEdittedDependencies = edittedConnectedAreas.filter(a => a.id != area.id)
+        updateConnectedAreas(updatedEdittedDependencies)
+        toast.info("Områdekobling fjernet")
+        
+    }
+
+    if(isLoading) {
+        return <CustomNavSpinner />
+    }
+
+
+    return (
+        <DependenciesColumn>
+            {edittedConnectedAreas.length === 0 &&
+                <p>
+                    Tjenesten fins ikke i noen områder
+                </p>
+            }
+
+            {allAreas.length !== 0
+                ?
+                    <Select label="Legg til tjenester i område" onChange={handleUpdateSelectedArea}>
+                        {availableAreas.length > 0 ?
+                        availableAreas.map(area => {
+                            return (
+                                <option key={area.id} value={area.id}>{area.name}</option>
+                            )
+                        })
+                        :
+                            <option key={undefined} value={""}>Ingen områder å legge tjenesten i</option>
+                        }
+                    </Select>
+                :
+                    <>
+                        Ingen områder å legge tjenesten i
+                    </>
+            }
+            
+            <div>
+                <Button variant="secondary" className="add-element" onClick={handlePutEdittedConnectedArea}>Legg til</Button>
+            </div>
+
+            <DependencyList>
+                {edittedConnectedAreas.map((area) => {
+                    return (
+                        <li key={area.id}>{area.name} 
+                            <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + area.name}
+                                    onClick={() => handleRemoveEdittedConnectedArea(area)}>
+                                <CloseCustomized/>
+                            </CustomButton>
+                        </li>
+                    )
+                })}
+            </DependencyList>
+        </DependenciesColumn>
+    )
+}
 
 // ---
 
