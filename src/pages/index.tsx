@@ -5,6 +5,10 @@ import { useEffect, useState } from 'react';
 import DashboardFromId from './Dashboard/[dashboardId]';
 import { RouterPrivatperson } from '../types/routes';
 
+
+
+
+
 export default function Home() {
     const router = useRouter()
     const [atHomePage] = useState(false)
@@ -14,6 +18,9 @@ export default function Home() {
             router.push(RouterPrivatperson.PATH)
         }
     },[router])
+
+
+
 
     return (
         <>

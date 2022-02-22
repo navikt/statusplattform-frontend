@@ -3,7 +3,6 @@ import Head from 'next/head'
 import Layout from '../../components/Layout'
 
 import CustomNavSpinner from '../../components/CustomNavSpinner'
-
 import { useLoader } from '../../utils/useLoader'
 import { useRenderComponentOnQuery } from '../../utils/routerHelpers'
 import TjenestedataContent from './TjenestedataComponent'

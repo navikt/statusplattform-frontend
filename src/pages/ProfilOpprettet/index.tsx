@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useContext, useEffect } from 'react'
 import { toast } from 'react-toastify'
+
 import { TitleContext } from '../../components/ContextProviders/TitleContext'
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import Layout from '../../components/Layout'

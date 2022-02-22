@@ -107,14 +107,14 @@ const DashboardRowContainer = styled.div`
         border-bottom: 2px solid rgba(0, 0, 0, 0.55);
     }
     &.editting {
-        border-color: var(--navBla);
+        border-color: var(--navds-global-color-blue-500);
     }
 `
 
 const DashboardRowInner = styled.div`
     min-height: 5rem;
     padding-left: 16px;
-    background-color: var(--navGraBakgrunn);
+    background-color: var(--navds-semantic-color-canvas-background);
 
     display: flex;
     flex-direction: row;
@@ -453,7 +453,7 @@ const AddAreaToDashboardDropdown = ({dashboardWithOnlyIdProp: dashboardWithoutId
 
 const DashboardDropRow = styled.div`
     border-top: 2px solid rgba(0, 0, 0, 0.1);
-    background-color: var(--navGraBakgrunn);
+    background-color: var(--navds-semantic-color-canvas-background);
     padding: 0 1rem;
 
     display: flex;

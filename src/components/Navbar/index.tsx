@@ -1,9 +1,10 @@
+import { useContext } from 'react';
 import { useRouter } from 'next/router'
 import Link from 'next/link'
 import styled from 'styled-components'
 
-import { Normaltekst, } from "nav-frontend-typografi";
-import { useContext } from 'react';
+import { BodyShort } from '@navikt/ds-react';
+
 import { UserData } from '../../types/userData';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { RouterArbeidsgiver, RouterInternt, RouterPrivatperson, RouterSamarbeidspartner } from '../../types/routes';
@@ -29,12 +30,15 @@ const Nav = styled.nav `
 			:hover {
 				cursor: pointer;
 			}
+
 			.inactive {
 				border-bottom: transparent 3px solid;
+				
 				:hover {
 					border-bottom: var(--navBla) 3px solid;
 				}
 			}
+
 			:focus, :active {
 				color: black;
 				background-color: transparent;
@@ -67,12 +71,6 @@ const LenkeSpacer = styled.div`
 	}
 `
 
-const NormalTekstCustomized = styled(Normaltekst)`
-	font-size: 1rem;
-	line-height: 1.375rem;
-`;
-
-
 export default function Navbar() {
 	const router = useRouter()
 
@@ -85,7 +83,7 @@ export default function Navbar() {
 				<li role="tab">
 					<Link href={RouterPrivatperson.PATH}>
 						<LenkeSpacer className={`${(router.asPath === RouterPrivatperson.PATH) ? "active" : "inactive"}`}>
-							<NormalTekstCustomized className={`${router.pathname === "/Privatperson" ? "active" : ""}`}>{RouterPrivatperson.NAME}</NormalTekstCustomized>
+							<BodyShort size="small" className={`${router.pathname === "/Privatperson" ? "active" : ""}`}>{RouterPrivatperson.NAME}</BodyShort>
 						</LenkeSpacer>
 					</Link>
 				</li>
@@ -93,7 +91,7 @@ export default function Navbar() {
 				<li role="tab">
 					<Link href={RouterArbeidsgiver.PATH}>
 						<LenkeSpacer className={`${(router.asPath === RouterArbeidsgiver.PATH) ? "active" : "inactive"}`}>
-							<NormalTekstCustomized className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>{RouterArbeidsgiver.NAME}</NormalTekstCustomized>
+							<BodyShort size="small" className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>{RouterArbeidsgiver.NAME}</BodyShort>
 						</LenkeSpacer>
 					</Link>
 				</li>
@@ -101,7 +99,7 @@ export default function Navbar() {
 				<li role="tab">
 					<Link href={RouterSamarbeidspartner.PATH}>
 						<LenkeSpacer className={`${(router.asPath === RouterSamarbeidspartner.PATH) ? "active" : "inactive"}`}>
-							<NormalTekstCustomized className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>{RouterSamarbeidspartner.NAME}</NormalTekstCustomized>
+							<BodyShort size="small" className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>{RouterSamarbeidspartner.NAME}</BodyShort>
 						</LenkeSpacer>
 					</Link>
 				</li>
@@ -110,7 +108,7 @@ export default function Navbar() {
 					<li role="tab">
 						<Link href={RouterInternt.PATH}>
 							<LenkeSpacer className={`${(router.asPath === RouterInternt.PATH) ? "active" : "inactive"}`}>
-								<NormalTekstCustomized className={`${router.pathname === "/Internt" ? "active" : ""}`}>{RouterInternt.NAME}</NormalTekstCustomized>
+								<BodyShort size="small" className={`${router.pathname === "/Internt" ? "active" : ""}`}>{RouterInternt.NAME}</BodyShort>
 							</LenkeSpacer>
 						</Link>
 					</li>

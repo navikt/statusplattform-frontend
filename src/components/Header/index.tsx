@@ -3,10 +3,9 @@ import { createRef, useContext, useState } from 'react'
 import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 
-import { Sidetittel } from 'nav-frontend-typografi'
 import { Checkbox } from 'nav-frontend-skjema'
 import { Collapse, Expand, Logout, PeopleFilled } from '@navikt/ds-icons'
-import { BodyShort, Button, Popover } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Popover } from '@navikt/ds-react'
 
 import SubscribeModal from '../../components/SubscribeModal'
 import BurgerMenu from '../../components/BurgerMenu'
@@ -57,7 +56,7 @@ const CustomHeader = styled.header`
     }
 `
 
-const SidetittelCustomized = styled(Sidetittel)`
+const HeadingCustomized = styled(Heading)`
     text-align: center;
     display: none;
     @media(min-width: 390px){
@@ -69,6 +68,8 @@ const SidetittelCustomized = styled(Sidetittel)`
     @media (min-width: 650px) {
         text-align: start;
         white-space: normal;
+
+        margin-left: 1rem;
     }
 `
 
@@ -80,8 +81,13 @@ const HeaderContent = styled.span`
     justify-content: space-between;
     align-items: center;
 
+    > * {
+        margin: .5rem 0;
+    }
+
     @media (min-width: 450px){
         flex-direction: row;
+        margin: 0;
     }
 `
 
@@ -180,9 +186,9 @@ const Header = () => {
 
             <HeaderContent>
                 <BurgerMenu />
-                {/* <SidetittelCustomized>
+                {/* <HeadingCustomized size="2xlarge" level="1">
                     Status digitale tjenester
-                </SidetittelCustomized> */}
+                </HeadingCustomized> */}
                 <ProfileOrLogin name={name} navIdent={navIdent} />
             
             </HeaderContent>

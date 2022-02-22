@@ -86,7 +86,7 @@ const AreaElementContainer = styled.div`
         }
     }
     &.editting {
-        border-color: var(--navBla);
+        border-color: var(--navds-global-color-blue-500);
     }
 `
 
@@ -268,7 +268,7 @@ export const options = [
 
 const AreaRowContainer = styled.div`
     min-height: 5rem;
-    background-color: var(--navGraBakgrunn);
+    background-color: var(--navds-semantic-color-canvas-background);
 
     display: flex;
     flex-direction: row;
@@ -367,7 +367,7 @@ const AreaElements = styled.div`
 `
 
 const IconContainer = styled.section`
-	color: var(--navBla);
+	color: var(--navds-global-color-blue-500);
     font-size: 2rem;
     display: flex;
     align-items: center;

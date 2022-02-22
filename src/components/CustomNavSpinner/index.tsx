@@ -4,7 +4,7 @@ import Head from 'next/head'
 import NavFrontendSpinner from 'nav-frontend-spinner'
 
 
-const SpinnerCentered = styled.div`
+const Centered = styled.div`
     position: fixed;
     top: 50%;
     left: 50%;
@@ -13,9 +13,9 @@ const SpinnerCentered = styled.div`
 
 const CustomNavSpinner = () => {
     return (
-        <SpinnerCentered>
+        <Centered>
             <Head>
-                <title>Lasting av navstatus</title>
+                <title>Laster...</title>
                 <link rel="icon" href="/favicon.ico" />
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta name="title" content="Navstatus" />
@@ -42,7 +42,7 @@ const CustomNavSpinner = () => {
                 <meta property="twitter:image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
             </Head>
             <NavFrontendSpinner type="XXL"/>
-        </SpinnerCentered>
+        </Centered>
     )
 }
 

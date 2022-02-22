@@ -1,11 +1,10 @@
 import styled from 'styled-components'
+import { ToastContainer } from 'react-toastify';
 
 import Layout from '../../components/Layout';
 import Admin from '../../components/Admin';
 import MenuSelector from '../../components/Admin/MenuSelector';
-import { ToastContainer } from 'react-toastify';
 
-import 'react-toastify/dist/ReactToastify.css';
 
 const AdminContainer = styled.div`
     width: 100%;
@@ -19,7 +18,7 @@ export const HorizontalSeparator = styled.span`
 
     width: 100%;
     height: 100%;
-    background-color: var(--navGra20);
+    background-color: var(--navds-global-color-gray-200);
 `
 
 export const DynamicListContainer = styled.div`
@@ -37,7 +36,7 @@ export const DynamicListContainer = styled.div`
         }
 
         .colored {
-            color: var(--navBla);
+            color: var(--navds-global-color-blue-500);
             text-decoration: underline;
             background-color: none;
             border: none;

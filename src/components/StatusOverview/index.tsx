@@ -1,12 +1,11 @@
 import styled from 'styled-components'
-import { toast } from 'react-toastify';
-
-import { AreaServicesList } from '../../types/navServices'
-import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from '../../utils/servicesOperations';
+import { useRouter } from 'next/router';
 
 import { Bell } from '@navikt/ds-icons';
 import { BodyShort, Button, Heading, Panel } from '@navikt/ds-react';
-import { useRouter } from 'next/router';
+
+import { AreaServicesList } from '../../types/navServices'
+import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI } from '../../utils/servicesOperations';
 import { RouterAvvikshistorikk, RouterOpprettVarsling } from '../../types/routes';
 
 

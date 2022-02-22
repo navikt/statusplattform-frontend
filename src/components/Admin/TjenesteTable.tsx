@@ -73,7 +73,7 @@ const TjenesteContent = styled.div`
     padding-top: 1px;
     padding-bottom: 1px;
 
-    background-color: var(--navGraBakgrunn);
+    background-color: var(--navds-semantic-color-canvas-background);
 
     border-top: 1px solid rgba(0, 0, 0, 0.55);
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
@@ -101,7 +101,7 @@ const TjenesteContent = styled.div`
     }
 
     &.editting {
-        border-color: var(--navBla);
+        border-color: var(--navds-global-color-blue-500);
     }
 `
 
@@ -890,7 +890,6 @@ const EditConnectedAreas: React.FC<
             const updatedEdittedDependencies: Area[] = [...edittedConnectedAreas, selectedArea]
             updateConnectedAreas(updatedEdittedDependencies)
             toast.success("Kobling mot område lagt til")
-            console.log(updatedEdittedDependencies)
             return
         }
         toast.info("Ingen områder å koble tjenesten mot")

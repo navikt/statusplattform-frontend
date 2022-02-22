@@ -2,9 +2,9 @@ import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { toast } from 'react-toastify'
+import Head from 'next/head'
 import Link from 'next/link'
 
-import { Innholdstittel, Systemtittel } from 'nav-frontend-typografi'
 import { Expand } from '@navikt/ds-icons'
 import { Alert, BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
 
@@ -292,6 +292,7 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
 
 
     if(areasInDashboard.length == 0) {
+        changeTitle("Feil ved henting av dashbord")
         return (
             <NoAreasInDashboard />
         )
@@ -446,7 +447,7 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
 
 
 const FullScreenTileContainer = styled.div`
-    background-color: var(--navGraBakgrunn);
+    background-color: var(--navds-semantic-color-canvas-background);
     min-height: 100vh;
 
     display: flex;
@@ -672,12 +673,14 @@ const ExpandAllToggle: React.FC<{toggleExpandAll: () => void, expanded: boolean}
 
 const ErrorWrapper = styled.div`
     margin: 2rem 0;
-    background-color: var(--navBakgrunn);
+    background-color: var(--navds-semantic-color-canvas-background-light);
     border-radius: .25rem;
     padding: 1.5rem;
     max-width: 50rem;
+
     display: flex;
     flex-flow: column wrap;
+    
     h1 {
         margin-right: 1.5rem;
         padding-right: 1.5rem;
@@ -686,6 +689,8 @@ const ErrorWrapper = styled.div`
 `;
 
 const ErrorHeader = styled.div`
+    padding-bottom: 1rem;
+
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -696,13 +701,18 @@ const NoAreasInDashboard = () => {
 
     return (
         <ErrorWrapper>
+            <Head>
+                <title>Feil ved henting av dashbord</title>
+            </Head>
+
             <ErrorHeader>
-                <Innholdstittel>Ingen områder i Dashbord</Innholdstittel>
+                <Heading size="large" level="2">Ingen områder i Dashbord</Heading>
             </ErrorHeader>
-                <div className="error404__content">
-                    <p>
+            
+                <div>
+                    <BodyShort spacing>
                         Det fins ingen områder i dashbordet enda. Hvis du mener dette er feil, rapporter det til administratorene av statusplattformen.
-                    </p>
+                    </BodyShort>
                     <Link href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">
                         Meld gjerne fra her
                     </Link>
@@ -752,7 +762,7 @@ const MaintenanceScheduling = () => {
 
     return (
         <MaintenanceContainer>
-            <Systemtittel>Planlagt vedlikehold</Systemtittel>
+            <Heading size="medium" level="2">Planlagt vedlikehold</Heading>
             <MaintenancePanel>
 
                 <BodyShort>

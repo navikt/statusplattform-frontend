@@ -1,16 +1,16 @@
 import React from 'react'
 import styled from 'styled-components'
 
-import { ISource, SourceType } from '../../types/source';
-
 import { Telephone, Email } from '@navikt/ds-icons'
 import Lukknapp from 'nav-frontend-lukknapp';
 import { Button, TextField } from '@navikt/ds-react';
 
+import { ISource, SourceType } from '../../types/source';
+
 
 const SubscribeModalContainer = styled.div`
     position: relative;
-    background-color: var(--navBakgrunn);
+    background-color: var(--navds-semantic-color-canvas-background-light);
     box-shadow: 1px 1px 4px 5px #ccc;
     max-width: 250px;
     border-bottom-left-radius: 10px;
@@ -27,7 +27,7 @@ const SubscribeModalContainer = styled.div`
         padding: 0;
         margin: 0;
         border-bottom: 1px solid #ccc;
-        background-color: var(--navGra40);
+        background-color: var(--navds-global-color-gray-400);
 
         font-size: 1.5rem;
         color: white;
@@ -46,13 +46,13 @@ const ListItemWrapper = styled.li`
     border: 1px solid black;
     :hover {
         cursor: pointer;
-        background-color: var(--navBlaLighten40);
+        background-color: var(--navds-global-color-blue-100);
     }
     img {
         min-height: 3rem;
     }
     :active {
-        background: var(--navGra80);
+        background: var(--navds-global-color-gray-800);
     }
 `
 
@@ -74,7 +74,7 @@ const SubscribeModalContent = styled.div`
 
 const CustomLukknapp = styled(Lukknapp)`
     border: none;
-    color: var(--navBakgrunn);
+    color: var(--navds-semantic-color-canvas-background-light);
     :hover {
         background-color: transparent;
     }

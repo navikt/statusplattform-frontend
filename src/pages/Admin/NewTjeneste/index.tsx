@@ -6,7 +6,6 @@ import router from "next/router";
 import Layout from '../../../components/Layout';
 import { Area, Component, Service } from "../../../types/navServices";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
-import { fetchTypes } from "../../..//utils/fetchTypes";
 
 import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
 import { Delete } from "@navikt/ds-icons";

@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 
-import { Wrench, Close, Success, Warning, Error, SuccessFilled, WarningFilled, ErrorFilled } from '@navikt/ds-icons'
-import { SuccessStroke } from '@navikt/ds-icons'
+import { Wrench, Success, Warning, Error, SuccessFilled, WarningFilled, ErrorFilled } from '@navikt/ds-icons'
 
 
 
@@ -56,22 +55,22 @@ const TrafficLightsContainer = styled.div`
 
 
 export const SuccessCustomized = styled(Success)`
-    color: var(--navGronn) !important;
+    color: var(--navds-global-color-green-500) !important;
 `
 
 export const SuccessFilledCustomized = styled(SuccessFilled)`
-    color: var(--navGronn) !important;
+    color: var(--navds-global-color-green-500) !important;
 `
 
 
 
 
 export const WarningCustomized = styled(Warning)`
-    color: var(--navOransje) !important;
+    color: var(--navds-global-color-orange-500) !important;
 `;
 
 export const WarningFilledCustomized = styled(WarningFilled)`
-    color: var(--navOransje) !important;
+    color: var(--navds-global-color-orange-500) !important;
 `
 
 
@@ -91,8 +90,8 @@ export const ErrorFilledCustomized = styled(ErrorFilled)`
 export const NoStatusAvailableCircle = styled.span`
     height: 16px;
     width: 16px;
-    /* background-color: var(--navGronn); */
-    border: 4px solid var(--navGronn);
+    /* background-color: var(--navds-global-color-green-500); */
+    border: 4px solid var(--navds-global-color-green-500);
     border-radius: 50%;
     display: inline-block;
 `;

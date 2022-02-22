@@ -10,32 +10,38 @@ const FooterContainer = styled.footer`
     margin-top: auto; /*Footer always at bottom (if min.height of container is 100vh)*/
     background-color: white;
     border-top: 1px solid #eaeaea;
+
     display: flex;
     justify-content: center;
 `
+
 const FooterContent = styled.div`
     width: 100%;
     max-width: 1200px;
     padding: 1.75rem 1rem;
     display: flex;
     flex-direction: column;
+
     img {
         width: 63px;
+
         :hover {
             transform: scale(1.05)
         }
     }
 
     a {
-        color: var(--navBla);
+        color: var(--navds-global-color-blue-500);
         text-decoration: underline;
         :hover {
             text-decoration: none;
         }
     }
+
     p {
         margin: 0;
     }
+
     @media (min-width: 700px){ 
         flex-direction: row;
     }
@@ -45,11 +51,13 @@ const Row = styled.div`
     width: 100%;
     display: flex;
     flex-direction: column;
+
     &.top {
         /* align-items: center; */
         /* position: relative; */
         width: auto;
     }
+
     &.bottom {
         width: 100%;
         padding: 0.5rem 10px;
@@ -58,6 +66,7 @@ const Row = styled.div`
         justify-content: center;
         flex-direction: column;
     }
+
     > ul {
         padding: 0;
         list-style: none;
@@ -68,13 +77,16 @@ const Row = styled.div`
             padding: 0.625rem 0;
         }
     }
+    
     @media (min-width: 700px) {
         flex-direction: row;
+
         > ul {
             padding: 0;
             margin: 0;
             display: flex;
             flex-flow: row wrap;
+
             li {
                 margin: 0.375rem 2rem 0 0;
                 padding-top: 0;
@@ -87,7 +99,7 @@ const Separator = styled.span`
     display: none;
     @media (min-width: 700px) {
         display: block;
-        border-left: 1px solid var(--navBlaLighten40);
+        border-left: 1px solid var(--navds-global-color-blue-100);
         height: 100%;
         width: 1px;
         padding: 0 5ch;
@@ -109,6 +121,7 @@ const Footer = () => {
                         </a>
                     </span>
                 </Row>
+
                 <Row className="bottom">
                     <p>Arbeids- og velferdsetaten</p>
                     <ul>
@@ -117,6 +130,7 @@ const Footer = () => {
                         <li><a href="https://www.nav.no/no/person#">Del skjerm med veileder</a></li>
                     </ul>
                 </Row>
+                
                 {/* <Separator style={{display: router.pathname.includes("Dashboard") ? "block" : "none"}} />
                 {router.pathname.includes("Dashboard") &&
                     <div>

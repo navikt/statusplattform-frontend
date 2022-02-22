@@ -9,6 +9,7 @@ const NavInfoCircleContent = styled.div`
     max-width: 14rem;
     padding: 1.5rem 0;
     text-align: center;
+
     > span {
         font-size: small;
         width: 100%;
@@ -18,16 +19,20 @@ const NavInfoCircleContent = styled.div`
         justify-content: center;
         align-items: center;
     }
+    
     span:nth-child(2){
         font-size: 2.5em;
     }
+
     @media (min-width: 560px) {
         min-width: 11.35rem;
+
         > span {
             line-height: 1.5rem;
             font-size: normal;
             min-height: 2.7rem;
         }
+        
         span:nth-child(2) {
             font-size: 3.5em;
         }

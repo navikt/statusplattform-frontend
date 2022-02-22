@@ -154,6 +154,10 @@ const Incidents = ()  => {
 
 
 
+// -------------------------------
+
+
+
 const PanelCustomized = styled(Panel)`
     width: 650px;
 
@@ -177,6 +181,9 @@ const PanelCustomized = styled(Panel)`
         flex-basis: 100%;
     }
 `
+
+
+
 
 
 export const IncidentCard : React.FC<{

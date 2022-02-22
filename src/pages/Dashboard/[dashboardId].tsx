@@ -3,6 +3,8 @@ import { useRouter } from "next/router"
 import Head from 'next/head'
 import styled from "styled-components"
 
+import { Button } from "@navikt/ds-react"
+
 import CustomNavSpinner from "../../components/CustomNavSpinner"
 import DashboardTemplate from "./DashboardTemplate"
 import Layout from '../../components/Layout'
@@ -12,9 +14,8 @@ import { UserStateContext } from "../../components/ContextProviders/UserStatusCo
 import { fetchDashboardsList } from "../../utils/dashboardsAPI"
 import { RouterPrivatperson } from "../../types/routes"
 import { Dashboard, SubArea } from "../../types/navServices"
-
-import { Button } from "@navikt/ds-react"
 import { fetchSubAreas } from "../../utils/areasAPI"
+
 
 
 const DashboardFromId = () => {
@@ -35,7 +36,6 @@ const DashboardFromId = () => {
             setIsLoading(true)
             const dashboards: Dashboard[] = await fetchDashboardsList()
             const subAreas: SubArea[] = await fetchSubAreas()
-            console.log(subAreas)
             const dashboardMatchingTarget: Dashboard | undefined = (dashboards.find(dashboard => dashboard.name == dashboardTarget ? dashboard : undefined))
             setRetrievedDashboard(dashboardMatchingTarget)
             setIsLoading(false)

@@ -2,16 +2,16 @@ import styled from 'styled-components'
 import { useContext } from "react";
 import Link from 'next/link'
 
+import { Wrench } from '@navikt/ds-icons'
+import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
+import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-frontend-etiketter';
+import { BodyShort, Heading } from '@navikt/ds-react';
+
 import { ErrorCustomized, ErrorFilledCustomized, FilledWrench, NoStatusAvailableCircle, OutlinedWrench, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { Area, MaintenanceObject} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
 
-import { Warning, Wrench } from '@navikt/ds-icons'
-import { Systemtittel } from "nav-frontend-typografi";
-import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
-import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-frontend-etiketter';
-import { BodyShort } from '@navikt/ds-react';
 
 
 
@@ -63,18 +63,16 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
     }
 `
 
-const SystemtittelCustomized = styled(Systemtittel)`
-    border-radius: 10px;
-    background-color: white;
-    height: 50px;
+const HeadingCustomized = styled(Heading)`
+    padding: .5rem 0;
     display: flex;
     flex-direction: row;
+    
     span {
         display: flex;
         align-items: center;
-        /* text-overflow: hidden;
-        overflow: hidden; */
     }
+    
     svg {
         margin-right: 10px;
             
@@ -186,11 +184,10 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
             alignment={expanded == true ? "stretch" : "flex-start"}
             tittel={
                 <div className="top-content">
-                    <SystemtittelCustomized>
+                    <HeadingCustomized size="medium">
                         <span>{handleAndSetNavIcon(area.icon)}</span>
                         <span>{area.name}</span>
-                    
-                    </SystemtittelCustomized> 
+                    </HeadingCustomized> 
 
 
                     <SwitchEtikett status={area.status} maintenanceObject={testMaintenanceObject} />

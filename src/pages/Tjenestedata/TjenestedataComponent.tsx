@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { useContext, useState } from 'react';
+import { useRouter } from 'next/router';
 import Link from 'next/link'
 
 import { Innholdstittel } from 'nav-frontend-typografi';
@@ -9,7 +10,6 @@ import { BodyShort, Button, Heading } from '@navikt/ds-react';
 import { Area, Service } from '../../types/navServices';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { RouterOpprettVarsling, RouterTjenestedata } from '../../types/routes';
-import { useRouter } from 'next/router';
 import { IncidentCard } from '../../components/Incidents';
 import { useLoader } from '../../utils/useLoader';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
@@ -42,7 +42,7 @@ const ServiceContainer = styled.div`
     min-height: 75px;
 
     padding: 1rem;
-    /* background-color: var(--navBakgrunn); */
+    /* background-color: var(--navds-semantic-color-canvas-background-light); */
     border-radius: 10px;
 
     display: flex;
@@ -172,15 +172,15 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
 
                                 if(dependencies.length != index+1) {
                                     return (
-                                        <a key={id} href={RouterTjenestedata.PATH + element.id}>
+                                        <Link key={id} href={RouterTjenestedata.PATH + element.id}>
                                             {element.name + ", "}
-                                        </a>
+                                        </Link>
                                     )
                                 }
 
                                 return (
                                     <>
-                                        <a href={RouterTjenestedata.PATH + element.id} >{element.name}</a>
+                                        <Link href={RouterTjenestedata.PATH + element.id} >{element.name}</Link>
                                     </>
                                 )
                             })

@@ -1,10 +1,10 @@
 import styled from "styled-components"
 import Link from 'next/link'
 import { useState } from "react"
-
-import { BodyShort, Button, Checkbox, Heading, Radio, RadioGroup, TextField } from "@navikt/ds-react"
 import { useRouter } from "next/router"
 import { toast } from "react-toastify"
+
+import { BodyShort, Button, Checkbox, Heading, Radio, RadioGroup, TextField } from "@navikt/ds-react"
 import { Refresh } from "@navikt/ds-icons"
 import { RouterConfirmedCreation, RouterHomePage } from "../../types/routes"
 

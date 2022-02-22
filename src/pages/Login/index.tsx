@@ -2,7 +2,6 @@ import { useContext, useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { useRouter } from 'next/router';
 import { toast } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
 
 import { Button, TextField } from '@navikt/ds-react';
 
@@ -16,7 +15,7 @@ import CustomNavSpinner from '../../components/CustomNavSpinner';
 const LoginContainer = styled.div`
     margin-top: 2rem;
     padding: 1rem;
-    background-color: var(--navBakgrunn);
+    background-color: var(--navds-semantic-color-canvas-background-light);
     border-radius: 5px;
     width: 100%;
     max-width: 768px;
@@ -84,7 +83,7 @@ const LoginPage = () => {
         username: "",
         password: ""
     })
-    const [currentLocation, setCurrentLocation] = useState<string>()
+
     const [isLoading, setIsLoading] = useState(false)
     const { changeTitle } = useContext(TitleContext)
     
@@ -93,7 +92,6 @@ const LoginPage = () => {
     useEffect(() => {
         setIsLoading(true)
         changeTitle("Logg inn")
-        setCurrentLocation(location.hostname)
         setIsLoading(false)
     },[])
 

@@ -2,17 +2,16 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useContext } from 'react'
-
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify'
+
+import { BodyShort, Heading } from '@navikt/ds-react'
+import { Home, Next } from '@navikt/ds-icons'
 
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import Navbar from '../../components/Navbar'
 import { NavigatorContext } from '../ContextProviders/NavigatorContext'
-
-import { BodyShort, Heading } from '@navikt/ds-react'
-import { Home, Next } from '@navikt/ds-icons'
 import { TitleContext } from '../ContextProviders/TitleContext'
 import { RouterHomePage } from '../../types/routes';
 
@@ -23,7 +22,7 @@ import { RouterHomePage } from '../../types/routes';
 const MainContentContainer = styled.div`
     min-height: 100vh;
     margin-bottom: -100px;
-    background-color: var(--navGraBakgrunn);
+    background-color: var(--navds-semantic-color-canvas-background);
     overflow: hidden;
     font-family: "Source Sans Pro", Arial, sans-serif;
 
@@ -31,7 +30,7 @@ const MainContentContainer = styled.div`
     flex-direction: column;
 
     .skip-links {
-        background-color: var(--navBla);
+        background-color: var(--navds-global-color-blue-500);
         padding: 0.5rem;
         height: 2.75rem;
         width: 120px;
@@ -115,6 +114,9 @@ const MainContent = props => {
                     </li>
                 </ul>
             </nav>
+
+
+            
             {!router.pathname.includes("Login") &&
                 <div>
                     <Navbar/>
