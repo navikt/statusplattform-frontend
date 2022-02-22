@@ -60,7 +60,7 @@ const BurgerMenu = () => {
                 open={open}
                 onClose={() => setOpen(!open)}
                 anchorEl={buttonRef.current}
-                placement="auto"
+                placement="bottom"
             >
                 <Popover.Content>
                     <PopoverContent />
