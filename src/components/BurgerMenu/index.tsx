@@ -25,6 +25,8 @@ const BurgerMenuContainer = styled.div`
 `
 
 const PopoverCustomized = styled(Popover)`
+    display: flex;
+
     ul {
         list-style: none;
         padding: 0;
