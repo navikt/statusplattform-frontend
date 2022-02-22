@@ -25,8 +25,10 @@ const BurgerMenuContainer = styled.div`
 `
 
 const PopoverCustomized = styled(Popover)`
-    display: flex;
-
+    div {
+        display: flex;
+    }
+    
     ul {
         list-style: none;
         padding: 0;
@@ -48,7 +50,7 @@ const BurgerMenu = () => {
     const [open, setOpen] = useState(false)
 	
     useRouter()
-
+    console.log(open)
     return (
         <BurgerMenuContainer>
 
