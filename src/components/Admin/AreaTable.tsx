@@ -1,12 +1,12 @@
-import styled from 'styled-components'
 import { useContext, useEffect, useState } from "react";
+import router from 'next/router';
 import Head from 'next/head'
+import styled from 'styled-components'
 import { toast } from 'react-toastify';
 
 import { Bag, Calculator, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, Saving, SocialAid } from '@navikt/ds-icons'
 
 import { Area, Service } from '../../types/navServices';
-import { Element } from 'nav-frontend-typografi';
 
 import { CloseCustomized, DependencyList } from '.';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
@@ -15,7 +15,6 @@ import { ModalInner } from '.';
 import { getIconsFromGivenCode } from '../../utils/servicesOperations';
 import { useLoader } from '../../utils/useLoader';
 import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react';
-import router from 'next/router';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { deleteArea, deleteServiceFromArea, fetchAreas, postAdminArea, putServiceToArea, updateArea } from '../../utils/areasAPI';
 import { fetchServices } from '../../utils/servicesAPI';
@@ -673,7 +672,7 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
                                 {servicesInArea.length > 0 &&
                                     <ServicesInAreaList>
                                         <EditDependeciesContainer>
-                                            <Element>Tjenester i område:</Element>
+                                            <BodyShort spacing><b>Tjenester i område:</b></BodyShort>
                                             <DependencyList>
                                                 {servicesInArea.map(service => {
                                                     return (

@@ -1,11 +1,12 @@
 import 'react-dropdown/style.css';
 import styled from 'styled-components'
 
+import { Close } from '@navikt/ds-icons';
+
 import AreaTable from './AreaTable';
 import TjenesteTable from './TjenesteTable';
 import DashboardTable from './DashboardTable';
 import { adminMenu, useFindCurrentTab } from './MenuSelector';
-import { Close } from '@navikt/ds-icons';
 import KomponentTable from './KomponentTable';
 
 
