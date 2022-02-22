@@ -64,7 +64,6 @@ export const DynamicListContainer = styled.div`
 `
 
  const AdminPage = () => {
-
     return (
         <Layout>
             <AdminContainer>
