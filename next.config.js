@@ -18,6 +18,10 @@ module.exports = withPlugins(
   ],
 
 {
+  i18n: {
+    locales: ['no'],
+    defaultLocale: 'no',
+  },
   async rewrites() {
     // sett opp miljøvar
     return process.env.NODE_ENV !== 'production'
