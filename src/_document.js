@@ -23,7 +23,7 @@ export default class MyDocument extends Document {
 
     render() {
         return (
-            <html prefix="og: https://ogp.me/ns#">
+            <html prefix="og: https://ogp.me/ns#" lang="nb-no">
             <Head>
                 <title>Status Nav digitale tjenester</title>
                 {/* Step 5: Output the styles in the head  */}

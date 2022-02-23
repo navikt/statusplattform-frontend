@@ -180,7 +180,7 @@ const Header = () => {
     return (
         <CustomHeader>
             <a href={RouterHomePage.PATH}>
-                <img src="/assets/nav-logo/png/red.png" alt="Til forsiden" />
+                <img src="/assets/nav-logo/png/red.png" alt="Til forsiden" role="presentation" />
             </a>
 
             <HeaderContent>
