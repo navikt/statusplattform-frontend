@@ -575,7 +575,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                     </div>
 
                     <div className="dependencies">
-                        <BodyShort><b>Komponentavhengigheter</b></BodyShort>
+                        <BodyShort><b>Tilkoblet områder</b></BodyShort>
                         <EditConnectedAreas
                             allAreas={allAreas} service={service} updatedService={updatedService}
                         />

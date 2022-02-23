@@ -8,6 +8,8 @@ import TjenesteTable from './TjenesteTable';
 import DashboardTable from './DashboardTable';
 import { adminMenu, useFindCurrentTab } from './MenuSelector';
 import KomponentTable from './KomponentTable';
+import { useEffect, useState } from 'react';
+import CustomNavSpinner from '../CustomNavSpinner';
 
 
 
