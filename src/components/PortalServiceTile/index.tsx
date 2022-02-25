@@ -11,6 +11,7 @@ import { ErrorCustomized, ErrorFilledCustomized, FilledWrench, NoStatusAvailable
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { Area, MaintenanceObject} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
+import { StringifyOptions } from 'querystring';
 
 
 
@@ -179,18 +180,21 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
 
     const testMaintenanceObject: MaintenanceObject = {isPlanned: false, message: "Planlagt 24. desember"}
 
+    const { name, status } = area
+
     return (
         <EkspanderbartpanelCustomized
             alignment={expanded == true ? "stretch" : "flex-start"}
             tittel={
                 <div className="top-content">
                     <HeadingCustomized size="medium">
-                        <span>{handleAndSetNavIcon(area.icon)}</span>
-                        <span>{area.name}</span>
+                        {/* <span>{handleAndSetNavIcon(area.icon)}</span> */}
+                        <span><StatusIconHandler status={status} isArea={true} /></span>
+                        <span>{name}</span>
                     </HeadingCustomized> 
 
 
-                    <SwitchEtikett status={area.status} maintenanceObject={testMaintenanceObject} />
+                    {/* <SwitchEtikett status={area.status} maintenanceObject={testMaintenanceObject} /> */}
 
                     {(testMaintenanceObject.message && testMaintenanceObject.isPlanned) ?
                         <BodyShort className="maintenance-message">
@@ -212,7 +216,8 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
                         return (
                             <li key={service.name}>
                                 <LenkeCustomized href={"/Tjenestedata/" + service.id}>
-                                    <section>{handleAndSetStatusIcon(service.status, false)} {service.name}</section>
+                                    {/* <section>{handleAndSetStatusIcon(service.status, false)} {service.name}</section> */}
+                                    <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
                                 </LenkeCustomized>
                             </li>
                         )
@@ -221,7 +226,8 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
                         return (
                             <li key={service.name}>
                                 <LenkeCustomized href={"/Tjenestedata/" + service.id}>
-                                    <section>{handleAndSetStatusIcon(service.status, false)} {service.name}</section>
+                                    {/* <section>{handleAndSetStatusIcon(service.status, false)} {service.name}</section> */}
+                                    <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
                                 </LenkeCustomized>
                             </li>
                         )
@@ -262,5 +268,28 @@ const SwitchEtikett: React.FC<{maintenanceObject?: MaintenanceObject, status: st
             })()}
         
         </div>
+    )
+}
+
+
+
+
+
+export const StatusIconHandler: React.FC<{status: string, isArea: boolean}> = ({status, isArea}) => {
+    return (
+        <>
+            {(() => {
+                switch (status) {
+                    case 'OK':
+                        return <SuccessFilledCustomized aria-label={isArea ? "Områdestatus: OK" : "Tjenestestatus: OK"}/>
+                    case 'ISSUE':
+                        return <WarningFilledCustomized aria-label={isArea ? "Områdestatus: Tjenester i området har feil" : "Tjenestestatus: Feil på tjeneste"}/>
+                    case 'DOWN':
+                        return <ErrorFilledCustomized aria-label={isArea ? "Områdestatus: Tjenester i området er nede" : "Tjenestestatus: Nede"}/>
+                    default:
+                        return null
+                }
+            })()}   
+        </>
     )
 }
