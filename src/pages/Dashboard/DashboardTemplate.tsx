@@ -52,7 +52,7 @@ const DashboardContainer = styled.div`
 `
 
 const DigitalServicesContainer = styled.div`
-    width: 100%;
+    /* width: 100%; */
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -92,7 +92,7 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     @media (min-width: 500px) {
         max-width: ${(props) => props.maxWidth}px;
     }
-    @media (min-width: 1200px) {
+    @media (min-width: 1339px) {
         max-width: ${(props) => props.maxWidth}px;
     }
 
@@ -217,7 +217,7 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
     let maxWidth = width > 
         1275+64 ? 1275+64 : (
             window.innerWidth > 
-                1275+32 ? 1275+32 : (
+                1275+64 ? 1275+64 : (
                     window.innerWidth > 
                         850+32 ? 850+32 : 425
                     )
@@ -733,15 +733,25 @@ const MaintenanceContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+
     h2 {
         width: 100%;
-        max-width: 1080px;
+    }
+
+    /* Temporary width-adjustments */
+    @media(min-width: 425px) {
+        width: 425px;
+    }
+    @media(min-width: 882px) {
+        width: 882px;
+    }
+    @media(min-width: 1339px) {
+        width: 1339px;
     }
 `
 
 const MaintenancePanel = styled(Panel) `
     width: 100%;
-    max-width: 1080px;
 
     display: flex;
     flex-direction: row;
@@ -749,8 +759,22 @@ const MaintenancePanel = styled(Panel) `
     align-items: center;
     gap: 5ch;
 
+    button {
+        word-break: break-all;
+    }
+
     & > * {
         flex-basis: 20% 70% 10%;
+    }
+    /* Temporary width-adjustments */
+    @media(min-width: 425px) {
+        width: 425px;
+    }
+    @media(min-width: 882px) {
+        width: 882px;
+    }
+    @media(min-width: 1339px) {
+        width: 1339px;
     }
 `
 

@@ -10,14 +10,24 @@ import { RouterAvvikshistorikk, RouterOpprettVarsling } from '../../types/routes
 
 
 const StatusOverviewContainer = styled.div`
-    max-width: 1080px;
     width: 100%;
     padding: 0;
-    margin: 50px;
+    margin: 50px 0;
 
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+
+    /* Temporary width-adjustments */
+    @media(min-width: 425px) {
+        width: 425px;
+    }
+    @media(min-width: 882px) {
+        width: 882px;
+    }
+    @media(min-width: 1339px) {
+        width: 1339px;
+    }
 `;
 
 const StatusBannerContainer = styled(Panel)`
