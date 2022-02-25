@@ -18,6 +18,7 @@ import { UserData } from '../../types/userData'
 import { TitleContext } from '../../components/ContextProviders/TitleContext'
 import { fetchDashboard } from '../../utils/dashboardsAPI'
 import { RouterAvvikshistorikk, RouterError } from '../../types/routes'
+import { ErrorFilledCustomized, SuccessFilledCustomized, WarningFilledCustomized, WrenchFilledCustomized } from '../../components/TrafficLights'
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
@@ -396,6 +397,7 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
             
             </DigitalServicesContainer>
             <MaintenanceScheduling />
+            <IconDescription />
         </DashboardContainer>
     )
 }
@@ -803,6 +805,77 @@ const MaintenanceScheduling = () => {
 
             </MaintenancePanel>
         </MaintenanceContainer>
+    )
+}
+
+
+
+
+const IconDescriptionContainer = styled.div`
+    padding-top: 1rem;
+
+    ul {
+        list-style: none;
+        padding: 0;
+
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+
+        @media(min-width: 450px) {
+            width: 425px;
+            flex-flow: row wrap;
+        }
+
+        @media(min-width: 902px) {
+            width: 882px;
+            flex-direction: row;
+        }
+
+        @media(min-width: 1359px) {
+            width: 1339px;
+        }
+
+        
+
+        li {            
+            display: inline-flex;
+            flex-basis: 50%;
+        }
+
+        @media(min-width: 450px) and (max-width: 902px) {
+            li:nth-child(2n) {
+                justify-content: flex-end;
+            }
+        }
+
+        @media(min-width: 902px) {
+            li {
+                flex-basis: auto;
+            }
+        }
+    }
+`
+
+const IconDescription = () => {
+    
+    return (
+        <IconDescriptionContainer>
+            <ul>
+                <li>
+                    <SuccessFilledCustomized /> Status OK
+                </li>
+                <li>
+                    <WarningFilledCustomized /> Feil oppdaget
+                </li>
+                <li>
+                    <ErrorFilledCustomized /> Nede
+                </li>
+                <li>
+                    <WrenchFilledCustomized /> Under vedlikehold
+                </li>
+            </ul>
+        </IconDescriptionContainer>
     )
 }
 
