@@ -7,7 +7,7 @@ import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-frontend-etiketter';
 import { BodyShort, Heading } from '@navikt/ds-react';
 
-import { ErrorCustomized, ErrorFilledCustomized, FilledWrench, NoStatusAvailableCircle, OutlinedWrench, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized } from '../../components/TrafficLights'
+import { ErrorCustomized, ErrorFilledCustomized, WrenchFilledCustomized, NoStatusAvailableCircle, WrenchOutlinedCustomized, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { Area, MaintenanceObject} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
@@ -153,7 +153,7 @@ export const handleAndSetStatusIcon = (status: string, isInternal?: boolean): an
         case 'ISSUE':
             return <WarningCustomized />
         case 'MAINTENANCE':
-            return <OutlinedWrench />
+            return <WrenchOutlinedCustomized />
         case null:
             if(isInternal) {
                 return <NoStatusAvailableCircle />
@@ -250,7 +250,7 @@ const SwitchEtikett: React.FC<{maintenanceObject?: MaintenanceObject, status: st
         <div className="etikett-container">
             {maintenanceObject.isPlanned && 
                 <EtikettInfo>
-                    <FilledWrench /> Vedlikehold pågår
+                    <WrenchFilledCustomized /> Vedlikehold pågår
                 </EtikettInfo>
             }
             {(() => {

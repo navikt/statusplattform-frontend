@@ -15,6 +15,8 @@ import { fetchDashboardsList } from "../../utils/dashboardsAPI"
 import { RouterPrivatperson } from "../../types/routes"
 import { Dashboard, SubArea } from "../../types/navServices"
 import { fetchSubAreas } from "../../utils/areasAPI"
+import { SuccessFilled, WarningFilled, WrenchFilled } from "@navikt/ds-icons"
+import { ErrorFilledCustomized, WrenchFilledCustomized, SuccessFilledCustomized, WarningFilledCustomized } from "../../components/TrafficLights"
 
 
 
@@ -103,6 +105,7 @@ const DashboardFromId = () => {
             </Head>
             <FullScreenButton isFullScreen={isFullScreen} changeIsFullScreen={(changed: boolean) => changeIsFullScreen(changed)} />
             <DashboardTemplate dashboard={retrievedDashboard} isFullScreen={isFullScreen}/>
+            <IconDescription />
         </Layout>
     )
 }
@@ -131,6 +134,74 @@ export const FullScreenButton: React.FC<{isFullScreen: boolean, changeIsFullScre
 }
 
 
+
+const IconDescriptionContainer = styled.div`
+    padding-top: 1rem;
+
+    ul {
+        list-style: none;
+        padding: 0;
+
+        display: flex;
+        justify-content: space-between;
+        flex-direction: column;
+
+        @media(min-width: 450px) {
+            width: 425px;
+            flex-flow: row wrap;
+        }
+
+        @media(min-width: 902px) {
+            width: 882px;
+            flex-direction: row;
+        }
+
+        @media(min-width: 1359px) {
+            width: 1339px;
+        }
+
+        
+
+        li {            
+            display: inline-flex;
+            flex-basis: 50%;
+        }
+
+        @media(min-width: 450px) and (max-width: 902px) {
+            li:nth-child(2n) {
+                justify-content: flex-end;
+            }
+        }
+
+        @media(min-width: 902px) {
+            li {
+                flex-basis: auto;
+            }
+        }
+    }
+`
+
+const IconDescription = () => {
+    
+    return (
+        <IconDescriptionContainer>
+            <ul>
+                <li>
+                    <SuccessFilledCustomized /> Status OK
+                </li>
+                <li>
+                    <WarningFilledCustomized /> Feil oppdaget
+                </li>
+                <li>
+                    <ErrorFilledCustomized /> Nede
+                </li>
+                <li>
+                    <WrenchFilledCustomized /> Under vedlikehold
+                </li>
+            </ul>
+        </IconDescriptionContainer>
+    )
+}
 
 
 

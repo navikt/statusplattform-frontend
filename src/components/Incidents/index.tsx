@@ -8,7 +8,7 @@ import { Bell } from '@navikt/ds-icons'
 
 import { Service } from '../../types/navServices'
 import CustomNavSpinner from '../CustomNavSpinner'
-import { ErrorCustomized, OutlinedWrench, SuccessCustomized, WarningCustomized } from '../TrafficLights'
+import { ErrorCustomized, WrenchOutlinedCustomized, SuccessCustomized, WarningCustomized } from '../TrafficLights'
 import { TitleContext } from '../ContextProviders/TitleContext'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { handleAndSetStatusIcon } from '../PortalServiceTile'
@@ -99,7 +99,7 @@ const Incidents = ()  => {
 
                 <Panel border className="incident-row">
                     <Heading spacing size="small" level="3">
-                        <OutlinedWrench />
+                        <WrenchOutlinedCustomized />
                         Tittel på avvik
                     </Heading>
                     

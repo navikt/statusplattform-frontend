@@ -22,10 +22,10 @@ const StatusOverviewContainer = styled.div`
     @media(min-width: 425px) {
         width: 425px;
     }
-    @media(min-width: 882px) {
+    @media(min-width: 902px) {
         width: 882px;
     }
-    @media(min-width: 1339px) {
+    @media(min-width: 1359px) {
         width: 1339px;
     }
 `;

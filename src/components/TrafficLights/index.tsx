@@ -77,11 +77,11 @@ export const WarningFilledCustomized = styled(WarningFilled)`
 
 
 export const ErrorCustomized = styled(Error)`
-    color: var(--redError) !important;
+    color: var(--navds-global-color-red-500) !important;
 `
 
 export const ErrorFilledCustomized = styled(ErrorFilled)`
-    color: var(--redError) !important;
+    color: var(--navds-global-color-red-500) !important;
 `
 
 
@@ -96,9 +96,11 @@ export const NoStatusAvailableCircle = styled.span`
     display: inline-block;
 `;
 
-const WrenchCustomized = styled(Wrench)`
-    color: var(--navds-global-color-deepblue-400);
-
+const WrenchCustomizedBlue = styled(Wrench)`
+    color: var(--navds-global-color-deepblue-400) !important;
+`
+const WrenchCustomizedWhite = styled(Wrench)`
+    color: var(--navds-semantic-color-canvas-background) !important;
 `
 
 
@@ -107,15 +109,17 @@ const Outine = styled.span`
     border-radius: 50%;
     border: 1px solid var(--navds-global-color-deepblue-400);
 
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
+
     display: inline-flex;
     justify-content: center;
     align-items: center;
 
     svg {
-        width: 16px;
-        height: 16px;
+        display: inline-block;
+        width: 12px;
+        height: 12px;
     }
 `
 
@@ -124,32 +128,35 @@ const Fill = styled.span`
     border: 1px solid var(--navds-global-color-deepblue-400);
     background-color: var(--navds-global-color-deepblue-400);
 
-    width: 24px;
-    height: 24px;
+    width: 18px;
+    height: 18px;
+
+    text-align: center;
+    
     display: inline-flex;
     justify-content: center;
     align-items: center;
 
     svg {
-        width: 16px;
-        height: 16px;
+        width: 12px;
+        height: 12px;
     }
 `
 
 
 
-export const OutlinedWrench = () => {
+export const WrenchOutlinedCustomized = () => {
     return (
         <Outine>
-            <WrenchCustomized />
+            <WrenchCustomizedBlue />
         </Outine>
     )
 }
 
-export const FilledWrench = () => {
+export const WrenchFilledCustomized = () => {
     return (
         <Fill>
-            <WrenchCustomized />
+            <WrenchCustomizedWhite />
         </Fill>
     )
 }
@@ -171,7 +178,7 @@ const TrafficLights = ({isInternal}: Props) => {
                 </div>
                 <div className="extra-info-wrapper">
                     {isInternal && <div><NoStatusAvailableCircle /><p> Status ikke levert av team </p></div>}
-                    <div><OutlinedWrench /><p> Planlagt vedlikehold</p></div>
+                    <div><WrenchOutlinedCustomized /><p> Planlagt vedlikehold</p></div>
                 </div>
             </TrafficLightsContainer>
         </div>

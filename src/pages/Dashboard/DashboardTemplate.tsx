@@ -52,7 +52,6 @@ const DashboardContainer = styled.div`
 `
 
 const DigitalServicesContainer = styled.div`
-    /* width: 100%; */
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -92,7 +91,7 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     @media (min-width: 500px) {
         max-width: ${(props) => props.maxWidth}px;
     }
-    @media (min-width: 1339px) {
+    @media (min-width: 1359px) {
         max-width: ${(props) => props.maxWidth}px;
     }
 
@@ -213,13 +212,13 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
     }
 
 
-    // +32 because we have a 32*2px (right and left gaps) flex-gap between tiles which we need to accomodate for
+    // +32 because we have a 32*2px (right and left gaps. additional +20 because of content margin) flex-gap between tiles which we need to accomodate for
     let maxWidth = width > 
-        1275+64 ? 1275+64 : (
+        1275+84 ? 1275+84 : (
             window.innerWidth > 
-                1275+64 ? 1275+64 : (
+                1275+84 ? 1275+84 : (
                     window.innerWidth > 
-                        850+32 ? 850+32 : 425
+                        850+52 ? 850+52 : 425
                     )
             );
 
@@ -742,10 +741,10 @@ const MaintenanceContainer = styled.div`
     @media(min-width: 425px) {
         width: 425px;
     }
-    @media(min-width: 882px) {
+    @media(min-width: 902px) {
         width: 882px;
     }
-    @media(min-width: 1339px) {
+    @media(min-width: 1359px) {
         width: 1339px;
     }
 `
@@ -754,9 +753,10 @@ const MaintenancePanel = styled(Panel) `
     width: 100%;
 
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
     justify-content: space-between;
     align-items: center;
+
     gap: 5ch;
 
     button {
@@ -768,12 +768,13 @@ const MaintenancePanel = styled(Panel) `
     }
     /* Temporary width-adjustments */
     @media(min-width: 425px) {
+        flex-flow: row nowrap;
         width: 425px;
     }
-    @media(min-width: 882px) {
+    @media(min-width: 902px) {
         width: 882px;
     }
-    @media(min-width: 1339px) {
+    @media(min-width: 1359px) {
         width: 1339px;
     }
 `
