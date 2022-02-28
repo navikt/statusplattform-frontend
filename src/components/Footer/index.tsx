@@ -116,8 +116,8 @@ const Footer = () => {
             <FooterContent>
                 <Row className="top">
                     <span>
-                        <a href="https://www.nav.no/no/person#">
-                            <img src="/assets/nav-logo/png/black.png" alt="Til forsiden" role="presentation" />
+                        <a href="https://www.nav.no/no/person#" aria-label="Lenke til nav.no">
+                            <img src="/assets/nav-logo/png/black.png" alt="Til forsiden" aria-hidden="true" />
                         </a>
                     </span>
                 </Row>

@@ -7,7 +7,7 @@ import Tabs from 'nav-frontend-tabs';
 
 const DashboardTabMenu = styled.header`
     width: 100%;
-    background-color: var(--navBakgrunn);
+    background-color: var(--navds-semantic-color-canvas-background-light);
     height: 50px;
 `
 

@@ -35,16 +35,21 @@ const Nav = styled.nav `
 				border-bottom: transparent 3px solid;
 				
 				:hover {
-					border-bottom: var(--navBla) 3px solid;
+					border-bottom: var(--navds-global-color-blue-500) 3px solid;
 				}
 			}
 
 			:focus, :active {
 				color: black;
 				background-color: transparent;
-				outline: var(--fokusFarge) 3px solid;
+				outline: var(--navds-semantic-color-focus) 3px solid;
 				box-shadow: 0 0 0 0;
 				outline-offset: -3px;
+			}
+
+			a {
+				text-decoration: none;
+				color: black;
 			}
 		}
 	}
@@ -64,7 +69,8 @@ const LenkeSpacer = styled.div`
 	align-items: center;
 
 	&.active {
-		border-bottom: var(--navBla) 3px solid;
+		border-bottom: var(--navds-global-color-blue-500) 3px solid;
+		
 		p {
 			font-weight: bold !important;
 		}
@@ -80,36 +86,44 @@ export default function Navbar() {
 	return (
 		<Nav>
 			<ul role="tablist">
-				<li role="tab">
+				<li role="tab" onClick={() => router.push(RouterPrivatperson.PATH)}>
 					<Link href={RouterPrivatperson.PATH}>
-						<LenkeSpacer className={`${(router.asPath === RouterPrivatperson.PATH) ? "active" : "inactive"}`}>
-							<BodyShort size="small" className={`${router.pathname === "/Privatperson" ? "active" : ""}`}>{RouterPrivatperson.NAME}</BodyShort>
-						</LenkeSpacer>
+						<a>
+							<LenkeSpacer className={`${(router.asPath === RouterPrivatperson.PATH) ? "active" : "inactive"}`}>
+								<BodyShort size="small" className={`${router.pathname === "/Privatperson" ? "active" : ""}`}>{RouterPrivatperson.NAME}</BodyShort>
+							</LenkeSpacer>
+						</a>
 					</Link>
 				</li>
 
-				<li role="tab">
+				<li role="tab" onClick={() => router.push(RouterArbeidsgiver.PATH)}>
 					<Link href={RouterArbeidsgiver.PATH}>
-						<LenkeSpacer className={`${(router.asPath === RouterArbeidsgiver.PATH) ? "active" : "inactive"}`}>
-							<BodyShort size="small" className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>{RouterArbeidsgiver.NAME}</BodyShort>
-						</LenkeSpacer>
+						<a>
+							<LenkeSpacer className={`${(router.asPath === RouterArbeidsgiver.PATH) ? "active" : "inactive"}`}>
+								<BodyShort size="small" className={`${router.pathname === "/Arbeidsgiver" ? "active" : ""}`}>{RouterArbeidsgiver.NAME}</BodyShort>
+							</LenkeSpacer>
+						</a>
 					</Link>
 				</li>
 
-				<li role="tab">
+				<li role="tab" onClick={() => router.push(RouterSamarbeidspartner.PATH)}>
 					<Link href={RouterSamarbeidspartner.PATH}>
-						<LenkeSpacer className={`${(router.asPath === RouterSamarbeidspartner.PATH) ? "active" : "inactive"}`}>
-							<BodyShort size="small" className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>{RouterSamarbeidspartner.NAME}</BodyShort>
-						</LenkeSpacer>
+						<a>
+							<LenkeSpacer className={`${(router.asPath === RouterSamarbeidspartner.PATH) ? "active" : "inactive"}`}>
+								<BodyShort size="small" className={`${router.pathname === "/Samarbeidspartner" ? "active" : ""}`}>{RouterSamarbeidspartner.NAME}</BodyShort>
+							</LenkeSpacer>
+						</a>
 					</Link>
 				</li>
 
 				{user.navIdent &&
-					<li role="tab">
+					<li role="tab" onClick={() => router.push(RouterInternt.PATH)}>
 						<Link href={RouterInternt.PATH}>
-							<LenkeSpacer className={`${(router.asPath === RouterInternt.PATH) ? "active" : "inactive"}`}>
-								<BodyShort size="small" className={`${router.pathname === "/Internt" ? "active" : ""}`}>{RouterInternt.NAME}</BodyShort>
-							</LenkeSpacer>
+							<a>
+								<LenkeSpacer className={`${(router.asPath === RouterInternt.PATH) ? "active" : "inactive"}`}>
+									<BodyShort size="small" className={`${router.pathname === "/Internt" ? "active" : ""}`}>{RouterInternt.NAME}</BodyShort>
+								</LenkeSpacer>
+							</a>
 						</Link>
 					</li>
 				}

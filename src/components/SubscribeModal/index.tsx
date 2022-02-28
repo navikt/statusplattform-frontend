@@ -102,7 +102,7 @@ const subscribeSources: ISource[] = [
     },{
         id: SourceType.slack,
         title: "Slack",
-        content: <img src="/assets/images/slack-icon.svg" alt="Slack icon" role="presentation" />,
+        content: <img src="/assets/images/slack-icon.svg" alt="Slack icon" aria-labelledby="Slack-ikon" />,
         text: "Du kan få statusmeldinger rett i Slack. Trykk nedenfor for å starte abonnering",
     },{
         id: SourceType.close,

@@ -21,14 +21,17 @@ const CustomHeader = styled.header`
     padding-bottom: 0.5rem;
     background-color: white;
     border-bottom: 1px solid #c6c2bf;
+
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
     align-items: center;
+
     img {
         max-width: 84px;
         max-height: 55px;
         margin-left: 1rem;
+
         :hover {
             transform: scale(1.05)
         }
@@ -38,6 +41,7 @@ const CustomHeader = styled.header`
         font-size: 1.875rem;
         font-weight: 600;
     }
+
     @media(min-width: 450px) {
         flex-flow: column wrap;
     }
@@ -45,10 +49,12 @@ const CustomHeader = styled.header`
         img {
             margin-left: 0;
         }
+
         padding: 0 1rem;
         flex-flow: row nowrap;
         align-items: center;
         justify-content: flex-start;
+        
         > span {
             padding-left: 20px;
         }
@@ -179,8 +185,8 @@ const Header = () => {
 
     return (
         <CustomHeader>
-            <a href={RouterHomePage.PATH}>
-                <img src="/assets/nav-logo/png/red.png" alt="Til forsiden" role="presentation" />
+            <a href={RouterHomePage.PATH} aria-label="Lenke til forside">
+                <img src="/assets/nav-logo/png/red.png" alt="Til forsiden" aria-hidden="true" />
             </a>
 
             <HeaderContent>
