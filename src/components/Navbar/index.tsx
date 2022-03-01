@@ -11,7 +11,6 @@ import { RouterArbeidsgiver, RouterInternt, RouterPrivatperson, RouterSamarbeids
 
 const Nav = styled.nav `
 	height: 2.75rem;
-    background-color: white;
 	border-bottom: #c6c2bf 1px solid;
 
 	display: none;
