@@ -188,13 +188,9 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
             tittel={
                 <div className="top-content">
                     <HeadingCustomized size="medium">
-                        {/* <span>{handleAndSetNavIcon(area.icon)}</span> */}
                         <span><StatusIconHandler status={status} isArea={true} /></span>
                         <span>{name}</span>
                     </HeadingCustomized> 
-
-
-                    {/* <SwitchEtikett status={area.status} maintenanceObject={testMaintenanceObject} /> */}
 
                     {(testMaintenanceObject.message && testMaintenanceObject.isPlanned) ?
                         <BodyShort className="maintenance-message">
@@ -216,7 +212,6 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
                         return (
                             <li key={service.name}>
                                 <LenkeCustomized href={"/Tjenestedata/" + service.id}>
-                                    {/* <section>{handleAndSetStatusIcon(service.status, false)} {service.name}</section> */}
                                     <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
                                 </LenkeCustomized>
                             </li>
@@ -226,7 +221,6 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
                         return (
                             <li key={service.name}>
                                 <LenkeCustomized href={"/Tjenestedata/" + service.id}>
-                                    {/* <section>{handleAndSetStatusIcon(service.status, false)} {service.name}</section> */}
                                     <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
                                 </LenkeCustomized>
                             </li>
@@ -237,37 +231,6 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
                 )}
             </ServicesList>
         </EkspanderbartpanelCustomized>
-    )
-}
-
-
-
-
-
-const SwitchEtikett: React.FC<{maintenanceObject?: MaintenanceObject, status: string}> = ({maintenanceObject, status}) => {
-    
-    return (
-        <div className="etikett-container">
-            {maintenanceObject.isPlanned && 
-                <EtikettInfo>
-                    <WrenchFilledCustomized /> Vedlikehold pågår
-                </EtikettInfo>
-            }
-            {(() => {
-                switch (status) {
-                    case 'OK':
-                        return <EtikettSuksess><SuccessFilledCustomized/> Fungerer normalt</EtikettSuksess>
-
-                    case 'ISSUE':
-                        return <EtikettFokus><WarningFilledCustomized/> Redusert funksjonalitet</EtikettFokus>
-                    case 'DOWN':
-                        return <EtikettAdvarsel><ErrorFilledCustomized/> Feil på tjeneste</EtikettAdvarsel>
-                    default:
-                        return null
-                }
-            })()}
-        
-        </div>
     )
 }
 
