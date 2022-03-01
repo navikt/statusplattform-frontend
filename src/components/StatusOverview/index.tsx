@@ -31,6 +31,8 @@ const StatusOverviewContainer = styled.div`
 `;
 
 const StatusBannerContainer = styled(Panel)`
+    background-color: transparent;
+
     display: flex;
     justify-content: space-between;
     flex-direction: column;
@@ -92,7 +94,7 @@ const StatusOverview = (props: AreaServicesList) => {
     return (
         <StatusOverviewContainer>
 
-            <StatusBannerContainer border={true}>
+            <StatusBannerContainer>
                 <div>
                     <Heading spacing size="medium" level="4">
                         Avvik

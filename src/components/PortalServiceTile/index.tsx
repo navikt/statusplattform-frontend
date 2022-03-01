@@ -22,6 +22,10 @@ import { StringifyOptions } from 'querystring';
 const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: string}>`
     width: 100%;
 
+    -moz-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
+    -webkit-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
+    box-shadow: 0 0 10px rgba(0,0,0, 0.2);
+
     .top-content {
         .etikett-container {
             margin-right: 5px;
@@ -185,6 +189,7 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
     return (
         <EkspanderbartpanelCustomized
             alignment={expanded == true ? "stretch" : "flex-start"}
+            border={false}
             tittel={
                 <div className="top-content">
                     <HeadingCustomized size="medium">

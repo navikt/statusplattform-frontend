@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import Head from 'next/head'
 import styled from "styled-components"
 
-import { Button } from "@navikt/ds-react"
+import { BodyShort, Button } from "@navikt/ds-react"
 
 import CustomNavSpinner from "../../components/CustomNavSpinner"
 import DashboardTemplate from "./DashboardTemplate"
@@ -15,6 +15,7 @@ import { fetchDashboardsList } from "../../utils/dashboardsAPI"
 import { RouterPrivatperson } from "../../types/routes"
 import { Dashboard, SubArea } from "../../types/navServices"
 import { fetchSubAreas } from "../../utils/areasAPI"
+import { FullscreenEnter, FullscreenExit } from "@navikt/ds-icons"
 
 
 const DashboardFromId = () => {
@@ -117,15 +118,17 @@ const FullScreenFixedButton = styled(Button)`
     @media(min-width: 1000px) {
         display: block;
         position: absolute;
-        right: 5ch;
-        top: 20ch;
+        right: 0;
+        top: 0;
     }
 `
 
 
 export const FullScreenButton: React.FC<{isFullScreen: boolean, changeIsFullScreen: (changed: boolean) => void}> = ({isFullScreen, changeIsFullScreen}) => {
     return (
-        <FullScreenFixedButton onClick={() => changeIsFullScreen(!isFullScreen)}>{isFullScreen ? "Lukk fullskjerm" : "Åpne i fullskjerm"}</FullScreenFixedButton>
+        <FullScreenFixedButton variant="tertiary" size="small" onClick={() => changeIsFullScreen(!isFullScreen)}>
+            {!isFullScreen ? <BodyShort>Åpne i fullskjerm <FullscreenEnter /></BodyShort> : <BodyShort>Lukk fullskjerm<FullscreenExit /></BodyShort>}
+        </FullScreenFixedButton>
     )
 }
 

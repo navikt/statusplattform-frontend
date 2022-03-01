@@ -53,6 +53,7 @@ const DashboardContainer = styled.div`
 `
 
 const DigitalServicesContainer = styled.div`
+    width: 100%;
     padding: 0;
     display: flex;
     flex-direction: column;
@@ -63,6 +64,7 @@ const DigitalServicesContainer = styled.div`
 const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     flex: 1;
     padding: 50px 0;
+    width: 100%;
     
     display: flex;
     justify-content: center;
@@ -90,6 +92,7 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
 
 
     @media (min-width: 500px) {
+        width: auto;
         max-width: ${(props) => props.maxWidth}px;
     }
     @media (min-width: 1359px) {
