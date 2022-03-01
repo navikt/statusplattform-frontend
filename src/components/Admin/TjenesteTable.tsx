@@ -12,28 +12,13 @@ import { BodyShort, Button, Heading, Modal, Select, TextField } from '@navikt/ds
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Area, Component, Service } from '../../types/navServices';
-import { CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '.';
+import { AdminCategoryContainer, CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { deleteService, fetchServices, postService, updateService } from '../../utils/servicesAPI';
 import { RouterAdminAddTjeneste } from '../../types/routes';
 import { fetchComponents } from '../../utils/componentsAPI';
 import { fetchAreas } from '../../utils/areasAPI';
 
-const TjenesteTableContainer = styled.div`
-    .services-overflow-container {
-        overflow-x: auto;
-        div {
-            min-width: fit-content;
-        }
-    }
-    
-    .centered {
-        display: flex;
-        justify-content: center;
-
-        margin: 60px 0;
-    }
-`
 
 const TjenesteHeader = styled.div`
     padding: 1rem 0 1rem;
@@ -166,7 +151,7 @@ const TjenesteTable = () => {
 
 
     return (
-        <TjenesteTableContainer>
+        <AdminCategoryContainer>
             <Head>
                 <title>Admin - Tjenester</title>
             </Head>
@@ -197,7 +182,7 @@ const TjenesteTable = () => {
 
 
 
-            <div className="services-overflow-container">
+            <div className="category-overflow-container">
                 <div>
                     {services
                         ?
@@ -245,7 +230,7 @@ const TjenesteTable = () => {
                     }
                 </div>
             </div>
-        </TjenesteTableContainer>
+        </AdminCategoryContainer>
     )
 }
 

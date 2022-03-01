@@ -9,13 +9,13 @@ import { UserStateProvider } from "./UserStatusContext"
 export const Providers: React.FC<{children: ReactNode}> = ({ children }) => {
     return (
         <UserStateProvider>
-            <NavigatorProvider>
-                <FilterProvider>
-                    <TitleProvider>
+            <TitleProvider>
+                <NavigatorProvider>
+                    <FilterProvider>
                         {children}
-                    </TitleProvider>
-                </FilterProvider>
-            </NavigatorProvider>
+                    </FilterProvider>
+                </NavigatorProvider>
+            </TitleProvider>
         </UserStateProvider>
     )  
 }

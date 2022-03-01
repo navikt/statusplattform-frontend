@@ -125,7 +125,6 @@ const MainContent = props => {
             }
             <Content id="content">
                 <Navigator />
-                <PageHeader title={title} />
                 {props.children}
             </Content>
 
@@ -223,15 +222,5 @@ const Navigator = () => {
                 </BodyShort>
             )}
         </NavigatorContainer>
-    )
-}
-
-
-const PageHeader: React.FC<{title: string}> = ({title}) => {
-
-    return (
-        <Heading spacing size="2xlarge" level="1">
-            {title}
-        </Heading>
     )
 }

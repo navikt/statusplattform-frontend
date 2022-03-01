@@ -15,6 +15,7 @@ import { UserStateContext } from '../ContextProviders/UserStatusContext'
 
 
 
+
 const CustomHeader = styled.header`
     min-height: 106px;
     height: 100%;
@@ -64,6 +65,8 @@ const CustomHeader = styled.header`
 const HeadingCustomized = styled(Heading)`
     text-align: center;
     display: none;
+    font-weight: normal;
+    
     @media(min-width: 390px){
         width: 100%;
     }
@@ -71,7 +74,6 @@ const HeadingCustomized = styled(Heading)`
         display: block;
     }
     @media (min-width: 650px) {
-        text-align: start;
         white-space: normal;
 
         margin-left: 1rem;
@@ -191,9 +193,9 @@ const Header = () => {
 
             <HeaderContent>
                 <BurgerMenu />
-                {/* <HeadingCustomized size="2xlarge" level="1">
-                    Status digitale tjenester
-                </HeadingCustomized> */}
+                <HeadingCustomized size="2xlarge" level="1">
+                    <b>Status</b> digitale tjenester
+                </HeadingCustomized>
                 <ProfileOrLogin name={name} navIdent={navIdent} />
             
             </HeaderContent>

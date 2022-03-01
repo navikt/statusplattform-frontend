@@ -8,7 +8,7 @@ import { Expand, Notes } from '@navikt/ds-icons'
 import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react'
 
 import CustomNavSpinner from '../../components/CustomNavSpinner'
-import { ModalInner } from '.';
+import { AdminCategoryContainer, ModalInner } from '.';
 import { CloseCustomized } from '.'
 import { Area, Dashboard } from '../../types/navServices'
 import { useLoader } from '../../utils/useLoader'
@@ -17,18 +17,6 @@ import { deleteDashboard, fetchDashboard, fetchDashboardsList, postDashboard, up
 import { fetchAreas, putAreasToDashboard } from '../../utils/areasAPI'
 import { RouterAdminAddDashboard } from '../../types/routes'
 
-
-
-const DashboardTableContainer = styled.div`
-    width: 100%;
-    
-    .centered {
-        display: flex;
-        justify-content: center;
-
-        margin: 60px 0;
-    }
-`
 
 
 const DashboardTable = () => {
@@ -49,7 +37,7 @@ const DashboardTable = () => {
     }
 
     return (
-        <DashboardTableContainer>
+        <AdminCategoryContainer>
             <Head>
                 <title>Admin - Dashbord</title>
             </Head>
@@ -60,7 +48,7 @@ const DashboardTable = () => {
                 </Button>
             </div>
             <Dashboards dashboards={dashboards} reloadDashboards={reload}/>
-        </DashboardTableContainer>
+        </AdminCategoryContainer>
     )
 }
 

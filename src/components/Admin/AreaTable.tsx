@@ -8,7 +8,7 @@ import { Bag, Calculator, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, 
 
 import { Area, Service } from '../../types/navServices';
 
-import { CloseCustomized, DependencyList } from '.';
+import { AdminCategoryContainer, CloseCustomized, DependencyList } from '.';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
 import { ModalInner } from '.';
@@ -25,21 +25,7 @@ import { RouterAdminAddOmråde } from '../../types/routes';
 
 
 
-const AreaContainer = styled.div`
-    .areas-overflow-container {
-        overflow-x: auto;
-        div {
-            min-width: fit-content;
-        }
-    }
 
-    .centered {
-        display: flex;
-        justify-content: center;
-
-        margin: 60px 0;
-    }
-`
 
 const AreaHeader = styled.div`
     padding: 1rem;
@@ -160,7 +146,7 @@ const AreaTable = () => {
 
 
     return (
-        <AreaContainer>
+        <AdminCategoryContainer>
             <Head>
                 <title>Admin - Områder</title>
             </Head>
@@ -184,7 +170,7 @@ const AreaTable = () => {
             </div>
 
 
-            <div className="areas-overflow-container">
+            <div className="category-overflow-container">
                 <div>
                     <AreaHeader>
                         <div className="area-header-content">
@@ -227,7 +213,7 @@ const AreaTable = () => {
                     </div>
                 </div>
             </div>
-        </AreaContainer>
+        </AdminCategoryContainer>
     )
 } 
 

@@ -12,27 +12,10 @@ import { BodyShort, Button, Heading, Modal, Select, TextField } from '@navikt/ds
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Component } from '../../types/navServices';
 import { deleteComponent, fetchComponents, updateComponent } from '../../utils/componentsAPI';
-import { CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '.';
+import { AdminCategoryContainer, CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { RouterAdminAddKomponent } from '../../types/routes';
 
-
-const KomponentTableContainer = styled.div`
-    .components-overflow-container {
-        overflow-x: auto;
-
-        div {
-            min-width: max-content;
-        }
-    }
-    
-    .centered {
-        display: flex;
-        justify-content: center;
-
-        margin: 60px 0;
-    }
-`
 
 const ComponentHeader = styled.div`
     padding: 1rem 0 1rem;
@@ -166,7 +149,7 @@ const KomponentTable = () => {
 
 
     return (
-        <KomponentTableContainer>
+        <AdminCategoryContainer>
             <Head>
                 <title>Admin - Tjenester</title>
             </Head>
@@ -196,7 +179,7 @@ const KomponentTable = () => {
 
 
 
-            <div className="components-overflow-container">
+            <div className="category-overflow-container">
                 <div>
                     {components
                     ?
@@ -248,7 +231,7 @@ const KomponentTable = () => {
                     }
                 </div>
             </div>
-        </KomponentTableContainer>
+        </AdminCategoryContainer>
     )
 }
 

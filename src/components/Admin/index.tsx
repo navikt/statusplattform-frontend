@@ -8,8 +8,10 @@ import TjenesteTable from './TjenesteTable';
 import DashboardTable from './DashboardTable';
 import { adminMenu, useFindCurrentTab } from './MenuSelector';
 import KomponentTable from './KomponentTable';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CustomNavSpinner from '../CustomNavSpinner';
+import { TitleContext } from '../ContextProviders/TitleContext';
+import { Heading } from '@navikt/ds-react';
 
 
 
@@ -61,7 +63,6 @@ const AdminDashboardContainer = styled.div`
 
 
 const AdminConfigsContainer = styled.div`
-    border-radius: 0 0 20px 20px;
     background-color: white; 
        
     width: 100%;
@@ -73,6 +74,31 @@ const AdminConfigsContainer = styled.div`
         justify-content: space-between;
     }
 `;
+
+const HeadingWrapper = styled.div`
+    margin-top: 2rem;
+
+    display: flex;
+    justify-content: center;
+`
+
+
+export const AdminCategoryContainer = styled.div`
+    .category-overflow-container {
+        overflow-x: auto;
+
+        div {
+            min-width: fit-content;
+        }
+    }
+
+    .centered {
+        display: flex;
+        justify-content: center;
+
+        margin: 1rem 0 1rem 0;
+    }
+`
 
 
 export const NoContentContainer = styled.div`
@@ -148,10 +174,14 @@ export interface Props {
 
 const AdminDashboard = () => {
     const selectedMenu = useFindCurrentTab(adminMenu)
+    const {title} = useContext(TitleContext)
     
 	return (
         <AdminDashboardContainer>
             <AdminConfigsContainer>
+                <HeadingWrapper>
+                    <Heading size="large" level="2">{title}</Heading>
+                </HeadingWrapper>
                 {selectedMenu === "Områder" && 
                     <AreaTable />
                 }
