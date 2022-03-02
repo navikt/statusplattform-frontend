@@ -20,6 +20,8 @@ import { StringifyOptions } from 'querystring';
 
 
 const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: string}>`
+    /* Adjustment to EkspanderbartPanel-component padding */
+    .ekspanderbartPanel__hode{padding: 20px;}
     width: 100%;
 
     -moz-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
@@ -39,6 +41,7 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
         }
         .navds-detail {
             color: var(--navds-global-color-gray-600);
+            position: absolute;
         }
     }
 
