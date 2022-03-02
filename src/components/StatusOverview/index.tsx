@@ -72,7 +72,7 @@ const DeviationCardContianer = styled.button`
         position: absolute;
 
         height: 100%;
-        padding: 7px;
+        padding: 3.5px;
     }
 
     .ok {background: var(--navds-global-color-green-500);}
