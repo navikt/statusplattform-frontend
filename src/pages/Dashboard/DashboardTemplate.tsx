@@ -330,8 +330,8 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
 
             
             </DigitalServicesContainer>
-            <MaintenanceScheduling />
-            <IconDescription />
+            {/* <MaintenanceScheduling />
+            <IconDescription /> */}
         </DashboardContainer>
     )
 }
