@@ -182,8 +182,13 @@ const NavigatorContainer = styled.div`
     }
 
     .deviation-button-wrapper {
-        position: absolute;
-        right: 0;
+        
+        
+        @media(min-width: 400px) {
+            position: absolute;
+            right: 0;
+        }
+
     }
 `
 
