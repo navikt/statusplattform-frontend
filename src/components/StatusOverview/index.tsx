@@ -10,6 +10,8 @@ import { RouterAvvikshistorikk, RouterOpprettVarsling } from '../../types/routes
 
 
 const StatusSummary = styled.div`
+    margin-top: 1rem;
+
     display: flex;
     flex-direction: column;
     gap: 32px;

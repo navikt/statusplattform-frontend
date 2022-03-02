@@ -5,15 +5,15 @@ import { useContext } from 'react'
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify'
 
-import { BodyShort, Heading } from '@navikt/ds-react'
-import { Home, Next } from '@navikt/ds-icons'
+import { BodyShort, Button, Heading } from '@navikt/ds-react'
+import { Clock, Home, Next } from '@navikt/ds-icons'
 
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import Navbar from '../../components/Navbar'
 import { NavigatorContext } from '../ContextProviders/NavigatorContext'
 import { TitleContext } from '../ContextProviders/TitleContext'
-import { RouterHomePage } from '../../types/routes';
+import { RouterAvvikshistorikk, RouterHomePage } from '../../types/routes';
 
 
 
@@ -180,6 +180,11 @@ const NavigatorContainer = styled.div`
         text-align: center;
         margin-bottom: 32px !important;
     }
+
+    .deviation-button-wrapper {
+        position: absolute;
+        right: 0;
+    }
 `
 
 
@@ -203,24 +208,31 @@ const Navigator = () => {
 
     return (
         <NavigatorContainer>
-
-            {navigatorRoutes.map((element, index) =>    
-                <BodyShort key={index} className="navigator-element">
-                    <span aria-label={"Naviger til " + element.stringifiedPathName} onClick={() => handleNavigatorRedirect(element.path)} className="navds-link">
-                        {element.home &&
-                            <span className="home-svg">
-                                <Home /> 
+            {!router.asPath.includes("Dashboard") &&
+                navigatorRoutes.map((element, index) =>    
+                    <BodyShort key={index} className="navigator-element">
+                        <span aria-label={"Naviger til " + element.stringifiedPathName} onClick={() => handleNavigatorRedirect(element.path)} className="navds-link">
+                            {element.home &&
+                                <span className="home-svg">
+                                    <Home /> 
+                                </span>
+                            }
+                            {element.stringifiedPathName}
+                        </span>
+                        {!element.lastElement &&
+                            <span className="navds-chevron">
+                                <Next />
                             </span>
                         }
-                        {element.stringifiedPathName}
-                    </span>
-                    {!element.lastElement &&
-                        <span className="navds-chevron">
-                            <Next />
-                        </span>
-                    }
-                </BodyShort>
-            )}
+                    </BodyShort>
+                )
+            }
+
+            {router.asPath.includes("Dashboard") &&
+                <div className="deviation-button-wrapper" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>
+                    <Button variant="tertiary" size="small">Se avvikshistorikk <Clock /> </Button>
+                </div>
+            }
         </NavigatorContainer>
     )
 }

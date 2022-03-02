@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import Head from 'next/head'
 import Link from 'next/link'
 
-import { Expand } from '@navikt/ds-icons'
+import { Clock, Expand } from '@navikt/ds-icons'
 import { Alert, BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
 
 import CustomNavSpinner from '../../components/CustomNavSpinner'
@@ -309,7 +309,9 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
     
     return (
         <DashboardContainer>
+
             <DigitalServicesContainer>
+
             <StatusOverview areas={areasInDashboard} />
 
                 {areasInDashboard.length > 0 &&
