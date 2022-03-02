@@ -5,7 +5,7 @@ import Link from 'next/link'
 import { Wrench } from '@navikt/ds-icons'
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-frontend-etiketter';
-import { BodyShort, Heading } from '@navikt/ds-react';
+import { BodyShort, Detail, Heading } from '@navikt/ds-react';
 
 import { ErrorCustomized, ErrorFilledCustomized, WrenchFilledCustomized, NoStatusAvailableCircle, WrenchOutlinedCustomized, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
@@ -36,6 +36,9 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
         .icon {
             margin-right: 0.5rem;
             vertical-align: middle;
+        }
+        .navds-detail {
+            color: var(--navds-global-color-gray-600);
         }
     }
 
@@ -196,14 +199,16 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
                         <span><StatusIconHandler status={status} isArea={true} /></span>
                         <span>{name}</span>
                     </HeadingCustomized> 
-
-                    {(testMaintenanceObject.message && testMaintenanceObject.isPlanned) ?
-                        <BodyShort className="maintenance-message">
-                            <Wrench className="icon" /> {testMaintenanceObject.message}
-                        </BodyShort>
-                        :
-                        <span className="empty-space"></span>
-                    }
+                    <Detail size="small">
+                        Oppetid 100%
+                        {(testMaintenanceObject.message && testMaintenanceObject.isPlanned) ?
+                            <BodyShort className="maintenance-message">
+                                {testMaintenanceObject.message}
+                            </BodyShort>
+                            :
+                            <span className="empty-space"></span>
+                        }
+                    </Detail>
                 </div>
             }
             aria-label="Ekspander område"

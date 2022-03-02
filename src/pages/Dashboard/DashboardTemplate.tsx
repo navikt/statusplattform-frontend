@@ -24,7 +24,6 @@ import { ErrorFilledCustomized, SuccessFilledCustomized, WarningFilledCustomized
 
 
 const DashboardContainer = styled.div`
-    width: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -67,9 +66,7 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
     width: 100%;
     
     display: flex;
-    justify-content: center;
-    align-items: space-between;
-    flex-flow: column wrap;
+    flex-direction: column;
 
     & > * {
         flex-basis: 100%;
@@ -105,6 +102,7 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
 const PortalServiceTileRow = styled.div `
     margin-bottom: 24px;
     gap: 32px;
+    width: 100%;
 
     display: flex;
     flex-flow: row nowrap;
@@ -136,11 +134,6 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
     const [expandAll, changeExpand] = useState(false)
     const [expandedTiles, setExpandedTiles] = useState([]);
     const [width, setWidth] = useState(typeof window !== "undefined"? window.innerWidth:0)
-
-    const [showAreasStatusOK, changeShowAreasStatusOK] = useState(false)
-    const [areasWithoutStatusOK, setAreaswithoutStatusOK] = useState<Area[]>()
-    const [areasStatusOK, setAreasStatusOK] = useState<Area[]>()
-    const [showAll, toggleShowAll] = useState(false)
 
     const {filters} = useContext(FilterContext)
     
@@ -185,14 +178,6 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
         }, 1000)
         return () => clearInterval(interval)
       }, [])
-
-
-    useEffect(() => {
-        if(areasInDashboard) {
-            setAreaswithoutStatusOK(areasInDashboard.filter(area => area.status != "OK"))
-            setAreasStatusOK(areasInDashboard.filter(area => area.status == "OK"))
-        }
-    },[areasInDashboard])
       
 
 
@@ -321,24 +306,14 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
     
 
 
+    
+    return (
+        <DashboardContainer>
+            <DigitalServicesContainer>
+            <StatusOverview areas={areasInDashboard} />
 
-    /*----------------- No areas having ISSUE or DOWN -----------------*/
-    if(!statuses.includes("ISSUE") && !statuses.includes("DOWN")) {
-        return (
-            <DashboardContainer>
-
-                <div className="status-only-ok">
-
-                    <div className="status-wrapper">
-                        <Alert variant="success">Alle digitale tjenester fungerer som normalt.</Alert>
-                    </div>
-
-                    <div className="button-container">
-                        <Button variant="secondary" onClick={() => toggleShowAll(!showAll)}>{showAll ? "Skjul alle områder" : "Vis alle områder"}</Button>
-                        <Button variant="secondary" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk</Button>
-                    </div>
-
-                    {showAll &&
+                {areasInDashboard.length > 0 &&
+                    <PortalServiceTileContainer maxWidth={maxWidth}>
                         <AllAreas 
                             expandAll={expandAll}
                             isTileExpanded={isTileExpanded}
@@ -348,51 +323,6 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
                             numberOfTilesPerRow={numberOfTilesPerRow}
                             rows={rows}
                         />
-                    }
-
-                </div>
-
-            </DashboardContainer>
-        )
-    }
-    /*----------------- No area having ISSUE or DOWN -----------------*/
-
-    
-    return (
-        <DashboardContainer>
-            <DigitalServicesContainer>
-            <StatusOverview areas={areasInDashboard} />
-
-                {areasInDashboard.length > 0 &&
-                    <PortalServiceTileContainer maxWidth={maxWidth}>
-                        
-                        
-                        <AreasWithoutOK 
-                            expandAll={expandAll}
-                            isTileExpanded={isTileExpanded}
-                            toggleExpandAll={toggleExpandAll}
-                            toggleTile={toggleTile}
-                            areasWithoutOK={areasWithoutStatusOK}
-                            numberOfTilesPerRow={numberOfTilesPerRow}
-                        />
-
-                        {showAreasStatusOK &&
-                            <AreasStatusOK
-                                expandAll={expandAll}
-                                isTileExpanded={isTileExpanded}
-                                toggleExpandAll={toggleExpandAll}
-                                toggleTile={toggleTile}
-                                areasStatusOK={areasStatusOK}
-                                numberOfAreasWithoutOK={areasWithoutStatusOK.length}
-                                numberOfTilesPerRow={numberOfTilesPerRow}
-                            />
-                        }
-
-
-                        <div className="centered-element">
-                            <Button variant="secondary" onClick={() => changeShowAreasStatusOK(!showAreasStatusOK)}>{showAreasStatusOK ? "Skjul områder uten avvik" : "Vis alle områder"}</Button>
-                        </div>
-
                     </PortalServiceTileContainer>
                 }
 
@@ -514,100 +444,6 @@ const FullScreen = ({ rows, toggleTile, numberOfTilesPerRow, isTileExpanded, tog
 
 
 
-
-
-
-
-
-
-const AreasWithoutOK: React.FC<{expandAll, isTileExpanded, toggleExpandAll: () => void, toggleTile, areasWithoutOK: Area[], numberOfTilesPerRow: number}> = (
-    { expandAll, isTileExpanded, toggleExpandAll, toggleTile, areasWithoutOK, numberOfTilesPerRow}
-    ) => {
-
-
-    const generateRowsOfTiles = () => {
-        //Endre denne oppførselen dersom det er ønskelig å bestemme antall per rad på brukersiden.
-        
-        let numberOfRows = Math.ceil( areasWithoutOK.length/numberOfTilesPerRow );
-        let rows: Area[][] = [];
-    
-        for(var i = 0; i < areasWithoutOK.length; i = i + numberOfTilesPerRow){
-            rows.push (areasWithoutOK.slice(i,i+ numberOfTilesPerRow))
-        }
-        return rows
-    }
-
-    let rows: Area[][] = generateRowsOfTiles()
-
-    return (
-        <>
-            <div className="centered-element">
-                <Heading size="medium" level="3">Områder med avvik</Heading>
-            </div>
-
-
-            <span className="expand-all-wrapper">
-                <ExpandAllToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
-            </span>
-
-            {rows.map((row, rowIndex) => (
-                <PortalServiceTileRow key={rowIndex}>
-                    {row.map((area, index) => 
-                        <PortalServiceTile key={index} toggleTile={toggleTile}
-                            tileIndex={rowIndex*numberOfTilesPerRow + index}
-                            area={area} expanded={isTileExpanded(rowIndex, index,0)}
-                        />
-                    )}
-                </PortalServiceTileRow>
-            ))}
-        </>
-    )
-}
-
-
-
-// -------------
-
-
-
-const AreasStatusOK: React.FC<{expandAll, isTileExpanded, toggleExpandAll, toggleTile, areasStatusOK: Area[], numberOfTilesPerRow: number, numberOfAreasWithoutOK:number}> = (
-    {expandAll, isTileExpanded, toggleExpandAll, toggleTile, areasStatusOK, numberOfTilesPerRow,numberOfAreasWithoutOK}
-    ) => {
-
-
-    const generateRowsOfTiles = () => {
-        //Endre denne oppførselen dersom det er ønskelig å bestemme antall per rad på brukersiden.
-        
-        let numberOfRows = Math.ceil( areasStatusOK.length/numberOfTilesPerRow );
-        let rows: Area[][] = [];
-    
-        for(var i = 0; i < areasStatusOK.length; i = i + numberOfTilesPerRow){
-            rows.push (areasStatusOK.slice(i,i+ numberOfTilesPerRow))
-        }
-        return rows
-    }
-
-    let rows: Area[][] = generateRowsOfTiles()
-
-    return (
-        <>
-            <div className="centered-element">
-                <Heading spacing size="medium" level="3">Områder uten avvik</Heading>
-            </div>
-
-            {rows.map((row, rowIndex) => (
-                <PortalServiceTileRow key={rowIndex}>
-                    {row.map((area, index) => 
-                        <PortalServiceTile key={index} toggleTile={toggleTile}
-                            tileIndex={numberOfAreasWithoutOK + rowIndex*numberOfTilesPerRow + index}
-                            area={area} expanded={isTileExpanded(rowIndex, index,numberOfAreasWithoutOK)}
-                        />
-                    )}
-                </PortalServiceTileRow>
-            ))}
-        </>
-    )
-}
 
 
 
