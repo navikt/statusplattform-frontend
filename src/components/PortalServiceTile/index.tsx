@@ -20,8 +20,11 @@ import { StringifyOptions } from 'querystring';
 
 
 const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: string}>`
-    /* Adjustment to EkspanderbartPanel-component padding */
-    .ekspanderbartPanel__hode{padding: 20px;}
+    /* 
+        Adjustment to EkspanderbartPanel-component padding
+        padding-bottom 34px is due to position: absolute in navds-detail
+    */
+    .ekspanderbartPanel__hode{padding: 20px; padding-bottom:34px;}
     width: 100%;
 
     -moz-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
@@ -29,6 +32,8 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
     box-shadow: 0 0 10px rgba(0,0,0, 0.2);
 
     .top-content {
+        position: relative;
+
         .etikett-container {
             margin-right: 5px;
             display: flex;
@@ -39,9 +44,11 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
             margin-right: 0.5rem;
             vertical-align: middle;
         }
+
         .navds-detail {
             color: var(--navds-global-color-gray-600);
             position: absolute;
+            width: 385px;
         }
     }
 
@@ -66,11 +73,6 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
         
         font-size: 1rem;
         font-style: italic;
-    }
-    .empty-space {
-        height: 15px;
-
-        display: block;
     }
 `
 
