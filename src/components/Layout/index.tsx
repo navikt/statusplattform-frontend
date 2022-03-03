@@ -180,16 +180,6 @@ const NavigatorContainer = styled.div`
         text-align: center;
         margin-bottom: 32px !important;
     }
-
-    .deviation-button-wrapper {
-        
-        
-        @media(min-width: 400px) {
-            position: absolute;
-            right: 0;
-        }
-
-    }
 `
 
 
@@ -231,12 +221,6 @@ const Navigator = () => {
                         }
                     </BodyShort>
                 )
-            }
-
-            {router.asPath.includes("Dashboard") &&
-                <div className="deviation-button-wrapper" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>
-                    <Button variant="tertiary" size="small">Se avvikshistorikk <Clock /> </Button>
-                </div>
             }
         </NavigatorContainer>
     )

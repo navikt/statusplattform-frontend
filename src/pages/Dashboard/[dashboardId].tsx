@@ -115,6 +115,12 @@ const DashboardFromId = () => {
 const FullScreenFixedButton = styled(Button)`
     display: none;
 
+    svg {
+        height: 16px;
+        width: 16px;
+        vertical-align: middle;
+    }
+
     @media(min-width: 1000px) {
         display: block;
         position: absolute;
@@ -127,7 +133,7 @@ const FullScreenFixedButton = styled(Button)`
 export const FullScreenButton: React.FC<{isFullScreen: boolean, changeIsFullScreen: (changed: boolean) => void}> = ({isFullScreen, changeIsFullScreen}) => {
     return (
         <FullScreenFixedButton variant="tertiary" size="small" onClick={() => changeIsFullScreen(!isFullScreen)}>
-            {!isFullScreen ? <BodyShort>Åpne i fullskjerm <FullscreenEnter /></BodyShort> : <BodyShort>Lukk fullskjerm<FullscreenExit /></BodyShort>}
+            {!isFullScreen ? <BodyShort size="small">Fullskjerm <FullscreenEnter /></BodyShort> : <BodyShort size="small">Lukk fullskjerm<FullscreenExit /></BodyShort>}
         </FullScreenFixedButton>
     )
 }

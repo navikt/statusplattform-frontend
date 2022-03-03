@@ -24,7 +24,7 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
         Adjustment to EkspanderbartPanel-component padding
         padding-bottom 34px is due to position: absolute in navds-detail
     */
-    .ekspanderbartPanel__hode{padding: 20px; padding-bottom:34px;}
+    .ekspanderbartPanel__hode{padding: 20px; padding-bottom:40px;}
     width: 100%;
 
     -moz-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
@@ -77,7 +77,7 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
 `
 
 const HeadingCustomized = styled(Heading)`
-    padding: .5rem 0;
+    padding-bottom: 6.5px;
     display: flex;
     flex-direction: row;
     
@@ -111,7 +111,7 @@ const ServicesList = styled.ul`
         justify-content: flex-start;
 
         section {
-            color: var(--navds-link-color-text);
+            text-decoration: underline;
 
             display: flex;
             align-items: center;
@@ -121,7 +121,7 @@ const ServicesList = styled.ul`
             }
 
             :hover {
-                text-decoration: underline;
+                text-decoration: none;
                 cursor: pointer;
             }
         }

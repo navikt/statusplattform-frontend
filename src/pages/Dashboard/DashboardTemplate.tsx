@@ -57,6 +57,13 @@ const DigitalServicesContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
+
+    .deviation-button-wrapper {
+        width: 100%;
+
+        display: flex;
+        justify-content: flex-end;
+    }
 `;
 
 
@@ -311,8 +318,13 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
         <DashboardContainer>
 
             <DigitalServicesContainer>
+                {router.asPath.includes("Dashboard") &&
+                    <div className="deviation-button-wrapper" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>
+                        <Button variant="tertiary" size="small">Se avvikshistorikk <Clock /> </Button>
+                    </div>
+                }
 
-            <StatusOverview areas={areasInDashboard} />
+                <StatusOverview areas={areasInDashboard} />
 
                 {areasInDashboard.length > 0 &&
                     <PortalServiceTileContainer maxWidth={maxWidth}>
@@ -490,11 +502,11 @@ const ExpandAllToggle: React.FC<{toggleExpandAll: () => void, expanded: boolean}
         <ToggleExpandAllButton variant="tertiary" size="small" aria-expanded={expanded} onClick={toggleExpandAll} >
             {!expanded
                 ?
-                    <BodyShort>
+                    <BodyShort size="small">
                         Ekspander områder
                     </BodyShort>
                 :
-                    <BodyShort>
+                    <BodyShort size="small">
                         Trekk sammen områder
                     </BodyShort>
             }
