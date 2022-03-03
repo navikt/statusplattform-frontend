@@ -15,6 +15,10 @@ const BurgerMenuContainer = styled.div`
         color: black !important;
     }
 
+    .navds-button:hover {
+        box-shadow: inset 0 0 0 2px var(--navds-global-color-gray-900);
+    }
+
     .menu-text {
         font-weight: bold;
     }
@@ -30,6 +34,13 @@ const BurgerMenuContainer = styled.div`
     .closed-burger {
         display: none;
     }
+
+    @media(min-width: 450px) {
+        button {
+            margin-right: 1rem;
+        }
+    }
+
 `
 
 const PopoverCustomized = styled(Popover)`

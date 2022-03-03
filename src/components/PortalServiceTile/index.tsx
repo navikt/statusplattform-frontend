@@ -12,6 +12,7 @@ import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { Area, MaintenanceObject} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
 import { StringifyOptions } from 'querystring';
+import { UserStateContext } from '../ContextProviders/UserStatusContext';
 
 
 
@@ -24,7 +25,22 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
         Adjustment to EkspanderbartPanel-component padding
         padding-bottom 34px is due to position: absolute in navds-detail
     */
-    .ekspanderbartPanel__hode{padding: 20px; padding-bottom:40px;}
+    .ekspanderbartPanel__hode {
+        padding: 0;
+        padding-right: 20px;
+        
+        .not-logged-in {
+            padding: 20px;
+        }
+
+        .logged-in {
+            padding: 20px; 
+            padding-bottom:40px;
+        }
+    }
+
+    .ekspanderbartPanel__hode--focus, .ekspanderbartPanel__hode:focus{box-shadow: none;}
+
     width: 100%;
 
     -moz-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
@@ -193,6 +209,8 @@ export interface PortalServiceTileProps {
 export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: PortalServiceTileProps) => {
     const {filters, matches} = useContext(FilterContext)
 
+    const { navIdent } = useContext(UserStateContext)
+
     const toggleExpanded = () => {
         toggleTile(tileIndex)
     }
@@ -206,21 +224,25 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
             alignment={expanded == true ? "stretch" : "flex-start"}
             border={false}
             tittel={
-                <div className="top-content">
+                <div className={navIdent ? "top-content logged-in" : "top-content not-logged-in"}>
                     <HeadingCustomized size="medium">
                         <span><StatusIconHandler status={status} isArea={true} /></span>
                         <span>{name}</span>
-                    </HeadingCustomized> 
-                    <Detail size="small">
-                        Oppetid 100%
-                        {(testMaintenanceObject.message && testMaintenanceObject.isPlanned) ?
-                            <BodyShort className="maintenance-message">
-                                {testMaintenanceObject.message}
-                            </BodyShort>
-                            :
-                            <span className="empty-space"></span>
-                        }
-                    </Detail>
+                    </HeadingCustomized>
+
+                    {navIdent &&
+                        <Detail size="small">
+                            <>Oppetid 100%</>
+
+                            {(testMaintenanceObject.message && testMaintenanceObject.isPlanned) ?
+                                <BodyShort className="maintenance-message">
+                                    {testMaintenanceObject.message}
+                                </BodyShort>
+                                :
+                                <span className="empty-space"></span>
+                            }
+                        </Detail>
+                    }
                 </div>
             }
             aria-label="Ekspander område"

@@ -24,9 +24,10 @@ const CustomHeader = styled.header`
     border-bottom: 1px solid #c6c2bf;
 
     display: flex;
-    flex-flow: row wrap;
-    justify-content: center;
-    align-items: center;
+    /* flex-flow: row wrap; */
+    /* justify-content: center;
+    align-items: center; */
+    flex-basis: 10% 80% 10%;
 
     img {
         max-width: 84px;
@@ -63,19 +64,19 @@ const CustomHeader = styled.header`
 `
 
 const HeadingCustomized = styled(Heading)`
-    text-align: center;
     display: none;
+
+    text-align: center;
     font-weight: normal;
     
     @media(min-width: 390px){
-        width: 100%;
+        /* width: 100%; */
+        display: block;
     }
     @media(min-width: 450px) {
-        display: block;
     }
     @media (min-width: 650px) {
         white-space: normal;
-
         margin-left: 1rem;
     }
 `
@@ -91,6 +92,10 @@ const HeaderContent = styled.span`
     > * {
         margin: .5rem 0;
     }
+/* 
+    .header-menues {
+        display: flex;
+    } */
 
     @media (min-width: 450px){
         flex-direction: row;
@@ -195,8 +200,10 @@ const Header = () => {
                 <HeadingCustomized size="2xlarge" level="1">
                     <b>Status</b> digitale tjenester
                 </HeadingCustomized>
-                <BurgerMenu />
-                <ProfileOrLogin name={name} navIdent={navIdent} />
+                <div className="header-menues">
+                    <BurgerMenu />
+                    <ProfileOrLogin name={name} navIdent={navIdent} />
+                </div>
             
             </HeaderContent>
 
@@ -359,6 +366,12 @@ const Filters = () => {
 const ProfileButton = styled(Button)`
     border-radius: 50px;
     min-width: 148px;
+    color: black;
+    box-shadow: inset 0 0 0 2px black;
+
+    :hover {
+        background: black;
+    }
 `
 
 
@@ -390,9 +403,8 @@ const PopoverCustomized = styled(Popover)`
         padding: 1rem 0;
     }
 
-
-    /* FJERN DENNE */
-    .navds-link {
+    .navds-link, svg {
+        color: black;
         cursor: pointer;
     }
 `
