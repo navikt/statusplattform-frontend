@@ -185,13 +185,13 @@ const handleAndSetNavIcon = (ikon: string) => {
 export const handleAndSetStatusIcon = (status: string, isInternal?: boolean): any => {
     switch(status) {
         case 'OK':
-            return <SuccessCustomized />
+            return <SuccessFilledCustomized />
         case 'DOWN':
-            return <ErrorCustomized />
+            return <ErrorFilledCustomized />
         case 'ISSUE':
-            return <WarningCustomized />
+            return <WarningFilledCustomized />
         case 'MAINTENANCE':
-            return <WrenchOutlinedCustomized />
+            return <WrenchFilledCustomized />
         case null:
             if(isInternal) {
                 return <NoStatusAvailableCircle />
