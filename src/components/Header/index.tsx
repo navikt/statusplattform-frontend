@@ -24,10 +24,9 @@ const CustomHeader = styled.header`
     border-bottom: 1px solid #c6c2bf;
 
     display: flex;
-    /* flex-flow: row wrap; */
-    /* justify-content: center;
-    align-items: center; */
-    flex-basis: 10% 80% 10%;
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: center;
 
     img {
         max-width: 84px;
@@ -53,9 +52,10 @@ const CustomHeader = styled.header`
         }
 
         padding: 0 1rem;
+        
         flex-flow: row nowrap;
         align-items: center;
-        justify-content: flex-start;
+        flex-basis: 10% 80% 10%;
         
         > span {
             padding-left: 20px;
@@ -70,7 +70,7 @@ const HeadingCustomized = styled(Heading)`
     font-weight: normal;
     
     @media(min-width: 390px){
-        /* width: 100%; */
+        width: 100%;
         display: block;
     }
     @media(min-width: 450px) {
@@ -192,20 +192,22 @@ const Header = () => {
 
     return (
         <CustomHeader>
-            <a href={RouterHomePage.PATH} aria-label="Lenke til forside">
-                <img src="/assets/nav-logo/png/black.png" alt="Til forsiden" aria-hidden="true" />
-            </a>
+            <div>
+                <a href={RouterHomePage.PATH} aria-label="Lenke til forside">
+                    <img src="/assets/nav-logo/png/black.png" alt="Til forsiden" aria-hidden="true" />
+                </a>
+            </div>
 
             <HeaderContent>
                 <HeadingCustomized size="2xlarge" level="1">
                     <b>Status</b> digitale tjenester
                 </HeadingCustomized>
-                <div className="header-menues">
-                    <BurgerMenu />
-                    <ProfileOrLogin name={name} navIdent={navIdent} />
-                </div>
             
             </HeaderContent>
+            <div className="header-menues">
+                <BurgerMenu />
+                <ProfileOrLogin name={name} navIdent={navIdent} />
+            </div>
 
 
             {/* <HeaderOptions>
