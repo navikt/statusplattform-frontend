@@ -136,7 +136,9 @@ const ServicesList = styled.ul`
         border-bottom: 1px solid var(--navds-semantic-color-border-inverted);
 
         section {
-            text-decoration: underline;
+            &.logged-in{
+                text-decoration: underline;
+            }
 
             display: flex;
             align-items: center;
@@ -145,7 +147,7 @@ const ServicesList = styled.ul`
                 margin-right: 8px;
             }
 
-            :hover {
+            &.logged-in:hover {
                 text-decoration: none;
                 cursor: pointer;
             }
@@ -255,18 +257,28 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
                     if (filters.length == 0) {
                         return (
                             <li key={service.name}>
-                                <LenkeCustomized href={"/Tjenestedata/" + service.id}>
+                                {navIdent
+                                ?
+                                    <LenkeCustomized href={"/Tjenestedata/" + service.id}>
+                                        <section className="logged-in"><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
+                                    </LenkeCustomized>
+                                :
                                     <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
-                                </LenkeCustomized>
+                                }
                             </li>
                         )
                     }
                     if(matches(service.status)) {
                         return (
                             <li key={service.name}>
-                                <LenkeCustomized href={"/Tjenestedata/" + service.id}>
+                                {navIdent
+                                ?
+                                    <LenkeCustomized href={"/Tjenestedata/" + service.id}>
+                                        <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
+                                    </LenkeCustomized>
+                                :
                                     <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
-                                </LenkeCustomized>
+                                }
                             </li>
                         )
                     }
