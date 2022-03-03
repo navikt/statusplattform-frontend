@@ -55,6 +55,10 @@ export const EndPathServices = () => {
     return "/rest/Services"
 }
 
+export const EndPathServiceHistory = (serviceId: string) => {
+    return EndPathService + "/HistoryAggregated/" + serviceId
+}
+
 export const EndPathAreaContainingServices = (serviceId: string) => {
     return "/rest/Service/Areas/" + serviceId
 }

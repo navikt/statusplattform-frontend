@@ -26,6 +26,12 @@ export interface Service {
     areasContainingThisService: Area[]
 }
 
+export interface ServiceHistory {
+    serviceId: string
+    date: Date
+    status: string
+}
+
 export interface Component {
     id?: string
     name: string

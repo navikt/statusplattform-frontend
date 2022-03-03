@@ -199,7 +199,7 @@ export const IncidentCard : React.FC<{
     return (
         <PanelCustomized border className="incident-row">
             <Heading spacing size="small" level="3">
-                <span>{handleAndSetStatusIcon(status)}</span>
+                {/* <span>{handleAndSetStatusIcon(status)}</span> */}
                 {titleOfIncident}
             </Heading>
             

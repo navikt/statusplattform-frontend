@@ -1,19 +1,21 @@
 import styled from 'styled-components'
-import { useContext, useState } from 'react';
+import { SetStateAction, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link'
 
 import { Innholdstittel } from 'nav-frontend-typografi';
 import { Bell } from '@navikt/ds-icons';
-import { BodyShort, Button, Heading } from '@navikt/ds-react';
+import { BodyShort, Button, Heading, Panel } from '@navikt/ds-react';
 
-import { Area, Service } from '../../types/navServices';
+import { Area, Service, ServiceHistory } from '../../types/navServices';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { RouterOpprettVarsling, RouterTjenestedata } from '../../types/routes';
 import { IncidentCard } from '../../components/Incidents';
 import { useLoader } from '../../utils/useLoader';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { fetchAreasContainingService } from '../../utils/areasAPI';
+import { handleAndSetStatusIcon } from '../../components/PortalServiceTile';
+import { fetchServiceHistory } from '../../utils/servicesAPI';
 
 
 const ErrorParagraph = styled.p`
@@ -27,15 +29,46 @@ const CategoryContainer = styled.div`
     width: 100%;
     padding: 0;
 
+    display: flex;
+    flex-direction: column;
+
+    .title-container {
+        svg {
+            margin-right: .6rem;
+        }
+        margin-bottom: 2rem;
+    }
+
     button {
         margin: 32px 0 40px 0;
     }
+
+    .top-row {
+        margin-bottom: 3rem;
+
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 50px;
+
+        .navds-panel{width: 100%;}
+        .navds-panel:first-child {
+            -moz-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
+            -webkit-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
+            box-shadow: 0 0 10px rgba(0,0,0, 0.2);
+        }
+        .navds-panel:last-child {border: none; background: none; height: max-content;}
+
+        @media(min-width: 825px) {
+            flex-direction: row;
+        }
+    }
     
     @media (min-width: 650px) {
-        width: 650px;
-        padding: 1rem 3rem;
+        padding: 0rem 2rem;
     }
 `
+
 
 const ServiceContainer = styled.div`
     min-width: 100px;
@@ -61,11 +94,6 @@ const ServiceWrapper = styled.div`
     width: 100%;
 `
 
-const CenterContent = styled.div`
-    text-align: center;
-    padding: 1rem;
-`
-
 const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
     const [showHistory, changeShowHistory] = useState(false)
 
@@ -86,26 +114,38 @@ const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
 
     return (
         <CategoryContainer>
-            <CenterContent><Innholdstittel>{service.name}</Innholdstittel></CenterContent>
+            <div className="title-container"><Innholdstittel>{handleAndSetStatusIcon(service.status)}{service.name}</Innholdstittel></div>
 
-            <Button variant="secondary" onClick={() => router.push(RouterOpprettVarsling.PATH)}><Bell/> Bli varslet ved avvik</Button> 
+            {/* <div>
+                <Button variant="secondary" onClick={() => router.push(RouterOpprettVarsling.PATH)}><Bell/> Bli varslet ved avvik</Button> 
+            </div> */}
+
+
+            <div className="top-row">
+                <Panel>
+                    <ServiceContainer>
+                        <ServiceWrapper>
+                            <ServiceData service={service} areasContainingService={areasContainingService} />
+                        </ServiceWrapper>
+                    </ServiceContainer>
+                </Panel>
+                
+                <IncidentCard descriptionOfIncident="Beskrivelse" status={service.status} timeframe='Tidsrom' titleOfIncident='Tittel' logLink='Loglenke' />
+            </div>
     
-            <IncidentCard descriptionOfIncident="Beskrivelse" status={service.status} timeframe='Tidsrom' titleOfIncident='Tittel' logLink='Loglenke' />
 
-            <ServiceContainer>
-                <ServiceWrapper>
-                    <ServiceData service={service} areasContainingService={areasContainingService} />
-                </ServiceWrapper>
-            </ServiceContainer>
-
-
-            <Button onClick={() => changeShowHistory(!showHistory)} variant="secondary">
-                {showHistory ? "- Skjul tidligere avvik" : "+ Vis tidligere avvik"}
-            </Button>
             
-            {showHistory &&
-                <ServiceIncidentHistory service={service} />
-            }
+
+
+            {/* <div>
+                <Button onClick={() => changeShowHistory(!showHistory)} variant="secondary">
+                    {showHistory ? "- Skjul tidligere avvik" : "+ Vis tidligere avvik"}
+                </Button>
+            </div> */}
+            
+            {/* {showHistory && */}
+            <ServiceIncidentHistory service={service} />
+            {/* } */}
         </CategoryContainer>
     )
 }
@@ -155,7 +195,6 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
         <>
         {navIdent &&
             <ServiceDataContainer>
-
                 <BodyShort spacing><b>Team</b></BodyShort>
                 <BodyShort>{team}</BodyShort>
                 <span className="separator" />
@@ -179,9 +218,7 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
                                 }
 
                                 return (
-                                    <>
-                                        <Link href={RouterTjenestedata.PATH + element.id} >{element.name}</Link>
-                                    </>
+                                    <Link key={id} href={RouterTjenestedata.PATH + element.id} >{element.name}</Link>
                                 )
                             })
                         :
@@ -220,6 +257,7 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
 /*------------------------------------------  ------------------------------------------*/
 
 
+
 const PublicDataContainer = styled.div`
     display: flex;
     flex-flow: column;
@@ -228,25 +266,137 @@ const PublicDataContainer = styled.div`
 
 
 const ServiceIncidentHistory: React.FC<{service: Service}>= ({service}) => {
-    
+    const [isLast90Days, setIsLast90Days] = useState<boolean>(true)
     // TODO: Henting av tjenestehistorikkdata som driftsmeldinger og diverse
+    const { data, isLoading, reload } = useLoader(() => fetchServiceHistory(service.id),[])
 
+    if(isLoading) {
+        return <CustomNavSpinner />
+    }
 
     return (
         <PublicDataContainer>
             <span>
-                <Heading size="medium" level="2" spacing>Vedlikehold- og avvikshistorikk</Heading>
+                <Heading size="medium" level="2" spacing>Historikk</Heading>
             </span>
 
-            <div>
-                <IncidentCard descriptionOfIncident='Beskrivelse' status='DOWN' timeframe='Tidsrom' titleOfIncident='Tittel' logLink='Loglenke' />
-            </div>
+            <TabHistory setIsLast90Days={setIsLast90Days} isLast90Days={isLast90Days} />
+            <HistoryOfService service={service} isLast90Days={isLast90Days} serviceHistory={data} />
 
         </PublicDataContainer>
     )
 }
 
 
+
+
+
+
+const TabMenu = styled.ul`
+    list-style: none;
+    padding: 0;
+    width: 100%;
+
+    span:first-child {
+        padding: 1rem 1rem 1rem 0;
+    }
+
+    span:not(:first-child) {
+        padding: 1rem;
+    }
+
+    li {
+
+        display: inline-block;
+
+        :hover {
+            cursor: pointer;
+        }
+
+        &.inactive {
+            border-bottom: transparent 3px solid;
+            
+            :hover {
+                border-bottom: var(--navds-global-color-blue-500) 3px solid;
+            }
+        }
+        &.active {
+            border-bottom: var(--navds-semantic-color-focus) 3px solid;
+        }
+
+        :focus, :active {
+            background-color: transparent;
+            outline: var(--navds-semantic-color-focus) 3px solid;
+            box-shadow: 0 0 0 0;
+            outline-offset: 3px;
+        }
+
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    }
+`
+
+interface History {
+    setIsLast90Days: React.Dispatch<SetStateAction<boolean>>,
+    isLast90Days: boolean
+}
+
+const TabHistory = ({setIsLast90Days, isLast90Days}: History) => {
+
+    return (
+        <TabMenu>
+            <span>
+                <li className={isLast90Days ? "active" : "inactive"} onClick={() => setIsLast90Days(true)}>
+                    <a href="#historyiioiok99">
+                        Siste 90 dager
+                    </a>
+                </li>
+            </span>
+            <span>
+                <li className={!isLast90Days ? "active" : "inactive"} onClick={() => setIsLast90Days(false)}>
+                    <a href="#history">
+                        Måned for måned
+                    </a>
+                </li>
+            </span>
+        </TabMenu>
+    )
+}
+
+
+
+
+
+
+
+
+const HistoryContainer = styled.div`
+
+`
+
+const DailyOverview = styled.div``
+
+const MonthlyOverview = styled.div``
+
+const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, serviceHistory: ServiceHistory[]}> = ({service, isLast90Days, serviceHistory}) => {
+
+    return (
+        <HistoryContainer id="history">
+            {isLast90Days
+            ?
+                <DailyOverview>
+                    daglig
+                </DailyOverview>
+            :
+                <MonthlyOverview>
+                    månedlig
+                </MonthlyOverview>
+            }
+        </HistoryContainer>
+    )
+}
 
 
 

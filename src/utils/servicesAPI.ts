@@ -1,5 +1,5 @@
-import { Component, Service } from "../types/navServices";
-import { EndPathPutServiceDependency, EndPathService, EndPathServices, EndPathServiceStatus, EndPathSpecificService, EndPathUpdateService } from "./apiHelper";
+import { Component, Service, ServiceHistory } from "../types/navServices";
+import { EndPathPutServiceDependency, EndPathService, EndPathServiceHistory, EndPathServices, EndPathServiceStatus, EndPathSpecificService, EndPathUpdateService } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -11,6 +11,18 @@ export class ResponseError extends Error {
 
 export const fetchServices = async (): Promise<Service[]> => {
     let endPath = EndPathServices();
+    let response;
+
+    response = await fetch(endPath);
+
+    if (response.ok) {
+        return response.json()
+    }
+    throw new ResponseError("Failed to fetch from server", response)
+}
+
+export const fetchServiceHistory = async (serviceId: string): Promise<ServiceHistory[]> => {
+    let endPath = EndPathServiceHistory(serviceId);
     let response;
 
     response = await fetch(endPath);
