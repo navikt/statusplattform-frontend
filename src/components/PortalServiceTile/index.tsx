@@ -13,6 +13,7 @@ import { Area, MaintenanceObject} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
 import { StringifyOptions } from 'querystring';
 import { UserStateContext } from '../ContextProviders/UserStatusContext';
+import { useRouter } from 'next/router';
 
 
 
@@ -212,6 +213,7 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
     const {filters, matches} = useContext(FilterContext)
 
     const { navIdent } = useContext(UserStateContext)
+    const router = useRouter()
 
     const toggleExpanded = () => {
         toggleTile(tileIndex)
@@ -226,13 +228,13 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
             alignment={expanded == true ? "stretch" : "flex-start"}
             border={false}
             tittel={
-                <div className={navIdent ? "top-content logged-in" : "top-content not-logged-in"}>
+                <div className={router.asPath.includes("Internt") ? "top-content logged-in" : "top-content not-logged-in"}>
                     <HeadingCustomized size="medium">
                         <span><StatusIconHandler status={status} isArea={true} /></span>
                         <span>{name}</span>
                     </HeadingCustomized>
 
-                    {navIdent &&
+                    {router.asPath.includes("Internt") &&
                         <Detail size="small">
                             <>Oppetid 100%</>
 
