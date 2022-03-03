@@ -70,9 +70,15 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
 
     .maintenance-message {
         color: grey;
-        
         font-size: 1rem;
         font-style: italic;
+    }
+
+    :hover {
+        span {
+            color: black;
+            text-decoration: underline;
+        }
     }
 `
 
@@ -109,6 +115,9 @@ const ServicesList = styled.ul`
 
         display: flex;
         justify-content: flex-start;
+        
+        padding: .8rem 0;
+        border-bottom: 1px solid var(--navds-semantic-color-border-inverted);
 
         section {
             text-decoration: underline;
@@ -134,12 +143,6 @@ const ServicesList = styled.ul`
 
     a {
         display: flex;
-    }
-    
-    @media (min-width: 250px){
-        li {
-            margin: 5px 0px 5px 0px;
-        }
     }
 `;
 

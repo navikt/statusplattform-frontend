@@ -11,6 +11,14 @@ import { UserData } from '../../types/userData';
 import { RouterAdmin, RouterArbeidsgiver, RouterInternt, RouterPrivatperson, RouterSamarbeidspartner } from '../../types/routes';
 
 const BurgerMenuContainer = styled.div`
+    & > * {
+        color: black !important;
+    }
+
+    .menu-text {
+        font-weight: bold;
+    }
+
     .hamburger-ikon, .close-ikon {
         width: 28px;
         height: 24px;
@@ -41,6 +49,10 @@ const PopoverCustomized = styled(Popover)`
         .popover-link-ikon {
             margin-right: 0.5rem;
         }
+
+        a {
+            color: black;
+        }
     }
 `
 
@@ -54,10 +66,10 @@ const BurgerMenu = () => {
     return (
         <BurgerMenuContainer>
 
-            <Button variant="secondary" id="menu-container" aria-expanded={open} ref={buttonRef} onClick={() => setOpen(!open)}>
+            <Button variant="tertiary" id="menu-container" aria-expanded={open} ref={buttonRef} onClick={() => setOpen(!open)}>
+                <span className="menu-text">Meny</span>
                 <span><Hamburger className={!open ? "hamburger-ikon" : "closed-burger"}/></span>
                 <span><Close className={open ? "close-ikon" : "closed-burger"}/></span>
-                <span className="menu-text">Meny</span>
             </Button>
 
             <PopoverCustomized

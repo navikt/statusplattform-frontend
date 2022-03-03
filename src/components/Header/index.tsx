@@ -188,14 +188,14 @@ const Header = () => {
     return (
         <CustomHeader>
             <a href={RouterHomePage.PATH} aria-label="Lenke til forside">
-                <img src="/assets/nav-logo/png/red.png" alt="Til forsiden" aria-hidden="true" />
+                <img src="/assets/nav-logo/png/black.png" alt="Til forsiden" aria-hidden="true" />
             </a>
 
             <HeaderContent>
-                <BurgerMenu />
                 <HeadingCustomized size="2xlarge" level="1">
                     <b>Status</b> digitale tjenester
                 </HeadingCustomized>
+                <BurgerMenu />
                 <ProfileOrLogin name={name} navIdent={navIdent} />
             
             </HeaderContent>
@@ -365,6 +365,12 @@ const ProfileButton = styled(Button)`
 const LoginButton = styled(Button)`
     border-radius: 50px;
     min-width: 148px;
+    color: black;
+    box-shadow: inset 0 0 0 2px black;
+
+    :hover {
+        background: black;
+    }
 `
 
 
@@ -447,11 +453,11 @@ const ProfileOrLogin: React.FC<{name: string, navIdent: string}> = ({name, navId
                     </PopoverCustomized>
                 </>
             :
-                <LoginButton 
+                <LoginButton variant="secondary"
                     onClick={() => router.push(RouterLogin.PATH)}
                 >
                     <BodyShort>
-                        Logg inn
+                        <b>Logg inn</b>
                     </BodyShort>
                 </LoginButton>
             }
