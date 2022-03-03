@@ -23,10 +23,24 @@ const CustomHeader = styled.header`
     background-color: white;
     border-bottom: 1px solid #c6c2bf;
 
+    position: relative;
     display: flex;
     flex-flow: row wrap;
     justify-content: center;
     align-items: center;
+
+    .header-menues {
+        width: 150px;
+    }
+
+    .last {
+
+        @media(min-width: 1150px) {
+            position: absolute;
+            display: flex;
+            right: 150px;
+        }
+    }
 
     img {
         max-width: 84px;
@@ -52,7 +66,7 @@ const CustomHeader = styled.header`
         }
 
         padding: 0 1rem;
-        
+
         flex-flow: row nowrap;
         align-items: center;
         flex-basis: 10% 80% 10%;
@@ -60,6 +74,19 @@ const CustomHeader = styled.header`
         > span {
             padding-left: 20px;
         }
+    }
+`
+
+const HeaderContent = styled.span`
+    width: 100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+
+    @media(min-width: 1150px) {
+        margin-right: 150px;
     }
 `
 
@@ -74,32 +101,10 @@ const HeadingCustomized = styled(Heading)`
         display: block;
     }
     @media(min-width: 450px) {
+        width: 425px;
     }
     @media (min-width: 650px) {
         white-space: normal;
-        margin-left: 1rem;
-    }
-`
-
-const HeaderContent = styled.span`
-    width: 100%;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-
-    > * {
-        margin: .5rem 0;
-    }
-/* 
-    .header-menues {
-        display: flex;
-    } */
-
-    @media (min-width: 450px){
-        flex-direction: row;
-        margin: 0;
     }
 `
 
@@ -192,7 +197,7 @@ const Header = () => {
 
     return (
         <CustomHeader>
-            <div>
+            <div className="header-menues">
                 <a href={RouterHomePage.PATH} aria-label="Lenke til forside">
                     <img src="/assets/nav-logo/png/black.png" alt="Til forsiden" aria-hidden="true" />
                 </a>
@@ -202,9 +207,9 @@ const Header = () => {
                 <HeadingCustomized size="2xlarge" level="1">
                     <b>Status</b> digitale tjenester
                 </HeadingCustomized>
-            
             </HeaderContent>
-            <div className="header-menues">
+
+            <div className="header-menues last">
                 <BurgerMenu />
                 <ProfileOrLogin name={name} navIdent={navIdent} />
             </div>
