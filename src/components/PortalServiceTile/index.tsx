@@ -141,6 +141,10 @@ const ServicesList = styled.ul`
         }
     }
 
+    li:last-child {
+        border-bottom: none;
+    }
+
     a {
         display: flex;
     }
