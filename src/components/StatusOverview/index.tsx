@@ -49,6 +49,10 @@ const DeviationCardContianer = styled.button`
 
     border-radius: 5px;
     border-left: 7.5px solid transparent;
+
+    display: flex;
+
+    :hover{cursor: pointer;}
     
     &.has-issue {
         background: var(--navds-semantic-color-feedback-warning-background);
@@ -72,10 +76,10 @@ const DeviationCardContianer = styled.button`
         border-left-color: var(--navds-global-color-red-500);
     }
 
-    display: flex;
     
     .content {
         text-align: left;
+        width: 100%;
         height: 100%;
         margin-left: 1.3rem;
 
@@ -83,7 +87,6 @@ const DeviationCardContianer = styled.button`
         flex-direction: column;
         justify-content: space-between;
 
-        :hover{cursor: pointer;}
         :focus, :hover {
             .navds-heading {
                 text-decoration: none;
