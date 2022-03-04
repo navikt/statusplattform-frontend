@@ -408,6 +408,8 @@ const LoginButton = styled(Button)`
 
 
 const PopoverCustomized = styled(Popover)`
+    width: max-content;
+
     ul {
         padding: 0;
         margin: 1rem;

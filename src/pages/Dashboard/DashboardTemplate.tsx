@@ -60,7 +60,7 @@ const DigitalServicesContainer = styled.div`
 
     .deviation-button-wrapper {
         width: 100%;
-
+        
         display: flex;
         justify-content: flex-end;
     }

@@ -44,6 +44,8 @@ const BurgerMenuContainer = styled.div`
 `
 
 const PopoverCustomized = styled(Popover)`
+    width: max-content;
+
     div {
         display: flex;
     }
