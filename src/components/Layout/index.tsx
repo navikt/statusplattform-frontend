@@ -13,7 +13,7 @@ import Header from '../../components/Header'
 import Navbar from '../../components/Navbar'
 import { NavigatorContext } from '../ContextProviders/NavigatorContext'
 import { TitleContext } from '../ContextProviders/TitleContext'
-import { RouterAvvikshistorikk, RouterHomePage } from '../../types/routes';
+import { RouterHomePage } from '../../types/routes';
 
 
 

@@ -319,8 +319,8 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
 
             <DigitalServicesContainer>
                 {router.asPath.includes("Dashboard") &&
-                    <div className="deviation-button-wrapper" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>
-                        <Button variant="tertiary" size="small">Se avvikshistorikk <Clock /> </Button>
+                    <div className="deviation-button-wrapper">
+                        <Button variant="tertiary" size="small" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk <Clock /> </Button>
                     </div>
                 }
 
