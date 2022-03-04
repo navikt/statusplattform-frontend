@@ -52,7 +52,7 @@ export interface Area {
     services: Service[]
     components: Component[]
     status?: string
-    subAreas?: SubArea
+    subAreas?: SubArea[]
 }
 
 export interface SubArea {

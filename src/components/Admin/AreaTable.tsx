@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 import { Bag, Calculator, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, Saving, SocialAid } from '@navikt/ds-icons'
 
-import { Area, Service } from '../../types/navServices';
+import { Area, Service, SubArea } from '../../types/navServices';
 
 import { AdminCategoryContainer, CloseCustomized, DependencyList } from '.';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
@@ -16,7 +16,7 @@ import { getIconsFromGivenCode } from '../../utils/servicesOperations';
 import { useLoader } from '../../utils/useLoader';
 import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react';
 import { TitleContext } from '../ContextProviders/TitleContext';
-import { deleteArea, deleteServiceFromArea, fetchAreas, postAdminArea, putServiceToArea, updateArea } from '../../utils/areasAPI';
+import { deleteArea, deleteServiceFromArea, fetchAreas, fetchSubAreas, postAdminArea, putServiceToArea, updateArea } from '../../utils/areasAPI';
 import { fetchServices } from '../../utils/servicesAPI';
 import { RouterAdminAddOmråde } from '../../types/routes';
 
@@ -540,21 +540,30 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
         description: area.description,
         icon: area.icon,
         services: area.services,
-        components: area.components
+        components: area.components,
+        subAreas: area.subAreas
     })
     const [servicesInArea, setServicesInArea] = useState<Service[]>(() => area.services.map(service => service))
+    const [subAreasInArea, setSubAreasInArea] = useState<SubArea[]>(() => area.subAreas.map(subArea => subArea))
+
+    const {data: subAreas, isLoading, reload} = useLoader(fetchSubAreas,[])
+
+    if(isLoading) 
+        return (
+            <CustomNavSpinner/>
+        )
 
 
 
     const handleDeleteServiceOnArea = (serviceId) => {
-        deleteServiceFromArea(area.id, serviceId)
-            .then(() => {
-                setServicesInArea([...servicesInArea.filter(service => service.id !== serviceId)])
-                toast.info("Tjeneste slettet fra område")
-            })
-            .catch(() => {
-                toast.warn("Tjeneste ble ikke slettet fra område grunnet feil")
-            }) 
+        setServicesInArea([...servicesInArea.filter(service => service.id !== serviceId)])
+        toast.info("Tjeneste slettet fra område")
+        // deleteServiceFromArea(area.id, serviceId)
+        //     .then(() => {
+        //     })
+        //     .catch(() => {
+        //         toast.warn("Tjeneste ble ikke slettet fra område grunnet feil")
+        //     }) 
     }
 
     const handlePutServiceToArea = (service: Service) => {
@@ -563,22 +572,43 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
             return
         }
         
-        putServiceToArea(area.id, service.id)
-            .then(() => {
-                setServicesInArea([...servicesInArea, service]);
-                toast.success("Tjenesten har blitt lagt til i området")
-            })
-            .catch(() => {
-                toast.warn("Tjenesten kunne ikke bli lagt til")
-            })
+        setServicesInArea([...servicesInArea, service]);
+        const newArea = {...updatedArea, services: [...servicesInArea, service]}
+            
+        changeUpdatedArea(newArea)
+        toast.success("Tjenesten har blitt lagt til i området")
+        // putServiceToArea(area.id, service.id)
+        //     .then(() => {
+        //     })
+        //     .catch(() => {
+        //         toast.warn("Tjenesten kunne ikke bli lagt til")
+        //     })
+    }
+
+    const handleDeleteSubAreaOnArea = (subAreaId) => {
+        setSubAreasInArea([...subAreasInArea.filter(subArea => subArea.id !== subAreaId)])
+        toast.info("Underområde slettet fra område")
+    }
+
+    const handlePutSubAreaToArea = (subArea: SubArea) => {
+        if(subAreasInArea.map(a => a.id).includes(subArea.id)) {
+            toast.warn("Dette underområdet fins allerede i området")
+            return
+        }
+        
+        setSubAreasInArea([...subAreasInArea, subArea]);
+        const newArea = {...updatedArea, subAreas: [...subAreasInArea, subArea]}
+            
+        changeUpdatedArea(newArea)
+        toast.success("Underområdet har blitt lagt til i området")
     }
 
     const handleUpdatedArea = (field: keyof typeof updatedArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const changedDashboard = {
+        const changedArea = {
             ...updatedArea,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
             
-        changeUpdatedArea(changedDashboard)
+        changeUpdatedArea(changedArea)
     }
 
     const handleSubmit = (event) => {
@@ -611,6 +641,7 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
 
 
     const { name, description, icon } = updatedArea
+console.log(subAreasInArea)
 
     return (
         <form onSubmit={handleSubmit}>
@@ -676,6 +707,35 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
                                         </EditDependeciesContainer>
                                     </ServicesInAreaList>
                                 }
+
+
+                                <DropdownSubAreaSelect 
+                                    subAreas={subAreas}
+                                    subAreasInArea={subAreasInArea} 
+                                    handlePutSubAreaToArea={handlePutSubAreaToArea}
+                                    toggleAreaExpanded={toggleExpanded} 
+                                />
+
+                                <ServicesInAreaList>
+                                    <EditDependeciesContainer>
+                                        <BodyShort spacing><b>Subområder i område:</b></BodyShort>
+                                        <DependencyList>
+                                            {subAreasInArea.map(subArea => {
+                                                return (
+                                                    <li key={subArea.id}>
+                                                        {subArea.name} 
+                                                        <button type="button"
+                                                                aria-label="Fjern underområde fra område"
+                                                                onClick={() => handleDeleteSubAreaOnArea(subArea.id)}>
+                                                            <CloseCustomized />
+                                                        </button>
+                                                    </li>
+                                                )
+                                            })}
+                                        </DependencyList>
+                                    </EditDependeciesContainer>
+                                </ServicesInAreaList>
+
                             </div>
                             
                             <div className="clickable" onClick={toggleExpanded}/>
@@ -788,6 +848,83 @@ const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handleP
         </TileDropdownColumn>
     )
 }
+
+
+
+
+
+
+
+
+
+
+
+interface DropdownSubAreasProps {
+    subAreas: SubArea[]
+    subAreasInArea: SubArea[]
+    handlePutSubAreaToArea: (selectedSubAreaId: SubArea) => void
+    toggleAreaExpanded: (area) => void
+}
+
+const DropdownSubAreaSelect = ({subAreas, subAreasInArea, handlePutSubAreaToArea, toggleAreaExpanded}: DropdownSubAreasProps) => {
+    const availableSubAreas = subAreas.filter(subArea => !subAreasInArea.map(sa => sa.id).includes(subArea.id))
+    
+    const [selectedSubArea, updatedSelectedSubArea] = useState<SubArea | null>(() => availableSubAreas.length > 0 ? availableSubAreas[0] : null)
+
+    useEffect(() => {
+        if(availableSubAreas.length > 0){
+            updatedSelectedSubArea(availableSubAreas[0])
+        }
+        else {
+            updatedSelectedSubArea(null)
+        }
+    }, [subAreas, subAreasInArea])
+
+    const handleUpdateSelectedSubArea = (event) => {
+        const idOfSelectedSubArea: string = event.target.value
+        const newSelectedSubArea: SubArea = availableSubAreas.find(service => idOfSelectedSubArea === service.id)
+        updatedSelectedSubArea(newSelectedSubArea)
+    }
+
+
+    const putHandler = () => {
+        if(!selectedSubArea) {
+            toast.info("Ingen underområde valgt")
+            return
+        }
+        handlePutSubAreaToArea(selectedSubArea)
+    }
+
+
+
+
+    return (
+        <TileDropdownColumn key="input">
+            <Select
+                value={selectedSubArea !== null ? selectedSubArea.id : ""} onChange={handleUpdateSelectedSubArea}
+                label="Velg underuområde"
+                hideLabel
+            >
+                {availableSubAreas.length > 0 ?
+                availableSubAreas.map(subArea => {
+                    return (
+                        <option key={subArea.id} value={subArea.id}>{subArea.name}</option>
+                    )
+                })
+                :
+                    <option key={undefined} value={""}>Ingen underområder å legge til</option>
+                }
+            </Select>
+
+            <div>
+                <Button variant="secondary" type="button" onClick={putHandler} >Legg til</Button>
+            </div>
+
+            <div className="clickable" onClick={toggleAreaExpanded}></div>
+        </TileDropdownColumn>
+    )
+}
+
 
 
 
