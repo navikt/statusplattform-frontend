@@ -66,7 +66,8 @@ export const updateArea = async (area: Area): Promise<void> =>{
                 name: area.name,
                 description: area.description,
                 icon: area.icon,
-                services: area.services
+                services: area.services,
+                subAreas: area.subAreas
             }),
             headers: {
                 "Content-type": "application/json; charset=UTF-8"
