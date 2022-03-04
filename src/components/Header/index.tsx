@@ -35,9 +35,13 @@ const CustomHeader = styled.header`
 
     .last {
         @media(max-width: 1149px) {
+            padding: 3px 0;
+            min-height: inherit;
+
             display: flex;
             flex-direction: column;
             align-items : flex-end;
+            justify-content: space-between;
             
             button {
                 margin: 0;
