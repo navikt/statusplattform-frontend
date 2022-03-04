@@ -126,6 +126,7 @@ const FullScreenFixedButton = styled(Button)`
         position: absolute;
         right: 0;
         top: 0;
+        height: 43px;
     }
 `
 
