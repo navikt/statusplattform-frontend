@@ -34,6 +34,15 @@ const CustomHeader = styled.header`
     }
 
     .last {
+        @media(max-width: 1149px) {
+            display: flex;
+            flex-direction: column;
+            align-items : flex-end;
+            
+            button {
+                margin: 0;
+            }
+        }
 
         @media(min-width: 1150px) {
             position: absolute;
