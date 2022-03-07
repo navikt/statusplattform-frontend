@@ -1,19 +1,22 @@
 import styled from 'styled-components'
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from 'next/link'
 
-import { Wrench } from '@navikt/ds-icons'
+import { Expand, Wrench } from '@navikt/ds-icons'
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-frontend-etiketter';
 import { BodyShort, Detail, Heading } from '@navikt/ds-react';
 
 import { ErrorCustomized, ErrorFilledCustomized, WrenchFilledCustomized, NoStatusAvailableCircle, WrenchOutlinedCustomized, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
-import { Area, MaintenanceObject} from '../../types/navServices'
+import { Area, MaintenanceObject, SubArea} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
 import { StringifyOptions } from 'querystring';
 import { UserStateContext } from '../ContextProviders/UserStatusContext';
 import { useRouter } from 'next/router';
+import { useLoader } from '../../utils/useLoader';
+import CustomNavSpinner from '../CustomNavSpinner';
+import { Collapse } from 'react-collapse';
 
 
 
@@ -37,6 +40,9 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
         .logged-in {
             padding: 20px; 
             padding-bottom:40px;
+        }
+        &:focus {
+            outline: 2px solid var(--navds-semantic-color-focus);
         }
     }
 
@@ -206,12 +212,13 @@ export interface PortalServiceTileProps {
     expanded: boolean;
     toggleTile: Function;
     tileIndex: number;
+    isAllExpanded: boolean
 }
 
 
-export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: PortalServiceTileProps) => {
+export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllExpanded}: PortalServiceTileProps) => {
+    
     const {filters, matches} = useContext(FilterContext)
-
     const { navIdent } = useContext(UserStateContext)
     const router = useRouter()
 
@@ -221,7 +228,7 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
 
     const testMaintenanceObject: MaintenanceObject = {isPlanned: false, message: "Planlagt 24. desember"}
 
-    const { name, status } = area
+    const { name, status, subAreas } = area
 
     return (
         <EkspanderbartpanelCustomized
@@ -254,7 +261,16 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex}: Porta
             apen={expanded}
             onClick={toggleExpanded}
         >
+            
             <ServicesList>
+                <div className="sub-area-container">
+                    {subAreas.map((subArea, index) => {
+                        return (
+                            <SubAreaComponent key={subArea.id} subArea={subArea} isLastElement={area.services.length == 0 && subAreas.length == index+1} isAllExpanded={isAllExpanded} />
+                        )
+                    })}
+                </div>
+
                 {area.services.map(service => {
                     if (filters.length == 0) {
                         return (
@@ -312,5 +328,89 @@ export const StatusIconHandler: React.FC<{status: string, isArea: boolean}> = ({
                 }
             })()}   
         </>
+    )
+}
+
+
+
+
+
+
+
+
+
+
+
+const SubAreaContent = styled.div`
+    padding: .8rem 0;
+
+
+    .sub-area-services {
+        list-style: none;
+    }
+
+    button {
+        border: none;
+        background: none;
+
+        .expanded {
+            transition: 200ms transform;
+        }
+
+        .not-expanded {
+            transform: scaleY(-1);
+            transition: 200ms transform;
+        }
+    }
+
+    svg {
+        margin-right: 8px;
+    }
+
+    .sub-area-services {
+        transition: 200ms transform;
+
+
+        .expanded {
+            transition: height 250ms cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+    }
+    
+    &.not-last-element {
+        border-bottom: 1px solid var(--navds-semantic-color-border-inverted);
+    }
+`
+
+
+const SubAreaComponent: React.FC<{subArea: SubArea, isLastElement: boolean, isAllExpanded: boolean}> = ({subArea, isLastElement, isAllExpanded}) => {
+    const [isToggled, setIsToggled] = useState(false)
+
+    const listOfStatusesInSubArea: string[] = subArea.services.map(service => service.status)
+
+    useEffect(() => {
+        if(isAllExpanded) {
+            setIsToggled(isAllExpanded)
+        }
+    },[isAllExpanded])
+
+    
+    return (
+        <SubAreaContent className={isLastElement ? "" : "not-last-element"}>
+            <button className="sub-area-button" aria-expanded={isToggled} onClick={() => setIsToggled(!isToggled)}>
+                <b> 
+                    {handleAndSetStatusIcon(subArea.status)}
+                    {subArea.name} <Expand className={!isToggled ? "expanded" : "not-expanded"}/>
+                </b>
+            </button>
+
+            <Collapse isOpened={isToggled}>
+                <ul className={`sub-area-services ${isToggled ? "expanded" : ""}`}>
+                    {subArea.services.map((service, index) => {
+                        return <li className={subArea.services.length != index+1 ? "not-last-element" : ""}>{handleAndSetStatusIcon(service.status)} {service.name}</li>
+                    })}
+                </ul>
+            </Collapse>
+        </SubAreaContent>
     )
 }
