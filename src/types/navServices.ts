@@ -57,6 +57,7 @@ export interface Area {
 
 export interface SubArea {
     id?: string
+    status: string
     name: string
     services: Service[]
 }

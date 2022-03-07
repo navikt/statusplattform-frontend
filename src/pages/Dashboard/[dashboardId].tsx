@@ -13,8 +13,7 @@ import { UserData } from "../../types/userData"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import { fetchDashboardsList } from "../../utils/dashboardsAPI"
 import { RouterPrivatperson } from "../../types/routes"
-import { Dashboard, SubArea } from "../../types/navServices"
-import { fetchSubAreas } from "../../utils/areasAPI"
+import { Dashboard } from "../../types/navServices"
 import { FullscreenEnter, FullscreenExit } from "@navikt/ds-icons"
 
 
@@ -35,7 +34,6 @@ const DashboardFromId = () => {
         (async function () {
             setIsLoading(true)
             const dashboards: Dashboard[] = await fetchDashboardsList()
-            const subAreas: SubArea[] = await fetchSubAreas()
             const dashboardMatchingTarget: Dashboard | undefined = (dashboards.find(dashboard => dashboard.name == dashboardTarget ? dashboard : undefined))
             setRetrievedDashboard(dashboardMatchingTarget)
             setIsLoading(false)

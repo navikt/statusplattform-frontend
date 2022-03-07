@@ -377,6 +377,7 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
                         <PortalServiceTile key={index} toggleTile={toggleTile}
                             tileIndex={rowIndex*numberOfTilesPerRow + index}
                             area={area} expanded={isTileExpanded(rowIndex, index, 0)}
+                            isAllExpanded={expandAll}
                         />
                     )}
                 </PortalServiceTileRow>
@@ -446,6 +447,7 @@ const FullScreen = ({ rows, toggleTile, numberOfTilesPerRow, isTileExpanded, tog
                             <PortalServiceTile key={index} toggleTile={toggleTile}
                                 tileIndex={rowIndex*numberOfTilesPerRow + index}
                                 area={area} expanded={isTileExpanded(rowIndex, index, 0)}
+                                isAllExpanded={expandAll}
                             />
                         )}
                     </FullScreenTileRow>
