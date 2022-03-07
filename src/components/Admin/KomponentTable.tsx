@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useLoader } from '../../utils/useLoader';
 
-import { Expand, Notes } from '@navikt/ds-icons'
+import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
 import { BodyShort, Button, Heading, Modal, Select, TextField } from '@navikt/ds-react';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
@@ -412,9 +412,9 @@ const ComponentRow = ({component, toggleEditComponent, toggleExpanded, isExpande
             </ComponentRowContent>
             <div className="button-container">
                 <CustomButton className="option" onClick={() => handleEditComponent(component)}>
-                    <Notes />
+                    <a><Notes /> Rediger</a>
                 </CustomButton>
-                <button className="option" onClick={setComponentToDelete} aria-label="Slett komponent"><CloseCustomized /></button>
+                <button className="option" onClick={setComponentToDelete} aria-label="Slett komponent"><a><Delete />Slett</a></button>
                 <button className="option" onClick={() => toggleExpanded(component)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
             
@@ -517,12 +517,12 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
             
             <div className="button-container">
                 <button type="button" className="option" onClick={handleSubmit}>
-                    Lagre endringer
+                    <a><SaveFile/> Lagre</a>
                 </button>
                 <CustomButton className="option" onClick={() => handleCancelEditting(component)}>
-                    Avbryt endringer
+                    <a><Close/> Avbryt</a>
                 </CustomButton>
-                <button className="option" onClick={setComponentToDelete} aria-label="Slett komponent"><CloseCustomized /></button>
+                <button className="option" onClick={setComponentToDelete} aria-label="Slett komponent"><a><Delete /> Slett</a></button>
                 <button className="option" onClick={() => toggleExpanded(component)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
 

@@ -7,7 +7,7 @@ import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useLoader } from '../../utils/useLoader';
 
-import { Expand, Notes } from '@navikt/ds-icons'
+import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
 import { BodyShort, Button, Heading, Modal, Select, TextField } from '@navikt/ds-react';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
@@ -94,6 +94,7 @@ const TjenesteContent = styled.div`
 const CustomButton = styled.button`
     background-color: transparent;
     border: none;
+
     :hover {
         cursor: pointer;
     }
@@ -375,7 +376,7 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
 
 
                 {isExpanded &&
-                    <div className="bottom-row" onClick={() => toggleExpanded(service)}>
+                    <div className="bottom-row">
 
                         <div className="service-row-column">
                             <div className="dependencies">
@@ -443,6 +444,10 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
                                 <BodyShort spacing><b>PollingUrl</b></BodyShort>
                                 <BodyShort>{service.pollingUrl}</BodyShort>
                             </span>
+                            <span className="service-data-element">
+                                <BodyShort spacing><b>ID</b></BodyShort>
+                                <BodyShort>{service.id}</BodyShort>
+                            </span>
                         </div>
                     </div>
                 }
@@ -450,9 +455,12 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
             </ServiceRowContent>
             <div className="button-container">
                 <CustomButton className="option" onClick={() => handleEditService(service)}>
-                    <Notes />
+                    <a>
+                        <Notes /> Rediger
+                    </a>
                 </CustomButton>
-                <button className="option" onClick={setServiceToDelete} aria-label="Slett tjeneste"><CloseCustomized /></button>
+
+                <button className="option" onClick={setServiceToDelete} aria-label="Slett tjeneste"><a><Delete/> Slett</a></button>
                 <button className="option" onClick={() => toggleExpanded(service)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
             
@@ -584,12 +592,14 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
             
             <div className="button-container">
                 <button type="button" className="option" onClick={handleSubmit}>
-                    Lagre endringer
+                    <a><SaveFile/> Lagre</a>
                 </button>
                 <CustomButton className="option" onClick={() => handleCloseEditService(service)}>
-                    Avbryt endringer
+                    <a>
+                        <Close/> Avbryt
+                    </a>
                 </CustomButton>
-                <button className="option" onClick={setServiceToDelete} aria-label="Slett tjeneste"><CloseCustomized /></button>
+                <button className="option" onClick={setServiceToDelete} aria-label="Slett tjeneste"><a><Delete/> Slett</a></button>
                 <button className="option" onClick={() => toggleExpanded(service)}><Expand className={isExpanded ? "expanded" : "not-expanded"} aria-expanded={isExpanded} /></button>
             </div>
 

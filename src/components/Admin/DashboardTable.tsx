@@ -4,7 +4,7 @@ import Head from 'next/head'
 import { toast } from 'react-toastify'
 import styled from 'styled-components'
 
-import { Expand, Notes } from '@navikt/ds-icons'
+import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
 import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react'
 
 import CustomNavSpinner from '../../components/CustomNavSpinner'
@@ -297,9 +297,9 @@ const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggle
 
             <div className="button-container">
                 <CustomButton className="option" onClick={handleEditDashboard}>
-                    <Notes />
+                    <a><Notes /> Rediger</a>
                 </CustomButton>
-                <button className="option" onClick={setDashboardToDelete} aria-label="Slett område"><CloseCustomized /></button>
+                <button className="option" onClick={setDashboardToDelete} aria-label="Slett område"><a><Delete/> Slett</a></button>
                 <button className="option" onClick={toggleExpanded} aria-expanded={expandedList.includes(dashboard.id)}>
                     <Expand className={expandedList.includes(dashboard.id) ? "expanded" : "not-expanded"} />
                 </button>
@@ -371,12 +371,12 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
 
                 <div className="button-container">
                     <button type="button" className="option" onClick={handleSubmit}>
-                        Lagre endringer
+                        <a><SaveFile/> Lagre</a>
                     </button>
                     <button type="button" className="option" onClick={handleDisableEdit} >
-                        Avbryt endringer
+                        <a><Close/> Avbryt</a>
                     </button>
-                    <button type="button" className="option" onClick={setDashboardToDelete} aria-label="Slett dashbord"><CloseCustomized /></button>
+                    <button type="button" className="option" onClick={setDashboardToDelete} aria-label="Slett dashbord"><a><Delete/> Slett</a></button>
                     <button type="button" className="option" onClick={toggleExpanded} aria-expanded={expandedList.includes(dashboard.id)}>
                         <Expand className={expandedList.includes(dashboard.id) ? "expanded" : "not-expanded"} />
                     </button>

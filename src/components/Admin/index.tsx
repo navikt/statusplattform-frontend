@@ -34,8 +34,10 @@ const AdminDashboardContainer = styled.div`
             border: none;
             padding: 0 16px;
 
-            max-width: 100px;
-            
+            a {
+                text-decoration: underline;
+            }
+
             display: flex;
             align-items: center;
             justify-content: center;
@@ -45,6 +47,10 @@ const AdminDashboardContainer = styled.div`
                 color: grey;
                 border-radius: 2pt;
                 box-shadow: 0 0 0 1pt grey;
+
+                a {
+                    text-decoration: none;
+                }
             }
 
             .not-expanded {
@@ -88,7 +94,7 @@ export const AdminCategoryContainer = styled.div`
         overflow-x: auto;
 
         div {
-            min-width: fit-content;
+            min-width: max-content;
         }
     }
 

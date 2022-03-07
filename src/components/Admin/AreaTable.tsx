@@ -4,7 +4,7 @@ import Head from 'next/head'
 import styled from 'styled-components'
 import { toast } from 'react-toastify';
 
-import { Bag, Calculator, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, Saving, SocialAid } from '@navikt/ds-icons'
+import { Bag, Calculator, Close, Delete, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, SaveFile, Saving, SocialAid } from '@navikt/ds-icons'
 
 import { Area, Service, SubArea } from '../../types/navServices';
 
@@ -442,7 +442,7 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
         toggleEditArea(area)
     }
 
-    const { id: areaId, name, description: beskrivelse, icon: ikon } = area
+    const { id: areaId, name, description: beskrivelse, icon: ikon, subAreas } = area
 
     return (
         <AreaRowContainer id={areaId}>
@@ -477,14 +477,38 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                                 
                         }
                         </div>
+
+
+                        <div className="bottom-row-column">
+                            {subAreas.length === 0 ?
+                                <div className="row-element">
+                                    Ingen underområder knyttet til området.
+                                </div>
+                            :
+                                <div className="row-element">
+                                    <BodyShort spacing><b>Underområder i område</b></BodyShort>
+                                    <ul>
+                                        {subAreas.map(subArea => {
+                                            return (
+                                                <li key={subArea.id}>
+                                                    {subArea.name} 
+                                                </li>
+                                            )
+                                        })}
+                                    </ul>
+                                </div>
+
+                                
+                        }
+                        </div>
                     </div>
                 }
             </AreaRowInner>
             <div className="button-container">
                 <CustomButton className="option" onClick={() => handleToggleEditArea()}>
-                    <Notes />
+                    <a><Notes /> Rediger</a>
                 </CustomButton>
-                <button className="option" onClick={setAreaToDelete} aria-label="Slett område"><CloseCustomized /></button>
+                <button className="option" onClick={setAreaToDelete} aria-label="Slett område"><a><Delete /> Slett</a></button>
                 <button className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>
                     <Expand className={isExpanded ? "expanded" : "not-expanded"} />
                 </button>
@@ -746,12 +770,12 @@ console.log(subAreasInArea)
 
                 <div className="button-container">
                     <button type="button" className="option" onClick={handleSubmit}>
-                        Lagre endringer
+                        <a><SaveFile/> Lagre</a>
                     </button>
                     <button type="button" className="option" onClick={() => handleDisableEditArea(area)} aria-label="Fjern dashbord">
-                        Avbryt endringer
+                        <a><Close/> Avbryt</a>
                     </button>
-                    <button type="button" className="option" onClick={setAreaToDelete} aria-label="Slett område"><CloseCustomized /></button>
+                    <button type="button" className="option" onClick={setAreaToDelete} aria-label="Slett område"><a><Delete /> Slett</a></button>
                     <button type="button" className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>
                         <Expand className={isExpanded ? "expanded" : "not-expanded"} />
                     </button>
