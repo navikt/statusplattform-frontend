@@ -350,6 +350,7 @@ const SubAreaContent = styled.div`
     }
 
     button {
+        padding: 0;
         border: none;
         background: none;
 
