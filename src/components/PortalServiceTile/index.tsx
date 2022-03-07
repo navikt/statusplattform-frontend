@@ -361,6 +361,9 @@ const SubAreaContent = styled.div`
             transform: scaleY(-1);
             transition: 200ms transform;
         }
+        :hover {
+            cursor: pointer;
+        }
     }
 
     svg {
@@ -369,7 +372,7 @@ const SubAreaContent = styled.div`
 
     .sub-area-services {
         transition: 200ms transform;
-
+        margin-top: 0.8rem;
 
         .expanded {
             transition: height 250ms cubic-bezier(0.4, 0, 0.2, 1);
