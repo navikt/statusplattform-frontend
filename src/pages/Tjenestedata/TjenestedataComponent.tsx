@@ -198,10 +198,6 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
                 <BodyShort spacing><b>Team</b></BodyShort>
                 <BodyShort>{team}</BodyShort>
                 <span className="separator" />
-
-                <BodyShort spacing><b>Type</b></BodyShort>
-                <BodyShort>{type}</BodyShort>
-                <span className="separator" />
                     
                     <BodyShort spacing><b>Avhengigheter</b></BodyShort>
 
@@ -228,18 +224,17 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
                     <span className="separator" />
 
                     <BodyShort spacing><b>Områder</b></BodyShort>
-                        {areasContainingService.map((element, index) => {
-                            if(areasContainingService.length != index+1) {
-                                return (
-                                    element.name + ", "
+                        <ul>
+                            {areasContainingService.map((area, index) => {
+                                if(areasContainingService.length != index+1) {
+                                    return (
+                                        <li key={area.id}>{area.name} + ", "</li>
+                                    )
+                                } return (
+                                    <li>{area.name}</li>
                                 )
-                            }return (
-                                element.name
-                            )
-                        })}
-                    <BodyShort>
-                    
-                    </BodyShort>
+                            })}
+                        </ul>
                     <span className="separator" />
 
                     <BodyShort spacing><b>Monitorlenke</b></BodyShort>
@@ -373,21 +368,79 @@ const TabHistory = ({setIsLast90Days, isLast90Days}: History) => {
 
 
 const HistoryContainer = styled.div`
-
 `
 
-const DailyOverview = styled.div``
+const DailyOverview = styled.div`
+    height: 92px;
+    background: white;
+    padding: 20px;
+
+    border-radius: 4px;
+
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
+
+    .entry {
+        display: block;
+        position: relative;
+
+        height: 100%;
+        width: 8px;
+        border-radius: 2px;
+        
+        &.ok {
+            background: var(--navds-global-color-green-500);
+        }
+        &.issue {
+            background: var(--navds-global-color-orange-500);
+        }
+        &.down {
+            background: var(--navds-global-color-red-500);
+        }
+
+        .entry-data {
+            position: absolute;
+        }
+    }
+`
 
 const MonthlyOverview = styled.div``
 
 const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, serviceHistory: ServiceHistory[]}> = ({service, isLast90Days, serviceHistory}) => {
+
+    const mockList = [{status: "OK", title: "Oppe", message: "Ingen feil på tjeneste"},
+        {status: "ISSUE", title: "Avvik på tjeneste", message: "Tjenesten er delvis nede grunnet problemer"},
+        {status: "DOWN", title: "Nede", message: "Tjenesten var nede"}
+    ]
+
+
 
     return (
         <HistoryContainer id="history">
             {isLast90Days
             ?
                 <DailyOverview>
-                    daglig
+                    {mockList.map((entry, index) => {
+                        return (
+                            <span key={index} className={`entry ${entry.status.toLowerCase()}`}>
+                                {/* <div className="entry-data" onMouseEnter={e => {
+                                        setStyle({display: 'block'});
+                                    }}
+                                    onMouseLeave={e => {
+                                        setStyle({display: 'none'})
+                                    }}
+                                >
+                                    <Heading size="medium" level="3">
+                                        {handleAndSetStatusIcon(entry.status)} {entry.title}
+                                    </Heading>
+                                    <BodyShort>
+                                        {entry.message}
+                                    </BodyShort>
+                                </div> */}
+                            </span>
+                        )
+                    })}
                 </DailyOverview>
             :
                 <MonthlyOverview>
