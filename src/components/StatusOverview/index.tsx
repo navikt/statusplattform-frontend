@@ -43,9 +43,9 @@ const StatusOverview = (props: AreaServicesList) => {
 const DeviationCardContianer = styled.button`
     position: relative;
     height: 100%;
-    outline: transparent solid 2px;
+    
     border: none;
-    padding: 0;
+    padding: 1rem .5rem;
 
     border-radius: 5px;
     border-left: 7.5px solid transparent;
@@ -62,7 +62,6 @@ const DeviationCardContianer = styled.button`
             background: var(--navds-global-color-orange-300);
             border-color: var(--navds-semantic-color-feedback-warning-icon);
         }
-        
 
         border-left-color: var(--navds-semantic-color-feedback-warning-icon);
     }
@@ -73,6 +72,7 @@ const DeviationCardContianer = styled.button`
         :hover {
             background: var(--navds-global-color-red-300);
         }
+
         border-left-color: var(--navds-global-color-red-500);
     }
 
@@ -98,30 +98,19 @@ const DeviationCardContianer = styled.button`
         text-decoration: underline;
     }
 
-    span {
-        position: absolute;
-
-        height: 100%;
-        padding: 3.5px;
-    }
-
-    /* .ok {background: var(--navds-global-color-green-500);}
-    .issue{background: var(--navds-global-color-orange-500);}
-    .down{background: var(--navds-global-color-red-500);} */
-
     :focus {
         outline: var(--navds-semantic-color-focus) solid 2px;
     }
     :active {background: var(--navds-semantic-color-interaction-primary-selected); color: white;}
 
     @media (min-width: 425px) {
-        height: 80px;
         width: 425px;
     }
 `
 
 
 const DeviationReportCard: React.FC<{status: string, titleOfDeviation: string, message: string}> = ({status, titleOfDeviation, message}) => {
+    
     return (
         <DeviationCardContianer aria-label={message + ". Trykk her for mer informasjon"} className={"has-"+status.toLowerCase()}>
             {/* <span className={status.toLowerCase()} /> */}
