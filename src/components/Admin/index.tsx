@@ -8,8 +8,7 @@ import TjenesteTable from './TjenesteTable';
 import DashboardTable from './DashboardTable';
 import { adminMenu, useFindCurrentTab } from './MenuSelector';
 import KomponentTable from './KomponentTable';
-import { useContext, useEffect, useState } from 'react';
-import CustomNavSpinner from '../CustomNavSpinner';
+import { useContext } from 'react';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { Heading } from '@navikt/ds-react';
 
