@@ -354,6 +354,10 @@ const SubAreaContent = styled.div`
         border: none;
         background: none;
 
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+
         .expanded {
             transition: 200ms transform;
         }
@@ -369,6 +373,10 @@ const SubAreaContent = styled.div`
 
     svg {
         margin-right: 8px;
+    }
+
+    svg:last-child{
+        margin-left: 8px;
     }
 
     .sub-area-services {
@@ -402,10 +410,11 @@ const SubAreaComponent: React.FC<{subArea: SubArea, isLastElement: boolean, isAl
     return (
         <SubAreaContent className={isLastElement ? "" : "not-last-element"}>
             <button className="sub-area-button" aria-expanded={isToggled} onClick={() => setIsToggled(!isToggled)}>
+                {handleAndSetStatusIcon(subArea.status)}
                 <b> 
-                    {handleAndSetStatusIcon(subArea.status)}
-                    {subArea.name} <Expand className={!isToggled ? "expanded" : "not-expanded"}/>
+                    {subArea.name} 
                 </b>
+                <Expand className={!isToggled ? "expanded" : "not-expanded"}/>
             </button>
 
             <Collapse isOpened={isToggled}>
