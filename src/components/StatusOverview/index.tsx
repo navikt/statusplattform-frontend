@@ -18,6 +18,10 @@ const StatusSummary = styled.div`
     flex-direction: column;
     gap: 32px;
 
+    .navds-alert {
+        width: 100%;
+    }
+
     @media (min-width: 902px) {
         flex-flow: row wrap;
     }
@@ -39,30 +43,29 @@ const StatusOverview = (props: AreaServicesList) => {
 
     useEffect(() => {
         // setIsLoading(true)
+        const areaStatusesOk = props.areas.map(area => area.status == "OK")
         const areaStatuses = props.areas.map(area => area.status)
-        // console.log(areaStatuses)
+        
+        if(props.areas.map(a => a.status == "OK").length == props.areas.length) {
+            setAllGood(true)
+        }
 
         if (areaStatuses.includes("DOWN")) {
+            setAllGood(false)
             setHasDown(true)
-            // setAllGood(false)
         }else setHasDown(false)
 
         if (areaStatuses.includes("ISSUE")) {
+            setAllGood(false)
             setHasIssue(true)
-            // setAllGood(false)
         }else setHasIssue(false)
 
-        // if(hasIssue == false && hasDown == false) {
-        //     setAllGood(true)
-        // }
-
-        // console.log(hasIssue)
-        // console.log(hasDown)
 
         // setIsLoading(false)
-    },[])
+    }, [props])
 
     // if(isLoading) return <CustomNavSpinner />
+
 
     return (
         <StatusSummary>
@@ -72,9 +75,9 @@ const StatusOverview = (props: AreaServicesList) => {
             {hasDown==true &&
                 <DeviationReportCard status={"DOWN"} titleOfDeviation={"Vi opplever større problemer med"} message={"Vi opplever problemer med flere av våre tjenester"}/>
             }
-            {/* {allGood &&
-                <Alert variant="success" >Ingen feil oppdaget</Alert>
-            } */}
+            {allGood &&
+                <Alert variant="success" >Alle våre systemer fungerer normalt</Alert>
+            }
         </StatusSummary>
     )
 }
