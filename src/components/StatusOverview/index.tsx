@@ -2,11 +2,13 @@ import styled from 'styled-components'
 import { useRouter } from 'next/router';
 
 import { Bell } from '@navikt/ds-icons';
-import { BodyShort, Button, Detail, Heading, Panel } from '@navikt/ds-react';
+import { Alert, BodyShort, Button, Detail, Heading, Panel } from '@navikt/ds-react';
 
 import { AreaServicesList } from '../../types/navServices'
 import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI, countFailingServices } from '../../utils/servicesOperations';
 import { RouterAvvikshistorikk, RouterOpprettVarsling } from '../../types/routes';
+import { useEffect, useState } from 'react';
+import CustomNavSpinner from '../CustomNavSpinner';
 
 
 const StatusSummary = styled.div`
@@ -29,11 +31,50 @@ const StatusSummary = styled.div`
 
 const StatusOverview = (props: AreaServicesList) => {
     const router = useRouter()
+    const [hasIssue, setHasIssue] = useState(false)
+    const [hasDown, setHasDown] = useState(false)
+    const [allGood, setAllGood] = useState(false)
+
+    const [isLoading, setIsLoading] = useState(false)
+
+    useEffect(() => {
+        // setIsLoading(true)
+        const areaStatuses = props.areas.map(area => area.status)
+        // console.log(areaStatuses)
+
+        if (areaStatuses.includes("DOWN")) {
+            setHasDown(true)
+            // setAllGood(false)
+        }else setHasDown(false)
+
+        if (areaStatuses.includes("ISSUE")) {
+            setHasIssue(true)
+            // setAllGood(false)
+        }else setHasIssue(false)
+
+        // if(hasIssue == false && hasDown == false) {
+        //     setAllGood(true)
+        // }
+
+        // console.log(hasIssue)
+        // console.log(hasDown)
+
+        // setIsLoading(false)
+    },[])
+
+    // if(isLoading) return <CustomNavSpinner />
 
     return (
         <StatusSummary>
-            <DeviationReportCard status={"ISSUE"} titleOfDeviation={"Vi opplever større problemer med"} message={"Vi opplever problemer med flere av våre tjenester"}/>
-            <DeviationReportCard status={"DOWN"} titleOfDeviation={"Vi opplever større problemer med"} message={"Vi opplever problemer med flere av våre tjenester"}/>
+            {hasIssue==true &&
+                <DeviationReportCard status={"ISSUE"} titleOfDeviation={"Vi opplever større problemer med"} message={"Vi opplever problemer med flere av våre tjenester"}/>
+            }
+            {hasDown==true &&
+                <DeviationReportCard status={"DOWN"} titleOfDeviation={"Vi opplever større problemer med"} message={"Vi opplever problemer med flere av våre tjenester"}/>
+            }
+            {/* {allGood &&
+                <Alert variant="success" >Ingen feil oppdaget</Alert>
+            } */}
         </StatusSummary>
     )
 }
