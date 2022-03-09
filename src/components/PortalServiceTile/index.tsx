@@ -420,7 +420,11 @@ const SubAreaComponent: React.FC<{subArea: SubArea, isLastElement: boolean, isAl
             <Collapse isOpened={isToggled}>
                 <ul className={`sub-area-services ${isToggled ? "expanded" : ""}`}>
                     {subArea.services.map((service, index) => {
-                        return <li className={subArea.services.length != index+1 ? "not-last-element" : ""}>{handleAndSetStatusIcon(service.status)} {service.name}</li>
+                        return (
+                            <li className={subArea.services.length != index+1 ? "not-last-element" : ""} key={service.id}>
+                                {handleAndSetStatusIcon(service.status)} {service.name}
+                            </li>
+                        )
                     })}
                 </ul>
             </Collapse>
