@@ -41,7 +41,7 @@ export interface Component {
     monitorlink?: string
     pollingUrl?: string
     status?: string
-    areasContainingThisComponent?: Area[]
+    servicesDependentOnThisComponent?: Service[]
 }
 
 export interface Area {

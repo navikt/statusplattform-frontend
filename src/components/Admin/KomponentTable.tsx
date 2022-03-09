@@ -381,12 +381,12 @@ const ComponentRow = ({component, toggleEditComponent, toggleExpanded, isExpande
                             {component.componentDependencies.length == 0
                                 ?
                                     <>
-                                        <BodyShort spacing><b>Tjenester avhengig denne</b></BodyShort>
-                                        <BodyShort spacing>Ingen tjenester avhengher denne komponenten</BodyShort>
+                                        <BodyShort spacing><b>Komponentavhengigheter</b></BodyShort>
+                                        <BodyShort spacing>Ingen komponentavhengigheter eksisterer</BodyShort>
                                     </>
                                 :
                                     <>
-                                        <BodyShort spacing><b>Tjenester avhengig denne</b></BodyShort>
+                                        <BodyShort spacing><b>Komponentavhengigheter</b></BodyShort>
                                         <ul>
                                             {component.componentDependencies.map((dependency, index) => {
                                                 return (
@@ -445,7 +445,7 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
         componentDependencies: component.componentDependencies,
         monitorlink: component.monitorlink,
         pollingUrl: component.pollingUrl,
-        areasContainingThisComponent: component.areasContainingThisComponent
+        servicesDependentOnThisComponent: component.servicesDependentOnThisComponent
     })
 
 
@@ -479,7 +479,7 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
     
 
 
-    const { name, type, team, componentDependencies, monitorlink, pollingUrl, areasContainingThisComponent } = updatedComponent
+    const { name, type, team, componentDependencies, monitorlink, pollingUrl, servicesDependentOnThisComponent } = updatedComponent
 
     return (
         <ComponentRowContainer>
