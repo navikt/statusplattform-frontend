@@ -189,7 +189,7 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
     const regex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi)
 
 
-    const { type, serviceDependencies: dependencies, id, monitorlink, team } = service
+    const { type, serviceDependencies: dependencies, componentDependencies, id, monitorlink, team } = service
 
     return (
         <>
@@ -200,7 +200,10 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
 
                 <span className="separator" />
                     
-                    <BodyShort spacing><b>Avhengigheter</b></BodyShort>
+
+
+                    
+                    <BodyShort spacing><b>Avhengigheter til tjenester</b></BodyShort>
 
                     <div>
                         {dependencies.length > 0
@@ -226,14 +229,48 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
                         }
                     </div>
 
+
                     <span className="separator" />
+
+
+                    <BodyShort spacing><b>Avhengigheter til komponenter</b></BodyShort>
+
+                    {componentDependencies.length > 0 
+                    ?
+                        <div>
+                            {componentDependencies.map((component, index) => {
+                                if(componentDependencies.length != index+1) {
+                                    return (
+                                        <Link key={id} href={RouterTjenestedata.PATH + component.id}>
+                                            {component.name + ", "}
+                                        </Link>
+                                    )
+                                }
+
+                                return (
+                                    <Link href={RouterTjenestedata.PATH + component.id} key={component.id}>{component.name}</Link>
+                                )
+                            })}
+                        </div>
+
+                    :
+                        <BodyShort>Ikke definert</BodyShort>
+                    }
+
+                    <span className="separator" />
+
+
+
+
+
+
 
                     <BodyShort spacing><b>Områder</b></BodyShort>
                     <ul>
                         {areasContainingService.map((area, index) => {
                             if(areasContainingService.length != index+1) {
                                 return (
-                                    <li key={area.id}>{area.name} + ", "</li>
+                                    <li key={area.id}>{area.name}, </li>
                                 )
                             } return (
                                 <li key={area.id}>{area.name}</li>
