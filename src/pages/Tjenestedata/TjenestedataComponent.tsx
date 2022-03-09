@@ -1,18 +1,18 @@
+import Link from 'next/link'
 import styled from 'styled-components'
 import { SetStateAction, useContext, useState } from 'react';
 import { useRouter } from 'next/router';
-import Link from 'next/link'
 
+
+import { BodyShort, Heading, Panel } from '@navikt/ds-react';
 import { Innholdstittel } from 'nav-frontend-typografi';
-import { Bell } from '@navikt/ds-icons';
-import { BodyShort, Button, Heading, Panel } from '@navikt/ds-react';
+import CustomNavSpinner from '../../components/CustomNavSpinner';
 
 import { Area, Service, ServiceHistory } from '../../types/navServices';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
-import { RouterOpprettVarsling, RouterTjenestedata } from '../../types/routes';
+import { RouterTjenestedata } from '../../types/routes';
 import { IncidentCard } from '../../components/Incidents';
 import { useLoader } from '../../utils/useLoader';
-import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { fetchAreasContainingService } from '../../utils/areasAPI';
 import { handleAndSetStatusIcon } from '../../components/PortalServiceTile';
 import { fetchServiceHistory } from '../../utils/servicesAPI';
@@ -197,12 +197,14 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
             <ServiceDataContainer>
                 <BodyShort spacing><b>Team</b></BodyShort>
                 <BodyShort>{team}</BodyShort>
+
                 <span className="separator" />
                     
                     <BodyShort spacing><b>Avhengigheter</b></BodyShort>
 
-                    <BodyShort>
-                        {dependencies.length > 0 ?
+                    <div>
+                        {dependencies.length > 0
+                        ?
                             dependencies.map((element, index) => {
 
                                 if(dependencies.length != index+1) {
@@ -214,27 +216,31 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
                                 }
 
                                 return (
-                                    <Link key={id} href={RouterTjenestedata.PATH + element.id} >{element.name}</Link>
+                                    <Link key={id} href={RouterTjenestedata.PATH + element.id} >
+                                        {element.name}
+                                    </Link>
                                 )
                             })
                         :
                             <BodyShort>Ikke definert</BodyShort>
                         }
-                    </BodyShort>
+                    </div>
+
                     <span className="separator" />
 
                     <BodyShort spacing><b>Områder</b></BodyShort>
-                        <ul>
-                            {areasContainingService.map((area, index) => {
-                                if(areasContainingService.length != index+1) {
-                                    return (
-                                        <li key={area.id}>{area.name} + ", "</li>
-                                    )
-                                } return (
-                                    <li>{area.name}</li>
+                    <ul>
+                        {areasContainingService.map((area, index) => {
+                            if(areasContainingService.length != index+1) {
+                                return (
+                                    <li key={area.id}>{area.name} + ", "</li>
                                 )
-                            })}
-                        </ul>
+                            } return (
+                                <li key={area.id}>{area.name}</li>
+                            )
+                        })}
+                    </ul>
+
                     <span className="separator" />
 
                     <BodyShort spacing><b>Monitorlenke</b></BodyShort>
