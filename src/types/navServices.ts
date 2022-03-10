@@ -48,7 +48,7 @@ export interface Area {
     id?: string
     name: string
     description: string
-    icon: string
+    icon?: string
     services: Service[]
     components: Component[]
     status?: string

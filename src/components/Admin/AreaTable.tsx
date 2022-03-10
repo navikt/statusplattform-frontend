@@ -176,7 +176,7 @@ const AreaTable = () => {
                         <div className="area-header-content">
                             <span>Navn</span>
                             <span>Beskrivelse</span>
-                            <span>Ikon</span>
+                            {/* <span>Ikon</span> */}
                         </div>
                         <div className="empty-space"></div>
                     </AreaHeader>
@@ -352,12 +352,12 @@ const AreaElements = styled.div`
     align-items: center;
 `
 
-const IconContainer = styled.section`
-	color: var(--navds-global-color-blue-500);
-    font-size: 2rem;
-    display: flex;
-    align-items: center;
-`;
+// const IconContainer = styled.section`
+// 	color: var(--navds-global-color-blue-500);
+//     font-size: 2rem;
+//     display: flex;
+//     align-items: center;
+// `;
 
 const TileDropdownColumn = styled.div`
     max-width: 300px;
@@ -442,7 +442,7 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
         toggleEditArea(area)
     }
 
-    const { id: areaId, name, description: beskrivelse, icon: ikon, subAreas } = area
+    const { id: areaId, name, description: beskrivelse, subAreas } = area
 
     return (
         <AreaRowContainer id={areaId}>
@@ -450,7 +450,7 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                 <div className="top-row">
                     <span className="row-element">{name}</span>
                     <span className="row-element">{beskrivelse}</span>
-                    <span className="row-element"><IconContainer>{getIconsFromGivenCode(ikon)}</IconContainer></span>
+                    {/* <span className="row-element"><IconContainer>{getIconsFromGivenCode(ikon)}</IconContainer></span> */}
                 </div>
         
                 {isExpanded && 
@@ -655,16 +655,16 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
         toggleEditArea(area)
     }
 
-    const handleAreaIconChange = (event) => {
-        const newArea = {
-            ...updatedArea,
-        }
-        newArea.icon = event.target.value
-        changeUpdatedArea(newArea)
-    }
+    // const handleAreaIconChange = (event) => {
+    //     const newArea = {
+    //         ...updatedArea,
+    //     }
+    //     newArea.icon = event.target.value
+    //     changeUpdatedArea(newArea)
+    // }
 
 
-    const { name, description, icon } = updatedArea
+    const { name, description } = updatedArea
 
     return (
         <form onSubmit={handleSubmit}>
@@ -675,7 +675,7 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
                     <AreaElements className="top-row" onClick={toggleExpanded}>
                         <TextField label="Navn" hideLabel className="row-element editting" value={name} onChange={handleUpdatedArea("name")} onClick={(event) => event.stopPropagation()} />
                         <TextField label="Beskrivelse" hideLabel className="row-element editting" value={description} onChange={handleUpdatedArea("description")} onClick={(event) => event.stopPropagation()} />
-                        <Select
+                        {/* <Select
                             label="Velg ikon"
                             hideLabel
                             className="row-element editting"
@@ -688,7 +688,7 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
                                     <option key={option.value} value={option.value}>{option.label}</option>
                                 )
                             })}
-                        </Select>
+                        </Select> */}
                     </AreaElements>
                     
 
