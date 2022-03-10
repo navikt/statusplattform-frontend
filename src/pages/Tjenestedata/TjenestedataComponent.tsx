@@ -279,14 +279,16 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
                             {componentDependencies.map((component, index) => {
                                 if(componentDependencies.length != index+1) {
                                     return (
-                                        <Link key={id} href={RouterTjenestedata.PATH + component.id}>
+                                        <Link key={component.id} href={RouterTjenestedata.PATH + component.id}>
                                             {component.name + ", "}
                                         </Link>
                                     )
                                 }
 
                                 return (
-                                    <Link href={RouterTjenestedata.PATH + component.id} key={component.id}>{component.name}</Link>
+                                    <Link href={RouterTjenestedata.PATH + component.id} key={component.id}>
+                                        {component.name}
+                                    </Link>
                                 )
                             })}
                         </div>
