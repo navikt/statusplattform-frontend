@@ -88,7 +88,7 @@ const NewComponent = () => {
 
     const handleAddComponentDependency = (componentToAdd: Component) => {
         if(dependencies.includes(componentToAdd)) {
-            toast.warn("Tjenesteavhengighet " + componentToAdd.name + " er allerede lagt til")
+            toast.warn("Komponent " + componentToAdd.name + " er allerede lagt til")
             return
         }
         const newComponentsList = [...newComponent.componentDependencies, componentToAdd]
@@ -96,7 +96,7 @@ const NewComponent = () => {
             name: name, team: team, type: type, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, servicesDependentOnThisComponent
         }
         updateNewComponent(updatedComponent)
-        toast.success("Lagt til tjenesteavhengighet")
+        toast.success("Lagt til komponentavhengighet")
     }
 
     const handleDeleteComponentDependency = (componentToDelete: Component) => {
@@ -196,7 +196,7 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
         changeSelectedComponent(newSelectedComponent)
     }
 
-    const addHandler = (selectedComponent) => {
+    const addHandler = () => {
         if(!selectedComponent) {
             toast.info("Ingen komponent valgt")
             return
@@ -220,7 +220,7 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
                 }
             </Select>
 
-            <Button variant="secondary" type="button" onClick={() => addHandler(selectedComponent)}>Legg til</Button>
+            <Button variant="secondary" type="button" onClick={addHandler}>Legg til</Button>
             
 
             {newComponent.componentDependencies.length > 0

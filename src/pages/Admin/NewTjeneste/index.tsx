@@ -122,7 +122,7 @@ const NewService = () => {
 
     const handleAddComponentDependency = (componentToAdd: Component) => {
         if(componentdependencies.includes(componentToAdd)) {
-            toast.warn("Tjenesteavhengighet " + componentToAdd.name + " er allerede lagt til")
+            toast.warn("Komponent " + componentToAdd.name + " er allerede lagt til")
             return
         }
         const newComponentsList = [...newService.componentDependencies, componentToAdd]
@@ -130,7 +130,7 @@ const NewService = () => {
             name: name, team: team, type: type, serviceDependencies: serviceDependencies, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
         }
         updateNewService(updatedService)
-        toast.success("Lagt til tjenesteavhengighet")
+        toast.success("Lagt til komponentavhengighet")
     }
 
     const handleDeleteComponentDependency = (componentToAdd: Component) => {
@@ -149,20 +149,20 @@ const NewService = () => {
     /*Handlers for adding serviceDependencies START*/
     const handleAddAreaServiceConnectsTo = (areaToConsistIn: Area) => {
         if(newService.areasContainingThisService.includes(areaToConsistIn)) {
-            toast.warn("Service " + areaToConsistIn.name + " er allerede i område")
+            toast.warn("Tjenesten ligger allerede i område: " + areaToConsistIn.name)
             return
         }
         const updatedList = [...newService.areasContainingThisService, areaToConsistIn]
         const updatedService: Service = {...newService,  areasContainingThisService: updatedList}
         updateNewService(updatedService)
-        toast.success("Lagt service i område")
+        toast.success("Lagt tjeneste i område")
     }
     
     const handleDeleteAreaServiceConnectsTo =  (areaToDeleteFrom: Area) => {
         const newAreaList: Area[] = [...newService.areasContainingThisService.filter(area => area != areaToDeleteFrom)]
         const updatedService: Service = {...newService, areasContainingThisService: newAreaList}
         updateNewService(updatedService)
-        toast.success("Fjernet service fra område")
+        toast.success("Fjernet tjeneste fra område")
     }
     /*Handlers for adding areaService END*/
 
@@ -365,7 +365,7 @@ const ComponentDependencies = ({newService, allComponents, handleAddComponentDep
 
     const dependencyHandler = () => {
         if(!selectedComponent) {
-            toast.info("Ingen tjeneste valgt")
+            toast.info("Ingen komponent valgt")
             return
         }
         handleAddComponentDependency(selectedComponent)
@@ -383,7 +383,7 @@ const ComponentDependencies = ({newService, allComponents, handleAddComponentDep
                         )
                     })
                 :
-                    <option key={undefined} value="">Ingen tilgjengelige områder</option>
+                    <option key={undefined} value="">Ingen tilgjengelige komponenter</option>
                 }
             </Select>
 
@@ -408,7 +408,7 @@ const ComponentDependencies = ({newService, allComponents, handleAddComponentDep
                     })}
                 </ul>
             :
-                <BodyShort spacing><b>Ingen tjenester igjen i listen</b></BodyShort>
+                <BodyShort spacing><b>Ingen komponenter lagt til</b></BodyShort>
             }
 
         </DynamicListContainer>
@@ -454,6 +454,14 @@ const ConnectServiceToArea = ({newService, allAreas, handleDeleteAreaServiceConn
         changeSelectedArea(newSelectedArea)
     }
 
+    const dependencyHandler = () => {
+        if(!selectedArea) {
+            toast.info("Ingen områder valgt")
+            return
+        }
+        handleAddAreaServiceConnectsTo(selectedArea)
+    }
+
 
     return (
         <DynamicListContainer>
@@ -469,7 +477,7 @@ const ConnectServiceToArea = ({newService, allAreas, handleDeleteAreaServiceConn
                 }
             </Select>
 
-            <Button variant="secondary" type="button" onClick={() => handleAddAreaServiceConnectsTo(selectedArea)}>Legg til</Button>
+            <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
             
 
             {newService.areasContainingThisService.length > 0

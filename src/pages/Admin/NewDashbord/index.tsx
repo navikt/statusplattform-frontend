@@ -167,6 +167,14 @@ const DashboardAreas = ({newDashboard, allAreas, handleDeleteAreaOnDashboard, ha
         const newSelectedArea: Area = availableAreas.find(area => idOfSelectedArea === area.id)
         changeSelectedArea(newSelectedArea)
     }
+
+    const dependencyHandler = () => {
+        if(!selectedArea) {
+            toast.info("Ingen områder valgt")
+            return
+        }
+        handleAddAreaToDashboard(selectedArea)
+    }
     
 
     return (
@@ -184,7 +192,7 @@ const DashboardAreas = ({newDashboard, allAreas, handleDeleteAreaOnDashboard, ha
                 }
             </Select>
 
-            <Button variant="secondary" type="button" onClick={() => handleAddAreaToDashboard(selectedArea)}>Legg til avhengighet</Button>
+            <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
             
 
             {newDashboard.areas.length > 0

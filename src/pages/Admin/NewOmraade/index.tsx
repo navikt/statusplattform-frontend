@@ -65,7 +65,7 @@ const NewArea = () => {
 
     const handleAddServiceToArea = (serviceToAdd: Service) => {
         if(newArea.services.includes(serviceToAdd)) {
-            toast.warn("Område " + serviceToAdd.name + " er allerede i område")
+            toast.warn("Tjeneste " + serviceToAdd.name + " er allerede i området")
             return
         }
         const updatedList = [...newArea.services, serviceToAdd]
@@ -73,7 +73,7 @@ const NewArea = () => {
             name: name, services: updatedList, components: components, description: description, icon: icon
         }
         updateNewArea(updatedArea)
-        toast.success("Lagt område til område")
+        toast.success("Lagt tjeneste til område")
     }
 
     const handleDeleteServiceOnArea = (serviceToDelete: Service) => {
@@ -82,7 +82,7 @@ const NewArea = () => {
             name: name, description: description, components: components, icon: icon, services: newServicesList
         }
         updateNewArea(updatedArea)
-        toast.success("Fjernet område fra område")
+        toast.success("Fjernet tjeneste fra område")
     }
 
 
@@ -97,13 +97,13 @@ const NewArea = () => {
     }
 
 
-    const handleAreaIconChange = (event) => {
-        const updatedNewArea = {
-            ...newArea,
-        }
-        updatedNewArea.icon = event.target.value
-        updateNewArea(updatedNewArea)
-    }
+    // const handleAreaIconChange = (event) => {
+    //     const updatedNewArea = {
+    //         ...newArea,
+    //     }
+    //     updatedNewArea.icon = event.target.value
+    //     updateNewArea(updatedNewArea)
+    // }
 
 
     return (
@@ -117,7 +117,7 @@ const NewArea = () => {
                     
                     <TextField type="text" required label="Navn på område" value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*" />
                     <TextField type="text" required label="Beskrivelse" value={description} onChange={handleAreaDataChange("description")} placeholder="Beskrivelse" />
-                    <Select
+                    {/* <Select
                         size="small"
                         label="Velg ikon til området*"
                         form="form"
@@ -129,7 +129,7 @@ const NewArea = () => {
                                 <option key={option.value} value={option.value}>{option.label}</option>
                             )
                         })}
-                    </Select>
+                    </Select> */}
 
                     <AreaServices 
                         newArea={newArea}
@@ -192,12 +192,19 @@ const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDe
         const newSelectedService: Service = availableServices.find(area => idOfSelectedArea === area.id)
         changeSelectedService(newSelectedService)
     }
-    
+
+    const dependencyHandler = () => {
+        if(!selectedService) {
+            toast.info("Ingen tjeneste valgt")
+            return
+        }
+        handleAddServiceToArea(selectedService)
+    }
 
     return (
         <DynamicListContainer>
             
-            <Select label="Legg til i område" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedArea}>
+            <Select label="Legg tjenester i ditt nye område" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedArea}>
                 {availableServices.length > 0 ?
                     availableServices.map(area => {
                         return (
@@ -209,7 +216,7 @@ const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDe
                 }
             </Select>
 
-            <Button variant="secondary" type="button" onClick={() => handleAddServiceToArea(selectedService)}>Legg til</Button>
+            <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
             
 
             {newArea.services.length > 0
