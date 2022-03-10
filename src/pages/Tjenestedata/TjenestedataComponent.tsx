@@ -39,6 +39,45 @@ const CategoryContainer = styled.div`
         margin-bottom: 2rem;
     }
 
+    .info-hover-text, .arrow {
+        visibility: hidden;
+    }
+
+    .no-status-wrapper {
+        :hover {
+            .info-hover-text, .arrow {
+                visibility: visible;
+            }
+        }
+    }
+
+    .no-status-wrapper {
+        position: relative;
+        display: inline-block;
+
+        .info-hover-text {
+            position: absolute;
+            background: white;
+
+            border-radius: 4px;
+
+            top: -.7rem;
+            padding: .7rem;
+
+            width: 200px;
+        }
+        
+        .arrow {
+            position: absolute;
+            top: 25%;
+            right: 0;
+
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+            border-right: 10px solid white;
+        }
+    }
+
     button {
         margin: 32px 0 40px 0;
     }
@@ -111,10 +150,9 @@ const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
         return <ErrorParagraph>Kunne ikke hente tjenesten. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
     }
 
-
     return (
         <CategoryContainer>
-            <div className="title-container"><Innholdstittel>{handleAndSetStatusIcon(service.status)}{service.name}</Innholdstittel></div>
+            <div className="title-container"><Innholdstittel>{handleAndSetStatusIcon(service.status, true)}{service.name}</Innholdstittel></div>
 
             {/* <div>
                 <Button variant="secondary" onClick={() => router.push(RouterOpprettVarsling.PATH)}><Bell/> Bli varslet ved avvik</Button> 

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-import { Wrench, Success, Warning, Error, SuccessFilled, WarningFilled, ErrorFilled } from '@navikt/ds-icons'
+import { Wrench, Success, Warning, Error, SuccessFilled, WarningFilled, ErrorFilled, HelptextFilled } from '@navikt/ds-icons'
 
 
 
@@ -95,6 +95,10 @@ export const NoStatusAvailableCircle = styled.span`
     border-radius: 50%;
     display: inline-block;
 `;
+
+export const HelptextCustomizedBlue = styled(HelptextFilled)`
+    color: var(--navds-global-color-deepblue-400) !important;
+`
 
 const WrenchCustomizedBlue = styled(Wrench)`
     color: var(--navds-global-color-deepblue-400) !important;

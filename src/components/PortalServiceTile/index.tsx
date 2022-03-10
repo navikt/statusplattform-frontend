@@ -7,7 +7,7 @@ import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-frontend-etiketter';
 import { BodyShort, Detail, Heading } from '@navikt/ds-react';
 
-import { ErrorCustomized, ErrorFilledCustomized, WrenchFilledCustomized, NoStatusAvailableCircle, WrenchOutlinedCustomized, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized } from '../../components/TrafficLights'
+import { ErrorCustomized, ErrorFilledCustomized, WrenchFilledCustomized, NoStatusAvailableCircle, WrenchOutlinedCustomized, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized, HelptextCustomizedBlue } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { Area, MaintenanceObject, SubArea} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
@@ -17,6 +17,7 @@ import { useRouter } from 'next/router';
 import { useLoader } from '../../utils/useLoader';
 import CustomNavSpinner from '../CustomNavSpinner';
 import { Collapse } from 'react-collapse';
+import { RouterTjenestedata } from '../../types/routes';
 
 
 
@@ -132,6 +133,10 @@ const ServicesList = styled.ul`
     list-style: none;
     padding: 0;
     margin: 0;
+
+    &.sub-area-services {
+        padding-left: 1rem;
+    }
     
     > li {
         list-style-type: none;
@@ -200,7 +205,15 @@ export const handleAndSetStatusIcon = (status: string, isInternal?: boolean): an
             return <WrenchFilledCustomized />
         case null:
             if(isInternal) {
-                return <NoStatusAvailableCircle />
+                return(
+                    <div className="no-status-wrapper">
+                        <HelptextCustomizedBlue aria-label="Ingen status å hente fra tjenesten" />
+                        <span className="info-hover-text">
+                            <Detail>Ingen status er lagt til på tjenesten</Detail>
+                        </span>
+                        <div className="arrow"></div>
+                    </div>
+                )
             }
         default:
             return null
@@ -266,7 +279,7 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
                 <div className="sub-area-container">
                     {subAreas.map((subArea, index) => {
                         return (
-                            <SubAreaComponent key={subArea.id} subArea={subArea} isLastElement={area.services.length == 0 && subAreas.length == index+1} isAllExpanded={isAllExpanded} />
+                            <SubAreaComponent key={subArea.id} subArea={subArea} isLastElement={area.services.length == 0 && subAreas.length == index+1} isAllExpanded={isAllExpanded} navIdent={navIdent} />
                         )
                     })}
                 </div>
@@ -277,7 +290,7 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
                             <li key={service.name}>
                                 {navIdent
                                 ?
-                                    <LenkeCustomized href={"/Tjenestedata/" + service.id}>
+                                    <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
                                         <section className="logged-in"><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
                                     </LenkeCustomized>
                                 :
@@ -291,7 +304,7 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
                             <li key={service.name}>
                                 {navIdent
                                 ?
-                                    <LenkeCustomized href={"/Tjenestedata/" + service.id}>
+                                    <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
                                         <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
                                     </LenkeCustomized>
                                 :
@@ -381,7 +394,6 @@ const SubAreaContent = styled.div`
 
     .sub-area-services {
         transition: 200ms transform;
-        margin-top: 0.8rem;
 
         .expanded {
             transition: height 250ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -395,7 +407,7 @@ const SubAreaContent = styled.div`
 `
 
 
-const SubAreaComponent: React.FC<{subArea: SubArea, isLastElement: boolean, isAllExpanded: boolean}> = ({subArea, isLastElement, isAllExpanded}) => {
+const SubAreaComponent: React.FC<{subArea: SubArea, isLastElement: boolean, isAllExpanded: boolean, navIdent: string}> = ({subArea, isLastElement, isAllExpanded, navIdent}) => {
     const [isToggled, setIsToggled] = useState(false)
 
     const listOfStatusesInSubArea: string[] = subArea.services.map(service => service.status)
@@ -417,17 +429,33 @@ const SubAreaComponent: React.FC<{subArea: SubArea, isLastElement: boolean, isAl
                 <Expand className={!isToggled ? "expanded" : "not-expanded"}/>
             </button>
 
+
+
             <Collapse isOpened={isToggled}>
-                <ul className={`sub-area-services ${isToggled ? "expanded" : ""}`}>
+                <ServicesList className={`sub-area-services ${isToggled ? "expanded" : ""}`}>
                     {subArea.services.map((service, index) => {
                         return (
                             <li className={subArea.services.length != index+1 ? "not-last-element" : ""} key={service.id}>
-                                {handleAndSetStatusIcon(service.status)} {service.name}
+                                {navIdent
+                                ?
+                                    // <LenkeCustomized href={"/Tjenestedata/" + service.id}>
+                                    //     <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
+                                    // </LenkeCustomized>
+                                    <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
+                                        <section className="logged-in"><StatusIconHandler isArea={false} status={service.status} /> {service.name}</section>
+                                    </LenkeCustomized>
+                                :
+                                    <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
+                                }
                             </li>
+                            
                         )
                     })}
-                </ul>
+                </ServicesList>
             </Collapse>
+
+
+
         </SubAreaContent>
     )
 }

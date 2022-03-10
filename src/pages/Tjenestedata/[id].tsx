@@ -8,9 +8,11 @@ import { useRenderComponentOnQuery } from '../../utils/routerHelpers'
 import TjenestedataContent from './TjenestedataComponent'
 import { fetchServiceFromId } from '../../utils/servicesAPI'
 import { useRouter } from 'next/router'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { Service } from '../../types/navServices'
-import { RouterError } from '../../types/routes'
+import { RouterError, RouterPrivatperson } from '../../types/routes'
+import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
+import { UserData } from '../../types/userData'
 
 
 
@@ -21,6 +23,9 @@ const TjenestedataContainer = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [service, setService] = useState<Service>()
     const router = useRouter()
+
+    const user = useContext<UserData>(UserStateContext)
+
 
     useEffect(() => {
 
@@ -49,6 +54,10 @@ const TjenestedataContainer = () => {
                 <CustomNavSpinner />
             </>
         )
+    }
+
+    if(!user.navIdent) {
+        router.push(RouterPrivatperson.PATH)
     }
 
     return (

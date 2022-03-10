@@ -495,16 +495,16 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         areasContainingThisService: service.areasContainingThisService
     })
 
-    const { data: allComponents, isLoading, reload: reloadComponents } = useLoader(fetchComponents,[]);
+    const { data: allComponents, isLoading: loadingComponents, reload: reloadComponents } = useLoader(fetchComponents,[]);
     const { data: allAreas, isLoading: loadingAreas, reload: reloadAreas } = useLoader(fetchAreas,[]);
 
 
-    if(isLoading || loadingAreas) {
+    if(loadingComponents || loadingAreas) {
         return(
             <CustomNavSpinner />
         )
     }
-
+    console.log(allComponents)
 
 
     const handleUpdatedService = (field: keyof typeof updatedService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
