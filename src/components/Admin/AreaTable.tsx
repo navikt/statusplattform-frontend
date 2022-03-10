@@ -665,7 +665,6 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
 
 
     const { name, description, icon } = updatedArea
-console.log(subAreasInArea)
 
     return (
         <form onSubmit={handleSubmit}>

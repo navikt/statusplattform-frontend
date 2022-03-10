@@ -504,7 +504,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
             <CustomNavSpinner />
         )
     }
-    console.log(allComponents)
 
 
     const handleUpdatedService = (field: keyof typeof updatedService) => (evt: React.ChangeEvent<HTMLInputElement>) => {

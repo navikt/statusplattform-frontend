@@ -82,8 +82,6 @@ const ServiceDataComponent: React.FC<{idOfService: string}> = ({idOfService}) =>
         )
     }
 
-    console.log(service.name)
-
     return (
         <Layout>
             <Head><title>Tjeneste: {service.name}</title></Head>
