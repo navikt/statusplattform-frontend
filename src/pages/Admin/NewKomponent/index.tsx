@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import router from "next/router";
 
 import Layout from '../../../components/Layout';
-import { Area, Component } from "../../../types/navServices";
+import { Service, Component } from "../../../types/navServices";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { fetchTypes } from "../../..//utils/fetchTypes";
 
@@ -35,10 +35,7 @@ const NewComponentContainer = styled.div`
 
 
 const NewComponent = () => {
-    const [allAreas, setAllAreas] = useState<Area[]>()
     const [allComponents, setAllComponents] = useState<Component[]>()
-    const [types, updateTypes] = useState<string[]>()
-    const [selectedType, updateSelectedType] = useState<string>("KOMPONENT")
     const [isLoading, setIsLoading] = useState(true)
 
     const [newComponent, updateNewComponent] = useState<Component>({
@@ -48,7 +45,7 @@ const NewComponent = () => {
         componentDependencies: [],
         monitorlink: "",
         pollingUrl: "",
-        areasContainingThisComponent: []
+        servicesDependentOnThisComponent: []
     })
 
     
@@ -59,11 +56,8 @@ const NewComponent = () => {
     useEffect(() => {
         (async function () {
             const retrievedComponents: Component[] = await fetchComponents()
-            const retrievedAreas: Area[] = await fetchAreas()
             const retrievedTypes: string[] = await fetchTypes()
             setAllComponents(retrievedComponents)
-            setAllAreas(retrievedAreas)
-            updateTypes(retrievedTypes)
             setIsLoading(false)
         })()
     }, [])
@@ -76,7 +70,7 @@ const NewComponent = () => {
         )
     }
 
-    const { name, team, type, componentDependencies: dependencies, monitorlink, pollingUrl, areasContainingThisComponent } = newComponent
+    const { name, team, type, componentDependencies: dependencies, monitorlink, pollingUrl, servicesDependentOnThisComponent } = newComponent
 
 
 
@@ -99,7 +93,7 @@ const NewComponent = () => {
         }
         const newComponentsList = [...newComponent.componentDependencies, componentToAdd]
         const updatedComponent: Component = {
-            name: name, team: team, type: type, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisComponent: areasContainingThisComponent
+            name: name, team: team, type: type, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, servicesDependentOnThisComponent
         }
         updateNewComponent(updatedComponent)
         toast.success("Lagt til tjenesteavhengighet")
@@ -108,36 +102,12 @@ const NewComponent = () => {
     const handleDeleteComponentDependency = (componentToDelete: Component) => {
         const newComponentsList: Component[] = [...newComponent.componentDependencies.filter(component => component != componentToDelete)]
         const updatedComponent: Component = {
-            name: name, team: team, type: type, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisComponent: areasContainingThisComponent
+            name: name, team: team, type: type, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, servicesDependentOnThisComponent
         }
         updateNewComponent(updatedComponent)
         toast.success("Fjernet område fra område")
     }
     /*Handlers for adding componentDependencies END*/
-
-
-
-
-
-    /*Handlers for adding componentDependencies START*/
-    const handleAddAreaComponentConnectsTo = (areaToConsistIn: Area) => {
-        if(newComponent.areasContainingThisComponent.includes(areaToConsistIn)) {
-            toast.warn("Component " + areaToConsistIn.name + " er allerede i område")
-            return
-        }
-        const updatedList = [...newComponent.areasContainingThisComponent, areaToConsistIn]
-        const updatedComponent: Component = {...newComponent,  areasContainingThisComponent: updatedList}
-        updateNewComponent(updatedComponent)
-        toast.success("Lagt component i område")
-    }
-    
-    const handleDeleteAreaComponentConnectsTo =  (areaToDeleteFrom: Area) => {
-        const newAreaList: Area[] = [...newComponent.areasContainingThisComponent.filter(area => area != areaToDeleteFrom)]
-        const updatedComponent: Component = {...newComponent, areasContainingThisComponent: newAreaList}
-        updateNewComponent(updatedComponent)
-        toast.success("Fjernet component fra område")
-    }
-    /*Handlers for adding areaComponent END*/
 
 
     const handlePostNewComponent = (event) => {
@@ -170,15 +140,6 @@ const NewComponent = () => {
                         allComponents={allComponents}
                         handleAddComponentDependency={(componentToAdd) => handleAddComponentDependency(componentToAdd)}
                         handleDeleteComponentDependency={(componentToAdd) => handleDeleteComponentDependency(componentToAdd)}
-                    />
-
-                    <HorizontalSeparator />
-
-                    <ConnectComponentToArea 
-                        newComponent={newComponent}
-                        allAreas={allAreas}
-                        handleAddAreaComponentConnectsTo={(areaToConsistIn) => handleAddAreaComponentConnectsTo(areaToConsistIn)}
-                        handleDeleteAreaComponentConnectsTo={(areaToDeleteFrom) => handleDeleteAreaComponentConnectsTo(areaToDeleteFrom)}
                     />
 
                     <HorizontalSeparator />
@@ -234,12 +195,20 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
         const newSelectedComponent: Component = availableComponents.find(area => idOfSelectedArea === area.id)
         changeSelectedComponent(newSelectedComponent)
     }
+
+    const addHandler = (selectedComponent) => {
+        if(!selectedComponent) {
+            toast.info("Ingen komponent valgt")
+            return
+        }
+        handleAddComponentDependency(selectedComponent)
+    }
     
 
     return (
         <DynamicListContainer>
             
-            <Select label="Legg til tjenesteavhengighet" value={selectedComponent !== null ? selectedComponent.id : ""} onChange={handleUpdateSelectedArea}>
+            <Select label="Legg til komponentavhengigheter" value={selectedComponent !== null ? selectedComponent.id : ""} onChange={handleUpdateSelectedArea}>
                 {availableComponents.length > 0 ?
                     availableComponents.map(component => {
                         return (
@@ -247,11 +216,11 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
                         )
                     })
                 :
-                    <option key={undefined} value="">Ingen tilgjengelige områder</option>
+                    <option key={undefined} value="">Ingen tilgjengelige komponenter</option>
                 }
             </Select>
 
-            <Button variant="secondary" type="button" onClick={() => handleAddComponentDependency(selectedComponent)}>Legg til</Button>
+            <Button variant="secondary" type="button" onClick={() => addHandler(selectedComponent)}>Legg til</Button>
             
 
             {newComponent.componentDependencies.length > 0
@@ -272,95 +241,12 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
                     })}
                 </ul>
             :
-                <BodyShort spacing><b>Ingen tjenester igjen i listen</b></BodyShort>
+                <BodyShort spacing><b>Ingen komponenter lagt til</b></BodyShort>
             }
 
         </DynamicListContainer>
     )
 }
 
-
-
-
-
-
-
-
-
-
-const ComponentToAreaContainer = styled(DynamicListContainer)``
-
-
-interface ComponentConnectionProps {
-    newComponent: Component
-    allAreas: Area[]
-    handleDeleteAreaComponentConnectsTo: (selectedArea) => void
-    handleAddAreaComponentConnectsTo: (selectedArea) => void
-}
-
-
-const ConnectComponentToArea = ({newComponent, allAreas, handleDeleteAreaComponentConnectsTo, handleAddAreaComponentConnectsTo}: ComponentConnectionProps) => {
-    const availableAreas: Area[] = allAreas.filter(area => !newComponent.areasContainingThisComponent.map(a => a.id).includes(area.id))
-
-    const [selectedArea, changeSelectedArea] = useState<Area | null>(() => availableAreas.length > 0 ? availableAreas[0] : null)
-
-    useEffect(() => {
-        if(availableAreas.length > 0){
-            changeSelectedArea(availableAreas[0])
-        }
-        else {
-            changeSelectedArea(null)
-        }
-    }, [allAreas, newComponent.areasContainingThisComponent])
-    
-
-
-    const handleUpdateSelectedArea = (event) => {
-        const idOfSelectedArea: string = event.target.value
-        const newSelectedArea: Area = availableAreas.find(area => idOfSelectedArea === area.id)
-        changeSelectedArea(newSelectedArea)
-    }
-
-
-    return (
-        <ComponentToAreaContainer>
-            <Select label="Legg til i område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
-                {availableAreas.length > 0 ?
-                    availableAreas.map(area => {
-                        return (
-                            <option key={area.id} value={area.id}>{area.name}</option>
-                        )
-                    })
-                :
-                    <option key={undefined} value="">Ingen områder å legge til</option>
-                }
-            </Select>
-
-            <Button variant="secondary" type="button" onClick={() => handleAddAreaComponentConnectsTo(selectedArea)}>Legg til</Button>
-            
-
-            {newComponent.areasContainingThisComponent.length > 0
-            ?
-                <ul className="new-list">
-                    {newComponent.areasContainingThisComponent.map(area => {
-                        return (
-                            <li key={area.id}>
-                                <BodyShort>
-                                    {area.name}
-                                    <button className="colored" type="button" onClick={() => handleDeleteAreaComponentConnectsTo(area)}>
-                                        <label>{area.name}</label>
-                                        <Delete/> Slett
-                                    </button>
-                                </BodyShort>
-                            </li>
-                        )
-                    })}
-                </ul>
-            :
-                <BodyShort spacing><b>Ingen områder lagt til</b></BodyShort>
-            }
-        </ComponentToAreaContainer>
-    )
-}
 
 export default NewComponent
