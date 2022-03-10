@@ -130,17 +130,18 @@ const ServicesList = styled.ul`
     
     border-radius:0 0 10px 10px;
 
-    list-style: none;
     padding: 0;
     margin: 0;
 
     &.sub-area-services {
         padding-left: 1rem;
     }
+
+    .sub-area-list-item:first-child {
+        padding-top: 0;
+    }
     
     > li {
-        list-style-type: none;
-
         display: flex;
         justify-content: flex-start;
         
@@ -355,15 +356,10 @@ export const StatusIconHandler: React.FC<{status: string, isArea: boolean}> = ({
 
 
 const SubAreaContent = styled.div`
-    padding: .8rem 0;
-
-
-    .sub-area-services {
-        list-style: none;
-    }
-
     button {
         padding: 0;
+        padding-bottom: .8rem;
+
         border: none;
         background: none;
 
@@ -435,12 +431,9 @@ const SubAreaComponent: React.FC<{subArea: SubArea, isLastElement: boolean, isAl
                 <ServicesList className={`sub-area-services ${isToggled ? "expanded" : ""}`}>
                     {subArea.services.map((service, index) => {
                         return (
-                            <li className={subArea.services.length != index+1 ? "not-last-element" : ""} key={service.id}>
+                            <li className={`sub-area-list-item ${subArea.services.length != index+1 ? "not-last-element" : ""}`} key={service.id}>
                                 {navIdent
                                 ?
-                                    // <LenkeCustomized href={"/Tjenestedata/" + service.id}>
-                                    //     <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
-                                    // </LenkeCustomized>
                                     <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
                                         <section className="logged-in"><StatusIconHandler isArea={false} status={service.status} /> {service.name}</section>
                                     </LenkeCustomized>
