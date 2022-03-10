@@ -70,27 +70,4 @@ const TjenestedataContainer = () => {
 
 
 
-
-const ServiceDataComponent: React.FC<{idOfService: string}> = ({idOfService}) => {
-    const { data: service, isLoading, reload } = useLoader(() => fetchServiceFromId(idOfService),[]);
-
-    if(isLoading) {
-        return (
-            <>
-                <CustomNavSpinner />
-            </>
-        )
-    }
-
-    return (
-        <Layout>
-            <Head><title>Tjeneste: {service.name}</title></Head>
-            <TjenestedataContent service={service}/>
-        </Layout>
-    )
-}
-
-
-
-
 export default TjenestedataContainer
