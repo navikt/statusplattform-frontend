@@ -357,8 +357,7 @@ export const StatusIconHandler: React.FC<{status: string, isArea: boolean}> = ({
 
 const SubAreaContent = styled.div`
     button {
-        padding: 0;
-        padding-bottom: .8rem;
+        padding: .8rem 0;
 
         border: none;
         background: none;
