@@ -346,11 +346,13 @@ const PublicDataContainer = styled.div`
 const ServiceIncidentHistory: React.FC<{service: Service}>= ({service}) => {
     const [isLast90Days, setIsLast90Days] = useState<boolean>(true)
     // TODO: Henting av tjenestehistorikkdata som driftsmeldinger og diverse
-    const { data, isLoading, reload } = useLoader(() => fetchServiceHistory(service.id),[])
+    const { data, isLoading, reload } = useLoader(() => fetchServiceHistory(service.id), [])
 
     if(isLoading) {
         return <CustomNavSpinner />
     }
+
+    console.log(data)
 
     return (
         <PublicDataContainer>
