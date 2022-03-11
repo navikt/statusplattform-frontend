@@ -1,4 +1,4 @@
-import 'react-dropdown/style.css';
+import { useContext } from 'react';
 import styled from 'styled-components'
 
 import { Close } from '@navikt/ds-icons';
@@ -8,7 +8,6 @@ import TjenesteTable from './TjenesteTable';
 import DashboardTable from './DashboardTable';
 import { adminMenu, useFindCurrentTab } from './MenuSelector';
 import KomponentTable from './KomponentTable';
-import { useContext } from 'react';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { Heading } from '@navikt/ds-react';
 

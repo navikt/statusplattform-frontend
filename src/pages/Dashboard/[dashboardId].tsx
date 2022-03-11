@@ -1,13 +1,13 @@
-import { useContext, useEffect, useState } from "react"
-import { useRouter } from "next/router"
 import Head from 'next/head'
 import styled from "styled-components"
+import { useContext, useEffect, useState } from "react"
+import { useRouter } from "next/router"
 
 import { BodyShort, Button } from "@navikt/ds-react"
 
+import Layout from '../../components/Layout'
 import CustomNavSpinner from "../../components/CustomNavSpinner"
 import DashboardTemplate from "./DashboardTemplate"
-import Layout from '../../components/Layout'
 import Custom404 from "../../pages/404"
 import { UserData } from "../../types/userData"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"

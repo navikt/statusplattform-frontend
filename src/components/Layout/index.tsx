@@ -1,9 +1,7 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import styled from 'styled-components'
 import { useContext } from 'react'
-import 'react-toastify/dist/ReactToastify.css';
-import { ToastContainer } from 'react-toastify'
+import { useRouter } from 'next/router'
 
 import { BodyShort, Button, Heading } from '@navikt/ds-react'
 import { Clock, Home, Next } from '@navikt/ds-icons'
@@ -15,6 +13,8 @@ import { NavigatorContext } from '../ContextProviders/NavigatorContext'
 import { TitleContext } from '../ContextProviders/TitleContext'
 import { RouterHomePage } from '../../types/routes';
 
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify'
 
 
 

@@ -1,6 +1,6 @@
+import Link from 'next/link'
 import styled from 'styled-components'
 import { useContext, useEffect, useState } from "react";
-import Link from 'next/link'
 
 import { Expand, Wrench } from '@navikt/ds-icons'
 import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';

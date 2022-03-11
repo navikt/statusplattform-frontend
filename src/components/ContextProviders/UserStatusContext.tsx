@@ -19,7 +19,7 @@ export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) =
         navIdent: "",
         name: ""
     })
-    const [isLoggedIn, changeIsLoggedIn] = useState(false)
+
     const router = useRouter()
 
     useEffect(() => {
@@ -28,7 +28,6 @@ export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) =
 
             if(retrieveduser) {
                 setUser(retrieveduser)
-                changeIsLoggedIn(true)
             }
         }
         getLoggedInUser()

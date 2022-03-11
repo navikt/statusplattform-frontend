@@ -163,7 +163,7 @@ const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
                 <Panel>
                     <ServiceContainer>
                         <ServiceWrapper>
-                            <ServiceData service={service} areasContainingService={areasContainingService} />
+                            <ServiceData service={service} />
                         </ServiceWrapper>
                     </ServiceContainer>
                 </Panel>
@@ -221,13 +221,13 @@ const ServiceDataContainer = styled.div`
 
 
 
-const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> = ({service, areasContainingService}) => {
+const ServiceData: React.FC<{service: Service}> = ({service}) => {
     const { navIdent } = useContext(UserStateContext)
 
     const regex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi)
 
 
-    const { type, serviceDependencies: dependencies, componentDependencies, id, monitorlink, team } = service
+    const { type, serviceDependencies: dependencies, componentDependencies, id, monitorlink, team, areasContainingThisService } = service
 
     return (
         <>
@@ -305,10 +305,10 @@ const ServiceData: React.FC<{service: Service, areasContainingService: Area[]}> 
 
 
 
-                    <BodyShort spacing><b>Områder</b></BodyShort>
+                    <BodyShort spacing><b>Områder som inneholder tjenesten</b></BodyShort>
                     <ul>
-                        {areasContainingService.map((area, index) => {
-                            if(areasContainingService.length != index+1) {
+                        {areasContainingThisService.map((area, index) => {
+                            if(areasContainingThisService.length != index+1) {
                                 return (
                                     <li key={area.id}>{area.name}, </li>
                                 )
@@ -352,7 +352,6 @@ const ServiceIncidentHistory: React.FC<{service: Service}>= ({service}) => {
         return <CustomNavSpinner />
     }
 
-    console.log(data)
 
     return (
         <PublicDataContainer>

@@ -1,7 +1,6 @@
 import styled from 'styled-components'
 import { useContext, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { toast } from 'react-toastify'
 
 import { BodyLong, BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
 import { Bell } from '@navikt/ds-icons'
@@ -16,6 +15,7 @@ import { UserStateContext } from '../ContextProviders/UserStatusContext'
 import { fetchServices } from '../../utils/servicesAPI'
 import { RouterOpprettVarsling } from '../../types/routes'
 
+import { toast } from 'react-toastify'
 
 
 const IncidentsPage = styled.div`

@@ -1,16 +1,13 @@
-import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { toast } from 'react-toastify'
 import Head from 'next/head'
 import Link from 'next/link'
+import styled from 'styled-components'
+import { toast } from 'react-toastify'
+import { useRouter } from 'next/router'
+import { useContext, useEffect, useState } from 'react'
 
 import { Clock, Expand } from '@navikt/ds-icons'
 import { Alert, BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
 
-import CustomNavSpinner from '../../components/CustomNavSpinner'
-import { PortalServiceTile } from '../../components/PortalServiceTile'
-import StatusOverview from '../../components/StatusOverview'
 import { Area, Dashboard } from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext'
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
@@ -19,6 +16,9 @@ import { TitleContext } from '../../components/ContextProviders/TitleContext'
 import { fetchDashboard } from '../../utils/dashboardsAPI'
 import { RouterAvvikshistorikk, RouterError } from '../../types/routes'
 import { ErrorFilledCustomized, SuccessFilledCustomized, WarningFilledCustomized, WrenchFilledCustomized } from '../../components/TrafficLights'
+import CustomNavSpinner from '../../components/CustomNavSpinner'
+import StatusOverview from '../../components/StatusOverview'
+import { PortalServiceTile } from '../../components/PortalServiceTile'
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
