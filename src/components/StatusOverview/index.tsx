@@ -96,7 +96,16 @@ const DeviationCardContianer = styled.button`
 
     display: flex;
 
-    :hover{cursor: pointer;}
+    &:hover{
+        cursor: pointer;
+
+        .content {
+
+            .navds-heading {
+                text-decoration: none;
+            }
+        }
+    }
     
     &.has-issue {
         background: var(--navds-semantic-color-feedback-warning-background);
@@ -131,7 +140,7 @@ const DeviationCardContianer = styled.button`
         flex-direction: column;
         justify-content: space-between;
 
-        :focus, :hover {
+        :focus {
             .navds-heading {
                 text-decoration: none;
             }

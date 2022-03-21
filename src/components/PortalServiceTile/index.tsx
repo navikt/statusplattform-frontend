@@ -217,7 +217,9 @@ export const handleAndSetStatusIcon = (status: string, isInternal?: boolean): an
                 )
             }
         default:
-            return null
+            return(
+                <HelptextCustomizedBlue aria-label="Ingen status tilgjengelig" />
+            )
     }
 }
 

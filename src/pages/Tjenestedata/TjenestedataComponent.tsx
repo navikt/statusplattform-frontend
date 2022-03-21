@@ -8,7 +8,7 @@ import { BodyShort, Heading, Panel } from '@navikt/ds-react';
 import { Innholdstittel } from 'nav-frontend-typografi';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
-import { Area, Service, ServiceHistory } from '../../types/navServices';
+import { Area, Component, Service, ServiceHistory } from '../../types/navServices';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { RouterTjenestedata } from '../../types/routes';
 import { IncidentCard } from '../../components/Incidents';
@@ -54,11 +54,12 @@ const CategoryContainer = styled.div`
     .no-status-wrapper {
         position: relative;
         display: inline-block;
-
+        
         .info-hover-text {
             position: absolute;
             background: white;
-
+            
+            z-index: 100;
             border-radius: 4px;
 
             top: -.7rem;
@@ -213,11 +214,12 @@ const ServiceDataContainer = styled.div`
     }
 
     a {
-        color: var(--navds-semantic-color-link);
+        /* color: var(--navds-semantic-color-link); */
+        color: black;
     }
-
-    
 `
+
+
 
 
 
@@ -227,7 +229,7 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
     const regex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi)
 
 
-    const { type, serviceDependencies: dependencies, componentDependencies, id, monitorlink, team, areasContainingThisService } = service
+    const { type, serviceDependencies, componentDependencies, id, monitorlink, team, areasContainingThisService } = service
 
     return (
         <>
@@ -237,93 +239,62 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
                 <BodyShort>{team}</BodyShort>
 
                 <span className="separator" />
-                    
-
 
                     
-                    <BodyShort spacing><b>Avhengigheter til tjenester</b></BodyShort>
+                <BodyShort spacing><b>Avhengigheter til tjenester</b></BodyShort>
 
-                    <div>
-                        {dependencies.length > 0
-                        ?
-                            dependencies.map((element, index) => {
-
-                                if(dependencies.length != index+1) {
-                                    return (
-                                        <Link key={id} href={RouterTjenestedata.PATH + element.id}>
-                                            {element.name + ", "}
-                                        </Link>
-                                    )
-                                }
-
-                                return (
-                                    <Link key={id} href={RouterTjenestedata.PATH + element.id} >
-                                        {element.name}
-                                    </Link>
-                                )
-                            })
-                        :
-                            <BodyShort>Ikke definert</BodyShort>
-                        }
-                    </div>
-
-
-                    <span className="separator" />
-
-
-                    <BodyShort spacing><b>Avhengigheter til komponenter</b></BodyShort>
-
-                    {componentDependencies.length > 0 
+                <div>
+                    {serviceDependencies.length > 0
                     ?
-                        <div>
-                            {componentDependencies.map((component, index) => {
-                                if(componentDependencies.length != index+1) {
-                                    return (
-                                        <Link key={component.id} href={RouterTjenestedata.PATH + component.id}>
-                                            {component.name + ", "}
-                                        </Link>
-                                    )
-                                }
-
-                                return (
-                                    <Link href={RouterTjenestedata.PATH + component.id} key={component.id}>
-                                        {component.name}
-                                    </Link>
-                                )
-                            })}
-                        </div>
-
+                        <ServicesAndComponentsList serviceDependencies={serviceDependencies} />
                     :
                         <BodyShort>Ikke definert</BodyShort>
                     }
-
-                    <span className="separator" />
-
+                </div>
 
 
+                <span className="separator" />
+
+
+                <BodyShort spacing><b>Avhengigheter til komponenter</b></BodyShort>
+
+                {componentDependencies.length > 0 
+                ?
+
+                    <ServicesAndComponentsList componentDependencies={componentDependencies} />
+
+
+                :
+                    <BodyShort>Ikke definert</BodyShort>
+                }
+
+                <span className="separator" />
 
 
 
 
-                    <BodyShort spacing><b>Områder som inneholder tjenesten</b></BodyShort>
-                    <ul>
-                        {areasContainingThisService.map((area, index) => {
-                            if(areasContainingThisService.length != index+1) {
-                                return (
-                                    <li key={area.id}>{area.name}, </li>
-                                )
-                            } return (
-                                <li key={area.id}>{area.name}</li>
+
+
+
+                <BodyShort spacing><b>Områder som inneholder tjenesten</b></BodyShort>
+                <ul>
+                    {areasContainingThisService.map((area, index) => {
+                        if(areasContainingThisService.length != index+1) {
+                            return (
+                                <li key={area.id}>{area.name}, </li>
                             )
-                        })}
-                    </ul>
+                        } return (
+                            <li key={area.id}>{area.name}</li>
+                        )
+                    })}
+                </ul>
 
-                    <span className="separator" />
+                <span className="separator" />
 
-                    <BodyShort spacing><b>Monitorlenke</b></BodyShort>
-                    <BodyShort>{regex.test(monitorlink) ? <a href={monitorlink}>{monitorlink}</a> : "Ikke definert"}</BodyShort>
-                </ServiceDataContainer>
-            }
+                <BodyShort spacing><b>Monitorlenke</b></BodyShort>
+                <BodyShort>{regex.test(monitorlink) ? <a href={monitorlink}>{monitorlink}</a> : "Ikke definert"}</BodyShort>
+            </ServiceDataContainer>
+        }
         </>
     )
 }
@@ -449,8 +420,6 @@ const TabHistory = ({setIsLast90Days, isLast90Days}: History) => {
 
 
 
-
-
 const HistoryContainer = styled.div`
 `
 
@@ -539,6 +508,69 @@ const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, servi
 
 
 
+
+
+/* ------------------ HELPERS ------------------ */
+
+
+
+const ServiceAndComponentDependencies = styled.ul`
+    display: flex;
+    flex-flow: row wrap;
+    
+    padding: 0;
+    list-style: none;
+    
+    li {
+        margin: .5rem 1rem;
+
+        a {
+            display: flex;
+            align-items: center;
+
+            svg {
+                margin-right: 5px;
+            }
+        }
+    }
+`
+
+const ServicesAndComponentsList: React.FC<{componentDependencies?: Component[], serviceDependencies?: Service[]}> = ({componentDependencies, serviceDependencies}) => {
+
+    if(componentDependencies) {
+        return (
+            <ServiceAndComponentDependencies>
+                {componentDependencies.map(component => {
+                    return (
+                        <li>
+                            <Link href={RouterTjenestedata.PATH + component.id} key={component.id}>
+                                <a>
+                                    {handleAndSetStatusIcon(component.status)} {component.name}
+                                </a>
+                            </Link>
+                        </li>
+                    )
+                })}
+            </ServiceAndComponentDependencies>
+        )
+    }
+
+    return (
+        <ServiceAndComponentDependencies>
+            {serviceDependencies.map(service => {
+                return (
+                    <li>
+                        <Link key={service.id} href={RouterTjenestedata.PATH + service.id} >
+                            <a>
+                                {handleAndSetStatusIcon(service.status)} {service.name}
+                            </a>
+                        </Link>
+                    </li>
+                )
+            })}
+        </ServiceAndComponentDependencies>
+    )
+}
 
 
 
