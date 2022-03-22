@@ -72,7 +72,7 @@ const MainContentContainer = styled.div`
 
 const Content = styled.main`
     min-height: 100%;
-    margin: 0 10px 2rem;
+    margin: 2rem 10px 2rem;
     white-space: pre-wrap;
     
     h1 {
@@ -124,7 +124,6 @@ const MainContent = props => {
                 </div>
             }
             <Content id="content">
-                <Navigator />
                 {props.children}
             </Content>
 
