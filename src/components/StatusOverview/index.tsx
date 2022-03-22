@@ -84,7 +84,7 @@ const StatusOverview = (props: AreaServicesList) => {
 
 
 
-const DeviationCardContianer = styled.button`
+const DeviationCardContainer = styled.button`
     position: relative;
     height: 100%;
     
@@ -165,14 +165,14 @@ const DeviationCardContianer = styled.button`
 const DeviationReportCard: React.FC<{status: string, titleOfDeviation: string, message: string}> = ({status, titleOfDeviation, message}) => {
     
     return (
-        <DeviationCardContianer aria-label={message + ". Trykk her for mer informasjon"} className={"has-"+status.toLowerCase()}>
+        <DeviationCardContainer aria-label={message + ". Trykk her for mer informasjon"} className={"has-"+status.toLowerCase()}>
             {/* <span className={status.toLowerCase()} /> */}
             <div className="content">
                 <Detail size="small">01.03.2022</Detail>
                 <Heading size="small" level="3">{titleOfDeviation}</Heading>
                 <BodyShort size="small">{message}</BodyShort>
             </div>
-        </DeviationCardContianer>
+        </DeviationCardContainer>
     )
 }
 
