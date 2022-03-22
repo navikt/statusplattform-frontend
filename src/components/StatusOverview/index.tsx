@@ -13,6 +13,7 @@ import CustomNavSpinner from '../CustomNavSpinner';
 
 const StatusSummary = styled.div`
     margin-top: 1rem;
+    width: 100%;
 
     display: flex;
     flex-direction: column;
