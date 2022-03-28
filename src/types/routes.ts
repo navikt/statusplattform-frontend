@@ -45,7 +45,7 @@ export enum RouterAdminDashboards {
 
 export enum RouterAdminAddDashboard {
     NAME = "Admin - NewDashboard",
-    PATH = "/Admin/NewDashbord"
+    PATH = "/Admin/NyttDashbord"
 }
 
 export enum RouterAdminOmråder {
@@ -55,7 +55,7 @@ export enum RouterAdminOmråder {
 
 export enum RouterAdminAddOmråde {
     NAME = "Admin - Områder",
-    PATH = "/Admin/NewOmraade"
+    PATH = "/Admin/NyttOmraade"
 }
 
 export enum RouterAdminTjenester {
@@ -65,7 +65,7 @@ export enum RouterAdminTjenester {
 
 export enum RouterAdminAddTjeneste {
     NAME = "Admin - Tjenester",
-    PATH = "/Admin/NewTjeneste"
+    PATH = "/Admin/NyTjeneste"
 }
 
 export enum RouterAdminKomponenter {
@@ -75,7 +75,7 @@ export enum RouterAdminKomponenter {
 
 export enum RouterAdminAddKomponent {
     NAME = "Admin - Komponenter",
-    PATH = "/Admin/NewKomponent"
+    PATH = "/Admin/NyKomponent"
 }
 // ---
 
