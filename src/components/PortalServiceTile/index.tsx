@@ -146,7 +146,6 @@ const ServicesList = styled.ul`
         justify-content: flex-start;
         
         padding: .8rem 0;
-        border-bottom: 1px solid var(--navds-semantic-color-border-inverted);
 
         section {
             &.logged-in{
@@ -170,10 +169,6 @@ const ServicesList = styled.ul`
             white-space: normal;
             word-break: break-word;
         }
-    }
-
-    li:last-child {
-        border-bottom: none;
     }
 
     a {
@@ -396,10 +391,6 @@ const SubAreaContent = styled.div`
             transition: height 250ms cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-    }
-    
-    &.not-last-element {
-        border-bottom: 1px solid var(--navds-semantic-color-border-inverted);
     }
 `
 
