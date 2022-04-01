@@ -148,7 +148,7 @@ const AreaTable = () => {
     return (
         <AdminCategoryContainer>
             <Head>
-                <title>Admin - Områder</title>
+                <title>Admin - Områder - status.nav.no</title>
             </Head>
 
             <Modal

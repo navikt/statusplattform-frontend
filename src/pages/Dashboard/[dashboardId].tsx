@@ -73,7 +73,7 @@ const DashboardFromId = () => {
     return (
         <Layout>
             <Head>
-                <title>{retrievedDashboard.name}</title>
+                <title>{retrievedDashboard.name} - status.nav.no</title>
                 <link rel="icon" href="/favicon.ico" />
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta name="title" content="Navstatus" />

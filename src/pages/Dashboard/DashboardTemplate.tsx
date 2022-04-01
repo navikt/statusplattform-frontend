@@ -557,7 +557,7 @@ const NoAreasInDashboard = () => {
     return (
         <ErrorWrapper>
             <Head>
-                <title>Feil ved henting av dashbord</title>
+                <title>Feil ved henting av dashbord - status.nav.no</title>
             </Head>
 
             <ErrorHeader>

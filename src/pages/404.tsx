@@ -36,7 +36,7 @@ export default function Custom404() {
     return (
         <Layout>
             <Head>
-                <title>Fant ikke siden</title>
+                <title>Fant ikke siden - status.nav.no</title>
             </Head>
 
             <ErrorWrapper>

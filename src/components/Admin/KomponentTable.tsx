@@ -151,7 +151,7 @@ const KomponentTable = () => {
     return (
         <AdminCategoryContainer>
             <Head>
-                <title>Admin - Tjenester</title>
+                <title>Admin - Tjenester - status.nav.no</title>
             </Head>
 
             <Modal

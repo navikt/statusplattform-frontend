@@ -4,6 +4,10 @@ import { ToastContainer } from 'react-toastify';
 import Layout from '../../components/Layout';
 import Admin from '../../components/Admin';
 import MenuSelector from '../../components/Admin/MenuSelector';
+import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
+import { useContext, useEffect } from 'react';
+import { useRouter } from 'next/router';
+import { RouterPrivatperson } from '../../types/routes';
 
 
 const AdminContainer = styled.div`
@@ -64,6 +68,16 @@ export const DynamicListContainer = styled.div`
 `
 
  const AdminPage = () => {
+     const user = useContext(UserStateContext)
+     const router = useRouter()
+
+     useEffect(() => {
+         if(!user.navIdent) {
+            router.push(RouterPrivatperson.PATH)
+         }
+     },[router])
+
+    
     return (
         <Layout>
             <AdminContainer>

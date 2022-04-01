@@ -59,7 +59,7 @@ const TjenestedataContainer = () => {
 
     return (
         <Layout>
-            <Head><title>Tjeneste: {service.name}</title></Head>
+            <Head><title>Tjeneste: {service.name} - status.nav.no</title></Head>
             <TjenestedataContent service={service}/>
         </Layout>
     )

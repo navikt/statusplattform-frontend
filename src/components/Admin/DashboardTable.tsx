@@ -39,7 +39,7 @@ const DashboardTable = () => {
     return (
         <AdminCategoryContainer>
             <Head>
-                <title>Admin - Dashbord</title>
+                <title>Admin - Dashbord - status.nav.no</title>
             </Head>
             <div className="centered">
                 <Button variant="secondary" 
