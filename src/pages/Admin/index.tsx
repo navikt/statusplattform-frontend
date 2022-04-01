@@ -72,10 +72,14 @@ export const DynamicListContainer = styled.div`
      const router = useRouter()
 
      useEffect(() => {
-         if(!user.navIdent) {
+        async () => {
+            await user
+            await router
+            if(!user.navIdent) {
             router.push(RouterPrivatperson.PATH)
-         }
-     },[router])
+            }
+        }
+     },[router, user])
 
     
     return (
