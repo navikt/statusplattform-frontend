@@ -8,7 +8,7 @@ import { BodyShort, Heading, Panel, Popover } from '@navikt/ds-react';
 import { Innholdstittel } from 'nav-frontend-typografi';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
-import { Component, HistoryOfSpecificServiceMonths, Service } from '../../types/navServices';
+import { Component, HistoryOfSpecificServiceDayEntry, HistoryOfSpecificServiceMonths, Service } from '../../types/navServices';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { RouterTjenestedata } from '../../types/routes';
 import { IncidentCard } from '../../components/Incidents';
@@ -459,48 +459,21 @@ const MonthlyOverview = styled.div`
 `
 
 const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, serviceHistory: HistoryOfSpecificServiceMonths[]}> = ({service, isLast90Days, serviceHistory}) => {
-    const popoverRef = useRef(null);
-    const [infoEntryVisible, changeInfoEntryVisible] = useState(false)
-    const [infoContent, changeInfoContent] = useState("")
-    const [infoStatusIconOnHover, setInfoStatusIconOnHover] = useState<JSX.Element>()
-
     let numberOfDaysInView = 0
-
-    const toggleEntryInfoOnHover = (status, information) => {
-        if(information){
-            changeInfoContent(information)
-        }
-        else{
-            changeInfoContent("Statusinformasjon eksisterer ikke")
-        }
-        setInfoStatusIconOnHover(handleAndSetStatusIcon(status))
-        changeInfoEntryVisible(true)
-    }
+    
 
     return (
         <HistoryContainer id="history">
-            <Popover
-                open={infoEntryVisible}
-                onClose={() => changeInfoEntryVisible(false)}
-                anchorEl={popoverRef.current}
-                placement="top"
-            >
-                <Popover.Content>{infoStatusIconOnHover}{infoContent}</Popover.Content>
-            </Popover>
-
             {isLast90Days
             ?
                 <DailyOverview>
                     {serviceHistory.map(currentMonth => 
                         currentMonth.entries.map((dailyEntry, index) => {
                             if(numberOfDaysInView < 90) {
-                                const {serviceId, date, status, information} = dailyEntry
-                                
                                 numberOfDaysInView ++
-                                return (
-                                    <span key={index} className={`entry ${status.toLowerCase()}`} onMouseEnter={() => toggleEntryInfoOnHover(status, information)} onMouseLeave={() => changeInfoEntryVisible(false)} ref={popoverRef} >
 
-                                    </span>
+                                return (
+                                    <DailyEntryComponent key={index} dailyEntry={dailyEntry} />
                                 )
                             }
                             
@@ -597,6 +570,60 @@ const ServicesAndComponentsList: React.FC<{componentDependencies?: Component[], 
 
 
 
+/* HELPERS FOR DAILY ENTRIES*/
+const DailyEntry = styled.div`
+    .navds-popover__content {
+        svg {
+            margin-right: 8px;
+        }
+    }
+`
+
+const DailyEntryComponent: React.FC<{dailyEntry: HistoryOfSpecificServiceDayEntry}> = ({dailyEntry}) => {
+    const popoverRef = useRef(null);
+    const [infoEntryVisible, changeInfoEntryVisible] = useState(false)
+    const [infoContent, changeInfoContent] = useState("")
+    const [infoStatusIconOnHover, setInfoStatusIconOnHover] = useState<JSX.Element>()
+
+
+    const toggleEntryInfoOnHover = (status, information) => {
+        if(information){
+            changeInfoContent(information)
+        }
+        else{
+            changeInfoContent("Statusinformasjon eksisterer ikke")
+        }
+        setInfoStatusIconOnHover(handleAndSetStatusIcon(status))
+        changeInfoEntryVisible(true)
+    }
+
+    const { serviceId, date, status, information } = dailyEntry
+
+
+    return (
+        <DailyEntry>
+            <Popover
+                open={infoEntryVisible}
+                onClose={() => changeInfoEntryVisible(false)}
+                anchorEl={popoverRef.current}
+                placement="top"
+            >
+                <Popover.Content>{infoStatusIconOnHover}{infoContent}</Popover.Content>
+            </Popover>
+            <span
+                className={`entry ${status.toLowerCase()}`}
+                onMouseEnter={() => toggleEntryInfoOnHover(status, information)}
+                onMouseLeave={() => changeInfoEntryVisible(false)} ref={popoverRef}
+            />
+        </DailyEntry>
+    )
+}
+
+// ----------------------
+
+
+
+
 const MonthlyStatusContainer = styled.div``
 
 const DaysInMonth = styled.div`
@@ -607,9 +634,6 @@ const DaysInMonth = styled.div`
     border-radius: 4px;
     background: white;
 
-    /* display: flex;
-    flex-flow: row wrap;
-    gap: 8px; */
     display: grid;
     grid-template-columns: 32px 32px 32px 32px 32px 32px 32px;
     grid-gap: 8px;
@@ -622,12 +646,19 @@ const Day = styled.div`
     &.down {
         background: var(--navds-global-color-red-500);
     }
+
     &.issue {
         background: var(--navds-global-color-orange-500);
     }
 
     &.ok {
         background: var(--navds-global-color-green-500);
+    }
+
+    .navds-popover__content {
+        svg {
+            margin-right: 8px;
+        }
     }
 `
 
@@ -636,6 +667,29 @@ interface MonthlyProps {
 }
 
 const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
+    return (
+        <MonthlyStatusContainer>
+            <div className="calendar-header">
+                {currentMonth.month}
+            </div>
+            <DaysInMonth>
+                {currentMonth.entries.map((day, index) => {
+                    if (index < 31)
+                        return (
+                            <DayComponent key={index} day={day}/>
+                    )
+                })}
+            </DaysInMonth>
+        </MonthlyStatusContainer>
+    )
+}
+
+
+
+
+
+
+const DayComponent: React.FC<{day: HistoryOfSpecificServiceDayEntry}> = ({day}) => {
     const popoverRef = useRef(null);
     const [infoEntryVisible, changeInfoEntryVisible] = useState(false)
     const [infoContent, changeInfoContent] = useState("")
@@ -652,8 +706,11 @@ const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
         changeInfoEntryVisible(true)
     }
 
+    const { date, serviceId, status, information} = day
+
     return (
-        <MonthlyStatusContainer>
+        <Day className={status.toLowerCase()} onMouseEnter={() => toggleEntryInfoOnHover(status, information)} onMouseLeave={() => changeInfoEntryVisible(false)} ref={popoverRef}>
+        
             <Popover
                 open={infoEntryVisible}
                 onClose={() => changeInfoEntryVisible(false)}
@@ -662,25 +719,9 @@ const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
             >
                 <Popover.Content>{infoStatusIconOnHover}{infoContent}</Popover.Content>
             </Popover>
-
-
-            <div className="calendar-header">
-                {currentMonth.month}
-            </div>
-            <DaysInMonth>
-                {currentMonth.entries.map((day, index) => {
-                    if (index < 31)
-                        return (
-                            <Day key={index} className={day.status.toLowerCase()} onMouseEnter={() => toggleEntryInfoOnHover(day.status, day.information)} onMouseLeave={() => changeInfoEntryVisible(false)} ref={popoverRef} />
-                    )
-                })}
-            </DaysInMonth>
-        </MonthlyStatusContainer>
+        </Day>
     )
 }
-
-
-
 
 
 export default TjenestedataContent
