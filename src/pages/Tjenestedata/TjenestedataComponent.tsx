@@ -1,14 +1,14 @@
 import Link from 'next/link'
 import styled from 'styled-components'
-import { SetStateAction, useContext, useState } from 'react';
+import { SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
 
-import { BodyShort, Heading, Panel } from '@navikt/ds-react';
+import { BodyShort, Heading, Panel, Popover } from '@navikt/ds-react';
 import { Innholdstittel } from 'nav-frontend-typografi';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
-import { Area, Component, Service, ServiceHistory } from '../../types/navServices';
+import { Component, HistoryOfSpecificServiceMonths, Service } from '../../types/navServices';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { RouterTjenestedata } from '../../types/routes';
 import { IncidentCard } from '../../components/Incidents';
@@ -171,20 +171,9 @@ const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
                 
                 <IncidentCard descriptionOfIncident="Beskrivelse" status={service.status} timeframe='Tidsrom' titleOfIncident='Tittel' logLink='Loglenke' />
             </div>
-    
-
             
-
-
-            {/* <div>
-                <Button onClick={() => changeShowHistory(!showHistory)} variant="secondary">
-                    {showHistory ? "- Skjul tidligere avvik" : "+ Vis tidligere avvik"}
-                </Button>
-            </div> */}
-            
-            {/* {showHistory && */}
             <ServiceIncidentHistory service={service} />
-            {/* } */}
+
         </CategoryContainer>
     )
 }
@@ -195,7 +184,7 @@ const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
 
 
 
-/*------------------------------------------ Helpers below ------------------------------------------*/
+/*------------------------------------------ Helpers for Root: below ------------------------------------------*/
 
 
 
@@ -319,7 +308,13 @@ const ServiceIncidentHistory: React.FC<{service: Service}>= ({service}) => {
     // TODO: Henting av tjenestehistorikkdata som driftsmeldinger og diverse
     const { data, isLoading, reload } = useLoader(() => fetchServiceHistory(service.id), [])
 
-    if(isLoading) {
+    const router = useRouter()
+
+    useEffect(() => {
+        router.query.history == ("90dager" || undefined) ? setIsLast90Days(true) : setIsLast90Days(false)
+    },[router])
+
+    if(isLoading || isLast90Days == undefined) {
         return <CustomNavSpinner />
     }
 
@@ -331,7 +326,7 @@ const ServiceIncidentHistory: React.FC<{service: Service}>= ({service}) => {
             </span>
 
             <TabHistory setIsLast90Days={setIsLast90Days} isLast90Days={isLast90Days} />
-            <HistoryOfService service={service} isLast90Days={isLast90Days} serviceHistory={data} />
+            <HistoryOfService service={service} isLast90Days={isLast90Days} serviceHistory={data.history} />
 
         </PublicDataContainer>
     )
@@ -394,21 +389,23 @@ interface History {
 }
 
 const TabHistory = ({setIsLast90Days, isLast90Days}: History) => {
+    const router = useRouter();
+    const { id } = router.query
 
     return (
         <TabMenu>
             <span>
                 <li className={isLast90Days ? "active" : "inactive"} onClick={() => setIsLast90Days(true)}>
-                    <a href="#historyiioiok99">
+                    <Link href={`${id}/?history=90dager`}>
                         Siste 90 dager
-                    </a>
+                    </Link>
                 </li>
             </span>
             <span>
                 <li className={!isLast90Days ? "active" : "inactive"} onClick={() => setIsLast90Days(false)}>
-                    <a href="#history">
+                    <Link href={`${id}/?history=månedlig`}>
                         Måned for måned
-                    </a>
+                    </Link>
                 </li>
             </span>
         </TabMenu>
@@ -429,6 +426,8 @@ const DailyOverview = styled.div`
     padding: 20px;
 
     border-radius: 4px;
+
+    width: min-content;
 
     display: flex;
     flex-direction: row;
@@ -451,53 +450,76 @@ const DailyOverview = styled.div`
         &.down {
             background: var(--navds-global-color-red-500);
         }
-
-        .entry-data {
-            position: absolute;
-        }
     }
 `
 
-const MonthlyOverview = styled.div``
+const MonthlyOverview = styled.div`
+    display: flex;
+    gap: 16px;
+`
 
-const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, serviceHistory: ServiceHistory[]}> = ({service, isLast90Days, serviceHistory}) => {
+const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, serviceHistory: HistoryOfSpecificServiceMonths[]}> = ({service, isLast90Days, serviceHistory}) => {
+    const popoverRef = useRef(null);
+    const [infoEntryVisible, changeInfoEntryVisible] = useState(false)
+    const [infoContent, changeInfoContent] = useState("")
+    const [infoStatusIconOnHover, setInfoStatusIconOnHover] = useState<JSX.Element>()
 
-    const mockList = [{status: "OK", title: "Oppe", message: "Ingen feil på tjeneste"},
-        {status: "ISSUE", title: "Avvik på tjeneste", message: "Tjenesten er delvis nede grunnet problemer"},
-        {status: "DOWN", title: "Nede", message: "Tjenesten var nede"}
-    ]
+    let numberOfDaysInView = 0
 
-
+    const toggleEntryInfoOnHover = (status, information) => {
+        if(information){
+            changeInfoContent(information)
+        }
+        else{
+            changeInfoContent("Statusinformasjon eksisterer ikke")
+        }
+        setInfoStatusIconOnHover(handleAndSetStatusIcon(status))
+        changeInfoEntryVisible(true)
+    }
 
     return (
         <HistoryContainer id="history">
+            <Popover
+                open={infoEntryVisible}
+                onClose={() => changeInfoEntryVisible(false)}
+                anchorEl={popoverRef.current}
+                placement="top"
+            >
+                <Popover.Content>{infoStatusIconOnHover}{infoContent}</Popover.Content>
+            </Popover>
+
             {isLast90Days
             ?
                 <DailyOverview>
-                    {mockList.map((entry, index) => {
-                        return (
-                            <span key={index} className={`entry ${entry.status.toLowerCase()}`}>
-                                {/* <div className="entry-data" onMouseEnter={e => {
-                                        setStyle({display: 'block'});
-                                    }}
-                                    onMouseLeave={e => {
-                                        setStyle({display: 'none'})
-                                    }}
-                                >
-                                    <Heading size="medium" level="3">
-                                        {handleAndSetStatusIcon(entry.status)} {entry.title}
-                                    </Heading>
-                                    <BodyShort>
-                                        {entry.message}
-                                    </BodyShort>
-                                </div> */}
-                            </span>
-                        )
-                    })}
+                    {serviceHistory.map(currentMonth => 
+                        currentMonth.entries.map((dailyEntry, index) => {
+                            if(numberOfDaysInView < 90) {
+                                const {serviceId, date, status, information} = dailyEntry
+                                
+                                numberOfDaysInView ++
+                                return (
+                                    <span key={index} className={`entry ${status.toLowerCase()}`} onMouseEnter={() => toggleEntryInfoOnHover(status, information)} onMouseLeave={() => changeInfoEntryVisible(false)} ref={popoverRef} >
+
+                                    </span>
+                                )
+                            }
+                            
+                            return null
+
+                        })
+                    )}
                 </DailyOverview>
             :
                 <MonthlyOverview>
-                    månedlig
+                    {serviceHistory.map((currentMonth, index) => {
+                        // MIDLERTIDIG for å stoppe loop til max tre måneder tilbake per page
+                        if(index > 2) {
+                            return
+                        }
+                        return (
+                            <MonthlyCalendarStatuses key={index} currentMonth={currentMonth} />
+                        )
+                    })}
                 </MonthlyOverview>
             }
         </HistoryContainer>
@@ -542,8 +564,8 @@ const ServicesAndComponentsList: React.FC<{componentDependencies?: Component[], 
             <ServiceAndComponentDependencies>
                 {componentDependencies.map(component => {
                     return (
-                        <li>
-                            <Link href={RouterTjenestedata.PATH + component.id} key={component.id}>
+                        <li key={component.id}>
+                            <Link href={RouterTjenestedata.PATH + component.id}>
                                 <a>
                                     {handleAndSetStatusIcon(component.status)} {component.name}
                                 </a>
@@ -559,8 +581,8 @@ const ServicesAndComponentsList: React.FC<{componentDependencies?: Component[], 
         <ServiceAndComponentDependencies>
             {serviceDependencies.map(service => {
                 return (
-                    <li>
-                        <Link key={service.id} href={RouterTjenestedata.PATH + service.id} >
+                    <li key={service.id}>
+                        <Link href={RouterTjenestedata.PATH + service.id} >
                             <a>
                                 {handleAndSetStatusIcon(service.status)} {service.name}
                             </a>
@@ -575,90 +597,90 @@ const ServicesAndComponentsList: React.FC<{componentDependencies?: Component[], 
 
 
 
+const MonthlyStatusContainer = styled.div``
 
+const DaysInMonth = styled.div`
+    width: 311px;
+    height: 224px;
 
+    padding: 20px;
+    border-radius: 4px;
+    background: white;
 
-// OLD, Might use later
-const HistoryWrapper = styled.div`
-    display: flex;
-    gap: 3px;
-    div {
-        position: relative;
+    /* display: flex;
+    flex-flow: row wrap;
+    gap: 8px; */
+    display: grid;
+    grid-template-columns: 32px 32px 32px 32px 32px 32px 32px;
+    grid-gap: 8px;
+`
+
+const Day = styled.div`
+    border-radius: 4px;
+    height: 32px;
+
+    &.down {
+        background: var(--navds-global-color-red-500);
     }
-    span {
-        position: relative;
-        background-color: grey;
-        height: 34px;
-        width: 7.6px;
-        display: block;
-        p {
-            border: 1px solid black;
-            background-color: white;
-            padding: 1rem;
-            border-radius: 5px;
-            z-index: 100;
-            top: calc(32px/2 + 10px);
-            transform: translateX(-50%);
-            display: none;
-            position: absolute;
-        }
-        .pointer-wrapper {
-            position: absolute;
-            height: 10px;
-            top: 9px;
-            z-index: 1001;
-            width: 0;
-            div {
-                display: none;
-                position: absolute;
-            }
-            .pointer-top {
-                border: 9px solid transparent;
-                border-bottom-color: black;
-                top: calc(31px/2);
-                transform: translateX(-28%);
-                z-index: -10;
-            }
-            .pointer-bottom {
-                border: 8px solid transparent;
-                border-bottom-color: white;
-                margin-left: 1px;
-                margin-bottom: -1px;
-                top: calc(35px/2);
-                transform: translateX(-31%);
-                z-index: 101;
-            }
-        }
-        :hover {
-            .pointer-top, .pointer-bottom, p {
-                display: block;
-            }
-        }
+    &.issue {
+        background: var(--navds-global-color-orange-500);
+    }
+
+    &.ok {
+        background: var(--navds-global-color-green-500);
     }
 `
-const Past90Days: React.FC<{service: Service | null}> = ({service}) => {
-    // Array er et test-array. Må endres når vi får records inn på rett måte
-    const test = Array.from(Array(10).keys())
-    
+
+interface MonthlyProps {
+    currentMonth: HistoryOfSpecificServiceMonths
+}
+
+const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
+    const popoverRef = useRef(null);
+    const [infoEntryVisible, changeInfoEntryVisible] = useState(false)
+    const [infoContent, changeInfoContent] = useState("")
+    const [infoStatusIconOnHover, setInfoStatusIconOnHover] = useState<JSX.Element>()
+
+    const toggleEntryInfoOnHover = (status, information) => {
+        if(information){
+            changeInfoContent(information)
+        }
+        else{
+            changeInfoContent("Statusinformasjon eksisterer ikke")
+        }
+        setInfoStatusIconOnHover(handleAndSetStatusIcon(status))
+        changeInfoEntryVisible(true)
+    }
+
     return (
-        <HistoryWrapper>
-            {test.map((e, index) => {
-                return (
-                    <div key={index}>
-                        <span className={service.status}>
-                            <div className="pointer-wrapper" >
-                                <div className="pointer-top" />
-                                <div className="pointer-bottom" />
-                            </div>
-                            <p className="hover-text">Statushistorikk under utvikling</p>
-                        </span>
-                    </div>
-                )
-            })}
-        </HistoryWrapper>
+        <MonthlyStatusContainer>
+            <Popover
+                open={infoEntryVisible}
+                onClose={() => changeInfoEntryVisible(false)}
+                anchorEl={popoverRef.current}
+                placement="top"
+            >
+                <Popover.Content>{infoStatusIconOnHover}{infoContent}</Popover.Content>
+            </Popover>
+
+
+            <div className="calendar-header">
+                {currentMonth.month}
+            </div>
+            <DaysInMonth>
+                {currentMonth.entries.map((day, index) => {
+                    if (index < 31)
+                        return (
+                            <Day key={index} className={day.status.toLowerCase()} onMouseEnter={() => toggleEntryInfoOnHover(day.status, day.information)} onMouseLeave={() => changeInfoEntryVisible(false)} ref={popoverRef} />
+                    )
+                })}
+            </DaysInMonth>
+        </MonthlyStatusContainer>
     )
 }
-// ---
+
+
+
 
 
 export default TjenestedataContent

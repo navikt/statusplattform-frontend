@@ -76,7 +76,7 @@ export const DynamicListContainer = styled.div`
             await user
             await router
             if(!user.navIdent) {
-            router.push(RouterPrivatperson.PATH)
+                router.push(RouterPrivatperson.PATH)
             }
         }
      },[router, user])

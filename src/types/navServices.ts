@@ -26,12 +26,6 @@ export interface Service {
     areasContainingThisService: Area[]
 }
 
-export interface ServiceHistory {
-    serviceId: string
-    date: Date
-    status: string
-}
-
 export interface Component {
     id?: string
     name: string
@@ -61,6 +55,33 @@ export interface SubArea {
     name: string
     services: Service[]
 }
+
+
+
+
+
+
+
+
+
+export interface HistoryOfSpecificService {
+    history: HistoryOfSpecificServiceMonths[]
+}
+
+export interface HistoryOfSpecificServiceMonths {
+    month: string
+    entries: HistoryOfSpecificServiceDayEntry[]
+}
+export interface HistoryOfSpecificServiceDayEntry {
+    serviceId: string
+    date: string
+    status: string
+    information?: string
+}
+
+
+
+
 
 
 export interface MaintenanceObject {
