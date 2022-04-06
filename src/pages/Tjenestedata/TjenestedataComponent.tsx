@@ -637,6 +637,11 @@ const DaysInMonth = styled.div`
     display: grid;
     grid-template-columns: 32px 32px 32px 32px 32px 32px 32px;
     grid-gap: 8px;
+
+    .empty-field {
+        display: block;
+        height: 32px;
+    }
 `
 
 const Day = styled.div`
@@ -656,6 +661,9 @@ const Day = styled.div`
     }
 
     .navds-popover__content {
+        display: flex;
+        flex-direction: column;
+
         svg {
             margin-right: 8px;
         }
@@ -667,16 +675,28 @@ interface MonthlyProps {
 }
 
 const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
+    const [month, updateMonth] = useState<[]>([])
+    const [weekInMonth, setWeekInMonth] = useState<number[]>([0, 1, 2, 3, 4, 5, 6])
+    
+    const firstDay = new Date(currentMonth.entries[0].date)    
+    const firstDayOfMonth = firstDay.getDay()
+    
     return (
         <MonthlyStatusContainer>
             <div className="calendar-header">
                 {currentMonth.month}
             </div>
+
             <DaysInMonth>
                 {currentMonth.entries.map((day, index) => {
+                    const dateConverted = new Date(day.date)
+                    if(index < firstDayOfMonth) {
+                        return <div className="empty-field"/>
+                    }
+
                     if (index < 31)
                         return (
-                            <DayComponent key={index} day={day}/>
+                            <DayComponent key={index} day={day} />
                     )
                 })}
             </DaysInMonth>
@@ -708,6 +728,22 @@ const DayComponent: React.FC<{day: HistoryOfSpecificServiceDayEntry}> = ({day}) 
 
     const { date, serviceId, status, information} = day
 
+    let statusMessage;
+
+    switch (status) {
+        case "OK":
+            statusMessage = "Ingen nedetid"
+            break;
+        case "ISSUE":
+            statusMessage = "Avvik på tjeneste"
+            break;
+        case "DOWN":
+            statusMessage = "Tjeneste var nede"
+            break;
+        default:
+            break;
+    }
+
     return (
         <Day className={status.toLowerCase()} onMouseEnter={() => toggleEntryInfoOnHover(status, information)} onMouseLeave={() => changeInfoEntryVisible(false)} ref={popoverRef}>
         
@@ -717,7 +753,12 @@ const DayComponent: React.FC<{day: HistoryOfSpecificServiceDayEntry}> = ({day}) 
                 anchorEl={popoverRef.current}
                 placement="top"
             >
-                <Popover.Content>{infoStatusIconOnHover}{infoContent}</Popover.Content>
+                <Popover.Content>
+                    <Heading spacing size="medium" level="2">
+                        {infoStatusIconOnHover}{statusMessage}
+                    </Heading>
+                    {infoContent}
+                </Popover.Content>
             </Popover>
         </Day>
     )
