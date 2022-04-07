@@ -4,7 +4,7 @@ import { SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
 
-import { BodyShort, Heading, Panel, Popover } from '@navikt/ds-react';
+import { BodyShort, Detail, Heading, Panel, Popover } from '@navikt/ds-react';
 import { Innholdstittel } from 'nav-frontend-typografi';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
@@ -487,7 +487,7 @@ const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, servi
                     {serviceHistory.map((currentMonth, index) => {
                         // MIDLERTIDIG for å stoppe loop til max tre måneder tilbake per page
                         if(index > 2) {
-                            return
+                            return null
                         }
                         return (
                             <MonthlyCalendarStatuses key={index} currentMonth={currentMonth} />
@@ -628,7 +628,7 @@ const MonthlyStatusContainer = styled.div``
 
 const DaysInMonth = styled.div`
     width: 311px;
-    height: 224px;
+    /* height: 224px; */
 
     padding: 20px;
     border-radius: 4px;
@@ -675,11 +675,8 @@ interface MonthlyProps {
 }
 
 const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
-    const [month, updateMonth] = useState<[]>([])
-    const [weekInMonth, setWeekInMonth] = useState<number[]>([0, 1, 2, 3, 4, 5, 6])
-    
     const firstDay = new Date(currentMonth.entries[0].date)    
-    const firstDayOfMonth = firstDay.getDay()
+    const firstDayOfMonth = firstDay.getDay()-1
     
     return (
         <MonthlyStatusContainer>
@@ -688,16 +685,19 @@ const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
             </div>
 
             <DaysInMonth>
+                {firstDayOfMonth != 0 &&
+                    [...Array(firstDayOfMonth)].map((e, i) => {
+                        return (
+                            <div key={i} className="empty-field"/>
+                        )
+                    })
+                }
                 {currentMonth.entries.map((day, index) => {
-                    const dateConverted = new Date(day.date)
-                    if(index < firstDayOfMonth) {
-                        return <div className="empty-field"/>
-                    }
-
-                    if (index < 31)
+                    if (index < 31){
                         return (
                             <DayComponent key={index} day={day} />
-                    )
+                        )
+                    }
                 })}
             </DaysInMonth>
         </MonthlyStatusContainer>
@@ -726,7 +726,7 @@ const DayComponent: React.FC<{day: HistoryOfSpecificServiceDayEntry}> = ({day}) 
         changeInfoEntryVisible(true)
     }
 
-    const { date, serviceId, status, information} = day
+    const { date, status, information} = day
 
     let statusMessage;
 
@@ -757,6 +757,7 @@ const DayComponent: React.FC<{day: HistoryOfSpecificServiceDayEntry}> = ({day}) 
                     <Heading spacing size="medium" level="2">
                         {infoStatusIconOnHover}{statusMessage}
                     </Heading>
+                    <Detail>{date}</Detail>
                     {infoContent}
                 </Popover.Content>
             </Popover>
