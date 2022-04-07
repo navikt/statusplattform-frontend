@@ -473,7 +473,7 @@ const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, servi
                                 numberOfDaysInView ++
 
                                 return (
-                                    <DailyEntryComponent key={index} dailyEntry={dailyEntry} />
+                                    <DailyEntryComponent key={index} dailyEntry={dailyEntry} currentMonth={currentMonth.month} />
                                 )
                             }
                             
@@ -579,11 +579,20 @@ const DailyEntry = styled.div`
     }
 `
 
-const DailyEntryComponent: React.FC<{dailyEntry: HistoryOfSpecificServiceDayEntry}> = ({dailyEntry}) => {
+const DailyEntryComponent: React.FC<{dailyEntry: HistoryOfSpecificServiceDayEntry, currentMonth: string}> = ({dailyEntry, currentMonth}) => {
     const popoverRef = useRef(null);
     const [infoEntryVisible, changeInfoEntryVisible] = useState(false)
     const [infoContent, changeInfoContent] = useState("")
     const [infoStatusIconOnHover, setInfoStatusIconOnHover] = useState<JSX.Element>()
+    const [formattedDateString, setFormattedDateString] = useState("")
+
+
+
+    useEffect(() => {
+        const monthPrettified: string = currentMonth.charAt(0) + currentMonth.slice(1).toLowerCase()
+        const dateNumber: string = dailyEntry.date.split("-")[2]
+        setFormattedDateString(dateNumber + ". " + monthPrettified)    
+    },[])
 
 
     const toggleEntryInfoOnHover = (status, information) => {
@@ -598,6 +607,21 @@ const DailyEntryComponent: React.FC<{dailyEntry: HistoryOfSpecificServiceDayEntr
     }
 
     const { serviceId, date, status, information } = dailyEntry
+    let statusMessage: string;
+
+    switch (status) {
+        case "OK":
+            statusMessage = "Ingen nedetid"
+            break;
+        case "ISSUE":
+            statusMessage = "Avvik på tjeneste"
+            break;
+        case "DOWN":
+            statusMessage = "Tjeneste var nede"
+            break;
+        default:
+            break;
+    }
 
 
     return (
@@ -608,7 +632,13 @@ const DailyEntryComponent: React.FC<{dailyEntry: HistoryOfSpecificServiceDayEntr
                 anchorEl={popoverRef.current}
                 placement="top"
             >
-                <Popover.Content>{infoStatusIconOnHover}{infoContent}</Popover.Content>
+                <Popover.Content>
+                    <Heading spacing size="medium" level="2">
+                        {infoStatusIconOnHover}{statusMessage}
+                    </Heading>
+                    <Detail>{formattedDateString}</Detail>
+                    {infoContent}
+                </Popover.Content>
             </Popover>
             <span
                 className={`entry ${status.toLowerCase()}`}
@@ -677,7 +707,7 @@ interface MonthlyProps {
 const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
     const firstDay = new Date(currentMonth.entries[0].date)    
     const firstDayOfMonth = firstDay.getDay()-1
-    
+
     return (
         <MonthlyStatusContainer>
             <div className="calendar-header">
@@ -695,7 +725,7 @@ const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
                 {currentMonth.entries.map((day, index) => {
                     if (index < 31){
                         return (
-                            <DayComponent key={index} day={day} />
+                            <DayComponent key={index} day={day} month={currentMonth.month}/>
                         )
                     }
                 })}
@@ -705,15 +735,34 @@ const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
 }
 
 
+// HELPER FOR DATE OBJECT
+// const calculateWeekNumberFromGivenDate(date: Date) {
+//     var firstDay: Date = new Date(date.getFullYear(), 0, 1);
+//     var dayOfYear: number = ((date - firstDay) / 86400000) + 1;
+//     var week = Math.ceil(dayOfYear / 7);
+//     return week;
+// }
+
+// ----------------------
 
 
 
-
-const DayComponent: React.FC<{day: HistoryOfSpecificServiceDayEntry}> = ({day}) => {
+const DayComponent: React.FC<{day: HistoryOfSpecificServiceDayEntry, month: string}> = ({day, month}) => {
     const popoverRef = useRef(null);
+
     const [infoEntryVisible, changeInfoEntryVisible] = useState(false)
     const [infoContent, changeInfoContent] = useState("")
     const [infoStatusIconOnHover, setInfoStatusIconOnHover] = useState<JSX.Element>()
+    const [formattedDateString, setFormattedDateString] = useState("")
+
+
+
+    useEffect(() => {
+        const monthPrettified: string = month.charAt(0) + month.slice(1).toLowerCase()
+        const dateNumber: string = day.date.split("-")[2]
+        setFormattedDateString(dateNumber + ". " + monthPrettified)
+    },[])
+
 
     const toggleEntryInfoOnHover = (status, information) => {
         if(information){
@@ -757,7 +806,7 @@ const DayComponent: React.FC<{day: HistoryOfSpecificServiceDayEntry}> = ({day}) 
                     <Heading spacing size="medium" level="2">
                         {infoStatusIconOnHover}{statusMessage}
                     </Heading>
-                    <Detail>{date}</Detail>
+                    <Detail>{formattedDateString}</Detail>
                     {infoContent}
                 </Popover.Content>
             </Popover>
