@@ -36,7 +36,7 @@ export const fetchServiceHistory = async (serviceId: string): Promise<HistoryOfS
 
 
 
-export const postService = async (service: Service): Promise<Object[]> =>{
+export const postService = async (service: Service): Promise<Service> =>{
     let response;
     let endPath = EndPathService()
     

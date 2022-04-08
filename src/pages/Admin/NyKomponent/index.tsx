@@ -8,8 +8,8 @@ import { Service, Component } from "../../../types/navServices";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { fetchTypes } from "../../../utils/fetchTypes";
 
-import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
-import { Delete } from "@navikt/ds-icons";
+import { BodyShort, Button, Detail, Heading, Modal, Select, TextField } from "@navikt/ds-react";
+import { Copy, Delete } from "@navikt/ds-icons";
 import { DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 import { fetchAreas } from "../../../utils/areasAPI";
@@ -33,10 +33,39 @@ const NewComponentContainer = styled.div`
 
 `
 
+const ModalContent = styled(Modal.Content)`
+    width: 100vw;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    
+    .bottom {
+        display: flex;
+        flex-wrap: wrap;
+
+        p {
+            margin-right: 1rem;
+        }
+    }
+`
+
 
 const NewComponent = () => {
     const [allComponents, setAllComponents] = useState<Component[]>()
     const [isLoading, setIsLoading] = useState(true)
+    const [didComponentCreate, changeDidComponentCreate] = useState(false)
+    const [newlyCreatedComponent, setNewlyCreatedComponent] = useState<Component>(
+        {
+            name: "",
+            team: "",
+            type: "KOMPONENT",
+            componentDependencies: [],
+            monitorlink: "",
+            pollingUrl: "",
+            servicesDependentOnThisComponent: []
+        }
+    )
 
     const [newComponent, updateNewComponent] = useState<Component>({
         name: "",
@@ -112,18 +141,45 @@ const NewComponent = () => {
 
     const handlePostNewComponent = (event) => {
         event.preventDefault()
-        postComponent(newComponent).then(() => {
+        postComponent(newComponent).then((response: Component) => {
             toast.success("Område lastet opp")
-            router.push(RouterAdminKomponenter.PATH)
+            changeDidComponentCreate(true)
+            setNewlyCreatedComponent(response)
         }).catch(() => {
             toast.error("Klarte ikke å laste opp område")
         })
     }
 
+    const redirectToAdminKomponenter = () => {
+        if(didComponentCreate) {
+            router.push(RouterAdminKomponenter.PATH)
+        }
+    }
 
 
     return (
         <Layout>
+
+            <Modal open={didComponentCreate} onClose={() => redirectToAdminKomponenter()}>
+                <ModalContent>
+                    <Heading spacing level="1" size="large">
+                        Tjeneste opprettet!
+                    </Heading>
+                    <Detail spacing>
+                        {newlyCreatedComponent.id}
+                    </Detail>
+
+                    <span className="bottom">
+                        <BodyShort>
+                            Kopier denne id'en: 
+                        </BodyShort>
+                        <Button variant="secondary" size="small" onClick={() => navigator.clipboard.writeText(newlyCreatedComponent.id)}>
+                            <Copy />
+                        </Button>
+                    </span>
+                </ModalContent>
+            </Modal>
+
             <NewComponentContainer>
                 <form onSubmit={event => handlePostNewComponent(event)}>
 

@@ -23,7 +23,7 @@ export const fetchComponents = async (): Promise<Component[]> => {
 
 
 
-export const postComponent = async (component: Component): Promise<Object[]> =>{
+export const postComponent = async (component: Component): Promise<Component> =>{
     let response;
     let endPath = EndPathComponent()
 

@@ -7,8 +7,8 @@ import Layout from '../../../components/Layout';
 import { Area, Component, Service } from "../../../types/navServices";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 
-import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
-import { Delete } from "@navikt/ds-icons";
+import { BodyShort, Button, Detail, Heading, Modal, Select, TextField } from "@navikt/ds-react";
+import { Copy, Delete } from "@navikt/ds-icons";
 import { DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 import { fetchServices, postService } from "../../../utils/servicesAPI";
@@ -33,13 +33,43 @@ const NewServiceContainer = styled.div`
 
 `
 
+const ModalContent = styled(Modal.Content)`
+    width: 100vw;
+
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    
+    .bottom {
+        display: flex;
+        flex-wrap: wrap;
+
+        p {
+            margin-right: 1rem;
+        }
+    }
+`
+
 
 const NewService = () => {
     const [allAreas, setAllAreas] = useState<Area[]>()
     const [allServices, setAllServices] = useState<Service[]>()
     const [allComponents, setAllComponents] = useState<Component[]>()
     const [isLoading, setIsLoading] = useState(true)
-
+    const [didServiceCreate, changeDidServiceCreate] = useState(false)
+    const [newlyCreatedService, setNewlyCreatedService] = useState<Service>(
+        {
+            name: "",
+            team: "",
+            type: "TJENESTE",
+            serviceDependencies: [],
+            componentDependencies: [],
+            monitorlink: "",
+            pollingUrl: "",
+            areasContainingThisService: []
+        }
+    )
+    
     const [newService, updateNewService] = useState<Service>({
         name: "",
         team: "",
@@ -57,6 +87,8 @@ const NewService = () => {
 
 
     useEffect(() => {
+        // Eksempelbruk i en standard nextjs app
+        Modal.setAppElement("#__next");
         (async function () {
             const retrievedServices: Service[] = await fetchServices()
             const retrievedComponents: Component[] = await fetchComponents()
@@ -169,18 +201,47 @@ const NewService = () => {
 
     const handlePostNewService = (event) => {
         event.preventDefault()
-        postService(newService).then(() => {
+        postService(newService).then((response: Service) => {
             toast.success("Tjeneste lastet opp")
-            router.push(RouterAdminTjenester.PATH)
+            changeDidServiceCreate(true)
+            setNewlyCreatedService(response)
         }).catch(() => {
             toast.error("Klarte ikke å laste opp tjeneste")
         })
+    }
+
+    const redirectToAdminTjenester = () => {
+        if(didServiceCreate) {
+            router.push(RouterAdminTjenester.PATH)
+        }
     }
 
 
 
     return (
         <Layout>
+
+            <Modal open={didServiceCreate} onClose={() => redirectToAdminTjenester()}>
+                <ModalContent>
+                    <Heading spacing level="1" size="large">
+                        Tjeneste opprettet!
+                    </Heading>
+                    <Detail spacing>
+                        {newlyCreatedService.id}
+                    </Detail>
+
+                    <span className="bottom">
+                        <BodyShort>
+                            Kopier denne id'en: 
+                        </BodyShort>
+                        <Button variant="secondary" size="small" onClick={() => navigator.clipboard.writeText(newlyCreatedService.id)}>
+                            <Copy />
+                        </Button>
+                    </span>
+                </ModalContent>
+            </Modal>
+
+
             <NewServiceContainer>
                 <form onSubmit={event => handlePostNewService(event)}>
 
