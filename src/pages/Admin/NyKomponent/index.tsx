@@ -142,11 +142,11 @@ const NewComponent = () => {
     const handlePostNewComponent = (event) => {
         event.preventDefault()
         postComponent(newComponent).then((response: Component) => {
-            toast.success("Område lastet opp")
+            toast.success("Komponent lastet opp")
             changeDidComponentCreate(true)
             setNewlyCreatedComponent(response)
         }).catch(() => {
-            toast.error("Klarte ikke å laste opp område")
+            toast.error("Klarte ikke å laste opp komponenten")
         })
     }
 
@@ -163,7 +163,7 @@ const NewComponent = () => {
             <Modal open={didComponentCreate} onClose={() => redirectToAdminKomponenter()}>
                 <ModalContent>
                     <Heading spacing level="1" size="large">
-                        Tjeneste opprettet!
+                        Komponent opprettet!
                     </Heading>
                     <Detail spacing>
                         {newlyCreatedComponent.id}
