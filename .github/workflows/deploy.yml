@@ -23,7 +23,6 @@ jobs:
   deploy-test:
     name: Deploy application to test env
     needs: build-and-run-tests
-    if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
@@ -31,7 +30,7 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: dev-gcp
-          RESOURCE: nais-test.yaml
+          RESOURCE: nais-test.yml
           VAR: image=${{ env.docker_image }}
 
   deploy-prod:
@@ -45,5 +44,5 @@ jobs:
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
           CLUSTER: prod-gcp
-          RESOURCE: nais.yaml
+          RESOURCE: nais.yml
           VAR: version=${{ env.IMAGE_TAG }}
