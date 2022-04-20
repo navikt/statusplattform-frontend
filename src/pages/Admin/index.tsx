@@ -5,9 +5,10 @@ import Layout from '../../components/Layout';
 import Admin from '../../components/Admin';
 import MenuSelector from '../../components/Admin/MenuSelector';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { RouterPrivatperson } from '../../types/routes';
+import CustomNavSpinner from '../../components/CustomNavSpinner';
 
 
 const AdminContainer = styled.div`
@@ -68,20 +69,31 @@ export const DynamicListContainer = styled.div`
 `
 
  const AdminPage = () => {
-     const user = useContext(UserStateContext)
-     const router = useRouter()
-
-     useEffect(() => {
-        async () => {
+    const user = useContext(UserStateContext)
+    const router = useRouter()
+    const [isLoading, setIsLoading] = useState(true)
+     
+    useEffect(() => {
+        setIsLoading(true)
+        const setUpInitial = async () => {
             await user
             await router
-            if(!user.navIdent) {
-                router.push(RouterPrivatperson.PATH)
-            }
+
         }
-     },[router, user])
+        setUpInitial().catch(console.error)
+        setIsLoading(false)
+    },[router, user])
 
     
+    if(isLoading) {
+        return <CustomNavSpinner />
+    }
+
+    if(!user.navIdent || user.navIdent.length == 0) {
+        router.push(RouterPrivatperson.PATH)
+        return <CustomNavSpinner />
+    }
+
     return (
         <Layout>
             <AdminContainer>
