@@ -71,7 +71,6 @@ export const DynamicListContainer = styled.div`
 `
 
  const AdminPage = () => {
-    // const user = useContext(UserStateContext)
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(true)
     const [userData, setUserData] = useState<UserData>(undefined)
