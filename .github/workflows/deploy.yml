@@ -20,9 +20,23 @@ jobs:
           docker build --tag ${docker_image} .
           docker push ${docker_image}
 
-  deploy:
-    name: Deploy to NAIS
-    needs: build
+  deploy-test:
+    name: Deploy application to test env
+    needs: test-build-and-push
+    if: github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: nais/deploy/actions/deploy@v1
+        env:
+          APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
+          CLUSTER: dev-gcp
+          RESOURCE: nais-test.yaml
+          VAR: image=${{ env.docker_image }}
+
+  deploy-prod:
+    name: Deploy application to prod
+    needs: deploy-test
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
@@ -30,7 +44,6 @@ jobs:
       - uses: nais/deploy/actions/deploy@v1
         env:
           APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-          CLUSTER: labs-gcp
-          RESOURCE: nais.yml
-          VAR: image=${{ env.docker_image }}
-
+          CLUSTER: prod-gcp
+          RESOURCE: nais.yaml
+          VAR: version=${{ env.IMAGE_TAG }}
