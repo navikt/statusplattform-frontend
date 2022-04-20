@@ -5,10 +5,12 @@ import Layout from '../../components/Layout';
 import Admin from '../../components/Admin';
 import MenuSelector from '../../components/Admin/MenuSelector';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
+import { UserData } from '../../types/userData';
 import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { RouterPrivatperson } from '../../types/routes';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
+import { checkLoginInfoAndState } from '../../utils/checkLoginInfoAndState';
 
 
 const AdminContainer = styled.div`
@@ -69,27 +71,27 @@ export const DynamicListContainer = styled.div`
 `
 
  const AdminPage = () => {
-    const user = useContext(UserStateContext)
+    // const user = useContext(UserStateContext)
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(true)
-     
+    const [userData, setUserData] = useState<UserData>(undefined)
+    
     useEffect(() => {
         setIsLoading(true)
         const setUpInitial = async () => {
-            await user
+            const user: UserData = await checkLoginInfoAndState()
+            setUserData(user)
             await router
-
         }
-        setUpInitial().catch(console.error)
-        setIsLoading(false)
-    },[router, user])
+        setUpInitial().then(() => setIsLoading(false))
+    },[])
 
     
     if(isLoading) {
         return <CustomNavSpinner />
     }
 
-    if(!user.navIdent || user.navIdent.length == 0) {
+    if(!userData.navIdent) {
         router.push(RouterPrivatperson.PATH)
         return <CustomNavSpinner />
     }
