@@ -1,23 +1,39 @@
 import { useRouter } from 'next/router'
-import { useContext, useEffect } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 import { TitleContext } from '../../components/ContextProviders/TitleContext'
+import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import Layout from '../../components/Layout'
-import { RouterHomePage } from '../../types/routes'
+import { RouterHomePage, RouterInternt } from '../../types/routes'
+import { UserData } from '../../types/userData'
+import { checkLoginInfoAndState } from '../../utils/checkLoginInfoAndState'
 
 const ProfileCreated = () => {
-    const { changeTitle } = useContext(TitleContext)
     const router = useRouter()
+    const { changeTitle } = useContext(TitleContext)
+    const user  = useContext(UserStateContext)
 
     useEffect(() => {
         toast.info("Ikke implementert")
         changeTitle("Bruker opprettet")
-    },[])
+    },[router])
+
+    const conditionalReroute = (): void => {
+        if(user.navIdent) {
+            router.push(RouterInternt.PATH)
+        }
+        else {
+            router.push(RouterHomePage.PATH)
+        }
+    }
     
     
-    setTimeout(() => router.push(RouterHomePage.PATH), 6000)
+    setTimeout(
+        () => conditionalReroute(),
+        6000
+    )
 
     return (
         <Layout>

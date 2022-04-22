@@ -9,7 +9,7 @@ import { BodyShort, Button, Checkbox, Heading, Popover } from '@navikt/ds-react'
 import SubscribeModal from '../../components/SubscribeModal'
 import BurgerMenu from '../../components/BurgerMenu'
 import { FilterContext, FilterOption } from '../ContextProviders/FilterContext'
-import { RouterHomePage, RouterLogin, RouterLogout } from '../../types/routes'
+import { RouterHomePage, RouterInternt, RouterLogin, RouterLogout } from '../../types/routes'
 import { UserStateContext } from '../ContextProviders/UserStatusContext'
 
 
@@ -204,6 +204,15 @@ const Header = () => {
     const closePopover = () => {
         if(anchor) {
             setAnchor(undefined)
+        }
+    }
+
+    const conditionalReroute = () => {
+        if(!navIdent) {
+            router.push(RouterInternt.PATH)
+        }
+        else {
+            router.push(RouterHomePage.PATH)
         }
     }
     
