@@ -118,12 +118,12 @@ const PopoverContent = () => {
     return (
         <div>
             <ul>
-                <li><Link href={RouterPrivatperson.PATH}>{RouterPrivatperson.NAME}</Link></li>
-                <li><Link href={RouterArbeidsgiver.PATH}>{RouterArbeidsgiver.NAME}</Link></li>
-                <li><Link href={RouterSamarbeidspartner.PATH}>{RouterSamarbeidspartner.NAME}</Link></li>
                 {user.navIdent &&
                     <li><Link href={RouterInternt.PATH}>{RouterInternt.NAME + " (Kun for innloggede nav brukere)"}</Link></li>
                 }
+                <li><Link href={RouterPrivatperson.PATH}>{RouterPrivatperson.NAME}</Link></li>
+                <li><Link href={RouterArbeidsgiver.PATH}>{RouterArbeidsgiver.NAME}</Link></li>
+                <li><Link href={RouterSamarbeidspartner.PATH}>{RouterSamarbeidspartner.NAME}</Link></li>
             </ul>
         
             <ul>

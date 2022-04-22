@@ -85,6 +85,17 @@ export default function Navbar() {
 	return (
 		<Nav>
 			<ul role="tablist">
+				{user.navIdent &&
+					<li role="tab" onClick={() => router.push(RouterInternt.PATH)}>
+						<Link href={RouterInternt.PATH}>
+							<a>
+								<LenkeSpacer className={`${(router.asPath === RouterInternt.PATH) ? "active" : "inactive"}`}>
+									<BodyShort size="small" className={`${router.pathname === "/Internt" ? "active" : ""}`}>{RouterInternt.NAME}</BodyShort>
+								</LenkeSpacer>
+							</a>
+						</Link>
+					</li>
+				}
 				<li role="tab" onClick={() => router.push(RouterPrivatperson.PATH)}>
 					<Link href={RouterPrivatperson.PATH}>
 						<a>
@@ -114,18 +125,6 @@ export default function Navbar() {
 						</a>
 					</Link>
 				</li>
-
-				{user.navIdent &&
-					<li role="tab" onClick={() => router.push(RouterInternt.PATH)}>
-						<Link href={RouterInternt.PATH}>
-							<a>
-								<LenkeSpacer className={`${(router.asPath === RouterInternt.PATH) ? "active" : "inactive"}`}>
-									<BodyShort size="small" className={`${router.pathname === "/Internt" ? "active" : ""}`}>{RouterInternt.NAME}</BodyShort>
-								</LenkeSpacer>
-							</a>
-						</Link>
-					</li>
-				}
 			</ul>
 		</Nav>
 	)
