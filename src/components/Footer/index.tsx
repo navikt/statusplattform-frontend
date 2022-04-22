@@ -83,7 +83,7 @@ const Footer = () => {
         <FooterContainer>
             <span>
                 <a href="https://www.nav.no/no/person#" aria-label="Lenke til nav.no">
-                    <img src="/assets/nav-logo/png/black.png" alt="Til forsiden" aria-hidden="true" />
+                    <img src="/sp/assets/nav-logo/png/black.png" alt="Til forsiden" aria-hidden="true" />
                 </a>
                 <BodyShort>Arbeids- og velferdsetaten</BodyShort>
             </span>

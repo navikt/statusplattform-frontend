@@ -1,7 +1,7 @@
 // Landing page
 export enum RouterHomePage {
     NAME = "Home",
-    PATH = "/"
+    PATH = "/sp"
 }
 // ---
 

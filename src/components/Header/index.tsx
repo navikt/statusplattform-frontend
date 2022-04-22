@@ -212,7 +212,7 @@ const Header = () => {
         <CustomHeader>
             <div className="header-menues">
                 <a href={RouterHomePage.PATH} aria-label="Lenke til forside">
-                    <img src="/assets/nav-logo/png/black.png" alt="Til forsiden" aria-hidden="true" />
+                    <img src="/sp/assets/nav-logo/png/black.png" alt="Til forsiden" aria-hidden="true" />
                 </a>
             </div>
 
