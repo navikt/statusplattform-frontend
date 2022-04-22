@@ -254,7 +254,7 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
 
                     {router.asPath.includes("Internt") &&
                         <Detail size="small">
-                            <>Oppetid 100%</>
+                            {/* <>Oppetid 100%</> */}
 
                             {(testMaintenanceObject.message && testMaintenanceObject.isPlanned) ?
                                 <BodyShort className="maintenance-message">
