@@ -458,29 +458,67 @@ const MonthlyOverview = styled.div`
     gap: 16px;
 `
 
+
+interface HistoryLast90Days {
+    entries: HistoryOfSpecificServiceDayEntry []
+    month: string
+}
+
 const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, serviceHistory: HistoryOfSpecificServiceMonths[]}> = ({service, isLast90Days, serviceHistory}) => {
     let numberOfDaysInView = 0
-    
+
+    const [historyLast90Days, setHistoryLast90Days] = useState<HistoryLast90Days>({
+        entries: [],
+        month: ""
+    })
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+
+    useEffect(() => {
+        setIsLoading(true)
+        let reversedForLast90Days = historyLast90Days
+
+        serviceHistory.map(month => {
+            month.entries.reverse().map(day => {
+                reversedForLast90Days.entries.push(day)
+            })
+        })
+
+        setHistoryLast90Days(reversedForLast90Days)
+        setIsLoading(false)
+    },[])
+
+    const prettifyMonth = (dateString: string): string => {
+        const date = new Date(dateString)
+        let month = date.toLocaleString("no-NO", { month: "long" })
+        month = month.charAt(0).toUpperCase() + month.slice(1)
+        const day = date.getDate()
+        return day + ". " + month
+    }
+
+
+
+    if(isLoading) {
+        return <CustomNavSpinner />
+    }
 
     return (
         <HistoryContainer id="history">
             {isLast90Days
             ?
                 <DailyOverview>
-                    {serviceHistory.map(currentMonth => 
-                        currentMonth.entries.map((dailyEntry, index) => {
-                            if(numberOfDaysInView < 90) {
-                                numberOfDaysInView ++
+                    {historyLast90Days.entries.map((dailyEntry, index) => {
+                        const month = prettifyMonth(dailyEntry.date)
+                        if(numberOfDaysInView < 90) {
+                            numberOfDaysInView ++
 
-                                return (
-                                    <DailyEntryComponent key={index} dailyEntry={dailyEntry} currentMonth={currentMonth.month} />
-                                )
-                            }
-                            
-                            return null
+                            return (
+                                <DailyEntryComponent key={index} dailyEntry={dailyEntry} currentMonth={month} />
+                            )
+                        }
+                        
+                        return null
 
-                        })
-                    )}
+                    })}
                 </DailyOverview>
             :
                 <MonthlyOverview>
@@ -610,7 +648,6 @@ const DailyEntryComponent: React.FC<{dailyEntry: HistoryOfSpecificServiceDayEntr
 
     let statusMessage: string = generateTitleOfDayStatusEntry(status);
 
-
     return (
         <DailyEntry>
             <Popover
@@ -623,7 +660,7 @@ const DailyEntryComponent: React.FC<{dailyEntry: HistoryOfSpecificServiceDayEntr
                     <Heading spacing size="medium" level="2">
                         {infoStatusIconOnHover}{statusMessage}
                     </Heading>
-                    <Detail>{formattedDateString}</Detail>
+                    <Detail>{currentMonth}</Detail>
                     {infoContent}
                 </Popover.Content>
             </Popover>
