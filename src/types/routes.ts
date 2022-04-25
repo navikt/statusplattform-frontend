@@ -102,6 +102,13 @@ export enum RouterAvvikshistorikk {
 // ---
 
 
+// OPSMeldinger
+export enum RouterOpsMeldinger {
+    NAME = "Operasjonsmeldinger",
+    PATH = "/Operasjonsmeldinger"
+}
+// ---
+
 
 
 // OpprettVarsling

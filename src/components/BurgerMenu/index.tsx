@@ -8,7 +8,7 @@ import { Button, Popover } from '@navikt/ds-react';
 
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { UserData } from '../../types/userData';
-import { RouterAdmin, RouterArbeidsgiver, RouterInternt, RouterPrivatperson, RouterSamarbeidspartner } from '../../types/routes';
+import { RouterAdmin, RouterArbeidsgiver, RouterInternt, RouterOpsMeldinger, RouterPrivatperson, RouterSamarbeidspartner } from '../../types/routes';
 
 const BurgerMenuContainer = styled.div`
     & > * {
@@ -119,7 +119,10 @@ const PopoverContent = () => {
         <div>
             <ul>
                 {user.navIdent &&
-                    <li><Link href={RouterInternt.PATH}>{RouterInternt.NAME + " (Kun for innloggede nav brukere)"}</Link></li>
+                    <>
+                        <li><Link href={RouterInternt.PATH}>{RouterInternt.NAME + " (Kun for innloggede nav brukere)"}</Link></li>
+                        <li><Link href={RouterOpsMeldinger.PATH}>{RouterOpsMeldinger.NAME}</Link></li>
+                    </>
                 }
                 <li><Link href={RouterPrivatperson.PATH}>{RouterPrivatperson.NAME}</Link></li>
                 <li><Link href={RouterArbeidsgiver.PATH}>{RouterArbeidsgiver.NAME}</Link></li>

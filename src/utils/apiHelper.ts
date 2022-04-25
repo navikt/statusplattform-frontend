@@ -132,3 +132,12 @@ export const EndPathGetLoginInfo = () => {
 export const EndPathSubAreas = () => {
     return "/rest/SubAreas/"
 }
+
+
+
+
+
+// OPS
+export const EndPathOps = () => {
+    return "/sp/rest/OpsMessage"
+}
