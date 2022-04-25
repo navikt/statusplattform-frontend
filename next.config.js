@@ -28,25 +28,18 @@ module.exports = withPlugins(
 
 		async rewrites() {
 			// sett opp miljøvar
-			return process.env.NODE_ENV !== "production"
-				? [
+			return
+				    [
 						{
 							source: "/oauth2/:path*",
-							destination: `http://localhost:3005/oauth2/:path*`,
+							destination: process.env.NODE_ENV == "production"? `https://status.nav.no/sp/backend/oauth2/:path*`
+							:(process.env.NODE_ENV == "test"? `https://digitalstatus.ekstern.dev.nav.no/oauth2/:path*`  : `http://localhost:3005/oauth2/:path*`),
 						},
 						{
 							source: "/rest/:path*",
+								destination: process.env.NODE_ENV == "production"? `https://status.nav.no/sp/backend/:path*`
+                            							:(process.env.NODE_ENV == "test"? `https://digitalstatus.ekstern.dev.nav.no/:path*`  : `http://localhost:3005/:path*`),
 							destination: `http://localhost:3005/rest/:path*`,
-						},
-				  ]
-				: [
-						{
-							source: "/oauth2/:path*",
-							destination: `https://digitalstatus.ekstern.dev.nav.no/oauth2/:path*`,
-						},
-						{
-							source: "/rest/:path*",
-							destination: `https://digitalstatus.ekstern.dev.nav.no/rest/:path*`,
 						},
 				  ]
 		},
