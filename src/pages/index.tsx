@@ -25,7 +25,7 @@ export default function Home() {
     return (
         <>
             <Head>
-                <link rel="icon" href="/favicon.ico" />
+                <link rel="icon" href="/sp/favicon.ico" />
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta name="title" content="Navstatus" />
                 <meta name="description" content="Status Nav digitale tjenester er en oversiktsside for Navs ulike tjenester til borgere, arbeidsgivere og samarbeidspartnere." />
