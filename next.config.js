@@ -42,11 +42,11 @@ module.exports = withPlugins(
 				: [
 						{
 							source: "/oauth2/:path*",
-							destination: `https://digitalstatus.ekstern.dev.nav.no/oauth2/:path*`,
+							destination: `https://status.nav.no/sp/oauth2/:path*`,
 						},
 						{
 							source: "/rest/:path*",
-							destination: `https://digitalstatus.ekstern.dev.nav.no/rest/:path*`,
+							destination: `https://status.nav.no/sp/rest/:path*`,
 						},
 				  ]
 		},
