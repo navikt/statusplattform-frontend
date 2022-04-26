@@ -1,4 +1,4 @@
-import { Button, Checkbox, CheckboxGroup, Heading, Textarea } from "@navikt/ds-react"
+import { Button, Checkbox, CheckboxGroup, Heading, Radio, RadioGroup, Textarea, TextField } from "@navikt/ds-react"
 import { useState } from "react"
 import { toast } from "react-toastify"
 import styled from 'styled-components'
@@ -17,14 +17,12 @@ const OpsMessage = () => {
         externalMessage: "",
         onlyShowForInternal: false,
         isActive: false,
-        createdAt: "",
-        closedAt: "",
         affectedServices: [],
     })
 
     const handleSubmitOpsMessage = () => {
         postOpsMessage(opsMessage).then(() => {
-            toast.info("Meldingen er sendt inn")
+            toast.success("Driftsmelding opprettet er sendt inn")
         }).catch(() => {
             toast.error("Det oppstod en feil")
         })
@@ -51,8 +49,18 @@ const OpsContainer = styled.div`
     display: flex;
     flex-direction: column;
     
-    & > * {
-        margin: 1rem;
+    .input-area {
+        width: 200px;
+        
+        & > * {
+            margin: 1rem 0;
+        }   
+    }
+
+    @media (min-width: 400px) {
+        .input-area {
+            width: 400px;
+        }
     }
 `
 
@@ -79,6 +87,12 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage}: OpsPr
         setOpsMessage({...opsMessage, externalMessage: message})
     }
 
+    const handleIsActive = (newValue) => {
+        if(newValue == "1") {
+            setOpsMessage({...opsMessage, isActive: true})
+        }
+    }
+
 
 
 
@@ -91,20 +105,42 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage}: OpsPr
                 </Checkbox>
             </CheckboxGroup>
 
-            <Textarea
-                label="Intern melding"
-                description="Informasjon til interne brukere"
-                value={opsMessage.internalMessage}
-                onChange={(e) => handleUpdateMessageToStaff(e.target.value)}
-            />
+            <RadioGroup legend="Skal driftsmeldingen gjelde umiddelbart?" onChange = {(e) => handleIsActive(e)}>
+                <Radio value="1">
+                    Nå
+                </Radio>
+                <Radio value="0">
+                    Senere
+                </Radio>
+            </RadioGroup>
+
+            <div className="input-area">
+                <TextField
+                    label="Tittel for meldingen"
+                    value={opsMessage.internalHeader}
+                    onChange={(e) => setOpsMessage({...opsMessage, internalHeader: e.target.value})}
+                />
+
+                <Textarea
+                    label="Intern melding"
+                    value={opsMessage.internalMessage}
+                    onChange={(e) => handleUpdateMessageToStaff(e.target.value)}
+                />
+            </div>
 
             {!opsMessage.onlyShowForInternal &&
-                <Textarea
-                    label="Ekstern melding"
-                    description="Informasjon til eksterne brukere"
-                    value={opsMessage.externalMessage}
-                    onChange={(e) => handleUpdateMessageToPublic(e.target.value)}
-                />
+                <div className="input-area">
+                    <TextField
+                        label="Tittel for ekstern melding"
+                        value={opsMessage.externalHeader}
+                        onChange={(e) => setOpsMessage({...opsMessage, externalHeader: e.target.value})}
+                    />
+                    <Textarea
+                        label="Ekstern melding"
+                        value={opsMessage.externalMessage}
+                        onChange={(e) => handleUpdateMessageToPublic(e.target.value)}
+                    />
+                </div>
             }
 
             <Button variant="primary" onClick={handleSubmitOpsMessage}>Send inn ny driftsmelding</Button>

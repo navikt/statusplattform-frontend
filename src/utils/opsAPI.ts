@@ -8,8 +8,8 @@ export class ResponseError extends Error {
 }
 
 export const postOpsMessage = async (opsMessage: OpsMessageI): Promise<Object> => {
-    let endPath = EndPathOps();
     let response;
+    let endPath = EndPathOps();
 
     response = await fetch(endPath,
         {
@@ -21,8 +21,6 @@ export const postOpsMessage = async (opsMessage: OpsMessageI): Promise<Object> =
                 externalMessage: opsMessage.externalMessage,
                 onlyShowForInternal: opsMessage.onlyShowForInternal,
                 isActive: opsMessage.isActive,
-                createdAt: "",
-                closeAt: "",
                 affectedServices: opsMessage.affectedServices,
             }),
             headers: {

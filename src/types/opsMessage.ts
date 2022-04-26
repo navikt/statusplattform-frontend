@@ -6,7 +6,5 @@ export interface OpsMessageI {
     externalMessage: string
     onlyShowForInternal: boolean
     isActive: boolean
-    createdAt: string
-    closedAt: string
     affectedServices: string[]
 }
