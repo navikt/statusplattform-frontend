@@ -33,11 +33,11 @@ module.exports = withPlugins(
 					return [
 						{
 							source: "/oauth2/:path*",
-							destination: `https://status.nav.no/sp/oauth2/:path*`,
+							destination: `https://status.nav.no/sp/backend/oauth2/:path*`,
 						},
 						{
 							source: "/rest/:path*",
-							destination: `https://status.nav.no/sp/rest/:path*`,
+							destination: `https://status.nav.no/sp/backend/rest/:path*`,
 						},
 					]
 				case "test":
