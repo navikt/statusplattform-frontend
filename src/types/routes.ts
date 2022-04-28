@@ -107,6 +107,11 @@ export enum RouterOpsMeldinger {
     NAME = "Operasjonsmeldinger",
     PATH = "/Operasjonsmeldinger"
 }
+
+export enum RouterOpprettOpsMelding {
+    NAME = "Opprett driftsmelding",
+    PATH = "Operasjonsmeldinger/OpprettMelding"
+}
 // ---
 
 

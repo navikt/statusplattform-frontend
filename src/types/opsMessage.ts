@@ -4,7 +4,7 @@ export interface OpsMessageI {
     internalMessage: string
     externalHeader: string
     externalMessage: string
-    onlyShowForInternal: boolean
+    onlyShowForNavEmployees: boolean
     isActive: boolean
     affectedServices: string[]
 }

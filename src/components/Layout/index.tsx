@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import styled from 'styled-components'
-import { useContext } from 'react'
+import { useContext, useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 import { BodyShort, Button, Heading } from '@navikt/ds-react'
@@ -95,6 +95,7 @@ const Content = styled.main`
 const MainContent = props => {
     const { title } = useContext(TitleContext)
     const router = useRouter()
+
 
     let currentPath = router.asPath
     currentPath = currentPath.includes("#") ? currentPath.substring(0, currentPath.indexOf("#")) : currentPath    

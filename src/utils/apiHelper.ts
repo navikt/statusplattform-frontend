@@ -137,5 +137,8 @@ export const EndPathSubAreas = () => {
 // OPS
 export const EndPathOps = () => {
     return "/sp/rest/OpsMessage"
+}
 
+export const EndPathSpecificOps = (opsId: string) => {
+    return EndPathOps() + "/" + opsId
 }

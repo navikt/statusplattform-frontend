@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 
 import DashboardFromId from './Dashboard/[dashboardId]';
 import { RouterPrivatperson } from '../types/routes';
+import CustomNavSpinner from '../components/CustomNavSpinner';
 
 
 
@@ -14,10 +15,14 @@ export default function Home() {
     const [atHomePage] = useState(false)
 
     useEffect(() => {
-        if(router.asPath == "/") {
+        if(router.isReady && router.asPath == "/") {
             router.push(RouterPrivatperson.PATH)
         }
     },[router])
+
+    if(router.isReady) {
+        return <CustomNavSpinner />
+    }
 
 
     return (
