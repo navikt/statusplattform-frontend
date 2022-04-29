@@ -1,10 +1,10 @@
 // Areas
 export const EndPathArea = () =>  {
-    return "/sp/rest/Area"
+    return "/rest/Area"
 }
 
 export const EndPathAreas = () =>  {
-    return "/sp/rest/Areas"
+    return "/rest/Areas"
 }
 
 export const EndPathSpecificArea = (areaId: string) =>  {
@@ -20,7 +20,7 @@ export const EndPathServiceToArea = (areaId: string, serviceId: string) =>  {
 
 // Dashboards
 export const EndPathDashboard = () => {
-    return "/sp/rest/Dashboard"
+    return "/rest/Dashboard"
 }
 export const EndPathPutAreasToDashboard = (dashboardId: string) => {
     return EndPathDashboard() + "/" + dashboardId
@@ -40,7 +40,7 @@ export const EndPathDashboardWithArea = (dashboardId: string) => {
 }
 
 export const EndPathDashboards = () => {
-    return "/sp/rest/Dashboards"
+    return "/rest/Dashboards"
 }
 // ---
 
@@ -48,11 +48,11 @@ export const EndPathDashboards = () => {
 
 // Services
 export const EndPathService = () => {
-    return "/sp/rest/Service"
+    return "/rest/Service"
 }
 
 export const EndPathServices = () => {
-    return "/sp/rest/Services"
+    return "/rest/Services"
 }
 
 export const EndPathServiceHistory = (serviceId: string) => {
@@ -60,7 +60,7 @@ export const EndPathServiceHistory = (serviceId: string) => {
 }
 
 export const EndPathAreaContainingServices = (serviceId: string) => {
-    return "/sp/rest/Service/Areas/" + serviceId
+    return "/rest/Service/Areas/" + serviceId
 }
 
 export const EndPathServiceTypes = () => {
@@ -76,7 +76,7 @@ export const EndPathUpdateService = (serviceId: string) => {
 }
 
 export const EndPathSpecificService = (serviceId: string) => {
-    return "/sp/rest/Service/" + serviceId
+    return "/rest/Service/" + serviceId
 }
 
 export const EndPathPutServiceDependency = (serviceId: string, dependencyId: string) => {
@@ -87,15 +87,15 @@ export const EndPathPutServiceDependency = (serviceId: string, dependencyId: str
 
 // Components
 export const EndPathComponent = () => {
-    return "/sp/rest/Service"
+    return "/rest/Service"
 }
 
 export const EndPathComponents = () => {
-    return "/sp/rest/Components"
+    return "/rest/Components"
 }
 
 export const EndPathAreaContainingComponents = (componentId: string) => {
-    return "/sp/rest/Component/Areas/" + componentId
+    return "/rest/Component/Areas/" + componentId
 }
 
 export const EndPathComponentTypes = () => {
@@ -111,7 +111,7 @@ export const EndPathUpdateComponent = (componentId: string) => {
 }
 
 export const EndPathSpecificComponent = (componentId: string) => {
-    return "/sp/rest/Component/" + componentId
+    return "/rest/Component/" + componentId
 }
 
 export const EndPathPutComponentDependency = (componentId: string, dependencyId: string) => {
@@ -122,7 +122,7 @@ export const EndPathPutComponentDependency = (componentId: string, dependencyId:
 
 // Login
 export const EndPathGetLoginInfo = () => {
-    return "/sp/oauth2/NavUser"
+    return "/oauth2/NavUser"
 }
 // ---
 
@@ -130,13 +130,13 @@ export const EndPathGetLoginInfo = () => {
 
 // SubAreas
 export const EndPathSubAreas = () => {
-    return "/sp/rest/SubAreas/"
+    return "/rest/SubAreas/"
 }
 
 
 // OPS
 export const EndPathOps = () => {
-    return "/sp/rest/OpsMessage"
+    return "/rest/OpsMessage"
 }
 
 export const EndPathSpecificOps = (opsId: string) => {
