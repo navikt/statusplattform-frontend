@@ -247,11 +247,13 @@ const NewService = () => {
 
                     <Detail size="small" spacing>Felter markert med * er obligatoriske</Detail>
 
-                    <TextField type="text" required label="Navn på tjeneste" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn*" />
+                    <TextField type="text" required label="Navn på tjeneste*" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn" />
                     <TextField type="text" required label="Team*" value={team} onChange={handleServiceDataChange("team")} placeholder="Team" />
 
-                    <TextField type="text" label="Monitorlink" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink" />
                     <TextField type="text" label="PollingUrl" value={pollingUrl} onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />
+                    <TextField type="text" label="Monitorlink" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink" />
+
+                    <HorizontalSeparator />
 
                     <ServiceDependencies 
                         newService={newService}
