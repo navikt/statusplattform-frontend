@@ -29,13 +29,13 @@ jobs:
             - uses: nais/deploy/actions/deploy@v1
               env:
                   APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-                  CLUSTER: dev-gcp
+                  CLUSTER: labs-gcp
                   RESOURCE: nais-test.yml
                   VAR: image=${{ env.docker_image }}
 
     deploy-prod:
         name: Deploy application to prod
-        needs: deploy-test
+        needs: build-and-run-tests
         if: github.ref == 'refs/heads/master'
         runs-on: ubuntu-latest
         steps:
@@ -45,4 +45,4 @@ jobs:
                   APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
                   CLUSTER: prod-gcp
                   RESOURCE: nais.yml
-                  VAR: version=${{ env.IMAGE_TAG }}
+                  VAR: image=${{ env.docker_image }}

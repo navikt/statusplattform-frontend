@@ -28,41 +28,26 @@ module.exports = withPlugins(
 
 		async rewrites() {
 			// sett opp miljøvar
-			switch (process.env.NODE_ENV) {
-				case "production":
 					return [
 						{
-							source: "/oauth2/:path*",
-							destination: `https://status.nav.no/sp/backend/oauth2/:path*`,
+							source: "/sp/oauth2/:path*",
+							destination: `https://status-api.nav.no/oauth2/:path*`,
 						},
+                        {
+                            source: "/oauth2/:path*",
+                            destination: `https://status-api.nav.no/oauth2/:path*`,
+                        },
 						{
-							source: "/rest/:path*",
-							destination: `https://status.nav.no/sp/backend/rest/:path*`,
+							source: "/sp/rest/:path*",
+							destination: `https://status-api.nav.no/rest/:path*`,
 						},
+                        {
+                            source: "/rest/:path*",
+                            destination: `https://status-api.nav.no/rest/:path*`,
+                        },
 					]
-				case "test":
-					return [
-						{
-							source: "/oauth2/:path*",
-							destination: `https://digitalstatus.ekstern.dev.nav.no/oauth2/:path*`,
-						},
-						{
-							source: "/rest/:path*",
-							destination: `https://digitalstatus.ekstern.dev.nav.no/rest/:path*`,
-						},
-					]
-				default:
-					return [
-						{
-							source: "/oauth2/:path*",
-							destination: `http://localhost:3005/oauth2/:path*`,
-						},
-						{
-							source: "/rest/:path*",
-							destination: `http://localhost:3005/rest/:path*`,
-						},
-					]
+
 			}
 		},
-	}
+
 )
