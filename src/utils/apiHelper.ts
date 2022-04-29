@@ -1,10 +1,26 @@
+const urlBasedOnEnvironment = (): string => {
+    let thisUrl = window.location.href;
+
+    if(thisUrl.includes('localhost')){
+        return "http://localhost:3005"
+    }
+
+    else if(thisUrl.includes("portal.labs")) {
+        return "https://digitalstatus.ekstern.dev.nav.no"
+    }
+
+    else {
+        return "https://status.nav.no/sp"
+    }
+}
+
 // Areas
 export const EndPathArea = () =>  {
-    return "/rest/Area"
+    return urlBasedOnEnvironment() + "/rest/Area"
 }
 
 export const EndPathAreas = () =>  {
-    return "/rest/Areas"
+    return urlBasedOnEnvironment() + "/rest/Areas"
 }
 
 export const EndPathSpecificArea = (areaId: string) =>  {
@@ -12,7 +28,7 @@ export const EndPathSpecificArea = (areaId: string) =>  {
 }
 
 export const EndPathServiceToArea = (areaId: string, serviceId: string) =>  {
-    return EndPathArea() + "/" + areaId + "/" + serviceId
+    return urlBasedOnEnvironment() + EndPathArea() + "/" + areaId + "/" + serviceId
 }
 // ---
 
@@ -20,10 +36,10 @@ export const EndPathServiceToArea = (areaId: string, serviceId: string) =>  {
 
 // Dashboards
 export const EndPathDashboard = () => {
-    return "/rest/Dashboard"
+    return urlBasedOnEnvironment() + "/rest/Dashboard"
 }
 export const EndPathPutAreasToDashboard = (dashboardId: string) => {
-    return EndPathDashboard() + "/" + dashboardId
+    return urlBasedOnEnvironment() + EndPathDashboard() + "/" + dashboardId
 }
 
 
@@ -32,15 +48,15 @@ export const EndPathSpecificDashboard = (dashboardId: string) => {
 }
 
 export const EndPathUpdateDashboard = (dashboardId: string) => {
-    return EndPathDashboard() + "/Update/" + dashboardId
+    return urlBasedOnEnvironment() + EndPathDashboard() + "/Update/" + dashboardId
 }
 
 export const EndPathDashboardWithArea = (dashboardId: string) => {
-    return EndPathAreas() + "/" + dashboardId
+    return urlBasedOnEnvironment() + EndPathAreas() + "/" + dashboardId
 }
 
 export const EndPathDashboards = () => {
-    return "/rest/Dashboards"
+    return urlBasedOnEnvironment() + "/rest/Dashboards"
 }
 // ---
 
@@ -48,31 +64,31 @@ export const EndPathDashboards = () => {
 
 // Services
 export const EndPathService = () => {
-    return "/rest/Service"
+    return urlBasedOnEnvironment() + "/rest/Service"
 }
 
 export const EndPathServices = () => {
-    return "/rest/Services"
+    return urlBasedOnEnvironment() + "/rest/Services"
 }
 
 export const EndPathServiceHistory = (serviceId: string) => {
-    return EndPathService() + "/HistoryAggregated/" + serviceId
+    return urlBasedOnEnvironment() + EndPathService() + "/HistoryAggregated/" + serviceId
 }
 
 export const EndPathAreaContainingServices = (serviceId: string) => {
-    return "/rest/Service/Areas/" + serviceId
+    return urlBasedOnEnvironment() + "/rest/Service/Areas/" + serviceId
 }
 
 export const EndPathServiceTypes = () => {
-    return EndPathServices() + "/Types"
+    return urlBasedOnEnvironment() + EndPathServices() + "/Types"
 }
 
 export const EndPathServiceStatus = () => {
-    return EndPathServices() + "/Status"
+    return urlBasedOnEnvironment() + EndPathServices() + "/Status"
 }
 
 export const EndPathUpdateService = (serviceId: string) => {
-    return EndPathService() + "/" + serviceId
+    return urlBasedOnEnvironment() + EndPathService() + "/" + serviceId
 }
 
 export const EndPathSpecificService = (serviceId: string) => {
@@ -80,34 +96,34 @@ export const EndPathSpecificService = (serviceId: string) => {
 }
 
 export const EndPathPutServiceDependency = (serviceId: string, dependencyId: string) => {
-    return EndPathService() + "/addDependency/" + serviceId + "/" + dependencyId
+    return urlBasedOnEnvironment() + EndPathService() + "/addDependency/" + serviceId + "/" + dependencyId
 }
 // ---
 
 
 // Components
 export const EndPathComponent = () => {
-    return "/rest/Service"
+    return urlBasedOnEnvironment() + "/rest/Service"
 }
 
 export const EndPathComponents = () => {
-    return "/rest/Components"
+    return urlBasedOnEnvironment() + "/rest/Components"
 }
 
 export const EndPathAreaContainingComponents = (componentId: string) => {
-    return "/rest/Component/Areas/" + componentId
+    return urlBasedOnEnvironment() + "/rest/Component/Areas/" + componentId
 }
 
 export const EndPathComponentTypes = () => {
-    return EndPathServices() + "/Types"
+    return urlBasedOnEnvironment() + EndPathServices() + "/Types"
 }
 
 export const EndPathComponentStatus = () => {
-    return EndPathServices() + "/Status"
+    return urlBasedOnEnvironment() + EndPathServices() + "/Status"
 }
 
 export const EndPathUpdateComponent = (componentId: string) => {
-    return EndPathService() + "/" + componentId
+    return urlBasedOnEnvironment() + EndPathService() + "/" + componentId
 }
 
 export const EndPathSpecificComponent = (componentId: string) => {
@@ -115,14 +131,14 @@ export const EndPathSpecificComponent = (componentId: string) => {
 }
 
 export const EndPathPutComponentDependency = (componentId: string, dependencyId: string) => {
-    return EndPathService() + "/addDependency/" + componentId + "/" + dependencyId
+    return urlBasedOnEnvironment() + EndPathService() + "/addDependency/" + componentId + "/" + dependencyId
 }
 // ---
 
 
 // Login
 export const EndPathGetLoginInfo = () => {
-    return "/oauth2/NavUser"
+    return urlBasedOnEnvironment() + "/oauth2/NavUser"
 }
 // ---
 
@@ -130,13 +146,13 @@ export const EndPathGetLoginInfo = () => {
 
 // SubAreas
 export const EndPathSubAreas = () => {
-    return "/rest/SubAreas/"
+    return urlBasedOnEnvironment() + "/rest/SubAreas/"
 }
 
 
 // OPS
 export const EndPathOps = () => {
-    return "/rest/OpsMessage"
+    return urlBasedOnEnvironment() + "/rest/OpsMessage"
 }
 
 export const EndPathSpecificOps = (opsId: string) => {
