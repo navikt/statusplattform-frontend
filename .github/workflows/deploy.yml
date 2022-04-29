@@ -31,7 +31,7 @@ jobs:
                   APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
                   CLUSTER: labs-gcp
                   RESOURCE: nais-test.yml
-                  VAR: image=${{  env.IMAGE_TAG  }}
+                  VAR: image=${{  env.docker_image  }}
 
     deploy-prod:
         name: Deploy application to prod
@@ -45,4 +45,4 @@ jobs:
                   APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
                   CLUSTER: prod-gcp
                   RESOURCE: nais.yml
-                  VAR: version=${{ env.IMAGE_TAG }}
+                  VAR: version=${{ env.docker_image }}
