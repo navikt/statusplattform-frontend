@@ -28,7 +28,6 @@ module.exports = withPlugins(
 
 		async rewrites() {
 			// sett opp miljøvar
-			switch (process.env.NODE_ENV) {
 					return [
 						{
 							source: "/oauth2/:path*",
@@ -42,5 +41,5 @@ module.exports = withPlugins(
 
 			}
 		},
-	}
+
 )
