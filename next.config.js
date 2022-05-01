@@ -30,21 +30,14 @@ module.exports = withPlugins(
 			// sett opp miljøvar
 					return [
 						{
-							source: "/sp/oauth2/:path*",
-							destination: `https://status-api.nav.no/oauth2/:path*`,
+							source: "/authenticate/:path*",
+							destination: `https://digitalstatus.ekstern.dev.nav.no/authenticate/:path*`,
 						},
-                        {
-                            source: "/oauth2/:path*",
-                            destination: `https://status-api.nav.no/oauth2/:path*`,
-                        },
+
 						{
-							source: "/sp/rest/:path*",
-							destination: `https://status-api.nav.no/rest/:path*`,
+							source: "/rest/:path*",
+							destination: `https://digitalstatus.ekstern.dev.nav.no/rest/:path*`,
 						},
-                        {
-                            source: "/rest/:path*",
-                            destination: `https://status-api.nav.no/rest/:path*`,
-                        },
 					]
 
 			}
