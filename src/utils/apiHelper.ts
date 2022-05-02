@@ -1,29 +1,17 @@
-const urlBasedOnEnvironment = (): string => {
-    if(typeof window !== "undefined") {
-        let thisUrl = window.location.href;
-    
-        if(thisUrl.includes('localhost')){
-            return "http://localhost:3005"
-        }
-    
-        else if(thisUrl.includes("portal.labs")) {
-            return "https://digitalstatus.ekstern.dev.nav.no"
-        }
-    
-        else {
-            return "https://status.nav.no/sp"
-        }
-    }
-    return ""
+export const RestPath = () => {
+    return "/rest" //TODO fiks denne så den tilpasser seg etter miljø, altså med /sp for prod, og uten for dev
+    //Prod -> "/sp/rest"
+    //Dev -> "/rest"
 }
+
 
 // Areas
 export const EndPathArea = () =>  {
-    return urlBasedOnEnvironment() + "/rest/Area"
+    return RestPath()+ "/Area"
 }
 
 export const EndPathAreas = () =>  {
-    return urlBasedOnEnvironment() + "/rest/Areas"
+    return RestPath()+ "/Areas"
 }
 
 export const EndPathSpecificArea = (areaId: string) =>  {
@@ -31,7 +19,7 @@ export const EndPathSpecificArea = (areaId: string) =>  {
 }
 
 export const EndPathServiceToArea = (areaId: string, serviceId: string) =>  {
-    return urlBasedOnEnvironment() + EndPathArea() + "/" + areaId + "/" + serviceId
+    return EndPathArea() + "/" + areaId + "/" + serviceId
 }
 // ---
 
@@ -39,7 +27,7 @@ export const EndPathServiceToArea = (areaId: string, serviceId: string) =>  {
 
 // Dashboards
 export const EndPathDashboard = () => {
-    return urlBasedOnEnvironment() + "/rest/Dashboard"
+    return RestPath()+ "/Dashboard"
 }
 export const EndPathPutAreasToDashboard = (dashboardId: string) => {
     return EndPathDashboard() + "/" + dashboardId
@@ -59,7 +47,7 @@ export const EndPathDashboardWithArea = (dashboardId: string) => {
 }
 
 export const EndPathDashboards = () => {
-    return urlBasedOnEnvironment() + "/rest/Dashboards"
+    return RestPath()+ "/Dashboards"
 }
 // ---
 
@@ -67,11 +55,11 @@ export const EndPathDashboards = () => {
 
 // Services
 export const EndPathService = () => {
-    return urlBasedOnEnvironment() + "/rest/Service"
+    return RestPath()+ "/Service"
 }
 
 export const EndPathServices = () => {
-    return urlBasedOnEnvironment() + "/rest/Services"
+    return RestPath()+ "/Services"
 }
 
 export const EndPathServiceHistory = (serviceId: string) => {
@@ -79,7 +67,7 @@ export const EndPathServiceHistory = (serviceId: string) => {
 }
 
 export const EndPathAreaContainingServices = (serviceId: string) => {
-    return urlBasedOnEnvironment() + "/rest/Service/Areas/" + serviceId
+    return RestPath()+ "/Service/Areas/" + serviceId
 }
 
 export const EndPathServiceTypes = () => {
@@ -95,7 +83,7 @@ export const EndPathUpdateService = (serviceId: string) => {
 }
 
 export const EndPathSpecificService = (serviceId: string) => {
-    return "/rest/Service/" + serviceId
+    return RestPath()+ "/Service/" + serviceId
 }
 
 export const EndPathPutServiceDependency = (serviceId: string, dependencyId: string) => {
@@ -106,15 +94,15 @@ export const EndPathPutServiceDependency = (serviceId: string, dependencyId: str
 
 // Components
 export const EndPathComponent = () => {
-    return urlBasedOnEnvironment() + "/rest/Service"
+    return RestPath()+ "/Service"
 }
 
 export const EndPathComponents = () => {
-    return urlBasedOnEnvironment() + "/rest/Components"
+    return RestPath()+ "/Components"
 }
 
 export const EndPathAreaContainingComponents = (componentId: string) => {
-    return urlBasedOnEnvironment() + "/rest/Component/Areas/" + componentId
+    return RestPath()+ "/Component/Areas/" + componentId
 }
 
 export const EndPathComponentTypes = () => {
@@ -130,7 +118,7 @@ export const EndPathUpdateComponent = (componentId: string) => {
 }
 
 export const EndPathSpecificComponent = (componentId: string) => {
-    return "/rest/Component/" + componentId
+    return RestPath()+ "/Component/" + componentId
 }
 
 export const EndPathPutComponentDependency = (componentId: string, dependencyId: string) => {
@@ -141,7 +129,7 @@ export const EndPathPutComponentDependency = (componentId: string, dependencyId:
 
 // Login
 export const EndPathGetLoginInfo = () => {
-    return urlBasedOnEnvironment() + "/oauth2/NavUser"
+    return "/oauth2/NavUser"
 }
 // ---
 
@@ -149,13 +137,13 @@ export const EndPathGetLoginInfo = () => {
 
 // SubAreas
 export const EndPathSubAreas = () => {
-    return urlBasedOnEnvironment() + "/rest/SubAreas/"
+    return RestPath()+ "/SubAreas/"
 }
 
 
 // OPS
 export const EndPathOps = () => {
-    return urlBasedOnEnvironment() + "/rest/OpsMessage"
+    return RestPath()+ "/OpsMessage"
 }
 
 export const EndPathSpecificOps = (opsId: string) => {
