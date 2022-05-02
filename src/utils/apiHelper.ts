@@ -129,7 +129,7 @@ export const EndPathPutComponentDependency = (componentId: string, dependencyId:
 
 // Login
 export const EndPathGetLoginInfo = () => {
-    return "/oauth2/NavUser"
+    return "/authenticate/NavUser"
 }
 // ---
 
