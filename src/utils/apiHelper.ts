@@ -114,7 +114,7 @@ export const EndPathComponentStatus = () => {
 }
 
 export const EndPathUpdateComponent = (componentId: string) => {
-    return urlBasedOnEnvironment() + EndPathService() + "/" + componentId
+    return EndPathService() + "/" + componentId
 }
 
 export const EndPathSpecificComponent = (componentId: string) => {
