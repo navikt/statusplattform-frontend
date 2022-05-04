@@ -18,6 +18,7 @@ import { useLoader } from '../../utils/useLoader';
 import CustomNavSpinner from '../CustomNavSpinner';
 import { Collapse } from 'react-collapse';
 import { RouterTjenestedata } from '../../types/routes';
+import { element } from 'prop-types';
 
 
 
@@ -25,7 +26,7 @@ import { RouterTjenestedata } from '../../types/routes';
 
 
 
-const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: string}>`
+const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: string, heightWhenNotExpanded: string, centerIfNotExpanded}>`
     /* 
         Adjustment to EkspanderbartPanel-component padding
         padding-bottom 34px is due to position: absolute in navds-detail
@@ -88,9 +89,11 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
 
     display: flex;
     flex-direction: column;
+    justify-content: ${(props): any => (props.centerIfNotExpanded)};
 
     //Styrer om panelet skal strekke etter høyden eller ikke basert på prop i render
     align-self: ${(props): any => (props.alignment)};
+    min-height: ${(props): any => (props.heightWhenNotExpanded)};
 
     .maintenance-message {
         color: grey;
@@ -224,14 +227,17 @@ export interface PortalServiceTileProps {
     toggleTile: Function;
     tileIndex: number;
     isAllExpanded: boolean
+    heightOfTileInRowBasedOfLargestTileInRow?: string
 }
 
 
-export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllExpanded}: PortalServiceTileProps) => {
+export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllExpanded, heightOfTileInRowBasedOfLargestTileInRow}: PortalServiceTileProps) => {
     
     const {filters, matches} = useContext(FilterContext)
     const { navIdent } = useContext(UserStateContext)
     const router = useRouter()
+
+
 
     const toggleExpanded = () => {
         toggleTile(tileIndex)
@@ -244,6 +250,9 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
     return (
         <EkspanderbartpanelCustomized
             alignment={expanded == true ? "stretch" : "flex-start"}
+            heightWhenNotExpanded={expanded != true ? `${heightOfTileInRowBasedOfLargestTileInRow}` : "auto"}
+            centerIfNotExpanded={expanded == true ? "flex-start" : "center"}
+
             border={false}
             tittel={
                 <div className={router.asPath.includes("Internt") ? "top-content logged-in" : "top-content not-logged-in"}>

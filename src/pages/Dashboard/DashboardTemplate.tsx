@@ -99,6 +99,7 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
         width: auto;
         max-width: ${(props) => props.maxWidth}px;
     }
+    
     @media (min-width: 1359px) {
         max-width: ${(props) => props.maxWidth}px;
     }
@@ -313,7 +314,6 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
     
 
 
-    
     return (
         <DashboardContainer>
 
@@ -366,6 +366,59 @@ interface AllAreasProps {
 
 
 const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpanded, toggleExpandAll, expandAll}: AllAreasProps) => {
+    const [rowHeightsAsString, setRowHeights] = useState<string[]>(Array.from(Array(rows.length).keys()).map(i => "0px"))
+
+    useEffect(() => {
+        const allElementsRetrievedFromDom: Element[] = Array.from(document.getElementsByClassName("ekspanderbartPanel"))
+        const arrayFromDomElements = generateArrayFromTwoArrays(allElementsRetrievedFromDom)
+
+        let newRowHeights: string[] = [...rowHeightsAsString]
+        arrayFromDomElements.map((domElementRow, index) => {
+            const heightForThisRow: number = findMinHeightForRow(domElementRow)
+            newRowHeights[index] = `${heightForThisRow.toString()}px`
+        })
+
+        setRowHeights(newRowHeights)
+        // Needs to check maxWidth property if we want to resize the dashboard
+        /* In order for the resizing to work, we must check what the fit-content size is
+        regardless of the previous width of the tile
+        */ 
+    }, [maxWidth])
+
+
+    const generateArrayFromTwoArrays = (allElements: Element[]): any[] => {
+        const matchingRowsInAllElementsBasedOnRowsProp: HTMLElement[][] = []
+        
+        rows.forEach((row: any[], index: number) => {
+            const rowToAddToMatchingRowsList: HTMLElement[] = []
+
+            row.forEach((rowElement: Area) => {
+                allElements.forEach((element: HTMLElement)  => {
+                    // element.style.minHeight = "400px"
+                    if(rowElement.name == element.firstChild.textContent) {
+                        rowToAddToMatchingRowsList.push(element)
+                    }
+                })
+            })
+            matchingRowsInAllElementsBasedOnRowsProp.push(rowToAddToMatchingRowsList)
+        })
+
+        return matchingRowsInAllElementsBasedOnRowsProp
+    }
+
+    const findMinHeightForRow = (row: HTMLElement[]) => {
+        let maxMinHeight: number = 0
+        row.forEach((rowElement: HTMLElement) => {
+            if (maxMinHeight == 0) {
+                maxMinHeight = rowElement.offsetHeight
+            }
+            if (rowElement.offsetHeight > maxMinHeight) {
+                maxMinHeight = rowElement.offsetHeight
+            }
+        })
+        return maxMinHeight
+    }
+
     return (
         <PortalServiceTileContainer maxWidth={maxWidth}>
             <span className="expand-all-wrapper">
@@ -378,6 +431,7 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
                             tileIndex={rowIndex*numberOfTilesPerRow + index}
                             area={area} expanded={isTileExpanded(rowIndex, index, 0)}
                             isAllExpanded={expandAll}
+                            heightOfTileInRowBasedOfLargestTileInRow={rowHeightsAsString[rowIndex]}
                         />
                     )}
                 </PortalServiceTileRow>
