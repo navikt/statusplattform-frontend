@@ -9,7 +9,7 @@ spec:
     image: {{ image }}
     port: 3000
     ingresses:
-        - https://status.dev.nav.io/sp
+        - https://status.dev.nav.no/sp
         #image: ghcr.io/navikt/myapplication:417dcaa2c839b9da72e0189e2cfdd4e90e9cc6fd
         #       ^--- interpolated from the ${{ env.docker_image }} variable in the action
     env:
@@ -23,8 +23,8 @@ spec:
             tenant: nav.no
             # optional
             replyURLs:
-                - "https://status.dev.nav.io/sp/oauth2/callback"
-                - "https://status.dev.nav.io/sp/Dashboard/Privatperson"
+                - "https://status.dev.nav.no/sp/oauth2/callback"
+                - "https://status.dev.nav.no/sp/Dashboard/Privatperson"
             claims:
                 extra:
                     - "NAVident"
