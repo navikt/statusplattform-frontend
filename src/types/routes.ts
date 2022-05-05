@@ -139,7 +139,7 @@ export enum RouterLogin {
 
 export enum RouterOauthLogin {
     NAME = "LoginAzure",
-    PATH = "/authenticate/login"
+    PATH = "/oauth2/login?redirect="+ "/Dashboard/Privatperson";
 }
 
 export enum RouterLogout {
