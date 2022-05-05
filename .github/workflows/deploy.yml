@@ -29,7 +29,7 @@ jobs:
             - uses: nais/deploy/actions/deploy@v1
               env:
                   APIKEY: ${{ secrets.NAIS_DEPLOY_APIKEY }}
-                  CLUSTER: labs-gcp
+                  CLUSTER: dev-gcp
                   RESOURCE: nais-test.yml
                   VAR: image=${{ env.docker_image }}
 
