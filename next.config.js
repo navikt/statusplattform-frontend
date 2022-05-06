@@ -26,6 +26,9 @@ module.exports = withPlugins(
 		basePath: "/sp",
 		assetPrefix: "/sp/",
 
+		/*
+
+
 		async rewrites() {
 			// sett opp miljøvar
 			return [
@@ -40,5 +43,6 @@ module.exports = withPlugins(
 				},
 			]
 		},
+		*/
 	}
 )
