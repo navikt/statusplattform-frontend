@@ -130,7 +130,7 @@ export const EndPathPutComponentDependency = (componentId: string, dependencyId:
 
 // Login
 export const EndPathGetLoginInfo = () => {
-    return RestPath() + "/authenticate/NavUser"
+    return "https://digitalstatus.ekstern.dev.nav.no"+ "/authenticate/NavUser"
 }
 // ---
 
