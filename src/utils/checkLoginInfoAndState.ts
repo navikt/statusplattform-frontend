@@ -13,10 +13,17 @@ export const checkLoginInfoAndState = async (): Promise<UserData | null> => {
     let response;
     let endPath = EndPathGetLoginInfo();
 
-    response = await fetch(endPath);
+    response = await fetch(endPath, {
+        headers: {
+            "Authorization": "Bearer " + localStorage.getItem("Authorization")
 
+        }
+    });
+
+    
     if (response.ok) {
         return response.json()
     }
+
     throw new ResponseError("Failed to fetch from server", response)
 }
