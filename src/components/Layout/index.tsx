@@ -92,7 +92,7 @@ const Content = styled.main`
 `;
 
 
-const MainContent = props => {
+const Layout = props => {
     const { title } = useContext(TitleContext)
     const router = useRouter()
 
@@ -133,7 +133,7 @@ const MainContent = props => {
     )
 }
 
-export default MainContent
+export default Layout
 
 
 

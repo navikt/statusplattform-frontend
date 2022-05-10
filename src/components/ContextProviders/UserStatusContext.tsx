@@ -3,7 +3,7 @@ import { createContext, ReactNode, useEffect, useState } from "react"
 import { UserData } from "../../types/userData"
 import { checkLoginInfoAndState } from "../../utils/checkLoginInfoAndState"
 
-interface UserStateInterface {
+export interface UserStateInterface {
     name: string
     navIdent: string
 }

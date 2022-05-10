@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { BodyShort, Heading, Ingress } from '@navikt/ds-react';
 
 import Layout from '../components/Layout'
+import { RouterFeedbackForm } from '../types/routes';
 
 const ErrorWrapper = styled.div`
     margin: 2rem 0;
@@ -52,8 +53,8 @@ export default function Custom404() {
                             gå til forsiden
                             </Link>.
                         </BodyShort>
-                        <Link href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">
-                            Meld gjerne fra om denne lenken
+                        <Link href={RouterFeedbackForm.PATH}>
+                            Meld gjerne ifra tilbakemeldingsskjemaet her
                         </Link>
                     </div>
             </ErrorWrapper>

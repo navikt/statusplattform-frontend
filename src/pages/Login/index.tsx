@@ -20,6 +20,7 @@ const LoginContainer = styled.div`
     width: 100%;
     max-width: 768px;
     box-shadow: 0 3px 6px rgb(0 0 0 / 15%);
+    
     display: flex;
     flex-direction: column;
     justify-content: space-around;

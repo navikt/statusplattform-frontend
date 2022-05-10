@@ -1,6 +1,6 @@
 export const RestPath = () => {
    //return "https://digitalstatus.ekstern.dev.nav.no/rest" //TODO fiks denne så den tilpasser seg etter miljø, altså med /sp for prod, og uten for dev
-    return "https://digitalstatus.ekstern.dev.nav.no/rest"
+    return "http://localhost:3005/rest"
     //Prod -> "/sp/rest"
     //Dev -> "/rest"
 }
@@ -130,7 +130,7 @@ export const EndPathPutComponentDependency = (componentId: string, dependencyId:
 
 // Login
 export const EndPathGetLoginInfo = () => {
-    return "https://digitalstatus.ekstern.dev.nav.no"+ "/authenticate/NavUser"
+    return "http://localhost:3005/authenticate" + "/NavUser"
 }
 // ---
 

@@ -1,7 +1,7 @@
 // Landing page
 export enum RouterHomePage {
     NAME = "Home",
-    PATH = "/sp"
+    PATH = "/"
 }
 // ---
 
@@ -154,5 +154,14 @@ export enum RouterLogout {
 export enum RouterError {
     NAME = "Error side",
     PATH = "/Custom404"
+}
+// ---
+
+
+
+// Feedback form
+export enum RouterFeedbackForm {
+    NAME = "Feedback skjema",
+    PATH = "/FeedbackSkjema"
 }
 // ---
