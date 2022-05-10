@@ -5,22 +5,24 @@ const handler = async (req, res) => {
 
     const cookies = new Cookies(req, res)
 
-    const authHeader = req.headers.authorization
+    const authHeader = req.headers.Authorization
 
-    // console.log(res.cookies)
+    console.log(authHeader)
 
     if (authHeader) {
         const token = authHeader.split(' ')[1]
-        const [user, navIdent] = Buffer.from(authHeader, 'base64').toString().split(':')
+        const [ Authorization ] = Buffer.from(authHeader, 'base64').toString().split(':')
 
-        if(navIdent) {
+        if(Authorization) {
             return res.status(200).json({
-                user,
-                navIdent,
+                Authorization
             })
         }
     }
-    return null
+    return res.status(200).json({
+        Authorization: '',
+        token: ''
+    })
 }
 
 
