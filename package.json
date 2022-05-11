@@ -10,6 +10,8 @@
   },
   "dependencies": {
     "@navikt/ds-css": "^0.12.11-next.0",
+    "swr": "^1.0.1",
+    "nextjs-cors": "^1.0.5",
     "@navikt/ds-css-internal": "^0.7.0",
     "@navikt/ds-icons": "^0.8.4",
     "@navikt/ds-react": "^0.14.10-next.0",

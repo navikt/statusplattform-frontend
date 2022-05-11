@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-  res.send(req.headers);
+  res.send("Hello world!");
 };
