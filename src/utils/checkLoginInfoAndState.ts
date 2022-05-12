@@ -19,11 +19,12 @@ const fetcher = (url) => fetch(url).then((res) => res.json())
 export const testing = async (): Promise<UserData | null> => {
 
 
-    fetch('http:localhost:3000/api/testApi').then((result) => {
+    fetch('/sp/api/testApi').then((result) => {
         console.log("heya")
     }).catch((result) => 
         console.log("oh no")
     )
+    
     /*
   
     const { data, error } = useSWR('/api/testApi', fetcher)
