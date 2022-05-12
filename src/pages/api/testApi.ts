@@ -10,8 +10,10 @@ const createRequest = (path,method ,headers)  => new Request(path, {
   });
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+    console.log("Hei du");
 
-
+    res.send("yuhu")
+    /*
     let path = EndPathGetLoginInfo()
     // EndPathGetLoginInfo();
     //let backEndRequest = createRequest(path, "GET", req.headers);
@@ -35,7 +37,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     else {
         res.send("Cant read userdate")
     }
-    
+    */
 
 };
 

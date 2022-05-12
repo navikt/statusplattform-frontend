@@ -11,6 +11,7 @@ import BurgerMenu from '../../components/BurgerMenu'
 import { FilterContext, FilterOption } from '../ContextProviders/FilterContext'
 import { RouterHomePage, RouterInternt, RouterLogin, RouterLogout } from '../../types/routes'
 import { UserStateContext } from '../ContextProviders/UserStatusContext'
+import { testing } from 'src/utils/checkLoginInfoAndState'
 
 
 
@@ -497,7 +498,7 @@ const ProfileOrLogin: React.FC<{name: string, navIdent: string}> = ({name, navId
                 </>
             :
                 <LoginButton variant="secondary"
-                    onClick={() => router.push(RouterLogin.PATH)}
+                    onClick={() => testing() }//router.push(RouterLogin.PATH)}
                 >
                     <BodyShort>
                         <b>Logg inn</b>
