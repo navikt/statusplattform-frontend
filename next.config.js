@@ -25,24 +25,5 @@ module.exports = withPlugins(
 
 		basePath: "/sp",
 		assetPrefix: "/sp/",
-
-		/*
-
-
-		async rewrites() {
-			// sett opp miljøvar
-			return [
-				{
-					source: "/authenticate/:path*",
-					destination: `https://digitalstatus.ekstern.dev.nav.no/authenticate/:path*`,
-				},
-
-				{
-					source: "/rest/:path*",
-					destination: `https://digitalstatus.ekstern.dev.nav.no/rest/:path*`,
-				},
-			]
-		},
-		*/
 	}
 )
