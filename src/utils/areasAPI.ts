@@ -8,25 +8,25 @@ export class ResponseError extends Error {
     }
 }
 
-const myHeaders = new Headers();
-myHeaders.append("backendpath",EndPathArea())
+const myHeaders = new Headers()
+myHeaders.append("backendpath", EndPathArea())
 
 
 
-const createRequest = (path,headers)  => new Request(path, {
-    headers: new Headers(headers),
-  });
+const createRequest = (path, headers)  => new Request(path, {
+    headers: new Headers(headers)
+})
 
 
 export const fetchAreas = async (): Promise<Area[]> => {
-    let response;
-    let endPath = EndPathAreas()
-    let headers = new Headers();
-    headers.append("backendpath",EndPathAreas());
-    let request = createRequest("http://localhost:3000/sp/api/testApi",headers)
+    let response
 
-    response = await fetch(request);
-    console.log(response);
+    let headers = new Headers()
+
+    headers.append("backendpath", EndPathAreas())
+    let request = createRequest("http://localhost:3000/sp/api/testApi", headers)
+
+    response = await fetch(request)
 
     if (response.ok) {
         return response.json()

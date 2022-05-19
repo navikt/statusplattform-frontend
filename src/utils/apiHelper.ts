@@ -1,6 +1,6 @@
 export const RestPath = () => {
    //return "https://digitalstatus.ekstern.dev.nav.no/rest" //TODO fiks denne så den tilpasser seg etter miljø, altså med /sp for prod, og uten for dev
-   return "";
+   return "/rest";
     //Prod -> "/sp/rest"
     //Dev -> "/rest"
 }

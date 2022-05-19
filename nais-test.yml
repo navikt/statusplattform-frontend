@@ -36,5 +36,5 @@ spec:
             singlePageApplication: false
         sidecar:
             enabled: true
-            autoLogin: true
+            autoLogin: false
             errorPath: ""

@@ -24,7 +24,7 @@ export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) =
 
     useEffect(() => {
         async function getLoggedInUser() {
-            const retrieveduser: UserData = await checkLoginInfoAndState()
+            const retrieveduser: UserData = await checkLoginInfoAndState("/authenticate/NavUser", "GET")
 
             if(retrieveduser) {
                 setUser(retrieveduser)
@@ -34,6 +34,8 @@ export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) =
     },[router])
 
     const { name, navIdent} = user
+
+    console.log(user)
     return (
         <UserStateContext.Provider value={{
             name,
