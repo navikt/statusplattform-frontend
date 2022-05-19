@@ -498,7 +498,7 @@ const ProfileOrLogin: React.FC<{name: string, navIdent: string}> = ({name, navId
                 </>
             :
                 <LoginButton variant="secondary"
-                    onClick={() => testing() }//router.push(RouterLogin.PATH)}
+                    onClick={() => router.push(RouterLogin.PATH)}
                 >
                     <BodyShort>
                         <b>Logg inn</b>

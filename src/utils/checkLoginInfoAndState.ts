@@ -12,17 +12,23 @@ export class ResponseError extends Error {
     }
 }
 
-
+const createRequest = (path,headers)  => new Request(path, {
+    headers: new Headers(headers),
+  });
 
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
-export const testing = async (): Promise<UserData | null> => {
-
-
-    fetch('/sp/api/testApi').then((result) => {
-        console.log("heya")
-    }).catch((result) => 
+export const testing = async (path:string, method: string): Promise<UserData | any> => {
+    let headers = new Headers();
+    headers.append("backendendpath",path);
+    headers.append("method", method)
+    let request = createRequest("/sp/api/testApi",headers)
+    let response = await fetch(request)
+    await response.json()
+    .then((result) => {console.log(result)})
+    .catch((e) => {
         console.log("oh no")
+    }
     )
     
     /*
@@ -37,8 +43,8 @@ export const testing = async (): Promise<UserData | null> => {
     */
 
     return
-
 }
+
 
 export const checkLoginInfoAndState = async (): Promise<UserData | null> => {
     return; }

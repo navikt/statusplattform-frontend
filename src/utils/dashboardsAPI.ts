@@ -1,5 +1,7 @@
 import { Dashboard } from "../types/navServices";
 import { EndPathDashboard, EndPathDashboards, EndPathSpecificDashboard, EndPathUpdateDashboard } from "./apiHelper";
+import { createApiRequest } from "./createApiRequest";
+
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -12,8 +14,8 @@ export class ResponseError extends Error {
 export const fetchDashboard = async (dashboardId: string): Promise<Dashboard> => {
     let response;
     let endPath = EndPathSpecificDashboard(dashboardId)
-
-    response = await fetch(endPath);
+    let request = createApiRequest(endPath,"GET")
+    response = await fetch(request);
 
     if (response.ok) {
         return response.json()
@@ -108,7 +110,9 @@ export const fetchDashboardsList = async (): Promise<Dashboard[]> => {
     let response;
     let endPath = EndPathDashboards()
 
-    response = await fetch(endPath);
+
+    let request = createApiRequest(endPath,"GET")
+    response = await fetch(request);
 
     if (response.ok) {
         return response.json()

@@ -13,8 +13,8 @@ spec:
         #image: ghcr.io/navikt/myapplication:417dcaa2c839b9da72e0189e2cfdd4e90e9cc6fd
         #       ^--- interpolated from the ${{ env.docker_image }} variable in the action
     env:
-        - name: ENVIRONMENT
-          value: "dev"
+        - name: BACKENDPATH
+          value: "https://digitalstatus.ekstern.dev.nav.no/rest"
     replicas:
         min: 1
         max: 1

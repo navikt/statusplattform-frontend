@@ -1,3 +1,4 @@
+import Header from "src/components/Header";
 import { Area, SubArea } from "../types/navServices";
 import { EndPathArea, EndPathAreaContainingServices, EndPathAreas, EndPathDashboardWithArea, EndPathPutAreasToDashboard, EndPathServiceToArea, EndPathSpecificArea, EndPathSubAreas } from "./apiHelper";
 
@@ -7,15 +8,25 @@ export class ResponseError extends Error {
     }
 }
 
+const myHeaders = new Headers();
+myHeaders.append("backendpath",EndPathArea())
 
+
+
+const createRequest = (path,headers)  => new Request(path, {
+    headers: new Headers(headers),
+  });
 
 
 export const fetchAreas = async (): Promise<Area[]> => {
     let response;
     let endPath = EndPathAreas()
+    let headers = new Headers();
+    headers.append("backendpath",EndPathAreas());
+    let request = createRequest("http://localhost:3000/sp/api/testApi",headers)
 
-    response = await fetch(endPath);
-
+    response = await fetch(request);
+    console.log(response);
 
     if (response.ok) {
         return response.json()
