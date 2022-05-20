@@ -20,6 +20,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log(method)
  
     let path = backendPath + backendEndpath
+    console.log("Full path: "+ path)
     
     let backEndRequest = createRequest(path, method, headers)
     
