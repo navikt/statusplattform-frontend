@@ -16,8 +16,8 @@ export const UserStateContext = createContext<UserStateInterface>({
 
 export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) => {
     const [user, setUser] = useState<UserStateInterface | null>({
-        navIdent: "",
-        name: ""
+        name: "",
+        navIdent: ""
     })
 
     const router = useRouter()
@@ -25,17 +25,16 @@ export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) =
     useEffect(() => {
         async function getLoggedInUser() {
             const retrieveduser: UserData = await checkLoginInfoAndState("/authenticate/NavUser", "GET")
-
             if(retrieveduser) {
+                console.log(retrieveduser)
                 setUser(retrieveduser)
             }
         }
         getLoggedInUser()
     },[router])
+    
+    const { name, navIdent } = user
 
-    const { name, navIdent} = user
-
-    console.log(user)
     return (
         <UserStateContext.Provider value={{
             name,
@@ -44,9 +43,5 @@ export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) =
             {children}
         </UserStateContext.Provider>
     )
-    // }
-    // return (
-    //     <>
-    //     </>
-    // )
+
 }

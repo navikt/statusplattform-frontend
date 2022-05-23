@@ -24,7 +24,7 @@ export const fetchAreas = async (): Promise<Area[]> => {
     let headers = new Headers()
 
     headers.append("backendpath", EndPathAreas())
-    let request = createRequest("http://localhost:3000/sp/api/testApi", headers)
+    let request = createRequest("http://localhost:3000/sp/api/requestGateway", headers)
 
     response = await fetch(request)
 

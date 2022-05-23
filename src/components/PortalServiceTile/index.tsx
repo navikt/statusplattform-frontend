@@ -26,7 +26,7 @@ import { element } from 'prop-types';
 
 
 
-const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: string, heightWhenNotExpanded: string, centerIfNotExpanded}>`
+const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: string, height_when_not_expanded: string, center_if_not_expanded}>`
     /* 
         Adjustment to EkspanderbartPanel-component padding
         padding-bottom 34px is due to position: absolute in navds-detail
@@ -89,11 +89,11 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
 
     display: flex;
     flex-direction: column;
-    justify-content: ${(props): any => (props.centerIfNotExpanded)};
+    justify-content: ${(props): any => (props.center_if_not_expanded)};
 
     //Styrer om panelet skal strekke etter høyden eller ikke basert på prop i render
     align-self: ${(props): any => (props.alignment)};
-    min-height: ${(props): any => (props.heightWhenNotExpanded)};
+    min-height: ${(props): any => (props.height_when_not_expanded)};
 
     .maintenance-message {
         color: grey;
@@ -250,8 +250,8 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
     return (
         <EkspanderbartpanelCustomized
             alignment={expanded == true ? "stretch" : "flex-start"}
-            heightWhenNotExpanded={expanded != true ? `${heightOfTileInRowBasedOfLargestTileInRow}` : "auto"}
-            centerIfNotExpanded={expanded == true ? "flex-start" : "center"}
+            height_when_not_expanded={expanded != true ? `${heightOfTileInRowBasedOfLargestTileInRow}` : "auto"}
+            center_if_not_expanded={expanded == true ? "flex-start" : "center"}
 
             border={false}
             tittel={
