@@ -21,9 +21,61 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
  
     let path = backendPath + backendEndpath
     console.log("Full path: "+ path)
+
+    const fetch = require("node-fetch");
+    const https = require('https');
     
+    const httpsAgent = new https.Agent({
+      rejectUnauthorized: false,
+    });
+    
+    
+    const resp = await fetch(
+        path,
+        {
+            method: method,
+            agent: httpsAgent,
+        },
+      )
+
+    await resp.json()
+    .then(body => {
+        if (body) {
+            console.log("SUCCSESFULLY READ USERDATA")
+            res.status(200).json(body)
+        }
+        else {
+            res.send("Cant read userdate")
+        }
+
+    })
+    .catch(e => console.log(e))
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    /*
     let backEndRequest = createRequest(path, method, headers)
-    
     let response = await fetch(backEndRequest)
     
     await response.json()
@@ -38,7 +90,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         })
         .catch(e => console.log(e))
-
+        */
 
 };
 
