@@ -10,6 +10,19 @@ export class ResponseError extends Error {
 }
 
 
+export const fetchDashboardsList = async (): Promise<Dashboard[]> => {
+    let response;
+    let endPath = EndPathDashboards()
+
+
+    let request = createApiRequest(endPath,"GET")
+    response = await fetch(request);
+
+    if (response.ok) {
+        return response.json()
+    }
+    throw new ResponseError("Failed to fetch from server", response)
+}
 
 export const fetchDashboard = async (dashboardId: string): Promise<Dashboard> => {
     let response;
@@ -106,19 +119,7 @@ export const updateDashboard = async (dashboard: Dashboard, newName: String): Pr
 
 
 
-export const fetchDashboardsList = async (): Promise<Dashboard[]> => {
-    let response;
-    let endPath = EndPathDashboards()
 
-
-    let request = createApiRequest(endPath,"GET")
-    response = await fetch(request);
-
-    if (response.ok) {
-        return response.json()
-    }
-    throw new ResponseError("Failed to fetch from server", response)
-}
 
 
 
