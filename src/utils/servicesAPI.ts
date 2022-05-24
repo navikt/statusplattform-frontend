@@ -1,5 +1,7 @@
+import { json } from "msw/lib/types/context";
 import { Component, HistoryOfSpecificService, Service } from "../types/navServices";
 import { EndPathPutServiceDependency, EndPathService, EndPathServiceHistory, EndPathServices, EndPathServiceStatus, EndPathSpecificService, EndPathUpdateService } from "./apiHelper";
+import { createApiRequest } from "./createApiRequest";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -10,13 +12,18 @@ export class ResponseError extends Error {
 
 
 export const fetchServices = async (): Promise<Service[]> => {
-    let endPath = EndPathServices();
     let response;
+    let endPath = EndPathServices()
+    console.log("Trying to get servises")
 
-    response = await fetch(endPath);
+
+    let request = createApiRequest(endPath,"GET")
+    response = await fetch(request);
 
     if (response.ok) {
-        return response.json()
+        let json = await response.json()
+        console.log(json)
+        return json
     }
     throw new ResponseError("Failed to fetch from server", response)
 }
