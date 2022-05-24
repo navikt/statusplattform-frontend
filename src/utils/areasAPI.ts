@@ -79,7 +79,7 @@ export const updateArea = async (area: Area): Promise<void> =>{
     response = await fetch(request);
 
     if (response.ok) {
-        return await response.json()
+        return await response
 
     }
     throw new ResponseError("Failed to fetch from server", response)
