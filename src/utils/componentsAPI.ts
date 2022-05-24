@@ -1,5 +1,6 @@
 import { Component } from "../types/navServices";
 import { EndPathComponent, EndPathComponents, EndPathComponentStatus, EndPathPutComponentDependency, EndPathSpecificComponent, EndPathUpdateComponent } from "./apiHelper";
+import { createApiRequest } from "./createApiRequest";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -9,14 +10,16 @@ export class ResponseError extends Error {
 
 
 export const fetchComponents = async (): Promise<Component[]> => {
-    let endPath = EndPathComponents();
-    let response;
+    let path = EndPathComponents()
+    let response
 
-    response = await fetch(endPath);
+    let request = createApiRequest(path, "GET")
+    response = await fetch(request)
 
     if (response.ok) {
         return response.json()
     }
+
     throw new ResponseError("Failed to fetch from server", response)
 }
 
@@ -24,27 +27,20 @@ export const fetchComponents = async (): Promise<Component[]> => {
 
 
 export const postComponent = async (component: Component): Promise<Component> =>{
-    let response;
-    let endPath = EndPathComponent()
+    let path = EndPathComponent()
+    let response
 
-    response = await fetch(endPath,
-    {
-        method: "POST",
-        body: JSON.stringify({
-            name: component.name,
-            type: component.type,
-            team: component.team,
-            dependencies: component.componentDependencies,
-            monitorlink: component.monitorlink,
-            pollingUrl: component.pollingUrl
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        },
-        mode: 'cors', // no-cors, *cors, same-origin,
-        credentials: 'same-origin', // include, *same-origin, omit
+    let body = JSON.stringify({
+        name: component.name,
+        type: component.type,
+        team: component.team,
+        dependencies: component.componentDependencies,
+        monitorlink: component.monitorlink,
+        pollingUrl: component.pollingUrl
+    })
 
-    });
+    let request = createApiRequest(path, "POST", body)
+    response = await fetch(request)
 
     if (response.ok) {
         return response.json()
@@ -56,27 +52,21 @@ export const postComponent = async (component: Component): Promise<Component> =>
 
 
 export const deleteComponent = async (component): Promise<Object[]> =>{
-    let response;
+    let path = EndPathSpecificComponent(component.id)
+    let response
 
-    let endPath = EndPathSpecificComponent(component.id)
 
-    response = await fetch(endPath,
-    {
-        method: "DELETE",
-        body: JSON.stringify({
-            Component_id: component.id,
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        },
-        mode: 'cors', // no-cors, *cors, same-origin,
-        credentials: 'same-origin', // include, *same-origin, omit
+    let body = JSON.stringify({
+        Component_id: component.id,
+    })
 
-    });
+    let request = createApiRequest(path, "DELETE", body)
+    response = await fetch(request)
     
     if (response.ok) {
-        return response.json()
+        return await response
     }
+
     throw new ResponseError("Failed to send DELETE request to server", response)
 }
 
@@ -84,31 +74,26 @@ export const deleteComponent = async (component): Promise<Object[]> =>{
 
 export const updateComponent = async (component: Component): Promise<void> =>{
     let response;
-    let endPath = EndPathUpdateComponent(component.id)
+    let path = EndPathUpdateComponent(component.id)
 
+    let body = JSON.stringify({
+        id: component.id,
+        name: component.name,
+        type: component.type,
+        team: component.team,
+        componentDependencies: component.componentDependencies,
+        monitorlink: component.monitorlink,
+        pollingUrl: component.pollingUrl
+    })
 
-    response = await fetch(endPath, {
-            method: "PUT",
-            body: JSON.stringify({
-                id: component.id,
-                name: component.name,
-                type: component.type,
-                team: component.team,
-                componentDependencies: component.componentDependencies,
-                monitorlink: component.monitorlink,
-                pollingUrl: component.pollingUrl
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin,
-            credentials: 'same-origin', // include, *same-origin, omit
-        });
+    let request = createApiRequest(path, "PUT", body)
+    response = await fetch(request)
     
 
     if (response.ok) {
         return response
     }
+    
     throw new ResponseError("Failed to post to server", response)
 }
 
@@ -117,10 +102,15 @@ export const updateComponent = async (component: Component): Promise<void> =>{
 
 export const fetchComponentFromId = async (componentId: string): Promise<Component> => {
 
-    let endUrl = EndPathSpecificComponent(componentId);
-    let response;
+    let path = EndPathSpecificComponent(componentId)
+    let response
 
-    response = await fetch(endUrl);
+    response = await fetch(path)
+
+    let request = createApiRequest(path, "GET")
+    response = await fetch(request)
+
+
 
     if (response.ok) {
         return response.json()
@@ -133,10 +123,11 @@ export const fetchComponentFromId = async (componentId: string): Promise<Compone
 
 
 export const fetchComponentStatuses = async (): Promise<string[]> => {
-    let endUrl = EndPathComponentStatus();
-    let response;
+    let path = EndPathComponentStatus()
+    let response
 
-    response = await fetch(endUrl);
+    let request = createApiRequest(path, "GET")
+    response = await fetch(request)
 
     if (response.ok) {
         return response.json()
@@ -147,23 +138,15 @@ export const fetchComponentStatuses = async (): Promise<string[]> => {
 
 export const putComponentDependency = async (componentId, dependencyId): Promise<Object[]> =>{
     let response;
-    let endPath = EndPathPutComponentDependency(componentId, dependencyId)
+    let path = EndPathPutComponentDependency(componentId, dependencyId)
 
+    let body = JSON.stringify({
+        componentId: componentId,
+        dependencyId: dependencyId
+    })
 
-    response = await fetch(endPath,
-    {
-        method: "PUT",
-        body: JSON.stringify({
-            componentId: componentId,
-            dependencyId: dependencyId
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        },
-        mode: 'cors', // no-cors, *cors, same-origin,
-        credentials: 'same-origin', // include, *same-origin, omit
-
-    });
+    let request = createApiRequest(path, "PUT", body)
+    response = await fetch(request)
        
     if (response.ok) {
         return response

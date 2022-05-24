@@ -47,7 +47,7 @@ export const postAdminArea = async (adminArea): Promise<Object[]> =>{
     })
     
     let request = createApiRequest(endPath,"POST", body)
-    response = await fetch(request);
+    response = await fetch(request)
 
 
 
@@ -62,7 +62,7 @@ export const postAdminArea = async (adminArea): Promise<Object[]> =>{
 
 export const updateArea = async (area: Area): Promise<void> =>{
     let response;
-    let endPath = EndPathSpecificArea(area.id)
+    let path = EndPathSpecificArea(area.id)
 
     let body = JSON.stringify({
         id: area.id,
@@ -73,13 +73,13 @@ export const updateArea = async (area: Area): Promise<void> =>{
         subAreas: area.subAreas
     })
 
-    let request = createApiRequest(endPath,"PUT", body)
+    let request = createApiRequest(path, "PUT", body)
 
 
     response = await fetch(request);
 
     if (response.ok) {
-        return await response.json()
+        return await response
 
     }
     throw new ResponseError("Failed to fetch from server", response)

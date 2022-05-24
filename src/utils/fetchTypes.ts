@@ -1,4 +1,5 @@
 import { EndPathServiceTypes } from "./apiHelper";
+import { createApiRequest } from "./createApiRequest";
 
 
 export class ResponseError extends Error {
@@ -7,12 +8,13 @@ export class ResponseError extends Error {
     }
 }
 
-let endPath: string = EndPathServiceTypes();
+let path: string = EndPathServiceTypes();
 
 export const fetchTypes = async (): Promise<string[]> => {
     let response;
 
-    response = await fetch(endPath)
+    let request = createApiRequest(path, "GET")
+    response = await fetch(request)
 
     if (response.ok) {
         return response.json()
