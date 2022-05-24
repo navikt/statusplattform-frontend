@@ -45,25 +45,22 @@ export const postDashboard = async (dashboard: Dashboard): Promise<Object[]> =>{
     let response;
     let endPath = EndPathDashboard()
 
-    response = await fetch(endPath,
-    {
-        method: "POST",
-        body: JSON.stringify({
-            name: dashboard.name,
-            areas: dashboard.areas
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        },
-        mode: 'cors', // no-cors, *cors, same-origin,
-        credentials: 'same-origin', // include, *same-origin, omit
 
-    });
+    let body = JSON.stringify({
+        name: dashboard.name,
+        areas: dashboard.areas
+    })
+
+    let request = createApiRequest(endPath,"POST", body)
+    response = await fetch(request);
+
+
 
     if (response.ok) {
-        return response.json()
+        return await response.json()
+
     }
-    throw new ResponseError("Failed to post to server", response)
+    throw new ResponseError("Failed to POST to server", response)
 }
 
 
@@ -73,22 +70,16 @@ export const deleteDashboard = async (dashboard: Dashboard): Promise<void> =>{
     let response;
     let endPath = EndPathSpecificDashboard(dashboard.id)
 
-    response = await fetch(endPath,
-    {
-        method: "DELETE",
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        },
-        mode: 'cors', // no-cors, *cors, same-origin,
-        credentials: 'same-origin', // include, *same-origin, omit
+    let request = createApiRequest(endPath,"DELETE")
+    response = await fetch(request);
 
-    });
 
 
     if (response.ok) {
-        return response
+        return await response
+
     }
-    throw new ResponseError("Failed to post to server", response)
+    throw new ResponseError("Failed to DELETE to server", response)
 }
 
 
@@ -97,24 +88,20 @@ export const updateDashboard = async (dashboard: Dashboard, newName: String): Pr
     let response;
     let endPath = EndPathUpdateDashboard(dashboard.id)
 
+    let body = JSON.stringify({
+        name: newName
+    })
 
-    response = await fetch(endPath, {
-            method: "PUT",
-            body: JSON.stringify({
-                name: newName
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin,
-            credentials: 'same-origin', // include, *same-origin, omit
-        });
-    
+    let request = createApiRequest(endPath,"PUT", body)
+    response = await fetch(request);
+
+
 
     if (response.ok) {
-        return response
+        return await response
+
     }
-    throw new ResponseError("Failed to post to server", response)
+    throw new ResponseError("Failed to PUT to server", response)
 }
 
 
