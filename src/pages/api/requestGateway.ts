@@ -1,9 +1,8 @@
 import { Console } from "console";
 import { NextApiRequest, NextApiResponse } from "next";
+import { backendPath } from "..";
 
 
-
-const backendPath = process.env.BACKENDPATH
 
 const createRequest = (path,method, headers)  => new Request(path, {
     method: method,

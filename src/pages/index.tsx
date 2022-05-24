@@ -8,6 +8,7 @@ import CustomNavSpinner from '../components/CustomNavSpinner';
 
 
 
+export const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
 
 
 export default function Home() {
