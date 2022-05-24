@@ -1,3 +1,4 @@
+import { resolve } from "path";
 import { Dashboard } from "../types/navServices";
 import { EndPathDashboard, EndPathDashboards, EndPathSpecificDashboard, EndPathUpdateDashboard } from "./apiHelper";
 import { createApiRequest } from "./createApiRequest";
@@ -19,7 +20,9 @@ export const fetchDashboardsList = async (): Promise<Dashboard[]> => {
     response = await fetch(request);
 
     if (response.ok) {
-        return response.json()
+        let json = await response.json()
+        console.log(json)
+        return json
     }
     throw new ResponseError("Failed to fetch from server", response)
 }
@@ -35,8 +38,6 @@ export const fetchDashboard = async (dashboardId: string): Promise<Dashboard> =>
     }
     throw new ResponseError("Failed to fetch from server", response)
 }
-
-
 
 
 
