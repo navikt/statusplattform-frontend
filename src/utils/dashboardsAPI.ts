@@ -12,16 +12,15 @@ export class ResponseError extends Error {
 
 
 export const fetchDashboardsList = async (): Promise<Dashboard[]> => {
-    let response;
+    let response
     let endPath = EndPathDashboards()
 
 
-    let request = createApiRequest(endPath,"GET")
-    response = await fetch(request);
+    let request = createApiRequest(endPath, "GET")
+    response = await fetch(request)
 
     if (response.ok) {
         let json = await response.json()
-        console.log(json)
         return json
     }
     throw new ResponseError("Failed to fetch from server", response)
@@ -30,8 +29,8 @@ export const fetchDashboardsList = async (): Promise<Dashboard[]> => {
 export const fetchDashboard = async (dashboardId: string): Promise<Dashboard> => {
     let response;
     let endPath = EndPathSpecificDashboard(dashboardId)
-    let request = createApiRequest(endPath,"GET")
-    response = await fetch(request);
+    let request = createApiRequest(endPath, "GET")
+    response = await fetch(request)
 
     if (response.ok) {
         return response.json()
@@ -42,7 +41,7 @@ export const fetchDashboard = async (dashboardId: string): Promise<Dashboard> =>
 
 
 export const postDashboard = async (dashboard: Dashboard): Promise<Object[]> =>{
-    let response;
+    let response
     let endPath = EndPathDashboard()
 
 
@@ -52,7 +51,7 @@ export const postDashboard = async (dashboard: Dashboard): Promise<Object[]> =>{
     })
 
     let request = createApiRequest(endPath,"POST", body)
-    response = await fetch(request);
+    response = await fetch(request)
 
 
 
@@ -67,11 +66,11 @@ export const postDashboard = async (dashboard: Dashboard): Promise<Object[]> =>{
 
 
 export const deleteDashboard = async (dashboard: Dashboard): Promise<void> =>{
-    let response;
+    let response
     let endPath = EndPathSpecificDashboard(dashboard.id)
 
     let request = createApiRequest(endPath,"DELETE")
-    response = await fetch(request);
+    response = await fetch(request)
 
 
 
@@ -84,16 +83,16 @@ export const deleteDashboard = async (dashboard: Dashboard): Promise<void> =>{
 
 
 
-export const updateDashboard = async (dashboard: Dashboard, newName: String): Promise<void> =>{
-    let response;
-    let endPath = EndPathUpdateDashboard(dashboard.id)
+export const updateDashboard = async (dashboard: Dashboard): Promise<void> =>{
+    let response
+    let path = EndPathUpdateDashboard(dashboard.id)
 
     let body = JSON.stringify({
-        name: newName
+        name: dashboard.name
     })
 
-    let request = createApiRequest(endPath,"PUT", body)
-    response = await fetch(request);
+    let request = createApiRequest(path, "PUT", body)
+    response = await fetch(request)
 
 
 

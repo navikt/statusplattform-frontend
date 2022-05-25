@@ -572,10 +572,11 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
 
     const {data: subAreas, isLoading, reload} = useLoader(fetchSubAreas,[])
 
-    if(isLoading) 
+    if(isLoading) {
         return (
             <CustomNavSpinner/>
         )
+    }
 
 
 
@@ -601,12 +602,6 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
             
         changeUpdatedArea(newArea)
         toast.success("Tjenesten har blitt lagt til i området")
-        // putServiceToArea(area.id, service.id)
-        //     .then(() => {
-        //     })
-        //     .catch(() => {
-        //         toast.warn("Tjenesten kunne ikke bli lagt til")
-        //     })
     }
 
     const handleDeleteSubAreaOnArea = (subAreaId) => {
