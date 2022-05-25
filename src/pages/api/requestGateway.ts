@@ -27,6 +27,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     let path = backendPath + backendEndpath
 
     console.log("IN REQUEST GATEWAY BUILDER")
+    console.log("method: " + method )
+    console.log("path: " + path)
+
+
 
 
 
