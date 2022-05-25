@@ -152,18 +152,13 @@ const CustomButton = styled.button`
 `
 
 const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => void}> = ({dashboards, reloadDashboards}) => {
+
     const [expanded, setExpanded] = useState<string[]>([]) 
+
     const [dashboardToDelete, setDashboardToDelete] = useState<Dashboard>()    
     const [dashboardsToEdit, changeDashboardsToEdit] = useState<string[]>([])
-    const { data: allAreas, isLoading, reload } = useLoader(fetchAreas,[]);
 
-    const handlePutAreasToDashboard = (dashboardId: string, areasToPut: string[]) => {
-        putAreasToDashboard(dashboardId, areasToPut).then(() => {
-            toast.success("Dashbord oppdatert")
-        }).catch(() => {
-            toast.error("Kunne ikke oppdatere dashbord")
-        })
-    }
+    const { data: allAreas, isLoading, reload } = useLoader(fetchAreas,[])
 
     const toggleExpanded = (dashboard: Dashboard) => {
         if(expanded.includes(dashboard.id)) {
@@ -171,6 +166,14 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
         } else {
             setExpanded([...expanded, dashboard.id])
         }
+    }
+
+    const handlePutAreasToDashboard = (dashboardId: string, areasToPut: string[]) => {
+        putAreasToDashboard(dashboardId, areasToPut).then(() => {
+            toast.success("Dashbord oppdatert")
+        }).catch(() => {
+            toast.error("Kunne ikke oppdatere dashbord")
+        })
     }
 
     const confirmDeleteDashboardHandler = () => {
@@ -341,7 +344,7 @@ const CurrentlyEdittingDashboard = ({dashboard, reloadDashboards, setDashboardTo
     }
 
     const handleSubmit = () => {
-        updateDashboard(dashboard, updatedDashboard.name).then(() => {
+        updateDashboard(dashboard).then(() => {
             reloadDashboards()
             if(expandedList.includes(dashboard.id)) {
                 toggleExpanded()
