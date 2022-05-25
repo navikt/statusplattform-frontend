@@ -30,11 +30,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("method: " + method )
     console.log("path: " + path)
 
-
-
-
-
-
     let backEndRequest
     if(method == "POST"|| method == "PUT"){
         backEndRequest = createRequestWithBody(path, method, headers, body)
@@ -43,20 +38,17 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         backEndRequest = createRequest(path, method, headers)
     }
 
-    let response = await fetch(backEndRequest)
-
-    await response.json()
-        .then(body => {
-            if (body) {
-                console.log("***** SUCCSESFULLY HANDLED REQUEST *****")
-                res.status(200).json(body)
-            }
-            else {
-                res.send("***** REQUEST FAILED *****")
-            }
-
-        })
-        .catch(e => console.log(e))
-
-
+    
+    const response = await fetch(backEndRequest)
+    const jsonResponse = await response.json()
+    console.log(jsonResponse)
+    if(jsonResponse){
+        console.log("***** SUCCSESFULLY HANDLED REQUEST *****")
+        res.status(200).json(jsonResponse)
+    }
+    else {
+        res.send("***** REQUEST FAILED *****")
+    }
+    
 }
+
