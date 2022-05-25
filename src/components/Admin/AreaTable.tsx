@@ -557,7 +557,16 @@ interface EditProps {
 
 
 
-const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, toggleExpanded, toggleEditArea, setAreaToDelete}: EditProps) => {
+const CurrentlyEdittingArea = ({
+            area,
+            allServices,
+            reloadAreas,
+            isExpanded,
+            toggleExpanded,
+            toggleEditArea,
+            setAreaToDelete
+    }: EditProps) => {
+    
     const [updatedArea, changeUpdatedArea] = useState({
         id: area.id,
         name: area.name,
@@ -567,6 +576,7 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
         components: area.components,
         subAreas: area.subAreas
     })
+    
     const [servicesInArea, setServicesInArea] = useState<Service[]>(() => area.services.map(service => service))
     const [subAreasInArea, setSubAreasInArea] = useState<SubArea[]>(() => area.subAreas.map(subArea => subArea))
 
@@ -649,14 +659,6 @@ const CurrentlyEdittingArea = ({area, allServices, reloadAreas, isExpanded, togg
         }
         toggleEditArea(area)
     }
-
-    // const handleAreaIconChange = (event) => {
-    //     const newArea = {
-    //         ...updatedArea,
-    //     }
-    //     newArea.icon = event.target.value
-    //     changeUpdatedArea(newArea)
-    // }
 
 
     const { name, description } = updatedArea
