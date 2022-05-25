@@ -13,8 +13,7 @@ export class ResponseError extends Error {
 
 export const fetchServices = async (): Promise<Service[]> => {
     let response;
-    let endPath = EndPathServices()
-    console.log("Trying to get servises")
+    let endPath = EndPathServices();
 
 
     let request = createApiRequest(endPath,"GET")
@@ -32,10 +31,15 @@ export const fetchServiceHistory = async (serviceId: string): Promise<HistoryOfS
     let endPath = EndPathServiceHistory(serviceId);
     let response;
 
-    response = await fetch(endPath);
+
+
+    let request = createApiRequest(endPath,"GET")
+    response = await fetch(request);
 
     if (response.ok) {
-        return response.json()
+        let json = await response.json()
+        console.log(json)
+        return json
     }
     throw new ResponseError("Failed to fetch from server", response)
 }
@@ -46,32 +50,31 @@ export const fetchServiceHistory = async (serviceId: string): Promise<HistoryOfS
 export const postService = async (service: Service): Promise<Service> =>{
     let response;
     let endPath = EndPathService()
-    
-    response = await fetch(endPath,
-    {
-        method: "POST",
-        body: JSON.stringify({
-            name: service.name,
-            type: service.type,
-            team: service.team,
-            serviceDependencies: service.serviceDependencies,
-            componentDependencies: service.componentDependencies,
-            monitorlink: service.monitorlink,
-            pollingUrl: service.pollingUrl,
-            areasContainingThisService: service.areasContainingThisService
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        },
-        mode: 'cors', // no-cors, *cors, same-origin,
-        credentials: 'same-origin', // include, *same-origin, omit
 
-    });
+    let body = JSON.stringify({
+        name: service.name,
+        type: service.type,
+        team: service.team,
+        serviceDependencies: service.serviceDependencies,
+        componentDependencies: service.componentDependencies,
+        monitorlink: service.monitorlink,
+        pollingUrl: service.pollingUrl,
+        areasContainingThisService: service.areasContainingThisService
+    })
+
+    
+    let request = createApiRequest(endPath,"POST", body)
+    response = await fetch(request);
+
+
 
     if (response.ok) {
-        return response.json()
+        return await response.json()
+
     }
-    throw new ResponseError("Failed to post to server", response)
+    throw new ResponseError("Failed to POST to server", response)
+
+
 }
 
 
@@ -82,24 +85,16 @@ export const deleteService = async (service): Promise<Object[]> =>{
 
     let endPath = EndPathSpecificService(service.id)
 
-    response = await fetch(endPath,
-    {
-        method: "DELETE",
-        body: JSON.stringify({
-            Service_id: service.id,
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        },
-        mode: 'cors', // no-cors, *cors, same-origin,
-        credentials: 'same-origin', // include, *same-origin, omit
+    let request = createApiRequest(endPath,"DELETE")
 
-    });
-    
+    response = await fetch(request);
+
+
     if (response.ok) {
-        return response.json()
+        return await response
+
     }
-    throw new ResponseError("Failed to send DELETE request to server", response)
+    throw new ResponseError("Failed to POST to server", response)
 }
 
 
@@ -108,45 +103,44 @@ export const updateService = async (service: Service): Promise<void> =>{
     let response;
     let endPath = EndPathUpdateService(service.id)
 
+    let body = JSON.stringify({
+        id: service.id,
+        name: service.name,
+        type: service.type,
+        team: service.team,
+        serviceDependencies: service.serviceDependencies,
+        componentDependencies: service.componentDependencies,
+        monitorlink: service.monitorlink,
+        pollingUrl: service.pollingUrl,
+        areasContainingThisService: service.areasContainingThisService
+    })
 
-    response = await fetch(endPath, {
-            method: "PUT",
-            body: JSON.stringify({
-                id: service.id,
-                name: service.name,
-                type: service.type,
-                team: service.team,
-                serviceDependencies: service.serviceDependencies,
-                componentDependencies: service.componentDependencies,
-                monitorlink: service.monitorlink,
-                pollingUrl: service.pollingUrl,
-                areasContainingThisService: service.areasContainingThisService
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin,
-            credentials: 'same-origin', // include, *same-origin, omit
-        });
-    
+
+    let request = createApiRequest(endPath,"PUT", body)
+    response = await fetch(request);
+
+
 
     if (response.ok) {
-        return response
+        return await response
+
     }
-    throw new ResponseError("Failed to post to server", response)
+    throw new ResponseError("Failed to POST to server", response)
 }
 
 
 
 export const fetchServiceFromId = async (serviceId: string): Promise<Service> => {
 
-    let endUrl = EndPathSpecificService(serviceId);
+    let endPath = EndPathSpecificService(serviceId);
     let response;
 
-    response = await fetch(endUrl);
+
+    let request = createApiRequest(endPath,"GET")
+    response = await fetch(request);
 
     if (response.ok) {
-        return response.json()
+        return  await response.json()
     }
     throw new ResponseError("Failed to fetch from server", response)
 }
@@ -156,13 +150,14 @@ export const fetchServiceFromId = async (serviceId: string): Promise<Service> =>
 
 
 export const fetchServiceStatuses = async (): Promise<string[]> => {
-    let endUrl = EndPathServiceStatus();
+    let endPath = EndPathServiceStatus();
     let response;
 
-    response = await fetch(endUrl);
+    let request = createApiRequest(endPath,"GET")
+    response = await fetch(request);
 
     if (response.ok) {
-        return response.json()
+        return await response.json()
     }
     throw new ResponseError("Failed to fetch from server", response)
 }
@@ -173,23 +168,11 @@ export const putServiceDependency = async (serviceId, dependencyId): Promise<Obj
     let endPath = EndPathPutServiceDependency(serviceId, dependencyId)
 
 
-    response = await fetch(endPath,
-    {
-        method: "PUT",
-        body: JSON.stringify({
-            serviceId: serviceId,
-            dependencyId: dependencyId
-        }),
-        headers: {
-            "Content-type": "application/json; charset=UTF-8"
-        },
-        mode: 'cors', // no-cors, *cors, same-origin,
-        credentials: 'same-origin', // include, *same-origin, omit
+    let request = createApiRequest(endPath,"PUT")
+    response = await fetch(request);
 
-    });
-       
     if (response.ok) {
-        return response
+        return await response
     }
-    throw new ResponseError("Failed to post to server", response)
+    throw new ResponseError("Failed to fetch from server", response)
 }
