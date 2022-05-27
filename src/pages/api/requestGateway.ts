@@ -1,54 +1,106 @@
-import { Console } from "console";
 import { NextApiRequest, NextApiResponse } from "next";
-import { backendPath } from "..";
 
 
+
+const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
 
 const createRequest = (path,method, headers)  => new Request(path, {
     method: method,
     headers: headers
 })
 
-
-const createRequestWithBody = (path,method, headers, body)  => new Request(path, {
-    method: method,
-    headers: headers,
-    body: body
-})
-
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+    console.log("IN TEST API")
 
-    
     let headers = req.headers
-
-    let method = req.headers.method
     let backendEndpath = headers.backendendpath
-    let body = headers.body
+    let method = req.headers.method
+    let body = req.headers.body
+
+    console.log(backendEndpath)
+    console.log(method)
+ 
     let path = backendPath + backendEndpath
+    console.log("Full path: "+ path)
+    
 
-    console.log("IN REQUEST GATEWAY BUILDER")
-    console.log("method: " + method )
-    console.log("path: " + path)
+    const fetch = require("node-fetch");
+    const https = require('https');
+    
+    const httpsAgent = new https.Agent({
+      rejectUnauthorized: false,
+    });
+    
+    
+    const resp = await fetch(
+        path,
+        {
+            method: method,
+            agent: httpsAgent,
+            body: body,
+        },
+      )
 
-    let backEndRequest
-    if(method == "POST"|| method == "PUT"){
-        backEndRequest = createRequestWithBody(path, method, headers, body)
-    }
-    else{
-        backEndRequest = createRequest(path, method, headers)
-    }
+    await resp.json()
+    .then(body => {
+        if (body) {
+            console.log("SUCCSESFULLY READ USERDATA")
+            res.status(200).json(body)
+        }
+        else {
+            res.send("Cant read userdate")
+        }
+
+    })
+    .catch(e => console.log(e))
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     
-    const response = await fetch(backEndRequest)
-    const jsonResponse = await response.json()
-    console.log(jsonResponse)
-    if(jsonResponse){
-        console.log("***** SUCCSESFULLY HANDLED REQUEST *****")
-        res.status(200).json(jsonResponse)
-    }
-    else {
-        res.send("***** REQUEST FAILED *****")
-    }
+    /*
+    let backEndRequest = createRequest(path, method, headers)
     
-}
+    let response = await fetch(backEndRequest)
+    
+    await response.json()
+        .then(body => {
+            if (body) {
+                console.log("SUCCSESFULLY READ USERDATA")
+                res.status(200).json(body)
+            }
+            else {
+                res.send("Cant read userdate")
+            }
+
+        })
+        .catch(e => console.log(e))
+
+        */
+
+};
+
+
+
+
+  
 
