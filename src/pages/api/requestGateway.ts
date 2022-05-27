@@ -35,6 +35,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const resp = await fetch(
         path,
         {
+            headers: headers,
             method: method,
             agent: httpsAgent,
             body: body,
