@@ -27,7 +27,7 @@ spec:
             # optional
             replyURLs:
                 - "https://status.dev.nav.no/sp/oauth2/callback"
-                - "https://status.dev.nav.no/sp/Dashboard/Privatperson"
+                - "https://status.dev.nav.no/sp/Dashboard/Internt"
             claims:
                 extra:
                     - "NAVident"
