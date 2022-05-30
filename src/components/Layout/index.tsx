@@ -9,7 +9,6 @@ import { Clock, Home, Next } from '@navikt/ds-icons'
 import Footer from '../../components/Footer'
 import Header from '../../components/Header'
 import Navbar from '../../components/Navbar'
-import { NavigatorContext } from '../ContextProviders/NavigatorContext'
 import { TitleContext } from '../ContextProviders/TitleContext'
 import { RouterHomePage } from '../../types/routes';
 
@@ -134,94 +133,3 @@ const Layout = props => {
 }
 
 export default Layout
-
-
-
-
-const NavigatorContainer = styled.div`
-    width: 100%;
-    left: 0;
-    padding: 0.75rem 1rem;
-
-    display: flex;
-    flex-flow: row wrap;
-
-    .navigator-element {
-        width: max-content;
-
-        display: flex;
-
-        .navds-link {
-            margin: .25rem .25rem .25rem 0;
-
-            :hover {
-                cursor: pointer;
-            }
-        }
-
-        .home-svg {
-            margin-right: 12px;
-            
-            svg {
-                color: black;
-            }
-        }
-
-        .navds-chevron {
-            color: #78706a;
-            margin: 0 12px;
-
-            display: flex;
-            align-items: center;
-        }
-    }
-
-    h1 {
-        text-align: center;
-        margin-bottom: 32px !important;
-    }
-`
-
-
-const Navigator = () => {
-    const { navigatorRoutes } = useContext(NavigatorContext)
-
-    const router = useRouter()
-
-    const handleNavigatorRedirect = (path) => {
-        if(path == "/Dashboard") {
-            router.push(RouterHomePage.PATH)
-        }
-        else if (path =="/Tjenestedata") {
-            router.push(router.asPath)
-        }
-        else {
-            router.push(path)
-        }
-    }
-
-
-    return (
-        <NavigatorContainer>
-            {!router.asPath.includes("Dashboard") &&
-                navigatorRoutes.map((element, index) =>    
-                    <BodyShort key={index} className="navigator-element">
-                        <span aria-label={"Naviger til " + element.stringifiedPathName} onClick={() => handleNavigatorRedirect(element.path)} className="navds-link">
-                            {element.home &&
-                                <span className="home-svg">
-                                    <Home /> 
-                                </span>
-                            }
-                            {element.stringifiedPathName}
-                        </span>
-                        {!element.lastElement &&
-                            <span className="navds-chevron">
-                                <Next />
-                            </span>
-                        }
-                    </BodyShort>
-                )
-            }
-        </NavigatorContainer>
-    )
-}

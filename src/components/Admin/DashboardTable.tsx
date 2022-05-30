@@ -366,7 +366,7 @@ const CurrentlyEdittingDashboard = ({
     }
 
     const handleSubmit = () => {
-        updateDashboard(dashboard).then(() => {
+        updateDashboard(updatedDashboard).then(() => {
             reloadDashboards()
             if(isExpanded) {
                 toggleExpanded()
@@ -471,7 +471,6 @@ const EditAreasInDashboard: React.FC<{
     const handleUpdateSelectedArea = (event) => {
         const idOfSelectedArea: string = event.target.value
         const newSelectedArea: Area = availableAreas.find(area => idOfSelectedArea === area.id)
-        console.log("newSelectedArea", newSelectedArea)
         updateSelectedArea(newSelectedArea)
     }
 

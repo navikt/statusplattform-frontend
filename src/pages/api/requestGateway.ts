@@ -11,14 +11,15 @@ const createRequest = (path,method, headers)  => new Request(path, {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("IN TEST API")
-
-    let headers = req.headers
-    let backendEndpath = headers.backendendpath
+    console.log(req.headers)
+    let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: "No Authorization header"
+    let backendEndpath = req.headers.backendendpath
     let method = req.headers.method
     let body = req.headers.body
 
     console.log(backendEndpath)
     console.log(method)
+    console.log(authorizationHeader)
 
     let path = backendPath + backendEndpath
     console.log("Full path: "+ path)
@@ -35,7 +36,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const resp = await fetch(
         path,
         {
-            headers: headers,
+            headers: {'authorization': authorizationHeader},
             method: method,
             agent: httpsAgent,
             body: body,

@@ -1,4 +1,3 @@
-import { resolve } from "path";
 import { Dashboard } from "../types/navServices";
 import { EndPathDashboard, EndPathDashboards, EndPathSpecificDashboard, EndPathUpdateDashboard } from "./apiHelper";
 import { createApiRequest } from "./createApiRequest";
@@ -86,9 +85,11 @@ export const deleteDashboard = async (dashboard: Dashboard): Promise<void> =>{
 export const updateDashboard = async (dashboard: Dashboard): Promise<void> =>{
     let response
     let path = EndPathUpdateDashboard(dashboard.id)
+    const listOfAreaIds: string[] = dashboard.areas.map(area => area.id)
 
     let body = JSON.stringify({
-        name: dashboard.name
+        name: dashboard.name,
+        areas: listOfAreaIds
     })
 
     let request = createApiRequest(path, "PUT", body)
@@ -102,12 +103,3 @@ export const updateDashboard = async (dashboard: Dashboard): Promise<void> =>{
     }
     throw new ResponseError("Failed to PUT to server", response)
 }
-
-
-
-
-
-
-
-
-
