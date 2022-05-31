@@ -3,8 +3,10 @@ import Head from 'next/head'
 import { useEffect, useState } from 'react';
 
 import DashboardFromId from './Dashboard/[dashboardId]';
-import { RouterPrivatperson } from '../types/routes';
+import { RouterInternt, RouterPrivatperson } from '../types/routes';
 import CustomNavSpinner from '../components/CustomNavSpinner';
+import { UserData } from '../types/userData';
+import { checkLoginInfoAndState } from '../utils/checkLoginInfoAndState';
 
 
 
@@ -14,12 +16,21 @@ export const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
 export default function Home() {
     const router = useRouter()
     const [atHomePage] = useState(false)
+    const [userData, setUserData] = useState<UserData>(undefined)
 
     useEffect(() => {
-        if(router.isReady && router.asPath == "/") {
-            router.push(RouterPrivatperson.PATH)
-        }
-    },[router])
+        (async function () {
+            const user: UserData = await checkLoginInfoAndState()
+            setUserData(user)
+            if(user.navIdent && router.isReady && router.asPath == "/") {
+                router.push(RouterInternt.PATH)   
+            }
+
+            else if (router.isReady && router.asPath == "/") {
+                router.push(RouterPrivatperson.PATH)
+            }
+        })()
+    }, [router])
 
     if(router.isReady) {
         return <CustomNavSpinner />
