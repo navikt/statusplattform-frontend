@@ -95,6 +95,8 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
     align-self: ${(props): any => (props.alignment)};
     min-height: ${(props): any => (props.height_when_not_expanded)};
 
+
+
     .maintenance-message {
         color: grey;
         font-size: 1rem;
