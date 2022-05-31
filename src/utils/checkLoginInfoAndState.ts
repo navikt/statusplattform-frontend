@@ -14,11 +14,11 @@ const createRequest = (path, headers)  => new Request(path, {
 const fetcher = (url) => fetch(url).then((res) => res.json())
 
 
-export const checkLoginInfoAndState = async (path: string, method: string): Promise<UserData | null> => {
+export const checkLoginInfoAndState = async (): Promise<UserData | null> => {
     let headers = new Headers()
 
-    headers.append("backendendpath", path)
-    headers.append("method", method)
+    headers.append("backendendpath", EndPathGetLoginInfo())
+    headers.append("method", "GET")
 
     let request = createRequest("/sp/api/requestGateway", headers)
     let response = await fetch(request)

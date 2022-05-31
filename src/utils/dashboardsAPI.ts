@@ -95,8 +95,6 @@ export const updateDashboard = async (dashboard: Dashboard): Promise<void> =>{
     let request = createApiRequest(path, "PUT", body)
     response = await fetch(request)
 
-
-
     if (response.ok) {
         return await response
 

@@ -640,7 +640,7 @@ const CurrentlyEdittingArea = ({
         changeUpdatedArea(changedArea)
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = () => {
         updateArea(updatedArea).then(() => {
             reloadAreas()
             if(isExpanded) {

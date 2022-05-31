@@ -78,7 +78,7 @@ export const DynamicListContainer = styled.div`
     useEffect(() => {
         setIsLoading(true)
         const setUpInitial = async () => {
-            const user: UserData = await checkLoginInfoAndState("/authenticate/NavUser", "GET")
+            const user: UserData = await checkLoginInfoAndState()
             setUserData(user)
             await router
         }

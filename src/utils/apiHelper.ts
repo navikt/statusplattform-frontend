@@ -40,7 +40,7 @@ export const EndPathSpecificDashboard = (dashboardId: string) => {
 }
 
 export const EndPathUpdateDashboard = (dashboardId: string) => {
-    return EndPathDashboard() + "/Update/" + dashboardId
+    return EndPathDashboard() + "/" + dashboardId
 }
 
 export const EndPathDashboardWithArea = (dashboardId: string) => {
@@ -130,7 +130,7 @@ export const EndPathPutComponentDependency = (componentId: string, dependencyId:
 
 // Login
 export const EndPathGetLoginInfo = () => {
-    return "http://localhost:3005"+ "/authenticate/NavUser"
+    return RestPath() + "/NavUser"
 }
 // ---
 
@@ -138,7 +138,7 @@ export const EndPathGetLoginInfo = () => {
 
 // SubAreas
 export const EndPathSubAreas = () => {
-    return RestPath()+ "/SubAreas/"
+    return RestPath() + "/SubAreas/"
 }
 
 
