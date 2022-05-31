@@ -7,7 +7,7 @@ import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
 import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-frontend-etiketter';
 import { BodyShort, Detail, Heading } from '@navikt/ds-react';
 
-import { ErrorCustomized, ErrorFilledCustomized, WrenchFilledCustomized, NoStatusAvailableCircle, WrenchOutlinedCustomized, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized, HelptextCustomizedBlue } from '../../components/TrafficLights'
+import { ErrorCustomized, ErrorFilledCustomized, WrenchFilledCustomized, NoStatusAvailableCircle, WrenchOutlinedCustomized, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized, HelptextCustomizedBlue, HelpTextCustomizedGray } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { Area, MaintenanceObject, SubArea} from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
@@ -216,6 +216,9 @@ export const handleAndSetStatusIcon = (status: string, isInternal?: boolean): an
                     </div>
                 )
             }
+            else {
+                return <HelptextCustomizedBlue aria-label="Ingen status tilgjengelig" />
+            }
         default:
             return(
                 <HelptextCustomizedBlue aria-label="Ingen status tilgjengelig" />
@@ -345,6 +348,8 @@ export const StatusIconHandler: React.FC<{status: string, isArea: boolean}> = ({
                         return <WarningFilledCustomized aria-label={isArea ? "Områdestatus: Tjenester i området har feil" : "Tjenestestatus: Feil på tjeneste"}/>
                     case 'DOWN':
                         return <ErrorFilledCustomized aria-label={isArea ? "Områdestatus: Tjenester i området er nede" : "Tjenestestatus: Nede"}/>
+                    case null:
+                        return <HelpTextCustomizedGray aria-label="Ingen status tilgjengelig" />
                     default:
                         return null
                 }

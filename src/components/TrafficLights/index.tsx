@@ -100,6 +100,10 @@ export const HelptextCustomizedBlue = styled(HelptextFilled)`
     color: var(--navds-global-color-deepblue-400) !important;
 `
 
+export const HelpTextCustomizedGray = styled(HelptextFilled)`
+    color: var(--navds-global-color-gray-600) !important;
+`
+
 const WrenchCustomizedBlue = styled(Wrench)`
     color: var(--navds-global-color-deepblue-400) !important;
 `
