@@ -145,7 +145,7 @@ export enum RouterOauthLogin {
 
 export enum RouterLogout {
     NAME = "Logg ut",
-    PATH = "/authenticate/logout"
+    PATH = "/sp/oauth2/logout"
 }
 // ---
 
