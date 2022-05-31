@@ -24,7 +24,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 
     const fetch = require("node-fetch");
-    const https = require('http');
+    const https = require('https');
 
     const httpsAgent = new https.Agent({
         rejectUnauthorized: false,
