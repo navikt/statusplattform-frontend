@@ -31,7 +31,7 @@ export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) =
         }
         getLoggedInUser()
     },[router])
-    
+
     const { name, navIdent } = user
 
     return (

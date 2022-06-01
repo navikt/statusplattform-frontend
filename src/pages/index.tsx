@@ -16,12 +16,14 @@ export const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
 export default function Home() {
     const router = useRouter()
     const [atHomePage] = useState(false)
+    
 
     useEffect(() => {
         (async function () {
             const user: UserData = await checkLoginInfoAndState()
             
             await user
+
 
             if(user.navIdent && router.isReady && router.asPath == "/") {
                 router.push(RouterInternt.PATH)   
@@ -46,7 +48,7 @@ export default function Home() {
                 <meta name="title" content="Navstatus" />
                 <meta name="description" content="Status Nav digitale tjenester er en oversiktsside for Navs ulike tjenester til borgere, arbeidsgivere og samarbeidspartnere." />
                 <meta property="image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
-                <meta property="url" content="https://status.nav.no" />
+                <meta property="url" content="https://status.nav.no/sp" />
                 <meta property="type" content="website" />
 
 
@@ -55,19 +57,19 @@ export default function Home() {
                 <meta property="og:title" content="Status Nav digitale tjenester" />
                 <meta property="og:description" content="Status Nav digitale tjenester er en oversiktsside for Navs ulike tjenester til borgere, arbeidsgivere og samarbeidspartnere." />
                 <meta property="og:image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
-                <meta property="og:url" content="https://portal.labs.nais.io/Dashboard/Privatperson" />
+                <meta property="og:url" content="https://status.nav.no/sp" />
                 <meta property="og:type" content="website" />
 
 
                 {/* <!-- Twitter --> */}
                 <meta property="twitter:card" content="summary_large_image" />
-                <meta property="twitter:url" content="https://portal.labs.nais.io/Dashboard/Privatperson" />
+                <meta property="twitter:url" content="https://status.nav.no/sp" />
                 <meta property="twitter:title" content="Navstatus" />
                 <meta property="twitter:description" content="Status Nav digitale tjenester er en oversiktsside for Navs ulike tjenester til borgere, arbeidsgivere og samarbeidspartnere." />
                 <meta property="twitter:image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
             </Head>
             {atHomePage &&
-                <DashboardFromId data={null}/>
+                <DashboardFromId data={null} />
             }
         </>
     )

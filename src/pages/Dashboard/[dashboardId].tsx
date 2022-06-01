@@ -15,6 +15,7 @@ import { RouterPrivatperson } from "../../types/routes"
 import { Dashboard } from "../../types/navServices"
 import { FullscreenEnter, FullscreenExit } from "@navikt/ds-icons"
 import { EndPathDashboards } from '../../utils/apiHelper'
+import { checkLoginInfoAndState } from '../../utils/checkLoginInfoAndState'
 
 
 export async function getServerSideProps() {
@@ -35,15 +36,18 @@ const DashboardFromId = ({data: dashboards}) => {
     const [isLoading, setIsLoading] = useState(true)
     const [retrievedDashboard, setRetrievedDashboard] = useState<Dashboard | undefined>()
     const [isFullScreen, changeIsFullScreen] = useState(false)
-
-    const user = useContext<UserData>(UserStateContext)
-
-
+    
+    const [user, setUser] = useState<UserData>()
+    
+    
 
     useEffect(() => {
         (async function () {
             setIsLoading(true)
             let dashboardTarget: Object = await router.query.dashboardId
+            const retrievedUser = await checkLoginInfoAndState()
+            await retrievedUser
+            setUser(retrievedUser)
             const dashboardMatchingTarget: Dashboard | undefined = (dashboards.find(dashboard => dashboard.name == dashboardTarget ? dashboard : undefined))
             setRetrievedDashboard(dashboardMatchingTarget)
             setIsLoading(false)
@@ -56,10 +60,9 @@ const DashboardFromId = ({data: dashboards}) => {
             <CustomNavSpinner />
         )
     }
-
+    console.log(user)
     
     if(!retrievedDashboard && router.isReady) {
-        console.log("faen da")
         return (
             <Custom404 />
         )
@@ -89,7 +92,7 @@ const DashboardFromId = ({data: dashboards}) => {
                 <meta name="title" content="Navstatus" />
                 <meta name="description" content="Status Nav digitale tjenester er en oversiktsside for Navs ulike tjenester til borgere, arbeidsgivere og samarbeidspartnere." />
                 <meta property="image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
-                <meta property="url" content="https://portal.labs.nais.io/Dashboard/Privatperson" />
+                <meta property="url" content="https://status.nav.no/sp" />
                 <meta property="type" content="website" />
 
 
@@ -98,13 +101,13 @@ const DashboardFromId = ({data: dashboards}) => {
                 <meta property="og:title" content="Status Nav digitale tjenester" />
                 <meta property="og:description" content="Status Nav digitale tjenester er en oversiktsside for Navs ulike tjenester til borgere, arbeidsgivere og samarbeidspartnere." />
                 <meta property="og:image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
-                <meta property="og:url" content="https://portal.labs.nais.io/Dashboard/Privatperson" />
+                <meta property="og:url" content="https://status.nav.no/sp" />
                 <meta property="og:type" content="website" />
 
 
                 {/* <!-- Twitter --> */}
                 <meta property="twitter:card" content="summary_large_image" />
-                <meta property="twitter:url" content="https://portal.labs.nais.io/Dashboard/Privatperson" />
+                <meta property="twitter:url" content="https://status.nav.no/sp" />
                 <meta property="twitter:title" content="Navstatus" />
                 <meta property="twitter:description" content="Status Nav digitale tjenester er en oversiktsside for Navs ulike tjenester til borgere, arbeidsgivere og samarbeidspartnere." />
                 <meta property="twitter:image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
