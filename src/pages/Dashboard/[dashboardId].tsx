@@ -11,15 +11,26 @@ import DashboardTemplate from "./DashboardTemplate"
 import Custom404 from "../../pages/404"
 import { UserData } from "../../types/userData"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
-import { fetchDashboardsList } from "../../utils/dashboardsAPI"
 import { RouterPrivatperson } from "../../types/routes"
 import { Dashboard } from "../../types/navServices"
 import { FullscreenEnter, FullscreenExit } from "@navikt/ds-icons"
+import { EndPathDashboards } from '../../utils/apiHelper'
 
 
-const DashboardFromId = () => {
+export async function getServerSideProps() {
+    const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
+    const res = await fetch(backendPath + EndPathDashboards())
+    const data = await res.json()
+
+    return {
+        props: {data}
+    }
+}
+
+
+const DashboardFromId = ({data: dashboards}) => {
     const router = useRouter()
-    let dashboardTarget: Object = router.query.dashboardId
+
 
     const [isLoading, setIsLoading] = useState(true)
     const [retrievedDashboard, setRetrievedDashboard] = useState<Dashboard | undefined>()
@@ -29,16 +40,15 @@ const DashboardFromId = () => {
 
 
 
-
     useEffect(() => {
         (async function () {
             setIsLoading(true)
-            const dashboards: Dashboard[] = await fetchDashboardsList()
+            let dashboardTarget: Object = await router.query.dashboardId
             const dashboardMatchingTarget: Dashboard | undefined = (dashboards.find(dashboard => dashboard.name == dashboardTarget ? dashboard : undefined))
             setRetrievedDashboard(dashboardMatchingTarget)
             setIsLoading(false)
         })()
-    }, [dashboardTarget])
+    }, [router])
 
     
     if(isLoading) {
@@ -48,8 +58,9 @@ const DashboardFromId = () => {
     }
 
     
-
-    if(!retrievedDashboard) {
+    // console.log(retrievedDashboard)
+    if(!retrievedDashboard && router.isReady) {
+        console.log("faen da")
         return (
             <Custom404 />
         )
