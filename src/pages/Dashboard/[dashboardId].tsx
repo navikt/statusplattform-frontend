@@ -58,7 +58,6 @@ const DashboardFromId = ({data: dashboards}) => {
     }
 
     
-    // console.log(retrievedDashboard)
     if(!retrievedDashboard && router.isReady) {
         console.log("faen da")
         return (

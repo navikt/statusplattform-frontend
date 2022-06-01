@@ -16,23 +16,24 @@ export const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
 export default function Home() {
     const router = useRouter()
     const [atHomePage] = useState(false)
-    const [userData, setUserData] = useState<UserData>(undefined)
 
     useEffect(() => {
         (async function () {
             const user: UserData = await checkLoginInfoAndState()
-            setUserData(user)
+            
+            await user
+
             if(user.navIdent && router.isReady && router.asPath == "/") {
                 router.push(RouterInternt.PATH)   
             }
 
-            else if (router.isReady && router.asPath == "/") {
+            else if (!user.navIdent && router.isReady && router.asPath == "/") {
                 router.push(RouterPrivatperson.PATH)
             }
         })()
     }, [router])
 
-    if(router.isReady) {
+    if(!router.isReady) {
         return <CustomNavSpinner />
     }
 
