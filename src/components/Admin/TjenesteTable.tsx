@@ -554,20 +554,20 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                         
                 <div className="bottom-row">
                     <div className="dependencies">
-                        <BodyShort><b>Tjenesteavhengigheter</b></BodyShort>
+                        <BodyShort spacing><b>Tjenesteavhengigheter</b></BodyShort>
                         <EditTjenesteDependencies
                             allServices={allServices} service={service} updatedService={updatedService}
                         />
 
 
-                        <BodyShort><b>Komponentavhengigheter</b></BodyShort>
+                        <BodyShort spacing><b>Komponentavhengigheter</b></BodyShort>
                         <EditComponentDependencies
                             allComponents={allComponents} service={service} updatedService={updatedService}
                         />
                     </div>
 
                     <div className="dependencies">
-                        <BodyShort><b>Tilkoblet områder</b></BodyShort>
+                        <BodyShort spacing><b>Tilkoblet områder</b></BodyShort>
                         <EditConnectedAreas
                             allAreas={allAreas} service={service} updatedService={updatedService}
                         />
@@ -684,10 +684,23 @@ const EditTjenesteDependencies: React.FC<
     return (
         <DependenciesColumn>
             {edittedServiceDependencies.length === 0 &&
-                <p>
+                <BodyShort spacing>
                     Ingen tjenesteavhengigheter eksisterer. Legg til nedenfor
-                </p>
+                </BodyShort>
             }
+
+            <DependencyList>
+                {edittedServiceDependencies.map((service) => {
+                    return (
+                        <li key={service.id}>{service.name} 
+                            <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + service.name}
+                                    onClick={() => handleRemoveEdittedServiceDependency(service)}>
+                                <CloseCustomized/>
+                            </CustomButton>
+                        </li>
+                    )
+                })}
+            </DependencyList>
 
             {allServices.length !== 0
                 ?
@@ -712,18 +725,6 @@ const EditTjenesteDependencies: React.FC<
                 <Button variant="secondary" className="add-element" onClick={handlePutEdittedServiceDependency}>Legg til</Button>
             </div>
 
-            <DependencyList>
-                {edittedServiceDependencies.map((service) => {
-                    return (
-                        <li key={service.id}>{service.name} 
-                            <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + service.name}
-                                    onClick={() => handleRemoveEdittedServiceDependency(service)}>
-                                <CloseCustomized/>
-                            </CustomButton>
-                        </li>
-                    )
-                })}
-            </DependencyList>
         </DependenciesColumn>
     )
 }
@@ -792,10 +793,23 @@ const EditComponentDependencies: React.FC<
     return (
         <DependenciesColumn>
             {edittedComponentDependencies.length === 0 &&
-                <p>
+                <BodyShort spacing>
                     Ingen komponentavhengigheter eksisterer. Legg til nedenfor
-                </p>
+                </BodyShort>
             }
+
+            <DependencyList>
+                {edittedComponentDependencies.map((component) => {
+                    return (
+                        <li key={component.id}>{component.name} 
+                            <CustomButton aria-label={"Fjern komponentavhengighet med navn " + component.name}
+                                    onClick={() => handleRemoveEdittedComponentDependency(component)}>
+                                <CloseCustomized/>
+                            </CustomButton>
+                        </li>
+                    )
+                })}
+            </DependencyList>
 
             {allComponents.length !== 0
                 ?
@@ -820,18 +834,6 @@ const EditComponentDependencies: React.FC<
                 <Button variant="secondary" className="add-element" onClick={handlePutEdittedComponentDependency}>Legg til</Button>
             </div>
 
-            <DependencyList>
-                {edittedComponentDependencies.map((component) => {
-                    return (
-                        <li key={component.id}>{component.name} 
-                            <CustomButton aria-label={"Fjern komponentavhengighet med navn " + component.name}
-                                    onClick={() => handleRemoveEdittedComponentDependency(component)}>
-                                <CloseCustomized/>
-                            </CustomButton>
-                        </li>
-                    )
-                })}
-            </DependencyList>
         </DependenciesColumn>
     )
 }
@@ -910,10 +912,22 @@ const EditConnectedAreas: React.FC<
     return (
         <DependenciesColumn>
             {edittedConnectedAreas.length === 0 &&
-                <p>
+                <BodyShort spacing>
                     Tjenesten fins ikke i noen områder
-                </p>
+                </BodyShort>
             }
+            <DependencyList>
+                {edittedConnectedAreas.map((area) => {
+                    return (
+                        <li key={area.id}>{area.name} 
+                            <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + area.name}
+                                    onClick={() => handleRemoveEdittedConnectedArea(area)}>
+                                <CloseCustomized/>
+                            </CustomButton>
+                        </li>
+                    )
+                })}
+            </DependencyList>
 
             {allAreas.length !== 0
                 ?
@@ -938,18 +952,7 @@ const EditConnectedAreas: React.FC<
                 <Button variant="secondary" className="add-element" onClick={handlePutEdittedConnectedArea}>Legg til</Button>
             </div>
 
-            <DependencyList>
-                {edittedConnectedAreas.map((area) => {
-                    return (
-                        <li key={area.id}>{area.name} 
-                            <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + area.name}
-                                    onClick={() => handleRemoveEdittedConnectedArea(area)}>
-                                <CloseCustomized/>
-                            </CustomButton>
-                        </li>
-                    )
-                })}
-            </DependencyList>
+            
         </DependenciesColumn>
     )
 }

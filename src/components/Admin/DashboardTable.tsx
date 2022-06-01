@@ -501,6 +501,23 @@ const EditAreasInDashboard: React.FC<{
                     </div>
                 }
 
+                {updatedDashboard.areas.length > 0 &&
+                    <div className="editting">
+                        <b>Områder i dashbord</b>
+                        <ul>
+                            {updatedDashboard.areas.map((area) => {
+                                return (
+                                    <li key={area.id}>{area.name} 
+                                        <CustomButton onClick={() => handleDeleteAreaFromDashboard(area)} aria-label="Fjern område fra dashbord">
+                                            <CloseCustomized />
+                                        </CustomButton>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </div>
+                }
+
 
                 <Select value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}
                     label="Velg område å legge til dashbord" hideLabel
@@ -520,24 +537,6 @@ const EditAreasInDashboard: React.FC<{
                     <Button variant="secondary" className="add-button" onClick={handleAddAreaToDashboard}>Legg til</Button>
                 </div>
 
-
-
-                {updatedDashboard.areas.length > 0 &&
-                    <div className="editting">
-                        <b>Områder i dashbord</b>
-                        <ul>
-                            {updatedDashboard.areas.map((area) => {
-                                return (
-                                    <li key={area.id}>{area.name} 
-                                        <CustomButton onClick={() => handleDeleteAreaFromDashboard(area)} aria-label="Fjern område fra dashbord">
-                                            <CloseCustomized />
-                                        </CustomButton>
-                                    </li>
-                                )
-                            })}
-                        </ul>
-                    </div>
-                }
             </DropdownColumn>
         </DashboardDropRow>
     )

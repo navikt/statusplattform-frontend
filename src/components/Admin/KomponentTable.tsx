@@ -496,18 +496,18 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
                         
                 <div className="bottom-row">
                     <div className="dependencies">
-                        <BodyShort><b>Tjenester avhengig denne</b></BodyShort>
+                        <BodyShort spacing><b>Tjenester avhengig denne</b></BodyShort>
 
                         <EditDependenciesTowardServices
                             allComponents={allComponents} component={component} updatedComponent={updatedComponent}
                         />
                     </div>
                     <span className="component-row-element editting">
-                        <BodyShort><b>Monitorlink</b></BodyShort>
+                        <BodyShort spacing><b>Monitorlink</b></BodyShort>
                         <TextField label="Monitorlink" hideLabel value={monitorlink} onChange={handleUpdatedComponent("monitorlink")}/>
                     </span>
                     <span className="component-row-element editting">
-                        <BodyShort><b>PollingUrl</b></BodyShort>
+                        <BodyShort spacing><b>PollingUrl</b></BodyShort>
                         <TextField label="Pollingurl" hideLabel value={pollingUrl} onChange={handleUpdatedComponent("pollingUrl")}/>
                     </span>
                 </div>
@@ -611,6 +611,27 @@ const EditDependenciesTowardServices: React.FC<
 
     return (
         <DependenciesColumn>
+            <DependencyList>
+                {edittedDependencies.length === 0
+                ?
+                    <BodyShort spacing>
+                        Komponenten er ikke koblet mot noen tjenester
+                    </BodyShort>
+                :
+                    <>
+                        {edittedDependencies.map((component) => {
+                            return (
+                                <li key={component.id}>{component.name} 
+                                    <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + component.name}
+                                            onClick={() => handleRemoveEdittedServiceDependency(component)}>
+                                        <CloseCustomized/>
+                                    </CustomButton>
+                                </li>
+                            )
+                        })}
+                    </>
+                }
+            </DependencyList>
             {allComponents.length !== 0
             ?
                 <Select label="Legg til komponenter i område" onChange={handleUpdateSelectedComponent}>
@@ -634,27 +655,7 @@ const EditDependenciesTowardServices: React.FC<
                 <Button variant="secondary" className="add-element" onClick={handlePutEdittedServiceDependency}>Legg til</Button>
             </div>
 
-            <DependencyList>
-                {edittedDependencies.length === 0
-                ?
-                    <>
-                        Komponenten er ikke koblet mot noen tjenester
-                    </>
-                :
-                    <>
-                        {edittedDependencies.map((component) => {
-                            return (
-                                <li key={component.id}>{component.name} 
-                                    <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + component.name}
-                                            onClick={() => handleRemoveEdittedServiceDependency(component)}>
-                                        <CloseCustomized/>
-                                    </CustomButton>
-                                </li>
-                            )
-                        })}
-                    </>
-                }
-            </DependencyList>
+            
         </DependenciesColumn>
     )
 }

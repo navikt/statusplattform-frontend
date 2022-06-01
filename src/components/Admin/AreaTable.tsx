@@ -305,6 +305,7 @@ const AreaRowInner = styled.div`
 
         display: flex;
         flex: row;
+        gap: 3rem;
 
         & > * {
             display: flex;
@@ -504,6 +505,8 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                     </div>
                 }
             </AreaRowInner>
+
+
             <div className="button-container">
                 <CustomButton className="option" onClick={() => handleToggleEditArea()}>
                     <a><Notes /> Rediger</a>
@@ -513,6 +516,7 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                     <Expand className={isExpanded ? "expanded" : "not-expanded"} />
                 </button>
             </div>
+            
         </AreaRowContainer>
     )
 } 
@@ -672,26 +676,13 @@ const CurrentlyEdittingArea = ({
                     <AreaElements className="top-row" onClick={toggleExpanded}>
                         <TextField label="Navn" hideLabel className="row-element editting" value={name} onChange={handleUpdatedArea("name")} onClick={(event) => event.stopPropagation()} />
                         <TextField label="Beskrivelse" hideLabel className="row-element editting" value={description} onChange={handleUpdatedArea("description")} onClick={(event) => event.stopPropagation()} />
-                        {/* <Select
-                            label="Velg ikon"
-                            hideLabel
-                            className="row-element editting"
-                            onChange={handleAreaIconChange}
-                            defaultValue={options[0].value}
-                            onClick={(event) => event.stopPropagation()}
-                        >
-                            {options.map(option => {
-                                return (
-                                    <option key={option.value} value={option.value}>{option.label}</option>
-                                )
-                            })}
-                        </Select> */}
                     </AreaElements>
                     
 
                 
                     {isExpanded &&
                         <div className="bottom-row">
+
                             <div className="bottom-row-column">
                                 {servicesInArea.length === 0 &&
                                     <p>
@@ -699,12 +690,7 @@ const CurrentlyEdittingArea = ({
                                     </p>
                                 }
 
-                                <DropdownRowSelect 
-                                    allServices={allServices}
-                                    servicesInArea={servicesInArea} 
-                                    handlePutServiceToArea={handlePutServiceToArea}
-                                    toggleAreaExpanded={toggleExpanded} 
-                                />
+                                
 
                                 {servicesInArea.length > 0 &&
                                     <ServicesInAreaList>
@@ -728,14 +714,15 @@ const CurrentlyEdittingArea = ({
                                     </ServicesInAreaList>
                                 }
 
-
-                                <DropdownSubAreaSelect 
-                                    subAreas={subAreas}
-                                    subAreasInArea={subAreasInArea} 
-                                    handlePutSubAreaToArea={handlePutSubAreaToArea}
+                                <DropdownRowSelect 
+                                    allServices={allServices}
+                                    servicesInArea={servicesInArea} 
+                                    handlePutServiceToArea={handlePutServiceToArea}
                                     toggleAreaExpanded={toggleExpanded} 
                                 />
+                            </div>
 
+                            <div className="bottom-row-column">
                                 <ServicesInAreaList>
                                     <EditDependeciesContainer>
                                         <BodyShort spacing><b>Subområder i område:</b></BodyShort>
@@ -756,6 +743,12 @@ const CurrentlyEdittingArea = ({
                                     </EditDependeciesContainer>
                                 </ServicesInAreaList>
 
+                                <DropdownSubAreaSelect 
+                                    subAreas={subAreas}
+                                    subAreasInArea={subAreasInArea} 
+                                    handlePutSubAreaToArea={handlePutSubAreaToArea}
+                                    toggleAreaExpanded={toggleExpanded} 
+                                />
                             </div>
                             
                             <div className="clickable" onClick={toggleExpanded}/>
