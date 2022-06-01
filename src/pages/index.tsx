@@ -66,7 +66,7 @@ export default function Home() {
                 <meta property="twitter:image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
             </Head>
             {atHomePage &&
-                <DashboardFromId/>
+                <DashboardFromId data={null}/>
             }
         </>
     )
