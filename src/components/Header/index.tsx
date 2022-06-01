@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import { toast } from 'react-toastify'
 
 import { Collapse, Expand, Logout, PeopleFilled } from '@navikt/ds-icons'
-import { BodyShort, Button, Checkbox, Heading, Popover } from '@navikt/ds-react'
+import { BodyShort, Button, Checkbox, Detail, Heading, Popover } from '@navikt/ds-react'
 
 import SubscribeModal from '../../components/SubscribeModal'
 import BurgerMenu from '../../components/BurgerMenu'
@@ -228,7 +228,7 @@ const Header = () => {
 
             <HeaderContent>
                 <HeadingCustomized size="2xlarge" level="1">
-                    <b>Status</b> digitale tjenester
+                    <b>Status</b> digitale tjenester <Detail>Under oppbygging</Detail>
                 </HeadingCustomized>
             </HeaderContent>
 
