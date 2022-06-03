@@ -110,7 +110,7 @@ export enum RouterOpsMeldinger {
 
 export enum RouterOpprettOpsMelding {
     NAME = "Opprett driftsmelding",
-    PATH = "Operasjonsmeldinger/OpprettMelding"
+    PATH = "Avviksmeldinger/OpprettMelding"
 }
 // ---
 
