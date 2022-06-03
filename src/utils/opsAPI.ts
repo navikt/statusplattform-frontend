@@ -55,7 +55,7 @@ export const deleteOpsMessage = async (id: string): Promise<OpsMessageI> => {
 
 
     if (response.ok) {
-        return response.json()
+        return response
     }
     throw new ResponseError("Failed to fetch from server", response)
 }
