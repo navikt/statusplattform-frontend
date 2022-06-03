@@ -1,5 +1,6 @@
 import { OpsMessageI } from "../types/opsMessage";
 import { EndPathOps, EndPathSpecificOps } from "./apiHelper";
+import { createApiRequest } from "./createApiRequest";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -11,25 +12,18 @@ export const postOpsMessage = async (opsMessage: OpsMessageI): Promise<Object> =
     let response;
     let endPath = EndPathOps();
 
-    response = await fetch(endPath,
-        {
-            method: "POST",
-            body: JSON.stringify({
-                internalHeader: opsMessage.internalHeader,
+    let body = JSON.stringify({
+        internalHeader: opsMessage.internalHeader,
                 internalMessage: opsMessage.internalMessage,
                 externalHeader: opsMessage.externalHeader,
                 externalMessage: opsMessage.externalMessage,
                 onlyShowForNavEmployees: opsMessage.onlyShowForNavEmployees,
                 isActive: opsMessage.isActive,
                 affectedServices: opsMessage.affectedServices,
-            }),
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin,
-            credentials: 'same-origin', // include, *same-origin, omit
-    
-        });
+    })
+
+    let request = createApiRequest(endPath, "POST", body)
+    response = await fetch(request)
 
     if (response.ok) {
         return response.json()
@@ -42,7 +36,8 @@ export const fetchOpsMessages = async (): Promise<OpsMessageI[]> => {
     let response;
     let endPath = EndPathOps()
 
-    response = await fetch(endPath);
+    let request = createApiRequest(endPath, "GET")
+    response = await fetch(request)
 
 
     if (response.ok) {
@@ -55,15 +50,9 @@ export const deleteOpsMessage = async (id: string): Promise<OpsMessageI> => {
     let response;
     let endPath = EndPathSpecificOps(id);
 
-    response = await fetch(endPath,
-        {
-            method: "DELETE",
-            headers: {
-                "Content-type": "application/json; charset=UTF-8"
-            },
-            mode: 'cors', // no-cors, *cors, same-origin,
-            credentials: 'same-origin', // include, *same-origin, omit
-        });
+    let request = createApiRequest(endPath, "DELETE")
+    response = await fetch(request)
+
 
     if (response.ok) {
         return response.json()
