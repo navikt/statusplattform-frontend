@@ -104,8 +104,8 @@ export enum RouterAvvikshistorikk {
 
 // OPSMeldinger
 export enum RouterOpsMeldinger {
-    NAME = "Operasjonsmeldinger",
-    PATH = "/Operasjonsmeldinger"
+    NAME = "Avviksmeldinger",
+    PATH = "/Avviksmeldinger"
 }
 
 export enum RouterOpprettOpsMelding {
