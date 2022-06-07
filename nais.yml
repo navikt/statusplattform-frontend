@@ -36,5 +36,5 @@ spec:
             singlePageApplication: false
         sidecar:
             enabled: true
-            autoLogin: false
-            errorPath: ""
+            autoLogin: true
+            errorPath: "https://status.nav.no/sp/Login"
