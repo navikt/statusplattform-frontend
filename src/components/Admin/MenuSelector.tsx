@@ -40,10 +40,13 @@ const MenuSelector: React.FC<{user}> = ({user}) => {
 
 
 
-    const approvedUsers = process.env.NEXT_PUBLIC_APPROVED_USERS.split(",")
+    const usersWithAccess: string[] = [
+        "L152423", "H161540", "K146221", "J104568", "G124938", "M106261"
+    ]
+
     let adminMenuWithAccessControl = adminMenu
 
-    if(!approvedUsers.includes(user.navIdent)) {
+    if(!usersWithAccess.includes(user.navIdent)) {
         adminMenuWithAccessControl = adminMenu.filter(menu => menu !== "Dashbord" && menu !== "Områder")
     }
 

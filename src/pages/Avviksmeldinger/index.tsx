@@ -32,11 +32,10 @@ const OpsMessages = ({data}) => {
 
     const user = useContext(UserStateContext)
 
-
-    const approvedUsers: string[] = process.env.NEXT_PUBLIC_APPROVED_USERS.split(",")
-    const opsUsers: string[] = process.env.NEXT_PUBLIC_OPS_ACCESS.split(",")
-    const cominbedAccessList: string[] = [...approvedUsers, ...opsUsers]
-    let adminMenuWithAccessControl = adminMenu
+    const usersWithAccess: string[] = [
+        "L152423", "H161540", "K146221", "J104568", "G124938", "M106261",
+        "K132081", "H123099", "L110875", "K125327", "F110862", "A110886", "W110798", "L120166"
+    ]
     
     useEffect(() => {
         setIsLoading(true)
@@ -51,7 +50,7 @@ const OpsMessages = ({data}) => {
             
         }
 
-        if(!cominbedAccessList.includes(user.navIdent)) {
+        if(!usersWithAccess.includes(user.navIdent)) {
             router.push(RouterError.PATH)
         } else {
             setupOpsPage().then(() => {
@@ -64,8 +63,6 @@ const OpsMessages = ({data}) => {
     if(isLoading) {
         return <CustomNavSpinner />
     }
-    
-    
 
     return (
         <Layout>

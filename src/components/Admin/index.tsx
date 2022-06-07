@@ -181,7 +181,10 @@ const AdminDashboard: React.FC<({user: UserData})> = ({user}) => {
     const selectedMenu = useFindCurrentTab(adminMenu)
     const {title} = useContext(TitleContext)
 
-    const approvedUsers = process.env.NEXT_PUBLIC_APPROVED_USERS.split(",")
+    const approvedUsers: string[] = [
+        "L152423", "H161540", "K146221", "J104568", "G124938", "M106261",
+    ]
+    
     
 	return (
         <AdminDashboardContainer>
