@@ -17,6 +17,8 @@ spec:
           value: "https://status-api.dev.nav.no"
         - name: NEXT_PUBLIC_APPROVED_USERS
           value: "L152423,H161540,K146221,J104568,G124938,M106261"
+        - name: NEXT_PUBLIC_OPS_ACCESS
+          value: "K132081,H123099,L110875,K125327,F110862,A110886,W110798,L120166"
     replicas:
         min: 1
         max: 1

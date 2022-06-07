@@ -4,13 +4,18 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import styled from 'styled-components'
+import { adminMenu } from "../../components/Admin/MenuSelector"
 import { TitleContext } from "../../components/ContextProviders/TitleContext"
+import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import CustomNavSpinner from "../../components/CustomNavSpinner"
 
 import Layout from '../../components/Layout'
 import OpsMessageCard from "../../components/OpsMessageCard"
 import { OpsMessageI } from "../../types/opsMessage"
 import { RouterError, RouterOpprettOpsMelding } from "../../types/routes"
+import { UserData } from "../../types/userData"
+import { EndPathGetLoginInfo } from "../../utils/apiHelper"
+import { checkLoginInfoAndState } from "../../utils/checkLoginInfoAndState"
 import { fetchOpsMessages } from "../../utils/opsAPI"
 
 
@@ -19,26 +24,41 @@ const CreateAvvikButtonWrapper = styled.div`
 `
 
 
-const OpsMessages = () => {
+const OpsMessages = ({data}) => {
     const router = useRouter()
 
     const [isLoading, setIsLoading] = useState(false)
     const [opsMessages, setOpsMessages] = useState<OpsMessageI[]>()
+
+    const user = useContext(UserStateContext)
+
+
+    const approvedUsers: string[] = process.env.NEXT_PUBLIC_APPROVED_USERS.split(",")
+    const opsUsers: string[] = process.env.NEXT_PUBLIC_OPS_ACCESS.split(",")
+    const cominbedAccessList: string[] = [...approvedUsers, ...opsUsers]
+    let adminMenuWithAccessControl = adminMenu
     
     useEffect(() => {
-        (async function () {
-            setIsLoading(true)
-
+        setIsLoading(true)
+        async function setupOpsPage () {
             if(router.isReady) {
                 await fetchOpsMessages().then((response) => {
                     setOpsMessages(response)
-                    setIsLoading(false)
                 }).catch(()=> {
                     router.push(RouterError.PATH)   
                 })
             }
+            
+        }
 
-        })()
+        if(!cominbedAccessList.includes(user.navIdent)) {
+            router.push(RouterError.PATH)
+        } else {
+            setupOpsPage().then(() => {
+                setIsLoading(false)
+            })
+        }
+
     },[router])
     
     if(isLoading) {
