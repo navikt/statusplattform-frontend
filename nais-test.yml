@@ -14,9 +14,9 @@ spec:
         #       ^--- interpolated from the ${{ env.docker_image }} variable in the action
     env:
         - name: NEXT_PUBLIC_BACKENDPATH
-            value: "https://status-api.dev.nav.no"
+          value: "https://status-api.dev.nav.no"
         - name: NEXT_PUBLIC_APPROVED_USERS
-            value: "L152423"
+          value: "L152423"
     replicas:
         min: 1
         max: 1
