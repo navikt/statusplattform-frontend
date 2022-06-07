@@ -21,7 +21,6 @@ export const fetchServices = async (): Promise<Service[]> => {
 
     if (response.ok) {
         let json = await response.json()
-        console.log(json)
         return json
     }
     throw new ResponseError("Failed to fetch from server", response)
@@ -38,7 +37,6 @@ export const fetchServiceHistory = async (serviceId: string): Promise<HistoryOfS
 
     if (response.ok) {
         let json = await response.json()
-        console.log(json)
         return json
     }
     throw new ResponseError("Failed to fetch from server", response)

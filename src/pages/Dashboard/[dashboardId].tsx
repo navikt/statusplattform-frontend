@@ -60,7 +60,6 @@ const DashboardFromId = ({data: dashboards}) => {
             <CustomNavSpinner />
         )
     }
-    console.log(user)
     
     if(!retrievedDashboard && router.isReady) {
         return (
