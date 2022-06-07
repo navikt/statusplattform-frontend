@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { RouterPrivatperson } from '../../types/routes';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { checkLoginInfoAndState } from '../../utils/checkLoginInfoAndState';
+import { backendPath } from '..';
 
 
 const AdminContainer = styled.div`
@@ -70,6 +71,7 @@ export const DynamicListContainer = styled.div`
     }
 `
 
+
  const AdminPage = () => {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(true)
@@ -98,8 +100,8 @@ export const DynamicListContainer = styled.div`
     return (
         <Layout>
             <AdminContainer>
-                <MenuSelector />
-                <Admin />
+                <MenuSelector user={userData} />
+                <Admin user={userData} />
             </AdminContainer>
             <ToastContainer/>
         </Layout>

@@ -33,22 +33,32 @@ export const useFindCurrentTab = (adminMenu: string[]) => {
 }
 
 
-const MenuSelector = () => {
+const MenuSelector: React.FC<{user}> = ({user}) => {
     const router = useRouter()
 
     const currentSelectedTab = useFindCurrentTab(adminMenu)
 
+
+
+    const approvedUsers = process.env.NEXT_PUBLIC_APPROVED_USERS.split(",")
+    let adminMenuWithAccessControl = adminMenu
+
+    if(!approvedUsers.includes(user.navIdent)) {
+        adminMenuWithAccessControl = adminMenu.filter(menu => menu !== "Dashbord" && menu !== "Områder")
+    }
+
+
     return (
         <DashboardTabMenu>
             <TabsCustomized
-                tabs={adminMenu.map(path => { 
+                tabs={adminMenuWithAccessControl.map(path => { 
                     return {
                         "aktiv": path === currentSelectedTab,
                         "label": path}
                     })
                 }
                 onChange={(_, index) =>
-                    router.push(router.pathname + "?tab=" + adminMenu[index])
+                    router.push(router.pathname + "?tab=" + adminMenuWithAccessControl[index])
                 }
 
             />

@@ -10,6 +10,7 @@ import { adminMenu, useFindCurrentTab } from './MenuSelector';
 import KomponentTable from './KomponentTable';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { Heading } from '@navikt/ds-react';
+import { UserData } from '../../types/userData';
 
 
 
@@ -176,9 +177,11 @@ export interface Props {
     selectedMenu?: string
 }
 
-const AdminDashboard = () => {
+const AdminDashboard: React.FC<({user: UserData})> = ({user}) => {
     const selectedMenu = useFindCurrentTab(adminMenu)
     const {title} = useContext(TitleContext)
+
+    const approvedUsers = process.env.NEXT_PUBLIC_APPROVED_USERS.split(",")
     
 	return (
         <AdminDashboardContainer>
@@ -186,14 +189,20 @@ const AdminDashboard = () => {
                 <HeadingWrapper>
                     <Heading size="large" level="2">{title}</Heading>
                 </HeadingWrapper>
-                {selectedMenu === "Områder" && 
-                    <AreaTable />
+                {approvedUsers.includes(user.navIdent) &&
+                    <>
+                        {selectedMenu === "Dashbord" &&
+                            <DashboardTable />
+                        }
+                        {selectedMenu === "Områder" &&
+                            <AreaTable />
+                        }
+                    </>
                 }
+
+                
                 {selectedMenu === "Tjenester" && 
                     <TjenesteTable />
-                }
-                {selectedMenu === "Dashbord" &&
-                    <DashboardTable />
                 }
                 {selectedMenu === "Komponenter" &&
                     <KomponentTable />
