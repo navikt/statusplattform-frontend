@@ -53,7 +53,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     })
     .catch(e => {
         console.log(e)
-        res.send(e)
+        res.status(resp.status).send(e)
     })
 
 
