@@ -1,5 +1,6 @@
 import { Delete } from "@navikt/ds-icons"
 import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react"
+import { useRouter } from "next/router"
 import { useState } from "react"
 import { toast } from "react-toastify"
 import styled from "styled-components"
@@ -8,7 +9,7 @@ import { RouterOpsMeldinger } from "../../types/routes"
 import { deleteOpsMessage } from "../../utils/opsAPI"
 
 
-const MessageCard = styled.div`
+const MessageCard = styled.button`
     background: white;
     padding: 1.7rem;
     margin: 1rem 0;
@@ -21,6 +22,11 @@ const MessageCard = styled.div`
 
     position: relative;
 
+    &:hover {
+        cursor: pointer;
+        outline: 1px solid black;
+    }
+
     .delete-button {
         position: absolute;
         right: 0;
@@ -30,6 +36,7 @@ const MessageCard = styled.div`
 
 const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI}> = ({opsMessage}) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
+    const router = useRouter()
 
     const handleModal = () => {
         setIsModalOpen(!isModalOpen)
@@ -49,7 +56,7 @@ const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI}> = ({opsMessage}) => {
     }
 
     return (
-        <MessageCard>
+        <MessageCard onClick={() => router.push(RouterOpsMeldinger.PATH + `/${opsMessage.id}`)}>
 
 
             <Modal 

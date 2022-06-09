@@ -19,7 +19,7 @@ export const postOpsMessage = async (opsMessage: OpsMessageI): Promise<Object> =
                 externalMessage: opsMessage.externalMessage,
                 onlyShowForNavEmployees: opsMessage.onlyShowForNavEmployees,
                 isActive: opsMessage.isActive,
-                affectedServices: opsMessage.affectedServices,
+                affectedServices: opsMessage.affectedServices.map(service => service.id),
     })
 
     let request = createApiRequest(endPath, "POST", body)
@@ -35,6 +35,20 @@ export const postOpsMessage = async (opsMessage: OpsMessageI): Promise<Object> =
 export const fetchOpsMessages = async (): Promise<OpsMessageI[]> => {
     let response;
     let endPath = EndPathOps()
+
+    let request = createApiRequest(endPath, "GET")
+    response = await fetch(request)
+
+
+    if (response.ok) {
+        return response.json()
+    }
+    throw new ResponseError("Failed to fetch from server", response)
+}
+
+export const fetchSpecificOpsMessage = async (id: string): Promise<OpsMessageI> => {
+    let response;
+    let endPath = EndPathSpecificOps(id);
 
     let request = createApiRequest(endPath, "GET")
     response = await fetch(request)

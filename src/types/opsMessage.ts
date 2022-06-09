@@ -1,3 +1,5 @@
+import { Service } from "./navServices"
+
 export interface OpsMessageI {
     id?: string
     internalHeader: string
@@ -6,5 +8,9 @@ export interface OpsMessageI {
     externalMessage: string
     onlyShowForNavEmployees: boolean
     isActive: boolean
-    affectedServices: string[]
+    affectedServices: Service[]
+    startDate: Date
+    endDate: Date
+    startTime: Date
+    endTime: Date
 }
