@@ -9,7 +9,7 @@ import { RouterOpsMeldinger } from "../../types/routes"
 import { deleteOpsMessage } from "../../utils/opsAPI"
 
 
-const MessageCard = styled.button`
+const MessageCard = styled.div`
     background: white;
     padding: 1.7rem;
     margin: 1rem 0;
@@ -22,7 +22,7 @@ const MessageCard = styled.button`
 
     position: relative;
 
-    &:hover {
+    button:hover {
         cursor: pointer;
         outline: 1px solid black;
     }
@@ -56,7 +56,7 @@ const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI}> = ({opsMessage}) => {
     }
 
     return (
-        <MessageCard onClick={() => router.push(RouterOpsMeldinger.PATH + `/${opsMessage.id}`)}>
+        <MessageCard>
 
 
             <Modal 
@@ -85,6 +85,8 @@ const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI}> = ({opsMessage}) => {
             </Button>
             <Heading spacing size="large" level="2">{opsMessage.internalHeader}</Heading>
             <BodyShort spacing>{opsMessage.internalMessage}</BodyShort>
+
+            <Button variant="tertiary" onClick={() => router.push(RouterOpsMeldinger.PATH + `/${opsMessage.id}`)}>Se mer...</Button>
         </MessageCard>
     )
 }
