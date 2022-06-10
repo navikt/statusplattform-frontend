@@ -4,11 +4,12 @@ import { useRouter } from 'next/router';
 import { Bell } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Detail, Heading, Panel } from '@navikt/ds-react';
 
-import { AreaServicesList } from '../../types/navServices'
+import { AreaServicesList, Service } from '../../types/navServices'
 import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI, countFailingServices } from '../../utils/servicesOperations';
 import { RouterAvvikshistorikk, RouterOpprettVarsling } from '../../types/routes';
 import { useEffect, useState } from 'react';
 import CustomNavSpinner from '../CustomNavSpinner';
+import { OpsMessageI } from '../../types/opsMessage';
 
 
 const StatusSummary = styled.div`
@@ -34,20 +35,21 @@ const StatusSummary = styled.div`
 
 //TODO Create Incidents handler and UI
 
-const StatusOverview = (props: AreaServicesList) => {
+const StatusOverview = ({areas}: AreaServicesList) => {
     const router = useRouter()
     const [hasIssue, setHasIssue] = useState(false)
     const [hasDown, setHasDown] = useState(false)
     const [allGood, setAllGood] = useState(false)
+    const [opsMessages, changeOpsMessages] = useState<OpsMessageI[]>([])
 
     const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
-        // setIsLoading(true)
-        const areaStatusesOk = props.areas.map(area => area.status == "OK")
-        const areaStatuses = props.areas.map(area => area.status)
-        
-        if(props.areas.map(a => a.status == "OK").length == props.areas.length) {
+        setIsLoading(true)
+        const areaStatusesOk = areas.map(area => area.status == "OK")
+        const areaStatuses = areas.map(area => area.status)
+
+        if(areas.map(a => a.status == "OK").length == areas.length) {
             setAllGood(true)
         }
 
@@ -62,19 +64,51 @@ const StatusOverview = (props: AreaServicesList) => {
         }else setHasIssue(false)
 
 
-        // setIsLoading(false)
-    }, [props])
+        setIsLoading(false)
+    }, [areas])
 
-    // if(isLoading) return <CustomNavSpinner />
+    const countServicesInAreas = () => {
+        const services: Service[] = areas.flatMap(area => area.services)
+        return services.length
+    }
+
+    const countIssueServices = () => {
+        const services: Service[] = areas.flatMap(area => area.services)
+        return services.filter(service => service.status == "ISSUE").length
+    }
+    if(isLoading) return <CustomNavSpinner />
+
+
+
+
+
+
+
+    
+    if(opsMessages.length == 0) {
+        return (
+            <StatusSummary>
+                {hasIssue==true &&
+                    <DeviationCardIfNoOpsMessage status={"ISSUE"} message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`} />
+                }
+                {hasDown==true &&
+                    <DeviationCardIfNoOpsMessage status={"DOWN"} message={`Nedetid og avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`} />
+                }
+                {allGood &&
+                    <Alert variant="success" >Alle våre systemer fungerer normalt</Alert>
+                }
+            </StatusSummary>
+        )
+    }
 
 
     return (
         <StatusSummary>
             {hasIssue==true &&
-                <DeviationReportCard status={"ISSUE"} titleOfDeviation={"Vi opplever større problemer med"} message={"Vi opplever problemer med flere av våre tjenester"}/>
+                <DeviationCardIfNoOpsMessage status={"ISSUE"} message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`} />
             }
             {hasDown==true &&
-                <DeviationReportCard status={"DOWN"} titleOfDeviation={"Vi opplever større problemer med"} message={"Vi opplever problemer med flere av våre tjenester"}/>
+                <DeviationCardIfNoOpsMessage status={"DOWN"} message={`Nedetid og avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`} />
             }
             {allGood &&
                 <Alert variant="success" >Alle våre systemer fungerer normalt</Alert>
@@ -162,6 +196,16 @@ const DeviationCardContainer = styled.button`
     }
 `
 
+const DeviationCardIfNoOpsMessage: React.FC<{status: string, message: string}> = ({status, message}) => {
+    
+    return (
+        <DeviationCardContainer aria-label={message + ". Trykk her for mer informasjon"} className={"has-"+status.toLowerCase()}>
+            <div className="content">
+                <BodyShort size="small">{message}</BodyShort>
+            </div>
+        </DeviationCardContainer>
+    )
+}
 
 const DeviationReportCard: React.FC<{status: string, titleOfDeviation: string, message: string}> = ({status, titleOfDeviation, message}) => {
     
@@ -169,9 +213,9 @@ const DeviationReportCard: React.FC<{status: string, titleOfDeviation: string, m
         <DeviationCardContainer aria-label={message + ". Trykk her for mer informasjon"} className={"has-"+status.toLowerCase()}>
             {/* <span className={status.toLowerCase()} /> */}
             <div className="content">
-                <Detail size="small">01.03.2022</Detail>
+                {/* <Detail size="small">01.03.2022</Detail> */}
                 <Heading size="small" level="3">{titleOfDeviation}</Heading>
-                <BodyShort size="small">{message}</BodyShort>
+                <BodyShort size="small">{titleOfDeviation}</BodyShort>
             </div>
         </DeviationCardContainer>
     )
