@@ -29,6 +29,7 @@ const CreateOpsMessage = () => {
         endDate: new Date(),
         startTime: new Date(),
         endTime: new Date(),
+        severity: ""
     })
     
     const [isLoading, setIsLoading] = useState(true)
