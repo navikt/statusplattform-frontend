@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import internal from "stream"
 import styled from "styled-components"
+import { BackButton } from "../../components/BackButton"
 import { TitleContext } from "../../components/ContextProviders/TitleContext"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import CustomNavSpinner from "../../components/CustomNavSpinner"
@@ -36,12 +37,13 @@ const opsMessageDetails = () => {
         return <CustomNavSpinner />
     }
 
+
     useEffect(() => {
         setIsLoading(true)
         async function fetchOpsMessage (id: string) {
             await fetchSpecificOpsMessage(id).then((response) => {
                 setOpsMessage(response)
-                changeTitle("Avviksmelding " + response.id)
+                changeTitle("Avviksmelding " + response.internalHeader)
             }).catch((e) => {
                 toast.error("Noe gikk galt ved henting av avviksmelding.")
             })
@@ -56,10 +58,12 @@ const opsMessageDetails = () => {
         return <CustomNavSpinner />
     }
 
+
+
     return (
         <Layout>
             <BackButtonWrapper>
-                <Button variant="secondary" onClick={() => router.push(RouterOpsMeldinger.PATH)}><Back/>Tilbake til menyen</Button>
+                <BackButton />
             </BackButtonWrapper>
             <OpsMessageContainer>
                 <Head>

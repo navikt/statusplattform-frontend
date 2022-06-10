@@ -4,8 +4,6 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import styled from 'styled-components'
-import { adminMenu } from "../../components/Admin/MenuSelector"
-import { TitleContext } from "../../components/ContextProviders/TitleContext"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import CustomNavSpinner from "../../components/CustomNavSpinner"
 
@@ -13,9 +11,6 @@ import Layout from '../../components/Layout'
 import OpsMessageCard from "../../components/OpsMessageCard"
 import { OpsMessageI } from "../../types/opsMessage"
 import { RouterError, RouterOpprettOpsMelding } from "../../types/routes"
-import { UserData } from "../../types/userData"
-import { EndPathGetLoginInfo } from "../../utils/apiHelper"
-import { checkLoginInfoAndState } from "../../utils/checkLoginInfoAndState"
 import { fetchOpsMessages } from "../../utils/opsAPI"
 
 
@@ -29,6 +24,7 @@ const OpsMessages = ({data}) => {
 
     const [isLoading, setIsLoading] = useState(false)
     const [opsMessages, setOpsMessages] = useState<OpsMessageI[]>()
+    const [ fetchingUser, setFetchingUser ] = useState(true);
 
     const user = useContext(UserStateContext)
 
@@ -39,25 +35,29 @@ const OpsMessages = ({data}) => {
     
     useEffect(() => {
         setIsLoading(true)
-        async function setupOpsPage () {
-            if(router.isReady) {
-                await fetchOpsMessages().then((response) => {
-                    setOpsMessages(response)
-                }).catch(()=> {
-                    router.push(RouterError.PATH)   
-                })
-            }
-            
-        }
 
-        if(!usersWithAccess.includes(user.navIdent)) {
-            router.push(RouterError.PATH)
-        } else {
-            setupOpsPage().then(() => {
+        const setupOpsPage = async () => {
+            await fetchOpsMessages()
+            .then((response) => {
+                setOpsMessages(response)
+                setFetchingUser(false)
+            }).catch(()=> {
+                router.push(RouterError.PATH)   
+                setFetchingUser(false)
+            }).finally(() => {
                 setIsLoading(false)
             })
         }
 
+        if(!usersWithAccess.includes(user.navIdent)) {
+            router.push(RouterError.PATH)
+        }
+        else {
+            setupOpsPage()
+        }
+        return () => {
+            // Do some cleanup   
+        }
     },[router])
     
     if(isLoading) {

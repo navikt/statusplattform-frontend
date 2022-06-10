@@ -7,6 +7,9 @@ import { Area, Dashboard } from '../../types/navServices'
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import { fetchDashboard, fetchDashboardsList } from '../../utils/dashboardsAPI'
 import { TitleContext } from '../../components/ContextProviders/TitleContext'
+import { backendPath } from '..'
+import { EndPathOps, EndPathServices } from '../../utils/apiHelper'
+import Head from 'next/head'
 
 
 
@@ -17,43 +20,28 @@ const ErrorParagraph = styled.p`
     border-radius: 5px;
 `;
 
-
-const IncidentsPage = () => {
-    const [areas, setAreas] = useState<Area[]>()
-    const [isLoading, setIsLoading] = useState(true)
-
-    const { changeTitle } = useContext(TitleContext)
-
-    useEffect(() => {
-        (async function () {
-            const dashboards: Dashboard[] = await fetchDashboardsList()
-            const retrievedDashboard: Dashboard = await fetchDashboard(dashboards[0].id)
-            setAreas(retrievedDashboard.areas)
-            setIsLoading(false)
-        })()
-    }, [])
-
-
-
+export async function getServerSideProps() {
+    const [resOpsMessages] = await Promise.all([
+        fetch(backendPath + EndPathOps()),
+    ])
     
-    if (isLoading) {
-        return (
-            <CustomNavSpinner />
-            ) 
-        }
-        
-    if (!areas) {
-        changeTitle("Feil oppstått!")
-        return (
-            <Layout>
-                <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
-            </Layout>
-        )
-    }
+    const allOpsMessages = await resOpsMessages.json()
 
+    return {
+        props: {
+            allOpsMessages,
+        }
+    }
+}
+
+
+const IncidentsPage = ({allOpsMessages}) => {
     return (
         <Layout>
-            <Incidents />
+            <Head>
+                <title>Avvikshistorikk - status.nav.no</title>
+            </Head>
+            <Incidents allOpsMessages={allOpsMessages} />
         </Layout>
     )
 }

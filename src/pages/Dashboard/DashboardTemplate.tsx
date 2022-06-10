@@ -318,11 +318,11 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
         <DashboardContainer>
 
             <DigitalServicesContainer>
-                {/* {router.asPath.includes("Dashboard") &&
+                {router.asPath.includes("Dashboard") &&
                     <div className="deviation-button-wrapper">
                         <Button variant="tertiary" size="small" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk <Clock /> </Button>
                     </div>
-                } */}
+                }
 
                 <StatusOverview areas={areasInDashboard} />
 

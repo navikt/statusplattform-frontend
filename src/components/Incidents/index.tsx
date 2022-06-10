@@ -1,21 +1,15 @@
 import styled from 'styled-components'
-import { useContext, useEffect, useState } from 'react'
+import { useContext } from 'react'
 import { useRouter } from 'next/router'
 
-import { BodyLong, BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
+import { BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
 import { Bell } from '@navikt/ds-icons'
 
-import { Service } from '../../types/navServices'
-import CustomNavSpinner from '../CustomNavSpinner'
-import { ErrorCustomized, WrenchOutlinedCustomized, SuccessCustomized, WarningCustomized } from '../TrafficLights'
-import { TitleContext } from '../ContextProviders/TitleContext'
-import { getIconsFromGivenCode } from '../../utils/servicesOperations'
 import { handleAndSetStatusIcon } from '../PortalServiceTile'
 import { UserStateContext } from '../ContextProviders/UserStatusContext'
-import { fetchServices } from '../../utils/servicesAPI'
-import { RouterOpprettVarsling } from '../../types/routes'
+import { RouterOpprettVarsling, RouterOpsMeldinger } from '../../types/routes'
 
-import { toast } from 'react-toastify'
+import { OpsMessageI } from '../../types/opsMessage'
 
 
 const IncidentsPage = styled.div`
@@ -60,31 +54,18 @@ const IncidentsContainer = styled.div`
 `
 
 
-
-const Incidents = ()  => {
-    const [isLoading, setIsLoading] = useState(false)
-    const [services, setServices] = useState<Service[]>()
-    const [filteredServices, changeFilteredServices] = useState(services)
-    
+const Incidents: React.FC<{allOpsMessages: OpsMessageI[]}> = ({allOpsMessages})  => {
     const router = useRouter()
 
-    const { changeTitle } = useContext(TitleContext)
-    
-    
-    useEffect(() => {
-        (async () => {
-            changeTitle("Avvikshistorikk")
-            setIsLoading(true)
-            const retrievedServices = await fetchServices()
-            setServices(retrievedServices)
-            setIsLoading(false)
-        })()
-    }, [])
-
-    if (isLoading) {
-        return <CustomNavSpinner />
+    if(allOpsMessages.length == 0) {
+        return (
+            <IncidentsPage>
+                <BodyShort>
+                    Du har ingen avviksmeldinger.
+                </BodyShort>
+            </IncidentsPage>
+        )
     }
-
 
     return (
         <IncidentsPage>
@@ -96,53 +77,17 @@ const Incidents = ()  => {
 
 
             <IncidentsContainer>
-
-                <Panel border className="incident-row">
-                    <Heading spacing size="small" level="3">
-                        <WrenchOutlinedCustomized />
-                        Tittel på avvik
-                    </Heading>
-                    
-                    <BodyShort spacing className="time-frame" size="small">Tidsrom det foregikk i</BodyShort>
-                    <BodyLong>Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                        Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                        when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                        It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-                        It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                        and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.
-                    </BodyLong>
-                </Panel>
-
-
-                <IncidentCard status='OK' titleOfIncident='Test OK' timeframe='13:37-27.01.2022' descriptionOfIncident="
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                    when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                    logLink='Loglenke'
-                />
-
-                <IncidentCard status='ISSUE' titleOfIncident='Test ISSUE' timeframe='13:37-27.01.2022' descriptionOfIncident="
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                    when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                    logLink='Loglenke'
-                />
-
-                <IncidentCard status='DOWN' titleOfIncident='Test DOWN' timeframe='13:37-27.01.2022' descriptionOfIncident="
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. 
-                    Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, 
-                    when an unknown printer took a galley of type and scrambled it to make a type specimen book. 
-                    It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. 
-                    It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, 
-                    and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum."
-                    logLink='Loglenke'
-                />
+                {allOpsMessages.map((entry, index) => {
+                    return (
+                        <IncidentCard key={index}
+                            opsId={entry.id}
+                            status={entry.severity}
+                            titleOfIncident={entry.internalHeader}
+                            timeframe={`${entry.startDate} - ${entry.endDate}`}
+                            descriptionOfIncident={entry.internalMessage}
+                        />
+                    )  
+                })}
                 
             </IncidentsContainer>
 
@@ -187,19 +132,22 @@ const PanelCustomized = styled(Panel)`
 
 
 export const IncidentCard : React.FC<{
+        opsId: string
         status: string
         titleOfIncident: string,
         timeframe: string,
         descriptionOfIncident: string,
-        logLink: string
-    }> = ({status, titleOfIncident, timeframe, descriptionOfIncident, logLink}) => {
+        logLink?: string
+    }> = ({opsId, status, titleOfIncident, timeframe, descriptionOfIncident, logLink}) => {
+    
+    const router = useRouter()
     
     const { navIdent } = useContext(UserStateContext)
 
     return (
         <PanelCustomized border className="incident-row">
             <Heading spacing size="small" level="3">
-                {/* <span>{handleAndSetStatusIcon(status)}</span> */}
+                <span>{handleAndSetStatusIcon(status)}</span>
                 {titleOfIncident}
             </Heading>
             
@@ -207,13 +155,9 @@ export const IncidentCard : React.FC<{
 
             <BodyShort spacing>{descriptionOfIncident}</BodyShort>
 
-            {navIdent &&
-                <>
-                    <BodyShort spacing><b>Loglenke</b></BodyShort>
-                    
-                    <BodyShort spacing>{logLink}</BodyShort>
-                </>
-            }
+            <Button variant="tertiary" onClick={() => router.push(`${RouterOpsMeldinger.PATH}/${opsId}`)}>
+                Se mer...
+            </Button>
         </PanelCustomized>
     )
 }
