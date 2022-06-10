@@ -6,6 +6,7 @@ import { useContext, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import internal from "stream"
 import styled from "styled-components"
+import { backendPath } from ".."
 import { BackButton } from "../../components/BackButton"
 import { TitleContext } from "../../components/ContextProviders/TitleContext"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
@@ -27,31 +28,26 @@ const BackButtonWrapper = styled.div`
     align-self: flex-start;
 `
 
-const opsMessageDetails = () => {
-    const router = useRouter()
-    const [opsMessage, setOpsMessage] = useState<OpsMessageI>()
-    const [isLoading, setIsLoading] = useState(true)
-    const { changeTitle } = useContext(TitleContext)
 
-    if(!router.isReady) {
-        return <CustomNavSpinner />
+export const getServerSideProps = async (context) => {
+    const { avviksmeldingId } = await context.query
+
+    const res = await fetch(backendPath + EndPathSpecificOps(avviksmeldingId))
+    const opsMessage = await res.json()
+
+    return {
+        props: {
+            opsMessage
+        }
     }
+}
 
+
+const opsMessageDetails = ({opsMessage}) => {
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        setIsLoading(true)
-        async function fetchOpsMessage (id: string) {
-            await fetchSpecificOpsMessage(id).then((response) => {
-                setOpsMessage(response)
-                changeTitle("Avviksmelding " + response.internalHeader)
-            }).catch((e) => {
-                toast.error("Noe gikk galt ved henting av avviksmelding.")
-            })
-        }
-        if(router.isReady) {
-            const opsId = router.query.avviksmeldingId
-            fetchOpsMessage(String(opsId)).then(() => setIsLoading(false))
-        }
+        setIsLoading(false)
     },[])
 
     if(isLoading) {

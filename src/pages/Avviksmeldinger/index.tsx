@@ -35,18 +35,24 @@ const OpsMessages = ({data}) => {
     
     useEffect(() => {
         setIsLoading(true)
+        let isMounted = true
 
         const setupOpsPage = async () => {
-            await fetchOpsMessages()
-            .then((response) => {
-                setOpsMessages(response)
+            try {
+                const opsMessages = await fetchOpsMessages()
+                if(isMounted) {
+                    setOpsMessages(opsMessages)
+                    setFetchingUser(false)
+                }
+            } catch (error) {
+                console.log(error)
                 setFetchingUser(false)
-            }).catch(()=> {
                 router.push(RouterError.PATH)   
-                setFetchingUser(false)
-            }).finally(() => {
-                setIsLoading(false)
-            })
+            } finally {
+                if(isMounted) {
+                    setIsLoading(false)
+                }
+            }
         }
 
         if(!usersWithAccess.includes(user.navIdent)) {
@@ -56,7 +62,7 @@ const OpsMessages = ({data}) => {
             setupOpsPage()
         }
         return () => {
-            // Do some cleanup   
+            isMounted = false
         }
     },[router])
     
