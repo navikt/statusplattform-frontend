@@ -4,46 +4,54 @@ import Layout from '../../components/Layout'
 
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import TjenestedataContent from './TjenestedataComponent'
-import { fetchServiceFromId } from '../../utils/servicesAPI'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
-import { Service } from '../../types/navServices'
-import { RouterError, RouterPrivatperson } from '../../types/routes'
+import { Area, Service } from '../../types/navServices'
+import { RouterPrivatperson } from '../../types/routes'
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
 import { UserData } from '../../types/userData'
+import { backendPath } from '..'
+import { EndPathAreaContainingServices, EndPathServiceHistory, EndPathSpecificService } from '../../utils/apiHelper'
 
 
 
 
+export const getServerSideProps = async (context) => {
+    const { id } = context.query
+    
+    const [resService, resAreasContainingService, resServiceIncidentHistory] = await Promise.all([
+        
+        fetch(backendPath + EndPathSpecificService(id)),
+        fetch(backendPath + EndPathAreaContainingServices(id)),
+        fetch(backendPath + EndPathServiceHistory(id))
+    ])
 
-const TjenestedataContainer = () => {
+    const retrievedService: Service = await resService.json()
+    const retrievedAreaContainingService: Area[] = await resAreasContainingService.json()
+    const retrievedServiceIncidentHistory = await resServiceIncidentHistory.json()
+
+    return {    
+        props: {
+            retrievedService: retrievedService,
+            retrievedAreaContainingService: retrievedAreaContainingService,
+            retrievedServiceIncidentHistory: retrievedServiceIncidentHistory
+        }
+    }
+}
+
+
+const TjenestedataContainer = ({retrievedService, retrievedAreaContainingService, retrievedServiceIncidentHistory}) => {
     const [isLoading, setIsLoading] = useState(false)
-    const [service, setService] = useState<Service>()
+    const [service, setService] = useState<Service>(retrievedService)
+
     const router = useRouter()
 
     const user = useContext<UserData>(UserStateContext)
 
 
     useEffect(() => {
-
+        setIsLoading(false)
     },[])
-
-    useEffect(() => {
-        (async function () {
-            setIsLoading(true)
-            if(router.isReady) {
-                const id: string = await router.asPath.split("/").pop()
-                try {
-                    const retrievedService = await fetchServiceFromId(id)
-                    setService(retrievedService)
-                } catch (error) {
-                    router.push(RouterError.PATH)   
-                } finally {
-                    setIsLoading(false)
-                }
-            }
-        })()
-    }, [router])
 
     if(isLoading || !service) {
         return (
@@ -60,7 +68,7 @@ const TjenestedataContainer = () => {
     return (
         <Layout>
             <Head><title>Tjeneste: {service.name} - status.nav.no</title></Head>
-            <TjenestedataContent service={service}/>
+            <TjenestedataContent service={retrievedService} areasContainingThisService={retrievedAreaContainingService} retrievedServiceIncidentHistory={retrievedServiceIncidentHistory}/>
         </Layout>
     )
 }

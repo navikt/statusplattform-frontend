@@ -8,10 +8,9 @@ import { BodyShort, Detail, Heading, Panel, Popover } from '@navikt/ds-react';
 import { Innholdstittel } from 'nav-frontend-typografi';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
-import { Component, HistoryOfSpecificServiceDayEntry, HistoryOfSpecificServiceMonths, Service } from '../../types/navServices';
+import { Area, Component, HistoryOfSpecificService, HistoryOfSpecificServiceDayEntry, HistoryOfSpecificServiceMonths, Service } from '../../types/navServices';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { RouterTjenestedata } from '../../types/routes';
-import { IncidentCard } from '../../components/Incidents';
 import { useLoader } from '../../utils/useLoader';
 import { fetchAreasContainingService } from '../../utils/areasAPI';
 import { handleAndSetStatusIcon } from '../../components/PortalServiceTile';
@@ -134,18 +133,11 @@ const ServiceWrapper = styled.div`
     width: 100%;
 `
 
-const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
-    const [showHistory, changeShowHistory] = useState(false)
+const TjenestedataContent: React.FC<{service: Service, areasContainingThisService: Area[], retrievedServiceIncidentHistory: HistoryOfSpecificService}> = ({service, areasContainingThisService, retrievedServiceIncidentHistory}) => {
 
-    const {data: areasContainingService, isLoading, reload} = useLoader(() => fetchAreasContainingService(service.id), [])
+    service.areasContainingThisService = areasContainingThisService
 
     const router = useRouter()
-
-    if(isLoading) {
-        return (
-            <CustomNavSpinner />
-        )
-    }
 
     if (!service) {
         return <ErrorParagraph>Kunne ikke hente tjenesten. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
@@ -191,17 +183,16 @@ const ServiceDataContainer = styled.div`
     &, .classified {
         display: flex;
         flex-direction: column;
-    }    
+    }
 
-    .separator {
-        width: 100%;
-        height: 1px;
-        background-color: var(--navds-global-color-gray-400);
-        margin: 16px 0;
+    .row {
+        border-bottom: 1px solid var(--navds-global-color-gray-400);
+        /* margin: 16px 0; */
+        padding: 16px 0;
+
     }
 
     a {
-        /* color: var(--navds-semantic-color-link); */
         color: black;
     }
 `
@@ -222,64 +213,50 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
         <>
         {navIdent &&
             <ServiceDataContainer>
-                <BodyShort spacing><b>Team</b></BodyShort>
-                <BodyShort>{team}</BodyShort>
-
-                <span className="separator" />
-
-                    
-                <BodyShort spacing><b>Avhengigheter til tjenester</b></BodyShort>
-
-                <div>
-                    {serviceDependencies.length > 0
-                    ?
-                        <ServicesAndComponentsList serviceDependencies={serviceDependencies} />
-                    :
-                        <BodyShort>Ikke definert</BodyShort>
-                    }
+                <div className="row">
+                    <BodyShort spacing><b>Team</b></BodyShort>
+                    <BodyShort>{team}</BodyShort>
                 </div>
 
-
-                <span className="separator" />
-
-
-                <BodyShort spacing><b>Avhengigheter til komponenter</b></BodyShort>
-
-                {componentDependencies.length > 0 
-                ?
-
-                    <ServicesAndComponentsList componentDependencies={componentDependencies} />
-
-
-                :
-                    <BodyShort>Ikke definert</BodyShort>
+                {serviceDependencies.length > 0 &&
+                    <div className="row">
+                        <BodyShort spacing><b>Avhengigheter til tjenester</b></BodyShort>
+                        <ServicesAndComponentsList serviceDependencies={serviceDependencies} />
+                    </div>
                 }
 
-                <span className="separator" />
+                {componentDependencies.length > 0 && 
+                    <div className="row">
+                        <BodyShort spacing><b>Avhengigheter til komponenter</b></BodyShort>
+                        <ServicesAndComponentsList componentDependencies={componentDependencies} />
+                    </div>
+                }
 
+                {areasContainingThisService.length > 0 &&
+                    <div className="row">
+                        <BodyShort spacing><b>Områder som inneholder tjenesten</b></BodyShort>
+                        <ul>
+                            {areasContainingThisService.map((area, index) => {
+                                if(areasContainingThisService.length != index+1) {
+                                    return (
+                                        <li key={area.id}>{area.name}, </li>
+                                    )
+                                } return (
+                                    <li key={area.id}>{area.name}</li>
+                                )
+                            })}
+                        </ul>
+                    </div>
+                }
 
+                
+                {monitorlink &&
+                    <div className="row">
+                        <BodyShort spacing><b>Monitorlenke</b></BodyShort>
+                        <BodyShort>{regex.test(monitorlink) ? <a href={monitorlink}>{monitorlink}</a> : "Ikke definert"}</BodyShort>
+                    </div>
+                }
 
-
-
-
-
-                <BodyShort spacing><b>Områder som inneholder tjenesten</b></BodyShort>
-                <ul>
-                    {areasContainingThisService.map((area, index) => {
-                        if(areasContainingThisService.length != index+1) {
-                            return (
-                                <li key={area.id}>{area.name}, </li>
-                            )
-                        } return (
-                            <li key={area.id}>{area.name}</li>
-                        )
-                    })}
-                </ul>
-
-                <span className="separator" />
-
-                <BodyShort spacing><b>Monitorlenke</b></BodyShort>
-                <BodyShort>{regex.test(monitorlink) ? <a href={monitorlink}>{monitorlink}</a> : "Ikke definert"}</BodyShort>
             </ServiceDataContainer>
         }
         </>
@@ -319,15 +296,47 @@ const PublicDataContainer = styled.div`
 const ServiceIncidentHistory: React.FC<{service: Service}>= ({service}) => {
     const [isLast90Days, setIsLast90Days] = useState<boolean>(true)
     // TODO: Henting av tjenestehistorikkdata som driftsmeldinger og diverse
-    const { data, isLoading, reload } = useLoader(() => fetchServiceHistory(service.id), [])
-
+    // const { data, isLoading, reload } = useLoader(() => fetchServiceHistory(service.id), [])
+    const [serviceHistory, setServiceHistory] = useState<HistoryOfSpecificService>()
+    const [isLoading, setIsLoading] = useState(true)
+    
     const router = useRouter()
+
+    useEffect(() => {
+        let fetching = true
+        setIsLoading(true)
+        const fetchHistory = async () => {
+            try {
+                const res = await fetchServiceHistory(service.id)
+                if(fetching) {
+                    setServiceHistory(res)
+                    setIsLoading(false)
+                    fetching = false
+                }
+                
+            } catch (error) {
+                console.log(error)
+            }   finally {
+                if(fetching) {
+                    setIsLoading(false)
+                }
+            }
+            
+        }
+
+        fetchHistory()
+
+        return () => {
+            fetching = false
+        }
+    },[])
+
 
     useEffect(() => {
         router.query.history == ("90dager" || undefined) ? setIsLast90Days(true) : setIsLast90Days(false)
     },[router])
 
-    if(isLoading || isLast90Days == undefined) {
+    if(isLoading){
         return <CustomNavSpinner />
     }
 
@@ -339,7 +348,7 @@ const ServiceIncidentHistory: React.FC<{service: Service}>= ({service}) => {
             </span>
 
             <TabHistory setIsLast90Days={setIsLast90Days} isLast90Days={isLast90Days} />
-            <HistoryOfService service={service} isLast90Days={isLast90Days} serviceHistory={data.history} />
+            <HistoryOfService service={service} isLast90Days={isLast90Days} serviceHistory={serviceHistory.history} />
 
         </PublicDataContainer>
     )
@@ -754,8 +763,19 @@ interface MonthlyProps {
 }
 
 const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
+    // const [isLoading, setIsLoading] = useState(true)
+
+    // useEffect(() => {
+    //     console.log(currentMonth)
+    //     setIsLoading(false)
+    // },[])
+
     const firstDay = new Date(currentMonth.entries[0].date)    
     const firstDayOfMonth = firstDay.getDay()-1
+
+    // if(isLoading) {
+    //     return <CustomNavSpinner />
+    // }
 
     return (
         <MonthlyStatusContainer>
