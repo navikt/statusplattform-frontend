@@ -169,7 +169,7 @@ const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
                     </ServiceContainer>
                 </Panel>
                 
-                <IncidentCard descriptionOfIncident="Beskrivelse" status={service.status} timeframe='Tidsrom' titleOfIncident='Tittel' logLink='Loglenke' />
+                {/* <StatusRecord /> */}
             </div>
             
             <ServiceIncidentHistory service={service} />
@@ -177,8 +177,6 @@ const TjenestedataContent: React.FC<{service: Service}> = ({service}) => {
         </CategoryContainer>
     )
 }
-
-
 
 
 
@@ -285,6 +283,21 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
             </ServiceDataContainer>
         }
         </>
+    )
+}
+
+
+
+
+const RecordWrapper = styled(Panel)`
+    /* display: flex; */
+`
+
+const StatusRecord = () => {
+    return (
+        <RecordWrapper>
+            asd
+        </RecordWrapper>
     )
 }
 
