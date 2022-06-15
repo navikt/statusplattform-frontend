@@ -5,8 +5,8 @@ import { toast } from 'react-toastify'
 import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 
-import { Clock, Expand } from '@navikt/ds-icons'
-import { Alert, BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
+import { Expand } from '@navikt/ds-icons'
+import { BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
 
 import { Area, Dashboard } from '../../types/navServices'
 import { FilterContext } from '../../components/ContextProviders/FilterContext'
@@ -57,13 +57,6 @@ const DigitalServicesContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-
-    .deviation-button-wrapper {
-        width: 100%;
-        
-        display: flex;
-        justify-content: flex-end;
-    }
 `;
 
 
@@ -318,12 +311,6 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
         <DashboardContainer>
 
             <DigitalServicesContainer>
-                {router.asPath.includes("Dashboard") &&
-                    <div className="deviation-button-wrapper">
-                        <Button variant="tertiary" size="small" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk <Clock /> </Button>
-                    </div>
-                }
-
                 <StatusOverview areas={areasInDashboard} />
 
                 {areasInDashboard.length > 0 &&

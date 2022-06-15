@@ -1,7 +1,7 @@
 import styled from 'styled-components'
-import { useRouter } from 'next/router';
+import { NextRouter, useRouter } from 'next/router';
 
-import { Bell } from '@navikt/ds-icons';
+import { Bell, Clock } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Detail, Heading, Panel } from '@navikt/ds-react';
 
 import { AreaServicesList, Service } from '../../types/navServices'
@@ -19,6 +19,18 @@ const StatusSummary = styled.div`
     display: flex;
     flex-direction: column;
     gap: 32px;
+
+    .top-row {
+        width: 100%;
+
+        display: grid;
+        grid-auto-columns: 1fr;
+        grid-auto-flow: column;
+
+        div:nth-child(2) {
+            text-align: center;
+        }
+    }
 
     .navds-alert {
         width: 100%;
@@ -43,7 +55,7 @@ const StatusOverview = ({areas}: AreaServicesList) => {
     const [opsMessages, changeOpsMessages] = useState<OpsMessageI[]>([])
 
     const [isLoading, setIsLoading] = useState(false)
-
+    
     useEffect(() => {
         setIsLoading(true)
         const areaStatusesOk = areas.map(area => area.status == "OK")
@@ -67,6 +79,8 @@ const StatusOverview = ({areas}: AreaServicesList) => {
         setIsLoading(false)
     }, [areas])
 
+
+
     const countServicesInAreas = () => {
         const services: Service[] = areas.flatMap(area => area.services)
         return services.length
@@ -84,18 +98,29 @@ const StatusOverview = ({areas}: AreaServicesList) => {
 
 
 
+
+
     if(isLoading) return <CustomNavSpinner />
 
 
 
 
-
-
+    const opsHasNeutral: boolean = opsMessages.flatMap(message => message.severity=="NEUTRAL").length > 0
 
     
-    if(opsMessages.length == 0) {
+    if(opsMessages.length != 0) {
         return (
             <StatusSummary>
+                <div className="top-row">
+                    <div className="deviation-button-wrapper">
+                        <Button variant="tertiary" size="small" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk <Clock /> </Button>
+                    </div>
+                    <div></div>
+                    <div className="planlagte-vedlikehold">
+                        {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
+                    </div>
+                </div>
+
                 {(hasIssue==true && !hasDown) &&
                     <DeviationCardIfNoOpsMessage status={"ISSUE"} message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`} />
                 }
@@ -110,16 +135,40 @@ const StatusOverview = ({areas}: AreaServicesList) => {
     }
 
 
+
+
+    console.log(allGood, opsHasNeutral)
+
     return (
         <StatusSummary>
-            {hasIssue==true &&
-                <DeviationCardIfNoOpsMessage status={"ISSUE"} message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`} />
-            }
-            {hasDown==true &&
-                <DeviationCardIfNoOpsMessage status={"DOWN"} message={`Nedetid og avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`} />
-            }
-            {allGood &&
-                <Alert variant="success" >Alle våre systemer fungerer normalt</Alert>
+            <div className="top-row">
+                <div className="deviation-button-wrapper">
+                    <Button variant="tertiary" size="small" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk <Clock /> </Button>
+                </div>
+                
+                {(hasIssue || hasDown)
+                    ?
+                        <div>{`Avvik på ${countIssueServices() + countDownServices()} av ${countServicesInAreas()} tjenester`}</div>
+                    :
+                        <div></div>
+                }
+                <div className="planlagte-vedlikehold">
+                    {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
+                </div>
+            </div>
+
+
+            
+            {allGood
+                ?
+                    (opsHasNeutral
+                        ?
+                            <></>
+                        : 
+                            <Alert variant="success" >Alle våre systemer fungerer normalt</Alert>
+                    )
+                :
+                    <></>
             }
         </StatusSummary>
     )
@@ -228,6 +277,7 @@ const DeviationReportCard: React.FC<{status: string, titleOfDeviation: string, m
         </DeviationCardContainer>
     )
 }
+
 
 
 
