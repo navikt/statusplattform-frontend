@@ -76,6 +76,14 @@ const StatusOverview = ({areas}: AreaServicesList) => {
         const services: Service[] = areas.flatMap(area => area.services)
         return services.filter(service => service.status == "ISSUE").length
     }
+
+    const countDownServices = () => {
+        const services: Service[] = areas.flatMap(area => area.services)
+        return services.filter(service => service.status == "DOWN").length
+    }
+
+
+
     if(isLoading) return <CustomNavSpinner />
 
 
@@ -88,11 +96,11 @@ const StatusOverview = ({areas}: AreaServicesList) => {
     if(opsMessages.length == 0) {
         return (
             <StatusSummary>
-                {hasIssue==true &&
+                {(hasIssue==true && !hasDown) &&
                     <DeviationCardIfNoOpsMessage status={"ISSUE"} message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`} />
                 }
                 {hasDown==true &&
-                    <DeviationCardIfNoOpsMessage status={"DOWN"} message={`Nedetid og avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`} />
+                    <DeviationCardIfNoOpsMessage status={"DOWN"} message={`Avvik på ${countIssueServices() + countDownServices()} av ${countServicesInAreas()} tjenester`} />
                 }
                 {allGood &&
                     <Alert variant="success" >Alle våre systemer fungerer normalt</Alert>
