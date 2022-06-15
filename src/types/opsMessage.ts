@@ -14,4 +14,5 @@ export interface OpsMessageI {
     startTime: Date
     endTime: Date
     severity?: string
+    state: string
 }

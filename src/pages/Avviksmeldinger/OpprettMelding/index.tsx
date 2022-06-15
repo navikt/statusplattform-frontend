@@ -29,8 +29,10 @@ const CreateOpsMessage = () => {
         endDate: new Date(),
         startTime: new Date(),
         endTime: new Date(),
-        severity: ""
+        severity: "",
+        state: ""
     })
+    // EKSEMPEL: "2017-07-21T17:30:00Z"
     
     const [isLoading, setIsLoading] = useState(true)
     
