@@ -108,7 +108,7 @@ const StatusOverview = ({areas}: AreaServicesList) => {
     const opsHasNeutral: boolean = opsMessages.flatMap(message => message.severity=="NEUTRAL").length > 0
 
     
-    if(opsMessages.length != 0) {
+    if(opsMessages.length == 0) {
         return (
             <StatusSummary>
                 <div className="top-row">
@@ -137,7 +137,7 @@ const StatusOverview = ({areas}: AreaServicesList) => {
 
 
 
-    console.log(allGood, opsHasNeutral)
+
 
     return (
         <StatusSummary>
