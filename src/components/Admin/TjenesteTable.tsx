@@ -492,7 +492,8 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         componentDependencies: service.componentDependencies,
         monitorlink: service.monitorlink,
         pollingUrl: service.pollingUrl,
-        areasContainingThisService: service.areasContainingThisService
+        areasContainingThisService: service.areasContainingThisService,
+        statusNotFromTeam: service.statusNotFromTeam
     })
 
     const { data: allComponents, isLoading: loadingComponents, reload: reloadComponents } = useLoader(fetchComponents,[]);

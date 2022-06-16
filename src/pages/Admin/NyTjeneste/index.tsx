@@ -66,7 +66,8 @@ const NewService = () => {
             componentDependencies: [],
             monitorlink: "",
             pollingUrl: "",
-            areasContainingThisService: []
+            areasContainingThisService: [],
+            statusNotFromTeam: false
         }
     )
     
@@ -78,7 +79,8 @@ const NewService = () => {
         componentDependencies: [],
         monitorlink: "",
         pollingUrl: "",
-        areasContainingThisService: []
+        areasContainingThisService: [],
+        statusNotFromTeam: false
     })
 
     
@@ -108,7 +110,7 @@ const NewService = () => {
         )
     }
 
-    const { name, team, type, serviceDependencies, componentDependencies: componentdependencies, monitorlink, pollingUrl, areasContainingThisService } = newService
+    const { name, team, type, serviceDependencies, componentDependencies: componentdependencies, monitorlink, pollingUrl, areasContainingThisService, statusNotFromTeam } = newService
 
 
 
@@ -131,7 +133,7 @@ const NewService = () => {
         }
         const newServicesList = [...newService.serviceDependencies, serviceToAdd]
         const updatedService: Service = {
-            name: name, team: team, type: type, serviceDependencies: newServicesList, componentDependencies: componentdependencies, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
+            name: name, team: team, type: type, serviceDependencies: newServicesList, componentDependencies: componentdependencies, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService, statusNotFromTeam: statusNotFromTeam
         }
         updateNewService(updatedService)
         toast.success("Lagt til tjenesteavhengighet")
@@ -140,7 +142,7 @@ const NewService = () => {
     const handleDeleteServiceDependency = (serviceToDelete: Service) => {
         const newServicesList: Service[] = [...newService.serviceDependencies.filter(service => service != serviceToDelete)]
         const updatedService: Service = {
-            name: name, team: team, type: type, serviceDependencies: newServicesList, componentDependencies: componentdependencies, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
+            name: name, team: team, type: type, serviceDependencies: newServicesList, componentDependencies: componentdependencies, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService, statusNotFromTeam: statusNotFromTeam
         }
         updateNewService(updatedService)
         toast.success("Fjernet område fra område")
@@ -159,7 +161,7 @@ const NewService = () => {
         }
         const newComponentsList = [...newService.componentDependencies, componentToAdd]
         const updatedService: Service = {
-            name: name, team: team, type: type, serviceDependencies: serviceDependencies, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
+            name: name, team: team, type: type, serviceDependencies: serviceDependencies, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService, statusNotFromTeam: statusNotFromTeam
         }
         updateNewService(updatedService)
         toast.success("Lagt til komponentavhengighet")
@@ -168,7 +170,7 @@ const NewService = () => {
     const handleDeleteComponentDependency = (componentToAdd: Component) => {
         const newComponentsList: Component[] = [...newService.serviceDependencies.filter(component => component != componentToAdd)]
         const updatedService: Service = {
-            name: name, team: team, type: type, serviceDependencies: serviceDependencies, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService
+            name: name, team: team, type: type, serviceDependencies: serviceDependencies, componentDependencies: newComponentsList, monitorlink: monitorlink, pollingUrl: pollingUrl, areasContainingThisService: areasContainingThisService, statusNotFromTeam: statusNotFromTeam
         }
         updateNewService(updatedService)
         toast.success("Fjernet område fra område")
