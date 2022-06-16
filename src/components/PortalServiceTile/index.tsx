@@ -334,6 +334,7 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
 
 
 export const StatusIconHandler: React.FC<{status: string, isArea: boolean, statusNotFromTeam?: boolean}> = ({status, isArea, statusNotFromTeam}) => {
+    console.log(`Er status fra team? ${statusNotFromTeam}`)
     return (
         <>
             {(() => {

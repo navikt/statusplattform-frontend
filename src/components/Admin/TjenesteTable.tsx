@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useLoader } from '../../utils/useLoader';
 
 import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
-import { BodyShort, Button, Heading, Modal, Select, TextField } from '@navikt/ds-react';
+import { BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal, Select, TextField } from '@navikt/ds-react';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Area, Component, Service } from '../../types/navServices';
@@ -506,7 +506,9 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         )
     }
 
+    const { name, type, team, serviceDependencies, componentDependencies, monitorlink, pollingUrl, statusNotFromTeam } = updatedService
 
+    console.log(statusNotFromTeam)
     const handleUpdatedService = (field: keyof typeof updatedService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const changedService = {
             ...updatedService,
@@ -535,10 +537,17 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         toggleEditService(service)
     }
 
+    const handleIsStatusFromTeam = () => {
+        if(!statusNotFromTeam) {
+            changeUpdatedService({...service,
+                statusNotFromTeam: !statusNotFromTeam
+            })
+        }
+        changeUpdatedService({...service, statusNotFromTeam: !statusNotFromTeam})
+    }
     
 
 
-    const { name, type, team, serviceDependencies, componentDependencies, monitorlink, pollingUrl } = updatedService
 
     return (
         <ServiceRowContainer>
@@ -583,6 +592,17 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                         <span className="service-data-element editting">
                             <BodyShort spacing><b>PollingUrl</b></BodyShort>
                             <TextField label="Pollingurl" hideLabel value={pollingUrl} onChange={handleUpdatedService("pollingUrl")}/>
+                        </span>
+
+                        <span className="service-data-element editting">
+                            <CheckboxGroup legend="Er statusen fra teamet?" onChange={() => handleIsStatusFromTeam()}>
+                                <Checkbox
+                                    value={!statusNotFromTeam ? "true" : "false"}
+                                    defaultChecked={!statusNotFromTeam}
+                                >
+                                    Er statusen godkjent av teamet?
+                                </Checkbox>
+                            </CheckboxGroup>
                         </span>
                     </div>
                 </div>

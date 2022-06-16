@@ -57,7 +57,8 @@ export const postService = async (service: Service): Promise<Service> =>{
         componentDependencies: service.componentDependencies,
         monitorlink: service.monitorlink,
         pollingUrl: service.pollingUrl,
-        areasContainingThisService: service.areasContainingThisService
+        areasContainingThisService: service.areasContainingThisService,
+        statusNotFromTeam: service.statusNotFromTeam
     })
 
     
@@ -110,7 +111,8 @@ export const updateService = async (service: Service): Promise<void> =>{
         componentDependencies: service.componentDependencies,
         monitorlink: service.monitorlink,
         pollingUrl: service.pollingUrl,
-        areasContainingThisService: service.areasContainingThisService
+        areasContainingThisService: service.areasContainingThisService,
+        statusNotFromTeam: service.statusNotFromTeam
     })
 
 
