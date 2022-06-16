@@ -190,10 +190,6 @@ const LenkeCustomized = styled(Link)`
 `
 
 
-const handleAndSetNavIcon = (ikon: string) => {
-    return getIconsFromGivenCode(ikon)
-}
-
 export const handleAndSetStatusIcon = (status: string, isInternal?: boolean): any => {
     switch(status) {
         case 'OK':
@@ -303,10 +299,10 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
                                 {navIdent
                                 ?
                                     <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
-                                        <section className="logged-in"><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
+                                        <section className="logged-in"><StatusIconHandler status={service.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam}/> {service.name}</section>
                                     </LenkeCustomized>
                                 :
-                                    <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
+                                    <section><StatusIconHandler status={service.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam}/> {service.name}</section>
                                 }
                             </li>
                         )
@@ -317,10 +313,10 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
                                 {navIdent
                                 ?
                                     <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
-                                        <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
+                                        <section><StatusIconHandler status={service.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
                                     </LenkeCustomized>
                                 :
-                                    <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
+                                    <section><StatusIconHandler status={service.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
                                 }
                             </li>
                         )
@@ -337,17 +333,17 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
 
 
 
-export const StatusIconHandler: React.FC<{status: string, isArea: boolean}> = ({status, isArea}) => {
+export const StatusIconHandler: React.FC<{status: string, isArea: boolean, statusNotFromTeam?: boolean}> = ({status, isArea, statusNotFromTeam}) => {
     return (
         <>
             {(() => {
                 switch (status) {
                     case 'OK':
-                        return <SuccessFilledCustomized aria-label={isArea ? "Områdestatus: OK" : "Tjenestestatus: OK"}/>
+                        return <SuccessFilledCustomized className={statusNotFromTeam ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: OK" : "Tjenestestatus: OK"}/>
                     case 'ISSUE':
-                        return <WarningFilledCustomized aria-label={isArea ? "Områdestatus: Tjenester i området har feil" : "Tjenestestatus: Feil på tjeneste"}/>
+                        return <WarningFilledCustomized className={statusNotFromTeam ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: Tjenester i området har feil" : "Tjenestestatus: Feil på tjeneste"}/>
                     case 'DOWN':
-                        return <ErrorFilledCustomized aria-label={isArea ? "Områdestatus: Tjenester i området er nede" : "Tjenestestatus: Nede"}/>
+                        return <ErrorFilledCustomized className={statusNotFromTeam ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: Tjenester i området er nede" : "Tjenestestatus: Nede"}/>
                     case null:
                         return <HelpTextCustomizedGray aria-label="Ingen status tilgjengelig" />
                     default:
@@ -443,10 +439,10 @@ const SubAreaComponent: React.FC<{subArea: SubArea, isLastElement: boolean, isAl
                                 {navIdent
                                 ?
                                     <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
-                                        <section className="logged-in"><StatusIconHandler isArea={false} status={service.status} /> {service.name}</section>
+                                        <section className="logged-in"><StatusIconHandler isArea={false} status={service.status} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
                                     </LenkeCustomized>
                                 :
-                                    <section><StatusIconHandler status={service.status} isArea={false} /> {service.name}</section>
+                                    <section><StatusIconHandler status={service.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
                                 }
                             </li>
                             

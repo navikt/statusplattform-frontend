@@ -60,6 +60,11 @@ export const SuccessCustomized = styled(Success)`
 
 export const SuccessFilledCustomized = styled(SuccessFilled)`
     color: var(--navds-global-color-green-500) !important;
+    
+    .status-not-from-team {
+        border: double;
+        border-radius: 50%;
+    }
 `
 
 
@@ -71,6 +76,11 @@ export const WarningCustomized = styled(Warning)`
 
 export const WarningFilledCustomized = styled(WarningFilled)`
     color: var(--navds-global-color-orange-500) !important;
+
+    .status-not-from-team {
+        border: double;
+        border-radius: 50%;
+    }
 `
 
 
@@ -82,6 +92,11 @@ export const ErrorCustomized = styled(Error)`
 
 export const ErrorFilledCustomized = styled(ErrorFilled)`
     color: var(--navds-global-color-red-500) !important;
+    
+    .status-not-from-team {
+        border: double;
+        border-radius: 50%;
+    }
 `
 
 

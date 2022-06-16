@@ -24,6 +24,7 @@ export interface Service {
     pollingUrl?: string
     status?: string
     areasContainingThisService: Area[]
+    statusNotFromTeam: boolean
 }
 
 export interface Component {
