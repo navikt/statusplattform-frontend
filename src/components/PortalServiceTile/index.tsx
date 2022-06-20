@@ -335,16 +335,27 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
 
 export const StatusIconHandler: React.FC<{status: string, isArea: boolean, statusNotFromTeam?: boolean}> = ({status, isArea, statusNotFromTeam}) => {
     console.log(`Er status fra team? ${statusNotFromTeam}`)
+    const router = useRouter()
+    let isIntern = false
+
+    useEffect(() => {
+
+    },[router])
+
+    if(router.isReady) {
+        router.asPath.includes("Internt") ? isIntern = true : isIntern = false
+    }
+
     return (
         <>
             {(() => {
                 switch (status) {
                     case 'OK':
-                        return <SuccessFilledCustomized className={statusNotFromTeam ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: OK" : "Tjenestestatus: OK"}/>
+                        return <SuccessFilledCustomized className={statusNotFromTeam && isIntern ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: OK" : "Tjenestestatus: OK"}/>
                     case 'ISSUE':
-                        return <WarningFilledCustomized className={statusNotFromTeam ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: Tjenester i området har feil" : "Tjenestestatus: Feil på tjeneste"}/>
+                        return <WarningFilledCustomized className={statusNotFromTeam && isIntern ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: Tjenester i området har feil" : "Tjenestestatus: Feil på tjeneste"}/>
                     case 'DOWN':
-                        return <ErrorFilledCustomized className={statusNotFromTeam ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: Tjenester i området er nede" : "Tjenestestatus: Nede"}/>
+                        return <ErrorFilledCustomized className={statusNotFromTeam && isIntern ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: Tjenester i området er nede" : "Tjenestestatus: Nede"}/>
                     case null:
                         return <HelpTextCustomizedGray aria-label="Ingen status tilgjengelig" />
                     default:
