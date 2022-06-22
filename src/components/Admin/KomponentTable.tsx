@@ -406,6 +406,10 @@ const ComponentRow = ({component, toggleEditComponent, toggleExpanded, isExpande
                             <BodyShort><b>PollingUrl</b></BodyShort>
                             <BodyShort>{component.pollingUrl}</BodyShort>
                         </span>
+                        <span className="component-row-element">
+                            <BodyShort spacing><b>ID</b></BodyShort>
+                            <BodyShort>{component.id}</BodyShort>
+                        </span>
                     </div>
                 }
 

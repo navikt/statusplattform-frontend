@@ -595,12 +595,12 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                         </span>
 
                         <span className="service-data-element editting">
-                            <CheckboxGroup legend="Er statusen fra teamet?" onChange={() => handleIsStatusFromTeam()}>
+                            <CheckboxGroup legend="" onChange={() => handleIsStatusFromTeam()}>
                                 <Checkbox
                                     value={!statusNotFromTeam ? "true" : "false"}
                                     defaultChecked={!statusNotFromTeam}
                                 >
-                                    Er statusen godkjent av teamet?
+                                    Er statuskilden ikke godkjent av teamet?
                                 </Checkbox>
                             </CheckboxGroup>
                         </span>
