@@ -24,8 +24,6 @@ export const HorizontalSeparator = styled.span`
     padding: 1px 0;
     margin: 16px 0;
 
-    width: 100%;
-    height: 100%;
     background-color: var(--navds-global-color-gray-200);
 `
 

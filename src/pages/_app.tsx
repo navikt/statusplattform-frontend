@@ -4,6 +4,8 @@ import "@navikt/ds-css-internal";
 
 import { Providers } from '../components/ContextProviders/Providers'
 import { useEffect } from 'react'
+import { Modal } from '@navikt/ds-react';
+
 
 function MyApp({ Component, pageProps }) {
     useEffect(() => {
@@ -19,8 +21,9 @@ function MyApp({ Component, pageProps }) {
                 }
             }
         }, 200)
+        Modal.setAppElement(document.getElementsByClassName('ReactModalPortal'));
     })
-
+    
     return (
         <Providers>
             <Component {...pageProps} />

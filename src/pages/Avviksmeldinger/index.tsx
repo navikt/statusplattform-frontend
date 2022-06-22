@@ -22,20 +22,21 @@ const CreateAvvikButtonWrapper = styled.div`
 
 export const getServerSideProps = async () => {
     const resOpsMessages = await fetch(backendPath + EndPathOps())
-    const opsMessages = await resOpsMessages.json()
+    const serverOpsMessages = await resOpsMessages.json()
 
     return {
-        props: { opsMessages }
+        props: { serverOpsMessages }
     }
 }
 
 
-const OpsMessages = ({opsMessages}) => {
+const OpsMessages = ({serverOpsMessages}) => {
     const router = useRouter()
 
     const [isLoading, setIsLoading] = useState(false)
-    // const [opsMessages, setOpsMessages] = useState<OpsMessageI[]>()
-    const [ fetchingUser, setFetchingUser ] = useState(true);
+    const [opsMessages, setOpsMessages] = useState<OpsMessageI[]>(serverOpsMessages)
+
+    const [opsMessage, newOpsMessage] = useState()
 
     const user = useContext(UserStateContext)
 
@@ -46,23 +47,32 @@ const OpsMessages = ({opsMessages}) => {
     ]
     
     useEffect(() => {
+        if(!usersWithAccess.includes(user.navIdent)) {
+            router.push(RouterError.PATH)
+        }
+    },[router])
+
+
+
+
+    useEffect(() => {
         setIsLoading(true)
         let isMounted = true
 
         const setupOpsPage = async () => {
             try {
-                const opsMessages = await fetchOpsMessages()
+                const reloadedOpsMessages = await fetchOpsMessages()
                 if(isMounted) {
-                    // setOpsMessages(opsMessages)
-                    setFetchingUser(false)
+                    setOpsMessages(reloadedOpsMessages)
                 }
             } catch (error) {
                 console.log(error)
-                setFetchingUser(false)
+                isMounted = false
                 router.push(RouterError.PATH)   
             } finally {
                 if(isMounted) {
                     setIsLoading(false)
+                    isMounted = false
                 }
             }
         }
@@ -75,17 +85,22 @@ const OpsMessages = ({opsMessages}) => {
         }
         return () => {
             isMounted = false
+            setIsLoading(false)
         }
-    },[router])
+    },[opsMessage])
+    
+
+    const notifyChangedOpsMessage = (changedOps) => {
+        newOpsMessage(changedOps)
+    }
     
     if(isLoading) {
         return <CustomNavSpinner />
     }
 
-    // const arrayActive: OpsMessageI[] = opsMessages.filter(message => message.state == "active")
-    // const arrayInActive: OpsMessageI[] = opsMessages.filter(message => message.state == "inActive")
+    const arrayActive: OpsMessageI[] = opsMessages.filter(message => message.isActive)
+    const arrayInActive: OpsMessageI[] = opsMessages.filter(message => !message.isActive)
     // const arrayArchived: OpsMessageI[] = opsMessages.filter(message => message.state == "archived")
-    // console.log(opsMessages)
 
     return (
         <Layout>
@@ -96,14 +111,14 @@ const OpsMessages = ({opsMessages}) => {
                 <Button onClick={() => router.push(RouterOpprettOpsMelding.PATH)}>Opprett ny avviksmelding</Button>
             </CreateAvvikButtonWrapper>
 
-            <Heading level="2" size="small">Alle avviksmeldinger</Heading>            
-            <ListOfOpsMessages opsMessages={opsMessages} />
+            {/* <Heading level="2" size="small">Alle avviksmeldinger</Heading>            
+            <ListOfOpsMessages opsMessages={opsMessages} /> */}
 
-            {/* {arrayActive.length > 0 &&
+            {arrayActive.length > 0 &&
                 <div>
                     <Heading level="2" size="small">Aktive meldinger</Heading>            
     
-                    <ListOfOpsMessages opsMessages={arrayActive} />
+                    <ListOfOpsMessages opsMessages={arrayActive} notifyChangedOpsMessage={notifyChangedOpsMessage} />
                 </div>
             }
 
@@ -111,11 +126,11 @@ const OpsMessages = ({opsMessages}) => {
                 <div>
                     <Heading level="2" size="small">Inaktive meldinger</Heading>            
 
-                    <ListOfOpsMessages opsMessages={arrayInActive} />
+                    <ListOfOpsMessages opsMessages={arrayInActive} notifyChangedOpsMessage={notifyChangedOpsMessage} />
                 </div>
             }
 
-            {arrayArchived.length > 0 &&
+            {/* {arrayArchived.length > 0 &&
                 <div>
                     <Heading level="2" size="small">Arkiverte meldinger</Heading>            
 
@@ -137,7 +152,7 @@ const OpsMessagesList = styled.div`
     gap: 32px;
 `
 
-const ListOfOpsMessages: React.FC<{opsMessages: OpsMessageI[]}> = ({opsMessages}) => {
+const ListOfOpsMessages: React.FC<{opsMessages: OpsMessageI[], notifyChangedOpsMessage: (changedOps) => void}> = ({opsMessages, notifyChangedOpsMessage}) => {
     if(!opsMessages) {
         return (
             <>
@@ -150,7 +165,7 @@ const ListOfOpsMessages: React.FC<{opsMessages: OpsMessageI[]}> = ({opsMessages}
         <OpsMessagesList>
             {
                 opsMessages.map((opsMessage) => {
-                    return <OpsMessageCard key={opsMessage.id} opsMessage={opsMessage} />
+                    return <OpsMessageCard key={opsMessage.id} opsMessage={opsMessage} notifyChangedOpsMessage={notifyChangedOpsMessage}/>
                 })
             }
         </OpsMessagesList>
