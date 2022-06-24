@@ -804,7 +804,7 @@ interface DropdownProps {
     toggleAreaExpanded: (area) => void
 }
 
-const DropdownRowSelect = ({allServices, servicesInArea: servicesInArea, handlePutServiceToArea, toggleAreaExpanded}: DropdownProps) => {
+const DropdownRowSelect = ({allServices, servicesInArea, handlePutServiceToArea, toggleAreaExpanded}: DropdownProps) => {
     const availableServices = allServices.filter(service => !servicesInArea.map(s => s.id).includes(service.id))
     
     const [selectedService, updateSelectedService] = useState<Service | null>(() => availableServices.length > 0 ? availableServices[0] : null)

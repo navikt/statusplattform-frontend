@@ -19,7 +19,7 @@ export const postOpsMessage = async (opsMessage: OpsMessageI): Promise<Object> =
         externalMessage: opsMessage.externalMessage,
         onlyShowForNavEmployees: opsMessage.onlyShowForNavEmployees,
         isActive: opsMessage.isActive,
-        affectedServices: opsMessage.affectedServices.map(service => service.id),
+        affectedServices: opsMessage.affectedServices,
         startTime: opsMessage.startTime,
         endTime: opsMessage.endTime,
     })

@@ -14,9 +14,27 @@ import { RouterOpsMeldinger } from "../../../types/routes"
 import { postOpsMessage } from "../../../utils/opsAPI"
 
 import "react-datepicker/dist/react-datepicker.css";
+import { Service } from "../../../types/navServices"
+import { backendPath } from "../.."
+import { EndPathServices } from "../../../utils/apiHelper"
+import { Delete } from "@navikt/ds-icons"
+import { CloseCustomized } from "../../../components/Admin"
 
 
-const CreateOpsMessage = () => {
+export const getServerSideProps = async () => {
+    const res = await fetch(backendPath + EndPathServices())
+    const services = await res.json()
+
+    return {
+        props: {
+            services
+        }
+    }
+    
+}
+
+
+const CreateOpsMessage = ({services}) => {
     const [opsMessage, setOpsMessage] = useState<OpsMessageI>({
         internalHeader: "",
         internalMessage: "",
@@ -77,10 +95,18 @@ const CreateOpsMessage = () => {
                 handleSubmitOpsMessage= {handleSubmitOpsMessage}
                 opsMessage={opsMessage}
                 setOpsMessage={(opsMessage) => setOpsMessage(opsMessage)}
+                services={services}
             />
         </Layout>
     )
 }
+
+
+
+
+
+
+
 
 
 const OpsContainer = styled.div`
@@ -113,11 +139,13 @@ interface OpsProps {
     handleSubmitOpsMessage: () => void
     opsMessage: OpsMessageI
     setOpsMessage: (opsMessage: OpsMessageI) => void
+    services: Service[]
 }
 
 
-const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage}: OpsProps) => {
+const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, services}: OpsProps) => {
     const [startDateForActiveOpsMessage, setStartDateForActiveOpsMessage] = useState(new Date())
+    const [isLoading, setIsLoading] = useState(true)
     const router = useRouter()
     
     const hours=[]
@@ -130,6 +158,13 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage}: OpsPr
         }
     }
 
+
+    useEffect(() => {
+        setIsLoading(true)
+        setIsLoading(false)
+    }, [opsMessage])
+
+
     const {
         affectedServices,
         externalHeader,
@@ -140,26 +175,37 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage}: OpsPr
         onlyShowForNavEmployees
     } = opsMessage
 
-    if(!router.isReady) {
+    if(!router.isReady || isLoading) {
         return <CustomNavSpinner />
+    }
+
+
+    const handleUpdateAffectedServices = (newServices: Service[]) => {
+        setOpsMessage({...opsMessage,
+            affectedServices: newServices
+        })
     }
 
     const handleIsInternal = () => {
         if(!opsMessage.onlyShowForNavEmployees) {
             setOpsMessage({...opsMessage,
-                externalHeader: opsMessage.internalHeader,
-                externalMessage: opsMessage.internalMessage
+                externalHeader: internalHeader,
+                externalMessage: internalMessage
             })
         }
         setOpsMessage({...opsMessage, onlyShowForNavEmployees: !onlyShowForNavEmployees})
     }
 
     const handleUpdateMessageToStaff = (message: string) => {
-        setOpsMessage({...opsMessage, internalMessage: message})
+        if(message.length < 501) {
+            setOpsMessage({...opsMessage, internalMessage: message})
+        }
     }
 
     const handleUpdateMessageToPublic = (message: string) => {
-        setOpsMessage({...opsMessage, externalMessage: message})
+        if(message.length < 501) {
+            setOpsMessage({...opsMessage, externalMessage: message})
+        }
     }
 
     const handleIsActive = (newValue) => {
@@ -169,7 +215,6 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage}: OpsPr
             setOpsMessage({...opsMessage, isActive: false})
         }
     }
-
     
 
     return (
@@ -191,12 +236,14 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage}: OpsPr
                     label="Tittel for meldingen"
                     value={internalHeader}
                     onChange={(e) => setOpsMessage({...opsMessage, internalHeader: e.target.value})}
+                    maxLength={100}
                 />
 
                 <Textarea
                     label="Intern melding"
                     value={internalMessage}
                     onChange={(e) => handleUpdateMessageToStaff(e.target.value)}
+                    maxLength={500}
                 />
             </div>
 
@@ -211,9 +258,13 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage}: OpsPr
                         label="Ekstern melding"
                         value={externalMessage}
                         onChange={(e) => handleUpdateMessageToPublic(e.target.value)}
+                        maxLength={500}
                     />
                 </div>
             }
+
+            <AffectedServicesComponent handleUpdateAffectedServices={handleUpdateAffectedServices} opsMessage={opsMessage} services={services} />
+
 
             <RadioGroup
                 legend="Skal avviksmeldingen gjelde umiddelbart?"
@@ -265,6 +316,162 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage}: OpsPr
         </OpsContainer>
     )
 }
+
+
+
+
+const AffectedServicesContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    ul {
+        button {
+            background: none;
+            border: none;
+        }
+    }
+`
+
+
+
+interface ServicesComponentInterface {
+    handleUpdateAffectedServices: (newOpsServiceConnections: Service[]) => void
+    opsMessage: OpsMessageI
+    services: Service[]
+}
+
+
+const AffectedServicesComponent = ({
+        handleUpdateAffectedServices,
+        opsMessage,
+        services
+    }: ServicesComponentInterface) => {
+
+    const [newAffectedServices, changeNewAffectedServices] = useState<Service[]>(opsMessage.affectedServices)
+        
+
+    const handleUpdateListOfAffectedServices = (service: Service) => {
+        if(newAffectedServices.map(s => s.id).includes(service.id)) {
+            toast.warn("Denne tjenesten fins allerede i området")
+            return
+        }
+        const changedAffectedServices = [...newAffectedServices, service]
+        changeNewAffectedServices(changedAffectedServices)
+        handleUpdateAffectedServices(changedAffectedServices)
+    }
+
+
+
+    const handleDeleteListOfAffectedServices = (service: Service) => {
+        if(!newAffectedServices.map(s => s.id).includes(service.id)) {
+            toast.warn("Tjenesten fins ikke i kobling. Noe gikk galt")
+            return
+        }
+        
+        const changedAffectedServices = newAffectedServices.filter(s => s.id != service.id)
+        changeNewAffectedServices(changedAffectedServices)
+        handleUpdateAffectedServices(changedAffectedServices)
+    }
+
+
+    return (
+        <AffectedServicesContainer>
+
+            <ul>
+                {newAffectedServices.map(service => {
+                    return (
+                        <li key={service.id} value={service.name}>
+                            {service.name}
+                            <button 
+                                type="button"
+                                aria-label="Fjern kobling til tjeneste"
+                                onClick={() => handleDeleteListOfAffectedServices(service)}
+                            >
+                                <CloseCustomized />
+                            </button>
+                        </li>
+                    )
+                })}
+            </ul>
+
+            <AffectedServicesSelect services={services} affectedServicesAttachedToOpsMessage={newAffectedServices} handleUpdateListOfAffectedServices={handleUpdateListOfAffectedServices} />            
+
+            
+        </AffectedServicesContainer>
+    )
+}
+
+
+
+
+const AffectedServicesSelectComponent = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+`
+
+interface newAffectedServices {
+    services: Service[]
+    affectedServicesAttachedToOpsMessage: Service[]
+    handleUpdateListOfAffectedServices: (selectedServiceId: Service) => void
+}
+
+const AffectedServicesSelect = ({services, affectedServicesAttachedToOpsMessage, handleUpdateListOfAffectedServices}: newAffectedServices) => {
+    const availableServices: Service[] = services.filter((service) => !affectedServicesAttachedToOpsMessage.map(s => s.id).includes(service.id))
+    const [selectedService, updateSelectedService] = useState<Service | null>(() => availableServices.length > 0 ? availableServices[0] : null)
+
+
+    useEffect(() => {
+        if(availableServices.length > 0){
+            updateSelectedService(availableServices[0])
+        }
+        else {
+            updateSelectedService(null)
+        }
+    }, [services, affectedServicesAttachedToOpsMessage])
+
+
+
+    const handleNewSelectedService = (event) => {
+        const idOfSelectedService: string = event.target.value
+        const newSelectedService: Service = availableServices.find(service => idOfSelectedService === service.id)
+        updateSelectedService(newSelectedService)
+    }
+
+
+    const putHandler = () => {
+        if(!selectedService) {
+            toast.info("Ingen tjeneste valgt")
+            return
+        }
+        handleUpdateListOfAffectedServices(selectedService)
+    }
+
+    return (
+        <AffectedServicesSelectComponent>
+            <Select label="Koble tjenester mot meldingen" value={selectedService !== null ? selectedService.id : ""} onChange={handleNewSelectedService} >
+                {availableServices.length > 0
+                ?
+                    availableServices.map(service => {
+                        return (
+                            <option key={service.id} value={service.id}>{service.name}</option>
+                        )
+                    })
+                :
+                    <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
+                }
+            </Select>
+
+            <div>
+                <Button variant="secondary" type="button" onClick={putHandler}> Legg til</Button>
+            </div>
+        </AffectedServicesSelectComponent>
+    )
+}
+
+
+
+
 
 
 export default CreateOpsMessage
