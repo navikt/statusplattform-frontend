@@ -597,7 +597,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                         <span className="service-data-element editting">
                             <CheckboxGroup legend="" onChange={() => handleIsStatusFromTeam()}>
                                 <Checkbox
-                                    value={!statusNotFromTeam ? "true" : "false"}
+                                    value={statusNotFromTeam ? "true" : "false"}
                                     defaultChecked={!statusNotFromTeam}
                                 >
                                     Statuskilde ikke godkjent av teamet
