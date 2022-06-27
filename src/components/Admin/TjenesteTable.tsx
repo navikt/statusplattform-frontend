@@ -18,9 +18,10 @@ import { deleteService, fetchServices, postService, updateService } from '../../
 import { RouterAdminAddTjeneste } from '../../types/routes';
 import { fetchComponents } from '../../utils/componentsAPI';
 import { fetchAreas } from '../../utils/areasAPI';
+import { HorizontalSeparator } from '../../pages/Admin';
 
 
-const TjenesteHeader = styled.div`
+const TjenesteHeader = styled.div<{paddingprop: string}>`
     padding: 1rem 0 1rem;
     padding-left: 1rem;
     border-bottom: 1px solid rgba(0, 0, 0, 0.55);
@@ -35,7 +36,9 @@ const TjenesteHeader = styled.div`
     }
 
     .empty-space {
-        padding: 0 calc(3rem + 20px);
+
+        padding: ${(props): any => (props.paddingprop)};
+
         display: flex;
         flex-direction: row;
     }
@@ -45,6 +48,7 @@ const TjenesteHeader = styled.div`
         display: flex;
         justify-content: space-between;
         gap: 5ch;
+
         span {
             width: 100%;
         }
@@ -188,7 +192,9 @@ const TjenesteTable = () => {
                     {services
                         ?
                         <div>
-                            <TjenesteHeader>
+                            <TjenesteHeader
+                                paddingprop={servicesToEdit.length == 0 ? "0 calc(7rem + 20px)" : "0 calc(9rem + 20px)"}
+                            >
                                 <div className="tjeneste-header-content">
                                     <span>Navn</span>
                                     <span>Team</span>
@@ -252,8 +258,10 @@ const ServiceRowContainer = styled.div`
     flex-direction: row;
     flex-grow: 1;
     
-    div {
-        display: flex;
+    @media (min-width: 850px) {
+        div {
+            display: flex;
+        }
     }
 `
 
@@ -563,19 +571,24 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                             allServices={allServices} service={service} updatedService={updatedService}
                         />
 
+                        <HorizontalSeparator />
+
 
                         <BodyShort spacing><b>Komponentavhengigheter</b></BodyShort>
                         <EditComponentDependencies
                             allComponents={allComponents} service={service} updatedService={updatedService}
                         />
-                    </div>
 
-                    <div className="dependencies">
+
+                        <HorizontalSeparator />
+
+
                         <BodyShort spacing><b>Tilkoblet områder</b></BodyShort>
                         <EditConnectedAreas
                             allAreas={allAreas} service={service} updatedService={updatedService}
                         />
                     </div>
+
 
                     <div className="service-row-column">
                         <span className="service-data-element editting">
