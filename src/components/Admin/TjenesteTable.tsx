@@ -508,7 +508,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
     const { name, type, team, serviceDependencies, componentDependencies, monitorlink, pollingUrl, statusNotFromTeam } = updatedService
 
-    console.log(statusNotFromTeam)
     const handleUpdatedService = (field: keyof typeof updatedService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const changedService = {
             ...updatedService,
@@ -538,11 +537,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
     }
 
     const handleIsStatusFromTeam = () => {
-        if(!statusNotFromTeam) {
-            changeUpdatedService({...service,
-                statusNotFromTeam: !statusNotFromTeam
-            })
-        }
         changeUpdatedService({...service, statusNotFromTeam: !statusNotFromTeam})
     }
     
@@ -598,7 +592,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                             <CheckboxGroup legend="" onChange={() => handleIsStatusFromTeam()}>
                                 <Checkbox
                                     value={statusNotFromTeam ? "true" : "false"}
-                                    defaultChecked={!statusNotFromTeam}
+                                    defaultChecked={statusNotFromTeam}
                                 >
                                     Statuskilde ikke godkjent av teamet
                                 </Checkbox>
