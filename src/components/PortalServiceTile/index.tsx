@@ -122,7 +122,7 @@ const HeadingCustomized = styled(Heading)`
     }
     
     svg {
-        margin-right: 10px;
+        margin-right: 8px;
             
         top: 50%;
         align-items: center;
@@ -151,11 +151,12 @@ const ServicesList = styled.ul`
         justify-content: flex-start;
         
         padding: .8rem 0;
+        margin-left: 1.5rem;
 
         section {
-            &.logged-in{
+            /* &.logged-in{
                 text-decoration: underline;
-            }
+            } */
 
             display: flex;
             align-items: center;
@@ -165,7 +166,7 @@ const ServicesList = styled.ul`
             }
 
             &.logged-in:hover {
-                text-decoration: none;
+                text-decoration: underline;
                 cursor: pointer;
             }
         }
@@ -398,6 +399,10 @@ const SubAreaContent = styled.div`
         :hover {
             cursor: pointer;
         }
+    }
+
+    .sub-area-button {
+        margin-left: 1.5rem;
     }
 
     svg {

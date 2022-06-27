@@ -30,6 +30,9 @@ const StatusSummary = styled.div`
         div:nth-child(2) {
             text-align: center;
         }
+        button {
+            visibility: hidden;
+        }
     }
 
     .navds-alert {

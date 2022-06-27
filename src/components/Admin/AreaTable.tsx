@@ -85,8 +85,8 @@ const AreaTable = () => {
     const [areasToEdit, changeAreasToEdit] = useState<string[]>([])
     const [areaToDelete, setAreaToDelete] = useState<Area>()
     
-    const { data: allAreas, isLoading: isLoadingAreas, reload: reloadAreas } = useLoader(fetchAreas,[]);
-    const { data: allServices, isLoading: isLoadingServices, reload: reloadServices } = useLoader(fetchServices,[]);
+    const { data: allAreas, isLoading: isLoadingAreas, reload: reloadAreas } = useLoader(fetchAreas, []);
+    const { data: allServices, isLoading: isLoadingServices, reload: reloadServices } = useLoader(fetchServices, []);
 
     const { changeTitle } = useContext(TitleContext)
 
@@ -645,16 +645,22 @@ const CurrentlyEdittingArea = ({
     }
 
     const handleSubmit = () => {
-        updateArea(updatedArea).then(() => {
-            reloadAreas()
-            if(isExpanded) {
-                toggleExpanded(area)
+        let fetching = true
+        try {
+            if(fetching) {
+                updateArea(updatedArea).then(() => {
+                    reloadAreas()
+                    if(isExpanded) {
+                        toggleExpanded(area)
+                    }
+                    toggleEditArea(area)
+                    toast.success("Oppdatering gjennomført")
+                    fetching = false
+                })
             }
-            toggleEditArea(area)
-            toast.success("Oppdatering gjennomført")
-        }).catch(() => {
-            toast.error("Noe gikk galt i oppdatering av område")
-        })
+        } catch (error) {
+            toast.error("Noe gikk galt i oppdatering av område")   
+        }
     }
 
     const handleDisableEditArea = (area) => {

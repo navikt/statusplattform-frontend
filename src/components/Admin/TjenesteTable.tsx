@@ -600,7 +600,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                                     value={!statusNotFromTeam ? "true" : "false"}
                                     defaultChecked={!statusNotFromTeam}
                                 >
-                                    Er statuskilden ikke godkjent av teamet?
+                                    Statuskilde ikke godkjent av teamet
                                 </Checkbox>
                             </CheckboxGroup>
                         </span>
