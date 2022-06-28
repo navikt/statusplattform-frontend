@@ -97,15 +97,6 @@ const NewArea = () => {
     }
 
 
-    // const handleAreaIconChange = (event) => {
-    //     const updatedNewArea = {
-    //         ...newArea,
-    //     }
-    //     updatedNewArea.icon = event.target.value
-    //     updateNewArea(updatedNewArea)
-    // }
-
-
     return (
         <Layout>
 
@@ -117,19 +108,6 @@ const NewArea = () => {
                     
                     <TextField type="text" required label="Navn på område" value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*" />
                     <TextField type="text" required label="Beskrivelse" value={description} onChange={handleAreaDataChange("description")} placeholder="Beskrivelse" />
-                    {/* <Select
-                        size="small"
-                        label="Velg ikon til området*"
-                        form="form"
-                        onChange={handleAreaIconChange}
-                        defaultValue={options[0].value}
-                    >
-                        {options.map(option => {
-                            return (
-                                <option key={option.value} value={option.value}>{option.label}</option>
-                            )
-                        })}
-                    </Select> */}
 
                     <AreaServices 
                         newArea={newArea}
@@ -212,7 +190,7 @@ const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDe
                         )
                     })
                 :
-                    <option key={undefined} value="">Ingen områder å legge til</option>
+                    <option key={undefined} value="">Ingen tjenester å legge til</option>
                 }
             </Select>
 
@@ -237,7 +215,7 @@ const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDe
                     })}
                 </ul>
             :
-                <BodyShort spacing><b>Ingen områder lagt til</b></BodyShort>
+                <BodyShort spacing><b>Ingen tjenester lagt til</b></BodyShort>
             }
 
         </DynamicListContainer>
