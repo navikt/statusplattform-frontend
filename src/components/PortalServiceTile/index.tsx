@@ -41,8 +41,8 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
 
         .logged-in {
             padding: 20px; 
-            padding-bottom:40px;
         }
+        
         &:focus {
             outline: 2px solid var(--navds-semantic-color-focus);
         }
@@ -150,8 +150,9 @@ const ServicesList = styled.ul`
         display: flex;
         justify-content: flex-start;
         
-        padding: .8rem 0;
+        padding: .5rem 0;
         margin-left: 1.5rem;
+        font-size: 1.3rem;
 
         section {
             /* &.logged-in{
@@ -283,6 +284,8 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
             apen={expanded}
             onClick={toggleExpanded}
         >
+
+            
             
             <ServicesList>
                 <div className="sub-area-container">

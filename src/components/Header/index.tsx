@@ -483,12 +483,13 @@ const ProfileOrLogin: React.FC<{name: string, navIdent: string}> = ({name, navId
                         <PopoverCustomized.Content>
                             <strong>{name}</strong>
                             <ul>
-                                <li>
+                                {/* TODO: Dette er ikke laget enda. Det må gjøres etterhvert som specs blir definert */}
+                                {/* <li>
                                     <span className="navds-link" onClick={() => toast.info("Ikke implementert enda")}>Min side</span>
                                 </li>
                                 <li>
                                     <span className="navds-link" onClick={() => toast.info("Ikke implementert enda")}>Mine varsler</span>
-                                </li>
+                                </li> */}
                                 <li>
                                     <a className="navds-link" href={RouterLogout.PATH}> <Logout /> Logg ut</a>
                                 </li>

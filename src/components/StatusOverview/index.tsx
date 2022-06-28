@@ -40,7 +40,8 @@ const StatusSummary = styled.div`
     }
 
     @media (min-width: 902px) {
-        flex-flow: row wrap;
+        /* TODO: Se på dette, det kan breake symmetrien på dashbordene hvis avviksmeldinger > 1 */
+        /* flex-flow: row wrap; */
     }
     @media (min-width: 1359px) {
         width: 100%;
@@ -183,9 +184,9 @@ const DeviationCardContainer = styled.button`
     position: relative;
     height: 100%;
     
-    border: none;
     padding: 1rem .5rem;
-
+    
+    border: none;
     border-radius: 5px;
     border-left: 7.5px solid transparent;
 
@@ -195,7 +196,7 @@ const DeviationCardContainer = styled.button`
         cursor: pointer;
 
         .content {
-
+            
             .navds-heading {
                 text-decoration: none;
             }
@@ -261,7 +262,7 @@ const DeviationCardIfNoOpsMessage: React.FC<{status: string, message: string}> =
     return (
         <DeviationCardContainer aria-label={message + ". Trykk her for mer informasjon"} className={"has-"+status.toLowerCase()}>
             <div className="content">
-                <BodyShort size="small">{message}</BodyShort>
+                <BodyShort>{message}</BodyShort>
             </div>
         </DeviationCardContainer>
     )
