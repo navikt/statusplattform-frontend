@@ -7,10 +7,21 @@ import { RouterInternt, RouterPrivatperson } from '../types/routes';
 import CustomNavSpinner from '../components/CustomNavSpinner';
 import { UserData } from '../types/userData';
 import { checkLoginInfoAndState } from '../utils/checkLoginInfoAndState';
+import styled from 'styled-components';
 
 
 
 export const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
+
+export const VerticalSeparator = styled.span`
+    display: block;
+
+    padding: 1px 1px;
+    height: 100%;
+    margin: 0 .5rem;
+
+    background-color: var(--navds-global-color-gray-200);
+`
 
 
 export default function Home() {

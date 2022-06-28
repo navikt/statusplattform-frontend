@@ -14,10 +14,22 @@ import { OpsMessageI } from "../../types/opsMessage"
 import { RouterError, RouterOpprettOpsMelding } from "../../types/routes"
 import { EndPathOps } from "../../utils/apiHelper"
 import { fetchOpsMessages } from "../../utils/opsAPI"
+import { HorizontalSeparator } from "../Admin"
 
 
 const CreateAvvikButtonWrapper = styled.div`
     margin-bottom: 2rem;
+`
+
+
+const OpsSectionContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+
+    h2 {
+        margin-bottom: 1rem;
+    }
 `
 
 export const getServerSideProps = async () => {
@@ -114,29 +126,33 @@ const OpsMessages = ({serverOpsMessages}) => {
             {/* <Heading level="2" size="small">Alle avviksmeldinger</Heading>            
             <ListOfOpsMessages opsMessages={opsMessages} /> */}
 
-            {arrayActive.length > 0 &&
-                <div>
-                    <Heading level="2" size="small">Aktive meldinger</Heading>            
-    
-                    <ListOfOpsMessages opsMessages={arrayActive} notifyChangedOpsMessage={notifyChangedOpsMessage} />
-                </div>
-            }
+            <OpsSectionContainer>
+                {arrayActive.length > 0 &&
+                    <div>
+                        <Heading level="2" size="xlarge">Aktive meldinger</Heading>            
+        
+                        <ListOfOpsMessages opsMessages={arrayActive} notifyChangedOpsMessage={notifyChangedOpsMessage} />
+                    </div>
+                }
 
-            {arrayInActive.length > 0 &&
-                <div>
-                    <Heading level="2" size="small">Inaktive meldinger</Heading>            
+                <HorizontalSeparator />
 
-                    <ListOfOpsMessages opsMessages={arrayInActive} notifyChangedOpsMessage={notifyChangedOpsMessage} />
-                </div>
-            }
+                {arrayInActive.length > 0 &&
+                    <div>
+                        <Heading level="2" size="xlarge">Inaktive meldinger</Heading>            
 
-            {/* {arrayArchived.length > 0 &&
-                <div>
-                    <Heading level="2" size="small">Arkiverte meldinger</Heading>            
+                        <ListOfOpsMessages opsMessages={arrayInActive} notifyChangedOpsMessage={notifyChangedOpsMessage} />
+                    </div>
+                }
 
-                    <ListOfOpsMessages opsMessages={arrayArchived} />
-                </div>
-            } */}
+                {/* {arrayArchived.length > 0 &&
+                    <div className="ops-section">
+                        <Heading level="2" size="small">Arkiverte meldinger</Heading>            
+
+                        <ListOfOpsMessages opsMessages={arrayArchived} />
+                    </div>
+                } */}
+            </OpsSectionContainer>
 
             <ToastContainer />
         </Layout>
@@ -147,9 +163,23 @@ const OpsMessages = ({serverOpsMessages}) => {
 
 
 const OpsMessagesList = styled.div`
-    display: flex;
-    flex-flow: row wrap;
-    gap: 32px;
+    display: grid;
+    grid-gap: 32px;
+
+    @media(min-width: 800px) {
+        grid-auto-rows: 350px;
+        grid-template-columns: repeat(2, 350px);
+    }
+    
+    @media(min-width: 1150px) {
+        grid-auto-rows: 350px;
+        grid-template-columns: repeat(3, 350px);
+    }
+
+    @media(min-width: 1600px) {
+        grid-auto-rows: 350px;
+        grid-template-columns: repeat(3, 500px);
+    }
 `
 
 const ListOfOpsMessages: React.FC<{opsMessages: OpsMessageI[], notifyChangedOpsMessage: (changedOps) => void}> = ({opsMessages, notifyChangedOpsMessage}) => {

@@ -1,10 +1,10 @@
-import { Delete, Error, Success } from "@navikt/ds-icons"
-import { BodyShort, Button, Detail, Heading, Modal } from "@navikt/ds-react"
+import { Delete } from "@navikt/ds-icons"
+import { BodyShort, Button, Heading, Modal } from "@navikt/ds-react"
 import { useRouter } from "next/router"
 import { useState } from "react"
 import { toast } from "react-toastify"
 import styled from "styled-components"
-import { HorizontalSeparator } from "../../pages/Admin"
+import { VerticalSeparator } from "../../pages"
 import { OpsMessageI } from "../../types/opsMessage"
 import { RouterOpsMeldinger } from "../../types/routes"
 import { deleteOpsMessage, updateSpecificOpsMessage } from "../../utils/opsAPI"
@@ -12,8 +12,7 @@ import { deleteOpsMessage, updateSpecificOpsMessage } from "../../utils/opsAPI"
 
 const MessageCard = styled.div`
     background: white;
-    padding: .5rem 1.7rem 1.7rem 1.7rem;
-    margin: 1rem 0;
+    padding: 1.5rem;
     border-radius: 4px;
     border: 1px solid #e6e6e6;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
@@ -21,20 +20,58 @@ const MessageCard = styled.div`
     display: flex;
     flex-flow: column wrap;
 
-    position: relative;
+    .ops-card-content {
+        display: flex;
+        flex-direction: column;
+        padding: .5rem 0;
+    }
+
+    .navds-body-short {
+        word-break: break-word;
+    }
 
     .buttons-container {
         display: flex;
-        justify-content: space-between;
+        align-self: flex-end;
 
-        button {
-            padding: .5rem .2rem;
+        .top-row-button {
+            padding: 0 .2rem;
+
+            text-decoration: underline;
+
+            span {
+                font-size: 18px;
+            }
+
+            svg {
+                height: 1rem;
+            }
+
+            :hover {
+                text-decoration: none;
+            }
         }
     }
 
     button:hover {
         cursor: pointer;
         outline: 1px solid black;
+    }
+
+    button:last-child {
+        margin-top: auto;
+    }
+`
+
+const CustomizedModal = styled(Modal)`
+    .modal-buttons {
+        display: flex;
+        gap: 1rem;
+
+        button {
+            margin: 1rem 0;
+            padding: .5rem 2rem;
+        }
     }
 `
 
@@ -84,7 +121,7 @@ const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI, notifyChangedOpsMessag
         <MessageCard>
 
 
-            <Modal 
+            <CustomizedModal
                 open={!!isModalOpen}
                 onClose={() => setIsModalOpen(false)}
             >
@@ -96,17 +133,17 @@ const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI, notifyChangedOpsMessag
 
                     Ønsker du å slette meldingen med tittel: <b>{opsMessage.internalHeader}</b>?
 
-                    <div>
+                    <div className="modal-buttons">
                         <Button onClick={() => setIsModalOpen(false)}>Avbryt</Button>
                         <Button onClick={() => handleDeleteMessage()}>Slett</Button>
                     </div>
 
                 </Modal.Content>
-            </Modal>
+            </CustomizedModal>
 
 
 
-            <Modal 
+            <CustomizedModal 
                 open={!!isActiveModalOpen}
                 onClose={() => setIsActiveModalOpen(false)}
             >
@@ -126,29 +163,40 @@ const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI, notifyChangedOpsMessag
                             </>
                     }
 
-                    <div>
+                    <div className="modal-buttons">
                         <Button onClick={() => setIsActiveModalOpen(false)}>Nei</Button>
                         <Button onClick={() => handleChangeActiveOpsMessage()}>Ja</Button>
                     </div>
 
                 </Modal.Content>
-            </Modal>
+            </CustomizedModal>
+
+
+
+
 
             <div className="buttons-container">
-                <Button size="small" variant="tertiary" className="delete-button" onClick={handleActiveModal}>
-                    Status: {opsMessage.isActive ? "Aktiv" : "Inaktiv"}
+                <Button size="small" variant="tertiary" className="top-row-button" onClick={handleActiveModal}>
+                    <span>
+                        Endre status
+                    </span>
                 </Button>
 
-                <Button size="small" variant="tertiary" className="delete-button" onClick={handleModal}>
+                <VerticalSeparator />
+
+                <Button size="small" variant="tertiary" className="top-row-button" onClick={handleModal}>
+                    <span>
+                        Slett
+                    </span>
                     <Delete className="delete-icon" />
                 </Button>
             </div>
 
-            <HorizontalSeparator />
-
-
-            <Heading spacing size="large" level="2">{opsMessage.internalHeader}</Heading>
-            <BodyShort spacing>{opsMessage.internalMessage}</BodyShort>
+            
+            <div className="ops-card-content">
+                <Heading spacing size="large" level="2">{opsMessage.internalHeader}</Heading>
+                <BodyShort spacing>{opsMessage.internalMessage}</BodyShort>
+            </div>
 
             <Button variant="tertiary" onClick={() => router.push(RouterOpsMeldinger.PATH + `/${opsMessage.id}`)}>Se mer...</Button>
         </MessageCard>
