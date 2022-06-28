@@ -1,15 +1,13 @@
-import { Back, EditFilled } from "@navikt/ds-icons"
+import { EditFilled } from "@navikt/ds-icons"
 import { BodyShort, Button, Checkbox, Heading, Select, TextField } from "@navikt/ds-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { toast } from "react-toastify"
-import internal from "stream"
 import styled from "styled-components"
 import { backendPath } from ".."
 import { CloseCustomized } from "../../components/Admin"
 import { BackButton } from "../../components/BackButton"
-import { TitleContext } from "../../components/ContextProviders/TitleContext"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import CustomNavSpinner from "../../components/CustomNavSpinner"
 import Layout from "../../components/Layout"
@@ -17,8 +15,7 @@ import { Service } from "../../types/navServices"
 import { OpsMessageI } from "../../types/opsMessage"
 import { RouterError, RouterOpsMeldinger } from "../../types/routes"
 import { EndPathServices, EndPathSpecificOps } from "../../utils/apiHelper"
-import { fetchSpecificOpsMessage } from "../../utils/opsAPI"
-import { HorizontalSeparator } from "../Admin"
+import { fetchSpecificOpsMessage, updateSpecificOpsMessage } from "../../utils/opsAPI"
 
 
 
@@ -89,16 +86,19 @@ const opsMessageDetails = ({opsMessage, retrievedServices}) => {
 
 const OpsContent = styled.div`
     background: #fff;
-    padding: 3rem 5rem;
+    padding: 2rem 4rem;
     border-radius: 0.5rem;
 
     display: flex;
     flex-direction: column;
 
-    h2 {
+    gap: 1rem;
+
+    .header-container {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        gap: 1rem;
     }
 `
 
@@ -108,29 +108,49 @@ interface OpsMessageComponentI {
     services: Service[]
 }
 
-const OpsMessageComponent = ({opsMessage, services}: OpsMessageComponentI) => {
+const OpsMessageComponent = ({opsMessage: serverSideOpsMessage, services}: OpsMessageComponentI) => {
     const [isEditting, toggleIsEditting] = useState(false)
+    const [opsMessage, changeOpsMessage] = useState<OpsMessageI>(serverSideOpsMessage)
 
     const { name, navIdent } = useContext(UserStateContext)
+
+    useEffect(() => {
+        let reFetching = true
+        const reFetch = async () => {
+            if(reFetching) {
+                await fetchSpecificOpsMessage(opsMessage.id).then((response) => {
+                    changeOpsMessage(response)
+                }).catch(() => {
+                    toast.error("Noe gikk galt")
+                })
+            }
+        }
+        if(reFetching){
+            reFetch()
+        }
+
+        reFetching = false
+    },[isEditting])
 
     
     const { internalHeader } = opsMessage
 
     return (
         <OpsContent>
-            
-            <Heading spacing size="medium" level="2">
-                Avviksmelding - {internalHeader} 
-                <Button className="edit-button" variant="tertiary" onClick={() => toggleIsEditting(!isEditting)}>
-                    <EditFilled/>
+            <div className="header-container">
+                <Heading size="medium" level="2">
+                    Avviksmelding - {internalHeader} 
+                </Heading>
+                <Button variant="primary" onClick={() => toggleIsEditting(!isEditting)}>
+                    {isEditting ? "Avbryt redigering" : <EditFilled/>}
                 </Button>
-            </Heading>
+            </div>
 
             {!isEditting
                 ?
                     <DetailsOfOpsMessage opsMessage={opsMessage} navIdent={navIdent} />
                 :
-                    <EditOpsMessage opsMessage={opsMessage} navIdent={navIdent} services={services} />
+                    <EditOpsMessage opsMessage={opsMessage} navIdent={navIdent} services={services} toggleIsEditting={(newValue) => toggleIsEditting(newValue)} />
             }
 
             
@@ -155,7 +175,6 @@ const DetailsOfOpsMessage = ({opsMessage, navIdent}: DetailsOpsMsgI) => {
             {navIdent &&
                 <div>
                     <BodyShort spacing>
-                        {internalHeader}
                         {internalMessage}
                     </BodyShort>
                 </div>
@@ -165,8 +184,6 @@ const DetailsOfOpsMessage = ({opsMessage, navIdent}: DetailsOpsMsgI) => {
                 {externalHeader}
                 {externalMessage}
             </div>
-
-            <HorizontalSeparator />
 
             <Heading size="small" level="3">Ytterligere detaljer</Heading>
             {navIdent &&
@@ -249,10 +266,11 @@ interface EditOpsMessageI {
     opsMessage: OpsMessageI
     navIdent: string
     services: Service[]
+    toggleIsEditting: (newValue) => void
 }
 
 
-const EditOpsMessage = ({opsMessage, navIdent, services}: EditOpsMessageI) => {
+const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting}: EditOpsMessageI) => {
     const [isLoading, setIsLoading] = useState(true)
     const [updatedOpsMessage, changeUpdatedOpsMessage] = useState<OpsMessageI>({
         ...opsMessage
@@ -291,6 +309,17 @@ const EditOpsMessage = ({opsMessage, navIdent, services}: EditOpsMessageI) => {
         changeUpdatedOpsMessage(newOps)
     }
 
+    const handleSubmitChangesOpsMessage = async () => {
+        try {
+            await updateSpecificOpsMessage(updatedOpsMessage).then(() => {
+                toast.success("Endringer lagret")
+                toggleIsEditting(false)
+            })
+        } catch (error) {
+            toast.error("Noe gikk galt ved oppdatering av meldingen")
+        }
+    }
+
 
     return (
         <EditOpsMessageContainer>
@@ -325,6 +354,10 @@ const EditOpsMessage = ({opsMessage, navIdent, services}: EditOpsMessageI) => {
                 <TextField label="Dato" type="date" value={} onChange={updateOpsMessage("startDate")} />
                 <TextField label="Klokkeslett" type="time" value={} onChange={updateOpsMessage("startTime")} />
             </div> */}
+
+            <Button variant="primary" onClick={handleSubmitChangesOpsMessage}>
+                Lagre endringer
+            </Button>
             
         </EditOpsMessageContainer>
     )
@@ -393,7 +426,7 @@ const ModifyAffectedServices = ({opsMessageToUpdate, handleUpdateOpsMessageAffec
                     Ingen tjenester er knyttet til avviksmeldingen
                 </BodyShort>
             :
-                <BodyShort>
+                <div>
                     <b>Tilknyttede tjenester mot avviksmeldingen:</b>
                     <ul>
                         {opsMessageToUpdate.affectedServices.map((service) => {
@@ -407,7 +440,7 @@ const ModifyAffectedServices = ({opsMessageToUpdate, handleUpdateOpsMessageAffec
                             )
                         })}
                     </ul>
-                </BodyShort>
+                </div>
             }
 
             <SelectAffectedServicesComponent

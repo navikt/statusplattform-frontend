@@ -79,6 +79,7 @@ export const deleteOpsMessage = async (id: string): Promise<OpsMessageI> => {
 export const updateSpecificOpsMessage = async (opsMessage: OpsMessageI): Promise<OpsMessageI> => {
     let response;
     let endPath = EndPathSpecificOps(opsMessage.id);
+    const affectedServices = opsMessage.affectedServices.map(service => service.id)
 
     let body = JSON.stringify({
         internalHeader: opsMessage.internalHeader,
@@ -87,7 +88,7 @@ export const updateSpecificOpsMessage = async (opsMessage: OpsMessageI): Promise
         externalMessage: opsMessage.externalMessage,
         onlyShowForNavEmployees: opsMessage.onlyShowForNavEmployees,
         isActive: opsMessage.isActive,
-        affectedServices: opsMessage.affectedServices.map(service => service.id),
+        affectedServices: opsMessage.affectedServices,
         startTime: opsMessage.startTime,
         endTime: opsMessage.endTime,
         severity: opsMessage.severity
@@ -98,7 +99,7 @@ export const updateSpecificOpsMessage = async (opsMessage: OpsMessageI): Promise
     
     
     if (response.ok) {
-        return response.json()
+        return response
     }
     throw new ResponseError("Failed to fetch from server", response)
 }
