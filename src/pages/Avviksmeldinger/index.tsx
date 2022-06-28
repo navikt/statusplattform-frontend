@@ -135,7 +135,9 @@ const OpsMessages = ({serverOpsMessages}) => {
                     </div>
                 }
 
-                <HorizontalSeparator />
+                {arrayInActive.length > 0 &&
+                    <HorizontalSeparator />
+                }
 
                 {arrayInActive.length > 0 &&
                     <div>
