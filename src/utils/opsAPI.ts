@@ -82,6 +82,7 @@ export const updateSpecificOpsMessage = async (opsMessage: OpsMessageI): Promise
     const affectedServices = opsMessage.affectedServices.map(service => service.id)
 
     let body = JSON.stringify({
+        id: opsMessage.id,
         internalHeader: opsMessage.internalHeader,
         internalMessage: opsMessage.internalMessage,
         externalHeader: opsMessage.externalHeader,

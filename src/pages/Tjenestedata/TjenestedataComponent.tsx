@@ -164,7 +164,7 @@ const TjenestedataContent: React.FC<{service: Service, areasContainingThisServic
                 {/* <StatusRecord /> */}
             </div>
             
-            <ServiceIncidentHistory service={service} />
+            {/* <ServiceIncidentHistory service={service} /> */}
 
         </CategoryContainer>
     )
