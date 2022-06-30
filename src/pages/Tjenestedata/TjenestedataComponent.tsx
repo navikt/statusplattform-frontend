@@ -145,7 +145,7 @@ const TjenestedataContent: React.FC<{service: Service, areasContainingThisServic
 
     return (
         <CategoryContainer>
-            <div className="title-container"><Innholdstittel>{handleAndSetStatusIcon(service.status, true)}{service.name}</Innholdstittel></div>
+            <div className="title-container"><Innholdstittel>{handleAndSetStatusIcon(service.record.status, true)}{service.name}</Innholdstittel></div>
 
             {/* <div>
                 <Button variant="secondary" onClick={() => router.push(RouterOpprettVarsling.PATH)}><Bell/> Bli varslet ved avvik</Button> 
@@ -617,7 +617,7 @@ const ServicesAndComponentsList: React.FC<{componentDependencies?: Component[], 
                     <li key={service.id}>
                         <Link href={RouterTjenestedata.PATH + service.id} >
                             <a>
-                                {handleAndSetStatusIcon(service.status)} {service.name}
+                                {handleAndSetStatusIcon(service.record.status)} {service.name}
                             </a>
                         </Link>
                     </li>

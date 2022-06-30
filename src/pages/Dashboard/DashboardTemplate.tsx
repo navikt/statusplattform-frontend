@@ -287,7 +287,7 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
     }
 
     const statuses: string[] = areasInDashboard.flatMap(area => area.services.map(
-        service => service.status
+        service => service.record.status
     ))
 
 

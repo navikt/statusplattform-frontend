@@ -303,24 +303,24 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
                                 {navIdent
                                 ?
                                     <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
-                                        <section className="logged-in"><StatusIconHandler status={service.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam}/> {service.name}</section>
+                                        <section className="logged-in"><StatusIconHandler status={service.record.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam}/> {service.name}</section>
                                     </LenkeCustomized>
                                 :
-                                    <section><StatusIconHandler status={service.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam}/> {service.name}</section>
+                                    <section><StatusIconHandler status={service.record.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam}/> {service.name}</section>
                                 }
                             </li>
                         )
                     }
-                    if(matches(service.status)) {
+                    if(matches(service.record.status)) {
                         return (
                             <li key={service.name}>
                                 {navIdent
                                 ?
                                     <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
-                                        <section><StatusIconHandler status={service.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
+                                        <section><StatusIconHandler status={service.record.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
                                     </LenkeCustomized>
                                 :
-                                    <section><StatusIconHandler status={service.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
+                                    <section><StatusIconHandler status={service.record.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
                                 }
                             </li>
                         )
@@ -429,7 +429,7 @@ const SubAreaContent = styled.div`
 const SubAreaComponent: React.FC<{subArea: SubArea, isLastElement: boolean, isAllExpanded: boolean, navIdent: string}> = ({subArea, isLastElement, isAllExpanded, navIdent}) => {
     const [isToggled, setIsToggled] = useState(false)
 
-    const listOfStatusesInSubArea: string[] = subArea.services.map(service => service.status)
+    const listOfStatusesInSubArea: string[] = subArea.services.map(service => service.record.status)
 
     useEffect(() => {
         if(isAllExpanded) {
@@ -458,10 +458,10 @@ const SubAreaComponent: React.FC<{subArea: SubArea, isLastElement: boolean, isAl
                                 {navIdent
                                 ?
                                     <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
-                                        <section className="logged-in"><StatusIconHandler isArea={false} status={service.status} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
+                                        <section className="logged-in"><StatusIconHandler isArea={false} status={service.record.status} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
                                     </LenkeCustomized>
                                 :
-                                    <section><StatusIconHandler status={service.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
+                                    <section><StatusIconHandler status={service.record.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
                                 }
                             </li>
                             

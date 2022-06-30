@@ -39,7 +39,7 @@ export const countHealthyServices = (props: AreaServicesList) => {
     let healthyServices: number = 0
     props.areas.map(area => {
         healthyServices += area.services.filter(
-            (service: Service) => service.status == "OK").length
+            (service: Service) => service.record.status == "OK").length
     })
     return healthyServices
 }
@@ -48,7 +48,7 @@ export const countFailingServices = (props: AreaServicesList) => {
     let failingServices: number = 0
     props.areas.map(area => {
         failingServices += area.services.filter(
-            (service: Service) => (service.status == "DOWN" || service.status == "ISSUE")).length
+            (service: Service) => (service.record.status == "DOWN" || service.record.status == "ISSUE")).length
     })
     return failingServices
 }

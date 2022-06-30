@@ -22,7 +22,7 @@ export interface Service {
     componentDependencies?: Component[]
     monitorlink?: string
     pollingUrl?: string
-    status?: string
+    record: Record
     areasContainingThisService: Area[]
     statusNotFromTeam: boolean
 }
@@ -88,4 +88,16 @@ export interface HistoryOfSpecificServiceDayEntry {
 export interface MaintenanceObject {
     isPlanned: boolean,
     message: string
+}
+
+
+
+
+
+
+export interface Record {
+    serviceId: string
+    status?: string
+    description: string
+    logLink: string    
 }

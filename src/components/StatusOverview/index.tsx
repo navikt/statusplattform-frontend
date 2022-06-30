@@ -92,12 +92,12 @@ const StatusOverview = ({areas}: AreaServicesList) => {
 
     const countIssueServices = () => {
         const services: Service[] = areas.flatMap(area => area.services)
-        return services.filter(service => service.status == "ISSUE").length
+        return services.filter(service => service.record.status == "ISSUE").length
     }
 
     const countDownServices = () => {
         const services: Service[] = areas.flatMap(area => area.services)
-        return services.filter(service => service.status == "DOWN").length
+        return services.filter(service => service.record.status == "DOWN").length
     }
 
 
