@@ -226,29 +226,33 @@ export const handleAndSetStatusIcon = (status: string, isInternal?: boolean): an
 
 export interface PortalServiceTileProps {
     area: Area;
-    expanded: boolean;
-    toggleTile: Function;
-    tileIndex: number;
+    expanded: boolean
+    toggleTile: Function
+    tileIndex: number
     isAllExpanded: boolean
     heightOfTileInRowBasedOfLargestTileInRow?: string
 }
 
 
 export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllExpanded, heightOfTileInRowBasedOfLargestTileInRow}: PortalServiceTileProps) => {
+    const [updatedArea, updateArea] = useState(area)
     
     const {filters, matches} = useContext(FilterContext)
     const { navIdent } = useContext(UserStateContext)
     const router = useRouter()
 
 
-
     const toggleExpanded = () => {
         toggleTile(tileIndex)
     }
 
+    useEffect(() => {
+        updateArea(area)
+    },[area])
+
     const testMaintenanceObject: MaintenanceObject = {isPlanned: false, message: "Planlagt 24. desember"}
 
-    const { name, status, subAreas } = area
+    const { name, status, subAreas } = updatedArea
 
     return (
         <EkspanderbartpanelCustomized
@@ -260,7 +264,9 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
             tittel={
                 <div className={router.asPath.includes("Internt") ? "top-content logged-in" : "top-content not-logged-in"}>
                     <HeadingCustomized size="medium">
-                        <span><StatusIconHandler status={status} isArea={true} /></span>
+                        <span>
+                            <StatusIconHandler status={status} isArea={true} />
+                        </span>
                         <span>{name}</span>
                     </HeadingCustomized>
 
