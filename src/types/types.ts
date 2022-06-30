@@ -22,7 +22,7 @@ export interface Service {
     componentDependencies?: Component[]
     monitorlink?: string
     pollingUrl?: string
-    record: Record
+    record?: Record
     areasContainingThisService: Area[]
     statusNotFromTeam: boolean
 }
