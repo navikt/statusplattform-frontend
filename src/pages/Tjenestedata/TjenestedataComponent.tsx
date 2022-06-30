@@ -284,11 +284,21 @@ interface StatusRecordI {
 const StatusRecord = ({record}: StatusRecordI) => {
     const prettifiedStatus: string = StatusPrettifier(record)
 
-    if(!record || record.status == "OK") {
+    if(!record) {
+        return null
+    }
+
+    if(record.status == "OK") {
         return (
-            <>
-                Status er ok
-            </>
+            <RecordWrapper>
+                <Heading level="2" size="medium">
+                    Informasjon om tjenestestatus
+                </Heading>
+                <Heading level="3" size="xsmall">
+                    Sist oppdaterte status
+                </Heading>
+                Alt kjører som forventet!
+            </RecordWrapper>
         )
     }
 
