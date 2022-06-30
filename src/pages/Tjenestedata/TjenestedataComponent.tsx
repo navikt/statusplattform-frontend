@@ -8,7 +8,7 @@ import { BodyShort, Detail, Heading, Panel, Popover } from '@navikt/ds-react';
 import { Innholdstittel } from 'nav-frontend-typografi';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
-import { Area, Component, HistoryOfSpecificService, HistoryOfSpecificServiceDayEntry, HistoryOfSpecificServiceMonths, Service } from '../../types/types';
+import { Area, Component, HistoryOfSpecificService, HistoryOfSpecificServiceDayEntry, HistoryOfSpecificServiceMonths, Record, Service } from '../../types/types';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { RouterTjenestedata } from '../../types/routes';
 import { useLoader } from '../../utils/useLoader';
@@ -91,11 +91,13 @@ const CategoryContainer = styled.div`
         gap: 50px;
 
         .navds-panel{width: 100%;}
+
         .navds-panel:first-child {
             -moz-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
             -webkit-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
             box-shadow: 0 0 10px rgba(0,0,0, 0.2);
         }
+        
         .navds-panel:last-child {border: none; background: none; height: max-content;}
 
         @media(min-width: 825px) {
@@ -160,8 +162,11 @@ const TjenestedataContent: React.FC<{service: Service, areasContainingThisServic
                         </ServiceWrapper>
                     </ServiceContainer>
                 </Panel>
+
+                {service.record &&
+                    <StatusRecord record={service.record} />
+                }
                 
-                {/* <StatusRecord /> */}
             </div>
             
             {/* <ServiceIncidentHistory service={service} /> */}
@@ -267,15 +272,65 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
 
 
 const RecordWrapper = styled(Panel)`
-    /* display: flex; */
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
 `
 
-const StatusRecord = () => {
+interface StatusRecordI {
+    record: Record
+}
+
+const StatusRecord = ({record}: StatusRecordI) => {
+    const prettifiedStatus: string = StatusPrettifier(record)
+
+    if(!record || record.status == "OK") {
+        return (
+            <>
+                Status er ok
+            </>
+        )
+    }
+
     return (
         <RecordWrapper>
-            asd
+            <Heading level="2" size="medium">
+                Informasjon om tjenestestatus
+            </Heading>
+            <div>
+                <Heading level="3" size="xsmall">
+                    Tjeneste id:
+                </Heading>
+                {record.serviceId}
+            </div>
+            <div>
+                <Heading level="3" size="xsmall">
+                    Sist oppdaterte status
+                </Heading>
+                {prettifiedStatus}
+            </div>
+            {record.description &&
+                <div>
+                    <Heading level="3" size="xsmall">
+                        Beskrivelse
+                    </Heading>
+                </div>
+            }
         </RecordWrapper>
     )
+}
+
+const StatusPrettifier = (record: Record): string => {
+    switch (record.status) {
+        case "OK":
+            return "Oppe"
+        case "ISSUE":
+            return "Avvik";
+        case "DOWN":
+            return "Nede"
+        default:
+            return "Ukjent"
+    }
 }
 
 
@@ -292,8 +347,11 @@ const PublicDataContainer = styled.div`
     justify-content: center;
 `
 
+interface ServiceIncidentHistory {
+    service: Service
+}
 
-const ServiceIncidentHistory: React.FC<{service: Service}>= ({service}) => {
+const ServiceIncidentHistory = ({service}: ServiceIncidentHistory) => {
     const [isLast90Days, setIsLast90Days] = useState<boolean>(true)
     // TODO: Henting av tjenestehistorikkdata som driftsmeldinger og diverse
     // const { data, isLoading, reload } = useLoader(() => fetchServiceHistory(service.id), [])
