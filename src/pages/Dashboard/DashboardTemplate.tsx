@@ -266,13 +266,14 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
         }
     }
 
-    let rows = generateRowsOfTiles();
+    let rows = generateRowsOfTiles()
+
     const toggleTile = (index: number) => {
         if(expandedTiles.includes(index)){
             setExpandedTiles(expandedTiles.filter(i => i != index))
         }
         else{
-            setExpandedTiles(expandedTiles.concat([index]));
+            setExpandedTiles(expandedTiles.concat([index]))
         }
     }
 
