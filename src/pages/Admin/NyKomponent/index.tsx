@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import router from "next/router";
 
 import Layout from '../../../components/Layout';
-import { Service, Component } from "../../../types/navServices";
+import { Service, Component } from "../../../types/types";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { fetchTypes } from "../../../utils/fetchTypes";
 

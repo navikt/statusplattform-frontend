@@ -7,7 +7,7 @@ import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
 import { toast, ToastContainer } from "react-toastify"
 
 import { options } from "../../../components/Admin/AreaTable";
-import { Area, Service } from "../../../types/navServices";
+import { Area, Service } from "../../../types/types";
 import { useLoader } from "../../../utils/useLoader";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";

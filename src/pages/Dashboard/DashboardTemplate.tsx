@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from 'react'
 import { Expand } from '@navikt/ds-icons'
 import { BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
 
-import { Area, Dashboard } from '../../types/navServices'
+import { Area, Dashboard } from '../../types/types'
 import { FilterContext } from '../../components/ContextProviders/FilterContext'
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
 import { UserData } from '../../types/userData'

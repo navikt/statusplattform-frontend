@@ -8,7 +8,7 @@ import { BodyShort, Detail, Heading, Panel, Popover } from '@navikt/ds-react';
 import { Innholdstittel } from 'nav-frontend-typografi';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
-import { Area, Component, HistoryOfSpecificService, HistoryOfSpecificServiceDayEntry, HistoryOfSpecificServiceMonths, Service } from '../../types/navServices';
+import { Area, Component, HistoryOfSpecificService, HistoryOfSpecificServiceDayEntry, HistoryOfSpecificServiceMonths, Service } from '../../types/types';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
 import { RouterTjenestedata } from '../../types/routes';
 import { useLoader } from '../../utils/useLoader';

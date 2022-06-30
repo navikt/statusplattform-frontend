@@ -14,7 +14,7 @@ import { RouterOpsMeldinger } from "../../../types/routes"
 import { postOpsMessage } from "../../../utils/opsAPI"
 
 import "react-datepicker/dist/react-datepicker.css";
-import { Service } from "../../../types/navServices"
+import { Service } from "../../../types/types"
 import { backendPath } from "../.."
 import { EndPathServices } from "../../../utils/apiHelper"
 import { Delete } from "@navikt/ds-icons"

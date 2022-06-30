@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import router from "next/router";
 
 import Layout from '../../../components/Layout';
-import { Area, Component, Service } from "../../../types/navServices";
+import { Area, Component, Service } from "../../../types/types";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 
 import { BodyShort, Button, Detail, Heading, Modal, Select, TextField } from "@navikt/ds-react";

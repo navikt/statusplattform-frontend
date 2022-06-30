@@ -1,4 +1,4 @@
-import { Dashboard } from "../types/navServices";
+import { Dashboard } from "../types/types";
 import { EndPathDashboard, EndPathDashboards, EndPathSpecificDashboard, EndPathUpdateDashboard } from "./apiHelper";
 import { createApiRequest } from "./createApiRequest";
 

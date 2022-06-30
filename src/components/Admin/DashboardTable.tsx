@@ -10,7 +10,7 @@ import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react'
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import { AdminCategoryContainer, ModalInner } from '.';
 import { CloseCustomized } from '.'
-import { Area, Dashboard } from '../../types/navServices'
+import { Area, Dashboard } from '../../types/types'
 import { useLoader } from '../../utils/useLoader'
 import { TitleContext } from '../ContextProviders/TitleContext'
 import { deleteDashboard, fetchDashboard, fetchDashboardsList, postDashboard, updateDashboard } from '../../utils/dashboardsAPI'

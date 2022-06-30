@@ -6,7 +6,7 @@ import { toast } from 'react-toastify';
 
 import { Bag, Calculator, Close, Delete, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, SaveFile, Saving, SocialAid } from '@navikt/ds-icons'
 
-import { Area, Service, SubArea } from '../../types/navServices';
+import { Area, Service, SubArea } from '../../types/types';
 
 import { AdminCategoryContainer, CloseCustomized, DependencyList } from '.';
 import CustomNavSpinner from '../../components/CustomNavSpinner';

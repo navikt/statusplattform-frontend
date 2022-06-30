@@ -1,5 +1,5 @@
 
-import { Area, SubArea } from "../types/navServices";
+import { Area, SubArea } from "../types/types";
 import { EndPathArea, EndPathAreaContainingServices, EndPathAreas, EndPathDashboardWithArea, EndPathPutAreasToDashboard, EndPathServiceToArea, EndPathSpecificArea, EndPathSubAreas } from "./apiHelper";
 import { createApiRequest } from "./createApiRequest";
 

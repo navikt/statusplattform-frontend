@@ -11,7 +11,7 @@ import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
 import { BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal, Select, TextField } from '@navikt/ds-react';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
-import { Area, Component, Service } from '../../types/navServices';
+import { Area, Component, Service } from '../../types/types';
 import { AdminCategoryContainer, CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { deleteService, fetchServices, postService, updateService } from '../../utils/servicesAPI';

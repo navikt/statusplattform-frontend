@@ -1,4 +1,4 @@
-import { Component } from "../types/navServices";
+import { Component } from "../types/types";
 import { EndPathComponent, EndPathComponents, EndPathComponentStatus, EndPathPutComponentDependency, EndPathSpecificComponent, EndPathUpdateComponent } from "./apiHelper";
 import { createApiRequest } from "./createApiRequest";
 

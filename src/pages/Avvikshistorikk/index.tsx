@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react'
 
 import Layout from '../../components/Layout'
 import Incidents from '../../components/Incidents'
-import { Area, Dashboard } from '../../types/navServices'
+import { Area, Dashboard } from '../../types/types'
 import CustomNavSpinner from '../../components/CustomNavSpinner'
 import { fetchDashboard, fetchDashboardsList } from '../../utils/dashboardsAPI'
 import { TitleContext } from '../../components/ContextProviders/TitleContext'

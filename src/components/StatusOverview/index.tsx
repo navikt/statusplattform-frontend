@@ -4,7 +4,7 @@ import { NextRouter, useRouter } from 'next/router';
 import { Bell, Clock } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Detail, Heading, Panel } from '@navikt/ds-react';
 
-import { AreaServicesList, Service } from '../../types/navServices'
+import { AreaServicesList, Service } from '../../types/types'
 import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI, countFailingServices } from '../../utils/servicesOperations';
 import { RouterAvvikshistorikk, RouterOpprettVarsling } from '../../types/routes';
 import { useEffect, useState } from 'react';

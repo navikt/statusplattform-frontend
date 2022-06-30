@@ -12,7 +12,7 @@ import Custom404 from "../../pages/404"
 import { UserData } from "../../types/userData"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import { RouterPrivatperson } from "../../types/routes"
-import { Dashboard } from "../../types/navServices"
+import { Dashboard } from "../../types/types"
 import { FullscreenEnter, FullscreenExit } from "@navikt/ds-icons"
 import { EndPathDashboards } from '../../utils/apiHelper'
 import { checkLoginInfoAndState } from '../../utils/checkLoginInfoAndState'

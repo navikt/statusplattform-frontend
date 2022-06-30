@@ -10,7 +10,7 @@ import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
 import { BodyShort, Button, Heading, Modal, Select, TextField } from '@navikt/ds-react';
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
-import { Component } from '../../types/navServices';
+import { Component } from '../../types/types';
 import { deleteComponent, fetchComponents, updateComponent } from '../../utils/componentsAPI';
 import { AdminCategoryContainer, CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';

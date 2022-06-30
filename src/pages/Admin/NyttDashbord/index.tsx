@@ -8,7 +8,7 @@ import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
 import { Delete } from "@navikt/ds-icons";
 
 import { useLoader } from "../../../utils/useLoader";
-import { Area, Dashboard } from "../../../types/navServices";
+import { Area, Dashboard } from "../../../types/types";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { DynamicListContainer, HorizontalSeparator } from "..";

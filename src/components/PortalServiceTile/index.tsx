@@ -9,7 +9,7 @@ import { BodyShort, Detail, Heading } from '@navikt/ds-react';
 
 import { ErrorCustomized, ErrorFilledCustomized, WrenchFilledCustomized, NoStatusAvailableCircle, WrenchOutlinedCustomized, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized, HelptextCustomizedBlue, HelpTextCustomizedGray } from '../../components/TrafficLights'
 import { getIconsFromGivenCode } from '../../utils/servicesOperations'
-import { Area, MaintenanceObject, SubArea} from '../../types/navServices'
+import { Area, MaintenanceObject, SubArea} from '../../types/types'
 import { FilterContext } from '../../components/ContextProviders/FilterContext';
 import { StringifyOptions } from 'querystring';
 import { UserStateContext } from '../ContextProviders/UserStatusContext';

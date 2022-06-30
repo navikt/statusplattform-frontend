@@ -1,4 +1,4 @@
-import { Service } from "./navServices"
+import { Service } from "./types"
 
 export interface OpsMessageI {
     id?: string
