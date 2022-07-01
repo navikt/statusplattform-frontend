@@ -2,7 +2,7 @@ import { useRouter } from 'next/router';
 import Head from 'next/head'
 import { useEffect, useState } from 'react';
 
-import DashboardFromId from './Dashboard/[dashboardName]';
+import DashboardFromName from './Dashboard/[dashboardName]';
 import { RouterInternt, RouterPrivatperson } from '../types/routes';
 import CustomNavSpinner from '../components/CustomNavSpinner';
 import { UserData } from '../types/userData';
@@ -80,7 +80,7 @@ export default function Home() {
                 <meta property="twitter:image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
             </Head>
             {atHomePage &&
-                <DashboardFromId data={null} />
+                <DashboardFromName dashboards={null} />
             }
         </>
     )

@@ -33,7 +33,7 @@ export const getServerSideProps = async () => {
 }
 
 
-const DashboardFromId = ({dashboards}) => {
+const DashboardFromName = ({dashboards}) => {
     const router = useRouter()
 
     const [isLoading, setIsLoading] = useState(true)
@@ -151,4 +151,4 @@ export const FullScreenButton: React.FC<{isFullScreen: boolean, changeIsFullScre
 
 
 
-export default DashboardFromId
+export default DashboardFromName
