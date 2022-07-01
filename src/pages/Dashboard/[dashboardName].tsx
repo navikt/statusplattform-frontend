@@ -9,61 +9,45 @@ import Layout from '../../components/Layout'
 import CustomNavSpinner from "../../components/CustomNavSpinner"
 import DashboardTemplate from "./DashboardTemplate"
 import Custom404 from "../404"
-import { UserData } from "../../types/userData"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import { RouterPrivatperson } from "../../types/routes"
 import { Dashboard } from "../../types/types"
 import { FullscreenEnter, FullscreenExit } from "@navikt/ds-icons"
 import { EndPathDashboards } from '../../utils/apiHelper'
-import { checkLoginInfoAndState } from '../../utils/checkLoginInfoAndState'
 
 
 export const getServerSideProps = async () => {
     const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
-    const res = await fetch(backendPath + EndPathDashboards())
-    const data = await res.json()
 
+    const [res] = await Promise.all([
+        fetch(backendPath + EndPathDashboards())
+    ])
+
+    const dashboards: Dashboard[] = await res.json()
 
     return {
-        props: {data}
+        props: {
+            dashboards
+        }
     }
 }
 
 
-const DashboardFromId = ({data: dashboards}) => {
+const DashboardFromId = ({dashboards}) => {
     const router = useRouter()
 
     const [isLoading, setIsLoading] = useState(true)
     const [retrievedDashboard, setRetrievedDashboard] = useState<Dashboard | undefined>()
     const [isFullScreen, changeIsFullScreen] = useState(false)
     
-    const [user, setUser] = useState<UserData>()
-    
-    
+    const user = useContext(UserStateContext)
 
     useEffect(() => {
-        let fetching = true
-
-        const fetchDashboards = async () => {
-            if(fetching) {
-                setIsLoading(true)
-                let dashboardTarget: Object = await router.query.dashboardName
-                const retrievedUser = await checkLoginInfoAndState()
-                await retrievedUser
-                setUser(retrievedUser)
-                const dashboardMatchingTarget: Dashboard | undefined = (dashboards.find(dashboard => dashboard.name == dashboardTarget ? dashboard : undefined))
-                setRetrievedDashboard(dashboardMatchingTarget)
-                setIsLoading(false)
-            }
-        }
-
-        if(fetching) {
-            fetchDashboards()
-        }
-
-        fetching = false
-
-        fetchDashboards()
+        setIsLoading(true)
+        let dashboardTarget: Object = router.query.dashboardName
+        const dashboardMatchingTarget: Dashboard | undefined = (dashboards.find(dashboard => dashboard.name == dashboardTarget ? dashboard : undefined))
+        setRetrievedDashboard(dashboardMatchingTarget)
+        setIsLoading(false)
     }, [router])
 
     
