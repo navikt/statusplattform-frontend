@@ -192,7 +192,7 @@ const LenkeCustomized = styled(Link)`
 `
 
 
-export const handleAndSetStatusIcon = (status: string, isInternal?: boolean): any => {
+export const handleAndSetStatusIcon = (status: string | null, isInternal?: boolean): any => {
     switch(status) {
         case 'OK':
             return <SuccessFilledCustomized />
