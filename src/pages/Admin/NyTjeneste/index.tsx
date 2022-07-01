@@ -7,7 +7,7 @@ import Layout from '../../../components/Layout';
 import { Area, Component, Service } from "../../../types/types";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 
-import { BodyShort, Button, Detail, Heading, Modal, Select, TextField } from "@navikt/ds-react";
+import { BodyShort, Button, Detail, Heading, Modal, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
 import { Copy, Delete } from "@navikt/ds-icons";
 import { DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
@@ -29,6 +29,12 @@ const NewServiceContainer = styled.div`
         display: flex;
         flex-flow: row nowrap;
         justify-content: space-between;
+    }
+
+    .input-field {
+        div {
+            margin-bottom: 1rem;
+        }
     }
 
 `
@@ -82,6 +88,7 @@ const NewService = () => {
         areasContainingThisService: [],
         statusNotFromTeam: false
     })
+    const [statusHolder, changeStatusHolder] = useState(false)
 
     
 
@@ -117,11 +124,41 @@ const NewService = () => {
 
 
     const handleServiceDataChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
+        if(field == "pollingUrl" && !statusHolder) {
+            validatePollingUrl(pollingUrl)
+        }
         const updatedNewArea = {
             ...newService,
             [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
             
             updateNewService(updatedNewArea)
+    }
+
+    const validatePollingUrl = (urlInput) => {
+        let url;
+        
+        try {
+            url = new URL(urlInput);
+        } catch (_) {
+            return false;  
+        }
+
+        return url.protocol === "http:" || url.protocol === "https:";
+    }
+
+    const validateMonitorLink = (urlInput) => {
+        if(urlInput.length == 0) {
+            return true
+        }
+        let url;
+        
+        try {
+            url = new URL(urlInput);
+        } catch (_) {
+            return false;  
+        }
+
+        return url.protocol === "http:" || url.protocol === "https:";
     }
 
     /*Handlers for adding serviceDependencies START*/
@@ -203,6 +240,10 @@ const NewService = () => {
 
     const handlePostNewService = (event) => {
         event.preventDefault()
+        if(!validatedForm()) {
+            toast.error("Det er mangler i skjemaet. Vennligst gå over og prøv igjen.")
+            return
+        }
         postService(newService).then((response: Service) => {
             toast.success("Tjeneste lastet opp")
             changeDidServiceCreate(true)
@@ -218,7 +259,21 @@ const NewService = () => {
         }
     }
 
+    const handleHasStatusholder = (radioSelected: string) => {
+        const isStatusHolder = radioSelected == "statusholder" ? true : false
+        changeStatusHolder(isStatusHolder)
+    }
 
+
+    const validatedForm = () => {
+        if(!validatePollingUrl(pollingUrl)) {
+            return false
+        }
+        if(!validateMonitorLink(monitorlink)) {
+            return false
+        }
+        return true
+    }
 
     return (
         <Layout>
@@ -252,8 +307,34 @@ const NewService = () => {
                     <TextField type="text" required label="Navn på tjeneste*" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn" />
                     <TextField type="text" required label="Team*" value={team} onChange={handleServiceDataChange("team")} placeholder="Team" />
 
-                    <TextField type="text" label="PollingUrl" value={pollingUrl} onChange={handleServiceDataChange("pollingUrl")} placeholder="PollingUrl" />
-                    <TextField type="text" label="Monitorlink" value={monitorlink} onChange={handleServiceDataChange("monitorlink")} placeholder="Monitorlink" />
+                    <RadioGroup
+                        legend="Er pollingurl egendefinert?"
+                        onChange={(val: any) => handleHasStatusholder(val)}
+                        defaultValue=""
+                    >
+                        <Radio value="">Egendefinert</Radio>
+                        <Radio value="statusholder">Statusholder</Radio>
+                    </RadioGroup>
+                    {!statusHolder &&
+                        <TextField
+                            className="input-field"
+                            type="text"
+                            label="PollingUrl"
+                            value={pollingUrl}
+                            error={!validatePollingUrl(pollingUrl) ? "Feil i formatet på urlen" : undefined}
+                            onChange={handleServiceDataChange("pollingUrl")}
+                            placeholder="PollingUrl"
+                            required
+                        />
+                    }
+                    <TextField
+                        type="text"
+                        label="Monitorlink"
+                        value={monitorlink}
+                        error={!validateMonitorLink(monitorlink) ? "Feil i formatet på urlen" : undefined}
+                        onChange={handleServiceDataChange("monitorlink")}
+                        placeholder="Monitorlink"
+                    />
 
                     <HorizontalSeparator />
 
