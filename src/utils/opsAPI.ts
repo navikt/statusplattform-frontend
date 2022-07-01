@@ -78,7 +78,7 @@ export const deleteOpsMessage = async (id: string): Promise<OpsMessageI> => {
 
 export const updateSpecificOpsMessage = async (opsMessage: OpsMessageI): Promise<OpsMessageI> => {
     let response;
-    let endPath = EndPathSpecificOps(opsMessage.id);
+    let endPath = EndPathOps();
     const affectedServices = opsMessage.affectedServices.map(service => service.id)
 
     let body = JSON.stringify({
