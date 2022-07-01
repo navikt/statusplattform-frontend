@@ -90,15 +90,17 @@ const CategoryContainer = styled.div`
         justify-content: space-between;
         gap: 50px;
 
-        .navds-panel{width: 100%;}
-
-        .navds-panel:first-child {
+        .navds-panel {
+            width: 100%;
+            padding: 2rem;
+            border: none;
+            background: none;
+            height: max-content;
+            
             -moz-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
             -webkit-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
             box-shadow: 0 0 10px rgba(0,0,0, 0.2);
         }
-        
-        .navds-panel:last-child {border: none; background: none; height: max-content;}
 
         @media(min-width: 825px) {
             flex-direction: row;
@@ -114,21 +116,12 @@ const CategoryContainer = styled.div`
 const ServiceContainer = styled.div`
     min-width: 100px;
     min-height: 75px;
-
-    padding: 1rem;
-    /* background-color: var(--navds-semantic-color-canvas-background-light); */
+    
     border-radius: 10px;
 
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-
-    /* Padding på alle sub-elementer for å ha spacing */
-    & > * {
-        padding: 1rem 0;
-    }
-
 `
 
 const ServiceWrapper = styled.div`
@@ -304,15 +297,6 @@ const StatusRecord = ({record}: StatusRecordI) => {
 
     return (
         <RecordWrapper>
-            <Heading level="2" size="medium">
-                Informasjon om tjenestestatus
-            </Heading>
-            <div>
-                <Heading level="3" size="xsmall">
-                    Tjeneste id:
-                </Heading>
-                {record.serviceId}
-            </div>
             <div>
                 <Heading level="3" size="xsmall">
                     Sist oppdaterte status
@@ -333,13 +317,13 @@ const StatusRecord = ({record}: StatusRecordI) => {
 const StatusPrettifier = (record: Record): string => {
     switch (record.status) {
         case "OK":
-            return "Oppe"
+            return "Tjenesten fungerer normalt."
         case "ISSUE":
-            return "Avvik";
+            return "Eventuell avviksmelding som er knyttet til tjenesten.";
         case "DOWN":
-            return "Nede"
+            return "Statusendepunkt svarer ikke."
         default:
-            return "Ukjent"
+            return "Status er ukjent."
     }
 }
 
