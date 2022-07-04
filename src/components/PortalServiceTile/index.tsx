@@ -31,6 +31,7 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
         Adjustment to EkspanderbartPanel-component padding
         padding-bottom 34px is due to position: absolute in navds-detail
     */
+    background: none;
     .ekspanderbartPanel__hode {
         padding: 0;
         padding-right: 20px;
@@ -131,7 +132,6 @@ const HeadingCustomized = styled(Heading)`
 
 const ServicesList = styled.ul`
     color: black;
-    background-color: white;
     
     border-radius:0 0 10px 10px;
 
