@@ -266,7 +266,7 @@ const NewService = () => {
 
 
     const validatedForm = () => {
-        if(!validatePollingUrl(pollingUrl)) {
+        if(!validatePollingUrl(pollingUrl) && !statusHolder) {
             return false
         }
         if(!validateMonitorLink(monitorlink)) {
