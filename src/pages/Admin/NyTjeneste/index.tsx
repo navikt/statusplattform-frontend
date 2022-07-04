@@ -62,20 +62,6 @@ const NewService = () => {
     const [allServices, setAllServices] = useState<Service[]>()
     const [allComponents, setAllComponents] = useState<Component[]>()
     const [isLoading, setIsLoading] = useState(true)
-    const [didServiceCreate, changeDidServiceCreate] = useState(false)
-    const [newlyCreatedService, setNewlyCreatedService] = useState<Service>(
-        {
-            name: "",
-            team: "",
-            type: "TJENESTE",
-            serviceDependencies: [],
-            componentDependencies: [],
-            monitorlink: "",
-            pollingUrl: "",
-            areasContainingThisService: [],
-            statusNotFromTeam: false
-        }
-    )
     
     const [newService, updateNewService] = useState<Service>({
         name: "",
@@ -88,7 +74,6 @@ const NewService = () => {
         areasContainingThisService: [],
         statusNotFromTeam: false
     })
-    const [statusHolder, changeStatusHolder] = useState(false)
 
     
 
@@ -124,23 +109,31 @@ const NewService = () => {
 
 
     const handleServiceDataChange = (field: keyof typeof newService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        if(field == "pollingUrl" && !statusHolder) {
-            validatePollingUrl(pollingUrl)
-        }
         const updatedNewArea = {
             ...newService,
-            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
-            
-            updateNewService(updatedNewArea)
+            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
+        }
+        updateNewService(updatedNewArea)
     }
 
     const validatePollingUrl = (urlInput) => {
+        if(urlInput.length == 0) {
+            return true
+        }
+
         let url;
         
         try {
             url = new URL(urlInput);
         } catch (_) {
             return false;  
+        }
+
+        const com = urlInput.substring(urlInput.length - 4)
+        const no = urlInput.substring(urlInput.length - 3)
+
+        if(com != ".com" && no != ".no") {
+            return false
         }
 
         return url.protocol === "http:" || url.protocol === "https:";
@@ -246,27 +239,18 @@ const NewService = () => {
         }
         postService(newService).then((response: Service) => {
             toast.success("Tjeneste lastet opp")
-            changeDidServiceCreate(true)
-            setNewlyCreatedService(response)
+            redirectToAdminTjenester()
         }).catch(() => {
             toast.error("Klarte ikke å laste opp tjeneste")
         })
     }
 
     const redirectToAdminTjenester = () => {
-        if(didServiceCreate) {
-            router.push(RouterAdminTjenester.PATH)
-        }
+        router.push(RouterAdminTjenester.PATH)
     }
-
-    const handleHasStatusholder = (radioSelected: string) => {
-        const isStatusHolder = radioSelected == "statusholder" ? true : false
-        changeStatusHolder(isStatusHolder)
-    }
-
 
     const validatedForm = () => {
-        if(!validatePollingUrl(pollingUrl) && !statusHolder) {
+        if(!validatePollingUrl(pollingUrl)) {
             return false
         }
         if(!validateMonitorLink(monitorlink)) {
@@ -275,30 +259,13 @@ const NewService = () => {
         return true
     }
 
+
+
+
+
+
     return (
         <Layout>
-
-            <Modal open={didServiceCreate} onClose={() => redirectToAdminTjenester()}>
-                <ModalContent>
-                    <Heading spacing level="1" size="large">
-                        Tjeneste opprettet!
-                    </Heading>
-                    <Detail spacing>
-                        {newlyCreatedService.id}
-                    </Detail>
-
-                    <span className="bottom">
-                        <BodyShort>
-                            Kopier denne id'en: 
-                        </BodyShort>
-                        <Button variant="secondary" size="small" onClick={() => navigator.clipboard.writeText(newlyCreatedService.id)}>
-                            <Copy />
-                        </Button>
-                    </span>
-                </ModalContent>
-            </Modal>
-
-
             <NewServiceContainer>
                 <form onSubmit={event => handlePostNewService(event)}>
 
@@ -307,26 +274,16 @@ const NewService = () => {
                     <TextField type="text" required label="Navn på tjeneste*" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn" />
                     <TextField type="text" required label="Team*" value={team} onChange={handleServiceDataChange("team")} placeholder="Team" />
 
-                    <RadioGroup
-                        legend="Er pollingurl egendefinert?"
-                        onChange={(val: any) => handleHasStatusholder(val)}
-                        defaultValue=""
-                    >
-                        <Radio value="">Egendefinert</Radio>
-                        <Radio value="statusholder">Statusholder</Radio>
-                    </RadioGroup>
-                    {!statusHolder &&
-                        <TextField
-                            className="input-field"
-                            type="text"
-                            label="PollingUrl"
-                            value={pollingUrl}
-                            error={!validatePollingUrl(pollingUrl) ? "Feil i formatet på urlen" : undefined}
-                            onChange={handleServiceDataChange("pollingUrl")}
-                            placeholder="PollingUrl"
-                            required
-                        />
-                    }
+                    <TextField
+                        className="input-field"
+                        type="text"
+                        label="PollingUrl"
+                        value={pollingUrl}
+                        error={!validatePollingUrl(pollingUrl) ? "Feil i formatet på urlen" : undefined}
+                        onChange={handleServiceDataChange("pollingUrl")}
+                        placeholder="PollingUrl"
+                        required
+                    />
                     <TextField
                         type="text"
                         label="Monitorlink"
@@ -347,14 +304,15 @@ const NewService = () => {
 
                     <HorizontalSeparator />
 
-                    <ComponentDependencies 
+                    {/* ComoponentDependencies må kanskje fjernes permanent fra denne sida. */}
+                    {/* <ComponentDependencies 
                         newService={newService}
                         allComponents={allComponents}
                         handleAddComponentDependency={(componentToAdd) => handleAddComponentDependency(componentToAdd)}
                         handleDeleteComponentDependency={(componentToAdd) => handleDeleteComponentDependency(componentToAdd)}
                     />
+                    <HorizontalSeparator /> */}
 
-                    <HorizontalSeparator />
 
                     <ConnectServiceToArea 
                         newService={newService}
