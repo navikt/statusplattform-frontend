@@ -117,6 +117,9 @@ const NewService = () => {
     }
 
     const validatePollingUrl = (urlInput) => {
+        if(urlInput.includes(" ")) {
+            return false
+        }
         if(urlInput == "STATUSHOLDER") {
             return true
         }
@@ -143,6 +146,9 @@ const NewService = () => {
     }
 
     const validateMonitorLink = (urlInput) => {
+        if(urlInput.includes(" ")) {
+            return false
+        }
         if(urlInput.length == 0) {
             return true
         }
@@ -285,7 +291,6 @@ const NewService = () => {
                         error={!validatePollingUrl(pollingUrl) ? "Feil i formatet på urlen" : undefined}
                         onChange={handleServiceDataChange("pollingUrl")}
                         placeholder="PollingUrl"
-                        required
                     />
                     <TextField
                         type="text"
