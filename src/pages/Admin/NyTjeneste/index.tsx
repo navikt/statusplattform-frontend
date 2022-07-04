@@ -117,6 +117,9 @@ const NewService = () => {
     }
 
     const validatePollingUrl = (urlInput) => {
+        if(urlInput == "STATUSHOLDER") {
+            return true
+        }
         if(urlInput.length == 0) {
             return true
         }
