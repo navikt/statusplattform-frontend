@@ -138,7 +138,7 @@ const NewService = () => {
         const com = urlInput.substring(urlInput.length - 4)
         const no = urlInput.substring(urlInput.length - 3)
 
-        if(com != ".com" && no != ".no") {
+        if(com != ".com" && no != ".no" && no != ".io") {
             return false
         }
 
@@ -289,6 +289,7 @@ const NewService = () => {
                         label="PollingUrl"
                         value={pollingUrl}
                         error={!validatePollingUrl(pollingUrl) ? "Feil i formatet på urlen" : undefined}
+
                         onChange={handleServiceDataChange("pollingUrl")}
                         placeholder="PollingUrl"
                     />
@@ -429,7 +430,7 @@ const ServiceDependencies = ({newService, allServices, handleDeleteServiceDepend
                     })}
                 </ul>
             :
-                <BodyShort spacing><b>Ingen tjenester igjen i listen</b></BodyShort>
+                <BodyShort spacing><b>Ingen tjenesteavhengigheter lagt til</b></BodyShort>
             }
 
         </DynamicListContainer>

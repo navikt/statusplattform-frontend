@@ -12,9 +12,9 @@ import { BodyShort, Button, Heading, Modal, Select, TextField } from '@navikt/ds
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Component } from '../../types/types';
 import { deleteComponent, fetchComponents, updateComponent } from '../../utils/componentsAPI';
-import { AdminCategoryContainer, CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { RouterAdminAddKomponent } from '../../types/routes';
+import { AdminCategoryContainer, CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '../../pages/Admin';
 
 
 const ComponentHeader = styled.div`
@@ -98,18 +98,40 @@ const CustomButton = styled.button`
 `
 
 
-
 const KomponentTable = () => {
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [componentsToEdit, changeComponentsToEdit] = useState<string[]>([])
     const [componentToDelete, setComponentToDelete] = useState<Component>()
-    const { data: components, isLoading: loadingComponents, reload } = useLoader(fetchComponents,[]);
+    const [components, setComponents] = useState<Component[]>()
+    const [loadingComponents, setLoadingComponents] = useState(true)
 
     const { changeTitle } = useContext(TitleContext)
     
     useEffect(() => {
+        let controlVar = true
+        setLoadingComponents(true)
         changeTitle("Admin - Komponenter")
-    })
+        const setup = async () => {
+            await fetchComponents().then((response)=> {
+                setLoadingComponents(false)
+                setComponents(response)
+            })
+        }
+        if(controlVar) {
+            setup()
+        }
+        controlVar = false
+    },[])
+
+    const reload = async () => {
+        setLoadingComponents(true)
+        await fetchComponents().then((response) => {
+            setComponents(response)
+            setLoadingComponents(false)
+        }).catch(() => {
+            toast.error("Noe gikk galt ved henting av tjenestene")
+        })
+    }
 
     if(loadingComponents) {
         return (

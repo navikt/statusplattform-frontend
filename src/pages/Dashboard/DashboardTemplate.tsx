@@ -121,6 +121,11 @@ const ErrorParagraph = styled.p`
 /* --------------------------------------- Styles end --------------------------------------- */
 
 
+
+// export const getStaticProps
+
+
+
 interface DashboardProps {
     dashboard: Dashboard
     isFullScreen: boolean
@@ -153,16 +158,28 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
 
     // initial state
     useEffect(() => {
-        (async function () {
-            setIsLoading(true)
-            changeTitle("Status digitale tjenester")
+        setIsLoading(true)
+        changeTitle("Status digitale tjenester")
+        let controlVar = true
 
-            const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
-            setAreasInDashboard(retrievedAreasInDashboard.areas)
+        const setup = async () => {
+            try {
+                const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
+                setAreasInDashboard(retrievedAreasInDashboard.areas)
+                rerouteIfNoDashboard()
+                setIsLoading(false)
+                console.log("dddd")
+            } catch (error) {
+                toast.error("Dæven")                
+            }
 
-            rerouteIfNoDashboard()
-            setIsLoading(false)
-        })()
+        }
+
+        if(controlVar) {
+            setup()
+        }
+        controlVar = false
+
     }, [])
 
 

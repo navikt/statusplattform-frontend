@@ -18,7 +18,7 @@ import { Service } from "../../../types/types"
 import { backendPath } from "../.."
 import { EndPathServices } from "../../../utils/apiHelper"
 import { Delete } from "@navikt/ds-icons"
-import { CloseCustomized } from "../../../components/Admin"
+import { CloseCustomized } from "../../Admin"
 
 
 export const getServerSideProps = async () => {

@@ -8,10 +8,8 @@ import { Bag, Calculator, Close, Delete, Expand, FillForms, FlowerBladeFall, Fol
 
 import { Area, Service, SubArea } from '../../types/types';
 
-import { AdminCategoryContainer, CloseCustomized, DependencyList } from '.';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
-import { ModalInner } from '.';
 import { getIconsFromGivenCode } from '../../utils/servicesOperations';
 import { useLoader } from '../../utils/useLoader';
 import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react';
@@ -19,6 +17,7 @@ import { TitleContext } from '../ContextProviders/TitleContext';
 import { deleteArea, deleteServiceFromArea, fetchAreas, fetchSubAreas, postAdminArea, putServiceToArea, updateArea } from '../../utils/areasAPI';
 import { fetchServices } from '../../utils/servicesAPI';
 import { RouterAdminAddOmråde } from '../../types/routes';
+import { AdminCategoryContainer, CloseCustomized, DependencyList, ModalInner } from "../../pages/Admin";
 
 
 
@@ -78,7 +77,6 @@ const AreaElementContainer = styled.div`
 
 
 
-
 const AreaTable = () => { 
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [anchorId, setAnchorId] = useState<string>("")
@@ -92,7 +90,7 @@ const AreaTable = () => {
 
     useEffect(() => {
         changeTitle("Admin - Områder")
-    })
+    },[])
 
 
     const reloadAll = () => {

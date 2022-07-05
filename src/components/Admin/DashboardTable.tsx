@@ -8,25 +8,37 @@ import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
 import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react'
 
 import CustomNavSpinner from '../../components/CustomNavSpinner'
-import { AdminCategoryContainer, ModalInner } from '.';
-import { CloseCustomized } from '.'
 import { Area, Dashboard } from '../../types/types'
 import { useLoader } from '../../utils/useLoader'
 import { TitleContext } from '../ContextProviders/TitleContext'
 import { deleteDashboard, fetchDashboard, fetchDashboardsList, postDashboard, updateDashboard } from '../../utils/dashboardsAPI'
 import { fetchAreas, putAreasToDashboard } from '../../utils/areasAPI'
 import { RouterAdminAddDashboard } from '../../types/routes'
+import { AdminCategoryContainer, CloseCustomized, ModalInner } from '../../pages/Admin'
 
 
 
 const DashboardTable = () => {
-    const { data: dashboards, isLoading, reload } = useLoader(fetchDashboardsList,[]);
+    const [isLoading, setIsLoading] = useState(true)
+    const [dashboards, setDashboards] = useState<Dashboard[]>()
 
     const { changeTitle } = useContext(TitleContext)
 
     useEffect(() => {
         changeTitle("Admin - Dashbord")
-    })
+        setIsLoading(false)
+    },[])
+
+    const reload = async () => {
+        await fetchDashboardsList().then((response) => {
+            setIsLoading(true)
+            setDashboards(response)
+            setIsLoading(false)
+        }).catch(() => {
+            toast.error("Noe gikk galt ved henting av dashbordene")
+        })
+    }
+
 
     const router = useRouter()
 
@@ -35,7 +47,6 @@ const DashboardTable = () => {
             <CustomNavSpinner/>
         ) 
     }
-
     return (
         <AdminCategoryContainer>
             <Head>

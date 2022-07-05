@@ -196,10 +196,10 @@ export const handleAndSetStatusIcon = (status: string | null, isInternal?: boole
     switch(status) {
         case 'OK':
             return <SuccessFilledCustomized />
-        case 'DOWN':
-            return <ErrorFilledCustomized />
         case 'ISSUE':
             return <WarningFilledCustomized />
+        case 'DOWN':
+            return <ErrorFilledCustomized />
         case 'MAINTENANCE':
             return <WrenchFilledCustomized />
         case null:

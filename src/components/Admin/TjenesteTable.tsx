@@ -12,13 +12,12 @@ import { BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal, Select, Tex
 
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Area, Component, Service } from '../../types/types';
-import { AdminCategoryContainer, CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '.';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import { deleteService, fetchServices, postService, updateService } from '../../utils/servicesAPI';
 import { RouterAdminAddTjeneste } from '../../types/routes';
 import { fetchComponents } from '../../utils/componentsAPI';
 import { fetchAreas } from '../../utils/areasAPI';
-import { HorizontalSeparator } from '../../pages/Admin';
+import { AdminCategoryContainer, CloseCustomized, DependenciesColumn, DependencyList, HorizontalSeparator, ModalInner, NoContentContainer } from '../../pages/Admin';
 
 
 const TjenesteHeader = styled.div<{paddingprop: string}>`
@@ -106,17 +105,48 @@ const CustomButton = styled.button`
 
 
 
+
 const TjenesteTable = () => {
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [servicesToEdit, changeServicesToEdit] = useState<string[]>([])
     const [serviceToDelete, setServiceToDelete] = useState<Service>()
-    const { data: services, isLoading: loadingServices, reload } = useLoader(fetchServices,[]);
+    const [services, setServices] = useState<Service[]>()
+    const [loadingServices, setLoadingServices] = useState(true)
 
     const { changeTitle } = useContext(TitleContext)
+
     
     useEffect(() => {
+        let controlVar = true
         changeTitle("Admin - Tjenester")
-    })
+        
+        const setupComponent = async () => {
+            try {
+                const responseServices = await fetchServices()
+                setLoadingServices(true)
+                setServices(responseServices)
+                setLoadingServices(false)
+            } catch (error) {
+                toast.error("Noe gikk galt ved henting av tjenestene")
+            }
+        }
+        if(controlVar) {
+            setupComponent()
+        }
+        controlVar = false
+    },[])
+
+    
+
+    const reload = async () => {
+        await fetchServices().then((response) => {
+            setLoadingServices(true)
+            setServices(response)
+            setLoadingServices(false)
+        }).catch(() => {
+            toast.error("Noe gikk galt ved henting av tjenestene")
+        })
+    }
 
     if(loadingServices) {
         return (
@@ -347,6 +377,12 @@ const ServiceRowContent = styled.div`
 
             display: flex;
             flex-direction: column;
+
+            &.editting {
+                .navds-form-field {
+                    flex-direction: column;
+                }
+            }
         }
     }
 `
@@ -504,12 +540,26 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         statusNotFromTeam: service.statusNotFromTeam,
         record: service.record
     })
+    const [isValidMonitorUrl, setIsValidMonitorUrl] = useState(true)
+    const [isValidPollingUrl, setIsvalidPollingUrl] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     const { data: allComponents, isLoading: loadingComponents, reload: reloadComponents } = useLoader(fetchComponents,[]);
     const { data: allAreas, isLoading: loadingAreas, reload: reloadAreas } = useLoader(fetchAreas,[]);
 
+    useEffect(() => {
+        setIsLoading(true)
+        if(monitorlink == null || monitorlink == undefined) {
+            changeUpdatedService({...updatedService, monitorlink: ""})
+        }
+        if(pollingUrl == null || pollingUrl == undefined) {
+            changeUpdatedService({...updatedService, pollingUrl: ""})
+        }
+        setIsLoading(false)
+    },[])
 
-    if(loadingComponents || loadingAreas) {
+
+    if(loadingComponents || loadingAreas || isLoading) {
         return(
             <CustomNavSpinner />
         )
@@ -526,6 +576,10 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
     }
 
     const handleSubmit = () => {
+        if(!areAllFieldsValid()) {
+            toast.error("Noen feil eksisterer i feltene dine. Vennligst gå over og prøv på nytt")
+            return
+        }
         updateService(updatedService).then(() => {
             reload()
             toggleEditService(service)
@@ -548,8 +602,92 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
     const handleIsStatusFromTeam = () => {
         changeUpdatedService({...service, statusNotFromTeam: !statusNotFromTeam})
     }
-    
 
+
+
+
+
+
+    const validatePollingUrl = (urlInput) => {
+        if(urlInput.includes(" ")) {
+            setIsvalidPollingUrl(false)
+            return false
+        }
+        if(urlInput == "STATUSHOLDER") {
+            setIsvalidPollingUrl(true)
+            return true
+        }
+        if(urlInput.length == 0) {
+            setIsvalidPollingUrl(true)
+            return true
+        }
+
+        let url
+        
+        try {
+            url = new URL(urlInput);
+        } catch (_) {
+            setIsvalidPollingUrl(false)
+            return false
+        }
+
+
+        const com = urlInput.substring(urlInput.length - 4)
+        const no = urlInput.substring(urlInput.length - 3)
+
+        if(com != ".com" && no != ".no" && no != ".io") {
+            setIsvalidPollingUrl(false)
+            return false
+        }
+
+        return setIsvalidPollingUrl(url.protocol === "http:" || url.protocol === "https:")
+    }
+
+
+
+
+
+    const validateMonitorUrl = (urlInput) => {
+        if(urlInput.includes(" ")) {
+            setIsValidMonitorUrl(false)
+            return false
+        }
+        if(urlInput.length == 0) {
+            setIsValidMonitorUrl(true)
+            return true
+        }
+
+        let url
+        
+        try {
+            url = new URL(urlInput);
+        } catch (_) {
+            setIsValidMonitorUrl(false)
+            return false
+        }
+
+
+        const com = urlInput.substring(urlInput.length - 4)
+        const no = urlInput.substring(urlInput.length - 3)
+
+        if(com != ".com" && no != ".no" && no != ".io") {
+            setIsValidMonitorUrl(false)
+            return false
+        }
+
+        return setIsValidMonitorUrl(url.protocol === "http:" || url.protocol === "https:")
+    }
+
+    const areAllFieldsValid = () => {
+        if(!validatePollingUrl(pollingUrl)) {
+            return false
+        }
+        if(!validateMonitorUrl(monitorlink)) {
+            return false
+        }
+        return true
+
+    }
 
 
     return (
@@ -594,12 +732,26 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
                     <div className="service-row-column">
                         <span className="service-data-element editting">
                             <BodyShort spacing><b>Monitorlink</b></BodyShort>
-                            <TextField label="Monitorlink" hideLabel value={monitorlink} onChange={handleUpdatedService("monitorlink")}/>
+                            <TextField
+                                label="Monitorlink" 
+                                hideLabel
+                                value={monitorlink == null ? "" : monitorlink}
+                                error={!isValidMonitorUrl ? "Monitor-url er ugyldig" : ""}
+                                onChange={handleUpdatedService("monitorlink")}
+                                onBlur={() => validateMonitorUrl(monitorlink)}
+                            />
                         </span>
                         
                         <span className="service-data-element editting">
                             <BodyShort spacing><b>PollingUrl</b></BodyShort>
-                            <TextField label="Pollingurl" hideLabel value={pollingUrl} onChange={handleUpdatedService("pollingUrl")}/>
+                            <TextField 
+                                label="Pollingurl"
+                                hideLabel
+                                value={pollingUrl}
+                                onChange={handleUpdatedService("pollingUrl")}
+                                error={!isValidPollingUrl ? "Polling-url er ugyldig" : ""}
+                                onBlur={() => validatePollingUrl(pollingUrl)}
+                            />
                         </span>
 
                         <span className="service-data-element editting">

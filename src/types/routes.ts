@@ -35,7 +35,7 @@ export enum RouterInternt {
 // Admin
 export enum RouterAdmin {
     NAME = "Admin",
-    PATH = "/Admin"
+    PATH = "/Admin?tab=Tjenester"
 }
 
 export enum RouterAdminDashboards {
