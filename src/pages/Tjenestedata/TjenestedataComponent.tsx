@@ -95,7 +95,6 @@ const CategoryContainer = styled.div`
             padding: 2rem;
             border: none;
             background: none;
-            height: max-content;
             
             -moz-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
             -webkit-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
@@ -184,10 +183,11 @@ const ServiceDataContainer = styled.div`
     }
 
     .row {
-        border-bottom: 1px solid var(--navds-global-color-gray-400);
-        /* margin: 16px 0; */
         padding: 16px 0;
-
+    }
+    
+    .row:not(:last-child) {
+        border-bottom: 1px solid var(--navds-global-color-gray-400);
     }
 
     a {
@@ -284,13 +284,7 @@ const StatusRecord = ({record}: StatusRecordI) => {
     if(record.status == "OK") {
         return (
             <RecordWrapper>
-                <Heading level="2" size="medium">
-                    Informasjon om tjenestestatus
-                </Heading>
-                <Heading level="3" size="xsmall">
-                    Sist oppdaterte status
-                </Heading>
-                Alt kjører som forventet!
+                Tjenesten fungerer som normalt
             </RecordWrapper>
         )
     }
@@ -298,15 +292,12 @@ const StatusRecord = ({record}: StatusRecordI) => {
     return (
         <RecordWrapper>
             <div>
-                <Heading level="3" size="xsmall">
-                    Sist oppdaterte status
-                </Heading>
                 {prettifiedStatus}
             </div>
             {record.description &&
                 <div>
                     <Heading level="3" size="xsmall">
-                        Beskrivelse
+                        Beskrivelse 
                     </Heading>
                 </div>
             }
@@ -317,13 +308,13 @@ const StatusRecord = ({record}: StatusRecordI) => {
 const StatusPrettifier = (record: Record): string => {
     switch (record.status) {
         case "OK":
-            return "Tjenesten fungerer normalt."
+            return "Tjenesten fungerer som normalt."
         case "ISSUE":
-            return "Eventuell avviksmelding som er knyttet til tjenesten.";
+            return "Tjenesten har redusert funksjonalitet.";
         case "DOWN":
-            return "Statusendepunkt svarer ikke."
+            return "Tjenesten er nede."
         default:
-            return "Status er ukjent."
+            return "Statusendepunktet svarer ikke."
     }
 }
 
