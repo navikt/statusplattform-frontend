@@ -183,11 +183,13 @@ const ServiceDataContainer = styled.div`
     }
 
     .row {
-        padding: 16px 0;
-    }
-    
-    .row:not(:last-child) {
-        border-bottom: 1px solid var(--navds-global-color-gray-400);
+        padding: .5rem 0;
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
     }
 
     a {
@@ -235,11 +237,7 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
                         <BodyShort spacing><b>Områder som inneholder tjenesten</b></BodyShort>
                         <ul>
                             {areasContainingThisService.map((area, index) => {
-                                if(areasContainingThisService.length != index+1) {
-                                    return (
-                                        <li key={area.id}>{area.name}, </li>
-                                    )
-                                } return (
+                                return (
                                     <li key={area.id}>{area.name}</li>
                                 )
                             })}
@@ -615,17 +613,17 @@ const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, servi
 const ServiceAndComponentDependencies = styled.ul`
     display: flex;
     flex-flow: row wrap;
+    column-gap: 1.5rem;
+    row-gap: .5rem;
     
     padding: 0;
     list-style: none;
     
     li {
-        margin: .5rem 1rem;
-
         a {
             display: flex;
             align-items: center;
-
+    
             svg {
                 margin-right: 5px;
             }
