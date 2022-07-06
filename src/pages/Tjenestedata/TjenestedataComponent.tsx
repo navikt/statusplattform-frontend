@@ -139,7 +139,11 @@ const TjenestedataContent: React.FC<{service: Service, areasContainingThisServic
 
     return (
         <CategoryContainer>
-            <div className="title-container"><Innholdstittel>{handleAndSetStatusIcon(service.record.status, true)}{service.name}</Innholdstittel></div>
+            <div className="title-container">
+                <Innholdstittel>{handleAndSetStatusIcon(service.record.status, true)}{service.name}</Innholdstittel>
+                {/* TODO: Legg til denne datoen når det er klart i backend og på types.ts --> Service */}
+                {/* <Detail>Sist oppdatert {service.record.date}</Detail> */}
+            </div>
 
             {/* <div>
                 <Button variant="secondary" onClick={() => router.push(RouterOpprettVarsling.PATH)}><Bell/> Bli varslet ved avvik</Button> 
