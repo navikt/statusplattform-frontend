@@ -10,16 +10,22 @@ import { fetchTypes } from "../../../utils/fetchTypes";
 
 import { BodyShort, Button, Detail, Heading, Modal, Select, TextField } from "@navikt/ds-react";
 import { Copy, Delete } from "@navikt/ds-icons";
-import { DynamicListContainer, HorizontalSeparator } from "..";
+import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 import { fetchAreas } from "../../../utils/areasAPI";
 import { fetchComponents, postComponent } from "../../../utils/componentsAPI";
 import { RouterAdminKomponenter } from "../../../types/routes";
+import { EndPathComponents, EndPathServices } from "../../../utils/apiHelper";
+import { backendPath } from "../..";
 
 
 const NewComponentContainer = styled.div`
     display: flex;
     flex-direction: column;
+    
+    @media (min-width: 600px) {
+        width: 600px;
+    }
 
     input, select {
         margin: 1rem 0;
@@ -50,9 +56,27 @@ const ModalContent = styled(Modal.Content)`
     }
 `
 
+export const getServerSideProps = async () => {
+    const [resComponents, resServices] = await Promise.all([
+        fetch(backendPath + EndPathComponents()),
+        fetch(backendPath + EndPathServices())
+    ])
+    
+    const allComponentsProps = await resComponents.json()
+    const allServicesProps = await resServices.json()
 
-const NewComponent = () => {
-    const [allComponents, setAllComponents] = useState<Component[]>()
+    return {
+        props: {
+            allComponentsProps,
+            allServicesProps
+        }
+    }
+}
+
+
+const NewComponent = ({allComponentsProps, allServicesProps}) => {
+    const [allComponents, setAllComponents] = useState<Component[]>(allComponentsProps)
+    const [allServices, setAllServices] = useState<Service[]>(allServicesProps)
     const [isLoading, setIsLoading] = useState(true)
     const [didComponentCreate, changeDidComponentCreate] = useState(false)
     const [newlyCreatedComponent, setNewlyCreatedComponent] = useState<Component>(
@@ -83,12 +107,7 @@ const NewComponent = () => {
 
 
     useEffect(() => {
-        (async function () {
-            const retrievedComponents: Component[] = await fetchComponents()
-            const retrievedTypes: string[] = await fetchTypes()
-            setAllComponents(retrievedComponents)
-            setIsLoading(false)
-        })()
+        setIsLoading(false)
     }, [])
 
 
@@ -137,6 +156,32 @@ const NewComponent = () => {
         toast.success("Fjernet område fra område")
     }
     /*Handlers for adding componentDependencies END*/
+
+
+    /*Handlers for connecting to services START*/
+
+    const handleConnectToService = (serviceToConnect: Service) => {
+        if(dependencies.includes(serviceToConnect)) {
+            toast.warn("Komponent " + serviceToConnect.name + " er allerede lagt til")
+            return
+        }
+        const newServicesList: Service[] = [...newComponent.servicesDependentOnThisComponent, serviceToConnect]
+        const updatedComponent: Component = {
+            name: name, team: team, type: type, componentDependencies: dependencies, monitorlink: monitorlink, pollingUrl: pollingUrl, servicesDependentOnThisComponent: newServicesList
+        }
+        updateNewComponent(updatedComponent)
+        toast.success("Lagt til komponentavhengighet")
+    }
+
+    const handleDeleteConnectionToService = (serviceToDeleteFromConnections: Component) => {
+        const newServicesList: Service[] = [...newComponent.servicesDependentOnThisComponent.filter(service => service != serviceToDeleteFromConnections)]
+        const updatedComponent: Component = {
+            name: name, team: team, type: type, componentDependencies: dependencies, monitorlink: monitorlink, pollingUrl: pollingUrl, servicesDependentOnThisComponent: newServicesList
+        }
+        updateNewComponent(updatedComponent)
+        toast.success("Fjernet område fra område")
+    }
+    /*Handlers for connecting to services END*/
 
 
     const handlePostNewComponent = (event) => {
@@ -202,11 +247,19 @@ const NewComponent = () => {
 
                     <HorizontalSeparator />
 
+                    <ConnectToServiceComponent 
+                        newComponent={newComponent}
+                        allServices={allServices}
+                        handleConnectToService={(serviceToConnect) => handleConnectToService(serviceToConnect)}
+                        handleDeleteConnectionToService={(serviceToDeleteFromConnections) => handleDeleteConnectionToService(serviceToDeleteFromConnections)}
+                    />
 
-                    <div className="button-container">
+                    <HorizontalSeparator />
+
+                    <ButtonContainer>
                         <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push(RouterAdminKomponenter.PATH)}>Avbryt</Button>
                         <Button type="submit" value="Legg til i område">Lagre</Button>
-                    </div>
+                    </ButtonContainer>
                 </form>
             </NewComponentContainer>
             <ToastContainer />
@@ -265,42 +318,132 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
 
     return (
         <DynamicListContainer>
+
+            <div className="column">
+                <Select label="Legg til komponentavhengigheter" value={selectedComponent !== null ? selectedComponent.id : ""} onChange={handleUpdateSelectedArea}>
+                    {availableComponents.length > 0 ?
+                        availableComponents.map(component => {
+                            return (
+                                <option key={component.id} value={component.id}>{component.name}</option>
+                            )
+                        })
+                    :
+                        <option key={undefined} value="">Ingen tilgjengelige komponenter</option>
+                    }
+                </Select>
+                <Button variant="secondary" type="button" onClick={addHandler}>Legg til</Button>
+            </div>
+
             
-            <Select label="Legg til komponentavhengigheter" value={selectedComponent !== null ? selectedComponent.id : ""} onChange={handleUpdateSelectedArea}>
-                {availableComponents.length > 0 ?
-                    availableComponents.map(component => {
-                        return (
-                            <option key={component.id} value={component.id}>{component.name}</option>
-                        )
-                    })
-                :
-                    <option key={undefined} value="">Ingen tilgjengelige komponenter</option>
+            <div className="column">
+                {newComponent.componentDependencies.length > 0 &&
+                    <div>
+                        <b>Komponentavhengigheter</b>
+                        <ul className="new-list">
+                            {newComponent.componentDependencies.map(component => {
+                                return (
+                                    <li key={component.id}>
+                                        <BodyShort>
+                                            {component.name}
+                                            <button className="colored" type="button" onClick={() => handleDeleteComponentDependency(component)}>
+                                                <label>{component.name}</label>
+                                                <Delete/> Slett
+                                            </button>
+                                        </BodyShort>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </div>
                 }
-            </Select>
+            </div>
 
-            <Button variant="secondary" type="button" onClick={addHandler}>Legg til</Button>
+        </DynamicListContainer>
+    )
+}
+
+
+
+interface ConnectToServiceI {
+    newComponent: Component
+    allServices: Service[]
+    handleConnectToService: (serviceToConnectTo) => void
+    handleDeleteConnectionToService: (serviceToDeleteFromConnections) => void
+}
+
+const ConnectToServiceComponent = ({newComponent, allServices, handleConnectToService, handleDeleteConnectionToService}: ConnectToServiceI) => {
+    const availableServices: Service[] = allServices.filter(area => !newComponent.servicesDependentOnThisComponent.map(a => a.id).includes(area.id))
+    const { changeTitle } = useContext(TitleContext)
+
+    const [selectedService, changeSelectedService] = useState<Service | null>(() => availableServices.length > 0 ? availableServices[0] : null)
+
+    useEffect(() => {
+        if(availableServices.length > 0){
+            changeSelectedService(availableServices[0])
+        }
+        else {
+            changeSelectedService(null)
+        }
+    }, [allServices, newComponent.servicesDependentOnThisComponent])
+    
+
+
+    const handleUpdateSelectedService = (event) => {
+        const idOfSelectedService: string = event.target.value
+        const newSelectedService: Service = availableServices.find(service => idOfSelectedService === service.id)
+        changeSelectedService(newSelectedService)
+    }
+
+    const addHandler = () => {
+        if(!selectedService) {
+            toast.info("Ingen tjeneste valgt valgt")
+            return
+        }
+        handleConnectToService(selectedService)
+    }
+    
+
+    return (
+        <DynamicListContainer>
+
+            <div className="column">
+                <Select label="Legg til kobling mot tjeneste" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}>
+                    {availableServices.length > 0 ?
+                        availableServices.map(component => {
+                            return (
+                                <option key={component.id} value={component.id}>{component.name}</option>
+                            )
+                        })
+                    :
+                        <option key={undefined} value="">Ingen tilgjengelige komponenter</option>
+                    }
+                </Select>
+                <Button variant="secondary" type="button" onClick={addHandler}>Legg til</Button>
+            </div>
+
             
-
-            {newComponent.componentDependencies.length > 0
-            ?
-                <ul className="new-list">
-                    {newComponent.componentDependencies.map(component => {
-                        return (
-                            <li key={component.id}>
-                                <BodyShort>
-                                    {component.name}
-                                    <button className="colored" type="button" onClick={() => handleDeleteComponentDependency(component)}>
-                                        <label>{component.name}</label>
-                                        <Delete/> Slett
-                                    </button>
-                                </BodyShort>
-                            </li>
-                        )
-                    })}
-                </ul>
-            :
-                <BodyShort spacing><b>Ingen komponenter lagt til</b></BodyShort>
-            }
+            <div className="column">
+                {newComponent.servicesDependentOnThisComponent.length > 0 &&
+                    <div>
+                        <b>Kobling mot tjeneste</b>
+                        <ul className="new-list">
+                            {newComponent.servicesDependentOnThisComponent.map(service => {
+                                return (
+                                    <li key={service.id}>
+                                        <BodyShort>
+                                            {service.name}
+                                            <button className="colored" type="button" onClick={() => handleDeleteConnectionToService(service)}>
+                                                <label>{service.name}</label>
+                                                <Delete/> Slett
+                                            </button>
+                                        </BodyShort>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </div>
+                }
+            </div>
 
         </DynamicListContainer>
     )

@@ -11,7 +11,7 @@ import { useLoader } from "../../../utils/useLoader";
 import { Area, Dashboard } from "../../../types/types";
 import Layout from '../../../components/Layout';
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
-import { DynamicListContainer, HorizontalSeparator } from "..";
+import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 import { postDashboard } from "../../../utils/dashboardsAPI";
 import { fetchAreas } from "../../../utils/areasAPI";
@@ -21,15 +21,13 @@ import { RouterAdminDashboards } from "../../../types/routes";
 const NewDashboardContainer = styled.div`
     display: flex;
     flex-direction: column;
+    
+    @media (min-width: 600px) {
+        width: 600px;
+    }
 
     input, select {
         margin: 1rem 0;
-    }
-
-    .button-container {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
     }
 `
 
@@ -111,10 +109,10 @@ const NewDashboard = () => {
 
                     <HorizontalSeparator />
 
-                    <div className="button-container">
+                    <ButtonContainer>
                         <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push(RouterAdminDashboards.PATH)}>Avbryt</Button>
                         <Button type="submit" value="Legg til dashbord">Lagre</Button>
-                    </div>
+                    </ButtonContainer>
                 </form>
 
                 <ToastContainer />
@@ -180,42 +178,44 @@ const DashboardAreas = ({newDashboard, allAreas, handleDeleteAreaOnDashboard, ha
     return (
         <DynamicListContainer>
             
-            <Select label="Legg til område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
-                {availableAreas.length > 0 ?
-                    availableAreas.map(area => {
-                        return (
-                            <option key={area.id} value={area.id}>{area.name}</option>
-                        )
-                    })
-                :
-                    <option key={undefined} value="">Ingen områder å legge til</option>
+            <div className="column">
+                <Select label="Legg til område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
+                    {availableAreas.length > 0 ?
+                        availableAreas.map(area => {
+                            return (
+                                <option key={area.id} value={area.id}>{area.name}</option>
+                            )
+                        })
+                    :
+                        <option key={undefined} value="">Ingen områder å legge til</option>
+                    }
+                </Select>
+                <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
+            </div>
+
+            <div className="column">
+
+                {newDashboard.areas.length > 0 &&
+                    <div>
+                        <b>Områder i dashbord</b>
+                        <ul className="new-list">
+                            {newDashboard.areas.map(area => {
+                                return (
+                                    <li key={area.id}>
+                                        <BodyShort>
+                                            {area.name}
+                                            <button className="colored" type="button" onClick={() => handleDeleteAreaOnDashboard(area)}>
+                                                <label>{area.name}</label>
+                                                <Delete/> Slett
+                                            </button>
+                                        </BodyShort>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </div>
                 }
-            </Select>
-
-            <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
-            
-
-            {newDashboard.areas.length > 0
-            ?
-                <ul className="new-list">
-                    {newDashboard.areas.map(area => {
-                        return (
-                            <li key={area.id}>
-                                <BodyShort>
-                                    {area.name}
-                                    <button className="colored" type="button" onClick={() => handleDeleteAreaOnDashboard(area)}>
-                                        <label>{area.name}</label>
-                                        <Delete/> Slett
-                                    </button>
-                                </BodyShort>
-                            </li>
-                        )
-                    })}
-                </ul>
-            :
-                <BodyShort spacing><b>Ingen områder lagt til</b></BodyShort>
-            }
-
+            </div>
         </DynamicListContainer>
     )
 }

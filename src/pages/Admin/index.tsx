@@ -187,9 +187,20 @@ export const HorizontalSeparator = styled.span`
 
 export const DynamicListContainer = styled.div`
     display: flex;
-    flex-direction: column;
-
     gap: 16px;
+
+    max-width: 100%;
+    
+    .column {
+        flex: 1 1 0;
+
+        padding: 1rem 0;
+
+        button {
+            background: none;
+            min-width: fit-content;
+        }
+    }
 
     .new-list {
         list-style: none;
@@ -222,9 +233,18 @@ export const DynamicListContainer = styled.div`
 
                 display: flex;
                 justify-content: space-between;
+                word-break: break-word;
             }
         }
     }
+`
+
+export const ButtonContainer = styled.div`
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+
+    margin-top: 2rem;
 `
 
 

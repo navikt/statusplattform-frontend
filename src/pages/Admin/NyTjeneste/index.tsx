@@ -9,7 +9,7 @@ import CustomNavSpinner from "../../../components/CustomNavSpinner";
 
 import { BodyShort, Button, Detail, Heading, Modal, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
 import { Copy, Delete } from "@navikt/ds-icons";
-import { DynamicListContainer, HorizontalSeparator } from "..";
+import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 import { fetchServices, postService } from "../../../utils/servicesAPI";
 import { fetchAreas } from "../../../utils/areasAPI";
@@ -21,22 +21,13 @@ const NewServiceContainer = styled.div`
     display: flex;
     flex-direction: column;
 
+    @media (min-width: 600px) {
+        width: 600px;
+    }
+
     input, select {
         margin: 1rem 0;
     }
-
-    .button-container {
-        display: flex;
-        flex-flow: row nowrap;
-        justify-content: space-between;
-    }
-
-    .input-field {
-        div {
-            margin-bottom: 1rem;
-        }
-    }
-
 `
 
 const ModalContent = styled(Modal.Content)`
@@ -284,7 +275,6 @@ const NewService = () => {
                     <TextField type="text" required label="Team*" value={team} onChange={handleServiceDataChange("team")} placeholder="Team" />
 
                     <TextField
-                        className="input-field"
                         type="text"
                         label="PollingUrl"
                         value={pollingUrl}
@@ -333,10 +323,10 @@ const NewService = () => {
                     <HorizontalSeparator />
 
 
-                    <div className="button-container">
+                    <ButtonContainer>
                         <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push(RouterAdminTjenester.PATH)}>Avbryt</Button>
                         <Button type="submit" value="Legg til i område">Lagre</Button>
-                    </div>
+                    </ButtonContainer>
                 </form>
             </NewServiceContainer>
             <ToastContainer />
@@ -396,42 +386,48 @@ const ServiceDependencies = ({newService, allServices, handleDeleteServiceDepend
 
     return (
         <DynamicListContainer>
-            
-            <Select label="Legg til tjenesteavhengighet" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedArea}>
-                {availableServices.length > 0 ?
-                    availableServices.map(service => {
-                        return (
-                            <option key={service.id} value={service.id}>{service.name}</option>
-                        )
-                    })
-                :
-                    <option key={undefined} value="">Ingen tilgjengelige områder</option>
+
+            <div className="column">
+                <Select label="Legg til tjenesteavhengighet" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedArea}>
+                    {availableServices.length > 0 ?
+                        availableServices.map(service => {
+                            return (
+                                <option key={service.id} value={service.id}>{service.name}</option>
+                            )
+                        })
+                    :
+                        <option key={undefined} value="">Ingen tilgjengelige områder</option>
+                    }
+                </Select>
+
+                <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
+            </div>
+
+            <div className="column">
+                {newService.serviceDependencies.length > 0 &&
+                    <div>
+                        <b>Tjenesteavhengigheter lagt til</b>
+                        <ul className="new-list">
+                            {newService.serviceDependencies.map(service => {
+                                return (
+                                    <li key={service.id}>
+                                        <BodyShort>
+                                            {service.name}
+                                            <button className="colored" type="button" onClick={() => handleDeleteServiceDependency(service)}>
+                                                <label>{service.name}</label>
+                                                <Delete/> Slett
+                                            </button>
+                                        </BodyShort>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </div>
                 }
-            </Select>
-
-            <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
+            </div>
+            
             
 
-            {newService.serviceDependencies.length > 0
-            ?
-                <ul className="new-list">
-                    {newService.serviceDependencies.map(service => {
-                        return (
-                            <li key={service.id}>
-                                <BodyShort>
-                                    {service.name}
-                                    <button className="colored" type="button" onClick={() => handleDeleteServiceDependency(service)}>
-                                        <label>{service.name}</label>
-                                        <Delete/> Slett
-                                    </button>
-                                </BodyShort>
-                            </li>
-                        )
-                    })}
-                </ul>
-            :
-                <BodyShort spacing><b>Ingen tjenesteavhengigheter lagt til</b></BodyShort>
-            }
 
         </DynamicListContainer>
     )
@@ -578,41 +574,45 @@ const ConnectServiceToArea = ({newService, allAreas, handleDeleteAreaServiceConn
 
     return (
         <DynamicListContainer>
-            <Select label="Legg til i område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
-                {availableAreas.length > 0 ?
-                    availableAreas.map(area => {
-                        return (
-                            <option key={area.id} value={area.id}>{area.name}</option>
-                        )
-                    })
-                :
-                    <option key={undefined} value="">Ingen områder å legge til</option>
-                }
-            </Select>
+            <div className="column">
+                <Select label="Legg til i område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
+                    {availableAreas.length > 0 ?
+                        availableAreas.map(area => {
+                            return (
+                                <option key={area.id} value={area.id}>{area.name}</option>
+                            )
+                        })
+                    :
+                        <option key={undefined} value="">Ingen områder å legge til</option>
+                    }
+                </Select>
 
-            <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
+                <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
+            </div>
             
-
-            {newService.areasContainingThisService.length > 0
-            ?
-                <ul className="new-list">
-                    {newService.areasContainingThisService.map(area => {
-                        return (
-                            <li key={area.id}>
-                                <BodyShort>
-                                    {area.name}
-                                    <button className="colored" type="button" onClick={() => handleDeleteAreaServiceConnectsTo(area)}>
-                                        <label>{area.name}</label>
-                                        <Delete/> Slett
-                                    </button>
-                                </BodyShort>
-                            </li>
-                        )
-                    })}
-                </ul>
-            :
-                <BodyShort spacing><b>Ingen områder lagt til</b></BodyShort>
-            }
+            
+            <div className="column">
+                {newService.areasContainingThisService.length > 0 &&
+                    <div>
+                        <b>Områdekoblinger lagt til</b>
+                        <ul className="new-list">
+                            {newService.areasContainingThisService.map(area => {
+                                return (
+                                    <li key={area.id}>
+                                        <BodyShort>
+                                            {area.name}
+                                            <button className="colored" type="button" onClick={() => handleDeleteAreaServiceConnectsTo(area)}>
+                                                <label>{area.name}</label>
+                                                <Delete/> Slett
+                                            </button>
+                                        </BodyShort>
+                                    </li>
+                                )
+                            })}
+                        </ul>
+                    </div>
+                }
+            </div>
         </DynamicListContainer>
     )
 }
