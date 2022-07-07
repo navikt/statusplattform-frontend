@@ -99,5 +99,6 @@ export interface Record {
     serviceId: string
     status?: string
     description: string
-    logLink: string    
+    logLink: string
+    timestamp: string
 }

@@ -275,49 +275,39 @@ interface StatusRecordI {
 }
 
 const StatusRecord = ({record}: StatusRecordI) => {
-    const prettifiedStatus: string = StatusPrettifier(record)
+
+    const prettifyRecordTimestamp = (recordDate: string): string => {
+        const date = new Date(recordDate)
+        const dateFromRecord = (
+            (date.getDate() <= 9 ? `0${date.getDate()}` : date.getDate())+ "." + 
+            (date.getMonth()+1 <= 9 ? `0${date.getMonth()+1}` : date.getMonth()+1) + "." + 
+            date.getFullYear() + " " + 
+            date.getHours() + ":" + 
+            date.getMinutes()) + ":" +
+            (date.getSeconds() <= 9 ? `0${date.getSeconds()}` : date.getSeconds())
+        return dateFromRecord
+    }
+
+    const prettifiedTimestamp = prettifyRecordTimestamp(record.timestamp)
 
     if(!record) {
         return null
     }
 
-    if(record.status == "OK") {
-        return (
-            <RecordWrapper>
-                <div>
-                    Status: {prettifiedStatus}
-                </div>
-                <div>
-                    {/* TODO: Legg til denne datoen når det er klart i backend og på types.ts --> Service */}
-                    {/* <Detail>Sist oppdatert {service.record.date}</Detail> */}
-                </div>
-                {record.description &&
-                    <div>
-                        Beskrivelse 
-                    </div>
-                }
-                {record.logLink &&
-                    <div>
-                        Description: {record.description}
-                    </div>
-                }
-            </RecordWrapper>
-        )
-    }
-
     return (
         <RecordWrapper>
-            <b>Informasjon om status</b>
+            <b>Teknisk info om status:</b>
             <div>
-                Status: {prettifiedStatus}
+                Status: {record.status}
             </div>
-            <div>
-                {/* TODO: Legg til denne datoen når det er klart i backend og på types.ts --> Service */}
-                {/* <Detail>Sist oppdatert {service.record.date}</Detail> */}
-            </div>
+            {record.timestamp &&
+                <div>
+                    Sist oppdatert: {prettifiedTimestamp}
+                </div>
+            }
             {record.description &&
                 <div>
-                    Description: {record.description}
+                    Beskrivelse: {record.description}
                 </div>
             }
             {record.logLink &&
@@ -328,20 +318,6 @@ const StatusRecord = ({record}: StatusRecordI) => {
         </RecordWrapper>
     )
 }
-
-const StatusPrettifier = (record: Record): string => {
-    switch (record.status) {
-        case "OK":
-            return "Tjenesten fungerer som normalt."
-        case "ISSUE":
-            return "Tjenesten har redusert funksjonalitet.";
-        case "DOWN":
-            return "Tjenesten er nede."
-        default:
-            return "Statusendepunktet svarer ikke."
-    }
-}
-
 
 
 
