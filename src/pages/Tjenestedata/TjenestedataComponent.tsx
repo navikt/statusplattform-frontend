@@ -4,7 +4,7 @@ import { SetStateAction, useContext, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 
 
-import { BodyShort, Detail, Heading, Panel, Popover } from '@navikt/ds-react';
+import { BodyShort, Detail, Heading, Panel, Popover, Tabs } from '@navikt/ds-react';
 import { Innholdstittel } from 'nav-frontend-typografi';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
 
@@ -127,15 +127,79 @@ const ServiceWrapper = styled.div`
     width: 100%;
 `
 
-const TjenestedataContent: React.FC<{service: Service, areasContainingThisService: Area[], retrievedServiceIncidentHistory: HistoryOfSpecificService}> = ({service, areasContainingThisService, retrievedServiceIncidentHistory}) => {
 
+
+interface TjenesteDataContentI {
+    service?: Service
+    component?: Component
+    areasContainingThisService?: Area[]
+}
+
+const TjenestedataContent= ({service, component, areasContainingThisService}: TjenesteDataContentI) => {
+ 
     service.areasContainingThisService = areasContainingThisService
 
     const router = useRouter()
 
-    if (!service) {
+    if (!service && !component) {
         return <ErrorParagraph>Kunne ikke hente tjenesten. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
     }
+
+
+    if(service && !component) {
+        return <ServiceData service={service} areasContainingThisService={areasContainingThisService} />
+    }
+
+    return <ComponentData component={component} />
+}
+
+
+
+
+
+
+
+
+
+
+
+const ComponentData = ({component}: TjenesteDataContentI) => {
+
+    return (
+        <CategoryContainer>
+            <div className="title-container">
+                <Innholdstittel>{handleAndSetStatusIcon(component.record.status, true)}{component.name}</Innholdstittel>
+            </div>
+
+            {/* <div>
+                <Button variant="secondary" onClick={() => router.push(RouterOpprettVarsling.PATH)}><Bell/> Bli varslet ved avvik</Button> 
+            </div> */}
+
+
+            <div className="top-row">
+                <Panel>
+                    <ServiceContainer>
+                        <ServiceWrapper>
+                            <TjenesteData component={component} />
+                        </ServiceWrapper>
+                    </ServiceContainer>
+                </Panel>
+
+                {component.record &&
+                    <StatusRecord record={component.record} />
+                }
+                
+            </div>
+            
+            <IncidentHistoryComponent component={component} />
+
+        </CategoryContainer>
+    )
+}
+
+
+
+const ServiceData = ({service, areasContainingThisService}: TjenesteDataContentI) => {
 
     return (
         <CategoryContainer>
@@ -152,7 +216,7 @@ const TjenestedataContent: React.FC<{service: Service, areasContainingThisServic
                 <Panel>
                     <ServiceContainer>
                         <ServiceWrapper>
-                            <ServiceData service={service} />
+                            <TjenesteData service={service} />
                         </ServiceWrapper>
                     </ServiceContainer>
                 </Panel>
@@ -163,7 +227,7 @@ const TjenestedataContent: React.FC<{service: Service, areasContainingThisServic
                 
             </div>
             
-            {/* <ServiceIncidentHistory service={service} /> */}
+            <IncidentHistoryComponent service={service} />
 
         </CategoryContainer>
     )
@@ -178,7 +242,7 @@ const TjenestedataContent: React.FC<{service: Service, areasContainingThisServic
 
 
 
-const ServiceDataContainer = styled.div`
+const TjenesteDataContainer = styled.div`
     &, .classified {
         display: flex;
         flex-direction: column;
@@ -203,7 +267,12 @@ const ServiceDataContainer = styled.div`
 
 
 
-const ServiceData: React.FC<{service: Service}> = ({service}) => {
+interface TjenesteDataI {
+    service?: Service
+    component?: Component
+}
+
+const TjenesteData = ({service, component}: TjenesteDataI) => {
     const { navIdent } = useContext(UserStateContext)
 
     const regex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi)
@@ -214,7 +283,7 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
     return (
         <>
         {navIdent &&
-            <ServiceDataContainer>
+            <TjenesteDataContainer>
                 <div className="row">
                     <BodyShort spacing><b>Team</b></BodyShort>
                     <BodyShort>{team}</BodyShort>
@@ -255,7 +324,7 @@ const ServiceData: React.FC<{service: Service}> = ({service}) => {
                     </div>
                 }
 
-            </ServiceDataContainer>
+            </TjenesteDataContainer>
         }
         </>
     )
@@ -332,15 +401,16 @@ const PublicDataContainer = styled.div`
     justify-content: center;
 `
 
-interface ServiceIncidentHistory {
-    service: Service
+interface IncidentHistoryI {
+    service?: Service
+    component?: Component
 }
 
-const ServiceIncidentHistory = ({service}: ServiceIncidentHistory) => {
+const IncidentHistoryComponent = ({service, component}: IncidentHistoryI) => {
     const [isLast90Days, setIsLast90Days] = useState<boolean>(true)
     // TODO: Henting av tjenestehistorikkdata som driftsmeldinger og diverse
     // const { data, isLoading, reload } = useLoader(() => fetchServiceHistory(service.id), [])
-    const [serviceHistory, setServiceHistory] = useState<HistoryOfSpecificService>()
+    const [history, setHistory] = useState<HistoryOfSpecificService>()
     const [isLoading, setIsLoading] = useState(true)
     
     const router = useRouter()
@@ -348,18 +418,24 @@ const ServiceIncidentHistory = ({service}: ServiceIncidentHistory) => {
     useEffect(() => {
         let fetching = true
         setIsLoading(true)
+
         const fetchHistory = async () => {
             try {
-                const res = await fetchServiceHistory(service.id)
+                let res
+                if(service && !component) {
+                    res = await fetchServiceHistory(service.id)
+                } else {
+                    res = await fetchServiceHistory(component.id)
+                }
                 if(fetching) {
-                    setServiceHistory(res)
+                    setHistory(res)
                     setIsLoading(false)
                     fetching = false
                 }
                 
             } catch (error) {
                 console.log(error)
-            }   finally {
+            } finally {
                 if(fetching) {
                     setIsLoading(false)
                 }
@@ -383,6 +459,19 @@ const ServiceIncidentHistory = ({service}: ServiceIncidentHistory) => {
         return <CustomNavSpinner />
     }
 
+    if(service && !component) {
+        return (
+            <PublicDataContainer>
+                <span>
+                    <Heading size="medium" level="2" spacing>Historikk</Heading>
+                </span>
+
+                <TabHistory setIsLast90Days={setIsLast90Days} isLast90Days={isLast90Days} />
+                <HistoryOfServiceOrComponent isLast90Days={isLast90Days} history={history.history} />
+
+            </PublicDataContainer>
+        )
+    }
 
     return (
         <PublicDataContainer>
@@ -391,10 +480,11 @@ const ServiceIncidentHistory = ({service}: ServiceIncidentHistory) => {
             </span>
 
             <TabHistory setIsLast90Days={setIsLast90Days} isLast90Days={isLast90Days} />
-            <HistoryOfService service={service} isLast90Days={isLast90Days} serviceHistory={serviceHistory.history} />
+            <HistoryOfServiceOrComponent isLast90Days={isLast90Days} history={history.history} />
 
         </PublicDataContainer>
     )
+
 }
 
 
@@ -448,31 +538,67 @@ const TabMenu = styled.ul`
     }
 `
 
+
+const TabsCustomized = styled(Tabs)`
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+    display: flex;
+    justify-content: center;
+`
+
 interface History {
     setIsLast90Days: React.Dispatch<SetStateAction<boolean>>,
     isLast90Days: boolean
 }
 
 const TabHistory = ({setIsLast90Days, isLast90Days}: History) => {
-    const router = useRouter();
-    const { id } = router.query
+    const router = useRouter()
+
+    const [selectedHistoryTab, changeSelectedHistoryTab] = useState<string>("månedlig")
+
+    const historyMenu: string[] = ["90dager", "månedlig"]
+
+    useEffect(() => {
+        setIsLast90Days(selectedHistoryTab === "90dager")
+    }, [selectedHistoryTab])
+
+    
+
+    const findSelectedHistoryTab = (historyMenu: string[]) => {
+        const router = useRouter()
+        // const tab = router.query.tab || ""
+        const tab = selectedHistoryTab
+        
+        let selected = historyMenu.indexOf(Array.isArray(tab) ? tab[0] : tab)
+        return selected >= 0 ? historyMenu[selected] : historyMenu[1]
+    }
+
+    const handleNewSelectedTab = (newTab: string) => {
+        changeSelectedHistoryTab(newTab)
+    }
+
 
     return (
         <TabMenu>
-            <span>
-                <li className={isLast90Days ? "active" : "inactive"} onClick={() => setIsLast90Days(true)}>
-                    <Link href={`${id}/?history=90dager`}>
-                        Siste 90 dager
-                    </Link>
-                </li>
-            </span>
-            <span>
-                <li className={!isLast90Days ? "active" : "inactive"} onClick={() => setIsLast90Days(false)}>
-                    <Link href={`${id}/?history=månedlig`}>
-                        Måned for måned
-                    </Link>
-                </li>
-            </span>
+            <TabsCustomized
+                value={selectedHistoryTab}
+                defaultValue={"månedlig"}
+                size="small"
+            >
+                <Tabs.List>
+                    <Tabs.Tab
+                        value={"90dager"}
+                        label={"Siste 90 dager"}
+                        onClick={() => handleNewSelectedTab("90dager")}
+                    />
+                    <Tabs.Tab
+                        value={"månedlig"}
+                        label={"Måned for måned"}
+                        onClick={() => handleNewSelectedTab("månedlig")}
+                    />
+                </Tabs.List>
+            </TabsCustomized>
         </TabMenu>
     )
 }
@@ -524,12 +650,17 @@ const MonthlyOverview = styled.div`
 `
 
 
+interface HistoryOfServiceOrComponentI {
+    isLast90Days: boolean
+    history: HistoryOfSpecificServiceMonths[]
+}
+
 interface HistoryLast90Days {
     entries: HistoryOfSpecificServiceDayEntry []
     month: string
 }
 
-const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, serviceHistory: HistoryOfSpecificServiceMonths[]}> = ({service, isLast90Days, serviceHistory}) => {
+const HistoryOfServiceOrComponent = ({isLast90Days, history}: HistoryOfServiceOrComponentI) => {
     let numberOfDaysInView = 0
 
     const [historyLast90Days, setHistoryLast90Days] = useState<HistoryLast90Days>({
@@ -542,7 +673,7 @@ const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, servi
         setIsLoading(true)
         let reversedForLast90Days = historyLast90Days
 
-        serviceHistory.map(month => {
+        history.map(month => {
             month.entries.reverse().map(day => {
                 reversedForLast90Days.entries.push(day)
             })
@@ -587,7 +718,7 @@ const HistoryOfService: React.FC<{service: Service, isLast90Days: boolean, servi
                 </DailyOverview>
             :
                 <MonthlyOverview>
-                    {serviceHistory.map((currentMonth, index) => {
+                    {history.map((currentMonth, index) => {
                         // MIDLERTIDIG for å stoppe loop til max tre måneder tilbake per page
                         if(index > 2) {
                             return null

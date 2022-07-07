@@ -37,6 +37,7 @@ export interface Component {
     pollingUrl?: string
     status?: string
     servicesDependentOnThisComponent?: Service[]
+    record?: Record
 }
 
 export interface Area {

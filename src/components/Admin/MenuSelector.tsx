@@ -1,7 +1,7 @@
 import styled from 'styled-components'
 import { useRouter } from 'next/router'
-
-import Tabs from 'nav-frontend-tabs';
+import { Tabs } from '@navikt/ds-react'
+import { useState } from 'react'
 
 
 
@@ -21,7 +21,7 @@ const TabsCustomized = styled(Tabs)`
 `
 
 export const adminMenu = ["Dashbord", "Områder", "Tjenester", "Komponenter"]
-const defaultAdminMenu = adminMenu[1]
+const defaultAdminMenu = adminMenu[2]
 
 
 export const useFindCurrentTab = (adminMenu: string[]) => {
@@ -36,35 +36,43 @@ export const useFindCurrentTab = (adminMenu: string[]) => {
 const MenuSelector: React.FC<{user}> = ({user}) => {
     const router = useRouter()
 
-    const currentSelectedTab = useFindCurrentTab(adminMenu)
-
-
+    const [selectedTab, setSelectedTab] = useState<string>(useFindCurrentTab(adminMenu))
+    
+    const handleNewSelectedTab = (newTab) => {
+        router.push(router.pathname + "?tab=" + newTab, undefined, {shallow: true})
+        setSelectedTab(newTab)
+    }
 
     const usersWithAccess: string[] = [
         "L152423", "H161540", "K146221", "J104568", "G124938", "M106261"
     ]
-
+    
     let adminMenuWithAccessControl = adminMenu
-
+    
     if(!usersWithAccess.includes(user.navIdent)) {
         adminMenuWithAccessControl = adminMenu.filter(menu => menu !== "Dashbord" && menu !== "Områder")
     }
-
+    
 
     return (
         <DashboardTabMenu>
             <TabsCustomized
-                tabs={adminMenuWithAccessControl.map(path => { 
-                    return {
-                        "aktiv": path === currentSelectedTab,
-                        "label": path}
-                    })
-                }
-                onChange={(_, index) =>
-                    router.push(router.pathname + "?tab=" + adminMenuWithAccessControl[index])
-                }
-
-            />
+                defaultValue="Tjenester"
+                value={selectedTab}
+            >
+                <Tabs.List>
+                    {adminMenuWithAccessControl.map((tab, index) => {
+                        return (
+                            <Tabs.Tab
+                                key={index}
+                                value={tab}
+                                label={tab}
+                                onClick={() => handleNewSelectedTab(tab)}
+                            />
+                        )
+                    })}
+                </Tabs.List>
+            </TabsCustomized>
         </DashboardTabMenu>
     )
 }
