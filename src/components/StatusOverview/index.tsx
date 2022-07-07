@@ -204,9 +204,9 @@ const DeviationCardContainer = styled.button`
     }
     
     &.has-issue {
-        background: var(--navds-semantic-color-feedback-warning-background);
+        background: var(--navds-global-color-orange-100);
         border-color: var(--navds-semantic-color-feedback-warning-background);
-
+        
         :hover {
             background: var(--navds-global-color-orange-300);
             border-color: var(--navds-semantic-color-feedback-warning-icon);
