@@ -191,7 +191,6 @@ export const DynamicListContainer = styled.div`
         padding: 1rem 0;
 
         button {
-            background: none;
             min-width: fit-content;
         }
     }
