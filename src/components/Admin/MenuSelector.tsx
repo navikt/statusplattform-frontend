@@ -9,15 +9,15 @@ const DashboardTabMenu = styled.header`
     width: 100%;
     background-color: var(--navds-semantic-color-canvas-background-light);
     height: 50px;
+
+    display: flex;
+    justify-content: center;
 `
 
 const TabsCustomized = styled(Tabs)`
     border-top: 0;
     border-top-left-radius: 0;
     border-top-right-radius: 0;
-    display: flex;
-    justify-content: center;
-    
 `
 
 export const adminMenu = ["Dashbord", "Områder", "Tjenester", "Komponenter"]
