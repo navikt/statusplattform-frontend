@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
 import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react'
 
-import CustomNavSpinner from '../../components/CustomNavSpinner'
+import CustomNavSpinner from '../CustomNavSpinner'
 import { Area, Dashboard } from '../../types/types'
 import { useLoader } from '../../utils/useLoader'
 import { TitleContext } from '../ContextProviders/TitleContext'
@@ -15,10 +15,13 @@ import { deleteDashboard, fetchDashboard, fetchDashboardsList, postDashboard, up
 import { fetchAreas, putAreasToDashboard } from '../../utils/areasAPI'
 import { RouterAdminAddDashboard } from '../../types/routes'
 import { AdminCategoryContainer, CloseCustomized, ModalInner } from '../../pages/Admin'
+import { backendPath } from '../../pages'
+import { EndPathDashboards } from '../../utils/apiHelper'
 
 
 
-const DashboardTable = () => {
+
+const TableDashbord = () => {
     const [isLoading, setIsLoading] = useState(true)
     const [dashboards, setDashboards] = useState<Dashboard[]>()
 
@@ -26,7 +29,25 @@ const DashboardTable = () => {
 
     useEffect(() => {
         changeTitle("Admin - Dashbord")
-        setIsLoading(false)
+        setIsLoading(true)
+        let controlVar = true
+        const setup = async () => {
+            if(controlVar) {
+                try {
+                    const dashboards: Dashboard[] = await fetchDashboardsList()
+                    await setDashboards(dashboards)
+                } catch (error) {
+                    toast.error("Noe gikk galt ved henting av dashbordene")
+                    console.log(error)
+                } finally {
+                    setIsLoading(false)
+                }
+            }
+        }
+        if(controlVar) {
+            setup()
+        }
+        controlVar = false
     },[])
 
     const reload = async () => {
@@ -170,6 +191,10 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
     const [dashboardsToEdit, changeDashboardsToEdit] = useState<string[]>([])
 
     const { data: allAreas, isLoading, reload } = useLoader(fetchAreas,[])
+
+    useEffect(() => {
+        
+    },[])
 
     const toggleExpanded = (dashboard: Dashboard) => {
         if(expandedList.includes(dashboard.id)) {
@@ -670,4 +695,4 @@ const DropdownColumn = styled.div`
 `
 
 
-export default DashboardTable
+export default TableDashbord

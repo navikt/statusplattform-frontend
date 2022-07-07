@@ -16,6 +16,8 @@ import { TitleContext } from "../../../components/ContextProviders/TitleContext"
 import { postDashboard } from "../../../utils/dashboardsAPI";
 import { fetchAreas } from "../../../utils/areasAPI";
 import { RouterAdminDashboards } from "../../../types/routes";
+import { backendPath } from "../..";
+import { EndPathAreas } from "../../../utils/apiHelper";
 
 
 const NewDashboardContainer = styled.div`
@@ -31,16 +33,33 @@ const NewDashboardContainer = styled.div`
     }
 `
 
+export const getServerSideProps = async () => {
+    const [resAreas] = await Promise.all ([
+        fetch(backendPath + EndPathAreas())
+    ])
+
+    const allAreasProps = resAreas.json()
+
+    return {
+        props: {
+            allAreasProps
+        }
+    }
+}
 
 
 
-const NewDashboard = () => {
+const NewDashboard = ({allAreasProps}) => {
+    const allAreas: Area[] = allAreasProps
     const [newDashboard, updateNewDashboard] = useState<Dashboard>({
         name: "",
         areas: []
     })
+    const [isLoading, setIsLoading] = useState(true)
 
-    const { data, isLoading, reload } = useLoader(fetchAreas,[]);
+    useEffect(() => {
+        setIsLoading(false)
+    }, [])
 
     if(isLoading) {
         return (
@@ -102,7 +121,7 @@ const NewDashboard = () => {
 
                     <DashboardAreas 
                         newDashboard={newDashboard}
-                        allAreas={data}
+                        allAreas={allAreas}
                         handleDeleteAreaOnDashboard={(areaToDelete) => handleDeleteAreaOnDashboard(areaToDelete)}
                         handleAddAreaToDashboard={(areaToAdd) => handleAddAreaToDashboard(areaToAdd)}
                     />

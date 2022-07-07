@@ -6,7 +6,6 @@ import { Delete } from "@navikt/ds-icons";
 import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
 import { toast, ToastContainer } from "react-toastify"
 
-import { options } from "../../../components/Admin/AreaTable";
 import { Area, Service } from "../../../types/types";
 import { useLoader } from "../../../utils/useLoader";
 import Layout from '../../../components/Layout';
@@ -16,6 +15,8 @@ import { TitleContext } from "../../../components/ContextProviders/TitleContext"
 import { fetchServices } from "../../../utils/servicesAPI";
 import { postAdminArea } from "../../../utils/areasAPI";
 import { RouterAdminOmråder } from "../../../types/routes";
+import { EndPathServices } from "../../../utils/apiHelper";
+import { backendPath } from "../..";
 
 
 
@@ -32,9 +33,26 @@ const NewAreaContainer = styled.div`
     }
 `
 
+export const getServerSideProps = async () => {
+    const [resServices] = await Promise.all([
+        fetch(backendPath + EndPathServices())
+    ])
+    
+    const allServicesProps: Service[] = await resServices.json()
+    console.log(allServicesProps)
 
-const NewArea = () => {
+    return {
+        props: {
+            allServicesProps,
+        }
+    }
+}
 
+
+
+const NewArea = ({allServicesProps}) => {
+    const allServices: Service[] = allServicesProps
+    const [isLoading, setIsLoading] = useState(true)
     const [newArea, updateNewArea] = useState<Area>({
         name: "",
         description: "",
@@ -43,7 +61,10 @@ const NewArea = () => {
         components: []
     })
 
-    const { data, isLoading, reload } = useLoader(fetchServices,[]);
+    useEffect(() => {
+        setIsLoading(false)
+    },[])
+
 
     if(isLoading) {
         return (
@@ -93,7 +114,7 @@ const NewArea = () => {
             toast.error("Klarte ikke å laste opp område")
         })
     }
-
+    
 
     return (
         <Layout>
@@ -109,7 +130,7 @@ const NewArea = () => {
 
                     <AreaServices 
                         newArea={newArea}
-                        allServices={data}
+                        allServices={allServices}
                         handleDeleteServiceOnArea={(areaToDelete) => handleDeleteServiceOnArea(areaToDelete)}
                         handleAddServiceToArea={(serviceToAdd) => handleAddServiceToArea(serviceToAdd)}
                     />
@@ -150,6 +171,10 @@ const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDe
     const availableServices: Service[] = allServices.filter(area => !newArea.services.map(a => a.id).includes(area.id))
     const { changeTitle } = useContext(TitleContext)
     const [selectedService, changeSelectedService] = useState<Service | null>(() => availableServices.length > 0 ? availableServices[0] : null)
+
+    // useEffect(() => {
+    //     console.log(allServices)
+    // }, [])
     
     useEffect(() => {
         changeTitle("Opprett nytt område")

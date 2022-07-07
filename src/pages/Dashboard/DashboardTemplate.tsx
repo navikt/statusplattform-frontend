@@ -168,9 +168,9 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
                 setAreasInDashboard(retrievedAreasInDashboard.areas)
                 rerouteIfNoDashboard()
                 setIsLoading(false)
-                console.log("dddd")
             } catch (error) {
-                toast.error("Dæven")                
+                toast.error("Noe gikk galt ved henting av områder i dashbordet")
+                console.log(error)
             }
 
         }

@@ -3,12 +3,16 @@ import "@navikt/ds-css";
 import "@navikt/ds-css-internal";
 
 import { Providers } from '../components/ContextProviders/Providers'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Modal } from '@navikt/ds-react';
+import CustomNavSpinner from '../components/CustomNavSpinner';
 
 
 function MyApp({ Component, pageProps }) {
+    const [isLoading, setIsLoading] = useState(false)
     useEffect(() => {
+        setIsLoading(true)
+
         setTimeout(() => {
             const path = window.location.hash 
             if (path && path.includes('#')) {
@@ -22,11 +26,18 @@ function MyApp({ Component, pageProps }) {
             }
         }, 200)
         Modal.setAppElement(document.getElementsByClassName('ReactModalPortal'));
+        setIsLoading(false)
+
     })
-    
+
     return (
         <Providers>
-            <Component {...pageProps} />
+            {!isLoading
+            ?
+                <Component {...pageProps} />
+            :
+                <CustomNavSpinner />
+            }
         </Providers>
     )
 }

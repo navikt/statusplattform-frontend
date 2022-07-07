@@ -5,19 +5,18 @@ import { useContext, useEffect, useState } from "react";
 
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useLoader } from '../../utils/useLoader';
 
 import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
 import { BodyShort, Button, Checkbox, CheckboxGroup, Heading, Modal, Select, TextField } from '@navikt/ds-react';
-
-import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Area, Component, Service } from '../../types/types';
-import { TitleContext } from '../ContextProviders/TitleContext';
-import { deleteService, fetchServices, postService, updateService } from '../../utils/servicesAPI';
-import { RouterAdminAddTjeneste } from '../../types/routes';
+import { useLoader } from '../../utils/useLoader';
 import { fetchComponents } from '../../utils/componentsAPI';
 import { fetchAreas } from '../../utils/areasAPI';
+import { deleteService, fetchServices, updateService } from '../../utils/servicesAPI';
 import { AdminCategoryContainer, CloseCustomized, DependenciesColumn, DependencyList, HorizontalSeparator, ModalInner, NoContentContainer } from '../../pages/Admin';
+import CustomNavSpinner from '../CustomNavSpinner';
+import { TitleContext } from '../ContextProviders/TitleContext';
+import { RouterAdminAddTjeneste } from '../../types/routes';
 
 
 const TjenesteHeader = styled.div<{paddingprop: string}>`
@@ -104,34 +103,35 @@ const CustomButton = styled.button`
 `
 
 
-
-
-const TjenesteTable = () => {
+const TableTjeneste = () => {
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [servicesToEdit, changeServicesToEdit] = useState<string[]>([])
     const [serviceToDelete, setServiceToDelete] = useState<Service>()
     const [services, setServices] = useState<Service[]>()
-    const [loadingServices, setLoadingServices] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     const { changeTitle } = useContext(TitleContext)
 
     
     useEffect(() => {
-        let controlVar = true
         changeTitle("Admin - Tjenester")
-        
-        const setupComponent = async () => {
-            try {
-                const responseServices = await fetchServices()
-                setLoadingServices(true)
-                setServices(responseServices)
-                setLoadingServices(false)
-            } catch (error) {
-                toast.error("Noe gikk galt ved henting av tjenestene")
+        setIsLoading(true)
+        let controlVar = true
+        const setup = async () => {
+            if(controlVar) {
+                try {
+                    const services: Service[] = await fetchServices()
+                    await setServices(services)
+                } catch (error) {
+                    console.log(error)
+                    toast.error("Noe gikk galt ved henting av tjenestene")
+                } finally {
+                    setIsLoading(false)
+                }
             }
         }
         if(controlVar) {
-            setupComponent()
+            setup()
         }
         controlVar = false
     },[])
@@ -139,16 +139,16 @@ const TjenesteTable = () => {
     
 
     const reload = async () => {
+        setIsLoading(true)
         await fetchServices().then((response) => {
-            setLoadingServices(true)
             setServices(response)
-            setLoadingServices(false)
+            setIsLoading(false)
         }).catch(() => {
             toast.error("Noe gikk galt ved henting av tjenestene")
         })
     }
 
-    if(loadingServices) {
+    if(isLoading) {
         return (
             <CustomNavSpinner />
         )
@@ -481,12 +481,17 @@ const ServiceRow = ({service, toggleEditService, toggleExpanded, isExpanded, set
                         <div className="service-row-column">
                             <span className="service-data-element">
                                 <BodyShort spacing><b>Monitorlink</b></BodyShort>
-                                <BodyShort>{service.monitorlink}</BodyShort>
+                                <a href={service.monitorlink}>{service.monitorlink}</a>
                             </span>
 
                             <span className="service-data-element">
                                 <BodyShort spacing><b>PollingUrl</b></BodyShort>
-                                <BodyShort>{service.pollingUrl}</BodyShort>
+                                {service.pollingUrl == "STATUSHOLDER"
+                                ?
+                                    <BodyShort>{service.pollingUrl}</BodyShort>
+                                :
+                                    <a href={service.pollingUrl}>{service.pollingUrl}</a>
+                                }
                             </span>
                             <span className="service-data-element">
                                 <BodyShort spacing><b>ID</b></BodyShort>
@@ -546,7 +551,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
     const { data: allComponents, isLoading: loadingComponents, reload: reloadComponents } = useLoader(fetchComponents,[]);
     const { data: allAreas, isLoading: loadingAreas, reload: reloadAreas } = useLoader(fetchAreas,[]);
-
+    
     useEffect(() => {
         setIsLoading(true)
         if(monitorlink == null || monitorlink == undefined) {
@@ -575,37 +580,17 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         changeUpdatedService(changedService)
     }
 
-    const handleSubmit = () => {
-        if(!areAllFieldsValid()) {
-            toast.error("Noen feil eksisterer i feltene dine. Vennligst gå over og prøv på nytt")
-            return
-        }
-        updateService(updatedService).then(() => {
-            reload()
-            toggleEditService(service)
-            if(isExpanded) {
-                toggleExpanded(service)
-            }
-            toast.success("Oppdatering gjennomført")
-        }).catch(() => {
-            toast.error("Noe gikk galt i oppdatering av område")
-        })
-    }
-
+    
     const handleCloseEditService = (service) => {
         if(isExpanded) {
             toggleExpanded(service)
         }
         toggleEditService(service)
     }
-
+    
     const handleIsStatusFromTeam = () => {
         changeUpdatedService({...service, statusNotFromTeam: !statusNotFromTeam})
     }
-
-
-
-
 
 
     const validatePollingUrl = (urlInput) => {
@@ -639,12 +624,8 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
             setIsvalidPollingUrl(false)
             return false
         }
-
         return setIsvalidPollingUrl(url.protocol === "http:" || url.protocol === "https:")
     }
-
-
-
 
 
     const validateMonitorUrl = (urlInput) => {
@@ -678,17 +659,38 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         return setIsValidMonitorUrl(url.protocol === "http:" || url.protocol === "https:")
     }
 
+
+
+
+
     const areAllFieldsValid = () => {
-        if(!validatePollingUrl(pollingUrl)) {
+        if(validatePollingUrl(pollingUrl) == false) {
             return false
         }
-        if(!validateMonitorUrl(monitorlink)) {
+        if(validateMonitorUrl(monitorlink) == false) {
             return false
         }
         return true
 
     }
+    
 
+    const handleSubmit = () => {
+        if(!areAllFieldsValid()) {
+            toast.error("Noen feil eksisterer i feltene dine. Vennligst gå over og prøv på nytt")
+            return
+        }
+        updateService(updatedService).then(() => {
+            reload()
+            toggleEditService(service)
+            if(isExpanded) {
+                toggleExpanded(service)
+            }
+            toast.success("Oppdatering gjennomført")
+        }).catch(() => {
+            toast.error("Noe gikk galt i oppdatering av område")
+        })
+    }
 
     return (
         <ServiceRowContainer>
@@ -1143,4 +1145,4 @@ const EditConnectedAreas: React.FC<
 
 
 
-export default TjenesteTable
+export default TableTjeneste

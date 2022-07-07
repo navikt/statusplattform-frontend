@@ -316,6 +316,7 @@ const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting}: Edit
                 toggleIsEditting(false)
             })
         } catch (error) {
+            console.log(error)
             toast.error("Noe gikk galt ved oppdatering av meldingen")
         }
     }

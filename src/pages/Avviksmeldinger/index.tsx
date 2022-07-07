@@ -79,8 +79,8 @@ const OpsMessages = ({serverOpsMessages}) => {
                 }
             } catch (error) {
                 console.log(error)
+                toast.error("Noe gikk galt ved henting av avviksmeldingene")
                 isMounted = false
-                router.push(RouterError.PATH)   
             } finally {
                 if(isMounted) {
                     setIsLoading(false)

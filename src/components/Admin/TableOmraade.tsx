@@ -6,18 +6,15 @@ import { toast } from 'react-toastify';
 
 import { Bag, Calculator, Close, Delete, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, SaveFile, Saving, SocialAid } from '@navikt/ds-icons'
 
-import { Area, Service, SubArea } from '../../types/types';
-
-import CustomNavSpinner from '../../components/CustomNavSpinner';
-
-import { getIconsFromGivenCode } from '../../utils/servicesOperations';
-import { useLoader } from '../../utils/useLoader';
 import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react';
-import { TitleContext } from '../ContextProviders/TitleContext';
-import { deleteArea, deleteServiceFromArea, fetchAreas, fetchSubAreas, postAdminArea, putServiceToArea, updateArea } from '../../utils/areasAPI';
-import { fetchServices } from '../../utils/servicesAPI';
-import { RouterAdminAddOmråde } from '../../types/routes';
+import { useLoader } from "../../utils/useLoader";
+import { deleteArea, fetchAreas, fetchSubAreas, updateArea } from "../../utils/areasAPI";
+import { fetchServices } from "../../utils/servicesAPI";
+import { TitleContext } from "../ContextProviders/TitleContext";
+import { Area, Service, SubArea } from "../../types/types";
 import { AdminCategoryContainer, CloseCustomized, DependencyList, ModalInner } from "../../pages/Admin";
+import { RouterAdminAddOmråde } from "../../types/routes";
+import CustomNavSpinner from "../CustomNavSpinner";
 
 
 
@@ -77,25 +74,99 @@ const AreaElementContainer = styled.div`
 
 
 
-const AreaTable = () => { 
+const TableOmraade = () => { 
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [anchorId, setAnchorId] = useState<string>("")
+
     const [areasToEdit, changeAreasToEdit] = useState<string[]>([])
     const [areaToDelete, setAreaToDelete] = useState<Area>()
-    
-    const { data: allAreas, isLoading: isLoadingAreas, reload: reloadAreas } = useLoader(fetchAreas, []);
-    const { data: allServices, isLoading: isLoadingServices, reload: reloadServices } = useLoader(fetchServices, []);
+
+    const [allAreas, setAllAreas] = useState<Area[]>()
+    const [allServices, setAllServices] = useState<Service[]>()
+
+    const [isLoadingAreas, setIsLoadingAreas] = useState(true)
+    const [isLoadingServices, setIsLoadingServices] = useState(true)
 
     const { changeTitle } = useContext(TitleContext)
 
     useEffect(() => {
         changeTitle("Admin - Områder")
+        setIsLoadingAreas(true)
+        setIsLoadingServices(true)
+        let controlVar = true
+        
+        const setup = async () => {
+            if(controlVar) {
+                try {
+                    const areas: Area[] = await fetchAreas()
+                    const services: Service[] = await fetchServices()
+                    await setAllAreas(areas)
+                    await setAllServices(services)
+                } catch (e) {
+                    console.log(e)
+                    toast.error("Noe gikk galt ved henting av data")
+                } finally {
+                    setIsLoadingAreas(false)
+                    setIsLoadingServices(false)
+                }
+            }
+        }
+        if(controlVar) {
+            setup()
+        }
+        controlVar = false
     },[])
 
 
-    const reloadAll = () => {
-        reloadAreas()
-        reloadServices()
+    const reloadAll = async () => {
+        let controlVar = true
+
+        if(controlVar) {
+            try {
+                await reloadAreas()
+                await reloadServices()
+            } catch (error) {
+                console.log(error)
+                toast.error("Noe gikk galt i hentingen.")
+            }
+
+        }
+        controlVar = false
+    }
+
+    const reloadAreas = async () => {
+        let controlVar = true
+        setIsLoadingAreas(true)
+
+        if(controlVar) {
+            try {
+                const reloadedAreas: Area[] = await fetchAreas()
+                setAllAreas(reloadedAreas)
+            } catch (error) {
+                console.log(error)
+                setIsLoadingAreas(false)
+                toast.error("Noe gikk galt i hentingen.")
+            }
+
+        }
+        controlVar = false
+    }
+    const reloadServices = async () => {
+        let controlVar = true
+        setIsLoadingServices(true)
+
+        if(controlVar) {
+            try {
+                const reloadedServices: Service[] = await fetchServices()
+                setAllServices(reloadedServices)
+            } catch (error) {
+                setIsLoadingServices(false)
+                console.log(error)
+                toast.error("Noe gikk galt i hentingen.")
+            }
+
+        }
+        controlVar = false
     }
 
 
@@ -108,10 +179,9 @@ const AreaTable = () => {
           }, 300);
     }, [anchorId])
 
-    if (isLoadingAreas || isLoadingServices) {
-        return (
-            <CustomNavSpinner />
-        )
+
+    if(isLoadingAreas || isLoadingServices) {
+        return <CustomNavSpinner />
     }
     
     const toggleExpandedFor = (tileAreaId) => {
@@ -141,6 +211,7 @@ const AreaTable = () => {
             toast.error("Kunne ikke slette området")
         })
     }
+
 
 
     return (
@@ -174,7 +245,6 @@ const AreaTable = () => {
                         <div className="area-header-content">
                             <span>Navn</span>
                             <span>Beskrivelse</span>
-                            {/* <span>Ikon</span> */}
                         </div>
                         <div className="empty-space"></div>
                     </AreaHeader>
@@ -586,7 +656,7 @@ const CurrentlyEdittingArea = ({
 
     if(isLoading) {
         return (
-            <CustomNavSpinner/>
+            <CustomNavSpinner />
         )
     }
 
@@ -657,6 +727,7 @@ const CurrentlyEdittingArea = ({
                 })
             }
         } catch (error) {
+            console.log(error)
             toast.error("Noe gikk galt i oppdatering av område")   
         }
     }
@@ -946,4 +1017,4 @@ const DropdownSubAreaSelect = ({subAreas, subAreasInArea, handlePutSubAreaToArea
 
 
 
-export default AreaTable
+export default TableOmraade

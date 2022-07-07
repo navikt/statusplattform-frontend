@@ -75,8 +75,8 @@ export const getServerSideProps = async () => {
 
 
 const NewComponent = ({allComponentsProps, allServicesProps}) => {
-    const [allComponents, setAllComponents] = useState<Component[]>(allComponentsProps)
-    const [allServices, setAllServices] = useState<Service[]>(allServicesProps)
+    const allComponents: Component[] =allComponentsProps
+    const allServices: Service[] = allServicesProps
     const [isLoading, setIsLoading] = useState(true)
     const [didComponentCreate, changeDidComponentCreate] = useState(false)
     const [newlyCreatedComponent, setNewlyCreatedComponent] = useState<Component>(

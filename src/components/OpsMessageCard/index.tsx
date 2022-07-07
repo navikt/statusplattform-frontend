@@ -94,6 +94,7 @@ const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI, notifyChangedOpsMessag
                 await deleteOpsMessage(opsMessage.id)
                 toast.success("Meldingen er slettet")
             } catch (error) {
+                console.log(error)
                 toast.error("Noe gikk galt")
             } finally {
                 setIsModalOpen(false)
@@ -111,6 +112,7 @@ const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI, notifyChangedOpsMessag
             notifyChangedOpsMessage(changedOps)
 
         } catch (error) {
+            console.log(error)
             toast.error("Noe gikk galt i oppdateringen")
             setIsActiveModalOpen(false)
         }

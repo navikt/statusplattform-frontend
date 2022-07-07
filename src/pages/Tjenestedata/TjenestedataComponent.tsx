@@ -141,8 +141,6 @@ const TjenestedataContent: React.FC<{service: Service, areasContainingThisServic
         <CategoryContainer>
             <div className="title-container">
                 <Innholdstittel>{handleAndSetStatusIcon(service.record.status, true)}{service.name}</Innholdstittel>
-                {/* TODO: Legg til denne datoen når det er klart i backend og på types.ts --> Service */}
-                {/* <Detail>Sist oppdatert {service.record.date}</Detail> */}
             </div>
 
             {/* <div>
@@ -286,21 +284,45 @@ const StatusRecord = ({record}: StatusRecordI) => {
     if(record.status == "OK") {
         return (
             <RecordWrapper>
-                Tjenesten fungerer som normalt
+                <div>
+                    Status: {prettifiedStatus}
+                </div>
+                <div>
+                    {/* TODO: Legg til denne datoen når det er klart i backend og på types.ts --> Service */}
+                    {/* <Detail>Sist oppdatert {service.record.date}</Detail> */}
+                </div>
+                {record.description &&
+                    <div>
+                        Beskrivelse 
+                    </div>
+                }
+                {record.logLink &&
+                    <div>
+                        Description: {record.description}
+                    </div>
+                }
             </RecordWrapper>
         )
     }
 
     return (
         <RecordWrapper>
+            <b>Informasjon om status</b>
             <div>
-                {prettifiedStatus}
+                Status: {prettifiedStatus}
+            </div>
+            <div>
+                {/* TODO: Legg til denne datoen når det er klart i backend og på types.ts --> Service */}
+                {/* <Detail>Sist oppdatert {service.record.date}</Detail> */}
             </div>
             {record.description &&
                 <div>
-                    <Heading level="3" size="xsmall">
-                        Beskrivelse 
-                    </Heading>
+                    Description: {record.description}
+                </div>
+            }
+            {record.logLink &&
+                <div>
+                    Logglenke: {record.logLink}
                 </div>
             }
         </RecordWrapper>

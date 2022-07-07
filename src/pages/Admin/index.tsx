@@ -1,28 +1,22 @@
 import styled from 'styled-components'
-import { toast, ToastContainer } from 'react-toastify';
+import { ToastContainer } from 'react-toastify';
 
 import Layout from '../../components/Layout';
 import MenuSelector, { adminMenu, useFindCurrentTab } from '../../components/Admin/MenuSelector';
 import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
-import { UserData } from '../../types/userData';
 import { useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import { RouterPrivatperson } from '../../types/routes';
 import CustomNavSpinner from '../../components/CustomNavSpinner';
-import { checkLoginInfoAndState } from '../../utils/checkLoginInfoAndState';
-import { backendPath } from '..';
-import { fetchComponents } from '../../utils/componentsAPI';
-import { fetchServices } from '../../utils/servicesAPI';
-import { fetchAreas } from '../../utils/areasAPI';
-import { fetchDashboardsList } from '../../utils/dashboardsAPI';
 import { Area, Component, Dashboard, Service } from '../../types/types';
 import { TitleContext } from '../../components/ContextProviders/TitleContext';
 import { Heading } from '@navikt/ds-react';
-import DashboardTable from '../../components/Admin/DashboardTable';
-import AreaTable from '../../components/Admin/AreaTable';
-import TjenesteTable from '../../components/Admin/TjenesteTable';
-import KomponentTable from '../../components/Admin/KomponentTable';
+import TableDashbord from '../../components/Admin/TableDashbord';
 import { Close } from '@navikt/ds-icons';
+import TableOmraade from '../../components/Admin/TableOmraade';
+import TableTjeneste from '../../components/Admin/TableTjeneste';
+import TableKomponent from '../../components/Admin/TableKomponent';
+import { backendPath } from '..';
 import { EndPathAreas, EndPathComponents, EndPathDashboards, EndPathServices } from '../../utils/apiHelper';
 
 
@@ -257,31 +251,30 @@ const HeadingWrapper = styled.div`
 
 
 export const getServerSideProps = async (context) => {
-    const { tab } = context.query
+    const [{tab}, , , , ] = await Promise.all([
+        context.query,
+    ])
 
-    let response;
 
-
-    
     return {
         props: {
-            tab,
+            tab
         }
     }
 }
 
 
-const AdminPage = ({tab}) => {
+const AdminPage = ({tab, dashbordProps, areasProps, servicesProps, componentProps}) => {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(true)
 
     const selectedMenu = useFindCurrentTab(adminMenu)
     const {title} = useContext(TitleContext)
 
-    const [dashboards, setDashboards] = useState<Dashboard[]>()
-    const [areas, setAreas] = useState<Area[]>()
-    const [services, setServices] = useState<Service[]>()
-    const [components, setComponents] = useState<Component[]>()
+    // const [dashboards, setDashboards] = useState<Dashboard[]>()
+    // const [areas, setAreas] = useState<Area[]>()
+    // const [services, setServices] = useState<Service[]>()
+    // const [components, setComponents] = useState<Component[]>()
 
     const approvedUsers: string[] = [
         "L152423", "H161540", "K146221", "J104568", "G124938", "M106261",
@@ -293,13 +286,17 @@ const AdminPage = ({tab}) => {
         setIsLoading(false)
     },[])
 
+    useEffect(() => {
+        setIsLoading(true)
+    },[selectedMenu])
+
 
     useEffect(() => {
         setIsLoading(true)
         if(router.isReady) {
             setIsLoading(false)
         }
-    },[router])
+    }, [router])
     
     if(isLoading) {
         return <CustomNavSpinner />
@@ -321,20 +318,20 @@ const AdminPage = ({tab}) => {
                     {approvedUsers.includes(user.navIdent) &&
                         <>
                             {selectedMenu === "Dashbord" &&
-                                <DashboardTable />
+                                <TableDashbord />
                             }
                             {selectedMenu === "Områder" &&
-                                <AreaTable />
+                                <TableOmraade />
                             }
                         </>
                     }
 
                     
                     {selectedMenu === "Tjenester" && 
-                        <TjenesteTable />
+                        <TableTjeneste />
                     }
                     {selectedMenu === "Komponenter" &&
-                        <KomponentTable />
+                        <TableKomponent />
                     }
                 </AdminConfigsContainer>
             </AdminDashboardContainer>

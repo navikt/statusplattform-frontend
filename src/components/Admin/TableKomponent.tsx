@@ -4,17 +4,16 @@ import router from 'next/router';
 import { useContext, useEffect, useState } from "react";
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { useLoader } from '../../utils/useLoader';
 
 import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
 import { BodyShort, Button, Heading, Modal, Select, TextField } from '@navikt/ds-react';
-
-import CustomNavSpinner from '../../components/CustomNavSpinner';
 import { Component } from '../../types/types';
 import { deleteComponent, fetchComponents, updateComponent } from '../../utils/componentsAPI';
 import { TitleContext } from '../ContextProviders/TitleContext';
-import { RouterAdminAddKomponent } from '../../types/routes';
+import CustomNavSpinner from '../CustomNavSpinner';
 import { AdminCategoryContainer, CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '../../pages/Admin';
+import { RouterAdminAddKomponent } from '../../types/routes';
+
 
 
 const ComponentHeader = styled.div`
@@ -98,24 +97,31 @@ const CustomButton = styled.button`
 `
 
 
-const KomponentTable = () => {
+const TableKomponent = () => {
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [componentsToEdit, changeComponentsToEdit] = useState<string[]>([])
     const [componentToDelete, setComponentToDelete] = useState<Component>()
     const [components, setComponents] = useState<Component[]>()
-    const [loadingComponents, setLoadingComponents] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     const { changeTitle } = useContext(TitleContext)
     
     useEffect(() => {
-        let controlVar = true
-        setLoadingComponents(true)
         changeTitle("Admin - Komponenter")
+        setIsLoading(true)
+        let controlVar = true
         const setup = async () => {
-            await fetchComponents().then((response)=> {
-                setLoadingComponents(false)
-                setComponents(response)
-            })
+            if(controlVar) {
+                try {
+                    const components: Component[] = await fetchComponents()
+                    await setComponents(components)
+                } catch (error) {
+                    toast.error("Noe gikk galt ved henting av dashbordene")
+                    console.log(error)
+                } finally {
+                    setIsLoading(false)
+                }
+            }
         }
         if(controlVar) {
             setup()
@@ -124,16 +130,17 @@ const KomponentTable = () => {
     },[])
 
     const reload = async () => {
-        setLoadingComponents(true)
+        setIsLoading(true)
         await fetchComponents().then((response) => {
             setComponents(response)
-            setLoadingComponents(false)
-        }).catch(() => {
+            setIsLoading(false)
+        }).catch((error) => {
             toast.error("Noe gikk galt ved henting av tjenestene")
+            console.log(error)
         })
     }
 
-    if(loadingComponents) {
+    if(isLoading) {
         return (
             <CustomNavSpinner />
         )
@@ -690,4 +697,4 @@ const EditDependenciesTowardServices: React.FC<
 
 
 
-export default KomponentTable
+export default TableKomponent
