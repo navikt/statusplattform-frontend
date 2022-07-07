@@ -551,6 +551,9 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
     const { data: allComponents, isLoading: loadingComponents, reload: reloadComponents } = useLoader(fetchComponents,[]);
     const { data: allAreas, isLoading: loadingAreas, reload: reloadAreas } = useLoader(fetchAreas,[]);
+
+    const { name, type, team, serviceDependencies, componentDependencies, monitorlink, pollingUrl, statusNotFromTeam } = updatedService
+
     
     useEffect(() => {
         setIsLoading(true)
@@ -570,7 +573,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         )
     }
 
-    const { name, type, team, serviceDependencies, componentDependencies, monitorlink, pollingUrl, statusNotFromTeam } = updatedService
 
     const handleUpdatedService = (field: keyof typeof updatedService) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const changedService = {
@@ -688,7 +690,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
             }
             toast.success("Oppdatering gjennomført")
         }).catch(() => {
-            toast.error("Noe gikk galt i oppdatering av område")
+            toast.error("Noe gikk galt i oppdatering av tjenesten.")
         })
     }
 
