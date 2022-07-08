@@ -179,7 +179,7 @@ const NewComponent = ({allComponentsProps, allServicesProps}) => {
             name: name, team: team, type: type, componentDependencies: dependencies, monitorlink: monitorlink, pollingUrl: pollingUrl, servicesDependentOnThisComponent: newServicesList
         }
         updateNewComponent(updatedComponent)
-        toast.success("Fjernet område fra område")
+        toast.success("Fjernet tjenestekobling")
     }
     /*Handlers for connecting to services END*/
 
@@ -200,7 +200,6 @@ const NewComponent = ({allComponentsProps, allServicesProps}) => {
             router.push(RouterAdminKomponenter.PATH)
         }
     }
-
 
     return (
         <Layout>

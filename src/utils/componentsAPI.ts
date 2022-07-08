@@ -35,6 +35,7 @@ export const postComponent = async (component: Component): Promise<Component> =>
         type: component.type,
         team: component.team,
         dependencies: component.componentDependencies,
+        servicesDependentOnThisComponent: component.servicesDependentOnThisComponent,
         monitorlink: component.monitorlink,
         pollingUrl: component.pollingUrl
     })
@@ -73,7 +74,7 @@ export const deleteComponent = async (component): Promise<Object[]> =>{
 
 
 export const updateComponent = async (component: Component): Promise<void> =>{
-    let response;
+    let response
     let path = EndPathUpdateComponent(component.id)
 
     let body = JSON.stringify({
@@ -137,7 +138,7 @@ export const fetchComponentStatuses = async (): Promise<string[]> => {
 
 
 export const putComponentDependency = async (componentId, dependencyId): Promise<Object[]> =>{
-    let response;
+    let response
     let path = EndPathPutComponentDependency(componentId, dependencyId)
 
     let body = JSON.stringify({
