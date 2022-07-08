@@ -775,7 +775,7 @@ const IconDescription = () => {
                     <SuccessFilledCustomized /> Status OK
                 </li>
                 <li>
-                    <WarningFilledCustomized /> Feil oppdaget
+                    <WarningFilledCustomized className="" /> Avvik på tjeneste
                 </li>
                 <li>
                     <ErrorFilledCustomized /> Nede
