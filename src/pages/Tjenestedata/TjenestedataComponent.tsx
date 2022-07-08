@@ -191,7 +191,7 @@ const ComponentData = ({component}: TjenesteDataContentI) => {
                 
             </div>
             
-            <IncidentHistoryComponent component={component} />
+            {/* <IncidentHistoryComponent component={component} /> */}
 
         </CategoryContainer>
     )
@@ -227,7 +227,7 @@ const ServiceData = ({service, areasContainingThisService}: TjenesteDataContentI
                 
             </div>
             
-            <IncidentHistoryComponent service={service} />
+            {/* <IncidentHistoryComponent service={service} /> */}
 
         </CategoryContainer>
     )
