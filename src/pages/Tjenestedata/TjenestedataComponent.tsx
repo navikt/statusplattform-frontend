@@ -365,7 +365,7 @@ const StatusRecord = ({record}: StatusRecordI) => {
 
     return (
         <RecordWrapper>
-            <b>Teknisk info om status:</b>
+            <b>Statusinfo:</b>
             <div>
                 Status: {record.status}
             </div>
