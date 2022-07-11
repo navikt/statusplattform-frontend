@@ -193,6 +193,10 @@ export const DynamicListContainer = styled.div`
         button {
             min-width: fit-content;
         }
+
+        .select-wrapper {
+            display: flex;
+        }
     }
 
     .new-list {

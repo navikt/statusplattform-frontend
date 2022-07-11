@@ -1,20 +1,21 @@
 import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import router from "next/router";
 
 import Layout from '../../../components/Layout';
 import { Area, Component, Service } from "../../../types/types";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 
-import { BodyShort, Button, Detail, Heading, Modal, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
-import { Copy, Delete } from "@navikt/ds-icons";
+import { BodyShort, Button, Detail, Heading, Modal, Popover, Radio, RadioGroup, Select, TextField } from "@navikt/ds-react";
+import { Copy, Delete, InformationColored } from "@navikt/ds-icons";
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 import { fetchServices, postService } from "../../../utils/servicesAPI";
 import { fetchAreas } from "../../../utils/areasAPI";
 import { RouterAdminTjenester } from "../../../types/routes";
 import { fetchComponents } from "../../../utils/componentsAPI";
+import { HelptextCustomizedBlue } from "../../../components/TrafficLights";
 
 
 const NewServiceContainer = styled.div`
@@ -25,8 +26,54 @@ const NewServiceContainer = styled.div`
         width: 600px;
     }
 
-    input, select {
+    input, select, .help-button-wrapper {
         margin: 1rem 0;
+    }
+
+    .input-wrapper {
+        display: flex;
+        width: 100%;
+
+        .navds-form-field {
+            width: 100%;
+        }
+
+        .help-button-wrapper {
+            height: 48px;
+            align-self: end;
+            display: flex;
+
+            .help-button {
+                background: none;
+                border: 2px solid transparent;
+
+                width: 48px;
+                height: 48px;
+                padding: 0;
+                
+
+                &:hover {
+                    cursor: pointer;
+                    border: 2px solid var(--navds-semantic-color-interaction-primary);
+                }
+
+                &:active {
+                    filter: contrast(300%);
+                }
+
+                svg {
+                    vertical-align: middle;
+                }
+            }
+        }
+    }
+`
+
+const PopoverCustomized = styled(Popover)`
+
+    .navds-popover__content {
+
+        max-width: 300px;
     }
 `
 
@@ -48,6 +95,16 @@ const ModalContent = styled(Modal.Content)`
 `
 
 
+const popoverContentList = [
+    "Navnet på tjenesten slik den omtales ut mot brukerne av tjenesten",
+    "Navnet på team slik det er skrevet i Teamkatalogen",
+    "URL til statusendepunkt som Statusplattformen skal polle for status",
+    "Link til et eventuelt dashboard eller monitor med mer detaljert informasjon. Eksempelvis Grafana dashboard",
+    "Her kan man legge inn andre tjenester det er avhengigheter til. Informasjon om status på disse vil da vises i tjenestebildet.Velg i liste og klikk Legg til for hver tjeneste.",
+    "Her legger man inn områder hvor tjenesten skal vises. Velg i liste og klikk Legg til for hvert område."
+]
+
+
 const NewService = () => {
     const [allAreas, setAllAreas] = useState<Area[]>()
     const [allServices, setAllServices] = useState<Service[]>()
@@ -65,6 +122,10 @@ const NewService = () => {
         areasContainingThisService: [],
         statusNotFromTeam: false
     })
+
+    const buttonRef = useRef()
+    const [openState, setOpenState] = useState(false)
+    const [popoverText, setPopoverText] = useState("")
 
     
 
@@ -259,47 +320,122 @@ const NewService = () => {
         return true
     }
 
-
-
+    const handleTriggerHelpText = (event, index) => {
+        if(openState) {
+            setOpenState(false)
+        }
+        else {
+            setOpenState(true)
+        }
+        buttonRef.current = event.target
+        setPopoverText(popoverContentList[index])
+    }
 
 
 
     return (
         <Layout>
+            <PopoverCustomized
+                open={openState}
+                onClose={() => setOpenState(false)}
+                anchorEl={buttonRef.current}
+                placement="right"
+            >
+                <Popover.Content>{popoverText}</Popover.Content>
+            </PopoverCustomized>
+            
+
+
+
+
             <NewServiceContainer>
                 <form onSubmit={event => handlePostNewService(event)}>
 
                     <Detail size="small" spacing>Felter markert med * er obligatoriske</Detail>
 
-                    <TextField type="text" required label="Navn på tjeneste*" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn" />
-                    <TextField type="text" required label="Team*" value={team} onChange={handleServiceDataChange("team")} placeholder="Team" />
+                    <div className="input-wrapper">
+                        <TextField type="text" required label="Navn på tjeneste*" value={name} onChange={handleServiceDataChange("name")} placeholder="Navn" />
+                        <div className="help-button-wrapper">
+                            <button
+                                className="help-button"
+                                type="button"
+                                ref={buttonRef}
+                                onClick={(event) => handleTriggerHelpText(event, 0)}
+                            >
+                                <InformationColored width="2em" height="2em" />
+                            </button>
+                        </div>
+                    </div>
 
-                    <TextField
-                        type="text"
-                        label="PollingUrl"
-                        value={pollingUrl}
-                        error={!validatePollingUrl(pollingUrl) ? "Feil i formatet på urlen" : undefined}
+                    <div className="input-wrapper">
+                        <TextField type="text" required label="Team*" value={team} onChange={handleServiceDataChange("team")} placeholder="Team" />
+                        <div className="help-button-wrapper">
+                            <button
+                                className="help-button"
+                                type="button"
+                                ref={buttonRef}
+                                onClick={(event) => handleTriggerHelpText(event, 1)}
+                            >
+                                <InformationColored width="2em" height="2em" />
+                            </button>
+                        </div>
+                    </div>
 
-                        onChange={handleServiceDataChange("pollingUrl")}
-                        placeholder="PollingUrl"
-                    />
-                    <TextField
-                        type="text"
-                        label="Monitorlink"
-                        value={monitorlink}
-                        error={!validateMonitorLink(monitorlink) ? "Feil i formatet på urlen" : undefined}
-                        onChange={handleServiceDataChange("monitorlink")}
-                        placeholder="Monitorlink"
-                    />
+                    <div className="input-wrapper">
+                        <TextField
+                            type="text"
+                            label={"PollingUrl"}
+                            value={pollingUrl}
+                            error={!validatePollingUrl(pollingUrl) ? "Feil i formatet på urlen" : undefined}
+
+                            onChange={handleServiceDataChange("pollingUrl")}
+                            placeholder="PollingUrl"
+                        />
+                        <div className="help-button-wrapper">
+                            <button
+                                className="help-button"
+                                type="button"
+                                ref={buttonRef}
+                                onClick={(event) => handleTriggerHelpText(event, 2)}
+                            >
+                                <InformationColored width="2em" height="2em" />
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="input-wrapper">
+                        <TextField
+                            type="text"
+                            label="Monitorlink"
+                            value={monitorlink}
+                            error={!validateMonitorLink(monitorlink) ? "Feil i formatet på urlen" : undefined}
+                            onChange={handleServiceDataChange("monitorlink")}
+                            placeholder="Monitorlink"
+                        />
+                        <div className="help-button-wrapper">
+                            <button
+                                className="help-button"
+                                type="button"
+                                ref={buttonRef}
+                                onClick={(event) => handleTriggerHelpText(event, 3)}
+                            >
+                                <InformationColored width="2em" height="2em" />
+                            </button>
+                        </div>
+                    </div>
 
                     <HorizontalSeparator />
 
-                    <ServiceDependencies 
-                        newService={newService}
-                        allServices={allServices}
-                        handleAddServiceDependency={(serviceToAdd) => handleAddServiceDependency(serviceToAdd)}
-                        handleDeleteServiceDependency={(serviceToAdd) => handleDeleteServiceDependency(serviceToAdd)}
-                    />
+                    <div className="input-wrapper">
+                        <ServiceDependencies 
+                            newService={newService}
+                            allServices={allServices}
+                            handleAddServiceDependency={(serviceToAdd) => handleAddServiceDependency(serviceToAdd)}
+                            handleDeleteServiceDependency={(serviceToAdd) => handleDeleteServiceDependency(serviceToAdd)}
+                            buttonRef={buttonRef}
+                            handleTriggerHelpText={(event, index) => handleTriggerHelpText(event, index)}
+                        />
+                    </div>
 
                     <HorizontalSeparator />
 
@@ -312,13 +448,16 @@ const NewService = () => {
                     />
                     <HorizontalSeparator /> */}
 
-
-                    <ConnectServiceToArea 
-                        newService={newService}
-                        allAreas={allAreas}
-                        handleAddAreaServiceConnectsTo={(areaToConsistIn) => handleAddAreaServiceConnectsTo(areaToConsistIn)}
-                        handleDeleteAreaServiceConnectsTo={(areaToDeleteFrom) => handleDeleteAreaServiceConnectsTo(areaToDeleteFrom)}
-                    />
+                    <div className="input-wrapper">
+                        <ConnectServiceToArea 
+                            newService={newService}
+                            allAreas={allAreas}
+                            handleAddAreaServiceConnectsTo={(areaToConsistIn) => handleAddAreaServiceConnectsTo(areaToConsistIn)}
+                            handleDeleteAreaServiceConnectsTo={(areaToDeleteFrom) => handleDeleteAreaServiceConnectsTo(areaToDeleteFrom)}
+                            buttonRef={buttonRef}
+                            handleTriggerHelpText={(event, index) => handleTriggerHelpText(event, index)}
+                        />
+                    </div>
 
                     <HorizontalSeparator />
 
@@ -346,11 +485,13 @@ interface ServiceProps {
     allServices: Service[]
     handleAddServiceDependency: (serviceToAdd) => void
     handleDeleteServiceDependency: (serviceToAdd) => void
+    buttonRef: React.RefObject<HTMLButtonElement>
+    handleTriggerHelpText: (event, index) => void
 }
 
 
 
-const ServiceDependencies = ({newService, allServices, handleDeleteServiceDependency, handleAddServiceDependency}: ServiceProps) => {
+const ServiceDependencies = ({newService, allServices, handleDeleteServiceDependency, handleAddServiceDependency, buttonRef, handleTriggerHelpText}: ServiceProps) => {
     const availableServices: Service[] = allServices.filter(area => !newService.serviceDependencies.map(a => a.id).includes(area.id))
     const { changeTitle } = useContext(TitleContext)
 
@@ -388,17 +529,29 @@ const ServiceDependencies = ({newService, allServices, handleDeleteServiceDepend
         <DynamicListContainer>
 
             <div className="column">
-                <Select label="Legg til tjenesteavhengighet" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedArea}>
-                    {availableServices.length > 0 ?
-                        availableServices.map(service => {
-                            return (
-                                <option key={service.id} value={service.id}>{service.name}</option>
-                            )
-                        })
-                    :
-                        <option key={undefined} value="">Ingen tilgjengelige områder</option>
-                    }
-                </Select>
+                <div className="select-wrapper">
+                    <Select label="Legg til tjenesteavhengighet" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedArea}>
+                        {availableServices.length > 0 ?
+                            availableServices.map(service => {
+                                return (
+                                    <option key={service.id} value={service.id}>{service.name}</option>
+                                )
+                            })
+                        :
+                            <option key={undefined} value="">Ingen tilgjengelige områder</option>
+                        }
+                    </Select>
+                    <div className="help-button-wrapper">
+                        <button
+                            className="help-button"
+                            type="button"
+                            ref={buttonRef}
+                            onClick={(event) => handleTriggerHelpText(event, 4)}
+                        >
+                            <InformationColored width="2em" height="2em" />
+                        </button>
+                    </div>
+                </div>
 
                 <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
             </div>
@@ -443,11 +596,13 @@ interface ComponentProps {
     allComponents: Component[]
     handleAddComponentDependency: (componentToAdd) => void
     handleDeleteComponentDependency: (serviceToAdd) => void
+    buttonRef: React.RefObject<HTMLButtonElement>
+    handleTriggerHelpText: (event, index) => void
 }
 
 
 
-const ComponentDependencies = ({newService, allComponents, handleAddComponentDependency, handleDeleteComponentDependency}: ComponentProps) => {
+const ComponentDependencies = ({newService, allComponents, handleAddComponentDependency, handleDeleteComponentDependency, buttonRef, handleTriggerHelpText}: ComponentProps) => {
     const availableComponents: Component[] | null = allComponents.filter(area => !newService.componentDependencies.map(a => a.id).includes(area.id))
     const { changeTitle } = useContext(TitleContext)
 
@@ -483,18 +638,29 @@ const ComponentDependencies = ({newService, allComponents, handleAddComponentDep
 
     return (
         <DynamicListContainer>
-            
-            <Select label="Legg til komponentavhengighet" value={selectedComponent !== null ? selectedComponent.id : ""} onChange={handleUpdateSelectedArea}>
-                {availableComponents.length > 0 ?
-                    availableComponents.map(service => {
-                        return (
-                            <option key={service.id} value={service.id}>{service.name}</option>
-                        )
-                    })
-                :
-                    <option key={undefined} value="">Ingen tilgjengelige komponenter</option>
-                }
-            </Select>
+            <div className="select-wrapper">
+                <Select label="Legg til komponentavhengighet" value={selectedComponent !== null ? selectedComponent.id : ""} onChange={handleUpdateSelectedArea}>
+                    {availableComponents.length > 0 ?
+                        availableComponents.map(service => {
+                            return (
+                                <option key={service.id} value={service.id}>{service.name}</option>
+                            )
+                        })
+                    :
+                        <option key={undefined} value="">Ingen tilgjengelige komponenter</option>
+                    }
+                </Select>
+                <div className="help-button-wrapper">
+                    <button
+                        className="help-button"
+                        type="button"
+                        ref={buttonRef}
+                        onClick={(event) => handleTriggerHelpText(event, 4)}
+                    >
+                        <InformationColored width="2em" height="2em" />
+                    </button>
+                </div>
+            </div>
 
             <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
             
@@ -538,10 +704,12 @@ interface ServiceConnectionProps {
     allAreas: Area[]
     handleDeleteAreaServiceConnectsTo: (selectedArea) => void
     handleAddAreaServiceConnectsTo: (selectedArea) => void
+    buttonRef: React.RefObject<HTMLButtonElement>
+    handleTriggerHelpText: (event, index) => void
 }
 
 
-const ConnectServiceToArea = ({newService, allAreas, handleDeleteAreaServiceConnectsTo, handleAddAreaServiceConnectsTo}: ServiceConnectionProps) => {
+const ConnectServiceToArea = ({newService, allAreas, handleDeleteAreaServiceConnectsTo, handleAddAreaServiceConnectsTo, buttonRef, handleTriggerHelpText}: ServiceConnectionProps) => {
     const availableAreas: Area[] = allAreas.filter(area => !newService.areasContainingThisService.map(a => a.id).includes(area.id))
 
     const [selectedArea, changeSelectedArea] = useState<Area | null>(() => availableAreas.length > 0 ? availableAreas[0] : null)
@@ -575,17 +743,30 @@ const ConnectServiceToArea = ({newService, allAreas, handleDeleteAreaServiceConn
     return (
         <DynamicListContainer>
             <div className="column">
-                <Select label="Legg til i område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
-                    {availableAreas.length > 0 ?
-                        availableAreas.map(area => {
-                            return (
-                                <option key={area.id} value={area.id}>{area.name}</option>
-                            )
-                        })
-                    :
-                        <option key={undefined} value="">Ingen områder å legge til</option>
-                    }
-                </Select>
+                <div className="select-wrapper">
+                    <Select label="Legg til i område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
+                        {availableAreas.length > 0 ?
+                            availableAreas.map(area => {
+                                return (
+                                    <option key={area.id} value={area.id}>{area.name}</option>
+                                )
+                            })
+                        :
+                            <option key={undefined} value="">Ingen områder å legge til</option>
+                        }
+                    </Select>
+                    <div className="help-button-wrapper">
+                        <button
+                            className="help-button"
+                            type="button"
+                            ref={buttonRef}
+                            onClick={(event) => handleTriggerHelpText(event, 5)}
+                        >
+                            <InformationColored width="2em" height="2em" />
+                        </button>
+                    </div>
+                </div>
+
 
                 <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
             </div>

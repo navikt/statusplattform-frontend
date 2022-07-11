@@ -200,7 +200,7 @@ const NewComponent = ({allComponentsProps, allServicesProps}) => {
             router.push(RouterAdminKomponenter.PATH)
         }
     }
-
+// SKJUL POPUP VED OPPRETTELSE!
     return (
         <Layout>
 
