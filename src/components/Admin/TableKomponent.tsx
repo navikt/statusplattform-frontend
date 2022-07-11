@@ -7,12 +7,13 @@ import 'react-toastify/dist/ReactToastify.css';
 
 import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
 import { BodyShort, Button, Heading, Modal, Select, TextField } from '@navikt/ds-react';
-import { Component } from '../../types/types';
+import { Component, Service } from '../../types/types';
 import { deleteComponent, fetchComponents, updateComponent } from '../../utils/componentsAPI';
 import { TitleContext } from '../ContextProviders/TitleContext';
 import CustomNavSpinner from '../CustomNavSpinner';
 import { AdminCategoryContainer, CloseCustomized, DependenciesColumn, DependencyList, ModalInner, NoContentContainer } from '../../pages/Admin';
 import { RouterAdminAddKomponent } from '../../types/routes';
+import { fetchServices } from '../../utils/servicesAPI';
 
 
 
@@ -102,6 +103,7 @@ const TableKomponent = () => {
     const [componentsToEdit, changeComponentsToEdit] = useState<string[]>([])
     const [componentToDelete, setComponentToDelete] = useState<Component>()
     const [components, setComponents] = useState<Component[]>()
+    const [allServices, setAllServices] = useState<Service[]>()
     const [isLoading, setIsLoading] = useState(false)
 
     const { changeTitle } = useContext(TitleContext)
@@ -115,6 +117,8 @@ const TableKomponent = () => {
                 try {
                     const components: Component[] = await fetchComponents()
                     await setComponents(components)
+                    const responseServices = await fetchServices()
+                    await setAllServices(responseServices)
                 } catch (error) {
                     toast.error("Noe gikk galt ved henting av dashbordene")
                     console.log(error)
@@ -128,6 +132,7 @@ const TableKomponent = () => {
         }
         controlVar = false
     },[])
+
 
     const reload = async () => {
         setIsLoading(true)
@@ -244,6 +249,7 @@ const TableKomponent = () => {
                                                     isExpanded={expanded.includes(component.id)}
                                                     setComponentToDelete={() => setComponentToDelete(component)}
                                                     allComponents={components}
+                                                    allServices={allServices}
                                                     reload={reload}
                                                 />
                                         }
@@ -383,9 +389,10 @@ interface ComponentRowProps {
     isExpanded: boolean,
     setComponentToDelete: (component) => void,
     reload?: () => void
+    allServices?: Service[]
 }
 
-const ComponentRow = ({component, toggleEditComponent, toggleExpanded, isExpanded, setComponentToDelete }: ComponentRowProps) => {
+const ComponentRow = ({component, toggleEditComponent, toggleExpanded, isExpanded, setComponentToDelete}: ComponentRowProps) => {
 
     const handleEditComponent = (component) => {
         if(!isExpanded) {
@@ -406,7 +413,7 @@ const ComponentRow = ({component, toggleEditComponent, toggleExpanded, isExpande
 
                 {isExpanded &&
                     <div className="bottom-row clickable" onClick={() => toggleExpanded(component)}>
-                        <div className="dependencies">
+                         <div className="dependencies">
                             {component.componentDependencies.length == 0
                                 ?
                                     <>
@@ -418,6 +425,27 @@ const ComponentRow = ({component, toggleEditComponent, toggleExpanded, isExpande
                                         <BodyShort spacing><b>Komponentavhengigheter</b></BodyShort>
                                         <ul>
                                             {component.componentDependencies.map((dependency, index) => {
+                                                return (
+                                                    <li key={index}>{dependency.name}</li>
+                                                    )
+                                                })}
+                                        </ul>
+                                    </>
+                            }
+                        </div>
+
+                        <div className="dependencies">
+                            {component.servicesDependentOnThisComponent.length == 0
+                                ?
+                                    <>
+                                        <BodyShort spacing><b>Koblinger mot tjenester</b></BodyShort>
+                                        <BodyShort spacing>Ingen tjenestekoblinger lagt til</BodyShort>
+                                    </>
+                                :
+                                    <>
+                                        <BodyShort spacing><b>Koblinger mot tjenester</b></BodyShort>
+                                        <ul>
+                                            {component.servicesDependentOnThisComponent.map((dependency, index) => {
                                                 return (
                                                     <li key={index}>{dependency.name}</li>
                                                     )
@@ -469,7 +497,7 @@ const ComponentRow = ({component, toggleEditComponent, toggleExpanded, isExpande
 
 
 
-const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, toggleExpanded, isExpanded, setComponentToDelete, reload } : ComponentRowProps) => {
+const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, toggleExpanded, isExpanded, setComponentToDelete, reload, allServices} : ComponentRowProps) => {
     const [updatedComponent, changeUpdatedComponent] = useState<Component>({
         id: component.id,
         name: component.name,
@@ -480,9 +508,29 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
         pollingUrl: component.pollingUrl,
         servicesDependentOnThisComponent: component.servicesDependentOnThisComponent
     })
+    const [isLoading, setIsLoading] = useState(true)
 
 
+    const { name, type, team, componentDependencies, monitorlink, pollingUrl, servicesDependentOnThisComponent } = updatedComponent
 
+    useEffect(() => {
+        setIsLoading(true)
+        if(monitorlink == null || monitorlink == undefined) {
+            changeUpdatedComponent({...updatedComponent, monitorlink: ""})
+        }
+        if(pollingUrl == null || pollingUrl == undefined) {
+            changeUpdatedComponent({...updatedComponent, pollingUrl: ""})
+        }
+        setIsLoading(false)
+    },[])
+
+
+    if(isLoading) {
+        return(
+            <CustomNavSpinner />
+        )
+    }
+    
     const handleUpdatedComponent = (field: keyof typeof updatedComponent) => (evt: React.ChangeEvent<HTMLInputElement>) => {
         const changedService = {
             ...updatedComponent,
@@ -512,7 +560,6 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
     
 
 
-    const { name, type, team, componentDependencies, monitorlink, pollingUrl, servicesDependentOnThisComponent } = updatedComponent
 
     return (
         <ComponentRowContainer>
@@ -529,12 +576,26 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
                         
                 <div className="bottom-row">
                     <div className="dependencies">
-                        <BodyShort spacing><b>Tjenester avhengig denne</b></BodyShort>
+                        <BodyShort spacing><b>Komponentavhengigheter</b></BodyShort>
 
-                        <EditDependenciesTowardServices
+                        <EditComponentDependencies
                             allComponents={allComponents} component={component} updatedComponent={updatedComponent}
                         />
                     </div>
+
+
+
+                    <div className="dependencies">
+                        <BodyShort spacing><b>Kobling mot tjenester</b></BodyShort>
+
+                        <EditConnctionToServices
+                            allServices={allServices} component={component} updatedComponent={updatedComponent}
+                        />
+                    </div>
+
+
+
+
                     <span className="component-row-element editting">
                         <BodyShort spacing><b>Monitorlink</b></BodyShort>
                         <TextField label="Monitorlink" hideLabel value={monitorlink} onChange={handleUpdatedComponent("monitorlink")}/>
@@ -582,18 +643,136 @@ const ComponentRowEditting = ({ component, allComponents, toggleEditComponent, t
 
 
 
+interface EditConnctionToServicesI {
+    allServices: Service[]
+    component: Component
+    updatedComponent: Component
+}
+
+
+const EditConnctionToServices = ({allServices, component, updatedComponent}: EditConnctionToServicesI) => {
+
+    const [edittedDependencies, updateDependencies] = useState<Service[]>([...component.servicesDependentOnThisComponent])
+    const availableServiceConnections: Service[] = [...allServices].filter(s => 
+        !edittedDependencies.map(service => service.id).includes(s.id)
+    )
+    
+    const [selectedService, updateSelectedService] = useState<Service | null>(allServices[0])
+
+
+    useEffect(() => {
+        updatedComponent.servicesDependentOnThisComponent = edittedDependencies
+        if(availableServiceConnections.length > 0){
+            updateSelectedService(availableServiceConnections[0])
+        }
+        else {
+            updateSelectedService(null)
+        }
+    }, [edittedDependencies])
+
+
+
+    const handleUpdateSelectedService = (event) => {
+        const idOfSelectedService: string = event.target.value
+        const newSelectedService: Service = allServices.find(service => idOfSelectedService === service.id)
+        updateSelectedService(newSelectedService)
+    }
+
+
+
+    const handlePutEdittedServiceConnection = () => {
+        if(selectedService !== null) {    
+            const updatedEdittedDependencies: Service[] = [...edittedDependencies, selectedService]
+            updateDependencies(updatedEdittedDependencies)
+            toast.success("Tjeenstekobling lagt til")
+            return
+        }
+        toast.info("Ingen tjenester å legge til")
+    }
+
+
+
+    const handleRemoveEdittedServiceConnection = (service: Service) => {
+        if(!edittedDependencies.includes(service)) {
+            toast.error("Tjenesten eksisterer ikke i avhengighetene. Noe har gått galt med innlesingen")
+            return
+        }
+        const updatedEdittedDependencies = edittedDependencies.filter(s => s.id != service.id)
+        updateDependencies(updatedEdittedDependencies)
+        toast.info("Kobling fjernet")
+        
+    }
+
+
+    return (
+        <DependenciesColumn>
+            <DependencyList>
+                {edittedDependencies.length === 0
+                ?
+                    <BodyShort spacing>
+                        Ingen tjenestekoblinger lagt til
+                    </BodyShort>
+                :
+                    <>
+                        {edittedDependencies.map((component) => {
+                            return (
+                                <li key={component.id}>{component.name} 
+                                    <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + component.name}
+                                            onClick={() => handleRemoveEdittedServiceConnection(component)}>
+                                        <CloseCustomized/>
+                                    </CustomButton>
+                                </li>
+                            )
+                        })}
+                    </>
+                }
+            </DependencyList>
+            {allServices.length !== 0
+            ?
+                <Select label="Legg til komponenter i område" onChange={handleUpdateSelectedService}>
+                    {availableServiceConnections.length > 0 ?
+                    availableServiceConnections.map(component => {
+                        return (
+                            <option key={component.id} value={component.id}>{component.name}</option>
+                        )
+                    })
+                    :
+                        <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
+                    }
+                </Select>
+            :
+                <>
+                    Ingen tjeneste å legge til
+                </>
+            }
+
+            <div>
+                <Button variant="secondary" className="add-element" onClick={handlePutEdittedServiceConnection}>Legg til</Button>
+            </div>
+
+            
+        </DependenciesColumn>
+    )
+}
 
 
 
 
-const EditDependenciesTowardServices: React.FC<
-                {allComponents: Component[], component: Component, updatedComponent: Component}> = (
-                {allComponents, component, updatedComponent}
-        ) => {
+
+
+
+interface EditComponentDependenciesI {
+    allComponents: Component[]
+    component: Component
+    updatedComponent: Component
+}
+
+
+const EditComponentDependencies = ({allComponents, component, updatedComponent}: EditComponentDependenciesI) => {
 
     const [edittedDependencies, updateDependencies] = useState<Component[]>([...component.componentDependencies])
-    const availableServiceDependencies: Component[] = [...allComponents].filter(s => 
-        s.id != component.id && !edittedDependencies.map(component => component.id).includes(s.id)
+    const availableServiceDependencies: Component[] = [...allComponents].filter(c => 
+        c.id != component.id && !edittedDependencies.map(component => component.id).includes(c.id)
     )
     
     const [selectedComponent, updateSelectedComponent] = useState<Component | null>(allComponents[0])
@@ -618,7 +797,7 @@ const EditDependenciesTowardServices: React.FC<
 
 
 
-    const handlePutEdittedServiceDependency = () => {
+    const handlePutEdittedComponentDependency = () => {
         if(selectedComponent !== null) {    
             const updatedEdittedDependencies: Component[] = [...edittedDependencies, selectedComponent]
             updateDependencies(updatedEdittedDependencies)
@@ -630,7 +809,7 @@ const EditDependenciesTowardServices: React.FC<
 
 
 
-    const handleRemoveEdittedServiceDependency = (component: Component) => {
+    const handleRemoveEdittedComponentDependency = (component: Component) => {
         if(!edittedDependencies.includes(component)) {
             toast.error("Komponent eksisterer ikke i avhengighetene. Noe har gått galt med innlesingen")
             return
@@ -648,7 +827,7 @@ const EditDependenciesTowardServices: React.FC<
                 {edittedDependencies.length === 0
                 ?
                     <BodyShort spacing>
-                        Komponenten er ikke koblet mot noen tjenester
+                        Ingen komponentavhengigheter lagt til
                     </BodyShort>
                 :
                     <>
@@ -656,7 +835,7 @@ const EditDependenciesTowardServices: React.FC<
                             return (
                                 <li key={component.id}>{component.name} 
                                     <CustomButton aria-label={"Fjern tjenesteavhengighet med navn " + component.name}
-                                            onClick={() => handleRemoveEdittedServiceDependency(component)}>
+                                            onClick={() => handleRemoveEdittedComponentDependency(component)}>
                                         <CloseCustomized/>
                                     </CustomButton>
                                 </li>
@@ -685,7 +864,7 @@ const EditDependenciesTowardServices: React.FC<
             }
 
             <div>
-                <Button variant="secondary" className="add-element" onClick={handlePutEdittedServiceDependency}>Legg til</Button>
+                <Button variant="secondary" className="add-element" onClick={handlePutEdittedComponentDependency}>Legg til</Button>
             </div>
 
             

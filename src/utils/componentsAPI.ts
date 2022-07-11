@@ -83,6 +83,7 @@ export const updateComponent = async (component: Component): Promise<void> =>{
         type: component.type,
         team: component.team,
         componentDependencies: component.componentDependencies,
+        servicesDependentOnThisComponent: component.servicesDependentOnThisComponent,
         monitorlink: component.monitorlink,
         pollingUrl: component.pollingUrl
     })
