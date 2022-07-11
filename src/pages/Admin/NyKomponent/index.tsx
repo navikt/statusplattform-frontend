@@ -197,7 +197,7 @@ const NewComponent = ({allComponentsProps, allServicesProps}) => {
     const redirectToAdminKomponenter = () => {
         router.push(RouterAdminKomponenter.PATH)
     }
-// SKJUL POPUP VED OPPRETTELSE!
+
     return (
         <Layout>
 
