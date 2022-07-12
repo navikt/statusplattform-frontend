@@ -62,7 +62,7 @@ const NewServiceContainer = styled.div`
                 }
 
                 svg {
-                    vertical-align: middle;
+                    vertical-align: super;
                 }
             }
         }
@@ -362,7 +362,7 @@ const NewService = () => {
                                 ref={buttonRef}
                                 onClick={(event) => handleTriggerHelpText(event, 0)}
                             >
-                                <InformationColored width="2em" height="2em" />
+                                <InformationColored width="1.5em" height="1.5em" />
                             </button>
                         </div>
                     </div>
@@ -376,7 +376,7 @@ const NewService = () => {
                                 ref={buttonRef}
                                 onClick={(event) => handleTriggerHelpText(event, 1)}
                             >
-                                <InformationColored width="2em" height="2em" />
+                                <InformationColored width="1.5em" height="1.5em" />
                             </button>
                         </div>
                     </div>
@@ -398,7 +398,7 @@ const NewService = () => {
                                 ref={buttonRef}
                                 onClick={(event) => handleTriggerHelpText(event, 2)}
                             >
-                                <InformationColored width="2em" height="2em" />
+                                <InformationColored width="1.5em" height="1.5em" />
                             </button>
                         </div>
                     </div>
@@ -419,7 +419,7 @@ const NewService = () => {
                                 ref={buttonRef}
                                 onClick={(event) => handleTriggerHelpText(event, 3)}
                             >
-                                <InformationColored width="2em" height="2em" />
+                                <InformationColored width="1.5em" height="1.5em" />
                             </button>
                         </div>
                     </div>
@@ -548,7 +548,7 @@ const ServiceDependencies = ({newService, allServices, handleDeleteServiceDepend
                             ref={buttonRef}
                             onClick={(event) => handleTriggerHelpText(event, 4)}
                         >
-                            <InformationColored width="2em" height="2em" />
+                            <InformationColored width="1.5em" height="1.5em" />
                         </button>
                     </div>
                 </div>
@@ -762,7 +762,7 @@ const ConnectServiceToArea = ({newService, allAreas, handleDeleteAreaServiceConn
                             ref={buttonRef}
                             onClick={(event) => handleTriggerHelpText(event, 5)}
                         >
-                            <InformationColored width="2em" height="2em" />
+                            <InformationColored width="1.5em" height="1.5em" />
                         </button>
                     </div>
                 </div>

@@ -1,6 +1,6 @@
 import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import router from "next/router";
 
 import Layout from '../../../components/Layout';
@@ -8,8 +8,8 @@ import { Service, Component } from "../../../types/types";
 import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import { fetchTypes } from "../../../utils/fetchTypes";
 
-import { BodyShort, Button, Detail, Heading, Modal, Select, TextField } from "@navikt/ds-react";
-import { Copy, Delete } from "@navikt/ds-icons";
+import { BodyShort, Button, Detail, Heading, Modal, Popover, Select, TextField } from "@navikt/ds-react";
+import { Copy, Delete, InformationColored } from "@navikt/ds-icons";
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from "..";
 import { TitleContext } from "../../../components/ContextProviders/TitleContext";
 import { fetchAreas } from "../../../utils/areasAPI";
@@ -27,7 +27,7 @@ const NewComponentContainer = styled.div`
         width: 600px;
     }
 
-    input, select {
+    input, select, .help-button-wrapper {
         margin: 1rem 0;
     }
 
@@ -37,6 +37,52 @@ const NewComponentContainer = styled.div`
         justify-content: space-between;
     }
 
+    .input-wrapper {
+        display: flex;
+        width: 100%;
+
+        .navds-form-field {
+            width: 100%;
+        }
+
+        .help-button-wrapper {
+            height: 48px;
+            align-self: end;
+            display: flex;
+
+            .help-button {
+                background: none;
+                border: 2px solid transparent;
+
+                width: 48px;
+                height: 48px;
+                padding: 0;
+                
+
+                &:hover {
+                    cursor: pointer;
+                    border: 2px solid var(--navds-semantic-color-interaction-primary);
+                }
+
+                &:active {
+                    filter: contrast(300%);
+                }
+
+                svg {
+                    vertical-align: super;
+                }
+            }
+        }
+    }
+
+`
+
+const PopoverCustomized = styled(Popover)`
+
+    .navds-popover__content {
+
+        max-width: 300px;
+    }
 `
 
 const ModalContent = styled(Modal.Content)`
@@ -73,23 +119,24 @@ export const getServerSideProps = async () => {
     }
 }
 
+const popoverContentList = [
+    "Navnet på komponenten slik den omtales ut mot brukerne av komponenten",
+    "Navnet på team slik det er skrevet i Teamkatalogen",
+    "URL til statusendepunkt som Statusplattformen skal polle for status",
+    "Link til et eventuelt dashboard eller monitor med mer detaljert informasjon. Eksempelvis Grafana dashboard",
+    "Her kan man legge inn andre komponenter det er avhengigheter til. Informasjon om status på disse vil da vises i komponentbildet. Velg i liste og klikk Legg til for hver komponent.",
+    "Her legger man inn tjenester hvor komponeten skal vises. Velg i liste og klikk Legg til for hver tjeneste."
+]
+
 
 const NewComponent = ({allComponentsProps, allServicesProps}) => {
     const allComponents: Component[] =allComponentsProps
     const allServices: Service[] = allServicesProps
     const [isLoading, setIsLoading] = useState(true)
     const [didComponentCreate, changeDidComponentCreate] = useState(false)
-    // const [newlyCreatedComponent, setNewlyCreatedComponent] = useState<Component>(
-    //     {
-    //         name: "",
-    //         team: "",
-    //         type: "KOMPONENT",
-    //         componentDependencies: [],
-    //         monitorlink: "",
-    //         pollingUrl: "",
-    //         servicesDependentOnThisComponent: []
-    //     }
-    // )
+    const buttonRef = useRef()
+    const [openState, setOpenState] = useState(false)
+    const [popoverText, setPopoverText] = useState("")
 
     const [newComponent, updateNewComponent] = useState<Component>({
         name: "",
@@ -198,37 +245,119 @@ const NewComponent = ({allComponentsProps, allServicesProps}) => {
         router.push(RouterAdminKomponenter.PATH)
     }
 
+    const handleTriggerHelpText = (event, index) => {
+        if(openState) {
+            setOpenState(false)
+        }
+        else {
+            setOpenState(true)
+        }
+        buttonRef.current = event.target
+        setPopoverText(popoverContentList[index])
+    }
+
+
+
+
+
+
     return (
         <Layout>
+            <PopoverCustomized
+                open={openState}
+                onClose={() => setOpenState(false)}
+                anchorEl={buttonRef.current}
+                placement="right"
+            >
+                <Popover.Content>{popoverText}</Popover.Content>
+            </PopoverCustomized>
 
             <NewComponentContainer>
                 <form onSubmit={event => handlePostNewComponent(event)}>
 
                     <Detail size="small" spacing>Felter markert med * er obligatoriske</Detail>
 
-                    <TextField type="text" required label="Navn på komponent*" value={name} onChange={handleComponentDataChange("name")} placeholder="Navn" />
-                    <TextField type="text" required label="Team*" value={team} onChange={handleComponentDataChange("team")} placeholder="Team" />
+                    <div className="input-wrapper">
+                        <TextField type="text" required label="Navn på komponent*" value={name} onChange={handleComponentDataChange("name")} placeholder="Navn" />
+                        <div className="help-button-wrapper">
+                            <button
+                                className="help-button"
+                                type="button"
+                                ref={buttonRef}
+                                onClick={(event) => handleTriggerHelpText(event, 0)}
+                            >
+                                <InformationColored width="1.5em" height="1.5em" />
+                            </button>
+                        </div>
+                    </div>
 
-                    <TextField type="text" label="PollingUrl" value={pollingUrl} onChange={handleComponentDataChange("pollingUrl")} placeholder="PollingUrl" />
-                    <TextField type="text" label="Monitorlink" value={monitorlink} onChange={handleComponentDataChange("monitorlink")} placeholder="Monitorlink" />
+                    <div className="input-wrapper">
+                        <TextField type="text" required label="Team*" value={team} onChange={handleComponentDataChange("team")} placeholder="Team" />
+                        <div className="help-button-wrapper">
+                            <button
+                                className="help-button"
+                                type="button"
+                                ref={buttonRef}
+                                onClick={(event) => handleTriggerHelpText(event, 1)}
+                            >
+                                <InformationColored width="1.5em" height="1.5em" />
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="input-wrapper">
+                        <TextField type="text" label="PollingUrl" value={pollingUrl} onChange={handleComponentDataChange("pollingUrl")} placeholder="PollingUrl" />
+                        <div className="help-button-wrapper">
+                            <button
+                                className="help-button"
+                                type="button"
+                                ref={buttonRef}
+                                onClick={(event) => handleTriggerHelpText(event, 2)}
+                            >
+                                <InformationColored width="1.5em" height="1.5em" />
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="input-wrapper">
+                        <TextField type="text" label="Monitorlink" value={monitorlink} onChange={handleComponentDataChange("monitorlink")} placeholder="Monitorlink" />
+                        <div className="help-button-wrapper">
+                            <button
+                                className="help-button"
+                                type="button"
+                                ref={buttonRef}
+                                onClick={(event) => handleTriggerHelpText(event, 3)}
+                            >
+                                <InformationColored width="1.5em" height="1.5em" />
+                            </button>
+                        </div>
+                    </div>
 
                     <HorizontalSeparator />
 
-                    <ComponentDependencies 
-                        newComponent={newComponent}
-                        allComponents={allComponents}
-                        handleAddComponentDependency={(componentToAdd) => handleAddComponentDependency(componentToAdd)}
-                        handleDeleteComponentDependency={(componentToAdd) => handleDeleteComponentDependency(componentToAdd)}
-                    />
+                    <div className="input-wrapper">
+                        <ComponentDependencies 
+                            newComponent={newComponent}
+                            allComponents={allComponents}
+                            handleAddComponentDependency={(componentToAdd) => handleAddComponentDependency(componentToAdd)}
+                            handleDeleteComponentDependency={(componentToAdd) => handleDeleteComponentDependency(componentToAdd)}
+                            buttonRef={buttonRef}
+                            handleTriggerHelpText={handleTriggerHelpText}
+                        />
+                    </div>
 
                     <HorizontalSeparator />
 
-                    <ConnectToServiceComponent 
-                        newComponent={newComponent}
-                        allServices={allServices}
-                        handleConnectToService={(serviceToConnect) => handleConnectToService(serviceToConnect)}
-                        handleDeleteConnectionToService={(serviceToDeleteFromConnections) => handleDeleteConnectionToService(serviceToDeleteFromConnections)}
-                    />
+                    <div className="input-wrapper">
+                        <ConnectToServiceComponent 
+                            newComponent={newComponent}
+                            allServices={allServices}
+                            handleConnectToService={(serviceToConnect) => handleConnectToService(serviceToConnect)}
+                            handleDeleteConnectionToService={(serviceToDeleteFromConnections) => handleDeleteConnectionToService(serviceToDeleteFromConnections)}
+                            buttonRef={buttonRef}
+                            handleTriggerHelpText={handleTriggerHelpText}
+                        />
+                    </div>
 
                     <HorizontalSeparator />
 
@@ -255,11 +384,13 @@ interface ComponentProps {
     allComponents: Component[]
     handleAddComponentDependency: (componentToAdd) => void
     handleDeleteComponentDependency: (componentToAdd) => void
+    buttonRef: React.RefObject<HTMLButtonElement>
+    handleTriggerHelpText: (event, index) => void
 }
 
 
 
-const ComponentDependencies = ({newComponent, allComponents, handleDeleteComponentDependency, handleAddComponentDependency}: ComponentProps) => {
+const ComponentDependencies = ({newComponent, allComponents, handleDeleteComponentDependency, handleAddComponentDependency, buttonRef, handleTriggerHelpText}: ComponentProps) => {
     const availableComponents: Component[] = allComponents.filter(area => !newComponent.componentDependencies.map(a => a.id).includes(area.id))
     const { changeTitle } = useContext(TitleContext)
 
@@ -296,17 +427,31 @@ const ComponentDependencies = ({newComponent, allComponents, handleDeleteCompone
         <DynamicListContainer>
 
             <div className="column">
-                <Select label="Legg til komponentavhengigheter" value={selectedComponent !== null ? selectedComponent.id : ""} onChange={handleUpdateSelectedArea}>
-                    {availableComponents.length > 0 ?
-                        availableComponents.map(component => {
-                            return (
-                                <option key={component.id} value={component.id}>{component.name}</option>
-                            )
-                        })
-                    :
-                        <option key={undefined} value="">Ingen tilgjengelige komponenter</option>
-                    }
-                </Select>
+                <div className="select-wrapper">
+                    <Select label="Legg til komponentavhengigheter" value={selectedComponent !== null ? selectedComponent.id : ""} onChange={handleUpdateSelectedArea}>
+                        {availableComponents.length > 0 ?
+                            availableComponents.map(component => {
+                                return (
+                                    <option key={component.id} value={component.id}>{component.name}</option>
+                                )
+                            })
+                        :
+                            <option key={undefined} value="">Ingen tilgjengelige komponenter</option>
+                        }
+                    </Select>
+                    <div className="help-button-wrapper">
+                        <button
+                            className="help-button"
+                            type="button"
+                            ref={buttonRef}
+                            onClick={(event) => handleTriggerHelpText(event, 4)}
+                        >
+                            <InformationColored width="1.5em" height="1.5em" />
+                        </button>
+                    </div>
+                </div>
+
+
                 <Button variant="secondary" type="button" onClick={addHandler}>Legg til</Button>
             </div>
 
@@ -345,9 +490,11 @@ interface ConnectToServiceI {
     allServices: Service[]
     handleConnectToService: (serviceToConnectTo) => void
     handleDeleteConnectionToService: (serviceToDeleteFromConnections) => void
+    buttonRef: React.RefObject<HTMLButtonElement>
+    handleTriggerHelpText: (event, index) => void
 }
 
-const ConnectToServiceComponent = ({newComponent, allServices, handleConnectToService, handleDeleteConnectionToService}: ConnectToServiceI) => {
+const ConnectToServiceComponent = ({newComponent, allServices, handleConnectToService, handleDeleteConnectionToService, buttonRef, handleTriggerHelpText}: ConnectToServiceI) => {
     const availableServices: Service[] = allServices.filter(area => !newComponent.servicesDependentOnThisComponent.map(a => a.id).includes(area.id))
     const { changeTitle } = useContext(TitleContext)
 
@@ -383,17 +530,30 @@ const ConnectToServiceComponent = ({newComponent, allServices, handleConnectToSe
         <DynamicListContainer>
 
             <div className="column">
-                <Select label="Legg til kobling mot tjeneste" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}>
-                    {availableServices.length > 0 ?
-                        availableServices.map(component => {
-                            return (
-                                <option key={component.id} value={component.id}>{component.name}</option>
-                            )
-                        })
-                    :
-                        <option key={undefined} value="">Ingen tilgjengelige komponenter</option>
-                    }
-                </Select>
+                <div className="select-wrapper">
+                    <Select label="Legg til kobling mot tjeneste" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}>
+                        {availableServices.length > 0 ?
+                            availableServices.map(component => {
+                                return (
+                                    <option key={component.id} value={component.id}>{component.name}</option>
+                                )
+                            })
+                        :
+                            <option key={undefined} value="">Ingen tilgjengelige komponenter</option>
+                        }
+                    </Select>
+                    <div className="help-button-wrapper">
+                            <button
+                                className="help-button"
+                                type="button"
+                                ref={buttonRef}
+                                onClick={(event) => handleTriggerHelpText(event, 5)}
+                            >
+                                <InformationColored width="1.5em" height="1.5em" />
+                            </button>
+                        </div>
+                </div>
+
                 <Button variant="secondary" type="button" onClick={addHandler}>Legg til</Button>
             </div>
 
