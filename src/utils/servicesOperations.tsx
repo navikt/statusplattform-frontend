@@ -1,4 +1,4 @@
-import { AreaServicesList, Service } from '../types/types'
+import { Area, Service } from '../types/types'
 
 import { 
     Bag, Folder, HealthCase, Money, FillForms, HandBandage, GuideDog, Calculator,
@@ -6,9 +6,11 @@ import {
 } from '@navikt/ds-icons'
 
 
+interface AreaPropsI {
+    areas: Area[]
+}
 
-
-export const mapStatusAndIncidentsToArray = (props: AreaServicesList) => {
+export const mapStatusAndIncidentsToArray = (props: AreaPropsI) => {
     let areasArray: Array<String> = []
     props.areas.map(tile => {
         areasArray.push(tile.status, "incidentsToBeAdded")
@@ -27,7 +29,7 @@ export const retrieveFilteredServiceList = (areas, areaName) => {
 
 
 
-export const countServicesInAreas = (props: AreaServicesList) => {
+export const countServicesInAreas = (props: AreaPropsI) => {
     let numberOfServices: number = 0
     props.areas.map(function (area){
         numberOfServices += area.services.length
@@ -35,7 +37,7 @@ export const countServicesInAreas = (props: AreaServicesList) => {
     return numberOfServices
 }
 
-export const countHealthyServices = (props: AreaServicesList) => {
+export const countHealthyServices = (props: AreaPropsI) => {
     let healthyServices: number = 0
     props.areas.map(area => {
         healthyServices += area.services.filter(
@@ -44,7 +46,7 @@ export const countHealthyServices = (props: AreaServicesList) => {
     return healthyServices
 }
 
-export const countFailingServices = (props: AreaServicesList) => {
+export const countFailingServices = (props: AreaPropsI) => {
     let failingServices: number = 0
     props.areas.map(area => {
         failingServices += area.services.filter(
@@ -81,7 +83,7 @@ export const getIconsFromGivenCode: any = (ikon: string) => {
 
 
 
-export const getListOfTilesThatFail = (props: AreaServicesList) => {
+export const getListOfTilesThatFail = (props: AreaPropsI) => {
     let listOfTilesThatFail: string[] = []
     props.areas.filter(area => {
         if(area.status === "DOWN") {

@@ -18,6 +18,7 @@ import { fetchAreas } from "../../../utils/areasAPI";
 import { RouterAdminDashboards } from "../../../types/routes";
 import { backendPath } from "../..";
 import { EndPathAreas } from "../../../utils/apiHelper";
+import OpsMessages from "../../Avviksmeldinger";
 
 
 const NewDashboardContainer = styled.div`
@@ -53,7 +54,8 @@ const NewDashboard = ({allAreasProps}) => {
     const allAreas: Area[] = allAreasProps
     const [newDashboard, updateNewDashboard] = useState<Dashboard>({
         name: "",
-        areas: []
+        areas: [],
+        opsMessages: []
     })
     const [isLoading, setIsLoading] = useState(true)
 
@@ -71,7 +73,8 @@ const NewDashboard = ({allAreasProps}) => {
     const handleChangeDashboardName = (event) => {
         const changedDashboard = {
             name: event.target.value,
-            areas: [...newDashboard.areas]
+            areas: [...newDashboard.areas],
+            opsMessages: newDashboard.opsMessages
         }
         updateNewDashboard(changedDashboard)
     }
@@ -82,14 +85,14 @@ const NewDashboard = ({allAreasProps}) => {
             return
         }
         const updatedList = [...newDashboard.areas, areaToAdd]
-        const updatedDashboard: Dashboard = {name: name, areas: updatedList}
+        const updatedDashboard: Dashboard = {name: name, areas: updatedList, opsMessages: newDashboard.opsMessages}
         updateNewDashboard(updatedDashboard)
         toast.success("Lagt område til dashbord")
     }
 
     const handleDeleteAreaOnDashboard = (areaToDelete: Area) => {
         const newAreaList: Area[] = [...newDashboard.areas.filter(area => area != areaToDelete)]
-        const updatedDashboard: Dashboard = {name: name, areas: newAreaList}
+        const updatedDashboard: Dashboard = {name: name, areas: newAreaList, opsMessages: newDashboard.opsMessages}
         updateNewDashboard(updatedDashboard)
         toast.success("Fjernet område fra dashbord")
     }

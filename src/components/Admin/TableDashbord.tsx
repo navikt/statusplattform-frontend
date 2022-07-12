@@ -372,7 +372,8 @@ const CurrentlyEdittingDashboard = ({
     const [updatedDashboard, changeUpdatedDashboard] = useState<Dashboard>({
         id: "",
         name: "",
-        areas: []
+        areas: [],
+        opsMessages: []
     })
 
     const [isLoading, setIsLoading] = useState(true)
@@ -382,7 +383,7 @@ const CurrentlyEdittingDashboard = ({
         (async function () {
             setIsLoading(true)
             await fetchDashboard(dashboard.id).then((response) => {
-                changeUpdatedDashboard({id: response.id, name: response.name, areas: response.areas})
+                changeUpdatedDashboard({id: response.id, name: response.name, areas: response.areas, opsMessages: response.opsMessages})
                 setIsLoading(false)
             }).catch(()=> {
                 toast.error("Noe gikk galt ved henting av dashbord-data")
