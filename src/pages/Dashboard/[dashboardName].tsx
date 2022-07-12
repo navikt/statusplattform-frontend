@@ -71,7 +71,7 @@ const DashboardFromName = ({dashboards}) => {
         return (
             <>
                 <FullScreenButton isFullScreen={isFullScreen} changeIsFullScreen={(changed: boolean) => changeIsFullScreen(changed)} />
-                <DashboardTemplate dashboard={retrievedDashboard} isFullScreen={isFullScreen} />
+                <DashboardTemplate dashboardProp={retrievedDashboard} isFullScreen={isFullScreen} />
             </>
         )
     }
@@ -108,7 +108,7 @@ const DashboardFromName = ({dashboards}) => {
                 <meta property="twitter:image" content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg" />
             </Head>
             <FullScreenButton isFullScreen={isFullScreen} changeIsFullScreen={(changed: boolean) => changeIsFullScreen(changed)} />
-            <DashboardTemplate dashboard={retrievedDashboard} isFullScreen={isFullScreen}/>
+            <DashboardTemplate dashboardProp={retrievedDashboard} isFullScreen={isFullScreen}/>
         </Layout>
     )
 }

@@ -1,12 +1,13 @@
+import { OpsMessageI } from "./opsMessage"
+
 export interface Dashboard {
     areas: Area[]
     name: string
     id?: string
+    opsMessages: OpsMessageI[]
 }
 
-export interface AreaServicesList {
-    areas: Area[]
-}
+
 export interface Tile {
     services: Service[]
     status: string

@@ -4,12 +4,14 @@ import { NextRouter, useRouter } from 'next/router';
 import { Bell, Clock } from '@navikt/ds-icons';
 import { Alert, BodyShort, Button, Detail, Heading, Panel } from '@navikt/ds-react';
 
-import { AreaServicesList, Service } from '../../types/types'
+import { Dashboard, Service } from '../../types/types'
 import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, beautifyListOfStringsForUI, countFailingServices } from '../../utils/servicesOperations';
 import { RouterAvvikshistorikk, RouterOpprettVarsling } from '../../types/routes';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import CustomNavSpinner from '../CustomNavSpinner';
 import { OpsMessageI } from '../../types/opsMessage';
+import { UserData } from '../../types/userData';
+import { UserStateContext } from '../ContextProviders/UserStatusContext';
 
 
 const StatusSummary = styled.div`
@@ -51,14 +53,21 @@ const StatusSummary = styled.div`
 
 //TODO Create Incidents handler and UI
 
-const StatusOverview = ({areas}: AreaServicesList) => {
+interface StatusOverviewI {
+    dashboard: Dashboard
+}
+
+const StatusOverview = ({ dashboard }: StatusOverviewI) => {
     const router = useRouter()
     const [hasIssue, setHasIssue] = useState(false)
     const [hasDown, setHasDown] = useState(false)
     const [allGood, setAllGood] = useState(false)
-    const [opsMessages, changeOpsMessages] = useState<OpsMessageI[]>([])
 
     const [isLoading, setIsLoading] = useState(false)
+
+    const { areas, opsMessages } = dashboard
+
+    const user = useContext(UserStateContext)
     
     useEffect(() => {
         setIsLoading(true)
@@ -142,7 +151,6 @@ const StatusOverview = ({areas}: AreaServicesList) => {
 
 
 
-
     return (
         <StatusSummary>
             <div className="top-row">
@@ -154,7 +162,14 @@ const StatusOverview = ({areas}: AreaServicesList) => {
                     ?
                         <div>{`Avvik på ${countIssueServices() + countDownServices()} av ${countServicesInAreas()} tjenester`}</div>
                     :
-                        <div></div>
+                        <div>
+                            {opsMessages.map((opsMessage) => {
+                                console.log(opsMessage)
+                                return (
+                                    <DeviationReportCard key={opsMessage.id} opsMessage={opsMessage} user={user} />
+                                )
+                            })}
+                        </div>
                 }
                 <div className="planlagte-vedlikehold">
                     {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
@@ -257,6 +272,12 @@ const DeviationCardContainer = styled.button`
     }
 `
 
+interface DeviationCardI {
+    opsMessage: OpsMessageI
+    user: UserData
+}
+
+
 const DeviationCardIfNoOpsMessage: React.FC<{status: string, message: string}> = ({status, message}) => {
     
     return (
@@ -268,15 +289,30 @@ const DeviationCardIfNoOpsMessage: React.FC<{status: string, message: string}> =
     )
 }
 
-const DeviationReportCard: React.FC<{status: string, titleOfDeviation: string, message: string}> = ({status, titleOfDeviation, message}) => {
+const DeviationReportCard = ({opsMessage, user}: DeviationCardI) => {
+    const { affectedServices, endDate, endTime, externalHeader, externalMessage, internalHeader, internalMessage, isActive, onlyShowForNavEmployees, startDate, startTime, state, severity } = opsMessage
+    
+    if(user.navIdent || (user.navIdent && onlyShowForNavEmployees == true)) {
+        return (
+            <DeviationCardContainer aria-label={opsMessage.internalHeader + ". Trykk her for mer informasjon"} className={"has-" + state.toLowerCase()}>
+                {/* <span className={status.toLowerCase()} /> */}
+                <div className="content">
+                    {/* <Detail size="small">01.03.2022</Detail> */}
+                    <Heading size="small" level="3">{internalHeader}</Heading>
+                    {/* <BodyShort size="small">{titleOfDeviation}</BodyShort> */}
+                </div>
+            </DeviationCardContainer>
+        )
+    }
+
     
     return (
-        <DeviationCardContainer aria-label={message + ". Trykk her for mer informasjon"} className={"has-"+status.toLowerCase()}>
+        <DeviationCardContainer aria-label={opsMessage.externalHeader + ". Trykk her for mer informasjon"} className={"has-" + state.toLowerCase()}>
             {/* <span className={status.toLowerCase()} /> */}
             <div className="content">
                 {/* <Detail size="small">01.03.2022</Detail> */}
-                <Heading size="small" level="3">{titleOfDeviation}</Heading>
-                <BodyShort size="small">{titleOfDeviation}</BodyShort>
+                <Heading size="small" level="3">{opsMessage.externalHeader}</Heading>
+                {/* <BodyShort size="small">{titleOfDeviation}</BodyShort> */}
             </div>
         </DeviationCardContainer>
     )

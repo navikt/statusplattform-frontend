@@ -112,6 +112,21 @@ const CreateOpsMessage = ({services}) => {
 const OpsContainer = styled.div`
     display: flex;
     flex-direction: column;
+
+    padding: 1rem;
+    border-radius: 0.5rem;
+
+    &.nøytral {
+        border: 3px solid #ccc;
+    }
+
+    &.rød {
+        border: 3px solid var(--navds-semantic-color-feedback-danger-border);
+    }
+
+    &.gul {
+        border: 3px solid var(--navds-semantic-color-feedback-warning-border);
+    }
     
     .input-area {
         width: 200px;
@@ -146,6 +161,7 @@ interface OpsProps {
 const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, services}: OpsProps) => {
     const [startDateForActiveOpsMessage, setStartDateForActiveOpsMessage] = useState(new Date())
     const [isLoading, setIsLoading] = useState(true)
+    const [selectedSeverity, setSelectedSeverity] = useState<string>("GUL")
     const router = useRouter()
     
     const hours=[]
@@ -215,11 +231,29 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
             setOpsMessage({...opsMessage, isActive: false})
         }
     }
-    
 
+    const handleUpdateSelectedSeverity = (event) => {
+        const newSelectedSeverity: string = event.target.value
+        setSelectedSeverity(newSelectedSeverity)
+        setOpsMessage({...opsMessage, severity: newSelectedSeverity})
+    }
+    
+    console.log(opsMessage)
     return (
-        <OpsContainer>
+        <OpsContainer className={selectedSeverity.toLowerCase()}>
             <Heading size="xlarge" level="2">Opprett avviksmeldingen</Heading>
+
+            <div className="input-area">
+                <Select
+                    label="Velg alvorlighetsgrad"
+                    value={selectedSeverity !== null ? selectedSeverity : ""}
+                    onChange={handleUpdateSelectedSeverity}
+                >
+                    <option value="NØYTRAL">Nøytral</option>
+                    <option value="GUL">Gul</option>
+                    <option value="RØD">Rød</option>
+                </Select>
+            </div>
 
             <CheckboxGroup legend="Bare til interne?" onChange={() => handleIsInternal()}>
                 <Checkbox 

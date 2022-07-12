@@ -146,7 +146,7 @@ const OpsMessageComponent = ({opsMessage: serverSideOpsMessage, services}: OpsMe
                 </Button>
             </div>
 
-            {!isEditting
+            {isEditting
                 ?
                     <DetailsOfOpsMessage opsMessage={opsMessage} navIdent={navIdent} />
                 :
@@ -161,6 +161,20 @@ const OpsMessageComponent = ({opsMessage: serverSideOpsMessage, services}: OpsMe
 
 
 
+const OpsDetailsContainer = styled.div`
+    &.nøytral {
+        border: 3px solid #ccc;
+    }
+
+    &.rød {
+        border: 3px solid var(--navds-semantic-color-feedback-danger-border);
+    }
+
+    &.gul {
+        border: 3px solid var(--navds-semantic-color-feedback-warning-border);
+    }
+`
+
 
 interface DetailsOpsMsgI {
     opsMessage: OpsMessageI
@@ -168,10 +182,10 @@ interface DetailsOpsMsgI {
 }
 
 const DetailsOfOpsMessage = ({opsMessage, navIdent}: DetailsOpsMsgI) => {
-    const { externalHeader, externalMessage, internalHeader, internalMessage, affectedServices, isActive, onlyShowForNavEmployees, startDate, startTime, endDate, endTime } = opsMessage
+    const { externalHeader, externalMessage, internalHeader, internalMessage, affectedServices, isActive, onlyShowForNavEmployees, startDate, startTime, endDate, endTime, severity } = opsMessage
     
     return (
-        <>
+        <OpsDetailsContainer className={severity.toLowerCase()}>
             {navIdent &&
                 <div>
                     <BodyShort spacing>
@@ -233,7 +247,7 @@ const DetailsOfOpsMessage = ({opsMessage, navIdent}: DetailsOpsMsgI) => {
                     })}
                 </ul>
             }
-        </>
+        </OpsDetailsContainer>
     )
 }
 
@@ -275,6 +289,7 @@ const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting}: Edit
     const [updatedOpsMessage, changeUpdatedOpsMessage] = useState<OpsMessageI>({
         ...opsMessage
     })
+    const [selectedSeverity, setSelectedSeverity] = useState<string>(opsMessage.severity)
 
     const router = useRouter()
 
@@ -295,7 +310,7 @@ const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting}: Edit
         return <CustomNavSpinner />
     }
     
-    const { externalHeader, externalMessage, internalHeader, internalMessage, affectedServices, isActive, onlyShowForNavEmployees, startDate, startTime, endDate, endTime } = updatedOpsMessage
+    const { externalHeader, externalMessage, internalHeader, internalMessage, affectedServices, isActive, onlyShowForNavEmployees, startDate, startTime, endDate, endTime, severity } = updatedOpsMessage
 
     const updateOpsMessage = (field: keyof typeof updatedOpsMessage) => (evt: React.ChangeEvent<HTMLInputElement>) =>  {
         const newOpsMessage: OpsMessageI = {
@@ -307,6 +322,12 @@ const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting}: Edit
 
     const handleUpdateOpsMessageAffectedServices = (newOps: OpsMessageI) => {
         changeUpdatedOpsMessage(newOps)
+    }
+
+    const handleUpdateSelectedSeverity = (event) => {
+        const newSelectedSeverity: string = event.target.value
+        setSelectedSeverity(newSelectedSeverity)
+        changeUpdatedOpsMessage({...opsMessage, severity: newSelectedSeverity})
     }
 
     const handleSubmitChangesOpsMessage = async () => {
@@ -334,6 +355,18 @@ const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting}: Edit
                 <Heading size="medium" level="3">Ekstern beskjed</Heading>
                 <TextField label="Ekstern header" value={externalHeader} onChange={updateOpsMessage("externalHeader")} />
                 <TextField label="Ekstern beskjed" value={externalMessage} onChange={updateOpsMessage("externalMessage")} />
+            </div>
+
+            <div className="section">
+                <Select
+                    label="Velg alvorlighetsgrad"
+                    value={selectedSeverity !== null ? selectedSeverity : ""}
+                    onChange={handleUpdateSelectedSeverity}
+                >
+                    <option value="NØYTRAL">Nøytral</option>
+                    <option value="GUL">Gul</option>
+                    <option value="RØD">Rød</option>
+                </Select>
             </div>
 
 

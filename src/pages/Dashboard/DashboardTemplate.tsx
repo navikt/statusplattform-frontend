@@ -127,19 +127,19 @@ const ErrorParagraph = styled.p`
 
 
 interface DashboardProps {
-    dashboard: Dashboard
+    dashboardProp: Dashboard
     isFullScreen: boolean
 }
 
 
 
 
-const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
+const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
     const [isLoading, setIsLoading] = useState(true)
-    const [areasInDashboard, setAreasInDashboard] = useState<Area[]>()
     const [expandAll, changeExpand] = useState(false)
     const [expandedTiles, setExpandedTiles] = useState([]);
     const [width, setWidth] = useState(typeof window !== "undefined"? window.innerWidth:0)
+    const [dashboard, setDashboard] = useState<Dashboard>()
 
     const {filters} = useContext(FilterContext)
     
@@ -164,8 +164,8 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
 
         const setup = async () => {
             try {
-                const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
-                setAreasInDashboard(retrievedAreasInDashboard.areas)
+                const retrievedDashboard: Dashboard = await fetchDashboard(dashboardProp.id)
+                setDashboard(retrievedDashboard)
                 rerouteIfNoDashboard()
                 setIsLoading(false)
             } catch (error) {
@@ -190,8 +190,8 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
             currentTime += 1
             if(currentTime === 30) {
                 currentTime = 0
-                const retrievedAreasInDashboard: Dashboard = await fetchDashboard(dashboard.id)
-                setAreasInDashboard(retrievedAreasInDashboard.areas)
+                const retrievedDashboard: Dashboard = await fetchDashboard(dashboardProp.id)
+                setDashboard(retrievedDashboard)
           }
         }, 1000)
         return () => clearInterval(interval)
@@ -200,7 +200,7 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
 
 
     const rerouteIfNoDashboard = () => {
-        if (!dashboard) {
+        if (!dashboardProp) {
             router.push(RouterError.PATH)
         }
     }
@@ -213,7 +213,7 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
         ) 
     }
 
-    if (!areasInDashboard) {
+    if (!dashboard.areas) {
         return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
     }
 
@@ -249,7 +249,7 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
         let widthOfTile = 425; 
         
         let maxNumberOfTilesPerRow = Math.floor(maxWidth/widthOfTile);
-        let numberOfTilesPerRow = biggestModulo(areasInDashboard.length, maxNumberOfTilesPerRow);
+        let numberOfTilesPerRow = biggestModulo(dashboard.areas.length, maxNumberOfTilesPerRow);
       
 
         return numberOfTilesPerRow;
@@ -260,11 +260,11 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
     const generateRowsOfTiles = () => {
         //Endre denne oppførselen dersom det er ønskelig å bestemme antall per rad på brukersiden.
         
-        let numberOfRows = Math.ceil( areasInDashboard.length/numberOfTilesPerRow );
+        let numberOfRows = Math.ceil( dashboard.areas.length/numberOfTilesPerRow );
         let rows: Area[][] = [];
     
-        for(var i = 0; i < areasInDashboard.length; i = i + numberOfTilesPerRow){
-            rows.push (areasInDashboard.slice(i,i+ numberOfTilesPerRow))
+        for(var i = 0; i < dashboard.areas.length; i = i + numberOfTilesPerRow){
+            rows.push (dashboard.areas.slice(i,i+ numberOfTilesPerRow))
         }
         return rows
     }
@@ -279,7 +279,7 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
             setExpandedTiles([])
         }else {
             changeExpand(true)
-            setExpandedTiles(Array.from(Array(areasInDashboard.length).keys()))
+            setExpandedTiles(Array.from(Array(dashboard.areas.length).keys()))
         }
     }
 
@@ -297,7 +297,7 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
 
 
 
-    if(areasInDashboard.length == 0) {
+    if(dashboard.areas.length == 0) {
         changeTitle("Feil ved henting av dashbord")
         return (
             <NoAreasInDashboard />
@@ -318,16 +318,15 @@ const DashboardTemplate = ({ dashboard, isFullScreen }: DashboardProps) => {
             />
         )
     }
-    
 
 
     return (
         <DashboardContainer>
 
             <DigitalServicesContainer>
-                <StatusOverview areas={areasInDashboard} />
+                <StatusOverview dashboard={dashboard} />
 
-                {areasInDashboard.length > 0 &&
+                {dashboard.areas.length > 0 &&
                     <PortalServiceTileContainer maxWidth={maxWidth}>
                         <AllAreas 
                             expandAll={expandAll}
