@@ -83,7 +83,7 @@ const Incidents: React.FC<{allOpsMessages: OpsMessageI[]}> = ({allOpsMessages}) 
                             opsId={entry.id}
                             status={entry.severity}
                             titleOfIncident={entry.internalHeader}
-                            timeframe={`${entry.startDate} - ${entry.endDate}`}
+                            timeframe={`${entry.startTime} - ${entry.endTime}`}
                             descriptionOfIncident={entry.internalMessage}
                         />
                     )  
