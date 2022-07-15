@@ -291,7 +291,6 @@ const DeviationCardIfNoOpsMessage: React.FC<{status: string, message: string}> =
 const DeviationReportCard = ({opsMessage, user}: DeviationCardI) => {
     const { affectedServices, endTime, startTime,  externalHeader, externalMessage, internalHeader, internalMessage, isActive, onlyShowForNavEmployees, severity } = opsMessage
 
-    console.log("Er inni ReportCard")
     
     if(user.navIdent || (user.navIdent && onlyShowForNavEmployees == true)) {
         return (
