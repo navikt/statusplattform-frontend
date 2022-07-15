@@ -104,7 +104,6 @@ const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI, notifyChangedOpsMessag
 
     const handleChangeActiveOpsMessage = async () => {
         const changedOps = {...opsMessage, isActive: !opsMessage.isActive}
-        console.log("dwqd")
         try {
             await updateSpecificOpsMessage(changedOps)
             toast.success(`Meldingen er nå satt til ${changedOps.isActive ? "aktiv" : "inaktiv"}`)

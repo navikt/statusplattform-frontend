@@ -158,7 +158,6 @@ const OpsMessageComponent = ({opsMessage: serverSideOpsMessage, services}: OpsMe
 
     
     const { internalHeader } = opsMessage
-    console.log(updatedSeverity)
 
     return (
         <OpsContent className={(updatedSeverity && isEditting) ? updatedSeverity.toLowerCase() : "neutral"}>
