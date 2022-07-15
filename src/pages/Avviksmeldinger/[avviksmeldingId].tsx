@@ -16,6 +16,7 @@ import { RouterError, RouterOpsMeldinger } from "../../types/routes"
 import { EndPathServices, EndPathSpecificOps } from "../../utils/apiHelper"
 import { fetchSpecificOpsMessage, updateSpecificOpsMessage } from "../../utils/opsAPI"
 import { CloseCustomized } from "../Admin"
+import PublicOpsContent from "./PublicOpsContent"
 
 
 
@@ -53,6 +54,8 @@ export const getServerSideProps = async (context) => {
 const opsMessageDetails = ({opsMessage, retrievedServices}) => {
     const [isLoading, setIsLoading] = useState(true)
 
+    const user = useContext(UserStateContext)
+
     useEffect(() => {
         setIsLoading(false)
     },[])
@@ -65,23 +68,25 @@ const opsMessageDetails = ({opsMessage, retrievedServices}) => {
 
     return (
         <Layout>
-            <BackButtonWrapper>
-                <BackButton />
-            </BackButtonWrapper>
+            {user.navIdent &&
+                <BackButtonWrapper>
+                    <BackButton />
+                </BackButtonWrapper>
+            }
             <OpsMessageContainer>
                 <Head>
                     <title>Avviksmelding - {opsMessage.internalHeader} - status.nav.no</title>
                 </Head>
-                <OpsMessageComponent opsMessage={opsMessage} services={retrievedServices} />
+                {user.navIdent
+                    ?
+                        <OpsMessageComponent opsMessage={opsMessage} services={retrievedServices} />
+                    :
+                        <PublicOpsContent opsMessage={opsMessage} services={retrievedServices} />
+                }
             </OpsMessageContainer>
         </Layout>
     )
 }
-
-
-
-
-
 
 
 const OpsContent = styled.div`
