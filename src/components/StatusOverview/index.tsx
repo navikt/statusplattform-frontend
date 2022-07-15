@@ -9,7 +9,7 @@ import { countHealthyServices, countServicesInAreas, getListOfTilesThatFail, bea
 import { RouterAvvikshistorikk, RouterOpprettVarsling } from '../../types/routes';
 import { useContext, useEffect, useState } from 'react';
 import CustomNavSpinner from '../CustomNavSpinner';
-import { OpsMessageI } from '../../types/opsMessage';
+import { OpsMessageI, SeverityEnum } from '../../types/opsMessage';
 import { UserData } from '../../types/userData';
 import { UserStateContext } from '../ContextProviders/UserStatusContext';
 
@@ -32,7 +32,7 @@ const StatusSummary = styled.div`
         div:nth-child(2) {
             text-align: center;
         }
-        button {
+        .avvikshistorikk-button {
             visibility: hidden;
         }
     }
@@ -118,7 +118,7 @@ const StatusOverview = ({ dashboard }: StatusOverviewI) => {
 
 
 
-    const opsHasNeutral: boolean = opsMessages.flatMap(message => message.severity=="NEUTRAL").length > 0
+    const opsHasNeutral: boolean = opsMessages.flatMap(message => message.severity == SeverityEnum.NEUTRAL).length > 0
 
     
     if(opsMessages.length == 0) {
@@ -155,26 +155,25 @@ const StatusOverview = ({ dashboard }: StatusOverviewI) => {
         <StatusSummary>
             <div className="top-row">
                 <div className="deviation-button-wrapper">
-                    <Button variant="tertiary" size="small" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk <Clock /> </Button>
+                    <Button className="avvikshistorikkbutton" variant="tertiary" size="small" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk <Clock /> </Button>
                 </div>
                 
-                {(hasIssue || hasDown)
-                    ?
-                        <div>{`Avvik på ${countIssueServices() + countDownServices()} av ${countServicesInAreas()} tjenester`}</div>
-                    :
-                        <div>
-                            {opsMessages.map((opsMessage) => {
-                                console.log(opsMessage)
-                                return (
-                                    <DeviationReportCard key={opsMessage.id} opsMessage={opsMessage} user={user} />
-                                )
-                            })}
-                        </div>
-                }
+                <div>{`Avvik på ${countIssueServices() + countDownServices()} av ${countServicesInAreas()} tjenester`}</div>
+
                 <div className="planlagte-vedlikehold">
-                    {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
+                    {/* Dette må synliggjøres når vedlikeholdsmeldinger er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
                 </div>
             </div>
+
+            {(hasIssue || hasDown) &&
+                <div className="ops-container">
+                    {opsMessages.map((opsMessage, i) => {
+                        return (
+                            <DeviationReportCard key={i} opsMessage={opsMessage} user={user} />
+                        )
+                    })}
+                </div>
+            }
 
 
             
@@ -182,7 +181,7 @@ const StatusOverview = ({ dashboard }: StatusOverviewI) => {
                 ?
                     (opsHasNeutral
                         ?
-                            <></>
+                            <div className="ops-container"></div>
                         : 
                             <Alert variant="success" >Alle våre systemer fungerer normalt</Alert>
                     )
@@ -281,7 +280,7 @@ interface DeviationCardI {
 const DeviationCardIfNoOpsMessage: React.FC<{status: string, message: string}> = ({status, message}) => {
     
     return (
-        <DeviationCardContainer aria-label={message + ". Trykk her for mer informasjon"} className={"has-"+status.toLowerCase()}>
+        <DeviationCardContainer aria-label={message + ". Trykk her for mer informasjon"} className={"has-" + status.toLowerCase()}>
             <div className="content">
                 <BodyShort>{message}</BodyShort>
             </div>
@@ -290,11 +289,13 @@ const DeviationCardIfNoOpsMessage: React.FC<{status: string, message: string}> =
 }
 
 const DeviationReportCard = ({opsMessage, user}: DeviationCardI) => {
-    const { affectedServices, endDate, endTime, externalHeader, externalMessage, internalHeader, internalMessage, isActive, onlyShowForNavEmployees, startDate, startTime, state, severity } = opsMessage
+    const { affectedServices, endTime, startTime,  externalHeader, externalMessage, internalHeader, internalMessage, isActive, onlyShowForNavEmployees, severity } = opsMessage
+
+    console.log("Er inni ReportCard")
     
     if(user.navIdent || (user.navIdent && onlyShowForNavEmployees == true)) {
         return (
-            <DeviationCardContainer aria-label={opsMessage.internalHeader + ". Trykk her for mer informasjon"} className={"has-" + state.toLowerCase()}>
+            <DeviationCardContainer aria-label={opsMessage.internalHeader + ". Trykk her for mer informasjon"} className={"has-" + severity.toLowerCase()}>
                 {/* <span className={status.toLowerCase()} /> */}
                 <div className="content">
                     {/* <Detail size="small">01.03.2022</Detail> */}
@@ -307,7 +308,7 @@ const DeviationReportCard = ({opsMessage, user}: DeviationCardI) => {
 
     
     return (
-        <DeviationCardContainer aria-label={opsMessage.externalHeader + ". Trykk her for mer informasjon"} className={"has-" + state.toLowerCase()}>
+        <DeviationCardContainer aria-label={opsMessage.externalHeader + ". Trykk her for mer informasjon"} className={"has-" + severity.toLowerCase()}>
             {/* <span className={status.toLowerCase()} /> */}
             <div className="content">
                 {/* <Detail size="small">01.03.2022</Detail> */}

@@ -11,7 +11,7 @@ import { UserStateContext } from "../../components/ContextProviders/UserStatusCo
 import CustomNavSpinner from "../../components/CustomNavSpinner"
 import Layout from "../../components/Layout"
 import { Service } from "../../types/types"
-import { OpsMessageI } from "../../types/opsMessage"
+import { OpsMessageI, SeverityEnum } from "../../types/opsMessage"
 import { RouterError, RouterOpsMeldinger } from "../../types/routes"
 import { EndPathServices, EndPathSpecificOps } from "../../utils/apiHelper"
 import { fetchSpecificOpsMessage, updateSpecificOpsMessage } from "../../utils/opsAPI"
@@ -94,6 +94,18 @@ const OpsContent = styled.div`
 
     gap: 1rem;
 
+    &.neutral {
+        border: 3px solid #ccc;
+    }
+
+    &.down {
+        border: 3px solid var(--navds-semantic-color-feedback-danger-border);
+    }
+
+    &.issue {
+        border: 3px solid var(--navds-semantic-color-feedback-warning-border);
+    }
+
     .header-container {
         display: flex;
         align-items: center;
@@ -111,6 +123,8 @@ interface OpsMessageComponentI {
 const OpsMessageComponent = ({opsMessage: serverSideOpsMessage, services}: OpsMessageComponentI) => {
     const [isEditting, toggleIsEditting] = useState(false)
     const [opsMessage, changeOpsMessage] = useState<OpsMessageI>(serverSideOpsMessage)
+    const [updatedSeverity, changeUpdatedSeverity] = useState<SeverityEnum>(serverSideOpsMessage.severity)
+    const [isLoading, setIsLoading] = useState(false)
 
     const { name, navIdent } = useContext(UserStateContext)
 
@@ -132,11 +146,17 @@ const OpsMessageComponent = ({opsMessage: serverSideOpsMessage, services}: OpsMe
         reFetching = false
     },[isEditting])
 
+    useEffect(() => {
+        setIsLoading(true)
+        setIsLoading(false)
+    }, [updatedSeverity])
+
     
     const { internalHeader } = opsMessage
+    console.log(updatedSeverity)
 
     return (
-        <OpsContent>
+        <OpsContent className={(updatedSeverity && isEditting) ? updatedSeverity.toLowerCase() : "neutral"}>
             <div className="header-container">
                 <Heading size="medium" level="2">
                     Avviksmelding - {internalHeader} 
@@ -150,7 +170,7 @@ const OpsMessageComponent = ({opsMessage: serverSideOpsMessage, services}: OpsMe
                 ?
                     <DetailsOfOpsMessage opsMessage={opsMessage} navIdent={navIdent} />
                 :
-                    <EditOpsMessage opsMessage={opsMessage} navIdent={navIdent} services={services} toggleIsEditting={(newValue) => toggleIsEditting(newValue)} />
+                    <EditOpsMessage opsMessage={opsMessage} navIdent={navIdent} services={services} toggleIsEditting={(newValue) => toggleIsEditting(newValue)} changeUpdatedSeverity={changeUpdatedSeverity} />
             }
 
             
@@ -162,15 +182,15 @@ const OpsMessageComponent = ({opsMessage: serverSideOpsMessage, services}: OpsMe
 
 
 const OpsDetailsContainer = styled.div`
-    &.nøytral {
+    &.neutral {
         border: 3px solid #ccc;
     }
 
-    &.rød {
+    &.down {
         border: 3px solid var(--navds-semantic-color-feedback-danger-border);
     }
 
-    &.gul {
+    &.issue {
         border: 3px solid var(--navds-semantic-color-feedback-warning-border);
     }
 `
@@ -182,7 +202,7 @@ interface DetailsOpsMsgI {
 }
 
 const DetailsOfOpsMessage = ({opsMessage, navIdent}: DetailsOpsMsgI) => {
-    const { externalHeader, externalMessage, internalHeader, internalMessage, affectedServices, isActive, onlyShowForNavEmployees, startDate, startTime, endDate, endTime, severity } = opsMessage
+    const { externalHeader, externalMessage, internalHeader, internalMessage, affectedServices, isActive, onlyShowForNavEmployees, startTime, endTime, severity } = opsMessage
     
     return (
         <OpsDetailsContainer className={severity.toLowerCase()}>
@@ -211,25 +231,18 @@ const DetailsOfOpsMessage = ({opsMessage, navIdent}: DetailsOpsMsgI) => {
                         </li>
                     </ul>
 
-                    {startDate &&
+                    {startTime &&
                         <ul>
-                            
                             <li>
-                                Startdato: {startDate}
-                            </li>
-                            <li>
-                                Klokkeslett: {startTime}
+                                Starttid: {startTime}
                             </li>
                         </ul>
                     }
 
-                    {endDate &&
+                    {endTime &&
                         <ul>
                             <li>
-                                Sluttdato: {endDate}
-                            </li>
-                            <li>
-                                Klokkeslett: {endTime}
+                                Sluttid: {endTime}
                             </li>
                         </ul>
                     }
@@ -281,10 +294,11 @@ interface EditOpsMessageI {
     navIdent: string
     services: Service[]
     toggleIsEditting: (newValue) => void
+    changeUpdatedSeverity: (newValue) => void
 }
 
 
-const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting}: EditOpsMessageI) => {
+const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting, changeUpdatedSeverity}: EditOpsMessageI) => {
     const [isLoading, setIsLoading] = useState(true)
     const [updatedOpsMessage, changeUpdatedOpsMessage] = useState<OpsMessageI>({
         ...opsMessage
@@ -310,7 +324,7 @@ const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting}: Edit
         return <CustomNavSpinner />
     }
     
-    const { externalHeader, externalMessage, internalHeader, internalMessage, affectedServices, isActive, onlyShowForNavEmployees, startDate, startTime, endDate, endTime, severity } = updatedOpsMessage
+    const { externalHeader, externalMessage, internalHeader, internalMessage, affectedServices, isActive, onlyShowForNavEmployees, startTime, endTime, severity } = updatedOpsMessage
 
     const updateOpsMessage = (field: keyof typeof updatedOpsMessage) => (evt: React.ChangeEvent<HTMLInputElement>) =>  {
         const newOpsMessage: OpsMessageI = {
@@ -325,9 +339,10 @@ const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting}: Edit
     }
 
     const handleUpdateSelectedSeverity = (event) => {
-        const newSelectedSeverity: string = event.target.value
+        const newSelectedSeverity: SeverityEnum = event.target.value
         setSelectedSeverity(newSelectedSeverity)
         changeUpdatedOpsMessage({...opsMessage, severity: newSelectedSeverity})
+        changeUpdatedSeverity(newSelectedSeverity)
     }
 
     const handleSubmitChangesOpsMessage = async () => {
@@ -341,7 +356,6 @@ const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting}: Edit
             toast.error("Noe gikk galt ved oppdatering av meldingen")
         }
     }
-
 
     return (
         <EditOpsMessageContainer>
@@ -363,9 +377,9 @@ const EditOpsMessage = ({opsMessage, navIdent, services, toggleIsEditting}: Edit
                     value={selectedSeverity !== null ? selectedSeverity : ""}
                     onChange={handleUpdateSelectedSeverity}
                 >
-                    <option value="NØYTRAL">Nøytral</option>
-                    <option value="GUL">Gul</option>
-                    <option value="RØD">Rød</option>
+                    <option value={SeverityEnum.NEUTRAL}>Nøytral</option>
+                    <option value={SeverityEnum.ISSUE}>Gul</option>
+                    <option value={SeverityEnum.DOWN}>Rød</option>
                 </Select>
             </div>
 

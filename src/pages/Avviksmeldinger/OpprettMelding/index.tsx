@@ -9,7 +9,7 @@ import { TitleContext } from "../../../components/ContextProviders/TitleContext"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
 
 import Layout from '../../../components/Layout'
-import { OpsMessageI } from "../../../types/opsMessage"
+import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
 import { RouterOpsMeldinger } from "../../../types/routes"
 import { postOpsMessage } from "../../../utils/opsAPI"
 
@@ -18,7 +18,7 @@ import { Service } from "../../../types/types"
 import { backendPath } from "../.."
 import { EndPathServices } from "../../../utils/apiHelper"
 import { Delete } from "@navikt/ds-icons"
-import { CloseCustomized } from "../../Admin"
+import { CloseCustomized, HorizontalSeparator } from "../../Admin"
 
 
 export const getServerSideProps = async () => {
@@ -43,11 +43,9 @@ const CreateOpsMessage = ({services}) => {
         onlyShowForNavEmployees: true,
         isActive: true,
         affectedServices: [],
-        startDate: new Date(),
-        endDate: new Date(),
         startTime: new Date(),
         endTime: new Date(),
-        severity: "",
+        severity: SeverityEnum.ISSUE,
         state: ""
     })
     // EKSEMPEL: "2017-07-21T17:30:00Z"
@@ -75,6 +73,7 @@ const CreateOpsMessage = ({services}) => {
     
 
     const handleSubmitOpsMessage = () => {
+        // console.log(opsMessage)
         postOpsMessage(opsMessage).then(() => {
             toast.success("Avviksmelding opprettet er sendt inn")
         }).catch(() => {
@@ -116,15 +115,15 @@ const OpsContainer = styled.div`
     padding: 1rem;
     border-radius: 0.5rem;
 
-    &.nøytral {
+    &.neutral {
         border: 3px solid #ccc;
     }
 
-    &.rød {
+    &.down {
         border: 3px solid var(--navds-semantic-color-feedback-danger-border);
     }
 
-    &.gul {
+    &.issue {
         border: 3px solid var(--navds-semantic-color-feedback-warning-border);
     }
     
@@ -158,8 +157,15 @@ interface OpsProps {
 }
 
 
+const options = [
+    "00","15","30","45"
+]
+
 const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, services}: OpsProps) => {
-    const [startDateForActiveOpsMessage, setStartDateForActiveOpsMessage] = useState(new Date())
+    const [startDateForActiveOpsMessage, setStartDateForActiveOpsMessage] = useState<Date>(new Date())
+    
+    const [endDateForActiveOpsMessage, setEndDateForActiveOpsMessage] = useState<Date>(new Date())
+
     const [isLoading, setIsLoading] = useState(true)
     const [selectedSeverity, setSelectedSeverity] = useState<string>("GUL")
     const router = useRouter()
@@ -173,6 +179,10 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
             hours.push(`${i}:00`)
         }
     }
+
+    useEffect(() => {
+        setOpsMessage({...opsMessage, startTime: startDateForActiveOpsMessage, endTime: endDateForActiveOpsMessage})
+    },[startDateForActiveOpsMessage, endDateForActiveOpsMessage])
 
 
     useEffect(() => {
@@ -233,12 +243,46 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
     }
 
     const handleUpdateSelectedSeverity = (event) => {
-        const newSelectedSeverity: string = event.target.value
+        const newSelectedSeverity: SeverityEnum = event.target.value
         setSelectedSeverity(newSelectedSeverity)
         setOpsMessage({...opsMessage, severity: newSelectedSeverity})
     }
-    
-    console.log(opsMessage)
+
+
+    const handleUpdateStartDate = (event) => {
+        const dateInput: Date = new Date(event)
+        setStartDateForActiveOpsMessage(dateInput)
+    }
+
+    const handleUpdateStartMinutes = (event) => {
+        const newDate: Date = new Date(startDateForActiveOpsMessage)
+        newDate.setMinutes(parseInt(event.target.value))
+        setStartDateForActiveOpsMessage(newDate)
+    }
+
+    const handleUpdateStartHours = (event) => {
+        const newDate: Date = new Date(startDateForActiveOpsMessage)
+        newDate.setHours(parseInt(event.target.value))
+        setStartDateForActiveOpsMessage(newDate)
+    }
+
+    const handleUpdateEndDate = (event) => {
+        const dateInput: Date = new Date(event)
+        setEndDateForActiveOpsMessage(dateInput)
+    }
+
+    const handleUpdateEndMinutes = (event) => {
+        const newDate: Date = new Date(endDateForActiveOpsMessage)
+        newDate.setMinutes(parseInt(event.target.value))
+        setEndDateForActiveOpsMessage(newDate)
+    }
+
+    const handleUpdateEndHours = (event) => {
+        const newDate: Date = new Date(endDateForActiveOpsMessage)
+        newDate.setHours(parseInt(event.target.value))
+        setEndDateForActiveOpsMessage(newDate)
+    }
+
     return (
         <OpsContainer className={selectedSeverity.toLowerCase()}>
             <Heading size="xlarge" level="2">Opprett avviksmeldingen</Heading>
@@ -249,9 +293,9 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
                     value={selectedSeverity !== null ? selectedSeverity : ""}
                     onChange={handleUpdateSelectedSeverity}
                 >
-                    <option value="NØYTRAL">Nøytral</option>
-                    <option value="GUL">Gul</option>
-                    <option value="RØD">Rød</option>
+                    <option value="NEUTRAL">Nøytral</option>
+                    <option value="ISSUE">Gul</option>
+                    <option value="DOWN">Rød</option>
                 </Select>
             </div>
 
@@ -319,28 +363,61 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
                     <DatePicker
                         id="startDate"
                         selected={startDateForActiveOpsMessage}
-                        onChange={(date:Date) => setStartDateForActiveOpsMessage(date)}
+                        onChange={handleUpdateStartDate}
                     />
 
                     <div className="input-area">
                         <BodyShort><b>Startklokkeslett</b></BodyShort>
                         <Select
                             label="Timer"
+                            onChange={handleUpdateStartHours}
                         >
-                            {hours.map((i) => {
-                                return <option key={i}>{i}</option>
+                            {hours.map((hour, i) => {
+                                return <option key={i}>{hour}</option>
                             })}
                         </Select>
                         <Select
                             label="Minutter"
+                            onChange={handleUpdateStartMinutes}
                         >
-                            <option value="00">00</option>
-                            <option value="15">15</option>
-                            <option value="30">30</option>
-                            <option value="45">45</option>
+                            {options.map((minutes, i) => 
+                                <option key={i} value={minutes}>{minutes}</option>
+                            )}
+                        </Select>
+                    </div>
+
+                    <HorizontalSeparator />
+
+                    <label htmlFor="#startDate"><b>Sluttdato</b></label>
+                    <DatePicker
+                        id="startDate"
+                        selected={startDateForActiveOpsMessage}
+                        onChange={handleUpdateEndDate}
+                    />
+
+                    <div className="input-area">
+                        <BodyShort><b>Sluttklokkeslett</b></BodyShort>
+                        <Select
+                            label="Timer"
+                            onChange={handleUpdateEndHours}
+                        >
+                            {hours.map((hour, i) => {
+                                return <option key={i}>{hour}</option>
+                            })}
+                        </Select>
+                        <Select
+                            label="Minutter"
+                            onChange={handleUpdateEndMinutes}
+                        >
+                            {options.map((minutes, i) => 
+                                <option key={i} value={minutes}>{minutes}</option>
+                            )}
                         </Select>
                     </div>
                 </div>
+
+
+                
             }
             
             <div className="button-container">

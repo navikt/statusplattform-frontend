@@ -234,6 +234,12 @@ export const DynamicListContainer = styled.div`
             }
         }
     }
+
+    @media (min-width: 600px) {
+        .column {
+            min-width: 300px;
+        }
+    }
 `
 
 export const ButtonContainer = styled.div`

@@ -9,10 +9,15 @@ export interface OpsMessageI {
     onlyShowForNavEmployees: boolean
     isActive: boolean
     affectedServices: Service[]
-    startDate: Date
-    endDate: Date
     startTime: Date
     endTime: Date
-    severity: string
+    severity: SeverityEnum
     state: string
+}
+
+export enum SeverityEnum {
+    OK = "OK",
+    ISSUE = "ISSUE",
+    DOWN = "DOWN",
+    NEUTRAL = "NEUTRAL"
 }
