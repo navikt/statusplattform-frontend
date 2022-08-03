@@ -187,12 +187,6 @@ const NewService = () => {
             return false;  
         }
 
-        const com = urlInput.substring(urlInput.length - 4)
-        const no = urlInput.substring(urlInput.length - 3)
-
-        if(com != ".com" && no != ".no" && no != ".io") {
-            return false
-        }
 
         return url.protocol === "http:" || url.protocol === "https:";
     }
