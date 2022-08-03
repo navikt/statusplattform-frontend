@@ -650,14 +650,6 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
         }
 
 
-        const com = urlInput.substring(urlInput.length - 4)
-        const no = urlInput.substring(urlInput.length - 3)
-
-        if(com != ".com" && no != ".no" && no != ".io") {
-            setIsValidMonitorUrl(false)
-            return false
-        }
-
         return setIsValidMonitorUrl(url.protocol === "http:" || url.protocol === "https:")
     }
 
