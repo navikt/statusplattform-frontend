@@ -1,27 +1,22 @@
-import Head from 'next/head'
-import Link from 'next/link'
-import styled from 'styled-components'
-import { toast } from 'react-toastify'
-import { useRouter } from 'next/router'
-import { useContext, useEffect, useState } from 'react'
+import Head from "next/head"
+import Link from "next/link"
+import styled from "styled-components"
+import { toast } from "react-toastify"
+import { useRouter } from "next/router"
+import { useContext, useEffect, useState } from "react"
 
-import { Expand } from '@navikt/ds-icons'
-import { BodyShort, Button, Heading, Panel } from '@navikt/ds-react'
+import { Expand } from "@navikt/ds-icons"
+import { BodyShort, Button, Heading } from "@navikt/ds-react"
 
-import { Area, Dashboard } from '../../types/types'
-import { FilterContext } from '../../components/ContextProviders/FilterContext'
-import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
-import { UserData } from '../../types/userData'
-import { TitleContext } from '../../components/ContextProviders/TitleContext'
-import { fetchDashboard } from '../../utils/dashboardsAPI'
-import { RouterAvvikshistorikk, RouterError } from '../../types/routes'
-import { ErrorFilledCustomized, SuccessFilledCustomized, WarningFilledCustomized, WrenchFilledCustomized } from '../../components/TrafficLights'
-import CustomNavSpinner from '../../components/CustomNavSpinner'
-import StatusOverview from '../../components/StatusOverview'
-import { PortalServiceTile } from '../../components/PortalServiceTile'
+import { Area, Dashboard } from "../../types/types"
+import { TitleContext } from "../../components/ContextProviders/TitleContext"
+import { fetchDashboard } from "../../utils/dashboardsAPI"
+import { RouterError } from "../../types/routes"
+import CustomNavSpinner from "../../components/CustomNavSpinner"
+import StatusOverview from "../../components/StatusOverview"
+import { PortalServiceTile } from "../../components/PortalServiceTile"
 
 /* --------------------------------------- Styles start --------------------------------------- */
-
 
 const DashboardContainer = styled.div`
     display: flex;
@@ -31,7 +26,7 @@ const DashboardContainer = styled.div`
     .status-only-ok {
         display: flex;
         flex-direction: column;
-        
+
         .status-wrapper {
             margin-bottom: 60px;
             max-width: max-content;
@@ -57,14 +52,13 @@ const DigitalServicesContainer = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-`;
+`
 
-
-const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
+const PortalServiceTileContainer = styled.div<{ maxWidth: number }>`
     flex: 1;
     padding: 50px 0;
     width: 100%;
-    
+
     display: flex;
     flex-direction: column;
 
@@ -87,20 +81,17 @@ const PortalServiceTileContainer = styled.div<{maxWidth: number}>`
         margin-bottom: 16px;
     }
 
-
     @media (min-width: 500px) {
         width: auto;
         max-width: ${(props) => props.maxWidth}px;
     }
-    
+
     @media (min-width: 1359px) {
         max-width: ${(props) => props.maxWidth}px;
     }
+`
 
-`;
-
-
-const PortalServiceTileRow = styled.div `
+const PortalServiceTileRow = styled.div`
     margin-bottom: 24px;
     gap: 32px;
     width: 100%;
@@ -116,45 +107,31 @@ const ErrorParagraph = styled.p`
     border-radius: 5px;
 `
 
-
-
 /* --------------------------------------- Styles end --------------------------------------- */
 
-
-
 // export const getStaticProps
-
-
 
 interface DashboardProps {
     dashboardProp: Dashboard
     isFullScreen: boolean
 }
 
-
-
-
 const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
     const [isLoading, setIsLoading] = useState(true)
     const [expandAll, changeExpand] = useState(false)
-    const [expandedTiles, setExpandedTiles] = useState([]);
-    const [width, setWidth] = useState(typeof window !== "undefined"? window.innerWidth:0)
+    const [expandedTiles, setExpandedTiles] = useState([])
+    const [width, setWidth] = useState(
+        typeof window !== "undefined" ? window.innerWidth : 0
+    )
     const [dashboard, setDashboard] = useState<Dashboard>()
 
-    const {filters} = useContext(FilterContext)
-    
     const { changeTitle } = useContext(TitleContext)
-
-    
-    const user = useContext<UserData>(UserStateContext)
-    
 
     const router = useRouter()
 
     useEffect(() => {
         window.addEventListener("resize", () => setWidth(window.innerWidth))
-    }, [width]);    
-
+    }, [width])
 
     // initial state
     useEffect(() => {
@@ -164,7 +141,9 @@ const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
 
         const setup = async () => {
             try {
-                const retrievedDashboard: Dashboard = await fetchDashboard(dashboardProp.id)
+                const retrievedDashboard: Dashboard = await fetchDashboard(
+                    dashboardProp.id
+                )
                 setDashboard(retrievedDashboard)
                 rerouteIfNoDashboard()
                 setIsLoading(false)
@@ -172,32 +151,29 @@ const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
                 toast.error("Noe gikk galt ved henting av områder i dashbordet")
                 console.log(error)
             }
-
         }
 
-        if(controlVar) {
+        if (controlVar) {
             setup()
         }
         controlVar = false
-
     }, [])
-
 
     // Timer for refetch of dashboard states
     useEffect(() => {
         let currentTime = 0
-        const interval = setInterval(async() => {
+        const interval = setInterval(async () => {
             currentTime += 1
-            if(currentTime === 30) {
+            if (currentTime === 30) {
                 currentTime = 0
-                const retrievedDashboard: Dashboard = await fetchDashboard(dashboardProp.id)
+                const retrievedDashboard: Dashboard = await fetchDashboard(
+                    dashboardProp.id
+                )
                 setDashboard(retrievedDashboard)
-          }
+            }
         }, 1000)
         return () => clearInterval(interval)
-      }, [])
-      
-
+    }, [])
 
     const rerouteIfNoDashboard = () => {
         if (!dashboardProp) {
@@ -205,79 +181,91 @@ const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
         }
     }
 
-    
-
     if (isLoading) {
-        return (
-            <CustomNavSpinner />
-        ) 
+        return <CustomNavSpinner />
     }
 
     if (!dashboard.areas) {
-        return <ErrorParagraph>Kunne ikke hente de digitale tjenestene. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
+        return (
+            <ErrorParagraph>
+                Kunne ikke hente de digitale tjenestene. Hvis problemet
+                vedvarer, kontakt support.
+            </ErrorParagraph>
+        )
     }
-
 
     // +32 because we have a 32*2px (right and left gaps. additional +20 because of content margin) flex-gap between tiles which we need to accomodate for
-    let maxWidth = width > 
-        1275+84 ? 1275+84 : (
-            window.innerWidth > 
-                1275+84 ? 1275+84 : (
-                    window.innerWidth > 
-                        850+52 ? 850+52 : 425
-                    )
-            );
+    let maxWidth =
+        width > 1275 + 84
+            ? 1275 + 84
+            : window.innerWidth > 1275 + 84
+            ? 1275 + 84
+            : window.innerWidth > 850 + 52
+            ? 850 + 52
+            : 425
 
-
-    const biggestModulo = (totalNumberOfTiles: number,maxTilesPerRow: number) => {
-        let calculatedMaxTiles = maxTilesPerRow; 
-        while(calculatedMaxTiles > 1){
-            if(totalNumberOfTiles % calculatedMaxTiles == 0){
-                return calculatedMaxTiles; 
+    const biggestModulo = (
+        totalNumberOfTiles: number,
+        maxTilesPerRow: number
+    ) => {
+        let calculatedMaxTiles = maxTilesPerRow
+        while (calculatedMaxTiles > 1) {
+            if (totalNumberOfTiles % calculatedMaxTiles == 0) {
+                return calculatedMaxTiles
             }
-            calculatedMaxTiles--;
+            calculatedMaxTiles--
         }
-        //Dersom ikke y, og ingen tall mindre enn y, ikke går opp i x, returneres y; 
-        return maxTilesPerRow; 
-
+        //Dersom ikke y, og ingen tall mindre enn y, ikke går opp i x, returneres y;
+        return maxTilesPerRow
     }
 
-    const calculateNumberOfTilesPerRow = (userRowSize ?: number) => {
-        if(width < 600){
-            return 1;
+    const calculateNumberOfTilesPerRow = () => {
+        if (width < 600) {
+            return 1
         }
-        let widthOfTile = 425; 
-        
-        let maxNumberOfTilesPerRow = Math.floor(maxWidth/widthOfTile);
-        let numberOfTilesPerRow = biggestModulo(dashboard.areas.length, maxNumberOfTilesPerRow);
-      
+        let widthOfTile = 425
 
-        return numberOfTilesPerRow;
+        let maxNumberOfTilesPerRow = Math.floor(maxWidth / widthOfTile)
+        let numberOfTilesPerRow = biggestModulo(
+            dashboard.areas.length,
+            maxNumberOfTilesPerRow
+        )
+
+        return numberOfTilesPerRow
     }
 
-    let numberOfTilesPerRow = calculateNumberOfTilesPerRow();
+    let numberOfTilesPerRow = calculateNumberOfTilesPerRow()
 
     const generateRowsOfTiles = () => {
         //Endre denne oppførselen dersom det er ønskelig å bestemme antall per rad på brukersiden.
-        
-        let numberOfRows = Math.ceil( dashboard.areas.length/numberOfTilesPerRow );
-        let rows: Area[][] = [];
-    
-        for(var i = 0; i < dashboard.areas.length; i = i + numberOfTilesPerRow){
-            rows.push (dashboard.areas.slice(i,i+ numberOfTilesPerRow))
+
+        let rows: Area[][] = []
+
+        for (
+            var i = 0;
+            i < dashboard.areas.length;
+            i = i + numberOfTilesPerRow
+        ) {
+            rows.push(dashboard.areas.slice(i, i + numberOfTilesPerRow))
         }
         return rows
     }
 
-    const isTileExpanded = (rowIndex : number, index : number, startingIndex: number): boolean => {
-        return expandedTiles.includes(startingIndex + rowIndex*numberOfTilesPerRow + index );
+    const isTileExpanded = (
+        rowIndex: number,
+        index: number,
+        startingIndex: number
+    ): boolean => {
+        return expandedTiles.includes(
+            startingIndex + rowIndex * numberOfTilesPerRow + index
+        )
     }
 
     const toggleExpandAll = () => {
-        if(expandAll) {
+        if (expandAll) {
             changeExpand(false)
             setExpandedTiles([])
-        }else {
+        } else {
             changeExpand(true)
             setExpandedTiles(Array.from(Array(dashboard.areas.length).keys()))
         }
@@ -286,29 +274,21 @@ const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
     let rows = generateRowsOfTiles()
 
     const toggleTile = (index: number) => {
-        if(expandedTiles.includes(index)){
-            setExpandedTiles(expandedTiles.filter(i => i != index))
-        }
-        else{
+        if (expandedTiles.includes(index)) {
+            setExpandedTiles(expandedTiles.filter((i) => i != index))
+        } else {
             setExpandedTiles(expandedTiles.concat([index]))
         }
     }
 
-
-
-
-    if(dashboard.areas.length == 0) {
+    if (dashboard.areas.length == 0) {
         changeTitle("Feil ved henting av dashbord")
-        return (
-            <NoAreasInDashboard />
-        )
+        return <NoAreasInDashboard />
     }
 
-
-    
-    if(isFullScreen) {
+    if (isFullScreen) {
         return (
-            <FullScreen 
+            <FullScreen
                 expandAll={expandAll}
                 isTileExpanded={isTileExpanded}
                 toggleExpandAll={toggleExpandAll}
@@ -319,16 +299,14 @@ const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
         )
     }
 
-
     return (
         <DashboardContainer>
-
             <DigitalServicesContainer>
                 <StatusOverview dashboard={dashboard} />
 
-                {dashboard.areas.length > 0 &&
+                {dashboard.areas.length > 0 && (
                     <PortalServiceTileContainer maxWidth={maxWidth}>
-                        <AllAreas 
+                        <AllAreas
                             expandAll={expandAll}
                             isTileExpanded={isTileExpanded}
                             toggleExpandAll={toggleExpandAll}
@@ -338,9 +316,7 @@ const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
                             rows={rows}
                         />
                     </PortalServiceTileContainer>
-                }
-
-            
+                )}
             </DigitalServicesContainer>
             {/* <MaintenanceScheduling />
             <IconDescription /> */}
@@ -348,29 +324,42 @@ const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
     )
 }
 
-
-
-
-
 /* --------------------------------------- Helpers below --------------------------------------- */
 
 interface AllAreasProps {
     maxWidth: number
     rows: Area[][]
-    toggleTile: (index) => void
+    toggleTile: (index: number) => void
     numberOfTilesPerRow: number
-    isTileExpanded: (rowIndex, index, startingIndex) => boolean
+    isTileExpanded: (
+        rowIndex: number,
+        index: number,
+        startingIndex: number
+    ) => boolean
     toggleExpandAll: () => void
     expandAll: boolean
 }
 
-
-const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpanded, toggleExpandAll, expandAll}: AllAreasProps) => {
-    const [rowHeightsAsString, setRowHeights] = useState<string[]>(Array.from(Array(rows.length).keys()).map(i => "0px"))
+const AllAreas = ({
+    maxWidth,
+    rows,
+    toggleTile,
+    numberOfTilesPerRow,
+    isTileExpanded,
+    toggleExpandAll,
+    expandAll,
+}: AllAreasProps) => {
+    const [rowHeightsAsString, setRowHeights] = useState<string[]>(
+        Array.from(Array(rows.length).keys()).map(() => "0px")
+    )
 
     useEffect(() => {
-        const allElementsRetrievedFromDom: Element[] = Array.from(document.getElementsByClassName("ekspanderbartPanel"))
-        const arrayFromDomElements = generateArrayFromTwoArrays(allElementsRetrievedFromDom)
+        const allElementsRetrievedFromDom: Element[] = Array.from(
+            document.getElementsByClassName("ekspanderbartPanel")
+        )
+        const arrayFromDomElements = generateArrayFromTwoArrays(
+            allElementsRetrievedFromDom
+        )
 
         let newRowHeights: string[] = [...rowHeightsAsString]
         arrayFromDomElements.map((domElementRow, index) => {
@@ -382,25 +371,26 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
         // Needs to check maxWidth property if we want to resize the dashboard
         /* In order for the resizing to work, we must check what the fit-content size is
         regardless of the previous width of the tile
-        */ 
+        */
     }, [maxWidth])
-
 
     const generateArrayFromTwoArrays = (allElements: Element[]): any[] => {
         const matchingRowsInAllElementsBasedOnRowsProp: HTMLElement[][] = []
-        
-        rows.forEach((row: any[], index: number) => {
+
+        rows.forEach((row: any[]) => {
             const rowToAddToMatchingRowsList: HTMLElement[] = []
 
             row.forEach((rowElement: Area) => {
-                allElements.forEach((element: HTMLElement)  => {
+                allElements.forEach((element: HTMLElement) => {
                     // element.style.minHeight = "400px"
-                    if(rowElement.name == element.firstChild.textContent) {
+                    if (rowElement.name == element.firstChild.textContent) {
                         rowToAddToMatchingRowsList.push(element)
                     }
                 })
             })
-            matchingRowsInAllElementsBasedOnRowsProp.push(rowToAddToMatchingRowsList)
+            matchingRowsInAllElementsBasedOnRowsProp.push(
+                rowToAddToMatchingRowsList
+            )
         })
 
         return matchingRowsInAllElementsBasedOnRowsProp
@@ -422,31 +412,33 @@ const AllAreas = ({maxWidth, rows, toggleTile, numberOfTilesPerRow, isTileExpand
     return (
         <PortalServiceTileContainer maxWidth={maxWidth}>
             <span className="expand-all-wrapper">
-                <ExpandAllToggle toggleExpandAll={toggleExpandAll} expanded={expandAll}/>
+                <ExpandAllToggle
+                    toggleExpandAll={toggleExpandAll}
+                    expanded={expandAll}
+                />
             </span>
             {rows.map((row, rowIndex) => (
                 <PortalServiceTileRow key={rowIndex}>
-                    {row.map((area, index) => 
-                        <PortalServiceTile key={index} toggleTile={toggleTile}
-                            tileIndex={rowIndex*numberOfTilesPerRow + index}
-                            area={area} expanded={isTileExpanded(rowIndex, index, 0)}
+                    {row.map((area, index) => (
+                        <PortalServiceTile
+                            key={index}
+                            toggleTile={toggleTile}
+                            tileIndex={rowIndex * numberOfTilesPerRow + index}
+                            area={area}
+                            expanded={isTileExpanded(rowIndex, index, 0)}
                             isAllExpanded={expandAll}
-                            heightOfTileInRowBasedOfLargestTileInRow={rowHeightsAsString[rowIndex]}
+                            heightOfTileInRowBasedOfLargestTileInRow={
+                                rowHeightsAsString[rowIndex]
+                            }
                         />
-                    )}
+                    ))}
                 </PortalServiceTileRow>
             ))}
         </PortalServiceTileContainer>
     )
 }
 
-
-
-
 // -------------
-
-
-
 
 const FullScreenTileContainer = styled.div`
     background-color: var(--navds-semantic-color-canvas-background);
@@ -460,14 +452,14 @@ const FullScreenTileContainer = styled.div`
     }
 `
 
-const FullScreenTileRow = styled.div `
+const FullScreenTileRow = styled.div`
     margin-bottom: 24px;
     gap: 32px;
 
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
-    
+
     > * {
         .ekspanderbartPanel__indikator {
             display: none !important;
@@ -475,35 +467,48 @@ const FullScreenTileRow = styled.div `
     }
 `
 
-
 interface FullScreenProps {
     rows: Area[][]
-    toggleTile: (index) => void
+    toggleTile: (index: number) => void
     numberOfTilesPerRow: number
-    isTileExpanded: (rowIndex, index, startingIndex) => boolean
+    isTileExpanded: (
+        rowIndex: number,
+        index: number,
+        startingIndex: number
+    ) => boolean
     toggleExpandAll: () => void
     expandAll: boolean
 }
 
-
-const FullScreen = ({ rows, toggleTile, numberOfTilesPerRow, isTileExpanded, toggleExpandAll, expandAll}: FullScreenProps) => {
-
+const FullScreen = ({
+    rows,
+    toggleTile,
+    numberOfTilesPerRow,
+    isTileExpanded,
+    toggleExpandAll,
+    expandAll,
+}: FullScreenProps) => {
     useEffect(() => {
         toggleExpandAll()
-    },[])
+    }, [])
 
     return (
         <FullScreenTileContainer>
             <div className="content">
                 {rows.map((row, rowIndex) => (
                     <FullScreenTileRow key={rowIndex}>
-                        {row.map((area, index) => 
-                            <PortalServiceTile key={index} toggleTile={toggleTile}
-                                tileIndex={rowIndex*numberOfTilesPerRow + index}
-                                area={area} expanded={isTileExpanded(rowIndex, index, 0)}
+                        {row.map((area, index) => (
+                            <PortalServiceTile
+                                key={index}
+                                toggleTile={toggleTile}
+                                tileIndex={
+                                    rowIndex * numberOfTilesPerRow + index
+                                }
+                                area={area}
+                                expanded={isTileExpanded(rowIndex, index, 0)}
                                 isAllExpanded={expandAll}
                             />
-                        )}
+                        ))}
                     </FullScreenTileRow>
                 ))}
             </div>
@@ -511,20 +516,7 @@ const FullScreen = ({ rows, toggleTile, numberOfTilesPerRow, isTileExpanded, tog
     )
 }
 
-
-
-
-
-
-
-
-
-
 /* --------------------------------------- --------------------------------------- */
-
-
-
-
 
 const ToggleExpandAllButton = styled(Button)`
     margin: 0 0 16px 0;
@@ -550,22 +542,24 @@ const ToggleExpandAllButton = styled(Button)`
             }
         }
     }
-
 `
 
-const ExpandAllToggle: React.FC<{toggleExpandAll: () => void, expanded: boolean}> = ({toggleExpandAll, expanded}) => {
+const ExpandAllToggle: React.FC<{
+    toggleExpandAll: () => void
+    expanded: boolean
+}> = ({ toggleExpandAll, expanded }) => {
     return (
-        <ToggleExpandAllButton variant="tertiary" size="small" aria-expanded={expanded} onClick={toggleExpandAll} >
-            {!expanded
-                ?
-                    <BodyShort size="small">
-                        Ekspander områder
-                    </BodyShort>
-                :
-                    <BodyShort size="small">
-                        Trekk sammen områder
-                    </BodyShort>
-            }
+        <ToggleExpandAllButton
+            variant="tertiary"
+            size="small"
+            aria-expanded={expanded}
+            onClick={toggleExpandAll}
+        >
+            {!expanded ? (
+                <BodyShort size="small">Ekspander områder</BodyShort>
+            ) : (
+                <BodyShort size="small">Trekk sammen områder</BodyShort>
+            )}
             <span className={expanded ? "expanded" : ""}>
                 <Expand />
             </span>
@@ -573,29 +567,24 @@ const ExpandAllToggle: React.FC<{toggleExpandAll: () => void, expanded: boolean}
     )
 }
 
-
-
-
 /* --------------------------------------- --------------------------------------- */
-
-
 
 const ErrorWrapper = styled.div`
     margin: 2rem 0;
     background-color: var(--navds-semantic-color-canvas-background-light);
-    border-radius: .25rem;
+    border-radius: 0.25rem;
     padding: 1.5rem;
     max-width: 50rem;
 
     display: flex;
     flex-flow: column wrap;
-    
+
     h1 {
         margin-right: 1.5rem;
         padding-right: 1.5rem;
         vertical-align: top;
     }
-`;
+`
 
 const ErrorHeader = styled.div`
     padding-bottom: 1rem;
@@ -605,9 +594,7 @@ const ErrorHeader = styled.div`
     align-items: center;
 `
 
-
 const NoAreasInDashboard = () => {
-
     return (
         <ErrorWrapper>
             <Head>
@@ -615,177 +602,23 @@ const NoAreasInDashboard = () => {
             </Head>
 
             <ErrorHeader>
-                <Heading size="large" level="2">Ingen områder i Dashbord</Heading>
+                <Heading size="large" level="2">
+                    Ingen områder i Dashbord
+                </Heading>
             </ErrorHeader>
-            
-                <div>
-                    <BodyShort spacing>
-                        Det fins ingen områder i dashbordet enda. Hvis du mener dette er feil, rapporter det til administratorene av statusplattformen.
-                    </BodyShort>
-                    <Link href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">
-                        Meld gjerne fra her
-                    </Link>
-                </div>
+
+            <div>
+                <BodyShort spacing>
+                    Det fins ingen områder i dashbordet enda. Hvis du mener
+                    dette er feil, rapporter det til administratorene av
+                    statusplattformen.
+                </BodyShort>
+                <Link href="https://www.nav.no/person/kontakt-oss/tilbakemeldinger/feil-og-mangler">
+                    Meld gjerne fra her
+                </Link>
+            </div>
         </ErrorWrapper>
-    )    
-}
-
-
-
-
-
-
-
-
-const MaintenanceContainer = styled.div`
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
-    h2 {
-        width: 100%;
-    }
-
-    /* Temporary width-adjustments */
-    @media(min-width: 425px) {
-        width: 425px;
-    }
-    @media(min-width: 902px) {
-        width: 882px;
-    }
-    @media(min-width: 1359px) {
-        width: 1339px;
-    }
-`
-
-const MaintenancePanel = styled(Panel) `
-    width: 100%;
-
-    display: flex;
-    flex-flow: row wrap;
-    justify-content: space-between;
-    align-items: center;
-
-    gap: 5ch;
-
-    button {
-        word-break: break-all;
-    }
-
-    & > * {
-        flex-basis: 20% 70% 10%;
-    }
-    /* Temporary width-adjustments */
-    @media(min-width: 425px) {
-        flex-flow: row nowrap;
-        width: 425px;
-    }
-    @media(min-width: 902px) {
-        width: 882px;
-    }
-    @media(min-width: 1359px) {
-        width: 1339px;
-    }
-`
-
-const MaintenanceScheduling = () => {
-
-    const handleRedirect = () => {
-        toast.info("Ikke implementert enda")
-    }
-
-    return (
-        <MaintenanceContainer>
-            <Heading size="medium" level="2">Planlagt vedlikehold</Heading>
-            <MaintenancePanel>
-
-                <BodyShort>
-                    Dato for vedlikehold
-                </BodyShort>
-
-                <BodyShort>
-                    {/* Two viewes based on whether theres maintenance scheduled or not */}
-                    Fins ingen støtte for vedlikehold helt enda
-                </BodyShort>
-
-                <Button variant="secondary" size="medium" onClick={handleRedirect}>Mer om vedlikehold</Button>
-
-            </MaintenancePanel>
-        </MaintenanceContainer>
     )
 }
-
-
-
-
-const IconDescriptionContainer = styled.div`
-    padding-top: 1rem;
-
-    ul {
-        list-style: none;
-        padding: 0;
-
-        display: flex;
-        justify-content: space-between;
-        flex-direction: column;
-
-        @media(min-width: 450px) {
-            width: 425px;
-            flex-flow: row wrap;
-        }
-
-        @media(min-width: 902px) {
-            width: 882px;
-            flex-direction: row;
-        }
-
-        @media(min-width: 1359px) {
-            width: 1339px;
-        }
-
-        
-
-        li {            
-            display: inline-flex;
-            flex-basis: 50%;
-        }
-
-        @media(min-width: 450px) and (max-width: 902px) {
-            li:nth-child(2n) {
-                justify-content: flex-end;
-            }
-        }
-
-        @media(min-width: 902px) {
-            li {
-                flex-basis: auto;
-            }
-        }
-    }
-`
-
-const IconDescription = () => {
-    
-    return (
-        <IconDescriptionContainer>
-            <ul>
-                <li>
-                    <SuccessFilledCustomized /> Status OK
-                </li>
-                <li>
-                    <WarningFilledCustomized className="" /> Avvik på tjeneste
-                </li>
-                <li>
-                    <ErrorFilledCustomized /> Nede
-                </li>
-                <li>
-                    <WrenchFilledCustomized /> Under vedlikehold
-                </li>
-            </ul>
-        </IconDescriptionContainer>
-    )
-}
-
 
 export default DashboardTemplate
