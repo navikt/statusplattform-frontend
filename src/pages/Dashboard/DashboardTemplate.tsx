@@ -1,7 +1,6 @@
 import Head from "next/head"
 import Link from "next/link"
 import styled from "styled-components"
-import { toast } from "react-toastify"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 
@@ -12,7 +11,6 @@ import { Area, Dashboard } from "../../types/types"
 import { TitleContext } from "../../components/ContextProviders/TitleContext"
 import { fetchDashboard } from "../../utils/dashboardsAPI"
 import { RouterError } from "../../types/routes"
-import CustomNavSpinner from "../../components/CustomNavSpinner"
 import StatusOverview from "../../components/StatusOverview"
 import { PortalServiceTile } from "../../components/PortalServiceTile"
 
@@ -109,21 +107,23 @@ const ErrorParagraph = styled.p`
 
 /* --------------------------------------- Styles end --------------------------------------- */
 
-// export const getStaticProps
-
 interface DashboardProps {
     dashboardProp: Dashboard
     isFullScreen: boolean
+    initialDashboard: Dashboard
 }
 
-const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
-    const [isLoading, setIsLoading] = useState(true)
+const DashboardTemplate = ({
+    dashboardProp,
+    isFullScreen,
+    initialDashboard,
+}: DashboardProps) => {
     const [expandAll, changeExpand] = useState(false)
     const [expandedTiles, setExpandedTiles] = useState([])
     const [width, setWidth] = useState(
         typeof window !== "undefined" ? window.innerWidth : 0
     )
-    const [dashboard, setDashboard] = useState<Dashboard>()
+    const [dashboard, setDashboard] = useState<Dashboard>(initialDashboard)
 
     const { changeTitle } = useContext(TitleContext)
 
@@ -132,32 +132,6 @@ const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
     useEffect(() => {
         window.addEventListener("resize", () => setWidth(window.innerWidth))
     }, [width])
-
-    // initial state
-    useEffect(() => {
-        setIsLoading(true)
-        changeTitle("Status digitale tjenester")
-        let controlVar = true
-
-        const setup = async () => {
-            try {
-                const retrievedDashboard: Dashboard = await fetchDashboard(
-                    dashboardProp.id
-                )
-                setDashboard(retrievedDashboard)
-                rerouteIfNoDashboard()
-                setIsLoading(false)
-            } catch (error) {
-                toast.error("Noe gikk galt ved henting av områder i dashbordet")
-                console.log(error)
-            }
-        }
-
-        if (controlVar) {
-            setup()
-        }
-        controlVar = false
-    }, [])
 
     // Timer for refetch of dashboard states
     useEffect(() => {
@@ -175,15 +149,11 @@ const DashboardTemplate = ({ dashboardProp, isFullScreen }: DashboardProps) => {
         return () => clearInterval(interval)
     }, [])
 
-    const rerouteIfNoDashboard = () => {
+    useEffect(() => {
         if (!dashboardProp) {
             router.push(RouterError.PATH)
         }
-    }
-
-    if (isLoading) {
-        return <CustomNavSpinner />
-    }
+    }, [dashboardProp])
 
     if (!dashboard.areas) {
         return (
