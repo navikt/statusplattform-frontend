@@ -116,5 +116,9 @@
     "testMatch": [
       "**/*.(test|spec).(ts|tsx|js|jsx)"
     ]
+  },
+  "prettier": {
+    "tabWidth": 4,
+    "semi": false
   }
 }
