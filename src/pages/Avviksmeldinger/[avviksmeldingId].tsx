@@ -21,6 +21,8 @@ import PublicOpsContent from "./PublicOpsContent"
 
 
 const OpsMessageContainer = styled.div`
+    width: 100%;
+    
     display: flex;
 `
 
@@ -68,11 +70,6 @@ const opsMessageDetails = ({opsMessage, retrievedServices}) => {
 
     return (
         <Layout>
-            {user.navIdent &&
-                <BackButtonWrapper>
-                    <BackButton />
-                </BackButtonWrapper>
-            }
             <OpsMessageContainer>
                 <Head>
                     <title>Avviksmelding - {opsMessage.internalHeader} - status.nav.no</title>
@@ -90,7 +87,6 @@ const opsMessageDetails = ({opsMessage, retrievedServices}) => {
 
 
 const OpsContent = styled.div`
-    background: #fff;
     padding: 2rem 4rem;
     border-radius: 0.5rem;
 
@@ -98,6 +94,11 @@ const OpsContent = styled.div`
     flex-direction: column;
 
     gap: 1rem;
+
+    
+    &.not-editting {
+        box-shadow: 0 0 10px rgb(0 0 0 / 20%);
+    }
 
     &.neutral {
         border: 3px solid #ccc;
@@ -110,6 +111,11 @@ const OpsContent = styled.div`
     &.issue {
         border: 3px solid var(--navds-semantic-color-feedback-warning-border);
     }
+
+    width: 80%;
+    align-items: center;
+    margin: 0 auto;
+
 
     .header-container {
         display: flex;
@@ -131,7 +137,10 @@ const OpsMessageComponent = ({opsMessage: serverSideOpsMessage, services}: OpsMe
     const [updatedSeverity, changeUpdatedSeverity] = useState<SeverityEnum>(serverSideOpsMessage.severity)
     const [isLoading, setIsLoading] = useState(false)
 
+
     const { name, navIdent } = useContext(UserStateContext)
+
+    const router = useRouter()
 
     useEffect(() => {
         let reFetching = true
@@ -156,21 +165,34 @@ const OpsMessageComponent = ({opsMessage: serverSideOpsMessage, services}: OpsMe
         setIsLoading(false)
     }, [updatedSeverity])
 
+    const usersWithAccess: string[] = [
+        "L152423", "H161540", "K146221", "J104568", "G124938", "M106261",
+        "K132081", "H123099", "L110875", "K125327", "F110862", "A110886", "L120166"
+    ]
     
-    const { internalHeader } = opsMessage
+    useEffect(() => {
+        if(!usersWithAccess.includes(navIdent)) {
+            router.push(RouterError.PATH)
+        }
+    },[router])
+
+    
+    const { internalHeader, externalHeader } = opsMessage
 
     return (
-        <OpsContent className={(updatedSeverity && isEditting) ? updatedSeverity.toLowerCase() : "neutral"}>
+        <OpsContent className={(updatedSeverity && isEditting) ? updatedSeverity.toLowerCase() : "not-editting"}>
             <div className="header-container">
                 <Heading size="medium" level="2">
-                    Avviksmelding - {internalHeader} 
+                    Avviksmelding - {usersWithAccess.includes(navIdent) ? internalHeader : externalHeader} 
                 </Heading>
-                <Button variant="primary" onClick={() => toggleIsEditting(!isEditting)}>
-                    {isEditting ? "Avbryt redigering" : <EditFilled/>}
-                </Button>
+                {usersWithAccess.includes(navIdent) &&
+                    <Button variant="primary" onClick={() => toggleIsEditting(!isEditting)}>
+                        {isEditting ? "Avbryt redigering" : <EditFilled/>}
+                    </Button>
+                }
             </div>
 
-            {isEditting
+            {!isEditting 
                 ?
                     <DetailsOfOpsMessage opsMessage={opsMessage} navIdent={navIdent} />
                 :
@@ -207,21 +229,27 @@ interface DetailsOpsMsgI {
 
 const DetailsOfOpsMessage = ({opsMessage, navIdent}: DetailsOpsMsgI) => {
     const { externalHeader, externalMessage, internalHeader, internalMessage, affectedServices, isActive, onlyShowForNavEmployees, startTime, endTime, severity } = opsMessage
+
+    const convertedStartTime = new Date(startTime)
+    const convertedEndTime = new Date(endTime)
+
+    const prettifiedStartTime = `${convertedStartTime.getDate() < 10 ? `0${convertedStartTime.getDate()}` : convertedStartTime.getDate()}.${convertedStartTime.getMonth() + 1 < 10 ? `0${convertedStartTime.getMonth() + 1}` : convertedStartTime.getMonth() + 1}.${convertedStartTime.getFullYear()}, ${convertedStartTime.getHours() < 10 ? `0${convertedStartTime.getHours()}` : convertedStartTime.getHours()}:${convertedStartTime.getMinutes() < 10 ? `0 ${convertedStartTime.getMinutes()}` : convertedStartTime.getMinutes()}`
+    const prettifiedEndTime = `${convertedEndTime.getDate() < 10 ? `0${convertedEndTime.getDate()}` : convertedEndTime.getDate()}.${convertedEndTime.getMonth() + 1 < 10 ? `0${convertedEndTime.getMonth() + 1}` : convertedEndTime.getMonth() + 1}.${convertedEndTime.getFullYear()}, ${convertedEndTime.getHours() < 10 ? `0${convertedEndTime.getHours()}` : convertedEndTime.getHours()}:${convertedEndTime.getMinutes() < 10 ? `0 ${convertedEndTime.getMinutes()}` : convertedEndTime.getMinutes()}`
     
     return (
-        <OpsDetailsContainer className={severity.toLowerCase()}>
-            {navIdent &&
-                <div>
-                    <BodyShort spacing>
-                        {internalMessage}
-                    </BodyShort>
-                </div>
+        <OpsDetailsContainer>
+            {navIdent
+                ?
+                    <div>
+                        <BodyShort spacing>
+                            {internalMessage}
+                        </BodyShort>
+                    </div>
+                :
+                    <div>
+                        {externalMessage}
+                    </div>
             }
- 
-            <div>
-                {externalHeader}
-                {externalMessage}
-            </div>
 
             <Heading size="small" level="3">Ytterligere detaljer</Heading>
             {navIdent &&
@@ -235,10 +263,10 @@ const DetailsOfOpsMessage = ({opsMessage, navIdent}: DetailsOpsMsgI) => {
                         </li>
                     </ul>
 
-                    {startTime &&
+                    {convertedStartTime &&
                         <ul>
                             <li>
-                                Starttid: {startTime}
+                                Starttid: {prettifiedStartTime}
                             </li>
                         </ul>
                     }
@@ -246,7 +274,7 @@ const DetailsOfOpsMessage = ({opsMessage, navIdent}: DetailsOpsMsgI) => {
                     {endTime &&
                         <ul>
                             <li>
-                                Sluttid: {endTime}
+                                Sluttid: {prettifiedEndTime}
                             </li>
                         </ul>
                     }
