@@ -12,22 +12,30 @@ import { deleteOpsMessage, updateSpecificOpsMessage } from "../../utils/opsAPI"
 
 const MessageCard = styled.div`
     background: white;
-    padding: 1.5rem;
+    padding: 0 1.5rem;
     border-radius: 4px;
     border: 1px solid #e6e6e6;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: column;
 
     .ops-card-content {
+        padding: .5rem 0;
+        
         display: flex;
         flex-direction: column;
-        padding: .5rem 0;
+        
     }
-
-    .navds-body-short {
+    
+    .message-content {
+        display: -webkit-box;
+        -webkit-line-clamp: 7;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
         word-break: break-word;
+
+
     }
 
     .buttons-container {
@@ -60,6 +68,7 @@ const MessageCard = styled.div`
 
     button:last-child {
         margin-top: auto;
+        width: 100%;
     }
 `
 
@@ -75,7 +84,14 @@ const CustomizedModal = styled(Modal)`
     }
 `
 
-const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI, notifyChangedOpsMessage: (changedOps) => void}> = ({opsMessage, notifyChangedOpsMessage}) => {
+
+
+interface OpsMessageCardI {
+    opsMessage: OpsMessageI
+    notifyChangedOpsMessage: (changedOps) => void
+}
+
+const OpsMessageCard = ({opsMessage, notifyChangedOpsMessage} : OpsMessageCardI) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isActiveModalOpen, setIsActiveModalOpen] = useState(false)
     const router = useRouter()
@@ -196,10 +212,12 @@ const OpsMessageCard: React.VFC<{opsMessage: OpsMessageI, notifyChangedOpsMessag
             
             <div className="ops-card-content">
                 <Heading spacing size="large" level="2">{opsMessage.internalHeader}</Heading>
-                <BodyShort spacing>{opsMessage.internalMessage}</BodyShort>
+                <BodyShort spacing className="message-content">{opsMessage.internalMessage}</BodyShort>
             </div>
 
-            <Button variant="tertiary" onClick={() => router.push(RouterOpsMeldinger.PATH + `/${opsMessage.id}`)}>Se mer...</Button>
+            <div>
+                <Button variant="tertiary" onClick={() => router.push(RouterOpsMeldinger.PATH + `/${opsMessage.id}`)}>Se mer...</Button>
+            </div>
         </MessageCard>
     )
 }
