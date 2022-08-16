@@ -20,17 +20,18 @@ Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
 ```
 
 The project runs on port 3000.
 
 ## General info on architecture
 
-
 The index.tsx page is the landing page. This redirects to the home dashboard rather than being an actual landing page. Do not confuse it as such. The reason for this is that users are meant to land as quickly as possible at the most relevant dashboard for the user.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
-
 The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+
+## Running locally
+
+Running the environment locally requires setting up the database with pgAdmin 4 along with running the backend. Consult the readme for the backend to see how.
+
+Ensure that the backend runs on port 3005, as this is the default we have set the frontend to communicate towards.
