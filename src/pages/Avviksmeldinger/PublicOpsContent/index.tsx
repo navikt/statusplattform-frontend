@@ -38,17 +38,66 @@ const PublicOpsContent = (props: PublicOpsContentI) => {
 
 
 const PublicOpsDetailsContainer = styled.div`
+
     display: flex;
     flex-direction: column;
-
     gap: 16px;
 `
 
 const PublicOpsDetails = (props: PublicOpsContentI) => {
+
+    const { affectedServices, startTime, endTime, externalHeader, externalMessage } = props.opsMessage
+    
+    const convertedStartTime = new Date(startTime)
+    const convertedEndTime = new Date(endTime)
+
+    const prettifiedStartTime = `${convertedStartTime.getDate() < 10 ? `0${convertedStartTime.getDate()}` : convertedStartTime.getDate()}.${
+        convertedStartTime.getMonth() + 1 < 10 ? `0${convertedStartTime.getMonth() + 1}` : convertedStartTime.getMonth() + 1}.${convertedStartTime.getFullYear()}, ${
+        convertedStartTime.getHours() < 10 ? `0${convertedStartTime.getHours()}` : convertedStartTime.getHours()}:${
+        convertedStartTime.getMinutes() < 10 ? `0${convertedStartTime.getMinutes()}` : convertedStartTime.getMinutes()}`
+
+    const prettifiedEndTime = `${convertedEndTime.getDate() < 10 ? `0${convertedEndTime.getDate()}` : convertedEndTime.getDate()}.${
+        convertedEndTime.getMonth() + 1 < 10 ? `0${convertedEndTime.getMonth() + 1}` : convertedEndTime.getMonth() + 1}.${convertedEndTime.getFullYear()}, ${
+        convertedEndTime.getHours() < 10 ? `0${convertedEndTime.getHours()}` : convertedEndTime.getHours()}:${
+        convertedEndTime.getMinutes() < 10 ? `0${convertedEndTime.getMinutes()}` : convertedEndTime.getMinutes()}`
+
     return (
         <PublicOpsDetailsContainer>
             <Heading level="2" size="medium">{props.opsMessage.externalHeader}</Heading>
-            <BodyLong>{props.opsMessage.externalMessage}</BodyLong>
+
+            <div>
+                {externalMessage}
+            </div>
+
+            <Heading size="small" level="3">Ytterligere detaljer</Heading>
+            {convertedStartTime &&
+                <ul>
+                    <li>
+                        Starttid: {prettifiedStartTime}
+                    </li>
+                </ul>
+            }
+
+            {convertedEndTime &&
+                <ul>
+                    <li>
+                        Sluttid: {prettifiedEndTime}
+                    </li>
+                </ul>
+            }
+
+
+            <b>Tilknyttede tjenester:</b>
+            {affectedServices.length > 0 &&
+                <ul>
+                    {affectedServices.map((service) => {
+                        return (
+                            <li key={service.id}>{service.name}</li>
+                        )
+                    })}
+                </ul>
+            }
+
         </PublicOpsDetailsContainer>
     )
 }

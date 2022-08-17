@@ -21,8 +21,6 @@ import PublicOpsContent from "./PublicOpsContent"
 
 
 const OpsMessageContainer = styled.div`
-    width: 100%;
-    
     display: flex;
 `
 
@@ -84,6 +82,13 @@ const opsMessageDetails = ({opsMessage, retrievedServices}) => {
         </Layout>
     )
 }
+
+
+
+
+
+
+
 
 
 const OpsContent = styled.div`
@@ -191,6 +196,8 @@ const OpsMessageComponent = ({opsMessage: serverSideOpsMessage, services}: OpsMe
                     </Button>
                 }
             </div>
+
+
 
             {!isEditting 
                 ?
