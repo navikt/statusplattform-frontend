@@ -6,8 +6,8 @@ Install the following:
 
 ```
 Node version 14.15.5
-JDK 11.0.10
-Maven 3.6.3
+JDK 17.x.x
+Maven 3.8.6
 ```
 
 ## Frontend
