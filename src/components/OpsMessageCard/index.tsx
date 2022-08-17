@@ -12,7 +12,7 @@ import { deleteOpsMessage, updateSpecificOpsMessage } from "../../utils/opsAPI"
 
 const MessageCard = styled.div`
     background: white;
-    padding: 0 1.5rem;
+    padding: 1rem 1.5rem;
     border-radius: 4px;
     border: 1px solid #e6e6e6;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
@@ -29,13 +29,12 @@ const MessageCard = styled.div`
     }
     
     .message-content {
-        display: -webkit-box;
-        -webkit-line-clamp: 7;
+        -webkit-line-clamp: 6;
         -webkit-box-orient: vertical;
         overflow: hidden;
         word-break: break-word;
-
-
+        
+        display: -webkit-box;
     }
 
     .buttons-container {
@@ -66,9 +65,8 @@ const MessageCard = styled.div`
         outline: 1px solid black;
     }
 
-    button:last-child {
+    .se-mer-wrapper {
         margin-top: auto;
-        width: 100%;
     }
 `
 
@@ -215,7 +213,7 @@ const OpsMessageCard = ({opsMessage, notifyChangedOpsMessage} : OpsMessageCardI)
                 <BodyShort spacing className="message-content">{opsMessage.internalMessage}</BodyShort>
             </div>
 
-            <div>
+            <div className="se-mer-wrapper">
                 <Button variant="tertiary" onClick={() => router.push(RouterOpsMeldinger.PATH + `/${opsMessage.id}`)}>Se mer...</Button>
             </div>
         </MessageCard>
