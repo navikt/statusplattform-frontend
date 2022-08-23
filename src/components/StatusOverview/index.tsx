@@ -117,12 +117,12 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
             .length
     }
 
-    if (isLoading) return <CustomNavSpinner />
-
     const opsHasNeutral: boolean =
         opsMessages.flatMap(
             (message) => message.severity == SeverityEnum.NEUTRAL
         ).length > 0
+
+    if (isLoading) return <CustomNavSpinner />
 
     if (allGood) {
         return (
@@ -250,71 +250,6 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
     }
 }
 
-// if(opsMessages.length == 0) {
-//     return (
-//         <StatusSummary>
-//             <div className="top-row">
-//                 <div className="deviation-button-wrapper">
-//                     <Button variant="tertiary" size="small" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk <Clock /> </Button>
-//                 </div>
-//                 <div></div>
-//                 <div className="planlagte-vedlikehold">
-//                     {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
-//                 </div>
-//             </div>
-
-//             {(hasIssue==true && !hasDown) &&
-//                 <DeviationCardIfNoOpsMessage status={"ISSUE"} message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`} />
-//             }
-//             {hasDown==true &&
-//                 <DeviationCardIfNoOpsMessage status={"DOWN"} message={`Avvik på ${countIssueServices() + countDownServices()} av ${countServicesInAreas()} tjenester`} />
-//             }
-//             {allGood &&
-//                 <Alert variant="success" >Alle våre systemer fungerer normalt</Alert>
-//             }
-//         </StatusSummary>
-//     )
-// }
-
-// return (
-//     <StatusSummary>
-//         <div className="top-row">
-//             <div className="deviation-button-wrapper">
-//                 <Button className="avvikshistorikkbutton" variant="tertiary" size="small" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>Se avvikshistorikk <Clock /> </Button>
-//             </div>
-
-//             <div>{`Avvik på ${countIssueServices() + countDownServices()} av ${countServicesInAreas()} tjenester`}</div>
-
-//             <div className="planlagte-vedlikehold">
-//                 {/* Dette må synliggjøres når vedlikeholdsmeldinger er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
-//             </div>
-//         </div>
-
-//         {(hasIssue || hasDown) &&
-//             <div className="ops-container">
-//                 {opsMessages.map((opsMessage, i) => {
-//                     return (
-//                         <DeviationReportCard key={i} opsMessage={opsMessage} user={user} />
-//                     )
-//                 })}
-//             </div>
-//         }
-
-//         {allGood
-//             ?
-//                 (opsHasNeutral
-//                     ?
-//                         <div className="ops-container"></div>
-//                     :
-//                         <Alert variant="success" >Alle våre systemer fungerer normalt</Alert>
-//                 )
-//             :
-//                 <></>
-//         }
-//     </StatusSummary>
-// )
-// }
-
 const DeviationCardContainer = styled.button`
     position: relative;
     height: 100%;
@@ -403,15 +338,15 @@ const DeviationCardContainer = styled.button`
     }
 `
 
-interface DeviationCardI {
-    opsMessage: OpsMessageI
-    user: UserData
-}
-
-const DeviationCardIfNoOpsMessage: React.FC<{
+interface DeviationCardIfNoOpsI {
     status: string
     message: string
-}> = ({ status, message }) => {
+}
+
+const DeviationCardIfNoOpsMessage = ({
+    status,
+    message,
+}: DeviationCardIfNoOpsI) => {
     return (
         <DeviationCardContainer
             aria-label={message + ". Trykk her for mer informasjon"}
@@ -424,19 +359,13 @@ const DeviationCardIfNoOpsMessage: React.FC<{
     )
 }
 
+interface DeviationCardI {
+    opsMessage: OpsMessageI
+    user: UserData
+}
+
 const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
-    const {
-        affectedServices,
-        endTime,
-        startTime,
-        externalHeader,
-        externalMessage,
-        internalHeader,
-        internalMessage,
-        isActive,
-        onlyShowForNavEmployees,
-        severity,
-    } = opsMessage
+    const { internalHeader, severity } = opsMessage
 
     // TODO: When the solution is ready to open for the public, re-implemented the commented code (or change it to something else)
     // if(user.navIdent || (user.navIdent && onlyShowForNavEmployees == true)) {
