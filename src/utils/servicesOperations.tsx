@@ -29,22 +29,23 @@ export const retrieveFilteredServiceList = (areas, areaName) => {
 
 
 
-export const countServicesInAreas = (props: AreaPropsI) => {
+export const countServicesInAreas = (areas: Area[]) => {
     let numberOfServices: number = 0
-    props.areas.map(function (area){
+    areas.map(function (area){
         numberOfServices += area.services.length
     })
     return numberOfServices
 }
 
-export const countHealthyServices = (props: AreaPropsI) => {
+export const countHealthyServicesInListOfAreas = (areas: Area[]) => {
     let healthyServices: number = 0
-    props.areas.map(area => {
+    areas.map(area => {
         healthyServices += area.services.filter(
             (service: Service) => service.record.status == "OK").length
     })
     return healthyServices
 }
+
 
 export const countFailingServices = (props: AreaPropsI) => {
     let failingServices: number = 0
