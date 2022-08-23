@@ -61,7 +61,6 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
     const [hasIssue, setHasIssue] = useState(false)
     const [hasDown, setHasDown] = useState(false)
     const [allGood, setAllGood] = useState(false)
-    const [allNeutral, setAllNeutral] = useState(false)
 
     const [isLoading, setIsLoading] = useState(true)
 
@@ -71,29 +70,21 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
         setIsLoading(true)
         const allAreaStatusesOk =
             countServicesInAreas() === countHealthyServicesInListOfAreas(areas)
-        const allAreaStatusesNeutral =
-            countServicesInAreas() === countNeutralServicesInListOfAreas(areas)
         const areaStatuses = areas.map((area) => area.status)
 
         if (allAreaStatusesOk) {
             setAllGood(true)
-            setAllNeutral(false)
-        } else if (allAreaStatusesNeutral) {
-            setAllNeutral(true)
-            setAllGood(false)
         } else if (areaStatuses.includes("DOWN")) {
             setAllGood(false)
-            setAllNeutral(false)
             setHasDown(true)
         } else if (areaStatuses.includes("ISSUE")) {
             setAllGood(false)
-            setAllNeutral(false)
             setHasIssue(true)
         } else setHasIssue(false)
 
+        console.log(allAreaStatusesOk)
         setIsLoading(false)
     }, [areas])
-
     const countServicesInAreas = () => {
         const services: Service[] = areas.flatMap((area) => area.services)
         return services.length
@@ -105,22 +96,11 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
             .length
     }
 
-    const countNeutralServicesInListOfAreas = (areas: Area[]) => {
-        const services: Service[] = areas.flatMap((area) => area.services)
-        return services.filter((service) => service.record.status == null)
-            .length
-    }
-
     const countDownServices = () => {
         const services: Service[] = areas.flatMap((area) => area.services)
         return services.filter((service) => service.record.status == "DOWN")
             .length
     }
-
-    const opsHasNeutral: boolean =
-        opsMessages.flatMap(
-            (message) => message.severity == SeverityEnum.NEUTRAL
-        ).length > 0
 
     if (isLoading) return <CustomNavSpinner />
 
@@ -149,17 +129,18 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                     Alle våre systemer fungerer normalt
                 </Alert>
 
-                {opsHasNeutral &&
-                    (!hasIssue || !hasDown) &&
-                    opsMessages.map((opsMessage, i) => {
-                        return (
-                            <DeviationReportCard
-                                key={i}
-                                opsMessage={opsMessage}
-                                user={user}
-                            />
-                        )
-                    })}
+                <div className="ops-container">
+                    {(!hasIssue || !hasDown) &&
+                        opsMessages.map((opsMessage, i) => {
+                            return (
+                                <DeviationReportCard
+                                    key={i}
+                                    opsMessage={opsMessage}
+                                    user={user}
+                                />
+                            )
+                        })}
+                </div>
             </StatusSummary>
         )
     } else {
@@ -178,42 +159,12 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                         </Button>
                     </div>
 
-                    <div>
-                        {!allNeutral && (
-                            <>
-                                {`Avvik på ${
-                                    countIssueServices() + countDownServices()
-                                } av ${countServicesInAreas()} tjenester`}
-                            </>
-                        )}
-                    </div>
-
                     <div className="planlagte-vedlikehold">
                         {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
                     </div>
                 </div>
 
-                {allNeutral ? (
-                    opsMessages.length == 0 ? (
-                        <div className="ops-container">
-                            <Alert variant="success">
-                                Alle våre systemer fungerer normalt
-                            </Alert>
-                        </div>
-                    ) : (
-                        <div className="ops-container">
-                            {opsMessages.map((opsMessage, i) => {
-                                return (
-                                    <DeviationReportCard
-                                        key={i}
-                                        opsMessage={opsMessage}
-                                        user={user}
-                                    />
-                                )
-                            })}
-                        </div>
-                    )
-                ) : opsMessages.length == 0 ? (
+                {opsMessages.length == 0 ? (
                     <div className="ops-container">
                         {hasIssue == true && !hasDown && (
                             <DeviationCardIfNoOpsMessage
