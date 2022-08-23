@@ -53,7 +53,7 @@ const CreateOpsMessage = ({ services }) => {
         affectedServices: [],
         startTime: new Date(),
         endTime: new Date(),
-        severity: SeverityEnum.ISSUE,
+        severity: SeverityEnum.NEUTRAL,
         state: "",
     })
     // EKSEMPEL: "2017-07-21T17:30:00Z"
@@ -109,29 +109,18 @@ const OpsContainer = styled.div`
     flex-direction: column;
 
     padding: 1rem;
-    /* border-radius: 0.5rem; */
+    border-left: 7.5px solid transparent;
 
     &.neutral {
-        box-shadow: inset -5px 0px 5px -5px var(--navds-global-color-blue-500);
-        -moz-box-shadow: -5px 0px 5px -5px var(--navds-global-color-blue-500);
-        -webkit-box-shadow: -5px 0px 5px -5px var(--navds-global-color-blue-500);
-        box-shadow: -5px 0px 5px -5px var(--navds-global-color-blue-500);
+        border-color: var(--navds-global-color-blue-500);
     }
 
     &.down {
-        box-shadow: inset -5px 0px 5px -5px
-            var(--navds-semantic-color-feedback-danger-border);
-        -moz-box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-danger-border);
-        -webkit-box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-danger-border);
-        box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-danger-border);
+        border-color: var(--navds-semantic-color-feedback-danger-border);
     }
 
     &.issue {
-        box-shadow: inset -5px 0px 5px -5px
-            var(--navds-semantic-color-feedback-warning-border);
-        -moz-box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-warning-border);
-        -webkit-box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-warning-border);
-        box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-warning-border);
+        border-color: var(--navds-semantic-color-feedback-warning-border);
     }
 
     .input-area {
@@ -176,7 +165,7 @@ const OpsComponent = ({
         useState<Date>(new Date())
 
     const [isLoading, setIsLoading] = useState(true)
-    const [selectedSeverity, setSelectedSeverity] = useState<string>("ISSUE")
+    const [selectedSeverity, setSelectedSeverity] = useState<string>("NEUTRAL")
     const router = useRouter()
 
     const hours = []
