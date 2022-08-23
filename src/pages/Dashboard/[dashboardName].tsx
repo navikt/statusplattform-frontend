@@ -38,12 +38,10 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 }
 
-
 interface DashboardFromNameProps {
     dashboards: Dashboard[]
     initialDashboard: Dashboard
 }
-
 
 const DashboardFromName = (props: DashboardFromNameProps) => {
     const router = useRouter()
@@ -59,10 +57,10 @@ const DashboardFromName = (props: DashboardFromNameProps) => {
     useEffect(() => {
         setIsLoading(true)
         let dashboardTarget: Object = router.query.dashboardName
-        const dashboardMatchingTarget: Dashboard | undefined = props.dashboards.find(
-            (dashboard) =>
+        const dashboardMatchingTarget: Dashboard | undefined =
+            props.dashboards.find((dashboard) =>
                 dashboard.name == dashboardTarget ? dashboard : undefined
-        )
+            )
         setRetrievedDashboard(dashboardMatchingTarget)
         setIsLoading(false)
     }, [router])
@@ -187,22 +185,15 @@ const FullScreenFixedButton = styled(Button)`
     }
 `
 
-
-
-
-
-
-
-
-
-
-
 interface FullscreenButtonProps {
     isFullScreen: boolean
     changeIsFullScreen: (changed: boolean) => void
 }
 
-export const FullScreenButton = ({ isFullScreen, changeIsFullScreen }: FullscreenButtonProps) => {
+export const FullScreenButton = ({
+    isFullScreen,
+    changeIsFullScreen,
+}: FullscreenButtonProps) => {
     return (
         <FullScreenFixedButton
             variant="tertiary"
