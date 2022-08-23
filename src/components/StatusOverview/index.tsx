@@ -53,20 +53,19 @@ const StatusSummary = styled.div`
 
 interface StatusOverviewI {
     dashboard: Dashboard
+    user: UserData
 }
 
-const StatusOverview = ({ dashboard }: StatusOverviewI) => {
+const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
     const router = useRouter()
     const [hasIssue, setHasIssue] = useState(false)
     const [hasDown, setHasDown] = useState(false)
     const [allGood, setAllGood] = useState(false)
     const [allNeutral, setAllNeutral] = useState(false)
 
-    const [isLoading, setIsLoading] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
 
     const { areas, opsMessages } = dashboard
-
-    const user = useContext(UserStateContext)
 
     useEffect(() => {
         setIsLoading(true)
@@ -78,19 +77,15 @@ const StatusOverview = ({ dashboard }: StatusOverviewI) => {
 
         if (allAreaStatusesOk) {
             setAllGood(true)
-        }
-
-        if (allAreaStatusesNeutral) {
+            setAllNeutral(false)
+        } else if (allAreaStatusesNeutral) {
             setAllNeutral(true)
-        }
-
-        if (areaStatuses.includes("DOWN")) {
+            setAllGood(false)
+        } else if (areaStatuses.includes("DOWN")) {
             setAllGood(false)
             setAllNeutral(false)
             setHasDown(true)
-        } else setHasDown(false)
-
-        if (areaStatuses.includes("ISSUE")) {
+        } else if (areaStatuses.includes("ISSUE")) {
             setAllGood(false)
             setAllNeutral(false)
             setHasIssue(true)
@@ -123,8 +118,6 @@ const StatusOverview = ({ dashboard }: StatusOverviewI) => {
     }
 
     if (isLoading) return <CustomNavSpinner />
-
-    // FORTSETT MED Å SE PÅ HVORFOR AVVIKSMELDINGER PLUTSELIG ER SKJULT. DETTE VAR WEIRD AF BRO!
 
     const opsHasNeutral: boolean =
         opsMessages.flatMap(
@@ -184,6 +177,7 @@ const StatusOverview = ({ dashboard }: StatusOverviewI) => {
                             Se avvikshistorikk <Clock />{" "}
                         </Button>
                     </div>
+
                     <div>
                         {!allNeutral && (
                             <>
@@ -193,13 +187,20 @@ const StatusOverview = ({ dashboard }: StatusOverviewI) => {
                             </>
                         )}
                     </div>
+
                     <div className="planlagte-vedlikehold">
                         {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
                     </div>
                 </div>
 
                 {allNeutral ? (
-                    opsMessages.length == 0 && (
+                    opsMessages.length == 0 ? (
+                        <div className="ops-container">
+                            <Alert variant="success">
+                                Alle våre systemer fungerer normalt
+                            </Alert>
+                        </div>
+                    ) : (
                         <div className="ops-container">
                             {opsMessages.map((opsMessage, i) => {
                                 return (
@@ -234,7 +235,6 @@ const StatusOverview = ({ dashboard }: StatusOverviewI) => {
                         {opsMessages.map((opsMessage, i) => {
                             return (
                                 <div key={i}>
-                                    {console.log(opsMessage)}
                                     <DeviationReportCard
                                         key={i}
                                         opsMessage={opsMessage}
