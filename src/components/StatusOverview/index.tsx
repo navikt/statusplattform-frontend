@@ -68,8 +68,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
 
     useEffect(() => {
         setIsLoading(true)
-        const allAreaStatusesOk =
-            countServicesInAreas() === countHealthyServicesInListOfAreas(areas)
+        const allAreaStatusesOk = countServicesInAreas() === countHealthyServicesInListOfAreas(areas)
         const areaStatuses = areas.map((area) => area.status)
 
         if (allAreaStatusesOk) {
@@ -82,7 +81,6 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
             setHasIssue(true)
         } else setHasIssue(false)
 
-        console.log(allAreaStatusesOk)
         setIsLoading(false)
     }, [areas])
     const countServicesInAreas = () => {
@@ -92,14 +90,12 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
 
     const countIssueServices = () => {
         const services: Service[] = areas.flatMap((area) => area.services)
-        return services.filter((service) => service.record.status == "ISSUE")
-            .length
+        return services.filter((service) => service.record.status == "ISSUE").length
     }
 
     const countDownServices = () => {
         const services: Service[] = areas.flatMap((area) => area.services)
-        return services.filter((service) => service.record.status == "DOWN")
-            .length
+        return services.filter((service) => service.record.status == "DOWN").length
     }
 
     if (isLoading) return <CustomNavSpinner />
@@ -109,36 +105,20 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
             <StatusSummary>
                 <div className="top-row">
                     <div className="deviation-button-wrapper">
-                        <Button
-                            variant="tertiary"
-                            size="small"
-                            onClick={() =>
-                                router.push(RouterAvvikshistorikk.PATH)
-                            }
-                        >
+                        <Button variant="tertiary" size="small" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>
                             Se avvikshistorikk <Clock />{" "}
                         </Button>
                     </div>
                     <div></div>
-                    <div className="planlagte-vedlikehold">
-                        {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
-                    </div>
+                    <div className="planlagte-vedlikehold">{/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}</div>
                 </div>
 
-                <Alert variant="success">
-                    Alle våre systemer fungerer normalt
-                </Alert>
+                <Alert variant="success">Alle våre systemer fungerer normalt</Alert>
 
                 <div className="ops-container">
                     {(!hasIssue || !hasDown) &&
                         opsMessages.map((opsMessage, i) => {
-                            return (
-                                <DeviationReportCard
-                                    key={i}
-                                    opsMessage={opsMessage}
-                                    user={user}
-                                />
-                            )
+                            return <DeviationReportCard key={i} opsMessage={opsMessage} user={user} />
                         })}
                 </div>
             </StatusSummary>
@@ -148,49 +128,25 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
             <StatusSummary>
                 <div className="top-row">
                     <div className="deviation-button-wrapper">
-                        <Button
-                            variant="tertiary"
-                            size="small"
-                            onClick={() =>
-                                router.push(RouterAvvikshistorikk.PATH)
-                            }
-                        >
+                        <Button variant="tertiary" size="small" onClick={() => router.push(RouterAvvikshistorikk.PATH)}>
                             Se avvikshistorikk <Clock />{" "}
                         </Button>
                     </div>
 
-                    <div className="planlagte-vedlikehold">
-                        {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
-                    </div>
+                    <div className="planlagte-vedlikehold">{/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}</div>
                 </div>
 
                 {opsMessages.length == 0 ? (
                     <div className="ops-container">
-                        {hasIssue == true && !hasDown && (
-                            <DeviationCardIfNoOpsMessage
-                                status={"ISSUE"}
-                                message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`}
-                            />
-                        )}
-                        {hasDown == true && (
-                            <DeviationCardIfNoOpsMessage
-                                status={"DOWN"}
-                                message={`Avvik på ${
-                                    countIssueServices() + countDownServices()
-                                } av ${countServicesInAreas()} tjenester`}
-                            />
-                        )}
+                        {hasIssue == true && !hasDown && <DeviationCardIfNoOpsMessage status={"ISSUE"} message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`} />}
+                        {hasDown == true && <DeviationCardIfNoOpsMessage status={"DOWN"} message={`Avvik på ${countIssueServices() + countDownServices()} av ${countServicesInAreas()} tjenester`} />}
                     </div>
                 ) : (
                     <div className="ops-container">
                         {opsMessages.map((opsMessage, i) => {
                             return (
                                 <div key={i}>
-                                    <DeviationReportCard
-                                        key={i}
-                                        opsMessage={opsMessage}
-                                        user={user}
-                                    />
+                                    <DeviationReportCard key={i} opsMessage={opsMessage} user={user} />
                                 </div>
                             )
                         })}
@@ -294,15 +250,9 @@ interface DeviationCardIfNoOpsI {
     message: string
 }
 
-const DeviationCardIfNoOpsMessage = ({
-    status,
-    message,
-}: DeviationCardIfNoOpsI) => {
+const DeviationCardIfNoOpsMessage = ({ status, message }: DeviationCardIfNoOpsI) => {
     return (
-        <DeviationCardContainer
-            aria-label={message + ". Trykk her for mer informasjon"}
-            className={"has-" + status.toLowerCase()}
-        >
+        <DeviationCardContainer aria-label={message + ". Trykk her for mer informasjon"} className={"has-" + status.toLowerCase()}>
             <div className="content">
                 <BodyShort>{message}</BodyShort>
             </div>
@@ -321,12 +271,7 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
     // TODO: When the solution is ready to open for the public, re-implemented the commented code (or change it to something else)
     // if(user.navIdent || (user.navIdent && onlyShowForNavEmployees == true)) {
     return (
-        <DeviationCardContainer
-            aria-label={
-                opsMessage.internalHeader + ". Trykk her for mer informasjon"
-            }
-            className={"has-" + severity.toLowerCase()}
-        >
+        <DeviationCardContainer aria-label={opsMessage.internalHeader + ". Trykk her for mer informasjon"} className={!severity ? "has-neutral" : "has-" + severity.toLowerCase()}>
             {/* <span className={status.toLowerCase()} /> */}
             <div className="content">
                 {/* <Detail size="small">01.03.2022</Detail> */}
