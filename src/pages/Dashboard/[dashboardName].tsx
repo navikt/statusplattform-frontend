@@ -38,7 +38,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
     }
 }
 
-const DashboardFromName = ({ dashboards, initialDashboard }) => {
+
+interface DashboardFromNameProps {
+    dashboards: Dashboard[]
+    initialDashboard: Dashboard
+}
+
+
+const DashboardFromName = (props: DashboardFromNameProps) => {
     const router = useRouter()
 
     const [isLoading, setIsLoading] = useState(true)
@@ -52,7 +59,7 @@ const DashboardFromName = ({ dashboards, initialDashboard }) => {
     useEffect(() => {
         setIsLoading(true)
         let dashboardTarget: Object = router.query.dashboardName
-        const dashboardMatchingTarget: Dashboard | undefined = dashboards.find(
+        const dashboardMatchingTarget: Dashboard | undefined = props.dashboards.find(
             (dashboard) =>
                 dashboard.name == dashboardTarget ? dashboard : undefined
         )
@@ -84,7 +91,7 @@ const DashboardFromName = ({ dashboards, initialDashboard }) => {
                 <DashboardTemplate
                     dashboardProp={retrievedDashboard}
                     isFullScreen={isFullScreen}
-                    initialDashboard={initialDashboard}
+                    initialDashboard={props.initialDashboard}
                 />
             </>
         )
@@ -156,7 +163,7 @@ const DashboardFromName = ({ dashboards, initialDashboard }) => {
             <DashboardTemplate
                 dashboardProp={retrievedDashboard}
                 isFullScreen={isFullScreen}
-                initialDashboard={initialDashboard}
+                initialDashboard={props.initialDashboard}
             />
         </Layout>
     )
@@ -180,10 +187,22 @@ const FullScreenFixedButton = styled(Button)`
     }
 `
 
-export const FullScreenButton: React.FC<{
+
+
+
+
+
+
+
+
+
+
+interface FullscreenButtonProps {
     isFullScreen: boolean
     changeIsFullScreen: (changed: boolean) => void
-}> = ({ isFullScreen, changeIsFullScreen }) => {
+}
+
+export const FullScreenButton = ({ isFullScreen, changeIsFullScreen }: FullscreenButtonProps) => {
     return (
         <FullScreenFixedButton
             variant="tertiary"
