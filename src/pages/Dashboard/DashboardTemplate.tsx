@@ -13,6 +13,7 @@ import { fetchDashboard } from "../../utils/dashboardsAPI"
 import { RouterError } from "../../types/routes"
 import StatusOverview from "../../components/StatusOverview"
 import { PortalServiceTile } from "../../components/PortalServiceTile"
+import { UserData } from "../../types/userData"
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
@@ -111,12 +112,14 @@ interface DashboardProps {
     dashboardProp: Dashboard
     isFullScreen: boolean
     initialDashboard: Dashboard
+    user: UserData
 }
 
 const DashboardTemplate = ({
     dashboardProp,
     isFullScreen,
     initialDashboard,
+    user,
 }: DashboardProps) => {
     const [expandAll, changeExpand] = useState(false)
     const [expandedTiles, setExpandedTiles] = useState([])
@@ -272,7 +275,7 @@ const DashboardTemplate = ({
     return (
         <DashboardContainer>
             <DigitalServicesContainer>
-                <StatusOverview dashboard={dashboard} />
+                <StatusOverview dashboard={dashboard} user={user} />
 
                 {dashboard.areas.length > 0 && (
                     <PortalServiceTileContainer maxWidth={maxWidth}>

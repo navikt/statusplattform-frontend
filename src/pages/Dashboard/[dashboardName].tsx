@@ -90,6 +90,7 @@ const DashboardFromName = (props: DashboardFromNameProps) => {
                     dashboardProp={retrievedDashboard}
                     isFullScreen={isFullScreen}
                     initialDashboard={props.initialDashboard}
+                    user={user}
                 />
             </>
         )
@@ -162,6 +163,7 @@ const DashboardFromName = (props: DashboardFromNameProps) => {
                 dashboardProp={retrievedDashboard}
                 isFullScreen={isFullScreen}
                 initialDashboard={props.initialDashboard}
+                user={user}
             />
         </Layout>
     )
