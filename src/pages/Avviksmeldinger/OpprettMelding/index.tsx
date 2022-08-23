@@ -1,25 +1,35 @@
-import { BodyShort, Button, Checkbox, CheckboxGroup, Heading, Radio, RadioGroup, Select, Textarea, TextField } from "@navikt/ds-react"
+import {
+    BodyShort,
+    Button,
+    Checkbox,
+    CheckboxGroup,
+    Heading,
+    Radio,
+    RadioGroup,
+    Select,
+    Textarea,
+    TextField,
+} from "@navikt/ds-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { toast } from "react-toastify"
-import styled from 'styled-components'
-import DatePicker from "react-datepicker";
+import styled from "styled-components"
+import DatePicker from "react-datepicker"
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
 
-import Layout from '../../../components/Layout'
+import Layout from "../../../components/Layout"
 import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
 import { RouterOpsMeldinger } from "../../../types/routes"
 import { postOpsMessage } from "../../../utils/opsAPI"
 
-import "react-datepicker/dist/react-datepicker.css";
+import "react-datepicker/dist/react-datepicker.css"
 import { Service } from "../../../types/types"
 import { backendPath } from "../.."
 import { EndPathServices } from "../../../utils/apiHelper"
 import { Delete } from "@navikt/ds-icons"
 import { CloseCustomized, HorizontalSeparator } from "../../Admin"
-
 
 export const getServerSideProps = async () => {
     const res = await fetch(backendPath + EndPathServices())
@@ -27,14 +37,12 @@ export const getServerSideProps = async () => {
 
     return {
         props: {
-            services
-        }
+            services,
+        },
     }
-    
 }
 
-
-const CreateOpsMessage = ({services}) => {
+const CreateOpsMessage = ({ services }) => {
     const [opsMessage, setOpsMessage] = useState<OpsMessageI>({
         internalHeader: "",
         internalMessage: "",
@@ -46,52 +54,48 @@ const CreateOpsMessage = ({services}) => {
         startTime: new Date(),
         endTime: new Date(),
         severity: SeverityEnum.ISSUE,
-        state: ""
+        state: "",
     })
     // EKSEMPEL: "2017-07-21T17:30:00Z"
-    
+
     const [isLoading, setIsLoading] = useState(true)
-    
-    
+
     const { changeTitle } = useContext(TitleContext)
     const router = useRouter()
 
     useEffect(() => {
         setIsLoading(true)
-        if(router.isReady) {
+        if (router.isReady) {
             changeTitle("Opprett avviksmelding - status.nav.no")
             setIsLoading(false)
         }
     }, [router])
 
-
-    if(isLoading) {
-        return (
-            <CustomNavSpinner />
-        )
+    if (isLoading) {
+        return <CustomNavSpinner />
     }
-    
 
     const handleSubmitOpsMessage = () => {
         // console.log(opsMessage)
-        postOpsMessage(opsMessage).then(() => {
-            toast.success("Avviksmelding opprettet er sendt inn")
-        }).catch(() => {
-            toast.error("Det oppstod en feil")
-        })
-        .finally(() => {
-            router.push(RouterOpsMeldinger.PATH)
-        })
+        postOpsMessage(opsMessage)
+            .then(() => {
+                toast.success("Avviksmelding opprettet er sendt inn")
+            })
+            .catch(() => {
+                toast.error("Det oppstod en feil")
+            })
+            .finally(() => {
+                router.push(RouterOpsMeldinger.PATH)
+            })
     }
-
 
     return (
         <Layout>
             <Head>
                 <title>Opprett avviksmelding - status.nav.no</title>
             </Head>
-            <OpsComponent 
-                handleSubmitOpsMessage= {handleSubmitOpsMessage}
+            <OpsComponent
+                handleSubmitOpsMessage={handleSubmitOpsMessage}
                 opsMessage={opsMessage}
                 setOpsMessage={(opsMessage) => setOpsMessage(opsMessage)}
                 services={services}
@@ -100,39 +104,42 @@ const CreateOpsMessage = ({services}) => {
     )
 }
 
-
-
-
-
-
-
-
-
 const OpsContainer = styled.div`
     display: flex;
     flex-direction: column;
 
     padding: 1rem;
-    border-radius: 0.5rem;
+    /* border-radius: 0.5rem; */
 
     &.neutral {
-        border: 3px solid #ccc;
+        box-shadow: inset -5px 0px 5px -5px var(--navds-global-color-blue-500);
+        -moz-box-shadow: -5px 0px 5px -5px var(--navds-global-color-blue-500);
+        -webkit-box-shadow: -5px 0px 5px -5px var(--navds-global-color-blue-500);
+        box-shadow: -5px 0px 5px -5px var(--navds-global-color-blue-500);
     }
 
     &.down {
-        border: 3px solid var(--navds-semantic-color-feedback-danger-border);
+        box-shadow: inset -5px 0px 5px -5px
+            var(--navds-semantic-color-feedback-danger-border);
+        -moz-box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-danger-border);
+        -webkit-box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-danger-border);
+        box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-danger-border);
     }
 
     &.issue {
-        border: 3px solid var(--navds-semantic-color-feedback-warning-border);
+        box-shadow: inset -5px 0px 5px -5px
+            var(--navds-semantic-color-feedback-warning-border);
+        -moz-box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-warning-border);
+        -webkit-box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-warning-border);
+        box-shadow: -5px 0px 5px -5px var(--navds-semantic-color-feedback-warning-border);
     }
-    
+
     .input-area {
         width: 200px;
-        
+
         & > * {
             margin: 1rem 0;
-        }   
+        }
     }
 
     .button-container {
@@ -147,8 +154,6 @@ const OpsContainer = styled.div`
     }
 `
 
-
-
 interface OpsProps {
     handleSubmitOpsMessage: () => void
     opsMessage: OpsMessageI
@@ -156,40 +161,45 @@ interface OpsProps {
     services: Service[]
 }
 
+const options = ["00", "15", "30", "45"]
 
-const options = [
-    "00","15","30","45"
-]
+const OpsComponent = ({
+    handleSubmitOpsMessage,
+    opsMessage,
+    setOpsMessage,
+    services,
+}: OpsProps) => {
+    const [startDateForActiveOpsMessage, setStartDateForActiveOpsMessage] =
+        useState<Date>(new Date())
 
-const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, services}: OpsProps) => {
-    const [startDateForActiveOpsMessage, setStartDateForActiveOpsMessage] = useState<Date>(new Date())
-    
-    const [endDateForActiveOpsMessage, setEndDateForActiveOpsMessage] = useState<Date>(new Date())
+    const [endDateForActiveOpsMessage, setEndDateForActiveOpsMessage] =
+        useState<Date>(new Date())
 
     const [isLoading, setIsLoading] = useState(true)
-    const [selectedSeverity, setSelectedSeverity] = useState<string>("GUL")
+    const [selectedSeverity, setSelectedSeverity] = useState<string>("ISSUE")
     const router = useRouter()
-    
-    const hours=[]
-    for(let i=0; i<24; i++) {
-        if(i < 10){
+
+    const hours = []
+    for (let i = 0; i < 24; i++) {
+        if (i < 10) {
             hours.push(`0${i}:00`)
-        }
-        else {
+        } else {
             hours.push(`${i}:00`)
         }
     }
 
     useEffect(() => {
-        setOpsMessage({...opsMessage, startTime: startDateForActiveOpsMessage, endTime: endDateForActiveOpsMessage})
-    },[startDateForActiveOpsMessage, endDateForActiveOpsMessage])
-
+        setOpsMessage({
+            ...opsMessage,
+            startTime: startDateForActiveOpsMessage,
+            endTime: endDateForActiveOpsMessage,
+        })
+    }, [startDateForActiveOpsMessage, endDateForActiveOpsMessage])
 
     useEffect(() => {
         setIsLoading(true)
         setIsLoading(false)
     }, [opsMessage])
-
 
     const {
         affectedServices,
@@ -198,56 +208,56 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
         internalHeader,
         internalMessage,
         isActive,
-        onlyShowForNavEmployees
+        onlyShowForNavEmployees,
     } = opsMessage
 
-    if(!router.isReady || isLoading) {
+    if (!router.isReady || isLoading) {
         return <CustomNavSpinner />
     }
 
-
     const handleUpdateAffectedServices = (newServices: Service[]) => {
-        setOpsMessage({...opsMessage,
-            affectedServices: newServices
-        })
+        setOpsMessage({ ...opsMessage, affectedServices: newServices })
     }
 
     const handleIsInternal = () => {
-        if(!opsMessage.onlyShowForNavEmployees) {
-            setOpsMessage({...opsMessage,
+        if (!opsMessage.onlyShowForNavEmployees) {
+            setOpsMessage({
+                ...opsMessage,
                 externalHeader: internalHeader,
-                externalMessage: internalMessage
+                externalMessage: internalMessage,
             })
         }
-        setOpsMessage({...opsMessage, onlyShowForNavEmployees: !onlyShowForNavEmployees})
+        setOpsMessage({
+            ...opsMessage,
+            onlyShowForNavEmployees: !onlyShowForNavEmployees,
+        })
     }
 
     const handleUpdateMessageToStaff = (message: string) => {
-        if(message.length < 501) {
-            setOpsMessage({...opsMessage, internalMessage: message})
+        if (message.length < 501) {
+            setOpsMessage({ ...opsMessage, internalMessage: message })
         }
     }
 
     const handleUpdateMessageToPublic = (message: string) => {
-        if(message.length < 501) {
-            setOpsMessage({...opsMessage, externalMessage: message})
+        if (message.length < 501) {
+            setOpsMessage({ ...opsMessage, externalMessage: message })
         }
     }
 
     const handleIsActive = (newValue) => {
-        if(newValue == "1") {
-            setOpsMessage({...opsMessage, isActive: true})
-        }else {
-            setOpsMessage({...opsMessage, isActive: false})
+        if (newValue == "1") {
+            setOpsMessage({ ...opsMessage, isActive: true })
+        } else {
+            setOpsMessage({ ...opsMessage, isActive: false })
         }
     }
 
     const handleUpdateSelectedSeverity = (event) => {
         const newSelectedSeverity: SeverityEnum = event.target.value
         setSelectedSeverity(newSelectedSeverity)
-        setOpsMessage({...opsMessage, severity: newSelectedSeverity})
+        setOpsMessage({ ...opsMessage, severity: newSelectedSeverity })
     }
-
 
     const handleUpdateStartDate = (event) => {
         const dateInput: Date = new Date(event)
@@ -285,7 +295,9 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
 
     return (
         <OpsContainer className={selectedSeverity.toLowerCase()}>
-            <Heading size="xlarge" level="2">Opprett avviksmeldingen</Heading>
+            <Heading size="xlarge" level="2">
+                Opprett avviksmeldingen
+            </Heading>
 
             <div className="input-area">
                 <Select
@@ -299,21 +311,29 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
                 </Select>
             </div>
 
-            <CheckboxGroup legend="Bare til interne?" onChange={() => handleIsInternal()}>
-                <Checkbox 
+            <CheckboxGroup
+                legend="Bare til interne?"
+                hideLegend
+                onChange={() => handleIsInternal()}
+            >
+                <Checkbox
                     value={onlyShowForNavEmployees ? "true" : "false"}
                     defaultChecked={onlyShowForNavEmployees}
                 >
+                    <b>- Bare til interne?</b>
                 </Checkbox>
             </CheckboxGroup>
-
-            
 
             <div className="input-area">
                 <TextField
                     label="Tittel for meldingen"
                     value={internalHeader}
-                    onChange={(e) => setOpsMessage({...opsMessage, internalHeader: e.target.value})}
+                    onChange={(e) =>
+                        setOpsMessage({
+                            ...opsMessage,
+                            internalHeader: e.target.value,
+                        })
+                    }
                     maxLength={100}
                 />
 
@@ -325,41 +345,49 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
                 />
             </div>
 
-            {!onlyShowForNavEmployees &&
+            {!onlyShowForNavEmployees && (
                 <div className="input-area">
                     <TextField
                         label="Tittel for ekstern melding"
                         value={externalHeader}
-                        onChange={(e) => setOpsMessage({...opsMessage, externalHeader: e.target.value})}
+                        onChange={(e) =>
+                            setOpsMessage({
+                                ...opsMessage,
+                                externalHeader: e.target.value,
+                            })
+                        }
                     />
                     <Textarea
                         label="Ekstern melding"
                         value={externalMessage}
-                        onChange={(e) => handleUpdateMessageToPublic(e.target.value)}
+                        onChange={(e) =>
+                            handleUpdateMessageToPublic(e.target.value)
+                        }
                         maxLength={500}
                     />
                 </div>
-            }
+            )}
 
-            <AffectedServicesComponent handleUpdateAffectedServices={handleUpdateAffectedServices} opsMessage={opsMessage} services={services} />
-
+            <AffectedServicesComponent
+                handleUpdateAffectedServices={handleUpdateAffectedServices}
+                opsMessage={opsMessage}
+                services={services}
+            />
 
             <RadioGroup
                 legend="Skal avviksmeldingen gjelde umiddelbart?"
-                onChange = {(e) => handleIsActive(e)}
+                onChange={(e) => handleIsActive(e)}
                 defaultValue={isActive ? "1" : "0"}
             >
-                <Radio value="1">
-                    Nå
-                </Radio>
-                <Radio value="0">
-                    Senere
-                </Radio>
+                <Radio value="1">Nå</Radio>
+                <Radio value="0">Senere</Radio>
             </RadioGroup>
 
-            {!isActive &&
+            {!isActive && (
                 <div className="input-area">
-                    <label htmlFor="#startDate"><b>Startdato</b></label>
+                    <label htmlFor="#startDate">
+                        <b>Startdato</b>
+                    </label>
                     <DatePicker
                         id="startDate"
                         selected={startDateForActiveOpsMessage}
@@ -367,11 +395,10 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
                     />
 
                     <div className="input-area">
-                        <BodyShort><b>Startklokkeslett</b></BodyShort>
-                        <Select
-                            label="Timer"
-                            onChange={handleUpdateStartHours}
-                        >
+                        <BodyShort>
+                            <b>Startklokkeslett</b>
+                        </BodyShort>
+                        <Select label="Timer" onChange={handleUpdateStartHours}>
                             {hours.map((hour, i) => {
                                 return <option key={i}>{hour}</option>
                             })}
@@ -380,15 +407,19 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
                             label="Minutter"
                             onChange={handleUpdateStartMinutes}
                         >
-                            {options.map((minutes, i) => 
-                                <option key={i} value={minutes}>{minutes}</option>
-                            )}
+                            {options.map((minutes, i) => (
+                                <option key={i} value={minutes}>
+                                    {minutes}
+                                </option>
+                            ))}
                         </Select>
                     </div>
 
                     <HorizontalSeparator />
 
-                    <label htmlFor="#startDate"><b>Sluttdato</b></label>
+                    <label htmlFor="#startDate">
+                        <b>Sluttdato</b>
+                    </label>
                     <DatePicker
                         id="startDate"
                         selected={startDateForActiveOpsMessage}
@@ -396,11 +427,10 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
                     />
 
                     <div className="input-area">
-                        <BodyShort><b>Sluttklokkeslett</b></BodyShort>
-                        <Select
-                            label="Timer"
-                            onChange={handleUpdateEndHours}
-                        >
+                        <BodyShort>
+                            <b>Sluttklokkeslett</b>
+                        </BodyShort>
+                        <Select label="Timer" onChange={handleUpdateEndHours}>
                             {hours.map((hour, i) => {
                                 return <option key={i}>{hour}</option>
                             })}
@@ -409,27 +439,30 @@ const OpsComponent = ({handleSubmitOpsMessage, opsMessage, setOpsMessage, servic
                             label="Minutter"
                             onChange={handleUpdateEndMinutes}
                         >
-                            {options.map((minutes, i) => 
-                                <option key={i} value={minutes}>{minutes}</option>
-                            )}
+                            {options.map((minutes, i) => (
+                                <option key={i} value={minutes}>
+                                    {minutes}
+                                </option>
+                            ))}
                         </Select>
                     </div>
                 </div>
+            )}
 
-
-                
-            }
-            
             <div className="button-container">
-                <Button variant="secondary" onClick={() => router.push(RouterOpsMeldinger.PATH)}>Avbryt</Button>
-                <Button variant="primary" onClick={handleSubmitOpsMessage}>Send inn ny avviksmelding</Button>
+                <Button
+                    variant="secondary"
+                    onClick={() => router.push(RouterOpsMeldinger.PATH)}
+                >
+                    Avbryt
+                </Button>
+                <Button variant="primary" onClick={handleSubmitOpsMessage}>
+                    Send inn ny avviksmelding
+                </Button>
             </div>
         </OpsContainer>
     )
 }
-
-
-
 
 const AffectedServicesContainer = styled.div`
     display: flex;
@@ -443,26 +476,23 @@ const AffectedServicesContainer = styled.div`
     }
 `
 
-
-
 interface ServicesComponentInterface {
     handleUpdateAffectedServices: (newOpsServiceConnections: Service[]) => void
     opsMessage: OpsMessageI
     services: Service[]
 }
 
-
 const AffectedServicesComponent = ({
-        handleUpdateAffectedServices,
-        opsMessage,
-        services
-    }: ServicesComponentInterface) => {
-
-    const [newAffectedServices, changeNewAffectedServices] = useState<Service[]>(opsMessage.affectedServices)
-        
+    handleUpdateAffectedServices,
+    opsMessage,
+    services,
+}: ServicesComponentInterface) => {
+    const [newAffectedServices, changeNewAffectedServices] = useState<
+        Service[]
+    >(opsMessage.affectedServices)
 
     const handleUpdateListOfAffectedServices = (service: Service) => {
-        if(newAffectedServices.map(s => s.id).includes(service.id)) {
+        if (newAffectedServices.map((s) => s.id).includes(service.id)) {
             toast.warn("Denne tjenesten fins allerede i området")
             return
         }
@@ -471,32 +501,32 @@ const AffectedServicesComponent = ({
         handleUpdateAffectedServices(changedAffectedServices)
     }
 
-
-
     const handleDeleteListOfAffectedServices = (service: Service) => {
-        if(!newAffectedServices.map(s => s.id).includes(service.id)) {
+        if (!newAffectedServices.map((s) => s.id).includes(service.id)) {
             toast.warn("Tjenesten fins ikke i kobling. Noe gikk galt")
             return
         }
-        
-        const changedAffectedServices = newAffectedServices.filter(s => s.id != service.id)
+
+        const changedAffectedServices = newAffectedServices.filter(
+            (s) => s.id != service.id
+        )
         changeNewAffectedServices(changedAffectedServices)
         handleUpdateAffectedServices(changedAffectedServices)
     }
 
-
     return (
         <AffectedServicesContainer>
-
             <ul>
-                {newAffectedServices.map(service => {
+                {newAffectedServices.map((service) => {
                     return (
                         <li key={service.id} value={service.name}>
                             {service.name}
-                            <button 
+                            <button
                                 type="button"
                                 aria-label="Fjern kobling til tjeneste"
-                                onClick={() => handleDeleteListOfAffectedServices(service)}
+                                onClick={() =>
+                                    handleDeleteListOfAffectedServices(service)
+                                }
                             >
                                 <CloseCustomized />
                             </button>
@@ -505,15 +535,16 @@ const AffectedServicesComponent = ({
                 })}
             </ul>
 
-            <AffectedServicesSelect services={services} affectedServicesAttachedToOpsMessage={newAffectedServices} handleUpdateListOfAffectedServices={handleUpdateListOfAffectedServices} />            
-
-            
+            <AffectedServicesSelect
+                services={services}
+                affectedServicesAttachedToOpsMessage={newAffectedServices}
+                handleUpdateListOfAffectedServices={
+                    handleUpdateListOfAffectedServices
+                }
+            />
         </AffectedServicesContainer>
     )
 }
-
-
-
 
 const AffectedServicesSelectComponent = styled.div`
     display: flex;
@@ -527,31 +558,39 @@ interface newAffectedServices {
     handleUpdateListOfAffectedServices: (selectedServiceId: Service) => void
 }
 
-const AffectedServicesSelect = ({services, affectedServicesAttachedToOpsMessage, handleUpdateListOfAffectedServices}: newAffectedServices) => {
-    const availableServices: Service[] = services.filter((service) => !affectedServicesAttachedToOpsMessage.map(s => s.id).includes(service.id))
-    const [selectedService, updateSelectedService] = useState<Service | null>(() => availableServices.length > 0 ? availableServices[0] : null)
-
+const AffectedServicesSelect = ({
+    services,
+    affectedServicesAttachedToOpsMessage,
+    handleUpdateListOfAffectedServices,
+}: newAffectedServices) => {
+    const availableServices: Service[] = services.filter(
+        (service) =>
+            !affectedServicesAttachedToOpsMessage
+                .map((s) => s.id)
+                .includes(service.id)
+    )
+    const [selectedService, updateSelectedService] = useState<Service | null>(
+        () => (availableServices.length > 0 ? availableServices[0] : null)
+    )
 
     useEffect(() => {
-        if(availableServices.length > 0){
+        if (availableServices.length > 0) {
             updateSelectedService(availableServices[0])
-        }
-        else {
+        } else {
             updateSelectedService(null)
         }
     }, [services, affectedServicesAttachedToOpsMessage])
 
-
-
     const handleNewSelectedService = (event) => {
         const idOfSelectedService: string = event.target.value
-        const newSelectedService: Service = availableServices.find(service => idOfSelectedService === service.id)
+        const newSelectedService: Service = availableServices.find(
+            (service) => idOfSelectedService === service.id
+        )
         updateSelectedService(newSelectedService)
     }
 
-
     const putHandler = () => {
-        if(!selectedService) {
+        if (!selectedService) {
             toast.info("Ingen tjeneste valgt")
             return
         }
@@ -560,29 +599,34 @@ const AffectedServicesSelect = ({services, affectedServicesAttachedToOpsMessage,
 
     return (
         <AffectedServicesSelectComponent>
-            <Select label="Koble tjenester mot meldingen" value={selectedService !== null ? selectedService.id : ""} onChange={handleNewSelectedService} >
-                {availableServices.length > 0
-                ?
-                    availableServices.map(service => {
+            <Select
+                label="Koble tjenester mot meldingen"
+                value={selectedService !== null ? selectedService.id : ""}
+                onChange={handleNewSelectedService}
+            >
+                {availableServices.length > 0 ? (
+                    availableServices.map((service) => {
                         return (
-                            <option key={service.id} value={service.id}>{service.name}</option>
+                            <option key={service.id} value={service.id}>
+                                {service.name}
+                            </option>
                         )
                     })
-                :
-                    <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
-                }
+                ) : (
+                    <option key={undefined} value={""}>
+                        Ingen tjeneste å legge til
+                    </option>
+                )}
             </Select>
 
             <div>
-                <Button variant="secondary" type="button" onClick={putHandler}> Legg til</Button>
+                <Button variant="secondary" type="button" onClick={putHandler}>
+                    {" "}
+                    Legg til
+                </Button>
             </div>
         </AffectedServicesSelectComponent>
     )
 }
-
-
-
-
-
 
 export default CreateOpsMessage
