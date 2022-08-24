@@ -269,7 +269,7 @@ const OpsMessageComponent = ({
                 )}
             </div>
 
-            {isEditting ? (
+            {!isEditting ? (
                 <DetailsOfOpsMessage
                     opsMessage={opsMessage}
                     navIdent={navIdent}
