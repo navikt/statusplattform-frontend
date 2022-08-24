@@ -28,6 +28,7 @@ import {
 } from "../../utils/opsAPI"
 import { CloseCustomized } from "../Admin"
 import PublicOpsContent from "./PublicOpsContent"
+import DateSetterOps from "../../components/DateSetterOps"
 
 const OpsMessageContainer = styled.div`
     display: flex;
@@ -202,7 +203,46 @@ const OpsMessageComponent = ({
         }
     }, [router])
 
-    const { internalHeader, externalHeader } = opsMessage
+    const { internalHeader, externalHeader, startTime, endTime } = opsMessage
+
+    const convertedStartTime = new Date(startTime)
+    const convertedEndTime = new Date(endTime)
+
+    const prettifiedStartTime = `${
+        convertedStartTime.getDate() < 10
+            ? `0${convertedStartTime.getDate()}`
+            : convertedStartTime.getDate()
+    }.${
+        convertedStartTime.getMonth() + 1 < 10
+            ? `0${convertedStartTime.getMonth() + 1}`
+            : convertedStartTime.getMonth() + 1
+    }.${convertedStartTime.getFullYear()}, ${
+        convertedStartTime.getHours() < 10
+            ? `0${convertedStartTime.getHours()}`
+            : convertedStartTime.getHours()
+    }:${
+        convertedStartTime.getMinutes() < 10
+            ? `0${convertedStartTime.getMinutes()}`
+            : convertedStartTime.getMinutes()
+    }`
+
+    const prettifiedEndTime = `${
+        convertedEndTime.getDate() < 10
+            ? `0${convertedEndTime.getDate()}`
+            : convertedEndTime.getDate()
+    }.${
+        convertedEndTime.getMonth() + 1 < 10
+            ? `0${convertedEndTime.getMonth() + 1}`
+            : convertedEndTime.getMonth() + 1
+    }.${convertedEndTime.getFullYear()}, ${
+        convertedEndTime.getHours() < 10
+            ? `0${convertedEndTime.getHours()}`
+            : convertedEndTime.getHours()
+    }:${
+        convertedEndTime.getMinutes() < 10
+            ? `0${convertedEndTime.getMinutes()}`
+            : convertedEndTime.getMinutes()
+    }`
 
     return (
         <OpsContent
@@ -229,10 +269,14 @@ const OpsMessageComponent = ({
                 )}
             </div>
 
-            {!isEditting ? (
+            {isEditting ? (
                 <DetailsOfOpsMessage
                     opsMessage={opsMessage}
                     navIdent={navIdent}
+                    convertedStartTime={convertedStartTime}
+                    convertedEndTime={convertedEndTime}
+                    prettifiedStartTime={prettifiedStartTime}
+                    prettifiedEndTime={prettifiedEndTime}
                 />
             ) : (
                 <EditOpsMessage
@@ -241,6 +285,10 @@ const OpsMessageComponent = ({
                     services={services}
                     toggleIsEditting={(newValue) => toggleIsEditting(newValue)}
                     changeUpdatedSeverity={changeUpdatedSeverity}
+                    convertedStartTime={convertedStartTime}
+                    convertedEndTime={convertedEndTime}
+                    prettifiedStartTime={prettifiedStartTime}
+                    prettifiedEndTime={prettifiedEndTime}
                 />
             )}
         </OpsContent>
@@ -264,9 +312,13 @@ const OpsDetailsContainer = styled.div`
 interface DetailsOpsMsgI {
     opsMessage: OpsMessageI
     navIdent: string
+    prettifiedStartTime: string
+    prettifiedEndTime: string
+    convertedStartTime: Date
+    convertedEndTime: Date
 }
 
-const DetailsOfOpsMessage = ({ opsMessage, navIdent }: DetailsOpsMsgI) => {
+const DetailsOfOpsMessage = (props: DetailsOpsMsgI) => {
     const {
         externalHeader,
         externalMessage,
@@ -278,45 +330,16 @@ const DetailsOfOpsMessage = ({ opsMessage, navIdent }: DetailsOpsMsgI) => {
         startTime,
         endTime,
         severity,
-    } = opsMessage
+    } = props.opsMessage
 
-    const convertedStartTime = new Date(startTime)
-    const convertedEndTime = new Date(endTime)
-
-    const prettifiedStartTime = `${
-        convertedStartTime.getDate() < 10
-            ? `0${convertedStartTime.getDate()}`
-            : convertedStartTime.getDate()
-    }.${
-        convertedStartTime.getMonth() + 1 < 10
-            ? `0${convertedStartTime.getMonth() + 1}`
-            : convertedStartTime.getMonth() + 1
-    }.${convertedStartTime.getFullYear()}, ${
-        convertedStartTime.getHours() < 10
-            ? `0${convertedStartTime.getHours()}`
-            : convertedStartTime.getHours()
-    }:${
-        convertedStartTime.getMinutes() < 10
-            ? `0 ${convertedStartTime.getMinutes()}`
-            : convertedStartTime.getMinutes()
-    }`
-    const prettifiedEndTime = `${
-        convertedEndTime.getDate() < 10
-            ? `0${convertedEndTime.getDate()}`
-            : convertedEndTime.getDate()
-    }.${
-        convertedEndTime.getMonth() + 1 < 10
-            ? `0${convertedEndTime.getMonth() + 1}`
-            : convertedEndTime.getMonth() + 1
-    }.${convertedEndTime.getFullYear()}, ${
-        convertedEndTime.getHours() < 10
-            ? `0${convertedEndTime.getHours()}`
-            : convertedEndTime.getHours()
-    }:${
-        convertedEndTime.getMinutes() < 10
-            ? `0 ${convertedEndTime.getMinutes()}`
-            : convertedEndTime.getMinutes()
-    }`
+    const {
+        opsMessage,
+        navIdent,
+        prettifiedEndTime,
+        prettifiedStartTime,
+        convertedEndTime,
+        convertedStartTime,
+    } = props
 
     return (
         <OpsDetailsContainer>
@@ -380,6 +403,18 @@ const EditOpsMessageContainer = styled.div`
         margin-bottom: 0;
     }
 
+    .timeframe-container {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .current-timeframe-wrapper {
+        display: flex;
+        flex-flow: row wrap;
+        gap: 1rem;
+    }
+
     @media (min-width: 600px) {
         .text-area-wrapper  {
             min-width: 500px;
@@ -399,25 +434,40 @@ interface EditOpsMessageI {
     services: Service[]
     toggleIsEditting: (newValue) => void
     changeUpdatedSeverity: (newValue) => void
+    prettifiedStartTime: string
+    prettifiedEndTime: string
+    convertedStartTime: Date
+    convertedEndTime: Date
 }
 
-const EditOpsMessage = ({
-    opsMessage,
-    navIdent,
-    services,
-    toggleIsEditting,
-    changeUpdatedSeverity,
-}: EditOpsMessageI) => {
+const EditOpsMessage = (props: EditOpsMessageI) => {
     const [isLoading, setIsLoading] = useState(true)
     const [updatedOpsMessage, changeUpdatedOpsMessage] = useState<OpsMessageI>({
-        ...opsMessage,
+        ...props.opsMessage,
     })
+    const [updateTimeframe, setUpdateTimeframe] = useState(false)
     const [selectedSeverity, setSelectedSeverity] = useState<string>(
-        opsMessage.severity
+        props.opsMessage.severity
     )
+    const [startDateForActiveOpsMessage, setStartDateForActiveOpsMessage] =
+        useState<Date>(props.convertedStartTime)
+
+    const [endDateForActiveOpsMessage, setEndDateForActiveOpsMessage] =
+        useState<Date>(props.convertedEndTime)
+
+    const {
+        opsMessage,
+        navIdent,
+        services,
+        toggleIsEditting,
+        changeUpdatedSeverity,
+        prettifiedEndTime,
+        prettifiedStartTime,
+        convertedEndTime,
+        convertedStartTime,
+    } = props
 
     const router = useRouter()
-    const ref = useRef(null)
 
     useEffect(() => {
         setIsLoading
@@ -430,6 +480,14 @@ const EditOpsMessage = ({
             }
         }
     }, [])
+
+    useEffect(() => {
+        changeUpdatedOpsMessage({
+            ...updatedOpsMessage,
+            startTime: startDateForActiveOpsMessage,
+            endTime: endDateForActiveOpsMessage,
+        })
+    }, [startDateForActiveOpsMessage, endDateForActiveOpsMessage])
 
     if (isLoading) {
         return <CustomNavSpinner />
@@ -511,6 +569,45 @@ const EditOpsMessage = ({
             toast.error("Noe gikk galt ved oppdatering av meldingen")
         }
     }
+
+    // Handlers for start- and endtime
+    const handleUpdateStartDate = (event) => {
+        const dateInput: Date = new Date(event)
+        setStartDateForActiveOpsMessage(dateInput)
+    }
+
+    const handleUpdateStartMinutes = (event) => {
+        const newDate: Date = new Date(startDateForActiveOpsMessage)
+        newDate.setMinutes(parseInt(event.target.value))
+        setStartDateForActiveOpsMessage(newDate)
+    }
+
+    const handleUpdateStartHours = (event) => {
+        const newDate: Date = new Date(startDateForActiveOpsMessage)
+        newDate.setHours(parseInt(event.target.value))
+        setStartDateForActiveOpsMessage(newDate)
+    }
+
+    const handleUpdateEndDate = (event) => {
+        const dateInput: Date = new Date(event)
+        console.log("Inni metoden, input er: " + dateInput)
+
+        setEndDateForActiveOpsMessage(dateInput)
+    }
+    // console.log("Ny sluttdato: " + opsMessage.endTime)
+
+    const handleUpdateEndMinutes = (event) => {
+        const newDate: Date = new Date(endDateForActiveOpsMessage)
+        newDate.setMinutes(parseInt(event.target.value))
+        setEndDateForActiveOpsMessage(newDate)
+    }
+
+    const handleUpdateEndHours = (event) => {
+        const newDate: Date = new Date(endDateForActiveOpsMessage)
+        newDate.setHours(parseInt(event.target.value))
+        setEndDateForActiveOpsMessage(newDate)
+    }
+    // -----
 
     return (
         <EditOpsMessageContainer>
@@ -607,12 +704,50 @@ const EditOpsMessage = ({
                 </Checkbox>
             </div>
 
-            {/* <div className="section">
-                <Heading size="medium" level="3">Startdato</Heading>
-                <TextField label="Dato" type="date" value={} onChange={updateOpsMessage("startDate")} />
-                <TextField label="Klokkeslett" type="time" value={} onChange={updateOpsMessage("startTime")} />
-            </div> */}
-
+            <div className="timeframe-container">
+                <div className="current-timeframe-wrapper">
+                    <div>
+                        <Heading size="medium" level="3">
+                            Foreløpig starttid
+                        </Heading>
+                        {convertedStartTime ? (
+                            <BodyShort>{prettifiedStartTime}</BodyShort>
+                        ) : (
+                            <p>Ikke satt</p>
+                        )}
+                    </div>
+                    <div>
+                        <Heading size="medium" level="3">
+                            Foreløpig sluttid
+                        </Heading>
+                        {convertedEndTime ? (
+                            <BodyShort>{prettifiedEndTime}</BodyShort>
+                        ) : (
+                            <p>Ikke satt</p>
+                        )}
+                    </div>
+                </div>
+                <Checkbox
+                    checked={updateTimeframe}
+                    onChange={() => setUpdateTimeframe(!updateTimeframe)}
+                >
+                    Ønsker du å endre datoer og klokkeslett?
+                </Checkbox>
+                {updateTimeframe && (
+                    <DateSetterOps
+                        startDateForActiveOpsMessage={
+                            startDateForActiveOpsMessage
+                        }
+                        endDateForActiveOpsMessage={endDateForActiveOpsMessage}
+                        handleUpdateStartDate={handleUpdateStartDate}
+                        handleUpdateStartHours={handleUpdateStartHours}
+                        handleUpdateStartMinutes={handleUpdateStartMinutes}
+                        handleUpdateEndDate={handleUpdateEndDate}
+                        handleUpdateEndHours={handleUpdateEndHours}
+                        handleUpdateEndMinutes={handleUpdateEndMinutes}
+                    />
+                )}
+            </div>
             <Button variant="primary" onClick={handleSubmitChangesOpsMessage}>
                 Lagre endringer
             </Button>

@@ -30,6 +30,7 @@ import { backendPath } from "../.."
 import { EndPathServices } from "../../../utils/apiHelper"
 import { Delete } from "@navikt/ds-icons"
 import { CloseCustomized, HorizontalSeparator } from "../../Admin"
+import DateSetterOps from "../../../components/DateSetterOps"
 
 export const getServerSideProps = async () => {
     const res = await fetch(backendPath + EndPathServices())
@@ -222,13 +223,13 @@ const OpsComponent = ({
         })
     }
 
-    const handleUpdateMessageToStaff = (message: string) => {
+    const handleUpdateMessageInternal = (message: string) => {
         if (message.length < 501) {
             setOpsMessage({ ...opsMessage, internalMessage: message })
         }
     }
 
-    const handleUpdateMessageToPublic = (message: string) => {
+    const handleUpdateMessageExternal = (message: string) => {
         if (message.length < 501) {
             setOpsMessage({ ...opsMessage, externalMessage: message })
         }
@@ -329,7 +330,9 @@ const OpsComponent = ({
                 <Textarea
                     label="Intern melding"
                     value={internalMessage}
-                    onChange={(e) => handleUpdateMessageToStaff(e.target.value)}
+                    onChange={(e) =>
+                        handleUpdateMessageInternal(e.target.value)
+                    }
                     maxLength={500}
                 />
             </div>
@@ -350,7 +353,7 @@ const OpsComponent = ({
                         label="Ekstern melding"
                         value={externalMessage}
                         onChange={(e) =>
-                            handleUpdateMessageToPublic(e.target.value)
+                            handleUpdateMessageExternal(e.target.value)
                         }
                         maxLength={500}
                     />
@@ -373,69 +376,79 @@ const OpsComponent = ({
             </RadioGroup>
 
             {!isActive && (
-                <div className="input-area">
-                    <label htmlFor="#startDate">
-                        <b>Startdato</b>
-                    </label>
-                    <DatePicker
-                        id="startDate"
-                        selected={startDateForActiveOpsMessage}
-                        onChange={handleUpdateStartDate}
-                    />
+                <DateSetterOps
+                    startDateForActiveOpsMessage={startDateForActiveOpsMessage}
+                    endDateForActiveOpsMessage={endDateForActiveOpsMessage}
+                    handleUpdateStartDate={handleUpdateStartDate}
+                    handleUpdateStartHours={handleUpdateStartHours}
+                    handleUpdateStartMinutes={handleUpdateStartMinutes}
+                    handleUpdateEndDate={handleUpdateEndDate}
+                    handleUpdateEndHours={handleUpdateEndHours}
+                    handleUpdateEndMinutes={handleUpdateEndMinutes}
+                />
+                // <div className="input-area">
+                //     <label htmlFor="#startDate">
+                //         <b>Startdato</b>
+                //     </label>
+                //     <DatePicker
+                //         id="startDate"
+                //         selected={startDateForActiveOpsMessage}
+                //         onChange={handleUpdateStartDate}
+                //     />
 
-                    <div className="input-area">
-                        <BodyShort>
-                            <b>Startklokkeslett</b>
-                        </BodyShort>
-                        <Select label="Timer" onChange={handleUpdateStartHours}>
-                            {hours.map((hour, i) => {
-                                return <option key={i}>{hour}</option>
-                            })}
-                        </Select>
-                        <Select
-                            label="Minutter"
-                            onChange={handleUpdateStartMinutes}
-                        >
-                            {options.map((minutes, i) => (
-                                <option key={i} value={minutes}>
-                                    {minutes}
-                                </option>
-                            ))}
-                        </Select>
-                    </div>
+                //     <div className="input-area">
+                //         <BodyShort>
+                //             <b>Startklokkeslett</b>
+                //         </BodyShort>
+                //         <Select label="Timer" onChange={handleUpdateStartHours}>
+                //             {hours.map((hour, i) => {
+                //                 return <option key={i}>{hour}</option>
+                //             })}
+                //         </Select>
+                //         <Select
+                //             label="Minutter"
+                //             onChange={handleUpdateStartMinutes}
+                //         >
+                //             {options.map((minutes, i) => (
+                //                 <option key={i} value={minutes}>
+                //                     {minutes}
+                //                 </option>
+                //             ))}
+                //         </Select>
+                //     </div>
 
-                    <HorizontalSeparator />
+                //     <HorizontalSeparator />
 
-                    <label htmlFor="#startDate">
-                        <b>Sluttdato</b>
-                    </label>
-                    <DatePicker
-                        id="startDate"
-                        selected={startDateForActiveOpsMessage}
-                        onChange={handleUpdateEndDate}
-                    />
+                //     <label htmlFor="#endDate">
+                //         <b>Sluttdato</b>
+                //     </label>
+                //     <DatePicker
+                //         id="endDate"
+                //         selected={endDateForActiveOpsMessage}
+                //         onChange={handleUpdateEndDate}
+                //     />
 
-                    <div className="input-area">
-                        <BodyShort>
-                            <b>Sluttklokkeslett</b>
-                        </BodyShort>
-                        <Select label="Timer" onChange={handleUpdateEndHours}>
-                            {hours.map((hour, i) => {
-                                return <option key={i}>{hour}</option>
-                            })}
-                        </Select>
-                        <Select
-                            label="Minutter"
-                            onChange={handleUpdateEndMinutes}
-                        >
-                            {options.map((minutes, i) => (
-                                <option key={i} value={minutes}>
-                                    {minutes}
-                                </option>
-                            ))}
-                        </Select>
-                    </div>
-                </div>
+                //     <div className="input-area">
+                //         <BodyShort>
+                //             <b>Sluttklokkeslett</b>
+                //         </BodyShort>
+                //         <Select label="Timer" onChange={handleUpdateEndHours}>
+                //             {hours.map((hour, i) => {
+                //                 return <option key={i}>{hour}</option>
+                //             })}
+                //         </Select>
+                //         <Select
+                //             label="Minutter"
+                //             onChange={handleUpdateEndMinutes}
+                //         >
+                //             {options.map((minutes, i) => (
+                //                 <option key={i} value={minutes}>
+                //                     {minutes}
+                //                 </option>
+                //             ))}
+                //         </Select>
+                //     </div>
+                // </div>
             )}
 
             <div className="button-container">
