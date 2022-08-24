@@ -5,11 +5,12 @@ import {
     Checkbox,
     Heading,
     Select,
+    Textarea,
     TextField,
 } from "@navikt/ds-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
 import styled from "styled-components"
 import { backendPath } from ".."
@@ -30,10 +31,7 @@ import PublicOpsContent from "./PublicOpsContent"
 
 const OpsMessageContainer = styled.div`
     display: flex;
-`
-
-const BackButtonWrapper = styled.div`
-    align-self: flex-start;
+    width: 100%;
 `
 
 export const getServerSideProps = async (context) => {
@@ -94,7 +92,7 @@ const opsMessageDetails = ({ opsMessage, retrievedServices }) => {
 }
 
 const OpsContent = styled.div`
-    padding: 2rem 4rem;
+    padding: 1rem 2rem;
     border-radius: 0.5rem;
 
     display: flex;
@@ -102,23 +100,25 @@ const OpsContent = styled.div`
 
     gap: 1rem;
 
+    border-left: 7.5px solid transparent;
+
     &.not-editting {
         box-shadow: 0 0 10px rgb(0 0 0 / 20%);
     }
 
     &.neutral {
-        border: 3px solid #ccc;
+        border-color: var(--navds-global-color-blue-500);
     }
 
     &.down {
-        border: 3px solid var(--navds-semantic-color-feedback-danger-border);
+        border-color: var(--navds-semantic-color-feedback-danger-border);
     }
 
     &.issue {
-        border: 3px solid var(--navds-semantic-color-feedback-warning-border);
+        border-color: var(--navds-semantic-color-feedback-warning-border);
     }
 
-    width: 80%;
+    width: 60%;
     align-items: center;
     margin: 0 auto;
 
@@ -127,6 +127,10 @@ const OpsContent = styled.div`
         align-items: center;
         justify-content: space-between;
         gap: 1rem;
+    }
+
+    @media (min-width: 1050px) {
+        padding: 2rem 4rem;
     }
 `
 
@@ -367,12 +371,25 @@ const EditOpsMessageContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    width: 100%;
 
     .section {
         margin: 1rem 0;
     }
     .section:last-child {
         margin-bottom: 0;
+    }
+
+    @media (min-width: 600px) {
+        .text-area-wrapper  {
+            min-width: 500px;
+        }
+    }
+
+    @media (min-width: 1000px) {
+        .text-area-wrapper  {
+            min-width: 750px;
+        }
     }
 `
 
@@ -400,6 +417,7 @@ const EditOpsMessage = ({
     )
 
     const router = useRouter()
+    const ref = useRef(null)
 
     useEffect(() => {
         setIsLoading
@@ -443,6 +461,17 @@ const EditOpsMessage = ({
             changeUpdatedOpsMessage(newOpsMessage)
         }
 
+    const handleUpdateOpsTextArea = (field, evt) => {
+        const newOpsMsg: OpsMessageI = {
+            ...updatedOpsMessage,
+            [field]:
+                evt.target.getAttribute("type") === "number"
+                    ? parseInt(evt.target.value)
+                    : evt.target.value,
+        }
+        changeUpdatedOpsMessage(newOpsMsg)
+    }
+
     const handleUpdateOpsMessageAffectedServices = (newOps: OpsMessageI) => {
         changeUpdatedOpsMessage(newOps)
     }
@@ -458,6 +487,20 @@ const EditOpsMessage = ({
     }
 
     const handleSubmitChangesOpsMessage = async () => {
+        if (updatedOpsMessage.internalMessage.length > 500) {
+            toast.error(
+                "Intern melding er for lang. Den kan ikke være mer enn 500 tegn"
+            )
+            document.getElementById("internal-message-wrapper").focus()
+            return
+        }
+        if (updatedOpsMessage.externalMessage.length > 500) {
+            toast.error(
+                "Ekstern melding er for lang. Den kan ikke være mer enn 500 tegn"
+            )
+            document.getElementById("external-message-wrapper").focus()
+            return
+        }
         try {
             await updateSpecificOpsMessage(updatedOpsMessage).then(() => {
                 toast.success("Endringer lagret")
@@ -480,10 +523,16 @@ const EditOpsMessage = ({
                     value={internalHeader}
                     onChange={updateOpsMessage("internalHeader")}
                 />
-                <TextField
+                <Textarea
+                    id="internal-message-wrapper"
+                    className="text-area-wrapper"
                     label="Intern beskjed"
                     value={internalMessage}
-                    onChange={updateOpsMessage("internalMessage")}
+                    size="medium"
+                    maxLength={500}
+                    onChange={(evt) =>
+                        handleUpdateOpsTextArea("internalMessage", evt)
+                    }
                 />
             </div>
 
@@ -496,10 +545,16 @@ const EditOpsMessage = ({
                     value={externalHeader}
                     onChange={updateOpsMessage("externalHeader")}
                 />
-                <TextField
+                <Textarea
+                    id="external-message-wrapper"
+                    className="text-area-wrapper"
                     label="Ekstern beskjed"
                     value={externalMessage}
-                    onChange={updateOpsMessage("externalMessage")}
+                    size="medium"
+                    maxLength={500}
+                    onChange={(evt) =>
+                        handleUpdateOpsTextArea("externalMessage", evt)
+                    }
                 />
             </div>
 
