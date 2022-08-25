@@ -83,15 +83,16 @@ const CustomizedModal = styled(Modal)`
 interface OpsMessageCardI {
     opsMessage: OpsMessageI
     notifyChangedOpsMessage: (changedOps) => void
+    notifyDeletedOpsMessage: () => void
 }
 
-const OpsMessageCard = ({
-    opsMessage,
-    notifyChangedOpsMessage,
-}: OpsMessageCardI) => {
+const OpsMessageCard = (props: OpsMessageCardI) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isActiveModalOpen, setIsActiveModalOpen] = useState(false)
     const router = useRouter()
+
+    const { opsMessage, notifyChangedOpsMessage, notifyDeletedOpsMessage } =
+        props
 
     const handleModal = () => {
         setIsModalOpen(!isModalOpen)
@@ -106,6 +107,7 @@ const OpsMessageCard = ({
             try {
                 await deleteOpsMessage(opsMessage.id)
                 toast.success("Meldingen er slettet")
+                notifyDeletedOpsMessage()
             } catch (error) {
                 console.log(error)
                 toast.error("Noe gikk galt")
