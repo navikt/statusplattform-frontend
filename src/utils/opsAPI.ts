@@ -9,8 +9,8 @@ export class ResponseError extends Error {
 }
 
 export const postOpsMessage = async (opsMessage: OpsMessageI): Promise<Object> => {
-    let response;
-    let endPath = EndPathOps();
+    let response
+    let endPath = EndPathOps()
 
     let body = JSON.stringify({
         internalHeader: opsMessage.internalHeader,
@@ -18,6 +18,7 @@ export const postOpsMessage = async (opsMessage: OpsMessageI): Promise<Object> =
         externalHeader: opsMessage.externalHeader,
         externalMessage: opsMessage.externalMessage,
         onlyShowForNavEmployees: opsMessage.onlyShowForNavEmployees,
+        severity: opsMessage.severity,
         isActive: opsMessage.isActive,
         affectedServices: opsMessage.affectedServices,
         startTime: opsMessage.startTime,
