@@ -108,7 +108,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
             <StatusSummary>
                 <div className="top-row">
                     <div className="deviation-button-wrapper">
-                        <Button
+                        {/* <Button
                             variant="tertiary"
                             size="small"
                             onClick={() =>
@@ -116,7 +116,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                             }
                         >
                             Se avvikshistorikk <Clock />{" "}
-                        </Button>
+                        </Button> */}
                     </div>
                     <div></div>
                     <div className="planlagte-vedlikehold">
@@ -147,7 +147,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
             <StatusSummary>
                 <div className="top-row">
                     <div className="deviation-button-wrapper">
-                        <Button
+                        {/* <Button
                             variant="tertiary"
                             size="small"
                             onClick={() =>
@@ -155,7 +155,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                             }
                         >
                             Se avvikshistorikk <Clock />{" "}
-                        </Button>
+                        </Button> */}
                     </div>
                     <div>
                         {`Avvik på ${
