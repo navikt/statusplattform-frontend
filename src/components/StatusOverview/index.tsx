@@ -157,6 +157,11 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                             Se avvikshistorikk <Clock />{" "}
                         </Button>
                     </div>
+                    <div>
+                        {`Avvik på ${
+                            countIssueServices() + countDownServices()
+                        } av ${countServicesInAreas()} tjenester`}
+                    </div>
 
                     <div className="planlagte-vedlikehold">
                         {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
