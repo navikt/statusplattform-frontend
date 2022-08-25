@@ -80,12 +80,12 @@ const DashboardFromName = (props: DashboardFromNameProps) => {
     if (isFullScreen) {
         return (
             <>
-                <FullScreenButton
+                {/* <FullScreenButton
                     isFullScreen={isFullScreen}
                     changeIsFullScreen={(changed: boolean) =>
                         changeIsFullScreen(changed)
                     }
-                />
+                /> */}
                 <DashboardTemplate
                     dashboardProp={retrievedDashboard}
                     isFullScreen={isFullScreen}
@@ -153,12 +153,12 @@ const DashboardFromName = (props: DashboardFromNameProps) => {
                     content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"
                 />
             </Head>
-            <FullScreenButton
+            {/* <FullScreenButton
                 isFullScreen={isFullScreen}
                 changeIsFullScreen={(changed: boolean) =>
                     changeIsFullScreen(changed)
                 }
-            />
+            /> */}
             <DashboardTemplate
                 dashboardProp={retrievedDashboard}
                 isFullScreen={isFullScreen}
