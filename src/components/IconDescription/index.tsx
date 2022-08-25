@@ -23,7 +23,7 @@ const IconDescription = () => {
     return (
         <IconDescriptionContainer>
             <span>
-                <SuccessFilledCustomized /> - Tjeneste fungerer som normalt
+                <SuccessFilledCustomized /> - Tjeneste fungerer normalt
             </span>
             <span>
                 <WarningFilledCustomized className="" /> - Redusert
