@@ -14,6 +14,7 @@ import { RouterError } from "../../types/routes"
 import StatusOverview from "../../components/StatusOverview"
 import { PortalServiceTile } from "../../components/PortalServiceTile"
 import { UserData } from "../../types/userData"
+import IconDescription from "../../components/IconDescription"
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
@@ -291,8 +292,8 @@ const DashboardTemplate = ({
                     </PortalServiceTileContainer>
                 )}
             </DigitalServicesContainer>
-            {/* <MaintenanceScheduling />
-            <IconDescription /> */}
+            {/* <MaintenanceScheduling /> */}
+            <IconDescription />
         </DashboardContainer>
     )
 }
