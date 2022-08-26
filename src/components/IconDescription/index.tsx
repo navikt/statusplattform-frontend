@@ -7,7 +7,7 @@ import {
 
 const IconDescriptionContainer = styled.div`
     display: flex;
-    flex-direction: row;
+    flex-flow: row wrap;
 
     span {
         padding: 1rem;
