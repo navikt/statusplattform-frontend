@@ -1,28 +1,40 @@
-import Link from 'next/link'
-import styled from 'styled-components'
-import { SetStateAction, useContext, useEffect, useRef, useState } from 'react';
-import { useRouter } from 'next/router';
+import Link from "next/link"
+import styled from "styled-components"
+import { SetStateAction, useContext, useEffect, useRef, useState } from "react"
+import { useRouter } from "next/router"
 
+import {
+    BodyShort,
+    Detail,
+    Heading,
+    Panel,
+    Popover,
+    Tabs,
+} from "@navikt/ds-react"
+import CustomNavSpinner from "../../components/CustomNavSpinner"
 
-import { BodyShort, Detail, Heading, Panel, Popover, Tabs } from '@navikt/ds-react';
-import { Innholdstittel } from 'nav-frontend-typografi';
-import CustomNavSpinner from '../../components/CustomNavSpinner';
-
-import { Area, Component, HistoryOfSpecificService, HistoryOfSpecificServiceDayEntry, HistoryOfSpecificServiceMonths, Record, Service } from '../../types/types';
-import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
-import { RouterTjenestedata } from '../../types/routes';
-import { useLoader } from '../../utils/useLoader';
-import { fetchAreasContainingService } from '../../utils/areasAPI';
-import { handleAndSetStatusIcon } from '../../components/PortalServiceTile';
-import { fetchServiceHistory } from '../../utils/servicesAPI';
-
+import {
+    Area,
+    Component,
+    HistoryOfSpecificService,
+    HistoryOfSpecificServiceDayEntry,
+    HistoryOfSpecificServiceMonths,
+    Record,
+    Service,
+} from "../../types/types"
+import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
+import { RouterTjenestedata } from "../../types/routes"
+import { useLoader } from "../../utils/useLoader"
+import { fetchAreasContainingService } from "../../utils/areasAPI"
+import { handleAndSetStatusIcon } from "../../components/PortalServiceTile"
+import { fetchServiceHistory } from "../../utils/servicesAPI"
 
 const ErrorParagraph = styled.p`
     color: #ff4a4a;
     font-weight: bold;
     padding: 10px;
     border-radius: 5px;
-`;
+`
 
 const CategoryContainer = styled.div`
     width: 100%;
@@ -33,18 +45,20 @@ const CategoryContainer = styled.div`
 
     .title-container {
         svg {
-            margin-right: .6rem;
+            margin-right: 0.6rem;
         }
         margin-bottom: 2rem;
     }
 
-    .info-hover-text, .arrow {
+    .info-hover-text,
+    .arrow {
         visibility: hidden;
     }
 
     .no-status-wrapper {
         :hover {
-            .info-hover-text, .arrow {
+            .info-hover-text,
+            .arrow {
                 visibility: visible;
             }
         }
@@ -53,20 +67,20 @@ const CategoryContainer = styled.div`
     .no-status-wrapper {
         position: relative;
         display: inline-block;
-        
+
         .info-hover-text {
             position: absolute;
             background: white;
-            
+
             z-index: 100;
             border-radius: 4px;
 
-            top: -.7rem;
-            padding: .7rem;
+            top: -0.7rem;
+            padding: 0.7rem;
 
             width: 200px;
         }
-        
+
         .arrow {
             position: absolute;
             top: 25%;
@@ -95,27 +109,26 @@ const CategoryContainer = styled.div`
             padding: 2rem;
             border: none;
             background: none;
-            
-            -moz-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
-            -webkit-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
-            box-shadow: 0 0 10px rgba(0,0,0, 0.2);
+
+            -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
-        @media(min-width: 825px) {
+        @media (min-width: 825px) {
             flex-direction: row;
         }
     }
-    
+
     @media (min-width: 650px) {
         padding: 0rem 2rem;
     }
 `
 
-
 const ServiceContainer = styled.div`
     min-width: 100px;
     min-height: 75px;
-    
+
     border-radius: 10px;
 
     display: flex;
@@ -127,54 +140,55 @@ const ServiceWrapper = styled.div`
     width: 100%;
 `
 
-
-
 interface TjenesteDataContentI {
     service?: Service
     component?: Component
     areasContainingThisService?: Area[]
 }
 
-const TjenestedataContent= ({service, component, areasContainingThisService}: TjenesteDataContentI) => {
- 
+const TjenestedataContent = ({
+    service,
+    component,
+    areasContainingThisService,
+}: TjenesteDataContentI) => {
     service.areasContainingThisService = areasContainingThisService
 
     const router = useRouter()
 
     if (!service && !component) {
-        return <ErrorParagraph>Kunne ikke hente tjenesten. Hvis problemet vedvarer, kontakt support.</ErrorParagraph>
+        return (
+            <ErrorParagraph>
+                Kunne ikke hente tjenesten. Hvis problemet vedvarer, kontakt
+                support.
+            </ErrorParagraph>
+        )
     }
 
-
-    if(service && !component) {
-        return <ServiceData service={service} areasContainingThisService={areasContainingThisService} />
+    if (service && !component) {
+        return (
+            <ServiceData
+                service={service}
+                areasContainingThisService={areasContainingThisService}
+            />
+        )
     }
 
     return <ComponentData component={component} />
 }
 
-
-
-
-
-
-
-
-
-
-
-const ComponentData = ({component}: TjenesteDataContentI) => {
-
+const ComponentData = ({ component }: TjenesteDataContentI) => {
     return (
         <CategoryContainer>
             <div className="title-container">
-                <Innholdstittel>{handleAndSetStatusIcon(component.record.status, true)}{component.name}</Innholdstittel>
+                <Heading level="1" size="large">
+                    {handleAndSetStatusIcon(component.record.status, true)}
+                    {component.name}
+                </Heading>
             </div>
 
             {/* <div>
                 <Button variant="secondary" onClick={() => router.push(RouterOpprettVarsling.PATH)}><Bell/> Bli varslet ved avvik</Button> 
             </div> */}
-
 
             <div className="top-row">
                 <Panel>
@@ -185,32 +199,30 @@ const ComponentData = ({component}: TjenesteDataContentI) => {
                     </ServiceContainer>
                 </Panel>
 
-                {component.record &&
-                    <StatusRecord record={component.record} />
-                }
-                
+                {component.record && <StatusRecord record={component.record} />}
             </div>
-            
-            {/* <IncidentHistoryComponent component={component} /> */}
 
+            {/* <IncidentHistoryComponent component={component} /> */}
         </CategoryContainer>
     )
 }
 
-
-
-const ServiceData = ({service, areasContainingThisService}: TjenesteDataContentI) => {
-
+const ServiceData = ({
+    service,
+    areasContainingThisService,
+}: TjenesteDataContentI) => {
     return (
         <CategoryContainer>
             <div className="title-container">
-                <Innholdstittel>{handleAndSetStatusIcon(service.record.status, true)}{service.name}</Innholdstittel>
+                <Heading level="1" size="large">
+                    {handleAndSetStatusIcon(service.record.status, true)}
+                    {service.name}
+                </Heading>
             </div>
 
             {/* <div>
                 <Button variant="secondary" onClick={() => router.push(RouterOpprettVarsling.PATH)}><Bell/> Bli varslet ved avvik</Button> 
             </div> */}
-
 
             <div className="top-row">
                 <Panel>
@@ -221,35 +233,25 @@ const ServiceData = ({service, areasContainingThisService}: TjenesteDataContentI
                     </ServiceContainer>
                 </Panel>
 
-                {service.record &&
-                    <StatusRecord record={service.record} />
-                }
-                
+                {service.record && <StatusRecord record={service.record} />}
             </div>
-            
-            {/* <IncidentHistoryComponent service={service} /> */}
 
+            {/* <IncidentHistoryComponent service={service} /> */}
         </CategoryContainer>
     )
 }
 
-
-
-
-
 /*------------------------------------------ Helpers for Root: below ------------------------------------------*/
 
-
-
-
 const TjenesteDataContainer = styled.div`
-    &, .classified {
+    &,
+    .classified {
         display: flex;
         flex-direction: column;
     }
 
     .row {
-        padding: .5rem 0;
+        padding: 0.5rem 0;
 
         ul {
             list-style: none;
@@ -263,75 +265,97 @@ const TjenesteDataContainer = styled.div`
     }
 `
 
-
-
-
-
 interface TjenesteDataI {
     service?: Service
     component?: Component
 }
 
-const TjenesteData = ({service, component}: TjenesteDataI) => {
+const TjenesteData = ({ service, component }: TjenesteDataI) => {
     const { navIdent } = useContext(UserStateContext)
 
-    const regex = new RegExp(/[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi)
+    const regex = new RegExp(
+        /[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()@:%_\+.~#?&//=]*)?/gi
+    )
 
-
-    const { type, serviceDependencies, componentDependencies, id, monitorlink, team, areasContainingThisService } = service
+    const {
+        type,
+        serviceDependencies,
+        componentDependencies,
+        id,
+        monitorlink,
+        team,
+        areasContainingThisService,
+    } = service
 
     return (
         <>
-        {navIdent &&
-            <TjenesteDataContainer>
-                <div className="row">
-                    <BodyShort spacing><b>Team</b></BodyShort>
-                    <BodyShort>{team}</BodyShort>
-                </div>
-
-                {serviceDependencies.length > 0 &&
+            {navIdent && (
+                <TjenesteDataContainer>
                     <div className="row">
-                        <BodyShort spacing><b>Avhengigheter til tjenester</b></BodyShort>
-                        <ServicesAndComponentsList serviceDependencies={serviceDependencies} />
+                        <BodyShort spacing>
+                            <b>Team</b>
+                        </BodyShort>
+                        <BodyShort>{team}</BodyShort>
                     </div>
-                }
 
-                {componentDependencies.length > 0 && 
-                    <div className="row">
-                        <BodyShort spacing><b>Avhengigheter til komponenter</b></BodyShort>
-                        <ServicesAndComponentsList componentDependencies={componentDependencies} />
-                    </div>
-                }
+                    {serviceDependencies.length > 0 && (
+                        <div className="row">
+                            <BodyShort spacing>
+                                <b>Avhengigheter til tjenester</b>
+                            </BodyShort>
+                            <ServicesAndComponentsList
+                                serviceDependencies={serviceDependencies}
+                            />
+                        </div>
+                    )}
 
-                {areasContainingThisService.length > 0 &&
-                    <div className="row">
-                        <BodyShort spacing><b>Områder som inneholder tjenesten</b></BodyShort>
-                        <ul>
-                            {areasContainingThisService.map((area, index) => {
-                                return (
-                                    <li key={area.id}>{area.name}</li>
-                                )
-                            })}
-                        </ul>
-                    </div>
-                }
+                    {componentDependencies.length > 0 && (
+                        <div className="row">
+                            <BodyShort spacing>
+                                <b>Avhengigheter til komponenter</b>
+                            </BodyShort>
+                            <ServicesAndComponentsList
+                                componentDependencies={componentDependencies}
+                            />
+                        </div>
+                    )}
 
-                
-                {monitorlink &&
-                    <div className="row">
-                        <BodyShort spacing><b>Monitorlenke</b></BodyShort>
-                        <BodyShort>{regex.test(monitorlink) ? <a href={monitorlink}>{monitorlink}</a> : "Ikke definert"}</BodyShort>
-                    </div>
-                }
+                    {areasContainingThisService.length > 0 && (
+                        <div className="row">
+                            <BodyShort spacing>
+                                <b>Områder som inneholder tjenesten</b>
+                            </BodyShort>
+                            <ul>
+                                {areasContainingThisService.map(
+                                    (area, index) => {
+                                        return (
+                                            <li key={area.id}>{area.name}</li>
+                                        )
+                                    }
+                                )}
+                            </ul>
+                        </div>
+                    )}
 
-            </TjenesteDataContainer>
-        }
+                    {monitorlink && (
+                        <div className="row">
+                            <BodyShort spacing>
+                                <b>Monitorlenke</b>
+                            </BodyShort>
+                            <BodyShort>
+                                {regex.test(monitorlink) ? (
+                                    <a href={monitorlink}>{monitorlink}</a>
+                                ) : (
+                                    "Ikke definert"
+                                )}
+                            </BodyShort>
+                        </div>
+                    )}
+                </TjenesteDataContainer>
+            )}
         </>
     )
 }
-
-
-
 
 const RecordWrapper = styled(Panel)`
     display: flex;
@@ -343,57 +367,50 @@ interface StatusRecordI {
     record: Record
 }
 
-const StatusRecord = ({record}: StatusRecordI) => {
-
+const StatusRecord = ({ record }: StatusRecordI) => {
     const prettifyRecordTimestamp = (recordDate: string): string => {
         const date = new Date(recordDate)
-        const dateFromRecord = (
-            (date.getDate() <= 9 ? `0${date.getDate()}` : date.getDate())+ "." + 
-            (date.getMonth()+1 <= 9 ? `0${date.getMonth()+1}` : date.getMonth()+1) + "." + 
-            date.getFullYear() + " " + 
-            (date.getHours() <= 9 ? `0${date.getHours()}` : date.getHours()) + ":" + 
-            (date.getMinutes() <= 9 ? `0${date.getMinutes()}` : date.getMinutes()) + ":" +
-            (date.getSeconds() <= 9 ? `0${date.getSeconds()}` : date.getSeconds()))
+        const dateFromRecord =
+            (date.getDate() <= 9 ? `0${date.getDate()}` : date.getDate()) +
+            "." +
+            (date.getMonth() + 1 <= 9
+                ? `0${date.getMonth() + 1}`
+                : date.getMonth() + 1) +
+            "." +
+            date.getFullYear() +
+            " " +
+            (date.getHours() <= 9 ? `0${date.getHours()}` : date.getHours()) +
+            ":" +
+            (date.getMinutes() <= 9
+                ? `0${date.getMinutes()}`
+                : date.getMinutes()) +
+            ":" +
+            (date.getSeconds() <= 9
+                ? `0${date.getSeconds()}`
+                : date.getSeconds())
         return dateFromRecord
     }
 
     const prettifiedTimestamp = prettifyRecordTimestamp(record.timestamp)
 
-    if(!record) {
+    if (!record) {
         return null
     }
 
     return (
         <RecordWrapper>
             <b>Statusinfo:</b>
-            <div>
-                Status: {record.status}
-            </div>
-            {record.timestamp &&
-                <div>
-                    Sist oppdatert: {prettifiedTimestamp}
-                </div>
-            }
-            {record.description &&
-                <div>
-                    Beskrivelse: {record.description}
-                </div>
-            }
-            {record.logLink &&
-                <div>
-                    Logglenke: {record.logLink}
-                </div>
-            }
+            <div>Status: {record.status}</div>
+            {record.timestamp && (
+                <div>Sist oppdatert: {prettifiedTimestamp}</div>
+            )}
+            {record.description && <div>Beskrivelse: {record.description}</div>}
+            {record.logLink && <div>Logglenke: {record.logLink}</div>}
         </RecordWrapper>
     )
 }
 
-
-
-
 /*------------------------------------------  ------------------------------------------*/
-
-
 
 const PublicDataContainer = styled.div`
     display: flex;
@@ -406,13 +423,13 @@ interface IncidentHistoryI {
     component?: Component
 }
 
-const IncidentHistoryComponent = ({service, component}: IncidentHistoryI) => {
+const IncidentHistoryComponent = ({ service, component }: IncidentHistoryI) => {
     const [isLast90Days, setIsLast90Days] = useState<boolean>(true)
     // TODO: Henting av tjenestehistorikkdata som driftsmeldinger og diverse
     // const { data, isLoading, reload } = useLoader(() => fetchServiceHistory(service.id), [])
     const [history, setHistory] = useState<HistoryOfSpecificService>()
     const [isLoading, setIsLoading] = useState(true)
-    
+
     const router = useRouter()
 
     useEffect(() => {
@@ -422,25 +439,23 @@ const IncidentHistoryComponent = ({service, component}: IncidentHistoryI) => {
         const fetchHistory = async () => {
             try {
                 let res
-                if(service && !component) {
+                if (service && !component) {
                     res = await fetchServiceHistory(service.id)
                 } else {
                     res = await fetchServiceHistory(component.id)
                 }
-                if(fetching) {
+                if (fetching) {
                     setHistory(res)
                     setIsLoading(false)
                     fetching = false
                 }
-                
             } catch (error) {
                 console.log(error)
             } finally {
-                if(fetching) {
+                if (fetching) {
                     setIsLoading(false)
                 }
             }
-            
         }
 
         fetchHistory()
@@ -448,27 +463,35 @@ const IncidentHistoryComponent = ({service, component}: IncidentHistoryI) => {
         return () => {
             fetching = false
         }
-    },[])
-
+    }, [])
 
     useEffect(() => {
-        router.query.history == ("90dager" || undefined) ? setIsLast90Days(true) : setIsLast90Days(false)
-    },[router])
+        router.query.history == ("90dager" || undefined)
+            ? setIsLast90Days(true)
+            : setIsLast90Days(false)
+    }, [router])
 
-    if(isLoading){
+    if (isLoading) {
         return <CustomNavSpinner />
     }
 
-    if(service && !component) {
+    if (service && !component) {
         return (
             <PublicDataContainer>
                 <span>
-                    <Heading size="medium" level="2" spacing>Historikk</Heading>
+                    <Heading size="medium" level="2" spacing>
+                        Historikk
+                    </Heading>
                 </span>
 
-                <TabHistory setIsLast90Days={setIsLast90Days} isLast90Days={isLast90Days} />
-                <HistoryOfServiceOrComponent isLast90Days={isLast90Days} history={history.history} />
-
+                <TabHistory
+                    setIsLast90Days={setIsLast90Days}
+                    isLast90Days={isLast90Days}
+                />
+                <HistoryOfServiceOrComponent
+                    isLast90Days={isLast90Days}
+                    history={history.history}
+                />
             </PublicDataContainer>
         )
     }
@@ -476,21 +499,22 @@ const IncidentHistoryComponent = ({service, component}: IncidentHistoryI) => {
     return (
         <PublicDataContainer>
             <span>
-                <Heading size="medium" level="2" spacing>Historikk</Heading>
+                <Heading size="medium" level="2" spacing>
+                    Historikk
+                </Heading>
             </span>
 
-            <TabHistory setIsLast90Days={setIsLast90Days} isLast90Days={isLast90Days} />
-            <HistoryOfServiceOrComponent isLast90Days={isLast90Days} history={history.history} />
-
+            <TabHistory
+                setIsLast90Days={setIsLast90Days}
+                isLast90Days={isLast90Days}
+            />
+            <HistoryOfServiceOrComponent
+                isLast90Days={isLast90Days}
+                history={history.history}
+            />
         </PublicDataContainer>
     )
-
 }
-
-
-
-
-
 
 const TabMenu = styled.ul`
     list-style: none;
@@ -506,7 +530,6 @@ const TabMenu = styled.ul`
     }
 
     li {
-
         display: inline-block;
 
         :hover {
@@ -515,7 +538,7 @@ const TabMenu = styled.ul`
 
         &.inactive {
             border-bottom: transparent 3px solid;
-            
+
             :hover {
                 border-bottom: var(--navds-global-color-blue-500) 3px solid;
             }
@@ -524,7 +547,8 @@ const TabMenu = styled.ul`
             border-bottom: var(--navds-semantic-color-focus) 3px solid;
         }
 
-        :focus, :active {
+        :focus,
+        :active {
             background-color: transparent;
             outline: var(--navds-semantic-color-focus) 3px solid;
             box-shadow: 0 0 0 0;
@@ -538,7 +562,6 @@ const TabMenu = styled.ul`
     }
 `
 
-
 const TabsCustomized = styled(Tabs)`
     border-top: 0;
     border-top-left-radius: 0;
@@ -548,14 +571,15 @@ const TabsCustomized = styled(Tabs)`
 `
 
 interface History {
-    setIsLast90Days: React.Dispatch<SetStateAction<boolean>>,
+    setIsLast90Days: React.Dispatch<SetStateAction<boolean>>
     isLast90Days: boolean
 }
 
-const TabHistory = ({setIsLast90Days, isLast90Days}: History) => {
+const TabHistory = ({ setIsLast90Days, isLast90Days }: History) => {
     const router = useRouter()
 
-    const [selectedHistoryTab, changeSelectedHistoryTab] = useState<string>("månedlig")
+    const [selectedHistoryTab, changeSelectedHistoryTab] =
+        useState<string>("månedlig")
 
     const historyMenu: string[] = ["90dager", "månedlig"]
 
@@ -563,13 +587,11 @@ const TabHistory = ({setIsLast90Days, isLast90Days}: History) => {
         setIsLast90Days(selectedHistoryTab === "90dager")
     }, [selectedHistoryTab])
 
-    
-
     const findSelectedHistoryTab = (historyMenu: string[]) => {
         const router = useRouter()
         // const tab = router.query.tab || ""
         const tab = selectedHistoryTab
-        
+
         let selected = historyMenu.indexOf(Array.isArray(tab) ? tab[0] : tab)
         return selected >= 0 ? historyMenu[selected] : historyMenu[1]
     }
@@ -577,7 +599,6 @@ const TabHistory = ({setIsLast90Days, isLast90Days}: History) => {
     const handleNewSelectedTab = (newTab: string) => {
         changeSelectedHistoryTab(newTab)
     }
-
 
     return (
         <TabMenu>
@@ -603,13 +624,7 @@ const TabHistory = ({setIsLast90Days, isLast90Days}: History) => {
     )
 }
 
-
-
-
-
-
-const HistoryContainer = styled.div`
-`
+const HistoryContainer = styled.div``
 
 const DailyOverview = styled.div`
     height: 92px;
@@ -631,11 +646,11 @@ const DailyOverview = styled.div`
         height: 100%;
         width: 8px;
         border-radius: 2px;
-        
+
         &.ok {
             background: var(--navds-global-color-green-500);
         }
-        &.issue {
+        &.issue  {
             background: var(--navds-global-color-orange-500);
         }
         &.down {
@@ -649,39 +664,42 @@ const MonthlyOverview = styled.div`
     gap: 16px;
 `
 
-
 interface HistoryOfServiceOrComponentI {
     isLast90Days: boolean
     history: HistoryOfSpecificServiceMonths[]
 }
 
 interface HistoryLast90Days {
-    entries: HistoryOfSpecificServiceDayEntry []
+    entries: HistoryOfSpecificServiceDayEntry[]
     month: string
 }
 
-const HistoryOfServiceOrComponent = ({isLast90Days, history}: HistoryOfServiceOrComponentI) => {
+const HistoryOfServiceOrComponent = ({
+    isLast90Days,
+    history,
+}: HistoryOfServiceOrComponentI) => {
     let numberOfDaysInView = 0
 
-    const [historyLast90Days, setHistoryLast90Days] = useState<HistoryLast90Days>({
-        entries: [],
-        month: ""
-    })
+    const [historyLast90Days, setHistoryLast90Days] =
+        useState<HistoryLast90Days>({
+            entries: [],
+            month: "",
+        })
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
     useEffect(() => {
         setIsLoading(true)
         let reversedForLast90Days = historyLast90Days
 
-        history.map(month => {
-            month.entries.reverse().map(day => {
+        history.map((month) => {
+            month.entries.reverse().map((day) => {
                 reversedForLast90Days.entries.push(day)
             })
         })
 
         setHistoryLast90Days(reversedForLast90Days)
         setIsLoading(false)
-    },[])
+    }, [])
 
     const prettifyMonth = (dateString: string): string => {
         const date = new Date(dateString)
@@ -691,72 +709,67 @@ const HistoryOfServiceOrComponent = ({isLast90Days, history}: HistoryOfServiceOr
         return day + ". " + month
     }
 
-
-
-    if(isLoading) {
+    if (isLoading) {
         return <CustomNavSpinner />
     }
 
     return (
         <HistoryContainer id="history">
-            {isLast90Days
-            ?
+            {isLast90Days ? (
                 <DailyOverview>
                     {historyLast90Days.entries.map((dailyEntry, index) => {
                         const month = prettifyMonth(dailyEntry.date)
-                        if(numberOfDaysInView < 90) {
-                            numberOfDaysInView ++
+                        if (numberOfDaysInView < 90) {
+                            numberOfDaysInView++
 
                             return (
-                                <DailyEntryComponent key={index} dailyEntry={dailyEntry} currentMonth={month} />
+                                <DailyEntryComponent
+                                    key={index}
+                                    dailyEntry={dailyEntry}
+                                    currentMonth={month}
+                                />
                             )
                         }
-                        
-                        return null
 
+                        return null
                     })}
                 </DailyOverview>
-            :
+            ) : (
                 <MonthlyOverview>
                     {history.map((currentMonth, index) => {
                         // MIDLERTIDIG for å stoppe loop til max tre måneder tilbake per page
-                        if(index > 2) {
+                        if (index > 2) {
                             return null
                         }
                         return (
-                            <MonthlyCalendarStatuses key={index} currentMonth={currentMonth} />
+                            <MonthlyCalendarStatuses
+                                key={index}
+                                currentMonth={currentMonth}
+                            />
                         )
                     })}
                 </MonthlyOverview>
-            }
+            )}
         </HistoryContainer>
     )
 }
 
-
-
-
-
-
-
 /* ------------------ HELPERS ------------------ */
-
-
 
 const ServiceAndComponentDependencies = styled.ul`
     display: flex;
     flex-flow: row wrap;
     column-gap: 1.5rem;
-    row-gap: .5rem;
-    
+    row-gap: 0.5rem;
+
     padding: 0;
     list-style: none;
-    
+
     li {
         a {
             display: flex;
             align-items: center;
-    
+
             svg {
                 margin-right: 5px;
             }
@@ -764,17 +777,20 @@ const ServiceAndComponentDependencies = styled.ul`
     }
 `
 
-const ServicesAndComponentsList: React.FC<{componentDependencies?: Component[], serviceDependencies?: Service[]}> = ({componentDependencies, serviceDependencies}) => {
-
-    if(componentDependencies) {
+const ServicesAndComponentsList: React.FC<{
+    componentDependencies?: Component[]
+    serviceDependencies?: Service[]
+}> = ({ componentDependencies, serviceDependencies }) => {
+    if (componentDependencies) {
         return (
             <ServiceAndComponentDependencies>
-                {componentDependencies.map(component => {
+                {componentDependencies.map((component) => {
                     return (
                         <li key={component.id}>
                             <Link href={RouterTjenestedata.PATH + component.id}>
                                 <a>
-                                    {handleAndSetStatusIcon(component.status)} {component.name}
+                                    {handleAndSetStatusIcon(component.status)}{" "}
+                                    {component.name}
                                 </a>
                             </Link>
                         </li>
@@ -786,12 +802,13 @@ const ServicesAndComponentsList: React.FC<{componentDependencies?: Component[], 
 
     return (
         <ServiceAndComponentDependencies>
-            {serviceDependencies.map(service => {
+            {serviceDependencies.map((service) => {
                 return (
                     <li key={service.id}>
-                        <Link href={RouterTjenestedata.PATH + service.id} >
+                        <Link href={RouterTjenestedata.PATH + service.id}>
                             <a>
-                                {handleAndSetStatusIcon(service.record.status)} {service.name}
+                                {handleAndSetStatusIcon(service.record.status)}{" "}
+                                {service.name}
                             </a>
                         </Link>
                     </li>
@@ -800,9 +817,6 @@ const ServicesAndComponentsList: React.FC<{componentDependencies?: Component[], 
         </ServiceAndComponentDependencies>
     )
 }
-
-
-
 
 /* STYLES FOR DAILY ENTRIES*/
 const DailyEntry = styled.div`
@@ -813,27 +827,28 @@ const DailyEntry = styled.div`
     }
 `
 
-const DailyEntryComponent: React.FC<{dailyEntry: HistoryOfSpecificServiceDayEntry, currentMonth: string}> = ({dailyEntry, currentMonth}) => {
-    const popoverRef = useRef(null);
+const DailyEntryComponent: React.FC<{
+    dailyEntry: HistoryOfSpecificServiceDayEntry
+    currentMonth: string
+}> = ({ dailyEntry, currentMonth }) => {
+    const popoverRef = useRef(null)
     const [infoEntryVisible, changeInfoEntryVisible] = useState(false)
     const [infoContent, changeInfoContent] = useState("")
-    const [infoStatusIconOnHover, setInfoStatusIconOnHover] = useState<JSX.Element>()
+    const [infoStatusIconOnHover, setInfoStatusIconOnHover] =
+        useState<JSX.Element>()
     const [formattedDateString, setFormattedDateString] = useState("")
 
-
-
     useEffect(() => {
-        const monthPrettified: string = currentMonth.charAt(0) + currentMonth.slice(1).toLowerCase()
+        const monthPrettified: string =
+            currentMonth.charAt(0) + currentMonth.slice(1).toLowerCase()
         const dateNumber: string = dailyEntry.date.split("-")[2]
-        setFormattedDateString(dateNumber + ". " + monthPrettified)    
-    },[])
-
+        setFormattedDateString(dateNumber + ". " + monthPrettified)
+    }, [])
 
     const toggleEntryInfoOnHover = (status, information) => {
-        if(information){
+        if (information) {
             changeInfoContent(information)
-        }
-        else{
+        } else {
             changeInfoContent("Statusinformasjon eksisterer ikke")
         }
         setInfoStatusIconOnHover(handleAndSetStatusIcon(status))
@@ -842,7 +857,7 @@ const DailyEntryComponent: React.FC<{dailyEntry: HistoryOfSpecificServiceDayEntr
 
     const { serviceId, date, status, information } = dailyEntry
 
-    let statusMessage: string = generateTitleOfDayStatusEntry(status);
+    let statusMessage: string = generateTitleOfDayStatusEntry(status)
 
     return (
         <DailyEntry>
@@ -854,7 +869,8 @@ const DailyEntryComponent: React.FC<{dailyEntry: HistoryOfSpecificServiceDayEntr
             >
                 <Popover.Content>
                     <Heading spacing size="medium" level="2">
-                        {infoStatusIconOnHover}{statusMessage}
+                        {infoStatusIconOnHover}
+                        {statusMessage}
                     </Heading>
                     <Detail>{currentMonth}</Detail>
                     {infoContent}
@@ -863,7 +879,8 @@ const DailyEntryComponent: React.FC<{dailyEntry: HistoryOfSpecificServiceDayEntr
             <span
                 className={`entry ${status.toLowerCase()}`}
                 onMouseEnter={() => toggleEntryInfoOnHover(status, information)}
-                onMouseLeave={() => changeInfoEntryVisible(false)} ref={popoverRef}
+                onMouseLeave={() => changeInfoEntryVisible(false)}
+                ref={popoverRef}
             />
         </DailyEntry>
     )
@@ -881,10 +898,9 @@ const generateTitleOfDayStatusEntry = (status: string) => {
         case "DOWN":
             return "Tjeneste var nede"
         default:
-            break;
+            break
     }
 }
-
 
 const MonthlyStatusContainer = styled.div``
 
@@ -936,7 +952,7 @@ interface MonthlyProps {
     currentMonth: HistoryOfSpecificServiceMonths
 }
 
-const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
+const MonthlyCalendarStatuses = ({ currentMonth }: MonthlyProps) => {
     // const [isLoading, setIsLoading] = useState(true)
 
     // useEffect(() => {
@@ -944,8 +960,8 @@ const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
     //     setIsLoading(false)
     // },[])
 
-    const firstDay = new Date(currentMonth.entries[0].date)    
-    const firstDayOfMonth = firstDay.getDay()-1
+    const firstDay = new Date(currentMonth.entries[0].date)
+    const firstDayOfMonth = firstDay.getDay() - 1
 
     // if(isLoading) {
     //     return <CustomNavSpinner />
@@ -954,21 +970,24 @@ const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
     return (
         <MonthlyStatusContainer>
             <div className="calendar-header">
-                {`${currentMonth.month} ${currentMonth.entries[0].date.substring(0, 4)}`}
+                {`${
+                    currentMonth.month
+                } ${currentMonth.entries[0].date.substring(0, 4)}`}
             </div>
 
             <DaysInMonth>
                 {firstDayOfMonth != 0 &&
                     [...Array(firstDayOfMonth)].map((e, i) => {
-                        return (
-                            <div key={i} className="empty-field"/>
-                        )
-                    })
-                }
+                        return <div key={i} className="empty-field" />
+                    })}
                 {currentMonth.entries.map((day, index) => {
-                    if (index < 31){
+                    if (index < 31) {
                         return (
-                            <DayComponent key={index} day={day} month={currentMonth.month}/>
+                            <DayComponent
+                                key={index}
+                                day={day}
+                                month={currentMonth.month}
+                            />
                         )
                     }
                 })}
@@ -977,42 +996,46 @@ const MonthlyCalendarStatuses = ({currentMonth}: MonthlyProps) => {
     )
 }
 
-
-
-const DayComponent: React.FC<{day: HistoryOfSpecificServiceDayEntry, month: string}> = ({day, month}) => {
-    const popoverRef = useRef(null);
+const DayComponent: React.FC<{
+    day: HistoryOfSpecificServiceDayEntry
+    month: string
+}> = ({ day, month }) => {
+    const popoverRef = useRef(null)
 
     const [infoEntryVisible, changeInfoEntryVisible] = useState(false)
     const [infoContent, changeInfoContent] = useState("")
-    const [infoStatusIconOnHover, setInfoStatusIconOnHover] = useState<JSX.Element>()
+    const [infoStatusIconOnHover, setInfoStatusIconOnHover] =
+        useState<JSX.Element>()
     const [formattedDateString, setFormattedDateString] = useState("")
 
-
-
     useEffect(() => {
-        const monthPrettified: string = month.charAt(0) + month.slice(1).toLowerCase()
+        const monthPrettified: string =
+            month.charAt(0) + month.slice(1).toLowerCase()
         const dateNumber: string = day.date.split("-")[2]
         setFormattedDateString(dateNumber + ". " + monthPrettified)
-    },[])
+    }, [])
 
     const toggleEntryInfoOnHover = (status, information) => {
-        if(information){
+        if (information) {
             changeInfoContent(information)
-        }
-        else{
+        } else {
             changeInfoContent("Statusinformasjon eksisterer ikke")
         }
         setInfoStatusIconOnHover(handleAndSetStatusIcon(status))
         changeInfoEntryVisible(true)
     }
 
-    const { date, status, information} = day
+    const { date, status, information } = day
 
-    let statusMessage = generateTitleOfDayStatusEntry(status);
+    let statusMessage = generateTitleOfDayStatusEntry(status)
 
     return (
-        <Day className={status.toLowerCase()} onMouseEnter={() => toggleEntryInfoOnHover(status, information)} onMouseLeave={() => changeInfoEntryVisible(false)} ref={popoverRef}>
-        
+        <Day
+            className={status.toLowerCase()}
+            onMouseEnter={() => toggleEntryInfoOnHover(status, information)}
+            onMouseLeave={() => changeInfoEntryVisible(false)}
+            ref={popoverRef}
+        >
             <Popover
                 open={infoEntryVisible}
                 onClose={() => changeInfoEntryVisible(false)}
@@ -1021,7 +1044,8 @@ const DayComponent: React.FC<{day: HistoryOfSpecificServiceDayEntry, month: stri
             >
                 <Popover.Content>
                     <Heading spacing size="medium" level="2">
-                        {infoStatusIconOnHover}{statusMessage}
+                        {infoStatusIconOnHover}
+                        {statusMessage}
                     </Heading>
                     <Detail>{formattedDateString}</Detail>
                     {infoContent}
@@ -1030,6 +1054,5 @@ const DayComponent: React.FC<{day: HistoryOfSpecificServiceDayEntry, month: stri
         </Day>
     )
 }
-
 
 export default TjenestedataContent
