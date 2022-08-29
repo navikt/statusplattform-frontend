@@ -74,6 +74,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
         "F110862",
         "A110886",
         "L120166",
+        "H166137"
     ]
 
     useEffect(() => {

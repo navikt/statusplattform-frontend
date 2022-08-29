@@ -6,7 +6,7 @@ import { Alert, BodyShort, Button, Heading } from "@navikt/ds-react"
 
 import { Area, Dashboard, Service } from "../../types/types"
 import { countHealthyServicesInListOfAreas } from "../../utils/servicesOperations"
-import { RouterAvvikshistorikk } from "../../types/routes"
+import { RouterAvvikshistorikk, RouterOpsMeldinger } from "../../types/routes"
 import { useContext, useEffect, useState } from "react"
 import CustomNavSpinner from "../CustomNavSpinner"
 import { OpsMessageI, SeverityEnum } from "../../types/opsMessage"
@@ -322,6 +322,8 @@ interface DeviationCardI {
 const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
     const { internalHeader, severity } = opsMessage
 
+    const router = useRouter()
+
     // TODO: When the solution is ready to open for the public, re-implemented the commented code (or change it to something else)
     // if(user.navIdent || (user.navIdent && onlyShowForNavEmployees == true)) {
     return (
@@ -331,6 +333,12 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
             }
             className={
                 !severity ? "has-neutral" : "has-" + severity.toLowerCase()
+            }
+
+            onClick={() =>
+                router.push(
+                    RouterOpsMeldinger.PATH + `/${opsMessage.id}`
+                )
             }
         >
             {/* <span className={status.toLowerCase()} /> */}
