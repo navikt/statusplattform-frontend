@@ -201,7 +201,7 @@ const ComponentData = ({ component }: TjenesteDataContentI) => {
 
                 {component.record && <StatusRecord record={component.record} />}
             </div>
-
+            {/* TODO: Denne må tilbake når det er klart! */}
             {/* <IncidentHistoryComponent component={component} /> */}
         </CategoryContainer>
     )
@@ -235,7 +235,7 @@ const ServiceData = ({
 
                 {service.record && <StatusRecord record={service.record} />}
             </div>
-
+            {/* TODO: Denne må tilbake når det er klart! */}
             {/* <IncidentHistoryComponent service={service} /> */}
         </CategoryContainer>
     )

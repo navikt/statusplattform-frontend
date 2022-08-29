@@ -1,12 +1,10 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from "react"
+import styled from "styled-components"
 
-import { Telephone, Email } from '@navikt/ds-icons'
-import Lukknapp from 'nav-frontend-lukknapp';
-import { Button, TextField } from '@navikt/ds-react';
+import { Telephone, Email } from "@navikt/ds-icons"
+import { Button, TextField } from "@navikt/ds-react"
 
-import { ISource, SourceType } from '../../types/source';
-
+import { ISource, SourceType } from "../../types/source"
 
 const SubscribeModalContainer = styled.div`
     position: relative;
@@ -72,7 +70,7 @@ const SubscribeModalContent = styled.div`
     }
 `
 
-const CustomLukknapp = styled(Lukknapp)`
+const CustomLukknapp = styled(Button)`
     border: none;
     color: var(--navds-semantic-color-canvas-background-light);
     :hover {
@@ -80,35 +78,41 @@ const CustomLukknapp = styled(Lukknapp)`
     }
 `
 
-
-
 const handleSlack = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     alert("ikke implementert")
 }
-
 
 const subscribeSources: ISource[] = [
     {
         id: SourceType.phone,
         title: "Telefon",
-        content: <Telephone/>,
+        content: <Telephone />,
         text: "Du kan motta sms-varsler når statusmeldinger oppdateres. Dersom du ønsker dette, fyll inn nummeret nedenfor: ",
-    },{
+    },
+    {
         id: SourceType.email,
         title: "Epost",
-        content: <Email/>,
+        content: <Email />,
         text: "Ved oppdaterte statusmeldinger kan du motta varsling på email. Fyll inn epost nedenfor om dette er ønskelig",
-    },{
+    },
+    {
         id: SourceType.slack,
         title: "Slack",
-        content: <img src="/sp/assets/images/slack-icon.svg" alt="Slack icon" aria-labelledby="Slack-ikon" />,
+        content: (
+            <img
+                src="/sp/assets/images/slack-icon.svg"
+                alt="Slack icon"
+                aria-labelledby="Slack-ikon"
+            />
+        ),
         text: "Du kan få statusmeldinger rett i Slack. Trykk nedenfor for å starte abonnering",
-    },{
+    },
+    {
         id: SourceType.close,
         title: "Close",
         content: <CustomLukknapp />,
-    }
+    },
 ]
 
 interface ClickHandler {
@@ -116,12 +120,13 @@ interface ClickHandler {
 }
 
 const SubscribeModal: React.FC<ClickHandler> = (props) => {
+    const [currentActiveSource, setActiveSource] = React.useState<ISource>(
+        subscribeSources[0]
+    )
 
-    const [currentActiveSource, setActiveSource] = React.useState<ISource>(subscribeSources[0])
-
-    const handleActiveSourceChange = (source:ISource) => {
+    const handleActiveSourceChange = (source: ISource) => {
         setActiveSource(source)
-        if(source.id === SourceType.close) {
+        if (source.id === SourceType.close) {
             props.toggleSubscribeModal()
         }
     }
@@ -131,38 +136,44 @@ const SubscribeModal: React.FC<ClickHandler> = (props) => {
         alert("ikke implementert")
     }
 
-    
-
     return (
         <SubscribeModalContainer>
             <ul>
-                {
-                    subscribeSources.map((source) => (
-                        <ListItemWrapper key={source.id} id={source.id} onClick={(e) => handleActiveSourceChange(source)}>{source.content} </ListItemWrapper>
-                    ))
-                }
+                {subscribeSources.map((source) => (
+                    <ListItemWrapper
+                        key={source.id}
+                        id={source.id}
+                        onClick={(e) => handleActiveSourceChange(source)}
+                    >
+                        {source.content}{" "}
+                    </ListItemWrapper>
+                ))}
             </ul>
             <SubscribeModalContent>
-                {currentActiveSource.id === SourceType.slack ? 
-                    (
-                        <>
-                            <form>
-                                <p>{currentActiveSource.text}</p>
-                                <Button onClick={(e) => handleSlack(e)}>Abonner</Button>
-                            </form>
-                        </>
-                    ) :
-                    (
-                        <>
+                {currentActiveSource.id === SourceType.slack ? (
+                    <>
+                        <form>
                             <p>{currentActiveSource.text}</p>
-                            <form>
-                                <TextField label={currentActiveSource.title} />
-                                <Button onClick={(e) => handleSubmit(currentActiveSource.id, e)}>Abonner</Button>
-                            </form>
-                        </>
-                    )
-                }
-
+                            <Button onClick={(e) => handleSlack(e)}>
+                                Abonner
+                            </Button>
+                        </form>
+                    </>
+                ) : (
+                    <>
+                        <p>{currentActiveSource.text}</p>
+                        <form>
+                            <TextField label={currentActiveSource.title} />
+                            <Button
+                                onClick={(e) =>
+                                    handleSubmit(currentActiveSource.id, e)
+                                }
+                            >
+                                Abonner
+                            </Button>
+                        </form>
+                    </>
+                )}
             </SubscribeModalContent>
         </SubscribeModalContainer>
     )
