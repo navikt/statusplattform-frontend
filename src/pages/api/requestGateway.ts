@@ -12,7 +12,7 @@ const createRequest = (path,method, headers)  => new Request(path, {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("IN REQUEST GATEWAY")
     let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: "No Authorization header"
-
+    console.log(authorizationHeader);
     let backendEndpath = req.headers.backendendpath
     let method = req.headers.method
     let body = req.headers.body
