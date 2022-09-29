@@ -128,7 +128,7 @@ export default function Navbar() {
 
 				
 				<li role="tab" >
-					<Link href={"https://vaktor.internal.nav.no/"}>
+					<Link href={"https://vaktor.intern.nav.no/"}>
 						<a>
 						<LenkeSpacer className="inactive" >
 							<BodyShort size="small" >Vaktor</BodyShort>
