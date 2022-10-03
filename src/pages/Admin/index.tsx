@@ -286,7 +286,7 @@ const AdminPage = ({tab, dashbordProps, areasProps, servicesProps, componentProp
     // const [components, setComponents] = useState<Component[]>()
 
     const approvedUsers: string[] = [
-        "L152423", "H161540", "K146221", "J104568", "G124938", "M106261","M137316"
+        "L152423", "H161540", "K146221", "J104568", "G124938", "M106261","M137316",
     ]
 
     const user = useContext(UserStateContext)
