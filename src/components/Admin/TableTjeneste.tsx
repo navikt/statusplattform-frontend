@@ -631,26 +631,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
 
     const validateMonitorUrl = (urlInput) => {
-        if(urlInput.includes(" ")) {
-            setIsValidMonitorUrl(false)
-            return false
-        }
-        if(urlInput.length == 0) {
-            setIsValidMonitorUrl(true)
-            return true
-        }
-
-        let url
-        
-        try {
-            url = new URL(urlInput);
-        } catch (_) {
-            setIsValidMonitorUrl(false)
-            return false
-        }
-
-
-        return setIsValidMonitorUrl(url.protocol === "http:" || url.protocol === "https:")
+        return true
     }
 
 
