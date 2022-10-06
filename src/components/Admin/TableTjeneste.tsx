@@ -596,37 +596,7 @@ const ServiceRowEditting = ({ service, allServices, toggleEditService, toggleExp
 
 
     const validatePollingUrl = (urlInput) => {
-        if(urlInput.includes(" ")) {
-            setIsvalidPollingUrl(false)
-            return false
-        }
-        if(urlInput == "STATUSHOLDER") {
-            setIsvalidPollingUrl(true)
-            return true
-        }
-        if(urlInput.length == 0) {
-            setIsvalidPollingUrl(true)
-            return true
-        }
-
-        let url
-        
-        try {
-            url = new URL(urlInput);
-        } catch (_) {
-            setIsvalidPollingUrl(false)
-            return false
-        }
-
-
-        const com = urlInput.substring(urlInput.length - 4)
-        const no = urlInput.substring(urlInput.length - 3)
-
-        if(com != ".com" && no != ".no" && no != ".io") {
-            setIsvalidPollingUrl(false)
-            return false
-        }
-        return setIsvalidPollingUrl(url.protocol === "http:" || url.protocol === "https:")
+        return true
     }
 
 

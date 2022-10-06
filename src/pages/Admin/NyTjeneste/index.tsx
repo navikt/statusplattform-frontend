@@ -173,21 +173,7 @@ const NewService = () => {
     }
 
     const validateMonitorLink = (urlInput) => {
-        if(urlInput.includes(" ")) {
-            return false
-        }
-        if(urlInput.length == 0) {
-            return true
-        }
-        let url;
-        
-        try {
-            url = new URL(urlInput);
-        } catch (_) {
-            return false;  
-        }
-
-        return url.protocol === "http:" || url.protocol === "https:";
+        return true
     }
 
     /*Handlers for adding serviceDependencies START*/
