@@ -11,8 +11,14 @@ const createRequest = (path,method, headers)  => new Request(path, {
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("IN REQUEST GATEWAY")
+
+    //For test/prod:
     let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: "No Authorization header"
-    let backendEndpath = req.headers.backendendpath
+
+    //For dev:
+    //let authorizationHeader = process.env.NEXT_AUTH_TOKEN
+
+     let backendEndpath = req.headers.backendendpath
     let method = req.headers.method
     let body = req.headers.body
 
@@ -23,6 +29,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const fetch = require("node-fetch");
     const https = require('https');
+
+    //For dev with local backend:
+    //const https = require('http');
 
     const httpsAgent = new https.Agent({
         rejectUnauthorized: false,

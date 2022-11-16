@@ -44,7 +44,7 @@ const MenuSelector: React.FC<{user}> = ({user}) => {
     }
 
     const usersWithAccess: string[] = [
-        "L152423", "H161540", "K146221", "J104568", "G124938", "M106261"
+        "L152423", "H161540", "K146221", "J104568", "G124938", "M106261", "H166137", "G121973"
     ]
     
     let adminMenuWithAccessControl = adminMenu
