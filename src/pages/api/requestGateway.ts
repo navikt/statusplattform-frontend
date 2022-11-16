@@ -1,82 +1,61 @@
-import { NextApiRequest, NextApiResponse } from "next";
-
-
+import { NextApiRequest, NextApiResponse } from "next"
 
 const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
 
-const createRequest = (path,method, headers)  => new Request(path, {
-    method: method,
-    headers: headers
-})
+const createRequest = (path, method, headers) =>
+    new Request(path, {
+        method: method,
+        headers: headers,
+    })
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("IN REQUEST GATEWAY")
-    let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: "No Authorization header"
+
+    //For test/prod:
+    let authorizationHeader =
+        req.headers && req.headers.authorization
+            ? req.headers.authorization
+            : "No Authorization header"
+
+    //For dev:
+    //let authorizationHeader = process.env.NEXT_AUTH_TOKEN
 
     let backendEndpath = req.headers.backendendpath
     let method = req.headers.method
     let body = req.headers.body
 
-
-
     let path = backendPath + backendEndpath
 
+    const fetch = require("node-fetch")
+    const https = require("https")
 
-    const fetch = require("node-fetch");
-    const https = require('https');
+    //For dev with local backend:
+    //const https = require('http');
 
     const httpsAgent = new https.Agent({
         rejectUnauthorized: false,
     })
 
-
-    const resp = await fetch(
-        path,
-        {
-            headers: {'Authorization': authorizationHeader},
-            method: method,
-            agent: httpsAgent,
-            body: body,
-        },
-      )
-    await resp.json()
-    .then(body => {
-        if (body) {
-            console.log("SUCCSESFULLY READ USERDATA")
-            res.status(200).json(body)
-        }
-        else {
-            res.send("Cant read userdate")
-        }
-
+    const resp = await fetch(path, {
+        headers: { Authorization: authorizationHeader },
+        method: method,
+        agent: httpsAgent,
+        body: body,
     })
-    .catch(e => {
-        console.log(e)
-        res.status(resp.status).send(e)
-    })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    await resp
+        .json()
+        .then((body) => {
+            if (body) {
+                console.log("SUCCSESFULLY READ USERDATA")
+                res.status(200).json(body)
+            } else {
+                res.send("Cant read userdate")
+            }
+        })
+        .catch((e) => {
+            console.log(e)
+            res.status(resp.status).send(e)
+        })
 
     /*
     let backEndRequest = createRequest(path, method, headers)
@@ -97,11 +76,4 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         .catch(e => console.log(e))
 
         */
-
-};
-
-
-
-
-
-
+}

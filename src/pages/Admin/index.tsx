@@ -1,26 +1,31 @@
-import styled from 'styled-components'
-import { ToastContainer } from 'react-toastify';
+import styled from "styled-components"
+import { ToastContainer } from "react-toastify"
 
-import Layout from '../../components/Layout';
-import MenuSelector, { adminMenu, useFindCurrentTab } from '../../components/Admin/MenuSelector';
-import { UserStateContext } from '../../components/ContextProviders/UserStatusContext';
-import { useContext, useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
-import { RouterPrivatperson } from '../../types/routes';
-import CustomNavSpinner from '../../components/CustomNavSpinner';
-import { Area, Component, Dashboard, Service } from '../../types/types';
-import { TitleContext } from '../../components/ContextProviders/TitleContext';
-import { Heading } from '@navikt/ds-react';
-import TableDashbord from '../../components/Admin/TableDashbord';
-import { Close } from '@navikt/ds-icons';
-import TableOmraade from '../../components/Admin/TableOmraade';
-import TableTjeneste from '../../components/Admin/TableTjeneste';
-import TableKomponent from '../../components/Admin/TableKomponent';
-import { backendPath } from '..';
-import { EndPathAreas, EndPathComponents, EndPathDashboards, EndPathServices } from '../../utils/apiHelper';
-
-
-
+import Layout from "../../components/Layout"
+import MenuSelector, {
+    adminMenu,
+    useFindCurrentTab,
+} from "../../components/Admin/MenuSelector"
+import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
+import { useContext, useEffect, useState } from "react"
+import { useRouter } from "next/router"
+import { RouterPrivatperson } from "../../types/routes"
+import CustomNavSpinner from "../../components/CustomNavSpinner"
+import { Area, Component, Dashboard, Service } from "../../types/types"
+import { TitleContext } from "../../components/ContextProviders/TitleContext"
+import { Heading } from "@navikt/ds-react"
+import TableDashbord from "../../components/Admin/TableDashbord"
+import { Close } from "@navikt/ds-icons"
+import TableOmraade from "../../components/Admin/TableOmraade"
+import TableTjeneste from "../../components/Admin/TableTjeneste"
+import TableKomponent from "../../components/Admin/TableKomponent"
+import { backendPath } from ".."
+import {
+    EndPathAreas,
+    EndPathComponents,
+    EndPathDashboards,
+    EndPathServices,
+} from "../../utils/apiHelper"
 
 export const AdminCategoryContainer = styled.div`
     .category-overflow-container {
@@ -39,21 +44,19 @@ export const AdminCategoryContainer = styled.div`
     }
 `
 
-
 export const NoContentContainer = styled.div`
     height: 100px;
-    
+
     display: flex;
     justify-content: center;
     align-items: center;
 `
 
-
 export const ModalInner = styled.div`
     padding: 2rem 4.5rem;
     display: flex;
     flex-direction: column;
-    
+
     button {
         margin: 1rem;
     }
@@ -62,7 +65,7 @@ export const ModalInner = styled.div`
 export const DependenciesColumn = styled.div`
     margin-right: 5ch;
     max-width: 242px;
-    
+
     display: flex;
     flex-direction: column;
 
@@ -93,17 +96,16 @@ export const DependenciesColumn = styled.div`
 export const DependencyList = styled.ul`
     list-style: none;
     padding: 0;
-    
+
     li {
         width: 100%;
-        
+
         display: flex;
         justify-content: space-between;
         align-items: center;
         height: fit-content;
     }
 `
-
 
 const AdminDashboardContainer = styled.div`
     width: 100%;
@@ -153,22 +155,20 @@ const AdminDashboardContainer = styled.div`
             }
         }
     }
-`;
-
-
+`
 
 const AdminConfigsContainer = styled.div`
-    background-color: white; 
-       
+    background-color: white;
+
     width: 100%;
     padding: 0 1rem;
-    
+
     h2 {
-        margin: 0 0 .5rem;
+        margin: 0 0 0.5rem;
         display: flex;
         justify-content: space-between;
     }
-`;
+`
 
 export const HorizontalSeparator = styled.span`
     display: block;
@@ -184,7 +184,7 @@ export const DynamicListContainer = styled.div`
     gap: 16px;
 
     max-width: 100%;
-    
+
     .column {
         flex: 1 1 0;
 
@@ -202,7 +202,7 @@ export const DynamicListContainer = styled.div`
     .new-list {
         list-style: none;
         padding: 0;
-        
+
         section {
             display: inline-block;
         }
@@ -250,7 +250,6 @@ export const ButtonContainer = styled.div`
     margin-top: 2rem;
 `
 
-
 const HeadingWrapper = styled.div`
     margin-top: 2rem;
 
@@ -258,27 +257,28 @@ const HeadingWrapper = styled.div`
     justify-content: center;
 `
 
-
 export const getServerSideProps = async (context) => {
-    const [{tab}, , , , ] = await Promise.all([
-        context.query,
-    ])
-
+    const [{ tab }, , , ,] = await Promise.all([context.query])
 
     return {
         props: {
-            tab
-        }
+            tab,
+        },
     }
 }
 
-
-const AdminPage = ({tab, dashbordProps, areasProps, servicesProps, componentProps}) => {
+const AdminPage = ({
+    tab,
+    dashbordProps,
+    areasProps,
+    servicesProps,
+    componentProps,
+}) => {
     const router = useRouter()
     const [isLoading, setIsLoading] = useState(true)
 
     const selectedMenu = useFindCurrentTab(adminMenu)
-    const {title} = useContext(TitleContext)
+    const { title } = useContext(TitleContext)
 
     // const [dashboards, setDashboards] = useState<Dashboard[]>()
     // const [areas, setAreas] = useState<Area[]>()
@@ -286,32 +286,39 @@ const AdminPage = ({tab, dashbordProps, areasProps, servicesProps, componentProp
     // const [components, setComponents] = useState<Component[]>()
 
     const approvedUsers: string[] = [
-        "L152423", "H161540", "K146221", "J104568", "G124938", "M106261", "H166137"
+        "L152423",
+        "H161540",
+        "K146221",
+        "J104568",
+        "G124938",
+        "M106261",
+        "M137316",
+        "H166137",
+        "G121973",
     ]
 
     const user = useContext(UserStateContext)
-    
+
     useEffect(() => {
         setIsLoading(false)
-    },[])
+    }, [])
 
     useEffect(() => {
         setIsLoading(true)
-    },[selectedMenu])
-
+    }, [selectedMenu])
 
     useEffect(() => {
         setIsLoading(true)
-        if(router.isReady) {
+        if (router.isReady) {
             setIsLoading(false)
         }
     }, [router])
-    
-    if(isLoading) {
+
+    if (isLoading) {
         return <CustomNavSpinner />
     }
 
-    if(!user.navIdent) {
+    if (!user.navIdent) {
         router.push(RouterPrivatperson.PATH)
         return <CustomNavSpinner />
     }
@@ -322,35 +329,25 @@ const AdminPage = ({tab, dashbordProps, areasProps, servicesProps, componentProp
                 <AdminConfigsContainer>
                     <MenuSelector user={user} />
                     <HeadingWrapper>
-                        <Heading size="large" level="2">{title}</Heading>
+                        <Heading size="large" level="2">
+                            {title}
+                        </Heading>
                     </HeadingWrapper>
-                    {approvedUsers.includes(user.navIdent) &&
+                    {approvedUsers.includes(user.navIdent) && (
                         <>
-                            {selectedMenu === "Dashbord" &&
-                                <TableDashbord />
-                            }
-                            {selectedMenu === "Områder" &&
-                                <TableOmraade />
-                            }
+                            {selectedMenu === "Dashbord" && <TableDashbord />}
+                            {selectedMenu === "Områder" && <TableOmraade />}
                         </>
-                    }
+                    )}
 
-                    
-                    {selectedMenu === "Tjenester" && 
-                        <TableTjeneste />
-                    }
-                    {selectedMenu === "Komponenter" &&
-                        <TableKomponent />
-                    }
+                    {selectedMenu === "Tjenester" && <TableTjeneste />}
+                    {selectedMenu === "Komponenter" && <TableKomponent />}
                 </AdminConfigsContainer>
             </AdminDashboardContainer>
-            <ToastContainer/>
+            <ToastContainer />
         </Layout>
     )
 }
-
-
-
 
 // HELPER BELOW
 
