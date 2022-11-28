@@ -3,6 +3,10 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 
 const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
+const CLIENT_ID = process.env.AZURE_APP_CLIENT_SECRET
+const CLIENT_SECRET = process.env.AZURE_APP_CLIENT_ID
+const ENV = process.env.ENV
+const TENANT = process.env.TENANT
 
 const createRequest = (path,method, headers)  => new Request(path, {
     method: method,
@@ -14,11 +18,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     //For test/prod:
     let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: "No Authorization header"
+    await requestBearerTokenForBackend(authorizationHeader);
 
     //For dev:
     //let authorizationHeader = process.env.NEXT_AUTH_TOKEN
 
-     let backendEndpath = req.headers.backendendpath
+
+    let backendEndpath = req.headers.backendendpath
     let method = req.headers.method
     let body = req.headers.body
 
@@ -62,51 +68,48 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         console.log(e)
         res.status(resp.status).send(e)
     })
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-    let backEndRequest = createRequest(path, method, headers)
-
-    let response = await fetch(backEndRequest)
-
-    await response.json()
-        .then(body => {
-            if (body) {
-                console.log("SUCCSESFULLY READ USERDATA")
-                res.status(200).json(body)
-            }
-            else {
-                res.send("Cant read userdate")
-            }
-
-        })
-        .catch(e => console.log(e))
-
-        */
-
 };
+
+
+const requestBearerTokenForBackend = async (bearerToken: String) => {
+    const fetch = require("node-fetch");
+    const https = require('https');
+    const bearerString = "Bearer ";
+    const accessToken = bearerToken.substring(bearerString.length)
+
+
+
+    const httpsAgent = new https.Agent({
+        rejectUnauthorized: false,
+    })
+
+
+
+    const resp = await fetch(
+        url,
+        {
+            client_id: CLIENT_ID,
+            client_secret: CLIENT_SECRET,
+            scope: "api://"+ENV+"-gcp.navdig.portalserver/.default",
+            assertion: accessToken,
+            grant_type: "urn:ietf:params:oauth:grant-type:jwt-bearer",
+            requested_token_use: "on_behalf_of"
+        },
+      )
+    await resp.json()
+    .then(body => {
+        if (body) {
+            console.log("SUCCSESFULLY GOT bearer token")
+           console.log(body)
+        }
+
+    })
+    .catch(e => {
+        console.log(e)
+
+    })
+}
+
 
 
 
