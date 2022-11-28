@@ -76,7 +76,7 @@ const requestBearerTokenForBackend = async (bearerToken: String) => {
     const https = require('https');
     const bearerString = "Bearer ";
     const accessToken = bearerToken.substring(bearerString.length)
-
+    const url = "https://login.microsoftonline.com/"+TENANT+"/oauth2/v2.0/token";
 
 
     const httpsAgent = new https.Agent({
