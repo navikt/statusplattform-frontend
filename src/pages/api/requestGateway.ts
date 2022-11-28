@@ -83,6 +83,15 @@ const requestBearerTokenForBackend = async (bearerToken: String) => {
         rejectUnauthorized: false,
     })
 
+    console.log("Tenant:" + TENANT )
+    
+    console.log("ClientId:" + CLIENT_ID )
+    console.log("Client Secret:" + CLIENT_SECRET )
+    console.log("AccessToken: "+ accessToken)
+    console.log("Env: "+ ENV);
+    
+
+
 
 
     const resp = await fetch(
