@@ -33,7 +33,7 @@ spec:
             enabled: true
             # optional, enum of {trygdeetaten.no, nav.no}
             # defaults to trygdeetaten.no in dev-* clusters, nav.no in production
-            tenant: trygdeetaten.no
+            tenant: nav.no
             # optional
             replyURLs:
                 - "https://status.dev.nav.no/sp/oauth2/callback"
