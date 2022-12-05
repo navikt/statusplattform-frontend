@@ -22,7 +22,7 @@ spec:
         - name: NPM_CONFIG_CACHE
           value: /tmp
         - name: TENANT
-          value: nav.no
+          value: trygdeetaten.no
         - name: ENV
           value: dev
     replicas:
@@ -31,13 +31,6 @@ spec:
     azure:
         application:
             enabled: true
-            # optional, enum of {trygdeetaten.no, nav.no}
-            # defaults to trygdeetaten.no in dev-* clusters, nav.no in production
-            tenant: nav.no
-            # optional
-            replyURLs:
-                - "https://status.dev.nav.no/sp/oauth2/callback"
-                - "https://status.dev.nav.no/sp/Dashboard/Internt"
             claims:
                 extra:
                     - "NAVident"
