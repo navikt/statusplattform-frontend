@@ -22,7 +22,7 @@ spec:
         - name: NPM_CONFIG_CACHE
           value: /tmp
         - name: TENANT
-          value: trygdeetaten.no
+          value: nav.no
         - name: ENV
           value: dev
     replicas:
