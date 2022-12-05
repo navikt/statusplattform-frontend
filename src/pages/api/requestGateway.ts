@@ -3,8 +3,8 @@ import { NextApiRequest, NextApiResponse } from "next";
 
 
 const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
-const CLIENT_ID = process.env.AZURE_APP_CLIENT_SECRET
-const CLIENT_SECRET = process.env.AZURE_APP_CLIENT_ID
+const CLIENT_ID = process.env.AZURE_APP_CLIENT_ID
+const CLIENT_SECRET = process.env.AZURE_APP_CLIENT_SECRET
 const ENV = process.env.ENV
 const TENANT = process.env.TENANT
 
@@ -18,6 +18,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     //For test/prod:
     let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: "No Authorization header"
+
     await requestBearerTokenForBackend(authorizationHeader);
 
     //For dev:
@@ -118,9 +119,6 @@ const requestBearerTokenForBackend = async (bearerToken: String) => {
 
     })
 }
-
-
-
 
 
 
