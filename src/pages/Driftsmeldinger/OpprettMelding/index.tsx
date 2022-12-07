@@ -1,5 +1,5 @@
 import {
-    BodyShort,
+    Alert,
    Button,
    Tooltip,
     Heading,
@@ -115,6 +115,11 @@ const CopyOpsMsg = styled.div`
     margin: -3.5px 0 0 8.5rem;
 `
 
+const AutomaticTimeAlert = styled.div`
+    width: 35rem;
+    margin: 0 0 2rem 0;
+`
+
 const OpsContainer = styled.div`
     display: flex;
     width: 45rem;
@@ -181,6 +186,7 @@ const OpsComponent = ({
 
     const [isLoading, setIsLoading] = useState(true)
     const [selectedSeverity, setSelectedSeverity] = useState<string>("NEUTRAL")
+     const [showAutomaticTimeMsg, setShowAutomaticTimeMsg] = useState(false)
     const router = useRouter()
 
     const hours = []
@@ -266,8 +272,14 @@ const OpsComponent = ({
 
     const handleIsActive = (newValue) => {
         if (newValue == "1") {
+            var currentTime = new Date()
+            currentTime.setDate(currentTime.getDate() + 14)
+           
+            setEndDateForActiveOpsMessage(currentTime)
+            setShowAutomaticTimeMsg(true)
             setOpsMessage({ ...opsMessage, isActive: true })
         } else {
+            setShowAutomaticTimeMsg(false)
             setOpsMessage({ ...opsMessage, isActive: false })
         }
     }
@@ -371,26 +383,28 @@ const OpsComponent = ({
 
             {!onlyShowForNavEmployees && (
                 <div className="input-area">
-                    <div><CopyOpsMsg>
+                    <div>
+                        <CopyOpsMsg>
                             <Tooltip
                                 content="Kopier intern melding"
                                 placement="right"
                             >
-                        <Button
-                            size="small"
-                            variant="tertiary"
-                            title="Kopier interntekst"
-                            onClick={() => {
-                                handleCopyInternal(
-                                    internalHeader,
-                                    internalMessage
-                                )
-                            }}
-                        >
-                            <Copy />
-                        </Button></Tooltip>
+                                <Button
+                                    size="small"
+                                    variant="tertiary"
+                                    title="Kopier interntekst"
+                                    onClick={() => {
+                                        handleCopyInternal(
+                                            internalHeader,
+                                            internalMessage
+                                        )
+                                    }}
+                                >
+                                    <Copy />
+                                </Button>
+                            </Tooltip>
                         </CopyOpsMsg>
-                       
+
                         <Heading level="5" size="xsmall">
                             Ekstern melding:
                         </Heading>
@@ -421,15 +435,35 @@ const OpsComponent = ({
                 opsMessage={opsMessage}
                 services={services}
             />
+            <Spacer height="1rem" />
 
             <RadioGroup
-                legend="Skal driftsmeldingen gjelde umiddelbart?"
+                legend="Sett varighet: "
                 onChange={(e) => handleIsActive(e)}
-                defaultValue={isActive ? "1" : "0"}
             >
-                <Radio value="1">Nå</Radio>
-                <Radio value="0">Senere</Radio>
+                <Radio value="1">
+                    <div>Automatisk</div>
+                </Radio>
+                <Radio value="0">Tilpasset ...</Radio>
             </RadioGroup>
+            <Spacer height="1rem" />
+
+            {showAutomaticTimeMsg && (
+                <AutomaticTimeAlert>
+                    <Alert
+                        variant="info"
+                        size="small"
+                    >{`Driftsmeldingen gjøres aktiv umiddelbart, og forblir aktiv i 14 dager. Driftsmeldingen blir inaktiv ${endDateForActiveOpsMessage.toLocaleDateString(
+                        "nb",
+                        {
+                            month: "long",
+                            weekday: "long",
+                            day: "numeric",
+                            year: "numeric",
+                        }
+                    )}.`}</Alert>
+                </AutomaticTimeAlert>
+            )}
 
             {!isActive && (
                 <DateSetterOps

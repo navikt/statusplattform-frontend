@@ -36,13 +36,14 @@ const OpsMessageContainer = styled.div`
 `
 
 export const getServerSideProps = async (context) => {
-    const { driftsmeldingId } = await context.query
+    const { driftmeldingsId } = await context.query
 
     const [resOpsMsg, resServices] = await Promise.all([
-        fetch(backendPath + EndPathSpecificOps(driftsmeldingId)),
+        fetch(backendPath + EndPathSpecificOps(driftmeldingsId)),
         fetch(backendPath + EndPathServices()),
     ])
 
+  
     const opsMessage: OpsMessageI = await resOpsMsg.json()
     const retrievedServices: Service[] = await resServices.json()
 
