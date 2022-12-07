@@ -98,6 +98,7 @@ const requestBearerTokenForBackend = async (bearerToken: String) => {
     const resp = await fetch(
         url,
         {
+            method: 'POST',
             client_id: CLIENT_ID,
             client_secret: CLIENT_SECRET,
             scope: "api://"+ENV+"-gcp.navdig.portalserver/.default",
