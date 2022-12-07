@@ -1,61 +1,56 @@
-import router from "next/router";
-import { useContext, useEffect, useState } from "react";
+import router from "next/router"
+import { useContext, useEffect, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
 
+import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react"
+import { Delete } from "@navikt/ds-icons"
 
-import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
-import { Delete } from "@navikt/ds-icons";
-
-import { useLoader } from "../../../utils/useLoader";
-import { Area, Dashboard } from "../../../types/types";
-import Layout from '../../../components/Layout';
-import CustomNavSpinner from "../../../components/CustomNavSpinner";
-import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from "..";
-import { TitleContext } from "../../../components/ContextProviders/TitleContext";
-import { postDashboard } from "../../../utils/dashboardsAPI";
-import { fetchAreas } from "../../../utils/areasAPI";
-import { RouterAdminDashboards } from "../../../types/routes";
-import { backendPath } from "../..";
-import { EndPathAreas } from "../../../utils/apiHelper";
-import OpsMessages from "../../Avviksmeldinger";
-
+import { useLoader } from "../../../utils/useLoader"
+import { Area, Dashboard } from "../../../types/types"
+import Layout from "../../../components/Layout"
+import CustomNavSpinner from "../../../components/CustomNavSpinner"
+import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
+import { TitleContext } from "../../../components/ContextProviders/TitleContext"
+import { postDashboard } from "../../../utils/dashboardsAPI"
+import { fetchAreas } from "../../../utils/areasAPI"
+import { RouterAdminDashboards } from "../../../types/routes"
+import { backendPath } from "../.."
+import { EndPathAreas } from "../../../utils/apiHelper"
+import OpsMessages from "../../Driftsmeldinger"
 
 const NewDashboardContainer = styled.div`
     display: flex;
     flex-direction: column;
-    
+
     @media (min-width: 600px) {
         width: 600px;
     }
 
-    input, select {
+    input,
+    select {
         margin: 1rem 0;
     }
 `
 
 export const getServerSideProps = async () => {
-    const [resAreas] = await Promise.all ([
-        fetch(backendPath + EndPathAreas())
-    ])
+    const [resAreas] = await Promise.all([fetch(backendPath + EndPathAreas())])
 
     const allAreasProps = resAreas.json()
 
     return {
         props: {
-            allAreasProps
-        }
+            allAreasProps,
+        },
     }
 }
 
-
-
-const NewDashboard = ({allAreasProps}) => {
+const NewDashboard = ({ allAreasProps }) => {
     const allAreas: Area[] = allAreasProps
     const [newDashboard, updateNewDashboard] = useState<Dashboard>({
         name: "",
         areas: [],
-        opsMessages: []
+        opsMessages: [],
     })
     const [isLoading, setIsLoading] = useState(true)
 
@@ -63,77 +58,105 @@ const NewDashboard = ({allAreasProps}) => {
         setIsLoading(false)
     }, [])
 
-    if(isLoading) {
-        return (
-            <CustomNavSpinner />
-        )
+    if (isLoading) {
+        return <CustomNavSpinner />
     }
-
 
     const handleChangeDashboardName = (event) => {
         const changedDashboard = {
             name: event.target.value,
             areas: [...newDashboard.areas],
-            opsMessages: newDashboard.opsMessages
+            opsMessages: newDashboard.opsMessages,
         }
         updateNewDashboard(changedDashboard)
     }
 
     const handleAddAreaToDashboard = (areaToAdd: Area) => {
-        if(newDashboard.areas.includes(areaToAdd)) {
+        if (newDashboard.areas.includes(areaToAdd)) {
             toast.warn("Område " + areaToAdd.name + " er allerede i dashbord")
             return
         }
         const updatedList = [...newDashboard.areas, areaToAdd]
-        const updatedDashboard: Dashboard = {name: name, areas: updatedList, opsMessages: newDashboard.opsMessages}
+        const updatedDashboard: Dashboard = {
+            name: name,
+            areas: updatedList,
+            opsMessages: newDashboard.opsMessages,
+        }
         updateNewDashboard(updatedDashboard)
         toast.success("Lagt område til dashbord")
     }
 
     const handleDeleteAreaOnDashboard = (areaToDelete: Area) => {
-        const newAreaList: Area[] = [...newDashboard.areas.filter(area => area != areaToDelete)]
-        const updatedDashboard: Dashboard = {name: name, areas: newAreaList, opsMessages: newDashboard.opsMessages}
+        const newAreaList: Area[] = [
+            ...newDashboard.areas.filter((area) => area != areaToDelete),
+        ]
+        const updatedDashboard: Dashboard = {
+            name: name,
+            areas: newAreaList,
+            opsMessages: newDashboard.opsMessages,
+        }
         updateNewDashboard(updatedDashboard)
         toast.success("Fjernet område fra dashbord")
     }
 
-
     const handlePostNewDashboard = (event) => {
         event.preventDefault()
-        postDashboard(newDashboard).then(() => {
-            toast.success("Dashbord lastet opp")
-            router.push(RouterAdminDashboards.PATH)
-        }).catch(() => {
-            toast.error("Klarte ikke å laste opp dashbord")
-        })
+        postDashboard(newDashboard)
+            .then(() => {
+                toast.success("Dashbord lastet opp")
+                router.push(RouterAdminDashboards.PATH)
+            })
+            .catch(() => {
+                toast.error("Klarte ikke å laste opp dashbord")
+            })
     }
-
 
     const { name } = newDashboard
 
     return (
         <Layout>
-
             <NewDashboardContainer>
+                <form onSubmit={(event) => handlePostNewDashboard(event)}>
+                    <Detail size="small" spacing>
+                        Felter markert med * er obligatoriske
+                    </Detail>
 
-                <form onSubmit={event => handlePostNewDashboard(event)}>
+                    <TextField
+                        type="text"
+                        required
+                        label="Navn på dashbord"
+                        value={name}
+                        onChange={(event) => handleChangeDashboardName(event)}
+                        placeholder="Navn*"
+                    />
 
-                    <Detail size="small" spacing>Felter markert med * er obligatoriske</Detail>
-                    
-                    <TextField type="text" required label="Navn på dashbord" value={name} onChange={(event) => handleChangeDashboardName(event)} placeholder="Navn*" />
-
-                    <DashboardAreas 
+                    <DashboardAreas
                         newDashboard={newDashboard}
                         allAreas={allAreas}
-                        handleDeleteAreaOnDashboard={(areaToDelete) => handleDeleteAreaOnDashboard(areaToDelete)}
-                        handleAddAreaToDashboard={(areaToAdd) => handleAddAreaToDashboard(areaToAdd)}
+                        handleDeleteAreaOnDashboard={(areaToDelete) =>
+                            handleDeleteAreaOnDashboard(areaToDelete)
+                        }
+                        handleAddAreaToDashboard={(areaToAdd) =>
+                            handleAddAreaToDashboard(areaToAdd)
+                        }
                     />
 
                     <HorizontalSeparator />
 
                     <ButtonContainer>
-                        <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push(RouterAdminDashboards.PATH)}>Avbryt</Button>
-                        <Button type="submit" value="Legg til dashbord">Lagre</Button>
+                        <Button
+                            variant="secondary"
+                            type="button"
+                            value="Avbryt"
+                            onClick={() =>
+                                router.push(RouterAdminDashboards.PATH)
+                            }
+                        >
+                            Avbryt
+                        </Button>
+                        <Button type="submit" value="Legg til dashbord">
+                            Lagre
+                        </Button>
                     </ButtonContainer>
                 </form>
 
@@ -143,16 +166,7 @@ const NewDashboard = ({allAreasProps}) => {
     )
 }
 
-
-
-
-
-
 /*------------- Helpers -------------*/
-
-
-
-
 
 interface DashboardProps {
     newDashboard: Dashboard
@@ -161,74 +175,97 @@ interface DashboardProps {
     handleAddAreaToDashboard: (areaToAdd) => void
 }
 
-
-
-
-
-const DashboardAreas = ({newDashboard, allAreas, handleDeleteAreaOnDashboard, handleAddAreaToDashboard}: DashboardProps) => {
-    const availableAreas: Area[] = allAreas.filter(area => !newDashboard.areas.map(a => a.id).includes(area.id))
+const DashboardAreas = ({
+    newDashboard,
+    allAreas,
+    handleDeleteAreaOnDashboard,
+    handleAddAreaToDashboard,
+}: DashboardProps) => {
+    const availableAreas: Area[] = allAreas.filter(
+        (area) => !newDashboard.areas.map((a) => a.id).includes(area.id)
+    )
     const { changeTitle } = useContext(TitleContext)
-    const [selectedArea, changeSelectedArea] = useState<Area | null>(() => availableAreas.length > 0 ? availableAreas[0] : null)
-    
+    const [selectedArea, changeSelectedArea] = useState<Area | null>(() =>
+        availableAreas.length > 0 ? availableAreas[0] : null
+    )
+
     useEffect(() => {
         changeTitle("Opprett nytt dashbord")
-        if(availableAreas.length > 0){
+        if (availableAreas.length > 0) {
             changeSelectedArea(availableAreas[0])
-        }
-        else {
+        } else {
             changeSelectedArea(null)
         }
     }, [allAreas, newDashboard.areas])
-    
-
 
     const handleUpdateSelectedArea = (event) => {
         const idOfSelectedArea: string = event.target.value
-        const newSelectedArea: Area = availableAreas.find(area => idOfSelectedArea === area.id)
+        const newSelectedArea: Area = availableAreas.find(
+            (area) => idOfSelectedArea === area.id
+        )
         changeSelectedArea(newSelectedArea)
     }
 
     const dependencyHandler = () => {
-        if(!selectedArea) {
+        if (!selectedArea) {
             toast.info("Ingen områder valgt")
             return
         }
         handleAddAreaToDashboard(selectedArea)
     }
-    
 
     return (
         <DynamicListContainer>
-            
             <div className="column">
-                <Select label="Legg til område" value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}>
-                    {availableAreas.length > 0 ?
-                        availableAreas.map(area => {
+                <Select
+                    label="Legg til område"
+                    value={selectedArea !== null ? selectedArea.id : ""}
+                    onChange={handleUpdateSelectedArea}
+                >
+                    {availableAreas.length > 0 ? (
+                        availableAreas.map((area) => {
                             return (
-                                <option key={area.id} value={area.id}>{area.name}</option>
+                                <option key={area.id} value={area.id}>
+                                    {area.name}
+                                </option>
                             )
                         })
-                    :
-                        <option key={undefined} value="">Ingen områder å legge til</option>
-                    }
+                    ) : (
+                        <option key={undefined} value="">
+                            Ingen områder å legge til
+                        </option>
+                    )}
                 </Select>
-                <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
+                <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={dependencyHandler}
+                >
+                    Legg til
+                </Button>
             </div>
 
             <div className="column">
-
-                {newDashboard.areas.length > 0 &&
+                {newDashboard.areas.length > 0 && (
                     <div>
                         <b>Områder i dashbord</b>
                         <ul className="new-list">
-                            {newDashboard.areas.map(area => {
+                            {newDashboard.areas.map((area) => {
                                 return (
                                     <li key={area.id}>
                                         <BodyShort>
                                             {area.name}
-                                            <button className="colored" type="button" onClick={() => handleDeleteAreaOnDashboard(area)}>
+                                            <button
+                                                className="colored"
+                                                type="button"
+                                                onClick={() =>
+                                                    handleDeleteAreaOnDashboard(
+                                                        area
+                                                    )
+                                                }
+                                            >
                                                 <label>{area.name}</label>
-                                                <Delete/> Slett
+                                                <Delete /> Slett
                                             </button>
                                         </BodyShort>
                                     </li>
@@ -236,7 +273,7 @@ const DashboardAreas = ({newDashboard, allAreas, handleDeleteAreaOnDashboard, ha
                             })}
                         </ul>
                     </div>
-                }
+                )}
             </div>
         </DynamicListContainer>
     )

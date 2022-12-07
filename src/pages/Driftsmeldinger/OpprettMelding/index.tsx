@@ -67,7 +67,7 @@ const CreateOpsMessage = ({ services }) => {
     useEffect(() => {
         setIsLoading(true)
         if (router.isReady) {
-            changeTitle("Opprett avviksmelding - status.nav.no")
+            changeTitle("Opprett driftsmelding - status.nav.no")
             setIsLoading(false)
         }
     }, [router])
@@ -80,7 +80,7 @@ const CreateOpsMessage = ({ services }) => {
         // console.log(opsMessage)
         postOpsMessage(opsMessage)
             .then(() => {
-                toast.success("Avviksmelding opprettet er sendt inn")
+                toast.success(" opprettet er sendt inn")
             })
             .catch(() => {
                 toast.error("Det oppstod en feil")
@@ -93,7 +93,7 @@ const CreateOpsMessage = ({ services }) => {
     return (
         <Layout>
             <Head>
-                <title>Opprett avviksmelding - status.nav.no</title>
+                <title>Opprett driftsmelding - status.nav.no</title>
             </Head>
             <OpsComponent
                 handleSubmitOpsMessage={handleSubmitOpsMessage}
@@ -286,7 +286,7 @@ const OpsComponent = ({
     return (
         <OpsContainer className={selectedSeverity.toLowerCase()}>
             <Heading size="xlarge" level="2">
-                Opprett avviksmeldingen
+                Opprett driftsmelding
             </Heading>
 
             <div className="input-area">
@@ -367,9 +367,10 @@ const OpsComponent = ({
             />
 
             <RadioGroup
-                legend="Skal avviksmeldingen gjelde umiddelbart?"
+                legend="Skal driftsmeldingen gjelde umiddelbart?"
                 onChange={(e) => handleIsActive(e)}
                 defaultValue={isActive ? "1" : "0"}
+                
             >
                 <Radio value="1">Nå</Radio>
                 <Radio value="0">Senere</Radio>
@@ -459,7 +460,7 @@ const OpsComponent = ({
                     Avbryt
                 </Button>
                 <Button variant="primary" onClick={handleSubmitOpsMessage}>
-                    Send inn ny avviksmelding
+                    Send inn ny driftsmelding
                 </Button>
             </div>
         </OpsContainer>

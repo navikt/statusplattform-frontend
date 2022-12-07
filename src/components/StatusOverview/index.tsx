@@ -41,7 +41,7 @@ const StatusSummary = styled.div`
     }
 
     @media (min-width: 902px) {
-        /* TODO: Se på dette, det kan breake symmetrien på dashbordene hvis avviksmeldinger > 1 */
+        /* TODO: Se på dette, det kan breake symmetrien på dashbordene hvis driftsmeldinger > 1 */
         /* flex-flow: row wrap; */
     }
     @media (min-width: 1359px) {

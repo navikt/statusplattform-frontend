@@ -74,7 +74,8 @@ const OpsMessages = ({ serverOpsMessages }) => {
         "F110862",
         "A110886",
         "L120166",
-        "H166137", "G121973"
+        "H166137",
+        "G121973",
     ]
 
     useEffect(() => {
@@ -95,7 +96,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
                 }
             } catch (error) {
                 console.log(error)
-                toast.error("Noe gikk galt ved henting av avviksmeldingene")
+                toast.error("Noe gikk galt ved henting av driftsmeldinger")
                 isMounted = false
             } finally {
                 if (isMounted) {
@@ -127,7 +128,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
                     }
                 } catch (error) {
                     console.log(error)
-                    toast.error("Noe gikk galt ved henting av avviksmeldingene")
+                    toast.error("Noe gikk galt ved henting av driftsmeldinger")
                     changeRefetchOpsMessages(false)
                 } finally {
                     if (reFetchOpsMessages) {
@@ -172,11 +173,11 @@ const OpsMessages = ({ serverOpsMessages }) => {
                 <Button
                     onClick={() => router.push(RouterOpprettOpsMelding.PATH)}
                 >
-                    Opprett ny avviksmelding
+                    Opprett ny driftsmelding
                 </Button>
             </CreateAvvikButtonWrapper>
 
-            {/* <Heading level="2" size="small">Alle avviksmeldinger</Heading>            
+            {/* <Heading level="2" size="small">Alle driftsmeldinger</Heading>            
             <ListOfOpsMessages opsMessages={opsMessages} /> */}
 
             <OpsSectionContainer>
@@ -255,7 +256,7 @@ const ListOfOpsMessages = (props: ListOfOpsMessagesI) => {
         props
 
     if (!opsMessages) {
-        return <>Ingen avviksmeldinger å vise</>
+        return <>Ingen driftsmeldinger å vise</>
     }
 
     return (

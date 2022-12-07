@@ -36,10 +36,10 @@ const OpsMessageContainer = styled.div`
 `
 
 export const getServerSideProps = async (context) => {
-    const { avviksmeldingId } = await context.query
+    const { driftsmeldingId } = await context.query
 
     const [resOpsMsg, resServices] = await Promise.all([
-        fetch(backendPath + EndPathSpecificOps(avviksmeldingId)),
+        fetch(backendPath + EndPathSpecificOps(driftsmeldingId)),
         fetch(backendPath + EndPathServices()),
     ])
 
@@ -72,7 +72,7 @@ const opsMessageDetails = ({ opsMessage, retrievedServices }) => {
             <OpsMessageContainer>
                 <Head>
                     <title>
-                        Avviksmelding - {opsMessage.internalHeader} -
+                        Driftsmelding - {opsMessage.internalHeader} -
                         status.nav.no
                     </title>
                 </Head>
@@ -195,7 +195,8 @@ const OpsMessageComponent = ({
         "F110862",
         "A110886",
         "L120166",
-        "H166137", "G121973"
+        "H166137",
+        "G121973",
     ]
 
     useEffect(() => {
@@ -255,7 +256,7 @@ const OpsMessageComponent = ({
         >
             <div className="header-container">
                 <Heading size="medium" level="2">
-                    Avviksmelding -{" "}
+                    Driftsmelding -{" "}
                     {usersWithAccess.includes(navIdent)
                         ? internalHeader
                         : externalHeader}
@@ -784,7 +785,7 @@ const ModifyAffectedServices = ({
                 .includes(service.id)
         ) {
             toast.error(
-                "Tjeneste fins allerede på avviksmeldingen. Noe har gått galt."
+                "Tjeneste finnes allerede på driftsmeldingen. Noe har gått galt."
             )
             return
         }
@@ -806,7 +807,7 @@ const ModifyAffectedServices = ({
                 .includes(service.id)
         ) {
             toast.error(
-                "Ser ut som tjenesten du prøver å fjerne ikke fins på avviksmeldingen. Noe har gått galt."
+                "Ser ut som tjenesten du prøver å fjerne ikke finnes på driftsmeldingen. Noe har gått galt."
             )
             return
         }
@@ -834,11 +835,11 @@ const ModifyAffectedServices = ({
         <EditAffectedServicesContainer className="section">
             {opsMessageToUpdate.affectedServices.length == 0 ? (
                 <BodyShort>
-                    Ingen tjenester er knyttet til avviksmeldingen
+                    Ingen tjenester er knyttet til driftsmeldingen
                 </BodyShort>
             ) : (
                 <div>
-                    <b>Tilknyttede tjenester mot avviksmeldingen:</b>
+                    <b>Tilknyttede tjenester mot driftsmeldingen:</b>
                     <ul>
                         {opsMessageToUpdate.affectedServices.map((service) => {
                             return (
