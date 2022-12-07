@@ -1,8 +1,7 @@
 import {
     BodyShort,
-    Button,
-    Checkbox,
-    CheckboxGroup,
+   Button,
+   Tooltip,
     Heading,
     Radio,
     RadioGroup,
@@ -28,7 +27,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import { Service } from "../../../types/types"
 import { backendPath } from "../.."
 import { EndPathServices } from "../../../utils/apiHelper"
-import { Delete } from "@navikt/ds-icons"
+import { Copy } from "@navikt/ds-icons"
 import { CloseCustomized, HorizontalSeparator } from "../../Admin"
 import DateSetterOps from "../../../components/DateSetterOps"
 
@@ -80,7 +79,7 @@ const CreateOpsMessage = ({ services }) => {
         // console.log(opsMessage)
         postOpsMessage(opsMessage)
             .then(() => {
-                toast.success(" opprettet er sendt inn")
+                toast.success("Driftsmelding opprettet")
             })
             .catch(() => {
                 toast.error("Det oppstod en feil")
@@ -105,12 +104,28 @@ const CreateOpsMessage = ({ services }) => {
     )
 }
 
+const Spacer = styled.div.attrs((props: { height: string }) => props)`
+    height: ${(props) => props.height};
+
+    
+`
+const CopyOpsMsg = styled.div`
+    display: inline-block;
+    position: absolute;
+    margin: -3.5px 0 0 8.5rem;
+`
+
 const OpsContainer = styled.div`
     display: flex;
+    width: 45rem;
+    min-width: 650px;
     flex-direction: column;
-
-    padding: 1rem;
-    border-left: 7.5px solid transparent;
+    background-color: white;
+    padding: 3rem;
+    padding-left: 4.5rem;
+    padding-bottom: 4rem;
+    border-left: 8px solid transparent;
+    border-radius: 0.5rem;
 
     &.neutral {
         border-color: var(--navds-global-color-blue-500);
@@ -125,8 +140,6 @@ const OpsContainer = styled.div`
     }
 
     .input-area {
-        width: 200px;
-
         & > * {
             margin: 1rem 0;
         }
@@ -135,11 +148,12 @@ const OpsContainer = styled.div`
     .button-container {
         display: flex;
         justify-content: space-between;
+        width: 35rem;
     }
 
-    @media (min-width: 400px) {
+    @media (min-width: 35rem) {
         .input-area {
-            width: 400px;
+            width: 35rem;
         }
     }
 `
@@ -209,19 +223,23 @@ const OpsComponent = ({
         setOpsMessage({ ...opsMessage, affectedServices: newServices })
     }
 
-    const handleIsInternal = () => {
-        if (!opsMessage.onlyShowForNavEmployees) {
-            setOpsMessage({
-                ...opsMessage,
-                externalHeader: internalHeader,
-                externalMessage: internalMessage,
-            })
-        }
-        setOpsMessage({
-            ...opsMessage,
-            onlyShowForNavEmployees: !onlyShowForNavEmployees,
-        })
-    }
+   const handleIsInternal = (newValue) => {
+       console.log(onlyShowForNavEmployees)
+       if (newValue == "Internal") {
+           setOpsMessage({
+               ...opsMessage,
+               onlyShowForNavEmployees: true,
+               externalHeader: internalHeader,
+               externalMessage: internalMessage,
+           })
+       } else {
+           setOpsMessage({
+               ...opsMessage,
+               onlyShowForNavEmployees: false,
+           })
+       }
+   }
+
 
     const handleUpdateMessageInternal = (message: string) => {
         if (message.length < 501) {
@@ -234,6 +252,17 @@ const OpsComponent = ({
             setOpsMessage({ ...opsMessage, externalMessage: message })
         }
     }
+
+     const handleCopyInternal = (title: string, message: string) => {
+         if (message.length < 501) {
+             setOpsMessage({
+                 ...opsMessage,
+                 externalHeader: title,
+                 externalMessage: message,
+             })
+         }
+     }
+
 
     const handleIsActive = (newValue) => {
         if (newValue == "1") {
@@ -285,38 +314,41 @@ const OpsComponent = ({
 
     return (
         <OpsContainer className={selectedSeverity.toLowerCase()}>
-            <Heading size="xlarge" level="2">
+            <Heading size="large" level="3">
                 Opprett driftsmelding
             </Heading>
 
+            <Spacer height="0.5rem" />
+
             <div className="input-area">
                 <Select
-                    label="Velg alvorlighetsgrad"
+                    label="Velg alvorlighetsgrad:"
                     value={selectedSeverity !== null ? selectedSeverity : ""}
                     onChange={handleUpdateSelectedSeverity}
                 >
-                    <option value="NEUTRAL">Nøytral</option>
-                    <option value="ISSUE">Gul</option>
-                    <option value="DOWN">Rød</option>
+                    <option value="NEUTRAL">Nøytral - Blå</option>
+                    <option value="ISSUE">Middels - Gul</option>
+                    <option value="DOWN">Høy - Rød</option>
                 </Select>
             </div>
 
-            <CheckboxGroup
-                legend="Bare til interne?"
-                hideLegend
-                onChange={() => handleIsInternal()}
+            <Spacer height="0.5rem" />
+
+            <RadioGroup
+                legend="Velg synlighet:"
+                onChange={(e) => handleIsInternal(e)}
+                defaultValue={"Internal"}
             >
-                <Checkbox
-                    value={onlyShowForNavEmployees ? "true" : "false"}
-                    defaultChecked={onlyShowForNavEmployees}
-                >
-                    <b>- Bare til interne?</b>
-                </Checkbox>
-            </CheckboxGroup>
+                <Radio value="Internal">Kun interne brukere</Radio>
+                <Radio value="Public">Interne og eksterne brukere</Radio>
+            </RadioGroup>
 
             <div className="input-area">
+                <Heading level="5" size="xsmall">
+                    Intern melding:
+                </Heading>
                 <TextField
-                    label="Tittel for meldingen"
+                    label="Tittel:"
                     value={internalHeader}
                     onChange={(e) =>
                         setOpsMessage({
@@ -328,7 +360,7 @@ const OpsComponent = ({
                 />
 
                 <Textarea
-                    label="Intern melding"
+                    label="Innhold:"
                     value={internalMessage}
                     onChange={(e) =>
                         handleUpdateMessageInternal(e.target.value)
@@ -339,8 +371,32 @@ const OpsComponent = ({
 
             {!onlyShowForNavEmployees && (
                 <div className="input-area">
+                    <div><CopyOpsMsg>
+                            <Tooltip
+                                content="Kopier intern melding"
+                                placement="right"
+                            >
+                        <Button
+                            size="small"
+                            variant="tertiary"
+                            title="Kopier interntekst"
+                            onClick={() => {
+                                handleCopyInternal(
+                                    internalHeader,
+                                    internalMessage
+                                )
+                            }}
+                        >
+                            <Copy />
+                        </Button></Tooltip>
+                        </CopyOpsMsg>
+                       
+                        <Heading level="5" size="xsmall">
+                            Ekstern melding:
+                        </Heading>
+                    </div>
                     <TextField
-                        label="Tittel for ekstern melding"
+                        label="Tittel:"
                         value={externalHeader}
                         onChange={(e) =>
                             setOpsMessage({
@@ -350,7 +406,7 @@ const OpsComponent = ({
                         }
                     />
                     <Textarea
-                        label="Ekstern melding"
+                        label="Innhold:"
                         value={externalMessage}
                         onChange={(e) =>
                             handleUpdateMessageExternal(e.target.value)
@@ -370,7 +426,6 @@ const OpsComponent = ({
                 legend="Skal driftsmeldingen gjelde umiddelbart?"
                 onChange={(e) => handleIsActive(e)}
                 defaultValue={isActive ? "1" : "0"}
-                
             >
                 <Radio value="1">Nå</Radio>
                 <Radio value="0">Senere</Radio>
