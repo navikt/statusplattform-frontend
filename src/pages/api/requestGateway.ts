@@ -89,6 +89,8 @@ const requestBearerTokenForBackend = async (bearerToken: String) => {
     let grant_type= 'urn:ietf:params:oauth:grant-type:jwt-bearer';
     let requested_token_use= 'on_behalf_of';
 
+    console.log(assertion);
+
 
     let body = 'client_id='+client_id+'&'
     +'client_secret='+client_secret+'&'
