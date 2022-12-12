@@ -28,7 +28,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     //let authorizationHeader = process.env.NEXT_AUTH_TOKEN
 
     await requestBearerTokenForBackend(accessToken);
-    await validateClaimsAndSignature(accessToken);
+    //await validateClaimsAndSignature(accessToken);
 
     let backendEndpath = req.headers.backendendpath
     let method = req.headers.method
