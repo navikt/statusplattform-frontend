@@ -1,5 +1,5 @@
 import { NextApiRequest, NextApiResponse } from "next";
-import jose from "jose";
+import { importJWK,jwtVerify , JWK } from "jose";
 
 
 
@@ -87,7 +87,7 @@ const requestBearerTokenForBackend = async (accessToken: String) => {
     const https = require('https');
 
     const url = "https://login.microsoftonline.com/"+TENANT+"/oauth2/v2.0/token";
-
+//
     let client_id = CLIENT_ID;
     let client_secret =  CLIENT_SECRET;
     let scope='api://'+ ENV +'-gcp.navdig.portalserver/.default'
@@ -98,7 +98,7 @@ const requestBearerTokenForBackend = async (accessToken: String) => {
 //     let client_id = 'cc54eb5e-cefa-4f70-b5c8-2cb7a34b2104';
 //     let client_secret =  'ZBw8Q~6i8zkHHZD09c8YGqZMBja6ARJMvdW-~bAU';
 //     let scope='api://dev-gcp.navdig.portalserver/.default'
-//     let assertion = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSJ9.eyJhdWQiOiJjYzU0ZWI1ZS1jZWZhLTRmNzAtYjVjOC0yY2I3YTM0YjIxMDQiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNjIzNjY1MzQtMWVjMy00OTYyLTg4NjktOWI1NTM1Mjc5ZDBiL3YyLjAiLCJpYXQiOjE2NzA4MzI5NTksIm5iZiI6MTY3MDgzMjk1OSwiZXhwIjoxNjcwODM3MjQ2LCJhaW8iOiJBWFFBaS84VEFBQUE5ditQWlJUNW92TVp2VUtWYXd4ZjVJTVgzaThNRW9Ud1RZZlVjc1l2dFZSQ1VaTXpWUWYvZWJkV3o1VDl0OThwd1gzdGV5d29XUGFXSFp3M3A3b1FUNkRIaVFodDN5c1BHSTdjd3IvQkFVS2dNN3ZrejhTUUdFNUFqalR1aHhMOVp6MWhkaDF4R2N0enUyOHlpNlp4SVE9PSIsImF6cCI6ImNjNTRlYjVlLWNlZmEtNGY3MC1iNWM4LTJjYjdhMzRiMjEwNCIsImF6cGFjciI6IjIiLCJncm91cHMiOlsiMmQ3ZjFjMGQtNTc4NC00ZjgxLThiYjItOGYzYTc5ZjhmOTQ5Il0sIm5hbWUiOiJMb3RzYmVyZywgTGFycyBBdWd1c3QiLCJvaWQiOiIxMDNmOWFkMi0wZjZiLTQ4OWMtYWQ0NC1iM2NlYmUyNTExZGIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJMYXJzLkF1Z3VzdC5Mb3RzYmVyZ0BuYXYubm8iLCJyaCI6IjAuQVNBQU5HVTJZc01lWWttSWFadFZOU2VkQzE3clZNejZ6bkJQdGNnc3Q2TkxJUVFnQURrLiIsInNjcCI6ImRlZmF1bHRhY2Nlc3MiLCJzdWIiOiJ5dmRoejk5WEJvdHRHTmRrWE1UWE1BcW43enREU1dKMVEzRDdaWjVSMFpJIiwidGlkIjoiNjIzNjY1MzQtMWVjMy00OTYyLTg4NjktOWI1NTM1Mjc5ZDBiIiwidXRpIjoiS21OZzN5QkFsMDZrYkE3dk13OHdBQSIsInZlciI6IjIuMCIsIk5BVmlkZW50IjoiTDE1MjQyMyIsImF6cF9uYW1lIjoiZGV2LWdjcDpuYXZkaWc6cG9ydGFsIn0.Z3I0Ew8aGQZQ0fzaQgtOXv1AZqWYFXQONOlN_ZMu_24uXscGC-o-Afew0aLoYXHheWjyLGBcZAl5LZaknb_LDodrPYt0GfZd2pU06waMiIvolSD2kxT_xq4EXZhm8mxkIsamER8-hj8_pzzvVjam5ppBzSfiQ6m2YowtgswV_swq9GuyHO6JenXGpqPwwu7P4pmbzpnZQfHh0I8374jNkUMVNaXnPmZxPnsAlCoyK59vt9tYFk3KsaR80_L2ICDhDrxVegRZz0vQSPIS_zXJxCE4prKL0FFGPCcL1fM6WSxFGckWzr7quf_OTHkIuHwjfiPS8rWnNka6sNm8y-xS7g';
+//     let assertion = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiIsImtpZCI6IjJaUXBKM1VwYmpBWVhZR2FYRUpsOGxWMFRPSSJ9.eyJhdWQiOiJjYzU0ZWI1ZS1jZWZhLTRmNzAtYjVjOC0yY2I3YTM0YjIxMDQiLCJpc3MiOiJodHRwczovL2xvZ2luLm1pY3Jvc29mdG9ubGluZS5jb20vNjIzNjY1MzQtMWVjMy00OTYyLTg4NjktOWI1NTM1Mjc5ZDBiL3YyLjAiLCJpYXQiOjE2NzA4NDY5MTAsIm5iZiI6MTY3MDg0NjkxMCwiZXhwIjoxNjcwODUxMjk5LCJhaW8iOiJBWFFBaS84VEFBQUFNZU4wVmdzTXlqa2svYk5pa2MrdVh0SFFiQzhCMHNNcERnZDNwOVJJeE95REVselZCQnlXQ0tPNzBCeE5OSlNDMHFRbmgvWHFqd1ZWMHBna2hlelUzMThyZngzK1hkTWJWRmFkcm8zZjVwZ3Fsam5xbGVQVmkvSlFRRGFCa0tmVCtCVUJhdUlDanBraHltZWhRQVJaU0E9PSIsImF6cCI6ImNjNTRlYjVlLWNlZmEtNGY3MC1iNWM4LTJjYjdhMzRiMjEwNCIsImF6cGFjciI6IjIiLCJncm91cHMiOlsiMmQ3ZjFjMGQtNTc4NC00ZjgxLThiYjItOGYzYTc5ZjhmOTQ5Il0sIm5hbWUiOiJMb3RzYmVyZywgTGFycyBBdWd1c3QiLCJvaWQiOiIxMDNmOWFkMi0wZjZiLTQ4OWMtYWQ0NC1iM2NlYmUyNTExZGIiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJMYXJzLkF1Z3VzdC5Mb3RzYmVyZ0BuYXYubm8iLCJyaCI6IjAuQVNBQU5HVTJZc01lWWttSWFadFZOU2VkQzE3clZNejZ6bkJQdGNnc3Q2TkxJUVFnQURrLiIsInNjcCI6ImRlZmF1bHRhY2Nlc3MiLCJzdWIiOiJ5dmRoejk5WEJvdHRHTmRrWE1UWE1BcW43enREU1dKMVEzRDdaWjVSMFpJIiwidGlkIjoiNjIzNjY1MzQtMWVjMy00OTYyLTg4NjktOWI1NTM1Mjc5ZDBiIiwidXRpIjoiZGdsb3cyUXh6RWU2d1lxaTU0S1ZBQSIsInZlciI6IjIuMCIsIk5BVmlkZW50IjoiTDE1MjQyMyIsImF6cF9uYW1lIjoiZGV2LWdjcDpuYXZkaWc6cG9ydGFsIn0.VP1977dr81wHIjUhzZjic3BbSF2-kuvZcDty_ifq1yYDo1810eNil2lctc_rm9mDhWsjDN7rsYSvo2eWA-Eejygc45tiid6lIudJ6zKk1NWI1XDCnRVTUVfvZlUsQMMldymWRLhPrCFOM3CdM1Fcl99ObFl7zy_9aBJDTVUSocKGg0CMntA95cfLhPr5b0Aa2vzjQ-DGWCNOBr6RpXbzeBSgfvtxdP0jwhqwxVDzk8FQq9YZhCkIZegjfBdl3ADlF97m9SYJniskWyletHG8qtWUXuY8Fd61vzx77EKeWO5U1f-OKITHWJyaz4G4c-AlAqUMiJwv36BvuQxtZJJMfw';
 //     let grant_type= 'urn:ietf:params:oauth:grant-type:jwt-bearer';
 //     let requested_token_use= 'on_behalf_of';
 
@@ -130,21 +130,23 @@ const requestBearerTokenForBackend = async (accessToken: String) => {
     
 
 
-const validateClaimsAndSignature = async (accessToken: String) => {
+const validateClaimsAndSignature = async (accessToken: string) => {
 
-    const alg = 'RS256'
-    const jwk = AZURE_APP_JWK;
-    const publicKey = await jose.importJWK(jwk, alg)
-    const jwt = accessToken;
-
-    const { payload, protectedHeader } = await jose.jwtVerify(jwt, publicKey, {
-    issuer: AZURE_OPENID_CONFIG_ISSUER,
-    audience: CLIENT_ID,
-    })
     console.log("In validation: --------")
     console.log("jwk: "+ AZURE_APP_JWK)
     console.log("ISSUER: " + AZURE_OPENID_CONFIG_ISSUER)
     console.log("CLIENT_ID" + CLIENT_ID)
+
+    const alg = 'RS256'
+    const jwk : JWK = {AZURE_APP_JWK};
+    const publicKey = await importJWK(jwk, alg)
+    const jwt:string = accessToken;
+
+    const { payload, protectedHeader } = await jwtVerify(jwt, publicKey, {
+    issuer: AZURE_OPENID_CONFIG_ISSUER,
+    audience: CLIENT_ID,
+    })
+ 
     console.log(protectedHeader)
     console.log(payload)
     console.log("----------------------")
