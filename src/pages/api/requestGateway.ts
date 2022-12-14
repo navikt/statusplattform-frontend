@@ -21,17 +21,24 @@ const createRequest = (path,method, headers)  => new Request(path, {
 export default async (req: NextApiRequest, res: NextApiResponse) => {
     console.log("IN REQUEST GATEWAY")
 
+    let NO_AUTHORIZATION_HEADER = "No Authorization header"
+
     //For test/prod:
-    let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: "No Authorization header"
-    let accessToken = getAccessTokenFromBearerToken(authorizationHeader);
+    let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: NO_AUTHORIZATION_HEADER
+    if(authorizationHeader != NO_AUTHORIZATION_HEADER){
+        let accessToken = getAccessTokenFromBearerToken(authorizationHeader);
+        await requestBearerTokenForBackend(accessToken);
+        await validateClaimsAndSignature(accessToken);
+    }
+
+
 
 
     //For dev:
     //let authorizationHeader = process.env.NEXT_AUTH_TOKEN
 
     //Kommenter ut dissde for å kjøre lokalt:
-    await requestBearerTokenForBackend(accessToken);
-    await validateClaimsAndSignature(accessToken);
+
 
     let backendEndpath = req.headers.backendendpath
     let method = req.headers.method
@@ -134,6 +141,16 @@ const requestBearerTokenForBackend = async (accessToken: String) => {
 
 
 const validateClaimsAndSignature = async (accessToken: string) => {
+    console.log("--------------------------------")
+    console.log("In validate claims and signature ")
+    console.log("AccessToken : "  + accessToken)
+    console.log("--------------------------------")
+    console.log("JWKS_URI : " + JWKS_URI)
+    console.log("--------------------------------")
+    console.log("AZURE_OPENID_CONFIG_ISSUER : " + AZURE_OPENID_CONFIG_ISSUER)
+    console.log("--------------------------------")
+    console.log("CLIENT_ID : " + CLIENT_ID)
+    
 
     const JWKS = createRemoteJWKSet(new URL(JWKS_URI))
 
