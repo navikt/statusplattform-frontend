@@ -25,6 +25,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     //For test/prod:
     //-----------------------------------
+
     let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: NO_AUTHORIZATION_HEADER
     let bearerTokenForBackend = ""
     if(authorizationHeader != NO_AUTHORIZATION_HEADER){
@@ -32,12 +33,14 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         await validateClaimsAndSignature(accessToken);
         bearerTokenForBackend = await requestBearerTokenForBackend(accessToken);
     }
+
     //-----------------------------------
 
     //For dev:
     //-----------------------------------
-    let authorizationHeader = process.env.NEXT_AUTH_TOKEN
-    let bearerTokenForBackend = getAccessTokenFromBearerToken(authorizationHeader);
+    // let authorizationHeader = process.env.NEXT_AUTH_TOKEN
+    //let bearerTokenForBackend = getAccessTokenFromBearerToken(authorizationHeader);
+    //console.log(authorizationHeader)
     //-----------------------------------
 
     let backendEndpath = req.headers.backendendpath
