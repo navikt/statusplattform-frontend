@@ -1,86 +1,42 @@
-import Link from 'next/link'
-import styled from 'styled-components'
-import { useContext, useEffect, useState } from "react";
+import Link from "next/link"
+import styled from "styled-components"
+import { useContext, useEffect, useState } from "react"
+import { Accordion, Button } from "@navikt/ds-react"
+import { Expand } from "@navikt/ds-icons"
+import { BodyShort, Detail, Heading } from "@navikt/ds-react"
+import {
+    ErrorFilledCustomized,
+    WrenchFilledCustomized,
+    SuccessFilledCustomized,
+    WarningFilledCustomized,
+    HelptextCustomizedBlue,
+    HelpTextCustomizedGray,
+} from "../../components/TrafficLights"
+import { Area, MaintenanceObject, SubArea } from "../../types/types"
+import { FilterContext } from "../../components/ContextProviders/FilterContext"
+import { UserStateContext } from "../ContextProviders/UserStatusContext"
+import { useRouter } from "next/router"
+import { Collapse } from "react-collapse"
+import { RouterTjenestedata } from "../../types/routes"
 
-import { Expand, Wrench } from '@navikt/ds-icons'
-import Ekspanderbartpanel from 'nav-frontend-ekspanderbartpanel';
-import { EtikettAdvarsel, EtikettFokus, EtikettInfo, EtikettSuksess } from 'nav-frontend-etiketter';
-import { BodyShort, Detail, Heading } from '@navikt/ds-react';
-
-import { ErrorCustomized, ErrorFilledCustomized, WrenchFilledCustomized, NoStatusAvailableCircle, WrenchOutlinedCustomized, SuccessCustomized, SuccessFilledCustomized, WarningCustomized, WarningFilledCustomized, HelptextCustomizedBlue, HelpTextCustomizedGray } from '../../components/TrafficLights'
-import { getIconsFromGivenCode } from '../../utils/servicesOperations'
-import { Area, MaintenanceObject, SubArea} from '../../types/types'
-import { FilterContext } from '../../components/ContextProviders/FilterContext';
-import { StringifyOptions } from 'querystring';
-import { UserStateContext } from '../ContextProviders/UserStatusContext';
-import { useRouter } from 'next/router';
-import { useLoader } from '../../utils/useLoader';
-import CustomNavSpinner from '../CustomNavSpinner';
-import { Collapse } from 'react-collapse';
-import { RouterTjenestedata } from '../../types/routes';
-import { element } from 'prop-types';
-
-
-
-
-
-
-
-const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: string, height_when_not_expanded: string, center_if_not_expanded}>`
-    /* 
-        Adjustment to EkspanderbartPanel-component padding
-        padding-bottom 34px is due to position: absolute in navds-detail
-    */
-    background: none;
-    .ekspanderbartPanel__hode {
-        padding: 0;
-        padding-right: 20px;
-        
-        .not-logged-in {
-            padding: 20px;
-        }
-
-        .logged-in {
-            padding: 20px; 
-        }
-        
-        &:focus {
-            outline: 2px solid var(--navds-semantic-color-focus);
-        }
-    }
-
-    .ekspanderbartPanel__hode--focus, .ekspanderbartPanel__hode:focus{box-shadow: none;}
+const CustomAccordionHeader = styled(Accordion.Header)`
+    border: none;
+    padding: 1.5rem 0.6rem 1.2rem 0.6rem;
+    border-radius: 4px;
+`
+const CustomizedAccordion = styled(Accordion)<{
+    alignment: string
+    height_when_not_expanded: string
+    center_if_not_expanded
+}>`
+    background: white;
+    border-radius: 4px;
 
     width: 100%;
 
-    -moz-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
-    -webkit-box-shadow: 0 0 10px rgba(0,0,0, 0.2);
-    box-shadow: 0 0 10px rgba(0,0,0, 0.2);
-
-    .top-content {
-        position: relative;
-
-        .etikett-container {
-            margin-right: 5px;
-            display: flex;
-            gap: 12px;
-        }
-
-        .icon {
-            margin-right: 0.5rem;
-            vertical-align: middle;
-        }
-
-        .navds-detail {
-            color: var(--navds-global-color-gray-600);
-            position: absolute;
-            width: 385px;
-        }
-    }
-
     @media (min-width: 425px) {
         width: 425px;
-        
+
         .top-content {
             .etikett-container {
                 margin-right: 0;
@@ -90,13 +46,11 @@ const EkspanderbartpanelCustomized = styled(Ekspanderbartpanel)<{alignment: stri
 
     display: flex;
     flex-direction: column;
-    justify-content: ${(props): any => (props.center_if_not_expanded)};
+    justify-content: ${(props): any => props.center_if_not_expanded};
 
     //Styrer om panelet skal strekke etter høyden eller ikke basert på prop i render
-    align-self: ${(props): any => (props.alignment)};
-    min-height: ${(props): any => (props.height_when_not_expanded)};
-
-
+    align-self: ${(props): any => props.alignment};
+    min-height: ${(props): any => props.height_when_not_expanded};
 
     .maintenance-message {
         color: grey;
@@ -116,24 +70,24 @@ const HeadingCustomized = styled(Heading)`
     padding-bottom: 6.5px;
     display: flex;
     flex-direction: row;
-    
+
     span {
         display: flex;
         align-items: center;
     }
-    
+
     svg {
         margin-right: 8px;
-            
+
         top: 50%;
         align-items: center;
     }
-`;
+`
 
 const ServicesList = styled.ul`
     color: black;
-    
-    border-radius:0 0 10px 10px;
+
+    border-radius: 0 0 10px 10px;
 
     padding: 0;
     margin: 0;
@@ -145,12 +99,12 @@ const ServicesList = styled.ul`
     .sub-area-list-item:first-child {
         padding-top: 0;
     }
-    
+
     > li {
         display: flex;
         justify-content: flex-start;
-        
-        padding: .5rem 0;
+
+        padding: 0.5rem 0;
         margin-left: 1.5rem;
         font-size: 1.3rem;
 
@@ -171,7 +125,7 @@ const ServicesList = styled.ul`
                 cursor: pointer;
             }
         }
-        
+
         section:nth-child(2) {
             white-space: normal;
             word-break: break-word;
@@ -181,7 +135,7 @@ const ServicesList = styled.ul`
     a {
         display: flex;
     }
-`;
+`
 
 const LenkeCustomized = styled(Link)`
     text-decoration: none;
@@ -191,41 +145,46 @@ const LenkeCustomized = styled(Link)`
     }
 `
 
-
-export const handleAndSetStatusIcon = (status: string | null, isInternal?: boolean): any => {
-    switch(status) {
-        case 'OK':
+export const handleAndSetStatusIcon = (
+    status: string | null,
+    isInternal?: boolean
+): any => {
+    switch (status) {
+        case "OK":
             return <SuccessFilledCustomized />
-        case 'ISSUE':
+        case "ISSUE":
             return <WarningFilledCustomized className="" />
-        case 'DOWN':
+        case "DOWN":
             return <ErrorFilledCustomized />
-        case 'MAINTENANCE':
+        case "MAINTENANCE":
             return <WrenchFilledCustomized />
         case null:
-            if(isInternal) {
-                return(
+            if (isInternal) {
+                return (
                     <div className="no-status-wrapper">
                         <HelptextCustomizedBlue aria-label="Ingen status å hente fra tjenesten" />
                         <span className="info-hover-text">
-                            <Detail>Ingen status er lagt til på tjenesten</Detail>
+                            <Detail>
+                                Ingen status er lagt til på tjenesten
+                            </Detail>
                         </span>
                         <div className="arrow"></div>
                     </div>
                 )
-            }
-            else {
-                return <HelptextCustomizedBlue aria-label="Ingen status tilgjengelig" />
+            } else {
+                return (
+                    <HelptextCustomizedBlue aria-label="Ingen status tilgjengelig" />
+                )
             }
         default:
-            return(
+            return (
                 <HelptextCustomizedBlue aria-label="Ingen status tilgjengelig" />
             )
     }
 }
 
 export interface PortalServiceTileProps {
-    area: Area;
+    area: Area
     expanded: boolean
     toggleTile: Function
     tileIndex: number
@@ -233,14 +192,19 @@ export interface PortalServiceTileProps {
     heightOfTileInRowBasedOfLargestTileInRow?: string
 }
 
-
-export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllExpanded, heightOfTileInRowBasedOfLargestTileInRow}: PortalServiceTileProps) => {
+export const PortalServiceTile = ({
+    area,
+    expanded,
+    toggleTile,
+    tileIndex,
+    isAllExpanded,
+    heightOfTileInRowBasedOfLargestTileInRow,
+}: PortalServiceTileProps) => {
     const [updatedArea, updateArea] = useState(area)
-    
-    const {filters, matches} = useContext(FilterContext)
+
+    const { filters, matches } = useContext(FilterContext)
     const { navIdent } = useContext(UserStateContext)
     const router = useRouter()
-
 
     const toggleExpanded = () => {
         toggleTile(tileIndex)
@@ -248,148 +212,260 @@ export const PortalServiceTile = ({area, expanded, toggleTile, tileIndex, isAllE
 
     useEffect(() => {
         updateArea(area)
-    },[area])
+    }, [area])
 
-    const testMaintenanceObject: MaintenanceObject = {isPlanned: false, message: "Planlagt 24. desember"}
+    const testMaintenanceObject: MaintenanceObject = {
+        isPlanned: false,
+        message: "Planlagt 24. desember",
+    }
 
     const { name, status, subAreas } = updatedArea
+    const [open, setOpen] = useState(false)
 
     return (
-        <EkspanderbartpanelCustomized
-            alignment={expanded == true ? "stretch" : "flex-start"}
-            height_when_not_expanded={expanded != true ? `${heightOfTileInRowBasedOfLargestTileInRow}` : "auto"}
-            center_if_not_expanded={expanded == true ? "flex-start" : "center"}
-
-            border={false}
-            tittel={
-                <div className={router.asPath.includes("Internt") ? "top-content logged-in" : "top-content not-logged-in"}>
-                    <HeadingCustomized size="medium">
-                        <span>
-                            <StatusIconHandler status={status} isArea={true} />
-                        </span>
-                        <span>{name}</span>
-                    </HeadingCustomized>
-
-                    {router.asPath.includes("Internt") &&
-                        <Detail size="small">
-                            {/* <>Oppetid 100%</> */}
-
-                            {(testMaintenanceObject.message && testMaintenanceObject.isPlanned) ?
-                                <BodyShort className="maintenance-message">
-                                    {testMaintenanceObject.message}
-                                </BodyShort>
-                                :
-                                <span className="empty-space"></span>
-                            }
-                        </Detail>
-                    }
-                </div>
-            }
-            aria-label="Ekspander område"
-            aria-expanded={expanded}
-            apen={expanded}
-            onClick={toggleExpanded}
-        >
-
-            
-            
-            <ServicesList>
-                <div className="sub-area-container">
-                    {subAreas.map((subArea, index) => {
-                        return (
-                            <SubAreaComponent key={subArea.id} subArea={subArea} isLastElement={area.services.length == 0 && subAreas.length == index+1} isAllExpanded={isAllExpanded} navIdent={navIdent} />
-                        )
-                    })}
-                </div>
-
-                {area.services.map(service => {
-                    if (filters.length == 0) {
-                        return (
-                            <li key={service.name}>
-                                {navIdent
-                                ?
-                                    <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
-                                        <section className="logged-in"><StatusIconHandler status={service.record.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam}/> {service.name}</section>
-                                    </LenkeCustomized>
-                                :
-                                    <section><StatusIconHandler status={service.record.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam}/> {service.name}</section>
-                                }
-                            </li>
-                        )
-                    }
-                    if(matches(service.record.status)) {
-                        return (
-                            <li key={service.name}>
-                                {navIdent
-                                ?
-                                    <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
-                                        <section><StatusIconHandler status={service.record.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
-                                    </LenkeCustomized>
-                                :
-                                    <section><StatusIconHandler status={service.record.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
-                                }
-                            </li>
-                        )
-                    }
-                    return
+        <>
+            <CustomizedAccordion
+                alignment={expanded == true ? "stretch" : "flex-start"}
+                height_when_not_expanded={
+                    expanded != true
+                        ? `${heightOfTileInRowBasedOfLargestTileInRow}`
+                        : "auto"
                 }
-                )}
-            </ServicesList>
-        </EkspanderbartpanelCustomized>
+                center_if_not_expanded={
+                    expanded == true ? "flex-start" : "center"
+                }
+            >
+                <Accordion.Item open={open}>
+                    <CustomAccordionHeader onClick={() => setOpen(!open)}>
+                        <div
+                            className={
+                                router.asPath.includes("Internt")
+                                    ? "top-content logged-in"
+                                    : "top-content not-logged-in"
+                            }
+                        >
+                            <HeadingCustomized size="medium">
+                                <span>
+                                    <StatusIconHandler
+                                        status={status}
+                                        isArea={true}
+                                    />
+                                </span>
+                                <span>{name}</span>
+                            </HeadingCustomized>
+
+                            {router.asPath.includes("Internt") && (
+                                <Detail size="small">
+                                    {/* <>Oppetid 100%</> */}
+
+                                    {testMaintenanceObject.message &&
+                                    testMaintenanceObject.isPlanned ? (
+                                        <BodyShort className="maintenance-message">
+                                            {testMaintenanceObject.message}
+                                        </BodyShort>
+                                    ) : (
+                                        <span className="empty-space"></span>
+                                    )}
+                                </Detail>
+                            )}
+                        </div>
+                    </CustomAccordionHeader>
+                    <Accordion.Content>
+                        <ServicesList>
+                            <div className="sub-area-container">
+                                {subAreas.map((subArea, index) => {
+                                    return (
+                                        <SubAreaComponent
+                                            key={subArea.id}
+                                            subArea={subArea}
+                                            isLastElement={
+                                                area.services.length == 0 &&
+                                                subAreas.length == index + 1
+                                            }
+                                            isAllExpanded={isAllExpanded}
+                                            navIdent={navIdent}
+                                        />
+                                    )
+                                })}
+                            </div>
+
+                            {area.services.map((service) => {
+                                if (filters.length == 0) {
+                                    return (
+                                        <li key={service.name}>
+                                            {navIdent ? (
+                                                <LenkeCustomized
+                                                    href={
+                                                        RouterTjenestedata.PATH +
+                                                        service.id
+                                                    }
+                                                >
+                                                    <section className="logged-in">
+                                                        <StatusIconHandler
+                                                            status={
+                                                                service.record
+                                                                    .status
+                                                            }
+                                                            isArea={false}
+                                                            statusNotFromTeam={
+                                                                service.statusNotFromTeam
+                                                            }
+                                                        />{" "}
+                                                        {service.name}
+                                                    </section>
+                                                </LenkeCustomized>
+                                            ) : (
+                                                <section>
+                                                    <StatusIconHandler
+                                                        status={
+                                                            service.record
+                                                                .status
+                                                        }
+                                                        isArea={false}
+                                                        statusNotFromTeam={
+                                                            service.statusNotFromTeam
+                                                        }
+                                                    />{" "}
+                                                    {service.name}
+                                                </section>
+                                            )}
+                                        </li>
+                                    )
+                                }
+                                if (matches(service.record.status)) {
+                                    return (
+                                        <li key={service.name}>
+                                            {navIdent ? (
+                                                <LenkeCustomized
+                                                    href={
+                                                        RouterTjenestedata.PATH +
+                                                        service.id
+                                                    }
+                                                >
+                                                    <section>
+                                                        <StatusIconHandler
+                                                            status={
+                                                                service.record
+                                                                    .status
+                                                            }
+                                                            isArea={false}
+                                                            statusNotFromTeam={
+                                                                service.statusNotFromTeam
+                                                            }
+                                                        />{" "}
+                                                        {service.name}
+                                                    </section>
+                                                </LenkeCustomized>
+                                            ) : (
+                                                <section>
+                                                    <StatusIconHandler
+                                                        status={
+                                                            service.record
+                                                                .status
+                                                        }
+                                                        isArea={false}
+                                                        statusNotFromTeam={
+                                                            service.statusNotFromTeam
+                                                        }
+                                                    />{" "}
+                                                    {service.name}
+                                                </section>
+                                            )}
+                                        </li>
+                                    )
+                                }
+                                return
+                            })}
+                        </ServicesList>
+                    </Accordion.Content>
+                </Accordion.Item>
+            </CustomizedAccordion>
+        </>
     )
 }
 
-
-
-
-
-export const StatusIconHandler: React.FC<{status: string, isArea: boolean, statusNotFromTeam?: boolean}> = ({status, isArea, statusNotFromTeam}) => {
+export const StatusIconHandler: React.FC<{
+    status: string
+    isArea: boolean
+    statusNotFromTeam?: boolean
+}> = ({ status, isArea, statusNotFromTeam }) => {
     const router = useRouter()
     let isIntern = false
 
-    useEffect(() => {
+    useEffect(() => {}, [router])
 
-    },[router])
-
-    if(router.isReady) {
-        router.asPath.includes("Internt") ? isIntern = true : isIntern = false
+    if (router.isReady) {
+        router.asPath.includes("Internt")
+            ? (isIntern = true)
+            : (isIntern = false)
     }
 
     return (
         <>
             {(() => {
                 switch (status) {
-                    case 'OK':
-                        return <SuccessFilledCustomized className={statusNotFromTeam && isIntern ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: OK" : "Tjenestestatus: OK"}/>
-                    case 'ISSUE':
-                        return <WarningFilledCustomized className={statusNotFromTeam && isIntern ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: Tjenester i området har feil" : "Tjenestestatus: Feil på tjeneste"}/>
-                    case 'DOWN':
-                        return <ErrorFilledCustomized className={statusNotFromTeam && isIntern ? "status-not-from-team" : ""} aria-label={isArea ? "Områdestatus: Tjenester i området er nede" : "Tjenestestatus: Nede"}/>
+                    case "OK":
+                        return (
+                            <SuccessFilledCustomized
+                                className={
+                                    statusNotFromTeam && isIntern
+                                        ? "status-not-from-team"
+                                        : ""
+                                }
+                                aria-label={
+                                    isArea
+                                        ? "Områdestatus: OK"
+                                        : "Tjenestestatus: OK"
+                                }
+                            />
+                        )
+                    case "ISSUE":
+                        return (
+                            <WarningFilledCustomized
+                                className={
+                                    statusNotFromTeam && isIntern
+                                        ? "status-not-from-team"
+                                        : ""
+                                }
+                                aria-label={
+                                    isArea
+                                        ? "Områdestatus: Tjenester i området har feil"
+                                        : "Tjenestestatus: Feil på tjeneste"
+                                }
+                            />
+                        )
+                    case "DOWN":
+                        return (
+                            <ErrorFilledCustomized
+                                className={
+                                    statusNotFromTeam && isIntern
+                                        ? "status-not-from-team"
+                                        : ""
+                                }
+                                aria-label={
+                                    isArea
+                                        ? "Områdestatus: Tjenester i området er nede"
+                                        : "Tjenestestatus: Nede"
+                                }
+                            />
+                        )
                     case null:
-                        return <HelpTextCustomizedGray aria-label="Ingen status tilgjengelig" />
+                        return (
+                            <HelpTextCustomizedGray aria-label="Ingen status tilgjengelig" />
+                        )
                     default:
                         return null
                 }
-            })()}   
+            })()}
         </>
     )
 }
 
-
-
-
-
-
-
-
-
-
-
 const SubAreaContent = styled.div`
     font-size: 1.3rem;
-    
+
     button {
-        padding: .8rem 0;
+        padding: 0.8rem 0;
 
         border: none;
         background: none;
@@ -419,7 +495,7 @@ const SubAreaContent = styled.div`
         margin-right: 8px;
     }
 
-    svg:last-child{
+    svg:last-child {
         margin-left: 8px;
     }
 
@@ -429,57 +505,90 @@ const SubAreaContent = styled.div`
         .expanded {
             transition: height 250ms cubic-bezier(0.4, 0, 0.2, 1);
         }
-
     }
 `
 
-
-const SubAreaComponent: React.FC<{subArea: SubArea, isLastElement: boolean, isAllExpanded: boolean, navIdent: string}> = ({subArea, isLastElement, isAllExpanded, navIdent}) => {
+const SubAreaComponent: React.FC<{
+    subArea: SubArea
+    isLastElement: boolean
+    isAllExpanded: boolean
+    navIdent: string
+}> = ({ subArea, isLastElement, isAllExpanded, navIdent }) => {
     const [isToggled, setIsToggled] = useState(false)
 
-    const listOfStatusesInSubArea: string[] = subArea.services.map(service => service.record.status)
+    const listOfStatusesInSubArea: string[] = subArea.services.map(
+        (service) => service.record.status
+    )
 
     useEffect(() => {
-        if(isAllExpanded) {
+        if (isAllExpanded) {
             setIsToggled(isAllExpanded)
         }
-    },[isAllExpanded])
+    }, [isAllExpanded])
 
-    
     return (
         <SubAreaContent className={isLastElement ? "" : "not-last-element"}>
-            <button className="sub-area-button" aria-expanded={isToggled} onClick={() => setIsToggled(!isToggled)}>
+            <button
+                className="sub-area-button"
+                aria-expanded={isToggled}
+                onClick={() => setIsToggled(!isToggled)}
+            >
+                {" "}
                 <StatusIconHandler status={subArea.status} isArea={false} />
-                <b>
-                    {subArea.name} 
-                </b>
-                <Expand className={!isToggled ? "expanded" : "not-expanded"}/>
+                <b>{subArea.name}</b>
+                <Expand className={!isToggled ? "expanded" : "not-expanded"} />
             </button>
 
-
-
             <Collapse isOpened={isToggled}>
-                <ServicesList className={`sub-area-services ${isToggled ? "expanded" : ""}`}>
+                <ServicesList
+                    className={`sub-area-services ${
+                        isToggled ? "expanded" : ""
+                    }`}
+                >
                     {subArea.services.map((service, index) => {
                         return (
-                            <li className={`sub-area-list-item ${subArea.services.length != index+1 ? "not-last-element" : ""}`} key={service.id}>
-                                {navIdent
-                                ?
-                                    <LenkeCustomized href={RouterTjenestedata.PATH + service.id}>
-                                        <section className="logged-in"><StatusIconHandler isArea={false} status={service.record.status} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
+                            <li
+                                className={`sub-area-list-item ${
+                                    subArea.services.length != index + 1
+                                        ? "not-last-element"
+                                        : ""
+                                }`}
+                                key={service.id}
+                            >
+                                {navIdent ? (
+                                    <LenkeCustomized
+                                        href={
+                                            RouterTjenestedata.PATH + service.id
+                                        }
+                                    >
+                                        <section className="logged-in">
+                                            <StatusIconHandler
+                                                isArea={false}
+                                                status={service.record.status}
+                                                statusNotFromTeam={
+                                                    service.statusNotFromTeam
+                                                }
+                                            />{" "}
+                                            {service.name}
+                                        </section>
                                     </LenkeCustomized>
-                                :
-                                    <section><StatusIconHandler status={service.record.status} isArea={false} statusNotFromTeam={service.statusNotFromTeam} /> {service.name}</section>
-                                }
+                                ) : (
+                                    <section>
+                                        <StatusIconHandler
+                                            status={service.record.status}
+                                            isArea={false}
+                                            statusNotFromTeam={
+                                                service.statusNotFromTeam
+                                            }
+                                        />{" "}
+                                        {service.name}
+                                    </section>
+                                )}
                             </li>
-                            
                         )
                     })}
                 </ServicesList>
             </Collapse>
-
-
-
         </SubAreaContent>
     )
 }
