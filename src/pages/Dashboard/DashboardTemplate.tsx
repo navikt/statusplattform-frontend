@@ -329,7 +329,7 @@ const AllAreas = ({
 
     useEffect(() => {
         const allElementsRetrievedFromDom: Element[] = Array.from(
-            document.getElementsByClassName("ekspanderbartPanel")
+            document.getElementsByClassName("accordion")
         )
         const arrayFromDomElements = generateArrayFromTwoArrays(
             allElementsRetrievedFromDom
@@ -433,12 +433,6 @@ const FullScreenTileRow = styled.div`
     display: flex;
     flex-flow: row nowrap;
     justify-content: center;
-
-    > * {
-        .ekspanderbartPanel__indikator {
-            display: none !important;
-        }
-    }
 `
 
 interface FullScreenProps {
