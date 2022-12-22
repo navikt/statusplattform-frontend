@@ -17,7 +17,7 @@ jobs:
                   NPM_AUTH_TOKEN: ${{ secrets.READER_TOKEN }}
               run: |
                   echo ${GITHUB_TOKEN} | docker login ghcr.io --username ${GITHUB_REPOSITORY} --password-stdin
-                  docker build --build-arg=NPM_AUTH_TOKEN={NPM_AUTH_TOKEN} --tag ${docker_image} .
+                  docker build --build-arg=NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN} --tag ${docker_image} .
                   docker push ${docker_image}
 
     deploy-test:
