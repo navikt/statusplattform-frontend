@@ -1,5 +1,4 @@
 import { UserData } from "../types/userData";
-import { EndPathGetLoginInfo } from "./apiHelper";
 
 export class ResponseError extends Error {
     public constructor (message: string, public response: Response) {
@@ -7,24 +6,16 @@ export class ResponseError extends Error {
     }
 }
 
-const createRequest = (path, headers)  => new Request(path, {
-    headers: new Headers(headers)
-})
-
-const fetcher = (url) => fetch(url).then((res) => res.json())
-
 
 export const checkLoginInfoAndState = async (): Promise<UserData | null> => {
-    let headers = new Headers()
 
-    headers.append("backendendpath", EndPathGetLoginInfo())
-    headers.append("method", "GET")
-
-    let request = createRequest("/sp/api/requestGateway", headers)
+    let request = new Request("/sp/api/userInfo")
     let response = await fetch(request)
 
     if(response.ok) {
-        return response.json()
+        let data = response.json()
+        console.log(data)
+        return data
     }
     
     throw new ResponseError("Failed to fetch from server", response)
