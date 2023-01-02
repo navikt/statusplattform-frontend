@@ -27,11 +27,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     //-----------------------------------
 
     let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: NO_AUTHORIZATION_HEADER
-    let bearerTokenForBackend = ""
+    let apiAccessToken = ""
     if(authorizationHeader != NO_AUTHORIZATION_HEADER){
-        let accessToken = getAccessTokenFromBearerToken(authorizationHeader);
-        await validateClaimsAndSignature(accessToken);
-        bearerTokenForBackend = await requestBearerTokenForBackend(accessToken);
+        let userAccessToken = getAccessTokenFromBearerToken(authorizationHeader);
+        await validateClaimsAndSignature(userAccessToken);
+        apiAccessToken = await requestBearerTokenForBackend(userAccessToken);
     }
 
     //-----------------------------------
@@ -66,7 +66,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const resp = await fetch(
         path,
         {
-            headers: {'Authorization': authorizationHeader},
+            headers: {'Authorization': apiAccessToken},
             method: method,
             agent: httpsAgent,
             body: body,
