@@ -29,9 +29,11 @@ const CustomizedAccordion = styled(Accordion)<{
     height_when_not_expanded: string
     center_if_not_expanded
 }>`
-    background: white;
+    background: none;
     border-radius: 4px;
-
+    -moz-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
     width: 100%;
 
     @media (min-width: 425px) {

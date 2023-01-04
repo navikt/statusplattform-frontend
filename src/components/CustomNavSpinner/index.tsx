@@ -67,7 +67,7 @@ const CustomNavSpinner = () => {
                     content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"
                 />
             </Head>
-            <Loader size="3xlarge" title="venter..." />;
+            <Loader size="3xlarge" title="venter..." />
         </Centered>
     )
 }
