@@ -1,15 +1,24 @@
+
 import { NextApiRequest, NextApiResponse } from "next";
 
 import { decodeJwt} from "jose";
 import { validateClaimsAndSignature, getAccessTokenFromBearerToken } from "./utils/authHelper";
 
-
+const env = process.env.NEXT_PUBLIC_ENV
 
 
 
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
-
+    if(env == "local"){
+        //For lokal kjøring:
+        let userInfo = {
+            name: "LOKAL, BRUKER",
+            navIdent: "L152423"
+        }
+        res.status(200).json(userInfo);
+        return;
+    }
 
     let NO_AUTHORIZATION_HEADER = "No Authorization header"
 
@@ -33,14 +42,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
                        name: claims.name,
                        navIdent: claims.NAVident
                    }
-
-    //For lokal kjøring: 
-    /*                   
-    let userInfo = {
-        name: "Etternavn, Fornavn",
-        navIdent: ""
-    }
-    */
+                   
     res.status(200).json(userInfo);
 };
 

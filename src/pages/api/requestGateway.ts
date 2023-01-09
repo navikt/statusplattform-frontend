@@ -6,7 +6,13 @@ import { validateClaimsAndSignature, getAccessTokenFromBearerToken, requestBeare
 
 const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
 
+
+const env = process.env.NEXT_PUBLIC_ENV
+const api_key = process.env.NEXT_API_KEY
+
+
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+
 
     console.log("IN REQUEST GATEWAY")
 
@@ -37,11 +43,21 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         rejectUnauthorized: false,
     })
 
+    let authHeaderType = 'Authorization';
+
+    if(env == "local"){
+        authHeaderType = 'Apikey';
+        apiAccessToken = api_key;
+    }
+
+    let authHeader = {[authHeaderType]: apiAccessToken};
+
+
 
     const resp = await fetch(
         path,
         {
-            headers: {'Authorization': apiAccessToken},
+            headers: authHeader,
             method: method,
             agent: httpsAgent,
             body: body,
