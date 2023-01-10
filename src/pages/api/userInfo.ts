@@ -21,13 +21,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     let NO_AUTHORIZATION_HEADER = "No Authorization header"
+    let userInfo = {status: "user not logged in"};
 
     //For test/prod:
     //-----------------------------------
 
     let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: NO_AUTHORIZATION_HEADER
     if(authorizationHeader == NO_AUTHORIZATION_HEADER){
-      res.send("User not logged in")
+        res.status(200).json(userInfo);
+        return
     }
     
     let accessToken = getAccessTokenFromBearerToken(authorizationHeader);
