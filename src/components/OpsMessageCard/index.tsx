@@ -218,7 +218,11 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
                     {opsMessage.internalHeader}
                 </Heading>
                 <BodyShort spacing className="message-content">
-                    {opsMessage.internalMessage}
+                    <span
+                        dangerouslySetInnerHTML={{
+                            __html: opsMessage.internalMessage,
+                        }}
+                    />
                 </BodyShort>
             </div>
 
