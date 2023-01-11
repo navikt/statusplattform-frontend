@@ -20,14 +20,16 @@ const MessageCard = styled.div`
     flex-flow: column;
 
     .ops-card-content {
-        padding: 0.5rem 0;
+        padding: 0.5rem 0 0.5rem;
 
         display: flex;
         flex-direction: column;
     }
 
     .message-content {
-        -webkit-line-clamp: 6;
+        margin: 0px;
+        padding: 0px;
+        height: 12.5rem;
         -webkit-box-orient: vertical;
         overflow-y: scroll;
 
