@@ -1,7 +1,7 @@
 import {
     Alert,
-   Button,
-   Tooltip,
+    Button,
+    Tooltip,
     Heading,
     Radio,
     RadioGroup,
@@ -11,13 +11,13 @@ import {
 } from "@navikt/ds-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useContext, useEffect, useState } from "react"
+import { useContext, useEffect, useState, useRef } from "react"
 import { toast } from "react-toastify"
 import styled from "styled-components"
 import DatePicker from "react-datepicker"
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
-
+import TextEditor from "src/components/TextEditor"
 import Layout from "../../../components/Layout"
 import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
 import { RouterOpsMeldinger } from "../../../types/routes"
@@ -106,8 +106,6 @@ const CreateOpsMessage = ({ services }) => {
 
 const Spacer = styled.div.attrs((props: { height: string }) => props)`
     height: ${(props) => props.height};
-
-    
 `
 const CopyOpsMsg = styled.div`
     display: inline-block;
@@ -186,9 +184,9 @@ const OpsComponent = ({
 
     const [isLoading, setIsLoading] = useState(true)
     const [selectedSeverity, setSelectedSeverity] = useState<string>("NEUTRAL")
-     const [showAutomaticTimeMsg, setShowAutomaticTimeMsg] = useState(false)
+    const [showAutomaticTimeMsg, setShowAutomaticTimeMsg] = useState(false)
     const router = useRouter()
-
+    const editorRef = useRef(null)
     const hours = []
     for (let i = 0; i < 24; i++) {
         if (i < 10) {
@@ -229,23 +227,22 @@ const OpsComponent = ({
         setOpsMessage({ ...opsMessage, affectedServices: newServices })
     }
 
-   const handleIsInternal = (newValue) => {
-       console.log(onlyShowForNavEmployees)
-       if (newValue == "Internal") {
-           setOpsMessage({
-               ...opsMessage,
-               onlyShowForNavEmployees: true,
-               externalHeader: internalHeader,
-               externalMessage: internalMessage,
-           })
-       } else {
-           setOpsMessage({
-               ...opsMessage,
-               onlyShowForNavEmployees: false,
-           })
-       }
-   }
-
+    const handleIsInternal = (newValue) => {
+        console.log(onlyShowForNavEmployees)
+        if (newValue == "Internal") {
+            setOpsMessage({
+                ...opsMessage,
+                onlyShowForNavEmployees: true,
+                externalHeader: internalHeader,
+                externalMessage: internalMessage,
+            })
+        } else {
+            setOpsMessage({
+                ...opsMessage,
+                onlyShowForNavEmployees: false,
+            })
+        }
+    }
 
     const handleUpdateMessageInternal = (message: string) => {
         if (message.length < 501) {
@@ -259,22 +256,21 @@ const OpsComponent = ({
         }
     }
 
-     const handleCopyInternal = (title: string, message: string) => {
-         if (message.length < 501) {
-             setOpsMessage({
-                 ...opsMessage,
-                 externalHeader: title,
-                 externalMessage: message,
-             })
-         }
-     }
-
+    const handleCopyInternal = (title: string, message: string) => {
+        if (message.length < 501) {
+            setOpsMessage({
+                ...opsMessage,
+                externalHeader: title,
+                externalMessage: message,
+            })
+        }
+    }
 
     const handleIsActive = (newValue) => {
         if (newValue == "1") {
             var currentTime = new Date()
             currentTime.setDate(currentTime.getDate() + 14)
-           
+
             setEndDateForActiveOpsMessage(currentTime)
             setShowAutomaticTimeMsg(true)
             setOpsMessage({ ...opsMessage, isActive: true })
@@ -371,6 +367,13 @@ const OpsComponent = ({
                     maxLength={100}
                 />
 
+                <TextEditor
+                    ref={editorRef}
+                    isInternal={true}
+                    handleUpdateInternalMsg={handleUpdateMessageInternal}
+                />
+
+                {/*
                 <Textarea
                     label="Innhold:"
                     value={internalMessage}
@@ -378,7 +381,7 @@ const OpsComponent = ({
                         handleUpdateMessageInternal(e.target.value)
                     }
                     maxLength={500}
-                />
+                />*/}
             </div>
 
             {!onlyShowForNavEmployees && (
@@ -419,13 +422,10 @@ const OpsComponent = ({
                             })
                         }
                     />
-                    <Textarea
-                        label="Innhold:"
-                        value={externalMessage}
-                        onChange={(e) =>
-                            handleUpdateMessageExternal(e.target.value)
-                        }
-                        maxLength={500}
+                    <TextEditor
+                        ref={editorRef}
+                        isInternal={false}
+                        handleUpdateExternalMsg={handleUpdateMessageExternal}
                     />
                 </div>
             )}

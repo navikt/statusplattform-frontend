@@ -43,7 +43,6 @@ export const getServerSideProps = async (context) => {
         fetch(backendPath + EndPathServices()),
     ])
 
-  
     const opsMessage: OpsMessageI = await resOpsMsg.json()
     const retrievedServices: Service[] = await resServices.json()
 
@@ -348,7 +347,14 @@ const DetailsOfOpsMessage = (props: DetailsOpsMsgI) => {
         <OpsDetailsContainer>
             {navIdent ? (
                 <div>
-                    <BodyShort spacing>{internalMessage}</BodyShort>
+                    <BodyShort spacing>
+                        {" "}
+                        <span
+                            dangerouslySetInnerHTML={{
+                                __html: opsMessage.internalMessage,
+                            }}
+                        />
+                    </BodyShort>
                 </div>
             ) : (
                 <div>{externalMessage}</div>
