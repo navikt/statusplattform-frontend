@@ -21,7 +21,7 @@ import Layout from "../../../components/Layout"
 import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
 import { RouterOpsMeldinger } from "../../../types/routes"
 import { postOpsMessage } from "../../../utils/opsAPI"
-
+import { OpsScheme, Spacer } from "../styles"
 import "react-datepicker/dist/react-datepicker.css"
 import { Service } from "../../../types/types"
 import { backendPath } from "../.."
@@ -103,9 +103,6 @@ const CreateOpsMessage = ({ services }) => {
     )
 }
 
-const Spacer = styled.div.attrs((props: { height: string }) => props)`
-    height: ${(props) => props.height};
-`
 const CopyOpsMsg = styled.div`
     display: inline-block;
     position: absolute;
@@ -115,49 +112,6 @@ const CopyOpsMsg = styled.div`
 const AutomaticTimeAlert = styled.div`
     width: 35rem;
     margin: 0 0 2rem 0;
-`
-
-const OpsContainer = styled.div`
-    display: flex;
-    width: 45rem;
-    min-width: 650px;
-    flex-direction: column;
-    background-color: white;
-    padding: 3rem;
-    padding-left: 4.5rem;
-    padding-bottom: 4rem;
-    border-left: 8px solid transparent;
-    border-radius: 0.5rem;
-
-    &.neutral {
-        border-color: var(--navds-global-color-blue-500);
-    }
-
-    &.down {
-        border-color: var(--navds-semantic-color-feedback-danger-border);
-    }
-
-    &.issue {
-        border-color: var(--navds-semantic-color-feedback-warning-border);
-    }
-
-    .input-area {
-        & > * {
-            margin: 1rem 0;
-        }
-    }
-
-    .button-container {
-        display: flex;
-        justify-content: space-between;
-        width: 35rem;
-    }
-
-    @media (min-width: 35rem) {
-        .input-area {
-            width: 35rem;
-        }
-    }
 `
 
 interface OpsProps {
@@ -320,7 +274,7 @@ const OpsComponent = ({
     }
 
     return (
-        <OpsContainer className={selectedSeverity.toLowerCase()}>
+        <OpsScheme className={selectedSeverity.toLowerCase()}>
             <Heading size="large" level="3">
                 Opprett driftsmelding
             </Heading>
@@ -475,6 +429,10 @@ const OpsComponent = ({
                     handleUpdateEndHours={handleUpdateEndHours}
                     handleUpdateEndMinutes={handleUpdateEndMinutes}
                 />
+
+                //
+                //-------- CODE USING COMPONENTS FROM AKSEL 2.0---------
+                //
                 // <div className="input-area">
                 //     <label htmlFor="#startDate">
                 //         <b>Startdato</b>
@@ -548,10 +506,10 @@ const OpsComponent = ({
                     Avbryt
                 </Button>
                 <Button variant="primary" onClick={handleSubmitOpsMessage}>
-                    Send inn ny driftsmelding
+                    Send inn
                 </Button>
             </div>
-        </OpsContainer>
+        </OpsScheme>
     )
 }
 
