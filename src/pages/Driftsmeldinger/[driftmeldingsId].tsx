@@ -28,7 +28,7 @@ import {
     fetchSpecificOpsMessage,
     updateSpecificOpsMessage,
 } from "../../utils/opsAPI"
-import { OpsScheme, Spacer } from "./styles"
+import { OpsScheme, Spacer } from "../../styles/styles"
 import { CloseCustomized } from "../Admin"
 import PublicOpsContent from "./PublicOpsContent"
 import DateSetterOps from "../../components/DateSetterOps"
