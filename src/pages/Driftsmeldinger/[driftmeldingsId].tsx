@@ -1,4 +1,4 @@
-import { EditFilled } from "@navikt/ds-icons"
+import { Edit, Back } from "@navikt/ds-icons"
 import {
     BodyShort,
     Button,
@@ -7,7 +7,9 @@ import {
     Select,
     Textarea,
     TextField,
+    Tag,
 } from "@navikt/ds-react"
+
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
@@ -26,6 +28,7 @@ import {
     fetchSpecificOpsMessage,
     updateSpecificOpsMessage,
 } from "../../utils/opsAPI"
+import { OpsScheme, Spacer } from "../../styles/styles"
 import { CloseCustomized } from "../Admin"
 import PublicOpsContent from "./PublicOpsContent"
 import DateSetterOps from "../../components/DateSetterOps"
@@ -33,6 +36,9 @@ import DateSetterOps from "../../components/DateSetterOps"
 const OpsMessageContainer = styled.div`
     display: flex;
     width: 100%;
+`
+const SubHeader = styled(Heading)`
+    color: var(--navds-global-color-gray-600);
 `
 
 export const getServerSideProps = async (context) => {
@@ -91,49 +97,6 @@ const opsMessageDetails = ({ opsMessage, retrievedServices }) => {
         </Layout>
     )
 }
-
-const OpsContent = styled.div`
-    padding: 1rem 2rem;
-    border-radius: 0.5rem;
-
-    display: flex;
-    flex-direction: column;
-
-    gap: 1rem;
-
-    border-left: 7.5px solid transparent;
-
-    &.not-editting {
-        box-shadow: 0 0 10px rgb(0 0 0 / 20%);
-    }
-
-    &.neutral {
-        border-color: var(--navds-global-color-blue-500);
-    }
-
-    &.down {
-        border-color: var(--navds-semantic-color-feedback-danger-border);
-    }
-
-    &.issue {
-        border-color: var(--navds-semantic-color-feedback-warning-border);
-    }
-
-    width: 60%;
-    align-items: center;
-    margin: 0 auto;
-
-    .header-container {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 1rem;
-    }
-
-    @media (min-width: 1050px) {
-        padding: 2rem 4rem;
-    }
-`
 
 interface OpsMessageComponentI {
     opsMessage: OpsMessageI
@@ -210,67 +173,55 @@ const OpsMessageComponent = ({
     const convertedStartTime = new Date(startTime)
     const convertedEndTime = new Date(endTime)
 
-    const prettifiedStartTime = `${
-        convertedStartTime.getDate() < 10
-            ? `0${convertedStartTime.getDate()}`
-            : convertedStartTime.getDate()
-    }.${
-        convertedStartTime.getMonth() + 1 < 10
-            ? `0${convertedStartTime.getMonth() + 1}`
-            : convertedStartTime.getMonth() + 1
-    }.${convertedStartTime.getFullYear()}, ${
-        convertedStartTime.getHours() < 10
-            ? `0${convertedStartTime.getHours()}`
-            : convertedStartTime.getHours()
-    }:${
-        convertedStartTime.getMinutes() < 10
-            ? `0${convertedStartTime.getMinutes()}`
-            : convertedStartTime.getMinutes()
-    }`
+    const datePrettifyer = (date: Date) => {
+        return `${
+            convertedEndTime.getDate() < 10
+                ? `0${convertedEndTime.getDate()}`
+                : convertedEndTime.getDate()
+        }/${
+            convertedEndTime.getMonth() + 1 < 10
+                ? `0${convertedEndTime.getMonth() + 1}`
+                : convertedEndTime.getMonth() + 1
+        }/${convertedEndTime.getFullYear().toString().substr(-2)} kl ${
+            convertedEndTime.getHours() < 10
+                ? `0${convertedEndTime.getHours()}`
+                : convertedEndTime.getHours()
+        }:${
+            convertedEndTime.getMinutes() < 10
+                ? `0${convertedEndTime.getMinutes()}`
+                : convertedEndTime.getMinutes()
+        }`
+    }
 
-    const prettifiedEndTime = `${
-        convertedEndTime.getDate() < 10
-            ? `0${convertedEndTime.getDate()}`
-            : convertedEndTime.getDate()
-    }.${
-        convertedEndTime.getMonth() + 1 < 10
-            ? `0${convertedEndTime.getMonth() + 1}`
-            : convertedEndTime.getMonth() + 1
-    }.${convertedEndTime.getFullYear()}, ${
-        convertedEndTime.getHours() < 10
-            ? `0${convertedEndTime.getHours()}`
-            : convertedEndTime.getHours()
-    }:${
-        convertedEndTime.getMinutes() < 10
-            ? `0${convertedEndTime.getMinutes()}`
-            : convertedEndTime.getMinutes()
-    }`
+    const prettifiedStartTime = datePrettifyer(convertedStartTime)
+    const prettifiedEndTime = datePrettifyer(convertedEndTime)
 
     return (
-        <OpsContent
-            className={
-                updatedSeverity && isEditting
-                    ? updatedSeverity.toLowerCase()
-                    : "not-editting"
-            }
+        <OpsScheme
+            className={updatedSeverity ? updatedSeverity.toLowerCase() : "none"}
         >
+            <div className="returnBtn">
+                <Button
+                    variant="tertiary"
+                    size="small"
+                    onClick={() => router.push(RouterOpsMeldinger.PATH)}
+                >
+                    <Back />
+                    Se alle driftsmeldinger
+                </Button>
+            </div>
             <div className="header-container">
-                <Heading size="medium" level="2">
-                    Driftsmelding -{" "}
+                <SubHeader size="small" level="3">
+                    Driftsmelding:{" "}
+                </SubHeader>
+                <Spacer height="0.8rem" />
+                <Heading size="large" level="1">
                     {usersWithAccess.includes(navIdent)
                         ? internalHeader
                         : externalHeader}
                 </Heading>
-                {usersWithAccess.includes(navIdent) && (
-                    <Button
-                        variant="primary"
-                        onClick={() => toggleIsEditting(!isEditting)}
-                    >
-                        {isEditting ? "Avbryt redigering" : <EditFilled />}
-                    </Button>
-                )}
+                <Spacer height="1.2rem" />
             </div>
-
             {!isEditting ? (
                 <DetailsOfOpsMessage
                     opsMessage={opsMessage}
@@ -293,11 +244,35 @@ const OpsMessageComponent = ({
                     prettifiedEndTime={prettifiedEndTime}
                 />
             )}
-        </OpsContent>
+            <div className="button-container">
+                {usersWithAccess.includes(navIdent) && (
+                    <Button
+                        variant="primary"
+                        onClick={() => toggleIsEditting(!isEditting)}
+                    >
+                        {isEditting ? "Avbryt redigering" : "Rediger"}
+                    </Button>
+                )}
+            </div>
+        </OpsScheme>
     )
 }
 
 const OpsDetailsContainer = styled.div`
+    .opsMessageContainer {
+        border: 1px solid;
+        border-color: var(--navds-global-color-gray-200);
+        border-radius: 0.5rem;
+        padding: 1rem;
+        width: 36rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .labelContainer {
+        display: flex;
+        margin: 1rem 0 1rem;
+        gap: 0.5rem;
+    }
     &.neutral {
         border: 3px solid #ccc;
     }
@@ -346,9 +321,8 @@ const DetailsOfOpsMessage = (props: DetailsOpsMsgI) => {
     return (
         <OpsDetailsContainer>
             {navIdent ? (
-                <div>
+                <div className="opsMessageContainer">
                     <BodyShort spacing>
-                        {" "}
                         <span
                             dangerouslySetInnerHTML={{
                                 __html: opsMessage.internalMessage,
@@ -360,40 +334,51 @@ const DetailsOfOpsMessage = (props: DetailsOpsMsgI) => {
                 <div>{externalMessage}</div>
             )}
 
-            <Heading size="small" level="3">
-                Ytterligere detaljer
-            </Heading>
-            {navIdent && (
+            {affectedServices.length > 0 && (
                 <>
-                    <ul>
-                        <li>Er den aktiv: {isActive ? "Ja" : "Nei"}</li>
-                        <li>
-                            Vises bare for ansatte:{" "}
-                            {onlyShowForNavEmployees ? "Ja" : "Nei"}
-                        </li>
-                    </ul>
-
-                    {convertedStartTime && (
-                        <ul>
-                            <li>Starttid: {prettifiedStartTime}</li>
-                        </ul>
-                    )}
-
-                    {endTime && (
-                        <ul>
-                            <li>Sluttid: {prettifiedEndTime}</li>
-                        </ul>
-                    )}
+                    <Heading size="xsmall" level="2">
+                        Tilknyttede tjenester:
+                    </Heading>
+                    <div className="labelContainer">
+                        {affectedServices.map((service) => {
+                            return (
+                                <Tag variant="info" key={service.id}>
+                                    {service.name}
+                                </Tag>
+                            )
+                        })}
+                    </div>
                 </>
             )}
 
-            <b>Tilknyttede tjenester:</b>
-            {affectedServices.length > 0 && (
-                <ul>
-                    {affectedServices.map((service) => {
-                        return <li key={service.id}>{service.name}</li>
-                    })}
-                </ul>
+            <Spacer height="1rem" />
+
+            <Heading size="xsmall" level="2">
+                Detaljer:
+            </Heading>
+
+            {navIdent && (
+                <>
+                    <div className="labelContainer">
+                        {onlyShowForNavEmployees ? (
+                            <Tag variant="info">Intern</Tag>
+                        ) : (
+                            <Tag variant="info">Interne og eksterne</Tag>
+                        )}
+                        {isActive ? (
+                            <Tag variant="success">Aktiv</Tag>
+                        ) : (
+                            <Tag variant="error">Inaktiv</Tag>
+                        )}
+                    </div>
+
+                    {convertedStartTime && convertedEndTime && (
+                        <BodyShort>
+                            Aktiv fra {prettifiedStartTime} til{" "}
+                            {prettifiedEndTime}
+                        </BodyShort>
+                    )}
+                </>
             )}
         </OpsDetailsContainer>
     )
@@ -403,10 +388,11 @@ const EditOpsMessageContainer = styled.div`
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    width: 100%;
+    width: 40rem;
 
     .section {
         margin: 1rem 0;
+        width: 40rem;
     }
     .section:last-child {
         margin-bottom: 0;
