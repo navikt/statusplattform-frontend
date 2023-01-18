@@ -1,12 +1,10 @@
-import '../styles/globals.css'
-import "@navikt/ds-css";
-import "@navikt/ds-css-internal";
+import "../styles/globals.css"
+import "@navikt/ds-css"
 
-import { Providers } from '../components/ContextProviders/Providers'
-import { useEffect, useState } from 'react'
-import { Modal } from '@navikt/ds-react';
-import CustomNavSpinner from '../components/CustomNavSpinner';
-
+import { Providers } from "../components/ContextProviders/Providers"
+import { useEffect, useState } from "react"
+import { Modal } from "@navikt/ds-react"
+import CustomNavSpinner from "../components/CustomNavSpinner"
 
 function MyApp({ Component, pageProps }) {
     const [isLoading, setIsLoading] = useState(false)
@@ -14,9 +12,9 @@ function MyApp({ Component, pageProps }) {
         setIsLoading(true)
 
         setTimeout(() => {
-            const path = window.location.hash 
-            if (path && path.includes('#')) {
-                const id = path.replace('#', '')
+            const path = window.location.hash
+            if (path && path.includes("#")) {
+                const id = path.replace("#", "")
                 const el = window.document.getElementById(id)
                 if (el) {
                     el.tabIndex = 0
@@ -25,19 +23,13 @@ function MyApp({ Component, pageProps }) {
                 }
             }
         }, 200)
-        Modal.setAppElement(document.getElementsByClassName('ReactModalPortal'));
+        Modal.setAppElement(document.getElementsByClassName("ReactModalPortal"))
         setIsLoading(false)
-
     })
 
     return (
         <Providers>
-            {!isLoading
-            ?
-                <Component {...pageProps} />
-            :
-                <CustomNavSpinner />
-            }
+            {!isLoading ? <Component {...pageProps} /> : <CustomNavSpinner />}
         </Providers>
     )
 }
