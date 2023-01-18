@@ -1,25 +1,32 @@
-import { SetStateAction, useContext, useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import Head from 'next/head'
-import { toast } from 'react-toastify'
-import styled from 'styled-components'
+import { SetStateAction, useContext, useEffect, useState } from "react"
+import { useRouter } from "next/router"
+import Head from "next/head"
+import { toast } from "react-toastify"
+import styled from "styled-components"
 
-import { Close, Delete, Expand, Notes, SaveFile } from '@navikt/ds-icons'
-import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react'
+import { Close, Delete, Expand, Notes, SaveFile } from "@navikt/ds-icons"
+import { BodyShort, Button, Modal, Select, TextField } from "@navikt/ds-react"
 
-import CustomNavSpinner from '../CustomNavSpinner'
-import { Area, Dashboard } from '../../types/types'
-import { useLoader } from '../../utils/useLoader'
-import { TitleContext } from '../ContextProviders/TitleContext'
-import { deleteDashboard, fetchDashboard, fetchDashboardsList, postDashboard, updateDashboard } from '../../utils/dashboardsAPI'
-import { fetchAreas, putAreasToDashboard } from '../../utils/areasAPI'
-import { RouterAdminAddDashboard } from '../../types/routes'
-import { AdminCategoryContainer, CloseCustomized, ModalInner } from '../../pages/Admin'
-import { backendPath } from '../../pages'
-import { EndPathDashboards } from '../../utils/apiHelper'
-
-
-
+import CustomNavSpinner from "../CustomNavSpinner"
+import { Area, Dashboard } from "../../types/types"
+import { useLoader } from "../../utils/useLoader"
+import { TitleContext } from "../ContextProviders/TitleContext"
+import {
+    deleteDashboard,
+    fetchDashboard,
+    fetchDashboardsList,
+    postDashboard,
+    updateDashboard,
+} from "../../utils/dashboardsAPI"
+import { fetchAreas, putAreasToDashboard } from "../../utils/areasAPI"
+import { RouterAdminAddDashboard } from "../../types/routes"
+import {
+    AdminCategoryContainer,
+    CloseCustomized,
+    ModalInner,
+} from "../../pages/Admin"
+import { backendPath } from "../../pages"
+import { EndPathDashboards } from "../../utils/apiHelper"
 
 const TableDashbord = () => {
     const [isLoading, setIsLoading] = useState(true)
@@ -32,7 +39,7 @@ const TableDashbord = () => {
         setIsLoading(true)
         let controlVar = true
         const setup = async () => {
-            if(controlVar) {
+            if (controlVar) {
                 try {
                     const dashboards: Dashboard[] = await fetchDashboardsList()
                     await setDashboards(dashboards)
@@ -44,29 +51,28 @@ const TableDashbord = () => {
                 }
             }
         }
-        if(controlVar) {
+        if (controlVar) {
             setup()
         }
         controlVar = false
-    },[])
+    }, [])
 
     const reload = async () => {
-        await fetchDashboardsList().then((response) => {
-            setIsLoading(true)
-            setDashboards(response)
-            setIsLoading(false)
-        }).catch(() => {
-            toast.error("Noe gikk galt ved henting av dashbordene")
-        })
+        await fetchDashboardsList()
+            .then((response) => {
+                setIsLoading(true)
+                setDashboards(response)
+                setIsLoading(false)
+            })
+            .catch(() => {
+                toast.error("Noe gikk galt ved henting av dashbordene")
+            })
     }
-
 
     const router = useRouter()
 
     if (isLoading) {
-        return (
-            <CustomNavSpinner/>
-        ) 
+        return <CustomNavSpinner />
     }
     return (
         <AdminCategoryContainer>
@@ -74,30 +80,19 @@ const TableDashbord = () => {
                 <title>Admin - Dashbord - status.nav.no</title>
             </Head>
             <div className="centered">
-                <Button variant="secondary" 
-                        onClick={() => router.push(RouterAdminAddDashboard.PATH)}>
+                <Button
+                    variant="secondary"
+                    onClick={() => router.push(RouterAdminAddDashboard.PATH)}
+                >
                     <b>Legg til nytt dashbord</b>
                 </Button>
             </div>
-            <Dashboards dashboards={dashboards} reloadDashboards={reload}/>
+            <Dashboards dashboards={dashboards} reloadDashboards={reload} />
         </AdminCategoryContainer>
     )
 }
 
-
-
-
-
-
 /* ----------------------- Helpers below ----------------------- */
-
-
-
-
-
-
-
-
 
 const DashboardsContainer = styled.div`
     overflow-x: auto;
@@ -127,14 +122,14 @@ const DashboardRowContainer = styled.div`
         border-bottom: 2px solid rgba(0, 0, 0, 0.55);
     }
     &.editting {
-        border-color: var(--navds-global-color-blue-500);
+        border-color: var(--a-blue-500);
     }
 `
 
 const DashboardRowInner = styled.div`
     min-height: 5rem;
     padding-left: 16px;
-    background-color: var(--navds-semantic-color-canvas-background);
+    background-color: var(--a-gray-100);
 
     display: flex;
     flex-direction: row;
@@ -161,7 +156,6 @@ const ClickableName = styled.div`
 
     &.editting {
         input {
-
             width: 152px;
         }
     }
@@ -183,105 +177,134 @@ const CustomButton = styled.button`
     }
 `
 
-const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => void}> = ({dashboards, reloadDashboards}) => {
+const Dashboards: React.FC<{
+    dashboards: Dashboard[]
+    reloadDashboards: () => void
+}> = ({ dashboards, reloadDashboards }) => {
+    const [expandedList, setExpandedList] = useState<string[]>([])
 
-    const [expandedList, setExpandedList] = useState<string[]>([]) 
-
-    const [dashboardToDelete, setDashboardToDelete] = useState<Dashboard>()    
+    const [dashboardToDelete, setDashboardToDelete] = useState<Dashboard>()
     const [dashboardsToEdit, changeDashboardsToEdit] = useState<string[]>([])
 
-    const { data: allAreas, isLoading, reload } = useLoader(fetchAreas,[])
+    const { data: allAreas, isLoading, reload } = useLoader(fetchAreas, [])
 
-    useEffect(() => {
-        
-    },[])
+    useEffect(() => {}, [])
 
     const toggleExpanded = (dashboard: Dashboard) => {
-        if(expandedList.includes(dashboard.id)) {
-            setExpandedList([...expandedList.filter(i => i !== dashboard.id)])
+        if (expandedList.includes(dashboard.id)) {
+            setExpandedList([...expandedList.filter((i) => i !== dashboard.id)])
         } else {
             setExpandedList([...expandedList, dashboard.id])
         }
     }
 
     const confirmDeleteDashboardHandler = () => {
-        deleteDashboard(dashboardToDelete).then(() => {
-            toast.info("Dashbordet ble slettet")
-            setDashboardToDelete(null);
-            reloadDashboards()
-        }).catch(() => {
-            toast.error("Kunne ikke slette dashbord")
-        })
+        deleteDashboard(dashboardToDelete)
+            .then(() => {
+                toast.info("Dashbordet ble slettet")
+                setDashboardToDelete(null)
+                reloadDashboards()
+            })
+            .catch(() => {
+                toast.error("Kunne ikke slette dashbord")
+            })
     }
 
     const toggleEditDashboard = (dashboard: Dashboard) => {
         let edittingDashboards: string[] = [...dashboardsToEdit]
-        if(edittingDashboards.includes(dashboard.id)) {
-            changeDashboardsToEdit(edittingDashboards.filter(d => d != dashboard.id))
+        if (edittingDashboards.includes(dashboard.id)) {
+            changeDashboardsToEdit(
+                edittingDashboards.filter((d) => d != dashboard.id)
+            )
             return
         }
         edittingDashboards.push(dashboard.id)
         changeDashboardsToEdit(edittingDashboards)
     }
 
-
-
-
     return (
         <DashboardsContainer>
-
-
             <Modal
                 open={!!dashboardToDelete}
                 onClose={() => setDashboardToDelete(null)}
             >
-                <ModalInner>Ønsker du å slette dashbordet?
-                    <Button variant="secondary" onClick={confirmDeleteDashboardHandler}>Slett dashbord</Button>
-                    <Button variant="secondary" onClick={() => setDashboardToDelete(null)}>Avbryt</Button>
+                <ModalInner>
+                    Ønsker du å slette dashbordet?
+                    <Button
+                        variant="secondary"
+                        onClick={confirmDeleteDashboardHandler}
+                    >
+                        Slett dashbord
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setDashboardToDelete(null)}
+                    >
+                        Avbryt
+                    </Button>
                 </ModalInner>
             </Modal>
 
-
             <div>
                 <DashboardsHeader>
-                    <BodyShort spacing><b>Navn på Dashbord</b></BodyShort>
+                    <BodyShort spacing>
+                        <b>Navn på Dashbord</b>
+                    </BodyShort>
                 </DashboardsHeader>
 
-                
                 {dashboards.map((dashboard) => {
                     return (
-                        <DashboardRowContainer className={dashboardsToEdit.includes(dashboard.id) ? "editting" : ""} key={dashboard.id}>
-
-
-
-                                {!dashboardsToEdit.includes(dashboard.id)
-                                    ?   
-                                        <>
-                                            <CurrentDashboardData 
-                                                expandedList={expandedList}
-                                                dashboard={dashboard}
-                                                setDashboardToDelete={() => setDashboardToDelete(dashboard)}
-                                                toggleEditDashboard={() => toggleEditDashboard(dashboard)}
-                                                toggleExpanded={() => toggleExpanded(dashboard)}
-                                            />
-                                            {expandedList.includes(dashboard.id) &&
-                                                <AreasInDashboard 
-                                                    dashboardWithOnlyIdProp={dashboard}
-                                                    toggleExpanded={() => toggleExpanded(dashboard)}
-                                                />
+                        <DashboardRowContainer
+                            className={
+                                dashboardsToEdit.includes(dashboard.id)
+                                    ? "editting"
+                                    : ""
+                            }
+                            key={dashboard.id}
+                        >
+                            {!dashboardsToEdit.includes(dashboard.id) ? (
+                                <>
+                                    <CurrentDashboardData
+                                        expandedList={expandedList}
+                                        dashboard={dashboard}
+                                        setDashboardToDelete={() =>
+                                            setDashboardToDelete(dashboard)
+                                        }
+                                        toggleEditDashboard={() =>
+                                            toggleEditDashboard(dashboard)
+                                        }
+                                        toggleExpanded={() =>
+                                            toggleExpanded(dashboard)
+                                        }
+                                    />
+                                    {expandedList.includes(dashboard.id) && (
+                                        <AreasInDashboard
+                                            dashboardWithOnlyIdProp={dashboard}
+                                            toggleExpanded={() =>
+                                                toggleExpanded(dashboard)
                                             }
-                                        </>
-                                    :
-                                        <CurrentlyEdittingDashboard 
-                                            dashboard={dashboard}
-                                            allAreas={allAreas}
-                                            isExpanded={expandedList.includes(dashboard.id)}
-                                            reloadDashboards={reloadDashboards}
-                                            setDashboardToDelete={() => setDashboardToDelete(dashboard)}
-                                            toggleExpanded={() => toggleExpanded(dashboard)}
-                                            toggleEditDashboard={() => toggleEditDashboard(dashboard)}
                                         />
-                                }
+                                    )}
+                                </>
+                            ) : (
+                                <CurrentlyEdittingDashboard
+                                    dashboard={dashboard}
+                                    allAreas={allAreas}
+                                    isExpanded={expandedList.includes(
+                                        dashboard.id
+                                    )}
+                                    reloadDashboards={reloadDashboards}
+                                    setDashboardToDelete={() =>
+                                        setDashboardToDelete(dashboard)
+                                    }
+                                    toggleExpanded={() =>
+                                        toggleExpanded(dashboard)
+                                    }
+                                    toggleEditDashboard={() =>
+                                        toggleEditDashboard(dashboard)
+                                    }
+                                />
+                            )}
                         </DashboardRowContainer>
                     )
                 })}
@@ -290,16 +313,7 @@ const Dashboards: React.FC<{dashboards: Dashboard[], reloadDashboards: () => voi
     )
 }
 
-
-
-
-
-
 // --------------------------------------------------------------------------
-
-
-
-
 
 interface CurrentDashboardDataProps {
     setDashboardToDelete: () => void
@@ -309,15 +323,19 @@ interface CurrentDashboardDataProps {
     dashboard: Dashboard
 }
 
-
-const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggleExpanded, expandedList, dashboard}: CurrentDashboardDataProps) => {
+const CurrentDashboardData = ({
+    setDashboardToDelete,
+    toggleEditDashboard,
+    toggleExpanded,
+    expandedList,
+    dashboard,
+}: CurrentDashboardDataProps) => {
     const handleEditDashboard = () => {
-        if(!expandedList.includes(dashboard.id)) {
+        if (!expandedList.includes(dashboard.id)) {
             toggleExpanded()
         }
         toggleEditDashboard()
     }
-
 
     return (
         <DashboardRowInner>
@@ -327,26 +345,38 @@ const CurrentDashboardData = ({setDashboardToDelete, toggleEditDashboard, toggle
 
             <div className="button-container">
                 <CustomButton className="option" onClick={handleEditDashboard}>
-                    <a><Notes /> Rediger</a>
+                    <a>
+                        <Notes /> Rediger
+                    </a>
                 </CustomButton>
-                <button className="option" onClick={setDashboardToDelete} aria-label="Slett område"><a><Delete/> Slett</a></button>
-                <button className="option" onClick={toggleExpanded} aria-expanded={expandedList.includes(dashboard.id)}>
-                    <Expand className={expandedList.includes(dashboard.id) ? "expanded" : "not-expanded"} />
+                <button
+                    className="option"
+                    onClick={setDashboardToDelete}
+                    aria-label="Slett område"
+                >
+                    <a>
+                        <Delete /> Slett
+                    </a>
+                </button>
+                <button
+                    className="option"
+                    onClick={toggleExpanded}
+                    aria-expanded={expandedList.includes(dashboard.id)}
+                >
+                    <Expand
+                        className={
+                            expandedList.includes(dashboard.id)
+                                ? "expanded"
+                                : "not-expanded"
+                        }
+                    />
                 </button>
             </div>
-
         </DashboardRowInner>
     )
 }
 
-
-
-
-
 /* ------------------------------------------ ------------------------------------------ */
-
-
-
 
 interface EditProps {
     dashboard: Dashboard
@@ -358,79 +388,84 @@ interface EditProps {
     toggleEditDashboard: () => void
 }
 
-
 const CurrentlyEdittingDashboard = ({
-            dashboard,
-            isExpanded,
-            allAreas,
-            reloadDashboards,
-            setDashboardToDelete,
-            toggleExpanded,
-            toggleEditDashboard
-    }: EditProps) => {
-    
+    dashboard,
+    isExpanded,
+    allAreas,
+    reloadDashboards,
+    setDashboardToDelete,
+    toggleExpanded,
+    toggleEditDashboard,
+}: EditProps) => {
     const [updatedDashboard, changeUpdatedDashboard] = useState<Dashboard>({
         id: "",
         name: "",
         areas: [],
-        opsMessages: []
+        opsMessages: [],
     })
 
     const [isLoading, setIsLoading] = useState(true)
 
-
     useEffect(() => {
-        (async function () {
+        ;(async function () {
             setIsLoading(true)
-            await fetchDashboard(dashboard.id).then((response) => {
-                changeUpdatedDashboard({id: response.id, name: response.name, areas: response.areas, opsMessages: response.opsMessages})
-                setIsLoading(false)
-            }).catch(()=> {
-                toast.error("Noe gikk galt ved henting av dashbord-data")
-            })
+            await fetchDashboard(dashboard.id)
+                .then((response) => {
+                    changeUpdatedDashboard({
+                        id: response.id,
+                        name: response.name,
+                        areas: response.areas,
+                        opsMessages: response.opsMessages,
+                    })
+                    setIsLoading(false)
+                })
+                .catch(() => {
+                    toast.error("Noe gikk galt ved henting av dashbord-data")
+                })
         })()
-    },[])
+    }, [])
 
-        
-    if(isLoading) {
+    if (isLoading) {
         return <CustomNavSpinner />
     }
 
-
-    const handleUpdateDashboardName = () => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const changedDashboard = {...updatedDashboard, name: evt.target.value}
-        changeUpdatedDashboard(changedDashboard)
-    }
+    const handleUpdateDashboardName =
+        () => (evt: React.ChangeEvent<HTMLInputElement>) => {
+            const changedDashboard = {
+                ...updatedDashboard,
+                name: evt.target.value,
+            }
+            changeUpdatedDashboard(changedDashboard)
+        }
 
     const handleSubmit = () => {
-        updateDashboard(updatedDashboard).then(() => {
-            reloadDashboards()
-            if(isExpanded) {
-                toggleExpanded()
-            }
-            toggleEditDashboard()
-            toast.success("Oppdatering gjennomført")
-        }).catch(() => {
-            toast.error("Noe gikk galt i oppdatering av dashbord")
-        })
+        updateDashboard(updatedDashboard)
+            .then(() => {
+                reloadDashboards()
+                if (isExpanded) {
+                    toggleExpanded()
+                }
+                toggleEditDashboard()
+                toast.success("Oppdatering gjennomført")
+            })
+            .catch(() => {
+                toast.error("Noe gikk galt i oppdatering av dashbord")
+            })
     }
 
     const handleDisableEdit = () => {
-        if(isExpanded) {
+        if (isExpanded) {
             toggleExpanded()
         }
         toggleEditDashboard()
-
     }
 
     const { name } = updatedDashboard
 
     return (
         <div>
-
             <DashboardRowInner>
-
-                <ClickableName className="editting" onClick={toggleExpanded} >
+                <ClickableName className="editting" onClick={toggleExpanded}>
                     <TextField
                         label="Navn"
                         hideLabel
@@ -441,111 +476,141 @@ const CurrentlyEdittingDashboard = ({
                 </ClickableName>
 
                 <div className="button-container">
-                    <button type="button" className="option" onClick={handleSubmit}>
-                        <a><SaveFile/> Lagre</a>
+                    <button
+                        type="button"
+                        className="option"
+                        onClick={handleSubmit}
+                    >
+                        <a>
+                            <SaveFile /> Lagre
+                        </a>
                     </button>
 
-                    <button type="button" className="option" onClick={handleDisableEdit} >
-                        <a><Close/> Avbryt</a>
+                    <button
+                        type="button"
+                        className="option"
+                        onClick={handleDisableEdit}
+                    >
+                        <a>
+                            <Close /> Avbryt
+                        </a>
                     </button>
 
-                    <button 
+                    <button
                         type="button"
                         className="option"
                         onClick={setDashboardToDelete}
                         aria-label="Slett dashbord"
-                    ><a><Delete/> Slett</a></button>
-
-                    <button type="button" className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>
-                        <Expand className={isExpanded ? "expanded" : "not-expanded"} />
+                    >
+                        <a>
+                            <Delete /> Slett
+                        </a>
                     </button>
 
+                    <button
+                        type="button"
+                        className="option"
+                        onClick={toggleExpanded}
+                        aria-expanded={isExpanded}
+                    >
+                        <Expand
+                            className={isExpanded ? "expanded" : "not-expanded"}
+                        />
+                    </button>
                 </div>
-
             </DashboardRowInner>
 
-            {isExpanded &&
-                <EditAreasInDashboard 
+            {isExpanded && (
+                <EditAreasInDashboard
                     updatedDashboard={updatedDashboard}
                     allAreas={allAreas}
                     changeUpdatedDashboard={changeUpdatedDashboard}
                 />
-            }
-
+            )}
         </div>
     )
 }
 
-
-
-
 /* ------------------------------------------ ------------------------------------------ */
 
-
-
-
-
 const EditAreasInDashboard: React.FC<{
-            updatedDashboard: Dashboard,
-            allAreas: Area[],
-            changeUpdatedDashboard: React.Dispatch<SetStateAction<Dashboard>>
+    updatedDashboard: Dashboard
+    allAreas: Area[]
+    changeUpdatedDashboard: React.Dispatch<SetStateAction<Dashboard>>
+}> = ({ updatedDashboard, allAreas, changeUpdatedDashboard }) => {
+    const availableAreas: Area[] = allAreas.filter(
+        (area) => !updatedDashboard.areas.map((a) => a.id).includes(area.id)
+    )
 
-    }> = ({updatedDashboard, allAreas, changeUpdatedDashboard}) => {
-
-    const availableAreas: Area[] = allAreas.filter(area => !updatedDashboard.areas.map(a => a.id).includes(area.id))
-
-    const [selectedArea, updateSelectedArea] = useState<Area | null>(() => availableAreas.length > 0 ? availableAreas[0] : null)
+    const [selectedArea, updateSelectedArea] = useState<Area | null>(() =>
+        availableAreas.length > 0 ? availableAreas[0] : null
+    )
 
     useEffect(() => {
-        if(availableAreas.length > 0){
+        if (availableAreas.length > 0) {
             updateSelectedArea(availableAreas[0])
-        }
-        else {
+        } else {
             updateSelectedArea(null)
         }
     }, [allAreas, updatedDashboard.areas])
 
     const handleUpdateSelectedArea = (event) => {
         const idOfSelectedArea: string = event.target.value
-        const newSelectedArea: Area = availableAreas.find(area => idOfSelectedArea === area.id)
+        const newSelectedArea: Area = availableAreas.find(
+            (area) => idOfSelectedArea === area.id
+        )
         updateSelectedArea(newSelectedArea)
     }
 
     const handleAddAreaToDashboard = async () => {
-        if(availableAreas.length != 0) {
+        if (availableAreas.length != 0) {
             toast.info("La til område i dashbord")
-            const newDashboardAreas: Area[] = [...updatedDashboard.areas.map(area => area), selectedArea]
-            changeUpdatedDashboard({...updatedDashboard, areas: newDashboardAreas})
+            const newDashboardAreas: Area[] = [
+                ...updatedDashboard.areas.map((area) => area),
+                selectedArea,
+            ]
+            changeUpdatedDashboard({
+                ...updatedDashboard,
+                areas: newDashboardAreas,
+            })
         } else {
             toast.error("Det er ikke flere områder å legge til")
         }
     }
 
-
     const handleDeleteAreaFromDashboard = async (areaToDelete: Area) => {
-        const newDashboardAreas: Area[] = [...updatedDashboard.areas.map(area => area)].filter(a => a.id != areaToDelete.id)
-        changeUpdatedDashboard({...updatedDashboard, areas: newDashboardAreas})
+        const newDashboardAreas: Area[] = [
+            ...updatedDashboard.areas.map((area) => area),
+        ].filter((a) => a.id != areaToDelete.id)
+        changeUpdatedDashboard({
+            ...updatedDashboard,
+            areas: newDashboardAreas,
+        })
     }
-
-
 
     return (
         <DashboardDropRow>
             <DropdownColumn>
-                {updatedDashboard.areas.length == 0 &&
-                    <div>
-                        Ingen områder i dashbord
-                    </div>
-                }
+                {updatedDashboard.areas.length == 0 && (
+                    <div>Ingen områder i dashbord</div>
+                )}
 
-                {updatedDashboard.areas.length > 0 &&
+                {updatedDashboard.areas.length > 0 && (
                     <div className="editting">
                         <b>Områder i dashbord</b>
                         <ul>
                             {updatedDashboard.areas.map((area) => {
                                 return (
-                                    <li key={area.id}>{area.name} 
-                                        <CustomButton onClick={() => handleDeleteAreaFromDashboard(area)} aria-label="Fjern område fra dashbord">
+                                    <li key={area.id}>
+                                        {area.name}
+                                        <CustomButton
+                                            onClick={() =>
+                                                handleDeleteAreaFromDashboard(
+                                                    area
+                                                )
+                                            }
+                                            aria-label="Fjern område fra dashbord"
+                                        >
                                             <CloseCustomized />
                                         </CustomButton>
                                     </li>
@@ -553,79 +618,74 @@ const EditAreasInDashboard: React.FC<{
                             })}
                         </ul>
                     </div>
-                }
+                )}
 
-
-                <Select value={selectedArea !== null ? selectedArea.id : ""} onChange={handleUpdateSelectedArea}
-                    label="Velg område å legge til dashbord" hideLabel
+                <Select
+                    value={selectedArea !== null ? selectedArea.id : ""}
+                    onChange={handleUpdateSelectedArea}
+                    label="Velg område å legge til dashbord"
+                    hideLabel
                 >
-                    {availableAreas.length > 0 ?
-                        availableAreas.map(area => {
+                    {availableAreas.length > 0 ? (
+                        availableAreas.map((area) => {
                             return (
-                                <option key={area.id} value={area.id}>{area.name}</option>
+                                <option key={area.id} value={area.id}>
+                                    {area.name}
+                                </option>
                             )
                         })
-                    :
-                        <option key={undefined} value="">Ingen områder å legge til</option>
-                    }
+                    ) : (
+                        <option key={undefined} value="">
+                            Ingen områder å legge til
+                        </option>
+                    )}
                 </Select>
 
                 <div>
-                    <Button variant="secondary" className="add-button" onClick={handleAddAreaToDashboard}>Legg til</Button>
+                    <Button
+                        variant="secondary"
+                        className="add-button"
+                        onClick={handleAddAreaToDashboard}
+                    >
+                        Legg til
+                    </Button>
                 </div>
-
             </DropdownColumn>
         </DashboardDropRow>
     )
 }
 
-
-
-
-
 /* ------------------------------------------ ------------------------------------------ */
 
+const AreasInDashboard: React.FC<{
+    dashboardWithOnlyIdProp?: Dashboard
+    toggleExpanded: () => void
+}> = ({ dashboardWithOnlyIdProp: dashboardWithoutIdProp, toggleExpanded }) => {
+    const {
+        data: entireDashboard,
+        isLoading,
+        reload,
+    } = useLoader(() => fetchDashboard(dashboardWithoutIdProp.id), [])
 
-
-
-const AreasInDashboard : React.FC<{
-            dashboardWithOnlyIdProp?: Dashboard
-            toggleExpanded: () => void
-    }> = ({
-        dashboardWithOnlyIdProp: dashboardWithoutIdProp,
-        toggleExpanded
-    }) => {
-
-    const { data: entireDashboard, isLoading, reload } = useLoader(() => fetchDashboard(dashboardWithoutIdProp.id),[]);
-
-    
-    if(isLoading) {
-        return (
-            <CustomNavSpinner />
-        )
+    if (isLoading) {
+        return <CustomNavSpinner />
     }
-
 
     return (
         <DashboardDropRow>
             <DropdownColumn>
-                {entireDashboard.areas.length == 0
-                ?
-                    <div>
-                        Ingen områder i dashbord
-                    </div>
-                :
+                {entireDashboard.areas.length == 0 ? (
+                    <div>Ingen områder i dashbord</div>
+                ) : (
                     <div>
                         <b>Områder i dashbord</b>
                         <ul>
                             {entireDashboard.areas.map((area) => {
-                                return (
-                                    <li key={area.id}>{area.name}</li>
-                                )
+                                return <li key={area.id}>{area.name}</li>
                             })}
                         </ul>
                     </div>
-                }
+                )}
             </DropdownColumn>
 
             <div className="clickable" onClick={toggleExpanded}></div>
@@ -633,22 +693,11 @@ const AreasInDashboard : React.FC<{
     )
 }
 
-
-
-
-
-
-
 /* ------------------------------------------ ------------------------------------------ */
-
-
-
-
-
 
 const DashboardDropRow = styled.div`
     border-top: 2px solid rgba(0, 0, 0, 0.1);
-    background-color: var(--navds-semantic-color-canvas-background);
+    background-color: var(--a-gray-100);
     padding: 0 1rem;
 
     display: flex;
@@ -658,7 +707,7 @@ const DashboardDropRow = styled.div`
         ul {
             list-style: none;
             padding: 0;
-            
+
             li {
                 display: flex;
                 justify-content: space-between;
@@ -694,6 +743,5 @@ const DropdownColumn = styled.div`
         margin: 1rem 0;
     }
 `
-
 
 export default TableDashbord

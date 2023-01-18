@@ -8,7 +8,7 @@ import { ISource, SourceType } from "../../types/source"
 
 const SubscribeModalContainer = styled.div`
     position: relative;
-    background-color: var(--navds-semantic-color-canvas-background-light);
+    background-color: var(--a-gray-100-light);
     box-shadow: 1px 1px 4px 5px #ccc;
     max-width: 250px;
     border-bottom-left-radius: 10px;
@@ -25,7 +25,7 @@ const SubscribeModalContainer = styled.div`
         padding: 0;
         margin: 0;
         border-bottom: 1px solid #ccc;
-        background-color: var(--navds-global-color-gray-400);
+        background-color: var(--a-gray-400);
 
         font-size: 1.5rem;
         color: white;
@@ -44,13 +44,13 @@ const ListItemWrapper = styled.li`
     border: 1px solid black;
     :hover {
         cursor: pointer;
-        background-color: var(--navds-global-color-blue-100);
+        background-color: var(--a-blue-100);
     }
     img {
         min-height: 3rem;
     }
     :active {
-        background: var(--navds-global-color-gray-800);
+        background: var(--a-gray-800);
     }
 `
 
@@ -72,7 +72,7 @@ const SubscribeModalContent = styled.div`
 
 const CustomLukknapp = styled(Button)`
     border: none;
-    color: var(--navds-semantic-color-canvas-background-light);
+    color: var(--a-gray-100-light);
     :hover {
         background-color: transparent;
     }

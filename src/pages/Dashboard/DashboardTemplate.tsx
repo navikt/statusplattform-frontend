@@ -415,7 +415,7 @@ const AllAreas = ({
 // -------------
 
 const FullScreenTileContainer = styled.div`
-    background-color: var(--navds-semantic-color-canvas-background);
+    background-color: var(--a-gray-100);
     min-height: 100vh;
 
     display: flex;
@@ -539,7 +539,7 @@ const ExpandAllToggle: React.FC<{
 
 const ErrorWrapper = styled.div`
     margin: 2rem 0;
-    background-color: var(--navds-semantic-color-canvas-background-light);
+    background-color: var(--a-gray-100-light);
     border-radius: 0.25rem;
     padding: 1.5rem;
     max-width: 50rem;
