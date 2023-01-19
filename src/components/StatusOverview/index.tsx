@@ -1,7 +1,7 @@
 import styled from "styled-components"
 import router, { useRouter } from "next/router"
 
-import { Clock } from "@navikt/ds-icons"
+import { Clock, Next } from "@navikt/ds-icons"
 import { Alert, BodyShort, Button, Heading } from "@navikt/ds-react"
 
 import { Area, Dashboard, Service } from "../../types/types"
@@ -147,15 +147,15 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
             <StatusSummary>
                 <div className="top-row">
                     <div className="deviation-button-wrapper">
-                        {/* <Button
+                        <Button
                             variant="tertiary"
                             size="small"
-                            onClick={() =>
-                                router.push(RouterAvvikshistorikk.PATH)
-                            }
+                            icon={<Next />}
+                            iconPosition="right"
+                            onClick={() => router.push(RouterOpsMeldinger.PATH)}
                         >
-                            Se avvikshistorikk <Clock />{" "}
-                        </Button> */}
+                            Se alle avviksmeldinger
+                        </Button>
                     </div>
                     <div>
                         {`Avvik på ${
@@ -167,7 +167,6 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                         {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
                     </div>
                 </div>
-
                 {opsMessages.length == 0 ? (
                     <div className="ops-container">
                         {hasIssue == true && !hasDown && (
@@ -274,10 +273,6 @@ const DeviationCardContainer = styled.button`
                 text-decoration: none;
             }
         }
-    }
-
-    .navds-heading {
-        text-decoration: underline;
     }
 
     :focus {
