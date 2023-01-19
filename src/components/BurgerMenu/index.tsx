@@ -90,16 +90,10 @@ const BurgerMenu = () => {
                 aria-expanded={open}
                 ref={buttonRef}
                 onClick={() => setOpen(!open)}
+                iconPosition="right"
+                icon={open ? <Close /> : <Hamburger />}
             >
                 <span className="menu-text">Meny</span>
-                <span>
-                    <Hamburger
-                        className={!open ? "hamburger-ikon" : "closed-burger"}
-                    />
-                </span>
-                <span>
-                    <Close className={open ? "close-ikon" : "closed-burger"} />
-                </span>
             </Button>
 
             <PopoverCustomized
