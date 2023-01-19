@@ -38,7 +38,9 @@ const OpsMessageContainer = styled.div`
     width: 100%;
 `
 const SubHeader = styled(Heading)`
+
     color: var(--a-gray-600);
+
 `
 
 export const getServerSideProps = async (context) => {
