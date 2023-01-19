@@ -1,12 +1,12 @@
 import styled from "styled-components"
-import { useRouter } from "next/router"
+import router, { useRouter } from "next/router"
 
 import { Clock } from "@navikt/ds-icons"
 import { Alert, BodyShort, Button, Heading } from "@navikt/ds-react"
 
 import { Area, Dashboard, Service } from "../../types/types"
 import { countHealthyServicesInListOfAreas } from "../../utils/servicesOperations"
-import { RouterAvvikshistorikk } from "../../types/routes"
+import { RouterAvvikshistorikk, RouterOpsMeldinger } from "../../types/routes"
 import { useContext, useEffect, useState } from "react"
 import CustomNavSpinner from "../CustomNavSpinner"
 import { OpsMessageI, SeverityEnum } from "../../types/opsMessage"
@@ -320,7 +320,7 @@ interface DeviationCardI {
 }
 
 const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
-    const { internalHeader, severity } = opsMessage
+    const { internalHeader, severity, id } = opsMessage
 
     // TODO: When the solution is ready to open for the public, re-implemented the commented code (or change it to something else)
     // if(user.navIdent || (user.navIdent && onlyShowForNavEmployees == true)) {
@@ -332,14 +332,12 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
             className={
                 !severity ? "has-neutral" : "has-" + severity.toLowerCase()
             }
+            onClick={() => router.push(RouterOpsMeldinger.PATH + `/${id}`)}
         >
-            {/* <span className={status.toLowerCase()} /> */}
             <div className="content">
-                {/* <Detail size="small">01.03.2022</Detail> */}
                 <Heading size="small" level="3">
                     {internalHeader}
                 </Heading>
-                {/* <BodyShort size="small">{titleOfDeviation}</BodyShort> */}
             </div>
         </DeviationCardContainer>
     )
