@@ -228,35 +228,35 @@ const DeviationCardContainer = styled.button`
     }
 
     &.has-issue {
-        background: var(--navds-global-color-orange-100);
-        border-color: var(--navds-semantic-color-feedback-warning-background);
+        background: var(--a-orange-100);
+        border-color: var(--a-surface-warning-subtle);
 
         :hover {
-            background: var(--navds-global-color-orange-300);
-            border-color: var(--navds-semantic-color-feedback-warning-icon);
+            background: var(--a-orange-300);
+            border-color: var(--a-icon-warning);
         }
 
-        border-left-color: var(--navds-semantic-color-feedback-warning-icon);
+        border-left-color: var(--a-icon-warning);
     }
 
     &.has-down {
-        background: var(--navds-global-color-red-100);
+        background: var(--a-red-100);
 
         :hover {
-            background: var(--navds-global-color-red-300);
+            background: var(--a-red-300);
         }
 
-        border-left-color: var(--navds-global-color-red-500);
+        border-left-color: var(--a-red-500);
     }
 
     &.has-neutral {
-        background: var(--navds-global-color-blue-100);
+        background: var(--a-blue-100);
 
         :hover {
-            background: var(--navds-global-color-blue-300);
+            background: var(--a-blue-300);
         }
 
-        border-left-color: var(--navds-global-color-blue-500);
+        border-left-color: var(--a-blue-500);
     }
 
     .content {
@@ -281,10 +281,10 @@ const DeviationCardContainer = styled.button`
     }
 
     :focus {
-        outline: var(--navds-semantic-color-focus) solid 2px;
+        outline: var(--a-border-focus) solid 2px;
     }
     :active {
-        background: var(--navds-semantic-color-interaction-primary-selected);
+        background: var(--a-surface-action-selected);
         color: white;
     }
 

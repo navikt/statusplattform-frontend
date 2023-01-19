@@ -42,7 +42,7 @@ const IncidentsContainer = styled.div`
         }
 
         .time-frame {
-            color: var(--navds-global-color-gray-600);
+            color: var(--a-gray-600);
         }
 
         & > * {
@@ -110,7 +110,7 @@ const PanelCustomized = styled(Panel)`
     }
 
     .time-frame {
-        color: var(--navds-global-color-gray-600);
+        color: var(--a-gray-600);
     }
 
     & > * {

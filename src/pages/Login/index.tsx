@@ -1,26 +1,24 @@
-import { useContext, useEffect, useState } from 'react'
-import styled from 'styled-components'
-import { useRouter } from 'next/router';
-import { toast } from 'react-toastify'
+import { useContext, useEffect, useState } from "react"
+import styled from "styled-components"
+import { useRouter } from "next/router"
+import { toast } from "react-toastify"
 
-import { Button, TextField } from '@navikt/ds-react';
+import { Button, TextField } from "@navikt/ds-react"
 
-import Layout from '../../components/Layout'
-import { TitleContext } from '../../components/ContextProviders/TitleContext';
-import { RouterOauthLogin } from '../../types/routes';
-import CustomNavSpinner from '../../components/CustomNavSpinner';
-
-
+import Layout from "../../components/Layout"
+import { TitleContext } from "../../components/ContextProviders/TitleContext"
+import { RouterOauthLogin } from "../../types/routes"
+import CustomNavSpinner from "../../components/CustomNavSpinner"
 
 const LoginContainer = styled.div`
     margin-top: 2rem;
     padding: 1rem;
-    background-color: var(--navds-semantic-color-canvas-background-light);
+    background-color: var(--a-gray-100-light);
     border-radius: 5px;
     width: 100%;
     max-width: 768px;
     box-shadow: 0 3px 6px rgb(0 0 0 / 15%);
-    
+
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -31,7 +29,7 @@ const LoginContainer = styled.div`
         margin: 0 auto;
         max-width: 260px;
     }
-    
+
     .external-login {
         display: flex;
         flex-direction: column;
@@ -60,7 +58,7 @@ const LoginContainer = styled.div`
     .separator-wrapper {
         display: none;
     }
-    @media(min-width: 820px) {
+    @media (min-width: 820px) {
         padding: 2rem;
         margin-top: 10%;
         flex-direction: row;
@@ -76,64 +74,51 @@ const LoginContainer = styled.div`
     }
 `
 
-
-
-
 const LoginPage = () => {
-    const [citizenLoginCredentials, changeCitizenLoginCredentials] = useState<any>({
-        username: "",
-        password: ""
-    })
+    const [citizenLoginCredentials, changeCitizenLoginCredentials] =
+        useState<any>({
+            username: "",
+            password: "",
+        })
 
     const [isLoading, setIsLoading] = useState(false)
     const { changeTitle } = useContext(TitleContext)
-    
+
     const router = useRouter()
-    
+
     useEffect(() => {
         setIsLoading(true)
         changeTitle("Logg inn")
         setIsLoading(false)
-    },[])
+    }, [])
 
-
-
-    if(isLoading) {
-        return (
-            <CustomNavSpinner />
-        )
+    if (isLoading) {
+        return <CustomNavSpinner />
     }
 
-
-    const changeUserCredentials = (field: keyof typeof citizenLoginCredentials) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const updatedCitizenCredentials = {
-            ...citizenLoginCredentials,
-            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value
+    const changeUserCredentials =
+        (field: keyof typeof citizenLoginCredentials) =>
+        (evt: React.ChangeEvent<HTMLInputElement>) => {
+            const updatedCitizenCredentials = {
+                ...citizenLoginCredentials,
+                [field]:
+                    evt.target.getAttribute("type") === "number"
+                        ? parseInt(evt.target.value)
+                        : evt.target.value,
+            }
+            changeCitizenLoginCredentials(updatedCitizenCredentials)
         }
-        changeCitizenLoginCredentials(updatedCitizenCredentials)
-    }
-
-
 
     const loginCitizen = (event) => {
         event.preventDefault()
         toast.info("Ikke implementert")
     }
 
-
-
     const handleLogInNavUser = () => {
         router.push(RouterOauthLogin.PATH)
     }
 
-
-
-
-
     const { username, password } = citizenLoginCredentials
-
-
-
 
     return (
         <Layout>
@@ -142,31 +127,35 @@ const LoginPage = () => {
                     <h2>Logg inn som borger</h2>
                     <form name="borger" onSubmit={loginCitizen}>
                         <TextField
-                            type="text" label="Brukernavn"
+                            type="text"
+                            label="Brukernavn"
                             id="password"
                             onChange={changeUserCredentials("username")}
-                            placeholder="Brukernavn" value={username}
+                            placeholder="Brukernavn"
+                            value={username}
                         />
                         <TextField
-                            type="text" label="Passord"
+                            type="text"
+                            label="Passord"
                             id="password"
                             onChange={changeUserCredentials("password")}
-                            placeholder="Passord" value={password}
+                            placeholder="Passord"
+                            value={password}
                         />
                         <Button type="submit">Logg inn</Button>
                     </form>
                 </div>
 
-
-                
-                <div className="separator-wrapper"><span className="vertical-separator"></span></div>
-
-
+                <div className="separator-wrapper">
+                    <span className="vertical-separator"></span>
+                </div>
 
                 <div className="nav-login">
                     <h2>Logg inn som Nav-ansatt med SSO</h2>
                     <form name="ansatt">
-                        <Button type="button" onClick={handleLogInNavUser}>Logg inn</Button>
+                        <Button type="button" onClick={handleLogInNavUser}>
+                            Logg inn
+                        </Button>
                     </form>
                 </div>
             </LoginContainer>

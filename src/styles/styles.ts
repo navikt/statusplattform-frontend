@@ -14,19 +14,19 @@ export const OpsScheme = styled.div`
     border-radius: 0.5rem;
 
     &.neutral {
-        border-color: var(--navds-global-color-blue-500);
+        border-color: var(--a-blue-500);
     }
 
     &.down {
-        border-color: var(--navds-semantic-color-feedback-danger-border);
+        border-color: var(--a-border-danger);
     }
 
     &.issue {
-        border-color: var(--navds-semantic-color-feedback-warning-border);
+        border-color: var(--a-border-warning);
     }
 
     &.none {
-        border-color: var(--navds-global-color-gray-300);
+        border-color: var(--a-gray-300);
     }
 
     .input-area {

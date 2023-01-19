@@ -10,11 +10,9 @@
         "lint": "next lint"
     },
     "dependencies": {
-        "@navikt/ds-css": "^0.18.27",
-        "@navikt/ds-css-internal": "^1.0.0-rc.2",
-        "@navikt/ds-icons": "^1.0.0-rc.2",
-        "@navikt/ds-react": "^0.19.21",
-        "@navikt/ds-react-internal": "^0.9.15",
+        "@navikt/ds-css": "^2.0.16",
+        "@navikt/ds-icons": "^2.0.16",
+        "@navikt/ds-react": "^2.0.16",
         "@tinymce/tinymce-react": "^4.2.0",
         "@types/react-collapse": "^5.0.1",
         "@types/react-modal": "^3.12.1",
