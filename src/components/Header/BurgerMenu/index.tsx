@@ -6,8 +6,8 @@ import styled from "styled-components"
 import { Close, Employer, Hamburger } from "@navikt/ds-icons"
 import { Button, Popover } from "@navikt/ds-react"
 
-import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
-import { UserData } from "../../types/userData"
+import { UserStateContext } from "../../ContextProviders/UserStatusContext"
+import { UserData } from "../../../types/userData"
 import {
     RouterAdmin,
     RouterArbeidsgiver,
@@ -15,7 +15,7 @@ import {
     RouterOpsMeldinger,
     RouterPrivatperson,
     RouterSamarbeidspartner,
-} from "../../types/routes"
+} from "../../../types/routes"
 
 const BurgerMenuContainer = styled.div`
     & > * {
