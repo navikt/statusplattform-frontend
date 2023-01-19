@@ -38,7 +38,9 @@ const OpsMessageContainer = styled.div`
     width: 100%;
 `
 const SubHeader = styled(Heading)`
-    color: var(--navds-global-color-gray-600);
+
+    color: var(--a-gray-600);
+
 `
 
 export const getServerSideProps = async (context) => {
@@ -261,7 +263,7 @@ const OpsMessageComponent = ({
 const OpsDetailsContainer = styled.div`
     .opsMessageContainer {
         border: 1px solid;
-        border-color: var(--navds-global-color-gray-200);
+        border-color: var(--a-gray-200);
         border-radius: 0.5rem;
         padding: 1rem;
         width: 36rem;
@@ -278,11 +280,11 @@ const OpsDetailsContainer = styled.div`
     }
 
     &.down {
-        border: 3px solid var(--navds-semantic-color-feedback-danger-border);
+        border: 3px solid var(--a-border-danger);
     }
 
     &.issue {
-        border: 3px solid var(--navds-semantic-color-feedback-warning-border);
+        border: 3px solid var(--a-border-warning);
     }
 `
 

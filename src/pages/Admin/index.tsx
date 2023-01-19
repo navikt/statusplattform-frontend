@@ -176,7 +176,7 @@ export const HorizontalSeparator = styled.span`
     padding: 1px 0;
     margin: 16px 0;
 
-    background-color: var(--navds-global-color-gray-200);
+    background-color: var(--a-gray-200);
 `
 
 export const DynamicListContainer = styled.div`
@@ -208,7 +208,7 @@ export const DynamicListContainer = styled.div`
         }
 
         .colored {
-            color: var(--navds-global-color-blue-500);
+            color: var(--a-blue-500);
             text-decoration: underline;
             background-color: none;
             border: none;

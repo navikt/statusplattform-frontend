@@ -13,26 +13,36 @@ const MessageCard = styled.div`
     background: white;
     padding: 1rem 1.5rem;
     border-radius: 4px;
-    border: 1px solid #e6e6e6;
+    border-left: 1px solid #ffffff;
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 
     display: flex;
     flex-flow: column;
 
     .ops-card-content {
-        padding: 0.5rem 0;
+        padding: 0.5rem 0 0.5rem;
 
         display: flex;
         flex-direction: column;
     }
 
     .message-content {
-        -webkit-line-clamp: 6;
+        margin: 0px;
+        padding: 0px;
+        height: 12.5rem;
         -webkit-box-orient: vertical;
-        overflow: hidden;
-        word-break: break-word;
+        overflow-y: scroll;
 
         display: -webkit-box;
+        ::-webkit-scrollbar {
+            -webkit-appearance: none;
+            width: 7px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            border-radius: 4px;
+            background-color: rgba(0, 0, 0, 0.2);
+        }
     }
 
     .buttons-container {
@@ -64,7 +74,8 @@ const MessageCard = styled.div`
     }
 
     .se-mer-wrapper {
-        margin-top: auto;
+        margin-top: 17.5rem;
+        position: absolute;
     }
 `
 
@@ -89,11 +100,12 @@ interface OpsMessageCardI {
 const OpsMessageCard = (props: OpsMessageCardI) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isActiveModalOpen, setIsActiveModalOpen] = useState(false)
+
     const router = useRouter()
 
     const { opsMessage, notifyChangedOpsMessage, notifyDeletedOpsMessage } =
         props
-
+    const color: string = opsMessage.severity
     const handleModal = () => {
         setIsModalOpen(!isModalOpen)
     }
@@ -136,7 +148,7 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
     }
 
     return (
-        <MessageCard>
+        <MessageCard className={opsMessage.severity}>
             <CustomizedModal
                 open={!!isModalOpen}
                 onClose={() => setIsModalOpen(false)}

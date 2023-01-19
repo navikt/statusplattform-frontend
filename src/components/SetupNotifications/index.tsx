@@ -1,13 +1,20 @@
 import styled from "styled-components"
-import Link from 'next/link'
+import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/router"
 import { toast } from "react-toastify"
 
-import { BodyShort, Button, Checkbox, Heading, Radio, RadioGroup, TextField } from "@navikt/ds-react"
+import {
+    BodyShort,
+    Button,
+    Checkbox,
+    Heading,
+    Radio,
+    RadioGroup,
+    TextField,
+} from "@navikt/ds-react"
 import { Refresh } from "@navikt/ds-icons"
 import { RouterConfirmedCreation, RouterHomePage } from "../../types/routes"
-
 
 const NotificationsContainer = styled.div`
     display: flex;
@@ -50,15 +57,11 @@ const CreateNotifications = () => {
 
     const router = useRouter()
 
-
-
-
     const handleChangeOTP = (event) => {
         changeChosenOTP(event)
-        if(emailSelected) {
+        if (emailSelected) {
             updateEmail("")
-        }
-        else {
+        } else {
             updatePhone("")
         }
         changeEmailSelected(!emailSelected)
@@ -76,52 +79,74 @@ const CreateNotifications = () => {
         console.log(event)
     }
 
-
-
-
-
-    if(clickedSendOtp) {
-        return <Otp phoneNumber={phone} changeClickedSendOtp={(state: boolean) => changeClickedSendOtp(state)}/>
+    if (clickedSendOtp) {
+        return (
+            <Otp
+                phoneNumber={phone}
+                changeClickedSendOtp={(state: boolean) =>
+                    changeClickedSendOtp(state)
+                }
+            />
+        )
     }
-
-
-
-
-
-
 
     return (
         <NotificationsContainer>
-            <Heading spacing level="2" size="medium">For å få "varsler" må du opprette en profil</Heading>
+            <Heading spacing level="2" size="medium">
+                For å få "varsler" må du opprette en profil
+            </Heading>
 
-            <BodyShort>For å opprette en profil, trenger vi å sende deg et engangspassord</BodyShort>
+            <BodyShort>
+                For å opprette en profil, trenger vi å sende deg et
+                engangspassord
+            </BodyShort>
 
             <form>
-                <RadioGroup legend="Hvordan vil du ha passordet tilsendt?" defaultValue={(chosenOTP) ? chosenOTP : "E-post"} onChange={(event) => handleChangeOTP(event)}>
+                <RadioGroup
+                    legend="Hvordan vil du ha passordet tilsendt?"
+                    defaultValue={chosenOTP ? chosenOTP : "E-post"}
+                    onChange={(event) => handleChangeOTP(event)}
+                >
                     <Radio value="E-post">E-post</Radio>
                     <Radio value="Telefon">Telefon</Radio>
                 </RadioGroup>
 
                 <div className="otp-input">
-                    <BodyShort>Fyll inn din epost i feltet nedenfor, så sender vi deg engangspassordet på {emailSelected ? "Epost" : "SMS"}</BodyShort>
-                    <TextField label="E-post" value={phone} onChange={event => handleUpdatePhone(event)} />
+                    <BodyShort>
+                        Fyll inn din epost i feltet nedenfor, så sender vi deg
+                        engangspassordet på {emailSelected ? "Epost" : "SMS"}
+                    </BodyShort>
+                    <TextField
+                        label="E-post"
+                        value={phone}
+                        onChange={(event) => handleUpdatePhone(event)}
+                    />
                 </div>
 
-                <Checkbox value={acceptsTerms} onChange={event => handleUpdateAcceptsTerms(event)} >Jeg godtar <Link href="#">personvernerklæring og vilkår for bruk</Link></Checkbox>
-                
-                <ButtonContainer>
-                    <Button type="button" onClick={() => router.push(RouterHomePage.PATH)}>Avbryt</Button>
+                <Checkbox
+                    value={acceptsTerms}
+                    onChange={(event) => handleUpdateAcceptsTerms(event)}
+                >
+                    Jeg godtar{" "}
+                    <Link href="#">personvernerklæring og vilkår for bruk</Link>
+                </Checkbox>
 
-                    <Button onClick={() => changeClickedSendOtp(true)}>Send passord på {emailSelected ? "Epost" : "SMS"}</Button>
+                <ButtonContainer>
+                    <Button
+                        type="button"
+                        onClick={() => router.push(RouterHomePage.PATH)}
+                    >
+                        Avbryt
+                    </Button>
+
+                    <Button onClick={() => changeClickedSendOtp(true)}>
+                        Send passord på {emailSelected ? "Epost" : "SMS"}
+                    </Button>
                 </ButtonContainer>
             </form>
-
         </NotificationsContainer>
     )
 }
-
-
-
 
 const ButtonContainer = styled.div`
     display: flex;
@@ -129,12 +154,11 @@ const ButtonContainer = styled.div`
     gap: 24px;
 
     margin-top: 32px;
-    
-    @media(min-width: 300px) {
+
+    @media (min-width: 300px) {
         flex-direction: row;
     }
 `
-
 
 const OtpContainer = styled.div`
     display: flex;
@@ -145,7 +169,7 @@ const OtpContainer = styled.div`
     }
 
     .colored {
-        color: var(--navds-global-color-blue-500);
+        color: var(--a-blue-500);
     }
 
     .linkify {
@@ -162,10 +186,10 @@ const OtpContainer = styled.div`
     }
 `
 
-
-
-
-const Otp: React.FC<{phoneNumber: string, changeClickedSendOtp: (state) => void }> = ({phoneNumber, changeClickedSendOtp}) => {
+const Otp: React.FC<{
+    phoneNumber: string
+    changeClickedSendOtp: (state) => void
+}> = ({ phoneNumber, changeClickedSendOtp }) => {
     const router = useRouter()
 
     const handleRedirectProfileCreated = () => {
@@ -174,23 +198,38 @@ const Otp: React.FC<{phoneNumber: string, changeClickedSendOtp: (state) => void 
 
     return (
         <OtpContainer>
-            <Heading level="2" size="medium">Fyll inn passordet fra SMS</Heading>
-            
+            <Heading level="2" size="medium">
+                Fyll inn passordet fra SMS
+            </Heading>
+
             <BodyShort>Fyll inn engangspassordet du mottok på SMS.</BodyShort>
 
-            <BodyShort>Mottok du ikke passordet? <span className="colored"> <Refresh /> <span className="linkify" onClick={() => toast.info("Nytt passord sent")}>Send passordet på nytt</span></span></BodyShort>
+            <BodyShort>
+                Mottok du ikke passordet?{" "}
+                <span className="colored">
+                    {" "}
+                    <Refresh />{" "}
+                    <span
+                        className="linkify"
+                        onClick={() => toast.info("Nytt passord sent")}
+                    >
+                        Send passordet på nytt
+                    </span>
+                </span>
+            </BodyShort>
 
             <TextField label="Engangspassord fra SMS" />
 
             <ButtonContainer>
-                <Button onClick={() => changeClickedSendOtp(false)}>Avbryt</Button>
-                <Button onClick={() => handleRedirectProfileCreated()}>Opprett profil</Button>
+                <Button onClick={() => changeClickedSendOtp(false)}>
+                    Avbryt
+                </Button>
+                <Button onClick={() => handleRedirectProfileCreated()}>
+                    Opprett profil
+                </Button>
             </ButtonContainer>
         </OtpContainer>
     )
 }
-
-
-
 
 export default CreateNotifications

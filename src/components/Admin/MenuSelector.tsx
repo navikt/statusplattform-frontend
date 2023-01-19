@@ -5,7 +5,7 @@ import { useState } from "react"
 
 const DashboardTabMenu = styled.header`
     width: 100%;
-    background-color: var(--navds-semantic-color-canvas-background-light);
+    background-color: var(--a-gray-100);
     height: 50px;
 
     display: flex;

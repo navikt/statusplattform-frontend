@@ -1,27 +1,48 @@
-import { useContext, useEffect, useState } from "react";
-import router from 'next/router';
-import Head from 'next/head'
-import styled from 'styled-components'
-import { toast } from 'react-toastify';
+import { useContext, useEffect, useState } from "react"
+import router from "next/router"
+import Head from "next/head"
+import styled from "styled-components"
+import { toast } from "react-toastify"
 
-import { Bag, Calculator, Close, Delete, Expand, FillForms, FlowerBladeFall, Folder, GuideDog, HandBandage, HealthCase, Heart, Money, Notes, SaveFile, Saving, SocialAid } from '@navikt/ds-icons'
+import {
+    Bag,
+    Calculator,
+    Close,
+    Delete,
+    Expand,
+    FillForms,
+    FlowerBladeFall,
+    Folder,
+    GuideDog,
+    HandBandage,
+    HealthCase,
+    Heart,
+    Money,
+    Notes,
+    SaveFile,
+    Saving,
+    SocialAid,
+} from "@navikt/ds-icons"
 
-import { BodyShort, Button, Modal, Select, TextField } from '@navikt/ds-react';
-import { useLoader } from "../../utils/useLoader";
-import { deleteArea, fetchAreas, fetchSubAreas, updateArea } from "../../utils/areasAPI";
-import { fetchServices } from "../../utils/servicesAPI";
-import { TitleContext } from "../ContextProviders/TitleContext";
-import { Area, Service, SubArea } from "../../types/types";
-import { AdminCategoryContainer, CloseCustomized, DependencyList, ModalInner } from "../../pages/Admin";
-import { RouterAdminAddOmråde } from "../../types/routes";
-import CustomNavSpinner from "../CustomNavSpinner";
-
-
-
-
-
-
-
+import { BodyShort, Button, Modal, Select, TextField } from "@navikt/ds-react"
+import { useLoader } from "../../utils/useLoader"
+import {
+    deleteArea,
+    fetchAreas,
+    fetchSubAreas,
+    updateArea,
+} from "../../utils/areasAPI"
+import { fetchServices } from "../../utils/servicesAPI"
+import { TitleContext } from "../ContextProviders/TitleContext"
+import { Area, Service, SubArea } from "../../types/types"
+import {
+    AdminCategoryContainer,
+    CloseCustomized,
+    DependencyList,
+    ModalInner,
+} from "../../pages/Admin"
+import { RouterAdminAddOmråde } from "../../types/routes"
+import CustomNavSpinner from "../CustomNavSpinner"
 
 const AreaHeader = styled.div`
     padding: 1rem;
@@ -46,7 +67,6 @@ const AreaHeader = styled.div`
         display: flex;
         flex-direction: row;
     }
-
 `
 
 const AreaElementContainer = styled.div`
@@ -68,13 +88,11 @@ const AreaElementContainer = styled.div`
         }
     }
     &.editting {
-        border-color: var(--navds-global-color-blue-500);
+        border-color: var(--a-blue-500);
     }
 `
 
-
-
-const TableOmraade = () => { 
+const TableOmraade = () => {
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [anchorId, setAnchorId] = useState<string>("")
 
@@ -94,9 +112,9 @@ const TableOmraade = () => {
         setIsLoadingAreas(true)
         setIsLoadingServices(true)
         let controlVar = true
-        
+
         const setup = async () => {
-            if(controlVar) {
+            if (controlVar) {
                 try {
                     const areas: Area[] = await fetchAreas()
                     const services: Service[] = await fetchServices()
@@ -111,17 +129,16 @@ const TableOmraade = () => {
                 }
             }
         }
-        if(controlVar) {
+        if (controlVar) {
             setup()
         }
         controlVar = false
-    },[])
-
+    }, [])
 
     const reloadAll = async () => {
         let controlVar = true
 
-        if(controlVar) {
+        if (controlVar) {
             try {
                 await reloadAreas()
                 await reloadServices()
@@ -129,7 +146,6 @@ const TableOmraade = () => {
                 console.log(error)
                 toast.error("Noe gikk galt i hentingen.")
             }
-
         }
         controlVar = false
     }
@@ -138,7 +154,7 @@ const TableOmraade = () => {
         let controlVar = true
         setIsLoadingAreas(true)
 
-        if(controlVar) {
+        if (controlVar) {
             try {
                 const reloadedAreas: Area[] = await fetchAreas()
                 setAllAreas(reloadedAreas)
@@ -147,7 +163,6 @@ const TableOmraade = () => {
                 setIsLoadingAreas(false)
                 toast.error("Noe gikk galt i hentingen.")
             }
-
         }
         controlVar = false
     }
@@ -155,7 +170,7 @@ const TableOmraade = () => {
         let controlVar = true
         setIsLoadingServices(true)
 
-        if(controlVar) {
+        if (controlVar) {
             try {
                 const reloadedServices: Service[] = await fetchServices()
                 setAllServices(reloadedServices)
@@ -164,29 +179,26 @@ const TableOmraade = () => {
                 console.log(error)
                 toast.error("Noe gikk galt i hentingen.")
             }
-
         }
         controlVar = false
     }
 
-
     useEffect(() => {
         setTimeout(() => {
-            const element = document.getElementById(anchorId);
+            const element = document.getElementById(anchorId)
             if (element) {
-              element.scrollIntoView();
+                element.scrollIntoView()
             }
-          }, 300);
+        }, 300)
     }, [anchorId])
 
-
-    if(isLoadingAreas || isLoadingServices) {
+    if (isLoadingAreas || isLoadingServices) {
         return <CustomNavSpinner />
     }
-    
+
     const toggleExpandedFor = (tileAreaId) => {
-        if(expanded.includes(tileAreaId)) {
-            toggleExpanded([...expanded.filter(i => i !== tileAreaId)])
+        if (expanded.includes(tileAreaId)) {
+            toggleExpanded([...expanded.filter((i) => i !== tileAreaId)])
         } else {
             toggleExpanded([...expanded, tileAreaId])
         }
@@ -194,8 +206,8 @@ const TableOmraade = () => {
 
     const toggleEditArea = (area: Area) => {
         let edittingAreas: string[] = [...areasToEdit]
-        if(edittingAreas.includes(area.id)) {
-            changeAreasToEdit(edittingAreas.filter(d => d != area.id))
+        if (edittingAreas.includes(area.id)) {
+            changeAreasToEdit(edittingAreas.filter((d) => d != area.id))
             return
         }
         edittingAreas.push(area.id)
@@ -203,16 +215,16 @@ const TableOmraade = () => {
     }
 
     const confirmDeleteAreaHandler = () => {
-        deleteArea(areaToDelete).then(() => {
-            toast.info("Området ble slettet")
-            setAreaToDelete(null);
-            reloadAreas()
-        }).catch(() => {
-            toast.error("Kunne ikke slette området")
-        })
+        deleteArea(areaToDelete)
+            .then(() => {
+                toast.info("Området ble slettet")
+                setAreaToDelete(null)
+                reloadAreas()
+            })
+            .catch(() => {
+                toast.error("Kunne ikke slette området")
+            })
     }
-
-
 
     return (
         <AdminCategoryContainer>
@@ -220,24 +232,32 @@ const TableOmraade = () => {
                 <title>Admin - Områder - status.nav.no</title>
             </Head>
 
-            <Modal
-                open={!!areaToDelete}
-                onClose={() => setAreaToDelete(null)}
-            >
-                <ModalInner>Ønsker du å slette området?
-                    <Button variant="secondary" onClick={confirmDeleteAreaHandler}>Slett området</Button>
-                    <Button variant="secondary" onClick={() => setAreaToDelete(null)}>Avbryt</Button>
+            <Modal open={!!areaToDelete} onClose={() => setAreaToDelete(null)}>
+                <ModalInner>
+                    Ønsker du å slette området?
+                    <Button
+                        variant="secondary"
+                        onClick={confirmDeleteAreaHandler}
+                    >
+                        Slett området
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        onClick={() => setAreaToDelete(null)}
+                    >
+                        Avbryt
+                    </Button>
                 </ModalInner>
             </Modal>
 
-
             <div className="centered">
-                <Button variant="secondary" 
-                        onClick={() => router.push(RouterAdminAddOmråde.PATH)}>
+                <Button
+                    variant="secondary"
+                    onClick={() => router.push(RouterAdminAddOmråde.PATH)}
+                >
                     <b>Legg til nytt område</b>
                 </Button>
             </div>
-
 
             <div className="category-overflow-container">
                 <div>
@@ -249,32 +269,54 @@ const TableOmraade = () => {
                         <div className="empty-space"></div>
                     </AreaHeader>
 
-
-                    
                     <div>
-                        {allAreas.map( (area, index) => {
+                        {allAreas.map((area, index) => {
                             return (
-                                <AreaElementContainer className={areasToEdit.includes(area.id) ? "editting" : ""} key={index}>
-                                    {!areasToEdit.includes(area.id) ?
+                                <AreaElementContainer
+                                    className={
+                                        areasToEdit.includes(area.id)
+                                            ? "editting"
+                                            : ""
+                                    }
+                                    key={index}
+                                >
+                                    {!areasToEdit.includes(area.id) ? (
                                         <AreaTableRow
                                             area={area}
                                             allServices={allServices}
-                                            reloadAll={reloadAll} 
-                                            isExpanded={expanded.includes(area.id)}
-                                            toggleExpanded={() => toggleExpandedFor(area.id)}
-                                            toggleEditArea={() => toggleEditArea(area)}
-                                            setAreaToDelete={() => setAreaToDelete(area)}
-                                       />
-                                    :
+                                            reloadAll={reloadAll}
+                                            isExpanded={expanded.includes(
+                                                area.id
+                                            )}
+                                            toggleExpanded={() =>
+                                                toggleExpandedFor(area.id)
+                                            }
+                                            toggleEditArea={() =>
+                                                toggleEditArea(area)
+                                            }
+                                            setAreaToDelete={() =>
+                                                setAreaToDelete(area)
+                                            }
+                                        />
+                                    ) : (
                                         <CurrentlyEdittingArea
                                             area={area}
                                             allServices={allServices}
                                             reloadAreas={reloadAreas}
-                                            isExpanded={expanded.includes(area.id)}
-                                            toggleExpanded={() => toggleExpandedFor(area.id)}
-                                            toggleEditArea={() => toggleEditArea(area)}
-                                            setAreaToDelete={() => setAreaToDelete(area)}
-                                        />}
+                                            isExpanded={expanded.includes(
+                                                area.id
+                                            )}
+                                            toggleExpanded={() =>
+                                                toggleExpandedFor(area.id)
+                                            }
+                                            toggleEditArea={() =>
+                                                toggleEditArea(area)
+                                            }
+                                            setAreaToDelete={() =>
+                                                setAreaToDelete(area)
+                                            }
+                                        />
+                                    )}
                                 </AreaElementContainer>
                             )
                         })}
@@ -283,51 +325,35 @@ const TableOmraade = () => {
             </div>
         </AdminCategoryContainer>
     )
-} 
-
-
-
-
-
+}
 
 /* ------------------------------------------- COMMON DATA BELOW --------------------------------------------------------- */
 
-
-
-
 export const options = [
-    { value: "0001", label: "Bag", icon: <Bag/> },
-    { value: "0002", label: "Sparepenger", icon: <Saving/> },
-    { value: "0003", label: "Hjerte", icon: <Heart/> },
-    { value: "0004", label: "Sosialstøtte", icon: <SocialAid/> },
-    { value: "0005", label: "Bandasje", icon: <HandBandage/> },
-    { value: "0006", label: "Skjemautfylt", icon: <FillForms/> },
-    { value: "0007", label: "Førstehjelp", icon: <HealthCase/> },
-    { value: "0008", label: "Guidehund", icon: <GuideDog/> },
-    { value: "0009", label: "Penger", icon: <Money/> },
-    { value: "0010", label: "Kalkulator", icon: <Calculator/> },
-    { value: "0011", label: "Blomst", icon: <FlowerBladeFall/> },
-    { value: "0012", label: "Mappe", icon: <Folder/> },
-];
-
-
-
-
-
+    { value: "0001", label: "Bag", icon: <Bag /> },
+    { value: "0002", label: "Sparepenger", icon: <Saving /> },
+    { value: "0003", label: "Hjerte", icon: <Heart /> },
+    { value: "0004", label: "Sosialstøtte", icon: <SocialAid /> },
+    { value: "0005", label: "Bandasje", icon: <HandBandage /> },
+    { value: "0006", label: "Skjemautfylt", icon: <FillForms /> },
+    { value: "0007", label: "Førstehjelp", icon: <HealthCase /> },
+    { value: "0008", label: "Guidehund", icon: <GuideDog /> },
+    { value: "0009", label: "Penger", icon: <Money /> },
+    { value: "0010", label: "Kalkulator", icon: <Calculator /> },
+    { value: "0011", label: "Blomst", icon: <FlowerBladeFall /> },
+    { value: "0012", label: "Mappe", icon: <Folder /> },
+]
 
 /* -------------------------------------------  --------------------------------------------------------- */
 
-
-
-
 const AreaRowContainer = styled.div`
     min-height: 5rem;
-    background-color: var(--navds-semantic-color-canvas-background);
+    background-color: var(--a-gray-100);
 
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    
+
     :first-child {
         padding-left: 1rem;
     }
@@ -349,14 +375,13 @@ const AreaRowInner = styled.div`
         & > * {
             display: flex;
             flex-basis: 100%;
-            
         }
         .row-element {
             flex-basis: 100%;
             margin-right: 5ch;
             word-break: break-word;
             width: 10rem;
-            
+
             & > * {
                 width: 20ch;
             }
@@ -365,7 +390,7 @@ const AreaRowInner = styled.div`
             cursor: pointer;
         }
     }
-    
+
     .bottom-row {
         border-top: 2px solid rgba(0, 0, 0, 0.1);
         min-height: 5rem;
@@ -422,7 +447,7 @@ const AreaElements = styled.div`
 `
 
 // const IconContainer = styled.section`
-// 	color: var(--navds-global-color-blue-500);
+// 	color: var(--a-blue-500);
 //     font-size: 2rem;
 //     display: flex;
 //     align-items: center;
@@ -448,10 +473,10 @@ const TileDropdownColumn = styled.div`
 `
 
 const ServicesInAreaList = styled.ul`
-        max-width: 100%;
-        padding: 0;
+    max-width: 100%;
+    padding: 0;
 
-        word-break: break-word;
+    word-break: break-word;
 
     li {
         list-style: none;
@@ -464,7 +489,6 @@ const ServicesInAreaList = styled.ul`
         justify-content: space-between;
 
         :hover {
-            
             border: 1px solid black;
         }
     }
@@ -488,24 +512,31 @@ const CustomButton = styled.button`
     }
 `
 
-
 interface Props {
     area: Area
     allServices: Service[]
     reloadAll: () => void
     isExpanded: boolean
-    toggleExpanded: () => void,
-    toggleEditArea: (area) => void,
+    toggleExpanded: () => void
+    toggleEditArea: (area) => void
     setAreaToDelete: (area) => void
 }
 
-
-const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices, toggleEditArea, setAreaToDelete}: Props) => { 
-    const [servicesInArea, setServicesInArea] = useState<Service[]>(() => area.services.map(service => service))
-
+const AreaTableRow = ({
+    area,
+    reloadAll,
+    isExpanded,
+    toggleExpanded,
+    allServices,
+    toggleEditArea,
+    setAreaToDelete,
+}: Props) => {
+    const [servicesInArea, setServicesInArea] = useState<Service[]>(() =>
+        area.services.map((service) => service)
+    )
 
     const handleToggleEditArea = () => {
-        if(!isExpanded) {
+        if (!isExpanded) {
             toggleExpanded()
         }
         toggleEditArea(area)
@@ -521,88 +552,91 @@ const AreaTableRow = ({ area, reloadAll, isExpanded, toggleExpanded, allServices
                     <span className="row-element">{beskrivelse}</span>
                     {/* <span className="row-element"><IconContainer>{getIconsFromGivenCode(ikon)}</IconContainer></span> */}
                 </div>
-        
-                {isExpanded && 
+
+                {isExpanded && (
                     <div className="bottom-row">
                         <div className="bottom-row-column">
-                            {servicesInArea.length === 0 ?
+                            {servicesInArea.length === 0 ? (
                                 <div className="row-element">
                                     Ingen tjenester er knyttet til området.
                                 </div>
-                            :
+                            ) : (
                                 <div className="row-element">
-                                    <BodyShort spacing><b>Tjenester i område</b></BodyShort>
+                                    <BodyShort spacing>
+                                        <b>Tjenester i område</b>
+                                    </BodyShort>
                                     <ul>
-                                        {servicesInArea.map(service => {
+                                        {servicesInArea.map((service) => {
                                             return (
                                                 <li key={service.id}>
-                                                    {service.name} 
+                                                    {service.name}
                                                 </li>
                                             )
                                         })}
                                     </ul>
                                 </div>
-
-                                
-                        }
+                            )}
                         </div>
 
-
                         <div className="bottom-row-column">
-                            {subAreas.length === 0 ?
+                            {subAreas.length === 0 ? (
                                 <div className="row-element">
                                     Ingen underområder knyttet til området.
                                 </div>
-                            :
+                            ) : (
                                 <div className="row-element">
-                                    <BodyShort spacing><b>Underområder i område</b></BodyShort>
+                                    <BodyShort spacing>
+                                        <b>Underområder i område</b>
+                                    </BodyShort>
                                     <ul>
-                                        {subAreas.map(subArea => {
+                                        {subAreas.map((subArea) => {
                                             return (
                                                 <li key={subArea.id}>
-                                                    {subArea.name} 
+                                                    {subArea.name}
                                                 </li>
                                             )
                                         })}
                                     </ul>
                                 </div>
-
-                                
-                        }
+                            )}
                         </div>
                     </div>
-                }
+                )}
             </AreaRowInner>
 
-
             <div className="button-container">
-                <CustomButton className="option" onClick={() => handleToggleEditArea()}>
-                    <a><Notes /> Rediger</a>
+                <CustomButton
+                    className="option"
+                    onClick={() => handleToggleEditArea()}
+                >
+                    <a>
+                        <Notes /> Rediger
+                    </a>
                 </CustomButton>
-                <button className="option" onClick={setAreaToDelete} aria-label="Slett område"><a><Delete /> Slett</a></button>
-                <button className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>
-                    <Expand className={isExpanded ? "expanded" : "not-expanded"} />
+                <button
+                    className="option"
+                    onClick={setAreaToDelete}
+                    aria-label="Slett område"
+                >
+                    <a>
+                        <Delete /> Slett
+                    </a>
+                </button>
+                <button
+                    className="option"
+                    onClick={toggleExpanded}
+                    aria-expanded={isExpanded}
+                >
+                    <Expand
+                        className={isExpanded ? "expanded" : "not-expanded"}
+                    />
                 </button>
             </div>
-            
         </AreaRowContainer>
     )
-} 
-
-
-
-
-
-
-
+}
 
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
 
 const EditDependeciesContainer = styled.div`
     min-width: 100px;
@@ -611,9 +645,6 @@ const EditDependeciesContainer = styled.div`
         transform: translateY(-2px);
     }
 `
-
-
-
 
 interface EditProps {
     area: Area
@@ -625,20 +656,15 @@ interface EditProps {
     setAreaToDelete: (area) => void
 }
 
-
-
-
-
 const CurrentlyEdittingArea = ({
-            area,
-            allServices,
-            reloadAreas,
-            isExpanded,
-            toggleExpanded,
-            toggleEditArea,
-            setAreaToDelete
-    }: EditProps) => {
-    
+    area,
+    allServices,
+    reloadAreas,
+    isExpanded,
+    toggleExpanded,
+    toggleEditArea,
+    setAreaToDelete,
+}: EditProps) => {
     const [updatedArea, changeUpdatedArea] = useState({
         id: area.id,
         name: area.name,
@@ -646,79 +672,95 @@ const CurrentlyEdittingArea = ({
         icon: area.icon,
         services: area.services,
         components: area.components,
-        subAreas: area.subAreas
+        subAreas: area.subAreas,
     })
-    
-    const [servicesInArea, setServicesInArea] = useState<Service[]>(() => area.services.map(service => service))
-    const [subAreasInArea, setSubAreasInArea] = useState<SubArea[]>(() => area.subAreas.map(subArea => subArea))
 
-    const {data: subAreas, isLoading, reload} = useLoader(fetchSubAreas,[])
+    const [servicesInArea, setServicesInArea] = useState<Service[]>(() =>
+        area.services.map((service) => service)
+    )
+    const [subAreasInArea, setSubAreasInArea] = useState<SubArea[]>(() =>
+        area.subAreas.map((subArea) => subArea)
+    )
 
-    if(isLoading) {
-        return (
-            <CustomNavSpinner />
-        )
+    const { data: subAreas, isLoading, reload } = useLoader(fetchSubAreas, [])
+
+    if (isLoading) {
+        return <CustomNavSpinner />
     }
 
-
-
     const handleDeleteServiceOnArea = (serviceId) => {
-        setServicesInArea([...servicesInArea.filter(service => service.id !== serviceId)])
+        setServicesInArea([
+            ...servicesInArea.filter((service) => service.id !== serviceId),
+        ])
         toast.info("Tjeneste slettet fra område")
         // deleteServiceFromArea(area.id, serviceId)
         //     .then(() => {
         //     })
         //     .catch(() => {
         //         toast.warn("Tjeneste ble ikke slettet fra område grunnet feil")
-        //     }) 
+        //     })
     }
 
     const handlePutServiceToArea = (service: Service) => {
-        if(servicesInArea.map(s => s.id).includes(service.id)) {
+        if (servicesInArea.map((s) => s.id).includes(service.id)) {
             toast.warn("Denne tjenesten fins allerede i området")
             return
         }
-        
-        setServicesInArea([...servicesInArea, service]);
-        const newArea = {...updatedArea, services: [...servicesInArea, service]}
-            
+
+        setServicesInArea([...servicesInArea, service])
+        const newArea = {
+            ...updatedArea,
+            services: [...servicesInArea, service],
+        }
+
         changeUpdatedArea(newArea)
         toast.success("Tjenesten har blitt lagt til i området")
     }
 
     const handleDeleteSubAreaOnArea = (subAreaId) => {
-        setSubAreasInArea([...subAreasInArea.filter(subArea => subArea.id !== subAreaId)])
+        setSubAreasInArea([
+            ...subAreasInArea.filter((subArea) => subArea.id !== subAreaId),
+        ])
         toast.info("Underområde slettet fra område")
     }
 
     const handlePutSubAreaToArea = (subArea: SubArea) => {
-        if(subAreasInArea.map(a => a.id).includes(subArea.id)) {
+        if (subAreasInArea.map((a) => a.id).includes(subArea.id)) {
             toast.warn("Dette underområdet fins allerede i området")
             return
         }
-        
-        setSubAreasInArea([...subAreasInArea, subArea]);
-        const newArea = {...updatedArea, subAreas: [...subAreasInArea, subArea]}
-            
+
+        setSubAreasInArea([...subAreasInArea, subArea])
+        const newArea = {
+            ...updatedArea,
+            subAreas: [...subAreasInArea, subArea],
+        }
+
         changeUpdatedArea(newArea)
         toast.success("Underområdet har blitt lagt til i området")
     }
 
-    const handleUpdatedArea = (field: keyof typeof updatedArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const changedArea = {
-            ...updatedArea,
-            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
-            
-        changeUpdatedArea(changedArea)
-    }
+    const handleUpdatedArea =
+        (field: keyof typeof updatedArea) =>
+        (evt: React.ChangeEvent<HTMLInputElement>) => {
+            const changedArea = {
+                ...updatedArea,
+                [field]:
+                    evt.target.getAttribute("type") === "number"
+                        ? parseInt(evt.target.value)
+                        : evt.target.value,
+            }
+
+            changeUpdatedArea(changedArea)
+        }
 
     const handleSubmit = () => {
         let fetching = true
         try {
-            if(fetching) {
+            if (fetching) {
                 updateArea(updatedArea).then(() => {
                     reloadAreas()
-                    if(isExpanded) {
+                    if (isExpanded) {
                         toggleExpanded(area)
                     }
                     toggleEditArea(area)
@@ -728,87 +770,117 @@ const CurrentlyEdittingArea = ({
             }
         } catch (error) {
             console.log(error)
-            toast.error("Noe gikk galt i oppdatering av område")   
+            toast.error("Noe gikk galt i oppdatering av område")
         }
     }
 
     const handleDisableEditArea = (area) => {
-        if(isExpanded) {
+        if (isExpanded) {
             toggleExpanded(area)
         }
         toggleEditArea(area)
     }
 
-
     const { name, description } = updatedArea
 
     return (
         <form onSubmit={handleSubmit}>
-
             <AreaRowContainer id={area.id} className="clickable editting">
                 <AreaRowInner>
-
                     <AreaElements className="top-row" onClick={toggleExpanded}>
-                        <TextField label="Navn" hideLabel className="row-element editting" value={name} onChange={handleUpdatedArea("name")} onClick={(event) => event.stopPropagation()} />
-                        <TextField label="Beskrivelse" hideLabel className="row-element editting" value={description} onChange={handleUpdatedArea("description")} onClick={(event) => event.stopPropagation()} />
+                        <TextField
+                            label="Navn"
+                            hideLabel
+                            className="row-element editting"
+                            value={name}
+                            onChange={handleUpdatedArea("name")}
+                            onClick={(event) => event.stopPropagation()}
+                        />
+                        <TextField
+                            label="Beskrivelse"
+                            hideLabel
+                            className="row-element editting"
+                            value={description}
+                            onChange={handleUpdatedArea("description")}
+                            onClick={(event) => event.stopPropagation()}
+                        />
                     </AreaElements>
-                    
 
-                
-                    {isExpanded &&
+                    {isExpanded && (
                         <div className="bottom-row">
-
                             <div className="bottom-row-column">
-                                {servicesInArea.length === 0 &&
+                                {servicesInArea.length === 0 && (
                                     <p>
-                                        Ingen tjenester er knyttet til området. Nedenfor kan du velge en ny tjeneste å legge til.
+                                        Ingen tjenester er knyttet til området.
+                                        Nedenfor kan du velge en ny tjeneste å
+                                        legge til.
                                     </p>
-                                }
+                                )}
 
-                                
-
-                                {servicesInArea.length > 0 &&
+                                {servicesInArea.length > 0 && (
                                     <ServicesInAreaList>
                                         <EditDependeciesContainer>
-                                            <BodyShort spacing><b>Tjenester i område:</b></BodyShort>
+                                            <BodyShort spacing>
+                                                <b>Tjenester i område:</b>
+                                            </BodyShort>
                                             <DependencyList>
-                                                {servicesInArea.map(service => {
-                                                    return (
-                                                        <li key={service.id}>
-                                                            {service.name} 
-                                                            <button type="button"
+                                                {servicesInArea.map(
+                                                    (service) => {
+                                                        return (
+                                                            <li
+                                                                key={service.id}
+                                                            >
+                                                                {service.name}
+                                                                <button
+                                                                    type="button"
                                                                     aria-label="Fjern tjenesten fra område"
-                                                                    onClick={() => handleDeleteServiceOnArea(service.id)}>
-                                                                <CloseCustomized />
-                                                            </button>
-                                                        </li>
-                                                    )
-                                                })}
+                                                                    onClick={() =>
+                                                                        handleDeleteServiceOnArea(
+                                                                            service.id
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    <CloseCustomized />
+                                                                </button>
+                                                            </li>
+                                                        )
+                                                    }
+                                                )}
                                             </DependencyList>
                                         </EditDependeciesContainer>
                                     </ServicesInAreaList>
-                                }
+                                )}
 
-                                <DropdownRowSelect 
+                                <DropdownRowSelect
                                     allServices={allServices}
-                                    servicesInArea={servicesInArea} 
-                                    handlePutServiceToArea={handlePutServiceToArea}
-                                    toggleAreaExpanded={toggleExpanded} 
+                                    servicesInArea={servicesInArea}
+                                    handlePutServiceToArea={
+                                        handlePutServiceToArea
+                                    }
+                                    toggleAreaExpanded={toggleExpanded}
                                 />
                             </div>
 
                             <div className="bottom-row-column">
                                 <ServicesInAreaList>
                                     <EditDependeciesContainer>
-                                        <BodyShort spacing><b>Subområder i område:</b></BodyShort>
+                                        <BodyShort spacing>
+                                            <b>Subområder i område:</b>
+                                        </BodyShort>
                                         <DependencyList>
-                                            {subAreasInArea.map(subArea => {
+                                            {subAreasInArea.map((subArea) => {
                                                 return (
                                                     <li key={subArea.id}>
-                                                        {subArea.name} 
-                                                        <button type="button"
-                                                                aria-label="Fjern underområde fra område"
-                                                                onClick={() => handleDeleteSubAreaOnArea(subArea.id)}>
+                                                        {subArea.name}
+                                                        <button
+                                                            type="button"
+                                                            aria-label="Fjern underområde fra område"
+                                                            onClick={() =>
+                                                                handleDeleteSubAreaOnArea(
+                                                                    subArea.id
+                                                                )
+                                                            }
+                                                        >
                                                             <CloseCustomized />
                                                         </button>
                                                     </li>
@@ -818,59 +890,71 @@ const CurrentlyEdittingArea = ({
                                     </EditDependeciesContainer>
                                 </ServicesInAreaList>
 
-                                <DropdownSubAreaSelect 
+                                <DropdownSubAreaSelect
                                     subAreas={subAreas}
-                                    subAreasInArea={subAreasInArea} 
-                                    handlePutSubAreaToArea={handlePutSubAreaToArea}
-                                    toggleAreaExpanded={toggleExpanded} 
+                                    subAreasInArea={subAreasInArea}
+                                    handlePutSubAreaToArea={
+                                        handlePutSubAreaToArea
+                                    }
+                                    toggleAreaExpanded={toggleExpanded}
                                 />
                             </div>
-                            
-                            <div className="clickable" onClick={toggleExpanded}/>
-                        </div>
-                    }
 
+                            <div
+                                className="clickable"
+                                onClick={toggleExpanded}
+                            />
+                        </div>
+                    )}
                 </AreaRowInner>
 
                 <div className="button-container">
-                    <button type="button" className="option" onClick={handleSubmit}>
-                        <a><SaveFile/> Lagre</a>
+                    <button
+                        type="button"
+                        className="option"
+                        onClick={handleSubmit}
+                    >
+                        <a>
+                            <SaveFile /> Lagre
+                        </a>
                     </button>
-                    <button type="button" className="option" onClick={() => handleDisableEditArea(area)} aria-label="Fjern dashbord">
-                        <a><Close/> Avbryt</a>
+                    <button
+                        type="button"
+                        className="option"
+                        onClick={() => handleDisableEditArea(area)}
+                        aria-label="Fjern dashbord"
+                    >
+                        <a>
+                            <Close /> Avbryt
+                        </a>
                     </button>
-                    <button type="button" className="option" onClick={setAreaToDelete} aria-label="Slett område"><a><Delete /> Slett</a></button>
-                    <button type="button" className="option" onClick={toggleExpanded} aria-expanded={isExpanded}>
-                        <Expand className={isExpanded ? "expanded" : "not-expanded"} />
+                    <button
+                        type="button"
+                        className="option"
+                        onClick={setAreaToDelete}
+                        aria-label="Slett område"
+                    >
+                        <a>
+                            <Delete /> Slett
+                        </a>
+                    </button>
+                    <button
+                        type="button"
+                        className="option"
+                        onClick={toggleExpanded}
+                        aria-expanded={isExpanded}
+                    >
+                        <Expand
+                            className={isExpanded ? "expanded" : "not-expanded"}
+                        />
                     </button>
                 </div>
             </AreaRowContainer>
-
         </form>
     )
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // ----------------------------------------------------------------------------------------------------
-
-
-
-
-
-
 
 interface DropdownProps {
     allServices: Service[]
@@ -879,73 +963,77 @@ interface DropdownProps {
     toggleAreaExpanded: (area) => void
 }
 
-const DropdownRowSelect = ({allServices, servicesInArea, handlePutServiceToArea, toggleAreaExpanded}: DropdownProps) => {
-    const availableServices = allServices.filter(service => !servicesInArea.map(s => s.id).includes(service.id))
-    
-    const [selectedService, updateSelectedService] = useState<Service | null>(() => availableServices.length > 0 ? availableServices[0] : null)
+const DropdownRowSelect = ({
+    allServices,
+    servicesInArea,
+    handlePutServiceToArea,
+    toggleAreaExpanded,
+}: DropdownProps) => {
+    const availableServices = allServices.filter(
+        (service) => !servicesInArea.map((s) => s.id).includes(service.id)
+    )
+
+    const [selectedService, updateSelectedService] = useState<Service | null>(
+        () => (availableServices.length > 0 ? availableServices[0] : null)
+    )
 
     useEffect(() => {
-        if(availableServices.length > 0){
+        if (availableServices.length > 0) {
             updateSelectedService(availableServices[0])
-        }
-        else {
+        } else {
             updateSelectedService(null)
         }
     }, [allServices, servicesInArea])
 
     const handleUpdateSelectedService = (event) => {
         const idOfSelectedService: string = event.target.value
-        const newSelectedService: Service = availableServices.find(service => idOfSelectedService === service.id)
+        const newSelectedService: Service = availableServices.find(
+            (service) => idOfSelectedService === service.id
+        )
         updateSelectedService(newSelectedService)
     }
 
-
     const putHandler = () => {
-        if(!selectedService) {
+        if (!selectedService) {
             toast.info("Ingen tjeneste valgt")
             return
         }
         handlePutServiceToArea(selectedService)
     }
 
-
-
     return (
         <TileDropdownColumn key="input">
             <Select
-                value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedService}
+                value={selectedService !== null ? selectedService.id : ""}
+                onChange={handleUpdateSelectedService}
                 label="Velg tjenesteavhengighet"
                 hideLabel
             >
-                {availableServices.length > 0 ?
-                availableServices.map(service => {
-                    return (
-                        <option key={service.id} value={service.id}>{service.name}</option>
-                    )
-                })
-                :
-                    <option key={undefined} value={""}>Ingen tjeneste å legge til</option>
-                }
+                {availableServices.length > 0 ? (
+                    availableServices.map((service) => {
+                        return (
+                            <option key={service.id} value={service.id}>
+                                {service.name}
+                            </option>
+                        )
+                    })
+                ) : (
+                    <option key={undefined} value={""}>
+                        Ingen tjeneste å legge til
+                    </option>
+                )}
             </Select>
 
             <div>
-                <Button variant="secondary" type="button" onClick={putHandler} >Legg til</Button>
+                <Button variant="secondary" type="button" onClick={putHandler}>
+                    Legg til
+                </Button>
             </div>
 
             <div className="clickable" onClick={toggleAreaExpanded}></div>
         </TileDropdownColumn>
     )
 }
-
-
-
-
-
-
-
-
-
-
 
 interface DropdownSubAreasProps {
     subAreas: SubArea[]
@@ -954,67 +1042,76 @@ interface DropdownSubAreasProps {
     toggleAreaExpanded: (area) => void
 }
 
-const DropdownSubAreaSelect = ({subAreas, subAreasInArea, handlePutSubAreaToArea, toggleAreaExpanded}: DropdownSubAreasProps) => {
-    const availableSubAreas = subAreas.filter(subArea => !subAreasInArea.map(sa => sa.id).includes(subArea.id))
-    
-    const [selectedSubArea, updatedSelectedSubArea] = useState<SubArea | null>(() => availableSubAreas.length > 0 ? availableSubAreas[0] : null)
+const DropdownSubAreaSelect = ({
+    subAreas,
+    subAreasInArea,
+    handlePutSubAreaToArea,
+    toggleAreaExpanded,
+}: DropdownSubAreasProps) => {
+    const availableSubAreas = subAreas.filter(
+        (subArea) => !subAreasInArea.map((sa) => sa.id).includes(subArea.id)
+    )
+
+    const [selectedSubArea, updatedSelectedSubArea] = useState<SubArea | null>(
+        () => (availableSubAreas.length > 0 ? availableSubAreas[0] : null)
+    )
 
     useEffect(() => {
-        if(availableSubAreas.length > 0){
+        if (availableSubAreas.length > 0) {
             updatedSelectedSubArea(availableSubAreas[0])
-        }
-        else {
+        } else {
             updatedSelectedSubArea(null)
         }
     }, [subAreas, subAreasInArea])
 
     const handleUpdateSelectedSubArea = (event) => {
         const idOfSelectedSubArea: string = event.target.value
-        const newSelectedSubArea: SubArea = availableSubAreas.find(service => idOfSelectedSubArea === service.id)
+        const newSelectedSubArea: SubArea = availableSubAreas.find(
+            (service) => idOfSelectedSubArea === service.id
+        )
         updatedSelectedSubArea(newSelectedSubArea)
     }
 
-
     const putHandler = () => {
-        if(!selectedSubArea) {
+        if (!selectedSubArea) {
             toast.info("Ingen underområde valgt")
             return
         }
         handlePutSubAreaToArea(selectedSubArea)
     }
 
-
-
-
     return (
         <TileDropdownColumn key="input">
             <Select
-                value={selectedSubArea !== null ? selectedSubArea.id : ""} onChange={handleUpdateSelectedSubArea}
+                value={selectedSubArea !== null ? selectedSubArea.id : ""}
+                onChange={handleUpdateSelectedSubArea}
                 label="Velg underuområde"
                 hideLabel
             >
-                {availableSubAreas.length > 0 ?
-                availableSubAreas.map(subArea => {
-                    return (
-                        <option key={subArea.id} value={subArea.id}>{subArea.name}</option>
-                    )
-                })
-                :
-                    <option key={undefined} value={""}>Ingen underområder å legge til</option>
-                }
+                {availableSubAreas.length > 0 ? (
+                    availableSubAreas.map((subArea) => {
+                        return (
+                            <option key={subArea.id} value={subArea.id}>
+                                {subArea.name}
+                            </option>
+                        )
+                    })
+                ) : (
+                    <option key={undefined} value={""}>
+                        Ingen underområder å legge til
+                    </option>
+                )}
             </Select>
 
             <div>
-                <Button variant="secondary" type="button" onClick={putHandler} >Legg til</Button>
+                <Button variant="secondary" type="button" onClick={putHandler}>
+                    Legg til
+                </Button>
             </div>
 
             <div className="clickable" onClick={toggleAreaExpanded}></div>
         </TileDropdownColumn>
     )
 }
-
-
-
-
 
 export default TableOmraade

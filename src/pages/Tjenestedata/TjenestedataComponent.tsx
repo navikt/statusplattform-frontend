@@ -540,17 +540,17 @@ const TabMenu = styled.ul`
             border-bottom: transparent 3px solid;
 
             :hover {
-                border-bottom: var(--navds-global-color-blue-500) 3px solid;
+                border-bottom: var(--a-blue-500) 3px solid;
             }
         }
         &.active {
-            border-bottom: var(--navds-semantic-color-focus) 3px solid;
+            border-bottom: var(--a-border-focus) 3px solid;
         }
 
         :focus,
         :active {
             background-color: transparent;
-            outline: var(--navds-semantic-color-focus) 3px solid;
+            outline: var(--a-border-focus) 3px solid;
             box-shadow: 0 0 0 0;
             outline-offset: 3px;
         }
@@ -648,13 +648,13 @@ const DailyOverview = styled.div`
         border-radius: 2px;
 
         &.ok {
-            background: var(--navds-global-color-green-500);
+            background: var(--a-green-500);
         }
         &.issue  {
-            background: var(--navds-global-color-orange-500);
+            background: var(--a-orange-500);
         }
         &.down {
-            background: var(--navds-global-color-red-500);
+            background: var(--a-red-500);
         }
     }
 `
@@ -927,15 +927,15 @@ const Day = styled.div`
     height: 32px;
 
     &.down {
-        background: var(--navds-global-color-red-500);
+        background: var(--a-red-500);
     }
 
     &.issue {
-        background: var(--navds-global-color-orange-500);
+        background: var(--a-orange-500);
     }
 
     &.ok {
-        background: var(--navds-global-color-green-500);
+        background: var(--a-green-500);
     }
 
     .navds-popover__content {
