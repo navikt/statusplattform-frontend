@@ -155,10 +155,8 @@ const PopoverContent = () => {
                     <>
                         <li>
                             <Link href={RouterAdmin.PATH}>
-                                <a>
-                                    <Employer className="popover-link-ikon" />
-                                    {RouterAdmin.NAME}
-                                </a>
+                                <Employer className="popover-link-ikon" />
+                                {RouterAdmin.NAME}
                             </Link>
                         </li>
                     </>

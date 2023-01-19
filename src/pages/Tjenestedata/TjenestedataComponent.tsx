@@ -788,10 +788,8 @@ const ServicesAndComponentsList: React.FC<{
                     return (
                         <li key={component.id}>
                             <Link href={RouterTjenestedata.PATH + component.id}>
-                                <a>
-                                    {handleAndSetStatusIcon(component.status)}{" "}
-                                    {component.name}
-                                </a>
+                                {handleAndSetStatusIcon(component.status)}{" "}
+                                {component.name}
                             </Link>
                         </li>
                     )
@@ -806,10 +804,8 @@ const ServicesAndComponentsList: React.FC<{
                 return (
                     <li key={service.id}>
                         <Link href={RouterTjenestedata.PATH + service.id}>
-                            <a>
-                                {handleAndSetStatusIcon(service.record.status)}{" "}
-                                {service.name}
-                            </a>
+                            {handleAndSetStatusIcon(service.record.status)}{" "}
+                            {service.name}
                         </Link>
                     </li>
                 )
