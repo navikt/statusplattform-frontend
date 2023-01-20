@@ -15,32 +15,30 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
 import styled from "styled-components"
-import { backendPath } from ".."
-import { BackButton } from "../../components/BackButton"
-import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
-import CustomNavSpinner from "../../components/CustomNavSpinner"
-import Layout from "../../components/Layout"
-import { Service } from "../../types/types"
-import { OpsMessageI, SeverityEnum } from "../../types/opsMessage"
-import { RouterError, RouterOpsMeldinger } from "../../types/routes"
-import { EndPathServices, EndPathSpecificOps } from "../../utils/apiHelper"
+import { backendPath } from "../.."
+import { BackButton } from "../../../components/BackButton"
+import { UserStateContext } from "../../../components/ContextProviders/UserStatusContext"
+import CustomNavSpinner from "../../../components/CustomNavSpinner"
+import Layout from "../../../components/Layout"
+import { Service } from "../../../types/types"
+import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
+import { RouterError, RouterOpsMeldinger } from "../../../types/routes"
+import { EndPathServices, EndPathSpecificOps } from "../../../utils/apiHelper"
 import {
     fetchSpecificOpsMessage,
     updateSpecificOpsMessage,
-} from "../../utils/opsAPI"
-import { OpsScheme, Spacer } from "../../styles/styles"
-import { CloseCustomized } from "../Admin"
-import PublicOpsContent from "./PublicOpsContent"
-import DateSetterOps from "../../components/DateSetterOps"
+} from "../../../utils/opsAPI"
+import { OpsScheme, Spacer } from "../../../styles/styles"
+import { CloseCustomized } from "../../Admin"
+import PublicOpsContent from "../PublicOpsContent"
+import DateSetterOps from "../../../components/DateSetterOps"
 
 const OpsMessageContainer = styled.div`
     display: flex;
     width: 100%;
 `
 const SubHeader = styled(Heading)`
-
     color: var(--a-gray-600);
-
 `
 
 export const getServerSideProps = async (context) => {
@@ -109,7 +107,7 @@ const OpsMessageComponent = ({
     opsMessage: serverSideOpsMessage,
     services,
 }: OpsMessageComponentI) => {
-    const [isEditting, toggleIsEditting] = useState(false)
+    const [isEditing, toggleisEditing] = useState(false)
     const [opsMessage, changeOpsMessage] =
         useState<OpsMessageI>(serverSideOpsMessage)
     const [updatedSeverity, changeUpdatedSeverity] = useState<SeverityEnum>(
@@ -139,7 +137,7 @@ const OpsMessageComponent = ({
         }
 
         reFetching = false
-    }, [isEditting])
+    }, [isEditing])
 
     useEffect(() => {
         setIsLoading(true)
@@ -224,38 +222,18 @@ const OpsMessageComponent = ({
                 </Heading>
                 <Spacer height="1.2rem" />
             </div>
-            {!isEditting ? (
-                <DetailsOfOpsMessage
-                    opsMessage={opsMessage}
-                    navIdent={navIdent}
-                    convertedStartTime={convertedStartTime}
-                    convertedEndTime={convertedEndTime}
-                    prettifiedStartTime={prettifiedStartTime}
-                    prettifiedEndTime={prettifiedEndTime}
-                />
-            ) : (
-                <EditOpsMessage
-                    opsMessage={opsMessage}
-                    navIdent={navIdent}
-                    services={services}
-                    toggleIsEditting={(newValue) => toggleIsEditting(newValue)}
-                    changeUpdatedSeverity={changeUpdatedSeverity}
-                    convertedStartTime={convertedStartTime}
-                    convertedEndTime={convertedEndTime}
-                    prettifiedStartTime={prettifiedStartTime}
-                    prettifiedEndTime={prettifiedEndTime}
-                />
-            )}
-            <div className="button-container">
-                {usersWithAccess.includes(navIdent) && (
-                    <Button
-                        variant="primary"
-                        onClick={() => toggleIsEditting(!isEditting)}
-                    >
-                        {isEditting ? "Avbryt redigering" : "Rediger"}
-                    </Button>
-                )}
-            </div>
+
+            <EditOpsMessage
+                opsMessage={opsMessage}
+                navIdent={navIdent}
+                services={services}
+                toggleisEditing={(newValue) => toggleisEditing(newValue)}
+                changeUpdatedSeverity={changeUpdatedSeverity}
+                convertedStartTime={convertedStartTime}
+                convertedEndTime={convertedEndTime}
+                prettifiedStartTime={prettifiedStartTime}
+                prettifiedEndTime={prettifiedEndTime}
+            />
         </OpsScheme>
     )
 }
@@ -287,104 +265,6 @@ const OpsDetailsContainer = styled.div`
         border: 3px solid var(--a-border-warning);
     }
 `
-
-interface DetailsOpsMsgI {
-    opsMessage: OpsMessageI
-    navIdent: string
-    prettifiedStartTime: string
-    prettifiedEndTime: string
-    convertedStartTime: Date
-    convertedEndTime: Date
-}
-
-const DetailsOfOpsMessage = (props: DetailsOpsMsgI) => {
-    const {
-        externalHeader,
-        externalMessage,
-        internalHeader,
-        internalMessage,
-        affectedServices,
-        isActive,
-        onlyShowForNavEmployees,
-        startTime,
-        endTime,
-        severity,
-    } = props.opsMessage
-
-    const {
-        opsMessage,
-        navIdent,
-        prettifiedEndTime,
-        prettifiedStartTime,
-        convertedEndTime,
-        convertedStartTime,
-    } = props
-
-    return (
-        <OpsDetailsContainer>
-            {navIdent ? (
-                <div className="opsMessageContainer">
-                    <BodyShort spacing>
-                        <span
-                            dangerouslySetInnerHTML={{
-                                __html: opsMessage.internalMessage,
-                            }}
-                        />
-                    </BodyShort>
-                </div>
-            ) : (
-                <div>{externalMessage}</div>
-            )}
-
-            {affectedServices.length > 0 && (
-                <>
-                    <Heading size="xsmall" level="2">
-                        Tilknyttede tjenester:
-                    </Heading>
-                    <div className="labelContainer">
-                        {affectedServices.map((service) => {
-                            return (
-                                <Tag variant="info" key={service.id}>
-                                    {service.name}
-                                </Tag>
-                            )
-                        })}
-                    </div>
-                </>
-            )}
-
-            <Spacer height="1rem" />
-
-            <Heading size="xsmall" level="2">
-                Detaljer:
-            </Heading>
-
-            {navIdent && (
-                <>
-                    <div className="labelContainer">
-                        {onlyShowForNavEmployees ? (
-                            <Tag variant="info">Intern</Tag>
-                        ) : (
-                            <Tag variant="info">Interne og eksterne</Tag>
-                        )}
-                        {isActive ? (
-                            <Tag variant="success">Aktiv</Tag>
-                        ) : (
-                            <Tag variant="error">Inaktiv</Tag>
-                        )}
-                    </div>
-
-                    {convertedStartTime && convertedEndTime && (
-                        <BodyShort>
-                            Aktiv fra {prettifiedStartTime} til{" "}
-                            {prettifiedEndTime}
-                        </BodyShort>
-                    )}
-                </>
-            )}
-        </OpsDetailsContainer>
-    )
-}
 
 const EditOpsMessageContainer = styled.div`
     display: flex;
@@ -429,7 +309,7 @@ interface EditOpsMessageI {
     opsMessage: OpsMessageI
     navIdent: string
     services: Service[]
-    toggleIsEditting: (newValue) => void
+    toggleisEditing: (newValue) => void
     changeUpdatedSeverity: (newValue) => void
     prettifiedStartTime: string
     prettifiedEndTime: string
@@ -456,7 +336,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
         opsMessage,
         navIdent,
         services,
-        toggleIsEditting,
+        toggleisEditing,
         changeUpdatedSeverity,
         prettifiedEndTime,
         prettifiedStartTime,
@@ -559,7 +439,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
         try {
             await updateSpecificOpsMessage(updatedOpsMessage).then(() => {
                 toast.success("Endringer lagret")
-                toggleIsEditting(false)
+                toggleisEditing(false)
             })
         } catch (error) {
             console.log(error)
