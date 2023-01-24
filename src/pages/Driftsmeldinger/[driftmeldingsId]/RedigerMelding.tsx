@@ -1,11 +1,10 @@
-import { Edit, Back } from "@navikt/ds-icons"
+import { Back } from "@navikt/ds-icons"
 import {
     BodyShort,
     Button,
     Checkbox,
     Heading,
     Select,
-    Textarea,
     TextField,
     Radio,
     RadioGroup,
@@ -16,9 +15,7 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
 import styled from "styled-components"
-import { VerticalSeparator } from "../.."
 import { backendPath } from "../.."
-import { BackButton } from "../../../components/BackButton"
 import { UserStateContext } from "../../../components/ContextProviders/UserStatusContext"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
 import Layout from "../../../components/Layout"
@@ -34,7 +31,7 @@ import { OpsScheme, Spacer } from "../../../styles/styles"
 import { CloseCustomized } from "../../Admin"
 import PublicOpsContent from "../PublicOpsContent"
 import DateSetterOps from "../../../components/DateSetterOps"
-import TextEditor from "src/components/TextEditor"
+import TextEditor from "../../../components/TextEditor"
 
 const OpsMessageContainer = styled.div`
     display: flex;

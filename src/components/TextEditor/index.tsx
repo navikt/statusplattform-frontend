@@ -1,8 +1,7 @@
-import { forwardRef, MutableRefObject, Props, useRef } from "react"
+import { MutableRefObject } from "react"
 import { Heading } from "@navikt/ds-react"
 import React from "react"
 import { Editor } from "@tinymce/tinymce-react"
-import tinymce from "tinymce/tinymce"
 
 interface EditorProps {
     isInternal: Boolean
