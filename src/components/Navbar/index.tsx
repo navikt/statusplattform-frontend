@@ -95,26 +95,26 @@ export default function Navbar() {
                         onClick={() => router.push(RouterInternt.PATH)}
                     >
                         <Link href={RouterInternt.PATH}>
-                            <a>
-                                <LenkeSpacer
+
+                            <LenkeSpacer
+                                className={`${
+                                    router.asPath === RouterInternt.PATH
+                                        ? "active"
+                                        : "inactive"
+                                }`}
+                            >
+                                <BodyShort
+                                    size="small"
                                     className={`${
-                                        router.asPath === RouterInternt.PATH
+                                        router.pathname === "/Internt"
                                             ? "active"
-                                            : "inactive"
+                                            : ""
                                     }`}
                                 >
-                                    <BodyShort
-                                        size="small"
-                                        className={`${
-                                            router.pathname === "/Internt"
-                                                ? "active"
-                                                : ""
-                                        }`}
-                                    >
-                                        {RouterInternt.NAME}
-                                    </BodyShort>
-                                </LenkeSpacer>
-                            </a>
+                                    {RouterInternt.NAME}
+                                </BodyShort>
+                            </LenkeSpacer>
+
                         </Link>
                     </li>
                 )}
@@ -123,26 +123,26 @@ export default function Navbar() {
                     onClick={() => router.push(RouterPrivatperson.PATH)}
                 >
                     <Link href={RouterPrivatperson.PATH}>
-                        <a>
-                            <LenkeSpacer
+
+                        <LenkeSpacer
+                            className={`${
+                                router.asPath === RouterPrivatperson.PATH
+                                    ? "active"
+                                    : "inactive"
+                            }`}
+                        >
+                            <BodyShort
+                                size="small"
                                 className={`${
-                                    router.asPath === RouterPrivatperson.PATH
+                                    router.pathname === "/Privatperson"
                                         ? "active"
-                                        : "inactive"
+                                        : ""
                                 }`}
                             >
-                                <BodyShort
-                                    size="small"
-                                    className={`${
-                                        router.pathname === "/Privatperson"
-                                            ? "active"
-                                            : ""
-                                    }`}
-                                >
-                                    {RouterPrivatperson.NAME}
-                                </BodyShort>
-                            </LenkeSpacer>
-                        </a>
+                                {RouterPrivatperson.NAME}
+                            </BodyShort>
+                        </LenkeSpacer>
+
                     </Link>
                 </li>
 
@@ -151,26 +151,26 @@ export default function Navbar() {
                     onClick={() => router.push(RouterArbeidsgiver.PATH)}
                 >
                     <Link href={RouterArbeidsgiver.PATH}>
-                        <a>
-                            <LenkeSpacer
+
+                        <LenkeSpacer
+                            className={`${
+                                router.asPath === RouterArbeidsgiver.PATH
+                                    ? "active"
+                                    : "inactive"
+                            }`}
+                        >
+                            <BodyShort
+                                size="small"
                                 className={`${
-                                    router.asPath === RouterArbeidsgiver.PATH
+                                    router.pathname === "/Arbeidsgiver"
                                         ? "active"
-                                        : "inactive"
+                                        : ""
                                 }`}
                             >
-                                <BodyShort
-                                    size="small"
-                                    className={`${
-                                        router.pathname === "/Arbeidsgiver"
-                                            ? "active"
-                                            : ""
-                                    }`}
-                                >
-                                    {RouterArbeidsgiver.NAME}
-                                </BodyShort>
-                            </LenkeSpacer>
-                        </a>
+                                {RouterArbeidsgiver.NAME}
+                            </BodyShort>
+                        </LenkeSpacer>
+
                     </Link>
                 </li>
 
@@ -179,40 +179,40 @@ export default function Navbar() {
                     onClick={() => router.push(RouterSamarbeidspartner.PATH)}
                 >
                     <Link href={RouterSamarbeidspartner.PATH}>
-                        <a>
-                            <LenkeSpacer
+
+                        <LenkeSpacer
+                            className={`${
+                                router.asPath ===
+                                RouterSamarbeidspartner.PATH
+                                    ? "active"
+                                    : "inactive"
+                            }`}
+                        >
+                            <BodyShort
+                                size="small"
                                 className={`${
-                                    router.asPath ===
-                                    RouterSamarbeidspartner.PATH
+                                    router.pathname === "/Samarbeidspartner"
                                         ? "active"
-                                        : "inactive"
+                                        : ""
                                 }`}
                             >
-                                <BodyShort
-                                    size="small"
-                                    className={`${
-                                        router.pathname === "/Samarbeidspartner"
-                                            ? "active"
-                                            : ""
-                                    }`}
-                                >
-                                    {RouterSamarbeidspartner.NAME}
-                                </BodyShort>
-                            </LenkeSpacer>
-                        </a>
+                                {RouterSamarbeidspartner.NAME}
+                            </BodyShort>
+                        </LenkeSpacer>
+
                     </Link>
                 </li>
 
                 <li role="tab">
                     <Link href={"https://vaktor.dev.nav.no/"}>
-                        <a>
-                            <LenkeSpacer>
-                                <BodyShort size="small">Vaktor</BodyShort>
-                            </LenkeSpacer>
-                        </a>
+
+                        <LenkeSpacer>
+                            <BodyShort size="small">Vaktor</BodyShort>
+                        </LenkeSpacer>
+
                     </Link>
                 </li>
             </ul>
         </Nav>
-    )
+    );
 }

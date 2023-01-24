@@ -121,30 +121,30 @@ const PopoverContent = () => {
                 {user.navIdent && (
                     <>
                         <li>
-                            <Link href={RouterInternt.PATH}>
+                            <Link href={RouterInternt.PATH} legacyBehavior>
                                 {RouterInternt.NAME +
                                     " (Kun for innloggede nav brukere)"}
                             </Link>
                         </li>
                         <li>
-                            <Link href={RouterOpsMeldinger.PATH}>
+                            <Link href={RouterOpsMeldinger.PATH} legacyBehavior>
                                 {RouterOpsMeldinger.NAME}
                             </Link>
                         </li>
                     </>
                 )}
                 <li>
-                    <Link href={RouterPrivatperson.PATH}>
+                    <Link href={RouterPrivatperson.PATH} legacyBehavior>
                         {RouterPrivatperson.NAME}
                     </Link>
                 </li>
                 <li>
-                    <Link href={RouterArbeidsgiver.PATH}>
+                    <Link href={RouterArbeidsgiver.PATH} legacyBehavior>
                         {RouterArbeidsgiver.NAME}
                     </Link>
                 </li>
                 <li>
-                    <Link href={RouterSamarbeidspartner.PATH}>
+                    <Link href={RouterSamarbeidspartner.PATH} legacyBehavior>
                         {RouterSamarbeidspartner.NAME}
                     </Link>
                 </li>
@@ -155,17 +155,17 @@ const PopoverContent = () => {
                     <>
                         <li>
                             <Link href={RouterAdmin.PATH}>
-                                <a>
-                                    <Employer className="popover-link-ikon" />
-                                    {RouterAdmin.NAME}
-                                </a>
+
+                                <Employer className="popover-link-ikon" />
+                                {RouterAdmin.NAME}
+
                             </Link>
                         </li>
                     </>
                 )}
             </ul>
         </div>
-    )
+    );
 }
 
 export default BurgerMenu
