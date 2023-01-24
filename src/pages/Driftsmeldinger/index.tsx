@@ -1,13 +1,4 @@
-import {
-    Button,
-    Checkbox,
-    CheckboxGroup,
-    Heading,
-    Radio,
-    RadioGroup,
-    Textarea,
-    TextField,
-} from "@navikt/ds-react"
+import { Button, Heading } from "@navikt/ds-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
@@ -16,7 +7,6 @@ import styled from "styled-components"
 import { backendPath } from ".."
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import CustomNavSpinner from "../../components/CustomNavSpinner"
-
 import Layout from "../../components/Layout"
 import OpsMessageCard from "../../components/OpsMessageCard"
 import { OpsMessageI } from "../../types/opsMessage"
@@ -26,13 +16,14 @@ import { fetchOpsMessages } from "../../utils/opsAPI"
 import { HorizontalSeparator } from "../Admin"
 
 const CreateAvvikButtonWrapper = styled.div`
-    margin-bottom: 2rem;
+    position: absolute;
+    top: 11.5rem;
+    right: 22.1rem;
 `
 
 const OpsSectionContainer = styled.div`
     display: flex;
     flex-direction: column;
-    gap: 50px;
 
     h2 {
         margin-bottom: 1rem;
@@ -186,6 +177,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
                         <Heading level="2" size="xlarge">
                             Aktive meldinger
                         </Heading>
+                        <HorizontalSeparator />
 
                         <ListOfOpsMessages
                             opsMessages={arrayActive}
@@ -195,13 +187,12 @@ const OpsMessages = ({ serverOpsMessages }) => {
                     </div>
                 )}
 
-                {arrayInActive.length > 0 && <HorizontalSeparator />}
-
                 {arrayInActive.length > 0 && (
                     <div>
                         <Heading level="2" size="xlarge">
                             Inaktive meldinger
                         </Heading>
+                        <HorizontalSeparator />
 
                         <ListOfOpsMessages
                             opsMessages={arrayInActive}
@@ -210,14 +201,6 @@ const OpsMessages = ({ serverOpsMessages }) => {
                         />
                     </div>
                 )}
-
-                {/* {arrayArchived.length > 0 &&
-                    <div className="ops-section">
-                        <Heading level="2" size="small">Arkiverte meldinger</Heading>            
-
-                        <ListOfOpsMessages opsMessages={arrayArchived} />
-                    </div>
-                } */}
             </OpsSectionContainer>
 
             <ToastContainer />
@@ -227,7 +210,8 @@ const OpsMessages = ({ serverOpsMessages }) => {
 
 const OpsMessagesList = styled.div`
     display: grid;
-    grid-gap: 32px;
+    grid-gap: 3rem;
+    margin-bottom: 2rem;
 
     @media (min-width: 800px) {
         grid-auto-rows: 350px;
@@ -241,7 +225,7 @@ const OpsMessagesList = styled.div`
 
     @media (min-width: 1600px) {
         grid-auto-rows: 350px;
-        grid-template-columns: repeat(3, 500px);
+        grid-template-columns: repeat(3, 370px);
     }
 `
 
@@ -259,9 +243,13 @@ const ListOfOpsMessages = (props: ListOfOpsMessagesI) => {
         return <>Ingen driftsmeldinger å vise</>
     }
 
+    const opsMsgList = opsMessages.sort((a, b) =>
+        a.severity > b.severity ? 1 : b.severity > a.severity ? -1 : 0
+    )
+
     return (
         <OpsMessagesList>
-            {opsMessages.map((opsMessage) => {
+            {opsMsgList.map((opsMessage) => {
                 return (
                     <OpsMessageCard
                         key={opsMessage.id}
