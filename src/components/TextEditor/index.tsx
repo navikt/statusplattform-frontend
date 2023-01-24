@@ -1,11 +1,12 @@
-import { forwardRef, MutableRefObject, Props, useRef } from "react"
+import { MutableRefObject } from "react"
 import { Heading } from "@navikt/ds-react"
 import React from "react"
 import { Editor } from "@tinymce/tinymce-react"
-import tinymce from "tinymce/tinymce"
 
 interface EditorProps {
     isInternal: Boolean
+    initialValue?: string
+    title?: string
     handleUpdateInternalMsg?: (message: string) => void
     handleUpdateExternalMsg?: (message: string) => void
 }
@@ -14,6 +15,8 @@ const TextEditor = React.forwardRef(
     (
         {
             isInternal,
+            initialValue,
+            title,
             handleUpdateInternalMsg,
             handleUpdateExternalMsg,
         }: EditorProps,
@@ -26,12 +29,10 @@ const TextEditor = React.forwardRef(
         }
         return (
             <>
-                <Heading level="5" size="xsmall">
-                    Innhold:
-                </Heading>
+                <Heading size="xsmall">{title ? title : "Innhold:"}</Heading>
                 <Editor
                     onInit={(editor) => (ref.current = editor)}
-                    initialValue=""
+                    initialValue={initialValue ? initialValue : ""}
                     onEditorChange={handleEditorChange}
                     init={{
                         height: 300,

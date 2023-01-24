@@ -340,6 +340,8 @@ const OpsComponent = ({
             {!onlyShowForNavEmployees && (
                 <div className="input-area">
                     <div>
+                        {/* --gjør denne synlig igjen når tekst kan kopieres
+                        
                         <CopyOpsMsg>
                             <Tooltip
                                 content="Kopier intern melding"
@@ -359,7 +361,7 @@ const OpsComponent = ({
                                     <Copy />
                                 </Button>
                             </Tooltip>
-                        </CopyOpsMsg>
+                        </CopyOpsMsg>*/}
 
                         <Heading level="5" size="xsmall">
                             Ekstern melding:

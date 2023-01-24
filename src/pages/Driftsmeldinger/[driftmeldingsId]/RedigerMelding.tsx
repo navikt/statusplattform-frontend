@@ -1,13 +1,13 @@
-import { Edit, Back } from "@navikt/ds-icons"
+import { Back } from "@navikt/ds-icons"
 import {
     BodyShort,
     Button,
     Checkbox,
     Heading,
     Select,
-    Textarea,
     TextField,
-    Tag,
+    Radio,
+    RadioGroup,
 } from "@navikt/ds-react"
 
 import Head from "next/head"
@@ -15,32 +15,30 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
 import styled from "styled-components"
-import { backendPath } from ".."
-import { BackButton } from "../../components/BackButton"
-import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
-import CustomNavSpinner from "../../components/CustomNavSpinner"
-import Layout from "../../components/Layout"
-import { Service } from "../../types/types"
-import { OpsMessageI, SeverityEnum } from "../../types/opsMessage"
-import { RouterError, RouterOpsMeldinger } from "../../types/routes"
-import { EndPathServices, EndPathSpecificOps } from "../../utils/apiHelper"
+import { backendPath } from "../.."
+import { UserStateContext } from "../../../components/ContextProviders/UserStatusContext"
+import CustomNavSpinner from "../../../components/CustomNavSpinner"
+import Layout from "../../../components/Layout"
+import { Service } from "../../../types/types"
+import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
+import { RouterError, RouterOpsMeldinger } from "../../../types/routes"
+import { EndPathServices, EndPathSpecificOps } from "../../../utils/apiHelper"
 import {
     fetchSpecificOpsMessage,
     updateSpecificOpsMessage,
-} from "../../utils/opsAPI"
-import { OpsScheme, Spacer } from "../../styles/styles"
-import { CloseCustomized } from "../Admin"
-import PublicOpsContent from "./PublicOpsContent"
-import DateSetterOps from "../../components/DateSetterOps"
+} from "../../../utils/opsAPI"
+import { OpsScheme, Spacer } from "../../../styles/styles"
+import { CloseCustomized } from "../../Admin"
+import PublicOpsContent from "../PublicOpsContent"
+import DateSetterOps from "../../../components/DateSetterOps"
+import TextEditor from "../../../components/TextEditor"
 
 const OpsMessageContainer = styled.div`
     display: flex;
     width: 100%;
 `
 const SubHeader = styled(Heading)`
-
     color: var(--a-gray-600);
-
 `
 
 export const getServerSideProps = async (context) => {
@@ -109,7 +107,7 @@ const OpsMessageComponent = ({
     opsMessage: serverSideOpsMessage,
     services,
 }: OpsMessageComponentI) => {
-    const [isEditting, toggleIsEditting] = useState(false)
+    const [isEditing, toggleisEditing] = useState(false)
     const [opsMessage, changeOpsMessage] =
         useState<OpsMessageI>(serverSideOpsMessage)
     const [updatedSeverity, changeUpdatedSeverity] = useState<SeverityEnum>(
@@ -139,7 +137,7 @@ const OpsMessageComponent = ({
         }
 
         reFetching = false
-    }, [isEditting])
+    }, [isEditing])
 
     useEffect(() => {
         setIsLoading(true)
@@ -214,7 +212,7 @@ const OpsMessageComponent = ({
             </div>
             <div className="header-container">
                 <SubHeader size="small" level="3">
-                    Driftsmelding:{" "}
+                    Rediger driftsmelding:{" "}
                 </SubHeader>
                 <Spacer height="0.8rem" />
                 <Heading size="large" level="1">
@@ -222,40 +220,21 @@ const OpsMessageComponent = ({
                         ? internalHeader
                         : externalHeader}
                 </Heading>
+
                 <Spacer height="1.2rem" />
             </div>
-            {!isEditting ? (
-                <DetailsOfOpsMessage
-                    opsMessage={opsMessage}
-                    navIdent={navIdent}
-                    convertedStartTime={convertedStartTime}
-                    convertedEndTime={convertedEndTime}
-                    prettifiedStartTime={prettifiedStartTime}
-                    prettifiedEndTime={prettifiedEndTime}
-                />
-            ) : (
-                <EditOpsMessage
-                    opsMessage={opsMessage}
-                    navIdent={navIdent}
-                    services={services}
-                    toggleIsEditting={(newValue) => toggleIsEditting(newValue)}
-                    changeUpdatedSeverity={changeUpdatedSeverity}
-                    convertedStartTime={convertedStartTime}
-                    convertedEndTime={convertedEndTime}
-                    prettifiedStartTime={prettifiedStartTime}
-                    prettifiedEndTime={prettifiedEndTime}
-                />
-            )}
-            <div className="button-container">
-                {usersWithAccess.includes(navIdent) && (
-                    <Button
-                        variant="primary"
-                        onClick={() => toggleIsEditting(!isEditting)}
-                    >
-                        {isEditting ? "Avbryt redigering" : "Rediger"}
-                    </Button>
-                )}
-            </div>
+
+            <EditOpsMessage
+                opsMessage={opsMessage}
+                navIdent={navIdent}
+                services={services}
+                toggleisEditing={(newValue) => toggleisEditing(newValue)}
+                changeUpdatedSeverity={changeUpdatedSeverity}
+                convertedStartTime={convertedStartTime}
+                convertedEndTime={convertedEndTime}
+                prettifiedStartTime={prettifiedStartTime}
+                prettifiedEndTime={prettifiedEndTime}
+            />
         </OpsScheme>
     )
 }
@@ -288,130 +267,22 @@ const OpsDetailsContainer = styled.div`
     }
 `
 
-interface DetailsOpsMsgI {
-    opsMessage: OpsMessageI
-    navIdent: string
-    prettifiedStartTime: string
-    prettifiedEndTime: string
-    convertedStartTime: Date
-    convertedEndTime: Date
-}
-
-const DetailsOfOpsMessage = (props: DetailsOpsMsgI) => {
-    const {
-        externalHeader,
-        externalMessage,
-        internalHeader,
-        internalMessage,
-        affectedServices,
-        isActive,
-        onlyShowForNavEmployees,
-        startTime,
-        endTime,
-        severity,
-    } = props.opsMessage
-
-    const {
-        opsMessage,
-        navIdent,
-        prettifiedEndTime,
-        prettifiedStartTime,
-        convertedEndTime,
-        convertedStartTime,
-    } = props
-
-    return (
-        <OpsDetailsContainer>
-            {navIdent ? (
-                <div className="opsMessageContainer">
-                    <BodyShort spacing>
-                        <span
-                            dangerouslySetInnerHTML={{
-                                __html: opsMessage.internalMessage,
-                            }}
-                        />
-                    </BodyShort>
-                </div>
-            ) : (
-                <div>{externalMessage}</div>
-            )}
-
-            {affectedServices.length > 0 && (
-                <>
-                    <Heading size="xsmall" level="2">
-                        Tilknyttede tjenester:
-                    </Heading>
-                    <div className="labelContainer">
-                        {affectedServices.map((service) => {
-                            return (
-                                <Tag variant="info" key={service.id}>
-                                    {service.name}
-                                </Tag>
-                            )
-                        })}
-                    </div>
-                </>
-            )}
-
-            <Spacer height="1rem" />
-
-            <Heading size="xsmall" level="2">
-                Detaljer:
-            </Heading>
-
-            {navIdent && (
-                <>
-                    <div className="labelContainer">
-                        {onlyShowForNavEmployees ? (
-                            <Tag variant="info">Intern</Tag>
-                        ) : (
-                            <Tag variant="info">Interne og eksterne</Tag>
-                        )}
-                        {isActive ? (
-                            <Tag variant="success">Aktiv</Tag>
-                        ) : (
-                            <Tag variant="error">Inaktiv</Tag>
-                        )}
-                    </div>
-
-                    {convertedStartTime && convertedEndTime && (
-                        <BodyShort>
-                            Aktiv fra {prettifiedStartTime} til{" "}
-                            {prettifiedEndTime}
-                        </BodyShort>
-                    )}
-                </>
-            )}
-        </OpsDetailsContainer>
-    )
-}
-
 const EditOpsMessageContainer = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-    width: 40rem;
+    width: 36.5rem;
 
     .section {
-        margin: 1rem 0;
-        width: 40rem;
-    }
-    .section:last-child {
-        margin-bottom: 0;
-    }
-
-    .timeframe-container {
         display: flex;
         flex-direction: column;
-        gap: 1rem;
+        gap: 0.5rem;
+        padding: 0 0 1rem;
     }
 
-    .current-timeframe-wrapper {
+    .buttonContainer {
         display: flex;
-        flex-flow: row wrap;
-        gap: 1rem;
+        flex-direction: row;
+        gap: 0.5rem;
+        margin: 1rem 0 -0.5rem 20rem;
     }
-
     @media (min-width: 600px) {
         .text-area-wrapper  {
             min-width: 500px;
@@ -429,7 +300,7 @@ interface EditOpsMessageI {
     opsMessage: OpsMessageI
     navIdent: string
     services: Service[]
-    toggleIsEditting: (newValue) => void
+    toggleisEditing: (newValue) => void
     changeUpdatedSeverity: (newValue) => void
     prettifiedStartTime: string
     prettifiedEndTime: string
@@ -452,11 +323,13 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
     const [endDateForActiveOpsMessage, setEndDateForActiveOpsMessage] =
         useState<Date>(props.convertedEndTime)
 
+    const editorRef = useRef(null)
+
     const {
         opsMessage,
         navIdent,
         services,
-        toggleIsEditting,
+        toggleisEditing,
         changeUpdatedSeverity,
         prettifiedEndTime,
         prettifiedStartTime,
@@ -557,13 +430,51 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
             return
         }
         try {
-            await updateSpecificOpsMessage(updatedOpsMessage).then(() => {
-                toast.success("Endringer lagret")
-                toggleIsEditting(false)
-            })
+            await updateSpecificOpsMessage(updatedOpsMessage)
+                .then(() => {
+                    toast.success("Endringer lagret")
+                })
+                .catch(() => {
+                    toast.error("Det oppstod en feil")
+                })
+                .finally(() => {
+                    router.push(RouterOpsMeldinger.PATH)
+                })
         } catch (error) {
             console.log(error)
             toast.error("Noe gikk galt ved oppdatering av meldingen")
+        }
+    }
+
+    const handleIsInternal = (newValue) => {
+        console.log(onlyShowForNavEmployees)
+        if (newValue == "Internal") {
+            changeUpdatedOpsMessage({
+                ...opsMessage,
+                onlyShowForNavEmployees: true,
+                externalHeader: internalHeader,
+                externalMessage: internalMessage,
+            })
+        } else {
+            changeUpdatedOpsMessage({
+                ...opsMessage,
+                onlyShowForNavEmployees: false,
+            })
+        }
+    }
+
+    const handleUpdateMessageInternal = (message: string) => {
+        if (message.length < 501) {
+            changeUpdatedOpsMessage({ ...opsMessage, internalMessage: message })
+        }
+    }
+
+    const handleUpdateMessageExternal = (message: string) => {
+        if (message.length < 501) {
+            changeUpdatedOpsMessage({
+                ...opsMessage,
+                externalMessage: message,
+            })
         }
     }
 
@@ -609,73 +520,6 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
     return (
         <EditOpsMessageContainer>
             <div className="section">
-                <Heading size="medium" level="3">
-                    Intern beskjed
-                </Heading>
-                <TextField
-                    label="Intern header"
-                    value={internalHeader}
-                    onChange={updateOpsMessage("internalHeader")}
-                />
-                <Textarea
-                    id="internal-message-wrapper"
-                    className="text-area-wrapper"
-                    label="Intern beskjed"
-                    value={internalMessage}
-                    size="medium"
-                    maxLength={500}
-                    onChange={(evt) =>
-                        handleUpdateOpsTextArea("internalMessage", evt)
-                    }
-                />
-            </div>
-
-            <div className="section">
-                <Heading size="medium" level="3">
-                    Ekstern beskjed
-                </Heading>
-                <TextField
-                    label="Ekstern header"
-                    value={externalHeader}
-                    onChange={updateOpsMessage("externalHeader")}
-                />
-                <Textarea
-                    id="external-message-wrapper"
-                    className="text-area-wrapper"
-                    label="Ekstern beskjed"
-                    value={externalMessage}
-                    size="medium"
-                    maxLength={500}
-                    onChange={(evt) =>
-                        handleUpdateOpsTextArea("externalMessage", evt)
-                    }
-                />
-            </div>
-
-            <div className="section">
-                <Select
-                    label="Velg alvorlighetsgrad"
-                    value={selectedSeverity !== null ? selectedSeverity : ""}
-                    onChange={handleUpdateSelectedSeverity}
-                >
-                    <option value={SeverityEnum.NEUTRAL}>Nøytral</option>
-                    <option value={SeverityEnum.ISSUE}>Gul</option>
-                    <option value={SeverityEnum.DOWN}>Rød</option>
-                </Select>
-            </div>
-
-            <ModifyAffectedServices
-                opsMessageToUpdate={updatedOpsMessage}
-                handleUpdateOpsMessageAffectedServices={(newOps) =>
-                    handleUpdateOpsMessageAffectedServices(newOps)
-                }
-                services={services}
-            />
-
-            <div className="section">
-                <Heading size="medium" level="3">
-                    Ytterligere detaljer
-                </Heading>
                 <Checkbox
                     checked={isActive}
                     onChange={() =>
@@ -685,8 +529,31 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                         })
                     }
                 >
-                    Er den aktiv?
+                    Sett meldingen som <b>aktiv</b>
                 </Checkbox>
+            </div>
+            <div className="section">
+                <Select
+                    label="Velg alvorlighetsgrad"
+                    value={selectedSeverity !== null ? selectedSeverity : ""}
+                    onChange={handleUpdateSelectedSeverity}
+                >
+                    <option value={SeverityEnum.NEUTRAL}>Nøytral - Blå</option>
+                    <option value={SeverityEnum.ISSUE}>Middels - Gul</option>
+                    <option value={SeverityEnum.DOWN}>Høy - Rød</option>
+                </Select>
+            </div>
+
+            <div className="section">
+                <RadioGroup
+                    legend="Velg synlighet:"
+                    onChange={(e) => handleIsInternal(e)}
+                    defaultValue={"Internal"}
+                >
+                    <Radio value="Internal">Kun interne brukere</Radio>
+                    <Radio value="Public">Interne og eksterne brukere</Radio>
+                </RadioGroup>
+
                 <Checkbox
                     checked={onlyShowForNavEmployees}
                     onChange={() =>
@@ -700,11 +567,54 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                     Vises bare for ansatte?
                 </Checkbox>
             </div>
+            <div className="section">
+                <TextField
+                    label="Intern tittel:"
+                    value={internalHeader}
+                    onChange={updateOpsMessage("internalHeader")}
+                />
 
+                <TextEditor
+                    ref={editorRef}
+                    isInternal={true}
+                    initialValue={internalMessage}
+                    title="Intern tekst:"
+                    handleUpdateInternalMsg={handleUpdateMessageInternal}
+                />
+            </div>
+            {!onlyShowForNavEmployees && (
+                <div className="section">
+                    <TextField
+                        label="Ekstern tittel"
+                        value={externalHeader}
+                        onChange={updateOpsMessage("externalHeader")}
+                    />
+
+                    <TextEditor
+                        ref={editorRef}
+                        isInternal={true}
+                        initialValue={externalMessage}
+                        title="Ekstern tekst:"
+                        handleUpdateInternalMsg={handleUpdateMessageExternal}
+                    />
+                </div>
+            )}
+            <ModifyAffectedServices
+                opsMessageToUpdate={updatedOpsMessage}
+                handleUpdateOpsMessageAffectedServices={(newOps) =>
+                    handleUpdateOpsMessageAffectedServices(newOps)
+                }
+                services={services}
+            />
+            <div className="section">
+                <Heading size="medium" level="3">
+                    Detaljer:
+                </Heading>
+            </div>
             <div className="timeframe-container">
-                <div className="current-timeframe-wrapper">
-                    <div>
-                        <Heading size="medium" level="3">
+                <div className="section">
+                    <div className="section">
+                        <Heading size="small" level="3">
                             Foreløpig starttid
                         </Heading>
                         {convertedStartTime ? (
@@ -714,7 +624,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                         )}
                     </div>
                     <div>
-                        <Heading size="medium" level="3">
+                        <Heading size="small" level="3">
                             Foreløpig sluttid
                         </Heading>
                         {convertedEndTime ? (
@@ -745,9 +655,20 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                     />
                 )}
             </div>
-            <Button variant="primary" onClick={handleSubmitChangesOpsMessage}>
-                Lagre endringer
-            </Button>
+            <div className="buttonContainer">
+                <Button
+                    variant="secondary"
+                    onClick={() => router.push(RouterOpsMeldinger.PATH)}
+                >
+                    Avbryt
+                </Button>
+                <Button
+                    variant="primary"
+                    onClick={handleSubmitChangesOpsMessage}
+                >
+                    Lagre endringer
+                </Button>
+            </div>
         </EditOpsMessageContainer>
     )
 }
@@ -828,13 +749,9 @@ const ModifyAffectedServices = ({
 
     return (
         <EditAffectedServicesContainer className="section">
-            {opsMessageToUpdate.affectedServices.length == 0 ? (
-                <BodyShort>
-                    Ingen tjenester er knyttet til driftsmeldingen
-                </BodyShort>
-            ) : (
+            {
                 <div>
-                    <b>Tilknyttede tjenester mot driftsmeldingen:</b>
+                    <Heading size="xsmall">Tilknyttede tjenester:</Heading>
                     <ul>
                         {opsMessageToUpdate.affectedServices.map((service) => {
                             return (
@@ -852,7 +769,7 @@ const ModifyAffectedServices = ({
                         })}
                     </ul>
                 </div>
-            )}
+            }
 
             <SelectAffectedServicesComponent
                 opsMessageToUpdate={opsMessageToUpdate}

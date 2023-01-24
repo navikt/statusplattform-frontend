@@ -4,20 +4,35 @@ import { useRouter } from "next/router"
 import { useState } from "react"
 import { toast } from "react-toastify"
 import styled from "styled-components"
+
 import { VerticalSeparator } from "../../pages"
 import { OpsMessageI } from "../../types/opsMessage"
 import { RouterOpsMeldinger } from "../../types/routes"
 import { deleteOpsMessage, updateSpecificOpsMessage } from "../../utils/opsAPI"
 
+const PublishedTime = styled.div`
+    color: var(--a-gray-500);
+    margin: -0.4rem 0 0.4rem;
+`
+
 const MessageCard = styled.div`
     background: white;
-    padding: 1rem 1.5rem;
+    padding: 1rem 1rem;
     border-radius: 4px;
-    border-left: 1px solid #ffffff;
+    border-left: 0.4rem solid var(--a-gray-300);
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-
     display: flex;
-    flex-flow: column;
+    flex-direction: column;
+
+    &.NEUTRAL {
+        border-color: var(--a-blue-200);
+    }
+    &.ISSUE {
+        border-color: var(--a-orange-200);
+    }
+    &.DOWN {
+        border-color: var(--a-red-200);
+    }
 
     .ops-card-content {
         padding: 0.5rem 0 0.5rem;
@@ -27,9 +42,10 @@ const MessageCard = styled.div`
     }
 
     .message-content {
-        margin: 0px;
-        padding: 0px;
-        height: 12.5rem;
+        margin: -0rem 0px 0 -0.5rem;
+        padding: 0.5rem;
+        height: 13.2rem;
+
         -webkit-box-orient: vertical;
         overflow-y: scroll;
 
@@ -74,7 +90,10 @@ const MessageCard = styled.div`
     }
 
     .se-mer-wrapper {
-        margin-top: 17.5rem;
+        display: flex;
+        flex-direction: row;
+        gap: 0.2rem;
+        margin: 18.4rem 0 0 9rem;
         position: absolute;
     }
 `
@@ -147,6 +166,21 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
         }
     }
 
+    const datePrettifyer = (date) => {
+        const convertedEndTime = new Date(date)
+        return `${
+            convertedEndTime.getDate() < 10
+                ? `0${convertedEndTime.getDate()}`
+                : convertedEndTime.getDate()
+        }/${
+            convertedEndTime.getMonth() + 1 < 10
+                ? `0${convertedEndTime.getMonth() + 1}`
+                : convertedEndTime.getMonth() + 1
+        }/${convertedEndTime.getFullYear().toString().substr(-2)} `
+    }
+
+    const prettifiedStartTime = datePrettifyer(opsMessage.startTime)
+
     return (
         <MessageCard className={opsMessage.severity}>
             <CustomizedModal
@@ -202,33 +236,12 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
                 </Modal.Content>
             </CustomizedModal>
 
-            <div className="buttons-container">
-                <Button
-                    size="small"
-                    variant="tertiary"
-                    className="top-row-button"
-                    onClick={handleActiveModal}
-                >
-                    <span>Endre status</span>
-                </Button>
-
-                <VerticalSeparator />
-
-                <Button
-                    size="small"
-                    variant="tertiary"
-                    className="top-row-button"
-                    onClick={handleModal}
-                >
-                    <span>Slett</span>
-                    <Delete className="delete-icon" />
-                </Button>
-            </div>
-
             <div className="ops-card-content">
-                <Heading spacing size="large" level="2">
+                <PublishedTime>{prettifiedStartTime}</PublishedTime>
+                <Heading spacing size="medium">
                     {opsMessage.internalHeader}
                 </Heading>
+
                 <BodyShort spacing className="message-content">
                     <span
                         dangerouslySetInnerHTML={{
@@ -240,14 +253,35 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
 
             <div className="se-mer-wrapper">
                 <Button
+                    size="small"
                     variant="tertiary"
+                    className="top-row-button"
+                    onClick={handleModal}
+                    icon={<Delete />}
+                />
+                <Button
+                    variant="tertiary"
+                    size="small"
+                    onClick={() =>
+                        router.push(
+                            RouterOpsMeldinger.PATH +
+                                `/${opsMessage.id}/RedigerMelding`
+                        )
+                    }
+                >
+                    Rediger
+                </Button>
+
+                <Button
+                    variant="tertiary"
+                    size="small"
                     onClick={() =>
                         router.push(
                             RouterOpsMeldinger.PATH + `/${opsMessage.id}`
                         )
                     }
                 >
-                    Se mer | Rediger
+                    Se mer
                 </Button>
             </div>
         </MessageCard>

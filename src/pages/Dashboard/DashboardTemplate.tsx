@@ -385,12 +385,12 @@ const AllAreas = ({
 
     return (
         <PortalServiceTileContainer maxWidth={maxWidth}>
-            <span className="expand-all-wrapper">
+            {/*  <span className="expand-all-wrapper">
                 <ExpandAllToggle
                     toggleExpandAll={toggleExpandAll}
                     expanded={expandAll}
                 />
-            </span>
+            </span>*/}
             {rows.map((row, rowIndex) => (
                 <PortalServiceTileRow key={rowIndex}>
                     {row.map((area, index) => (
