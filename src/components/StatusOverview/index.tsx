@@ -1,8 +1,8 @@
 import styled from "styled-components"
 import router, { useRouter } from "next/router"
 
-import { Clock, Next } from "@navikt/ds-icons"
-import { Alert, BodyShort, Button, Heading } from "@navikt/ds-react"
+import { Clock, Edit, Next } from "@navikt/ds-icons"
+import { Alert, BodyShort, Button, Heading, Tooltip } from "@navikt/ds-react"
 
 import { Area, Dashboard, Service } from "../../types/types"
 import { countHealthyServicesInListOfAreas } from "../../utils/servicesOperations"
@@ -208,7 +208,36 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
     }
 }
 
-const DeviationCardContainer = styled.button`
+const EditOpsButton = styled(Button)`
+    &.neutral {
+        color: var(--a-blue-600);
+        background: none;
+
+        :hover {
+            background: var(--a-blue-100);
+        }
+    }
+
+    &.issue {
+        color: var(--a-orange-700);
+        background: none;
+
+        :hover {
+            background: var(--a-orange-100);
+        }
+    }
+
+    &.down {
+        color: var(--a-red-700);
+        background: none;
+
+        :hover {
+            background: var(--a-red-100);
+        }
+    }
+`
+
+const DeviationCardContainer = styled.div`
     position: relative;
     height: 100%;
 
@@ -235,7 +264,7 @@ const DeviationCardContainer = styled.button`
         border-color: var(--a-surface-warning-subtle);
 
         :hover {
-            background: var(--a-orange-300);
+            background: var(--a-orange-200);
             border-color: var(--a-icon-warning);
         }
 
@@ -246,7 +275,7 @@ const DeviationCardContainer = styled.button`
         background: var(--a-red-100);
 
         :hover {
-            background: var(--a-red-300);
+            background: var(--a-red-200);
         }
 
         border-left-color: var(--a-red-500);
@@ -256,7 +285,7 @@ const DeviationCardContainer = styled.button`
         background: var(--a-blue-100);
 
         :hover {
-            background: var(--a-blue-300);
+            background: var(--a-blue-200);
         }
 
         border-left-color: var(--a-blue-500);
@@ -269,7 +298,7 @@ const DeviationCardContainer = styled.button`
         margin-left: 1.3rem;
 
         display: flex;
-        flex-direction: column;
+        flex-direction: row;
         justify-content: space-between;
 
         :focus {
@@ -313,6 +342,11 @@ const DeviationCardIfNoOpsMessage = ({
     )
 }
 
+const handleEditOpsClick = (e, id) => {
+    e.stopPropagation()
+    router.push(RouterOpsMeldinger.PATH + `/${id}/RedigerMelding`)
+}
+
 interface DeviationCardI {
     opsMessage: OpsMessageI
     user: UserData
@@ -337,6 +371,15 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
                 <Heading size="small" level="3">
                     {internalHeader}
                 </Heading>
+                <Tooltip content="Rediger driftsmelding" placement="right">
+                    <EditOpsButton
+                        icon={<Edit />}
+                        aria-label="Rediger driftsmelding"
+                        size="small"
+                        className={severity.toLowerCase()}
+                        onClick={(e) => handleEditOpsClick(e, id)}
+                    ></EditOpsButton>
+                </Tooltip>
             </div>
         </DeviationCardContainer>
     )
