@@ -15,12 +15,13 @@ import { EndPathOps } from "../../utils/apiHelper"
 import { fetchOpsMessages } from "../../utils/opsAPI"
 import { HorizontalSeparator } from "../Admin"
 
-const CreateAvvikButtonWrapper = styled.div`
-    position: absolute;
-    top: 11.5rem;
-    right: 22.1rem;
+const CreateAvvikButtonWrapper = styled.div``
+const OpsHead = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    height: 3rem;
 `
-
 const OpsSectionContainer = styled.div`
     display: flex;
     flex-direction: column;
@@ -160,23 +161,25 @@ const OpsMessages = ({ serverOpsMessages }) => {
             <Head>
                 <title>Operasjonsmeldinger - status.nav.no</title>
             </Head>
-            <CreateAvvikButtonWrapper>
-                <Button
-                    onClick={() => router.push(RouterOpprettOpsMelding.PATH)}
-                >
-                    Opprett ny driftsmelding
-                </Button>
-            </CreateAvvikButtonWrapper>
 
             {/* <Heading level="2" size="small">Alle driftsmeldinger</Heading>            
             <ListOfOpsMessages opsMessages={opsMessages} /> */}
 
             <OpsSectionContainer>
                 {arrayActive.length > 0 && (
-                    <div>
-                        <Heading level="2" size="xlarge">
-                            Aktive meldinger
-                        </Heading>
+                    <>
+                        <OpsHead>
+                            <Heading level="2" size="xlarge">
+                                Aktive meldinger
+                            </Heading>
+                            <Button
+                                onClick={() =>
+                                    router.push(RouterOpprettOpsMelding.PATH)
+                                }
+                            >
+                                Opprett ny driftsmelding
+                            </Button>
+                        </OpsHead>
                         <HorizontalSeparator />
 
                         <ListOfOpsMessages
@@ -184,14 +187,27 @@ const OpsMessages = ({ serverOpsMessages }) => {
                             notifyChangedOpsMessage={notifyChangedOpsMessage}
                             notifyDeletedOpsMessage={notifyDeletedOpsMessage}
                         />
-                    </div>
+                    </>
                 )}
 
                 {arrayInActive.length > 0 && (
                     <div>
-                        <Heading level="2" size="xlarge">
-                            Inaktive meldinger
-                        </Heading>
+                        <OpsHead>
+                            <Heading level="2" size="xlarge">
+                                Inaktive meldinger
+                            </Heading>
+                            {arrayActive.length <= 0 && (
+                                <Button
+                                    onClick={() =>
+                                        router.push(
+                                            RouterOpprettOpsMelding.PATH
+                                        )
+                                    }
+                                >
+                                    Opprett ny driftsmelding
+                                </Button>
+                            )}
+                        </OpsHead>
                         <HorizontalSeparator />
 
                         <ListOfOpsMessages
