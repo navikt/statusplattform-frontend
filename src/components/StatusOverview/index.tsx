@@ -101,6 +101,10 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
             .length
     }
 
+    const opsMsgList = opsMessages.sort((a, b) =>
+        a.severity > b.severity ? 1 : b.severity > a.severity ? -1 : 0
+    )
+
     if (isLoading) return <CustomNavSpinner />
 
     if (allGood) {
@@ -130,7 +134,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
 
                 <div className="ops-container">
                     {(!hasIssue || !hasDown) &&
-                        opsMessages.map((opsMessage, i) => {
+                        opsMsgList.map((opsMessage, i) => {
                             return (
                                 <DeviationReportCard
                                     key={i}
