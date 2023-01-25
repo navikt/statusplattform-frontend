@@ -14,7 +14,6 @@ export const OpsScheme = styled.div`
     border-radius: 0.5rem;
 
     &.neutral {
-
         border-color: var(--a-blue-500);
     }
 
@@ -28,8 +27,6 @@ export const OpsScheme = styled.div`
 
     &.none {
         border-color: var(--a-gray-300);
-
-
     }
 
     .input-area {
@@ -42,6 +39,7 @@ export const OpsScheme = styled.div`
         display: flex;
         flex-direction: row;
         float: right;
+        gap: 0.2rem;
         margin: 1rem 0;
         justify-content: right;
     }

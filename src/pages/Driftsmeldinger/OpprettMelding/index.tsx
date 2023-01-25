@@ -520,10 +520,7 @@ const OpsComponent = ({
             )}
 
             <div className="button-container">
-                <Button
-                    variant="secondary"
-                    onClick={() => router.push(RouterOpsMeldinger.PATH)}
-                >
+                <Button variant="secondary" onClick={() => router.back()}>
                     Avbryt
                 </Button>
                 <Button variant="primary" onClick={handleSubmitOpsMessage}>
