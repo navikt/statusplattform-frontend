@@ -47,21 +47,21 @@ const StatusSummary = styled.div`
         display: grid;
         row-gap: 1.5rem;
         column-gap: 2rem;
-        height: 24rem;
+        height: 17rem;
         overflow: hidden;
 
         @media (min-width: 800px) {
-            grid-auto-rows: 12rem;
+            grid-auto-rows: 7.4rem;
             grid-template-columns: repeat(2, 425px);
         }
 
         @media (min-width: 1150px) {
-            grid-auto-rows: 12rem;
+            grid-auto-rows: 7.4rem;
             grid-template-columns: repeat(3, 425px);
         }
 
         @media (min-width: 1600px) {
-            grid-auto-rows: 11rem;
+            grid-auto-rows: 7.4rem;
             grid-template-columns: repeat(3, 425px);
         }
     }
@@ -240,14 +240,14 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
 
 const EditOpsButton = styled(Button)`
     height: 2rem;
-    margin-top: -0.5rem;
+    margin: -0.6rem 0.2rem 0;
     color: var(--a-gray-400);
 `
 
 const DeviationCardContainer = styled.div`
     position: relative;
     height: 100%;
-    padding: 1rem 0.5rem;
+    padding: 1rem 0;
     border: none;
     border-radius: 5px;
     border-left: 7.5px solid transparent;
@@ -283,9 +283,18 @@ const DeviationCardContainer = styled.div`
     }
 
     .headercontent {
+        padding-right: 1rem;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 1;
+        -webkit-box-orient: vertical;
+    }
+
+    .topcontent {
         text-align: left;
         width: 100%;
-        margin: -0rem 0 0.4rem;
+        margin-bottom: 0.2rem;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
@@ -294,7 +303,7 @@ const DeviationCardContainer = styled.div`
             text-overflow: ellipsis;
             overflow: hidden;
             display: -webkit-box;
-            -webkit-line-clamp: 2;
+            -webkit-line-clamp: 1;
             -webkit-box-orient: vertical;
         }
     }
@@ -304,14 +313,14 @@ const DeviationCardContainer = styled.div`
     }
 
     .opsMsgContainer {
-        margin: -0.6rem 0;
-        height: 4.2rem;
-        padding-right: 0.3rem;
+        margin: -0.9rem 0;
+        height: 2.8rem;
+        padding-right: 1rem;
 
         text-overflow: ellipsis;
         overflow: hidden;
         display: -webkit-box;
-        -webkit-line-clamp: 2;
+        -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
     }
 
@@ -415,8 +424,11 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
             onClick={() => router.push(RouterOpsMeldinger.PATH + `/${id}`)}
         >
             <div className="content">
-                <div className="headercontent">
-                    <Heading size="small">{internalHeader}</Heading>
+                <div className="topcontent">
+                    <div className="opsMsgTime">
+                        {datePrettifyer(convertedStartTime)}
+                    </div>
+
                     {approvedUsers.includes(user.navIdent) && (
                         <Tooltip
                             content="Rediger driftsmelding"
@@ -433,8 +445,8 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
                         </Tooltip>
                     )}
                 </div>
-                <div className="opsMsgTime">
-                    {datePrettifyer(convertedStartTime)}
+                <div className="headercontent">
+                    <Heading size="small">{internalHeader}</Heading>
                 </div>
                 <div className="opsMsgContainer">
                     <BodyShort>
