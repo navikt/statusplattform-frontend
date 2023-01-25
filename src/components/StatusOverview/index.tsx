@@ -2,7 +2,14 @@ import styled from "styled-components"
 import router, { useRouter } from "next/router"
 
 import { Clock, Edit, Next } from "@navikt/ds-icons"
-import { Alert, BodyShort, Button, Heading, Tooltip } from "@navikt/ds-react"
+import {
+    Alert,
+    BodyLong,
+    BodyShort,
+    Button,
+    Heading,
+    Tooltip,
+} from "@navikt/ds-react"
 
 import { Area, Dashboard, Service } from "../../types/types"
 import { countHealthyServicesInListOfAreas } from "../../utils/servicesOperations"
@@ -33,6 +40,29 @@ const StatusSummary = styled.div`
         }
         .avvikshistorikk-button {
             visibility: hidden;
+        }
+    }
+
+    .ops-container {
+        display: grid;
+        row-gap: 1.5rem;
+        column-gap: 2rem;
+        height: 24rem;
+        overflow: hidden;
+
+        @media (min-width: 800px) {
+            grid-auto-rows: 12rem;
+            grid-template-columns: repeat(2, 425px);
+        }
+
+        @media (min-width: 1150px) {
+            grid-auto-rows: 12rem;
+            grid-template-columns: repeat(3, 425px);
+        }
+
+        @media (min-width: 1600px) {
+            grid-auto-rows: 11rem;
+            grid-template-columns: repeat(3, 425px);
         }
     }
 
@@ -209,45 +239,26 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
 }
 
 const EditOpsButton = styled(Button)`
-    &.neutral {
-        color: var(--a-blue-600);
-        background: none;
-
-        :hover {
-            background: var(--a-blue-100);
-        }
-    }
-
-    &.issue {
-        color: var(--a-orange-700);
-        background: none;
-
-        :hover {
-            background: var(--a-orange-100);
-        }
-    }
-
-    &.down {
-        color: var(--a-red-700);
-        background: none;
-
-        :hover {
-            background: var(--a-red-100);
-        }
-    }
+    height: 2rem;
+    margin-top: -0.5rem;
+    color: var(--a-gray-400);
 `
 
 const DeviationCardContainer = styled.div`
     position: relative;
     height: 100%;
-
     padding: 1rem 0.5rem;
-
     border: none;
     border-radius: 5px;
     border-left: 7.5px solid transparent;
-
+    background: white;
     display: flex;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+
+    &:active:hover {
+        background-color: var(--a-blue-100);
+        color: black;
+    }
 
     &:hover {
         cursor: pointer;
@@ -260,52 +271,58 @@ const DeviationCardContainer = styled.div`
     }
 
     &.has-issue {
-        background: var(--a-orange-100);
-        border-color: var(--a-surface-warning-subtle);
-
-        :hover {
-            background: var(--a-orange-200);
-            border-color: var(--a-icon-warning);
-        }
-
-        border-left-color: var(--a-icon-warning);
+        border-left-color: var(--a-orange-200);
     }
 
     &.has-down {
-        background: var(--a-red-100);
-
-        :hover {
-            background: var(--a-red-200);
-        }
-
-        border-left-color: var(--a-red-500);
+        border-left-color: var(--a-red-200);
     }
 
     &.has-neutral {
-        background: var(--a-blue-100);
+        border-left-color: var(--a-blue-200);
+    }
 
-        :hover {
-            background: var(--a-blue-200);
+    .headercontent {
+        text-align: left;
+        width: 100%;
+        margin: -0rem 0 0.4rem;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+
+        .navds-heading {
+            text-overflow: ellipsis;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
+    }
 
-        border-left-color: var(--a-blue-500);
+    .opsMsgTime {
+        color: var(--a-gray-500);
+    }
+
+    .opsMsgContainer {
+        margin: -0.6rem 0;
+        height: 4.2rem;
+        padding-right: 0.3rem;
+
+        text-overflow: ellipsis;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
     }
 
     .content {
         text-align: left;
         width: 100%;
-        height: 100%;
-        margin-left: 1.3rem;
+
+        margin-left: 1rem;
 
         display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-
-        :focus {
-            .navds-heading {
-                text-decoration: none;
-            }
-        }
+        flex-direction: column;
     }
 
     :focus {
@@ -353,7 +370,24 @@ interface DeviationCardI {
 }
 
 const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
-    const { internalHeader, severity, id } = opsMessage
+    const { internalHeader, startTime, internalMessage, severity, id } =
+        opsMessage
+
+    const convertedStartTime = new Date(startTime)
+
+    const datePrettifyer = (date: Date) => {
+        return `${
+            date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
+        }/${
+            date.getMonth() + 1 < 10
+                ? `0${date.getMonth() + 1}`
+                : date.getMonth() + 1
+        }/${date.getFullYear().toString().substr(-2)} kl ${
+            date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()
+        }:${
+            date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
+        }`
+    }
 
     const approvedUsers = [
         "L152423",
@@ -381,20 +415,36 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
             onClick={() => router.push(RouterOpsMeldinger.PATH + `/${id}`)}
         >
             <div className="content">
-                <Heading size="small" level="3">
-                    {internalHeader}
-                </Heading>
-                {approvedUsers.includes(user.navIdent) && (
-                    <Tooltip content="Rediger driftsmelding" placement="right">
-                        <EditOpsButton
-                            icon={<Edit />}
-                            aria-label="Rediger driftsmelding"
-                            size="small"
-                            className={severity.toLowerCase()}
-                            onClick={(e) => handleEditOpsClick(e, id)}
-                        ></EditOpsButton>
-                    </Tooltip>
-                )}
+                <div className="headercontent">
+                    <Heading size="small">{internalHeader}</Heading>
+                    {approvedUsers.includes(user.navIdent) && (
+                        <Tooltip
+                            content="Rediger driftsmelding"
+                            placement="right"
+                        >
+                            <EditOpsButton
+                                icon={<Edit />}
+                                aria-label="Rediger driftsmelding"
+                                size="small"
+                                variant="tertiary"
+                                className={severity.toLowerCase()}
+                                onClick={(e) => handleEditOpsClick(e, id)}
+                            ></EditOpsButton>
+                        </Tooltip>
+                    )}
+                </div>
+                <div className="opsMsgTime">
+                    {datePrettifyer(convertedStartTime)}
+                </div>
+                <div className="opsMsgContainer">
+                    <BodyShort>
+                        <span
+                            dangerouslySetInnerHTML={{
+                                __html: internalMessage,
+                            }}
+                        />
+                    </BodyShort>
+                </div>
             </div>
         </DeviationCardContainer>
     )
