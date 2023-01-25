@@ -144,26 +144,10 @@ const OpsMessageComponent = ({
         setIsLoading(false)
     }, [updatedSeverity])
 
-    const usersWithAccess: string[] = [
-        "L152423",
-        "H161540",
-        "K146221",
-        "J104568",
-        "G124938",
-        "M106261",
-        "K132081",
-        "H123099",
-        "L110875",
-        "K125327",
-        "F110862",
-        "A110886",
-        "L120166",
-        "H166137",
-        "G121973",
-    ]
+    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS.split(",")
 
     useEffect(() => {
-        if (!usersWithAccess.includes(navIdent)) {
+        if (!approvedUsers.includes(navIdent)) {
             router.push(RouterError.PATH)
         }
     }, [router])
@@ -210,9 +194,7 @@ const OpsMessageComponent = ({
                 </SubHeader>
                 <Spacer height="0.8rem" />
                 <Heading size="large" level="1">
-                    {usersWithAccess.includes(navIdent)
-                        ? internalHeader
-                        : externalHeader}
+                    {navIdent ? internalHeader : externalHeader}
                 </Heading>
 
                 <Spacer height="1.2rem" />

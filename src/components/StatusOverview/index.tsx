@@ -158,9 +158,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                             iconPosition="right"
                             onClick={() => router.push(RouterOpsMeldinger.PATH)}
                         >
-
                             Se alle driftsmeldinger
-
                         </Button>
                     </div>
                     <div>
@@ -357,8 +355,8 @@ interface DeviationCardI {
 const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
     const { internalHeader, severity, id } = opsMessage
 
-    // TODO: When the solution is ready to open for the public, re-implemented the commented code (or change it to something else)
-    // if(user.navIdent || (user.navIdent && onlyShowForNavEmployees == true)) {
+    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS.split(",")
+
     return (
         <DeviationCardContainer
             aria-label={
@@ -373,15 +371,17 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
                 <Heading size="small" level="3">
                     {internalHeader}
                 </Heading>
-                <Tooltip content="Rediger driftsmelding" placement="right">
-                    <EditOpsButton
-                        icon={<Edit />}
-                        aria-label="Rediger driftsmelding"
-                        size="small"
-                        className={severity.toLowerCase()}
-                        onClick={(e) => handleEditOpsClick(e, id)}
-                    ></EditOpsButton>
-                </Tooltip>
+                {approvedUsers.includes(user.navIdent) && (
+                    <Tooltip content="Rediger driftsmelding" placement="right">
+                        <EditOpsButton
+                            icon={<Edit />}
+                            aria-label="Rediger driftsmelding"
+                            size="small"
+                            className={severity.toLowerCase()}
+                            onClick={(e) => handleEditOpsClick(e, id)}
+                        ></EditOpsButton>
+                    </Tooltip>
+                )}
             </div>
         </DeviationCardContainer>
     )
