@@ -6,7 +6,7 @@ metadata:
     labels:
         team: navdig
 spec:
-    image: { { image } }
+    image: {{ image }}
     port: 3000
     ingresses:
         - https://status.nav.no/sp
