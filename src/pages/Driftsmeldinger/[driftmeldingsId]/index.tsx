@@ -175,21 +175,17 @@ const OpsMessageComponent = ({
 
     const datePrettifyer = (date: Date) => {
         return `${
-            convertedEndTime.getDate() < 10
-                ? `0${convertedEndTime.getDate()}`
-                : convertedEndTime.getDate()
+
+            date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
         }/${
-            convertedEndTime.getMonth() + 1 < 10
-                ? `0${convertedEndTime.getMonth() + 1}`
-                : convertedEndTime.getMonth() + 1
-        }/${convertedEndTime.getFullYear().toString().substr(-2)} kl ${
-            convertedEndTime.getHours() < 10
-                ? `0${convertedEndTime.getHours()}`
-                : convertedEndTime.getHours()
+            date.getMonth() + 1 < 10
+                ? `0${date.getMonth() + 1}`
+                : date.getMonth() + 1
+        }/${date.getFullYear().toString().substr(-2)} kl ${
+            date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()
         }:${
-            convertedEndTime.getMinutes() < 10
-                ? `0${convertedEndTime.getMinutes()}`
-                : convertedEndTime.getMinutes()
+            date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
+
         }`
     }
 

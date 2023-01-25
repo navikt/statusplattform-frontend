@@ -158,7 +158,9 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                             iconPosition="right"
                             onClick={() => router.push(RouterOpsMeldinger.PATH)}
                         >
-                            Se alle avviksmeldinger
+
+                            Se alle driftsmeldinger
+
                         </Button>
                     </div>
                     <div>

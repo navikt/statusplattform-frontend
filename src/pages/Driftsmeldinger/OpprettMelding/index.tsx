@@ -29,6 +29,7 @@ import { EndPathServices } from "../../../utils/apiHelper"
 import { Copy } from "@navikt/ds-icons"
 import { CloseCustomized, HorizontalSeparator } from "../../Admin"
 import DateSetterOps from "../../../components/DateSetterOps"
+import { cursorTo } from "readline"
 
 export const getServerSideProps = async () => {
     const res = await fetch(backendPath + EndPathServices())
@@ -123,6 +124,11 @@ interface OpsProps {
 
 const options = ["00", "15", "30", "45"]
 
+var currentTime = new Date()
+var endTime = new Date()
+currentTime.setDate(currentTime.getDate())
+endTime.setDate(endTime.getDate() + 14)
+
 const OpsComponent = ({
     handleSubmitOpsMessage,
     opsMessage,
@@ -130,16 +136,16 @@ const OpsComponent = ({
     services,
 }: OpsProps) => {
     const [startDateForActiveOpsMessage, setStartDateForActiveOpsMessage] =
-        useState<Date>(new Date())
+        useState<Date>(currentTime)
 
     const [endDateForActiveOpsMessage, setEndDateForActiveOpsMessage] =
-        useState<Date>(new Date())
+        useState<Date>(endTime)
 
     const [isLoading, setIsLoading] = useState(true)
     const [selectedSeverity, setSelectedSeverity] = useState<string>("NEUTRAL")
-    const [showAutomaticTimeMsg, setShowAutomaticTimeMsg] = useState(false)
+    const [showAutomaticTimeMsg, setShowAutomaticTimeMsg] = useState(true)
     const router = useRouter()
-    const editorRef = useRef(null)
+    const createMsgRef = useRef(null)
     const hours = []
     for (let i = 0; i < 24; i++) {
         if (i < 10) {
@@ -222,11 +228,19 @@ const OpsComponent = ({
     const handleIsActive = (newValue) => {
         if (newValue == "1") {
             var currentTime = new Date()
-            currentTime.setDate(currentTime.getDate() + 14)
-
-            setEndDateForActiveOpsMessage(currentTime)
+            var endTime = new Date()
+            currentTime.setDate(currentTime.getDate())
+            endTime.setDate(endTime.getDate() + 14)
+            console.log("starttime " + currentTime + " endtime " + endTime)
+            setStartDateForActiveOpsMessage(currentTime)
+            setEndDateForActiveOpsMessage(endTime)
             setShowAutomaticTimeMsg(true)
-            setOpsMessage({ ...opsMessage, isActive: true })
+            setOpsMessage({
+                ...opsMessage,
+                startTime: currentTime,
+                endTime: endTime,
+                isActive: true,
+            })
         } else {
             setShowAutomaticTimeMsg(false)
             setOpsMessage({ ...opsMessage, isActive: false })
@@ -321,8 +335,10 @@ const OpsComponent = ({
                 />
 
                 <TextEditor
-                    ref={editorRef}
+                    ref={createMsgRef}
                     isInternal={true}
+                    initialValue={internalMessage}
+                    title="Innhold:"
                     handleUpdateInternalMsg={handleUpdateMessageInternal}
                 />
 
@@ -378,9 +394,11 @@ const OpsComponent = ({
                         }
                     />
                     <TextEditor
-                        ref={editorRef}
-                        isInternal={false}
-                        handleUpdateExternalMsg={handleUpdateMessageExternal}
+                        ref={createMsgRef}
+                        isInternal={true}
+                        initialValue={externalMessage}
+                        title="Innhold:"
+                        handleUpdateInternalMsg={handleUpdateMessageExternal}
                     />
                 </div>
             )}
@@ -395,6 +413,7 @@ const OpsComponent = ({
             <RadioGroup
                 legend="Sett varighet: "
                 onChange={(e) => handleIsActive(e)}
+                defaultValue={"1"}
             >
                 <Radio value="1">
                     <div>Automatisk</div>
@@ -651,10 +670,12 @@ const AffectedServicesSelect = ({
     return (
         <AffectedServicesSelectComponent>
             <Select
-                label="Koble tjenester mot meldingen"
-                value={selectedService !== null ? selectedService.id : ""}
+                label="Tilknyttede tjenester:"
                 onChange={handleNewSelectedService}
             >
+                <option key={undefined} value={""}>
+                    -
+                </option>
                 {availableServices.length > 0 ? (
                     availableServices.map((service) => {
                         return (
