@@ -32,7 +32,9 @@ const TextEditor = React.forwardRef(
                 <Heading size="xsmall">{title ? title : "Innhold:"}</Heading>
                 <Editor
                     onInit={(editor) => (ref.current = editor)}
+
                     value={initialValue ? initialValue : ""}
+
                     onEditorChange={handleEditorChange}
                     init={{
                         height: 300,

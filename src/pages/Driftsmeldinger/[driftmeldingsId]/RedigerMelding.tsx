@@ -175,6 +175,7 @@ const OpsMessageComponent = ({
 
     const datePrettifyer = (date: Date) => {
         return `${
+
             date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
         }/${
             date.getMonth() + 1 < 10
@@ -184,6 +185,7 @@ const OpsMessageComponent = ({
             date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()
         }:${
             date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
+
         }`
     }
 
@@ -548,7 +550,9 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                     <Radio value="Public">Interne og eksterne brukere</Radio>
                 </RadioGroup>
 
+
                 {/*  <Checkbox
+
                     checked={onlyShowForNavEmployees}
                     onChange={() =>
                         changeUpdatedOpsMessage({
@@ -559,7 +563,9 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                     }
                 >
                     Vises bare for ansatte?
+
                 </Checkbox>*/}
+
             </div>
             <div className="section">
                 <TextField
@@ -837,11 +843,13 @@ const SelectAffectedServicesComponent = ({
             <Select
                 hideLabel
                 label="Liste av tjenester"
+
                 onChange={handleNewSelectedService}
             >
                 <option value={"default"} key={0}>
                     -
                 </option>
+
                 {availableServices.length > 0 ? (
                     availableServices.map((service) => {
                         return (

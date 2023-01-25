@@ -93,7 +93,9 @@ const MessageCard = styled.div`
         display: flex;
         flex-direction: row;
         gap: 0.2rem;
+
         margin: 18.4rem 0 0 8rem;
+
         position: absolute;
     }
 `
