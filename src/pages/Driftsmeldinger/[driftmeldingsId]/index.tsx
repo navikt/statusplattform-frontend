@@ -144,7 +144,7 @@ const OpsMessageComponent = ({
         setIsLoading(false)
     }, [updatedSeverity])
 
-    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS.split(",")
+    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS?.split(",")
 
     useEffect(() => {
         if (!navIdent) {

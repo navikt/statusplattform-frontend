@@ -51,7 +51,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
     const [reFetchOpsMessages, changeRefetchOpsMessages] = useState(false)
 
     const user = useContext(UserStateContext)
-    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS.split(",")
+    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS?.split(",")
 
     useEffect(() => {
         if (!user.navIdent) {

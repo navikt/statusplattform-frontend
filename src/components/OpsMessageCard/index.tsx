@@ -135,7 +135,7 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
     const [isActiveModalOpen, setIsActiveModalOpen] = useState(false)
 
     const { name, navIdent } = useContext(UserStateContext)
-    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS.split(",")
+    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS?.split(",")
 
     const router = useRouter()
 

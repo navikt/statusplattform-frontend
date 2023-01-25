@@ -355,7 +355,7 @@ interface DeviationCardI {
 const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
     const { internalHeader, severity, id } = opsMessage
 
-    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS.split(",")
+    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS?.split(",")
 
     return (
         <DeviationCardContainer

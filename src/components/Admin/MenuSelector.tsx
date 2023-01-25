@@ -43,7 +43,7 @@ const MenuSelector: React.FC<{ user }> = ({ user }) => {
         setSelectedTab(newTab)
     }
 
-    const usersWithAccess = process.env.NEXT_PUBLIC_APPROVED_USERS.split(",")
+    const usersWithAccess = process.env.NEXT_PUBLIC_APPROVED_USERS?.split(",")
 
     let adminMenuWithAccessControl = adminMenu
 
