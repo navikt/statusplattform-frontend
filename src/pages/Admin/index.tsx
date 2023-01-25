@@ -285,17 +285,7 @@ const AdminPage = ({
     // const [services, setServices] = useState<Service[]>()
     // const [components, setComponents] = useState<Component[]>()
 
-    const approvedUsers: string[] = [
-        "L152423",
-        "H161540",
-        "K146221",
-        "J104568",
-        "G124938",
-        "M106261",
-        "M137316",
-        "H166137",
-        "G121973",
-    ]
+    const approvedUsers = process.env.NEXT_PUBLIC_APPROVED_USERS.split(",")
 
     const user = useContext(UserStateContext)
 

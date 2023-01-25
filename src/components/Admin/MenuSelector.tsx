@@ -43,16 +43,7 @@ const MenuSelector: React.FC<{ user }> = ({ user }) => {
         setSelectedTab(newTab)
     }
 
-    const usersWithAccess: string[] = [
-        "L152423",
-        "H161540",
-        "K146221",
-        "J104568",
-        "G124938",
-        "M106261",
-        "H166137",
-        "G121973",
-    ]
+    const usersWithAccess = process.env.NEXT_PUBLIC_APPROVED_USERS.split(",")
 
     let adminMenuWithAccessControl = adminMenu
 

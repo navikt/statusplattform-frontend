@@ -51,27 +51,10 @@ const OpsMessages = ({ serverOpsMessages }) => {
     const [reFetchOpsMessages, changeRefetchOpsMessages] = useState(false)
 
     const user = useContext(UserStateContext)
-
-    const usersWithAccess: string[] = [
-        "L152423",
-        "H161540",
-        "K146221",
-        "J104568",
-        "G124938",
-        "M106261",
-        "K132081",
-        "H123099",
-        "L110875",
-        "K125327",
-        "F110862",
-        "A110886",
-        "L120166",
-        "H166137",
-        "G121973",
-    ]
+    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS.split(",")
 
     useEffect(() => {
-        if (!usersWithAccess.includes(user.navIdent)) {
+        if (!user.navIdent) {
             router.push(RouterError.PATH)
         }
     }, [router])
@@ -98,7 +81,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
             }
         }
 
-        if (!usersWithAccess.includes(user.navIdent)) {
+        if (!user.navIdent) {
             router.push(RouterError.PATH)
         } else {
             setupOpsPage()
@@ -154,6 +137,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
     const arrayInActive: OpsMessageI[] = opsMessages.filter(
         (message) => !message.isActive
     )
+
     // const arrayArchived: OpsMessageI[] = opsMessages.filter(message => message.state == "archived")
 
     return (
@@ -172,13 +156,17 @@ const OpsMessages = ({ serverOpsMessages }) => {
                             <Heading level="2" size="xlarge">
                                 Aktive meldinger
                             </Heading>
-                            <Button
-                                onClick={() =>
-                                    router.push(RouterOpprettOpsMelding.PATH)
-                                }
-                            >
-                                Opprett ny driftsmelding
-                            </Button>
+                            {approvedUsers.includes(user.navIdent) && (
+                                <Button
+                                    onClick={() =>
+                                        router.push(
+                                            RouterOpprettOpsMelding.PATH
+                                        )
+                                    }
+                                >
+                                    Opprett ny driftsmelding
+                                </Button>
+                            )}
                         </OpsHead>
                         <HorizontalSeparator />
 
@@ -196,17 +184,18 @@ const OpsMessages = ({ serverOpsMessages }) => {
                             <Heading level="2" size="xlarge">
                                 Inaktive meldinger
                             </Heading>
-                            {arrayActive.length <= 0 && (
-                                <Button
-                                    onClick={() =>
-                                        router.push(
-                                            RouterOpprettOpsMelding.PATH
-                                        )
-                                    }
-                                >
-                                    Opprett ny driftsmelding
-                                </Button>
-                            )}
+                            {arrayActive.length <= 0 &&
+                                approvedUsers.includes(user.navIdent) && (
+                                    <Button
+                                        onClick={() =>
+                                            router.push(
+                                                RouterOpprettOpsMelding.PATH
+                                            )
+                                        }
+                                    >
+                                        Opprett ny driftsmelding
+                                    </Button>
+                                )}
                         </OpsHead>
                         <HorizontalSeparator />
 
@@ -231,12 +220,12 @@ const OpsMessagesList = styled.div`
 
     @media (min-width: 800px) {
         grid-auto-rows: 350px;
-        grid-template-columns: repeat(2, 350px);
+        grid-template-columns: repeat(2, 370px);
     }
 
     @media (min-width: 1150px) {
         grid-auto-rows: 350px;
-        grid-template-columns: repeat(3, 350px);
+        grid-template-columns: repeat(3, 370px);
     }
 
     @media (min-width: 1600px) {

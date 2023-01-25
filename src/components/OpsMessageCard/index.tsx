@@ -1,7 +1,8 @@
 import { Delete } from "@navikt/ds-icons"
 import { BodyShort, Button, Heading, Modal } from "@navikt/ds-react"
 import { useRouter } from "next/router"
-import { useState } from "react"
+import { userAgent } from "next/server"
+import { useContext, useState } from "react"
 import { toast } from "react-toastify"
 import styled from "styled-components"
 
@@ -9,6 +10,7 @@ import { VerticalSeparator } from "../../pages"
 import { OpsMessageI } from "../../types/opsMessage"
 import { RouterOpsMeldinger } from "../../types/routes"
 import { deleteOpsMessage, updateSpecificOpsMessage } from "../../utils/opsAPI"
+import { UserStateContext } from "../ContextProviders/UserStatusContext"
 
 const PublishedTime = styled.div`
     color: var(--a-gray-500);
@@ -94,7 +96,17 @@ const MessageCard = styled.div`
         flex-direction: row;
         gap: 0.2rem;
 
-        margin: 18.4rem 0 0 8rem;
+        margin: 18.4rem 0 0 9.5rem;
+
+        position: absolute;
+    }
+
+    .se-mer-ops {
+        display: flex;
+        flex-direction: row;
+        gap: 0.2rem;
+
+        margin: 18.4rem 0 0 16.5rem;
 
         position: absolute;
     }
@@ -121,6 +133,9 @@ interface OpsMessageCardI {
 const OpsMessageCard = (props: OpsMessageCardI) => {
     const [isModalOpen, setIsModalOpen] = useState(false)
     const [isActiveModalOpen, setIsActiveModalOpen] = useState(false)
+
+    const { name, navIdent } = useContext(UserStateContext)
+    const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS.split(",")
 
     const router = useRouter()
 
@@ -253,27 +268,36 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
                 </BodyShort>
             </div>
 
-            <div className="se-mer-wrapper">
-                <Button
-                    size="small"
-                    variant="tertiary"
-                    className="top-row-button"
-                    onClick={handleModal}
-                    icon={<Delete />}
-                />
-                <Button
-                    variant="tertiary"
-                    size="small"
-                    onClick={() =>
-                        router.push(
-                            RouterOpsMeldinger.PATH +
-                                `/${opsMessage.id}/RedigerMelding`
-                        )
-                    }
-                >
-                    Rediger
-                </Button>
-
+            <div
+                className={
+                    approvedUsers.includes(navIdent)
+                        ? "se-mer-wrapper"
+                        : "se-mer-ops"
+                }
+            >
+                {approvedUsers.includes(navIdent) && (
+                    <>
+                        <Button
+                            size="small"
+                            variant="tertiary"
+                            className="top-row-button"
+                            onClick={handleModal}
+                            icon={<Delete />}
+                        />
+                        <Button
+                            variant="tertiary"
+                            size="small"
+                            onClick={() =>
+                                router.push(
+                                    RouterOpsMeldinger.PATH +
+                                        `/${opsMessage.id}/RedigerMelding`
+                                )
+                            }
+                        >
+                            Rediger
+                        </Button>
+                    </>
+                )}
                 <Button
                     variant="tertiary"
                     size="small"
