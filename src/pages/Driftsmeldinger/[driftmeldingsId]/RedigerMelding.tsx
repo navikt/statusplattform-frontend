@@ -175,21 +175,15 @@ const OpsMessageComponent = ({
 
     const datePrettifyer = (date: Date) => {
         return `${
-            convertedEndTime.getDate() < 10
-                ? `0${convertedEndTime.getDate()}`
-                : convertedEndTime.getDate()
+            date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
         }/${
-            convertedEndTime.getMonth() + 1 < 10
-                ? `0${convertedEndTime.getMonth() + 1}`
-                : convertedEndTime.getMonth() + 1
-        }/${convertedEndTime.getFullYear().toString().substr(-2)} kl ${
-            convertedEndTime.getHours() < 10
-                ? `0${convertedEndTime.getHours()}`
-                : convertedEndTime.getHours()
+            date.getMonth() + 1 < 10
+                ? `0${date.getMonth() + 1}`
+                : date.getMonth() + 1
+        }/${date.getFullYear().toString().substr(-2)} kl ${
+            date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()
         }:${
-            convertedEndTime.getMinutes() < 10
-                ? `0${convertedEndTime.getMinutes()}`
-                : convertedEndTime.getMinutes()
+            date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
         }`
     }
 
@@ -554,7 +548,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                     <Radio value="Public">Interne og eksterne brukere</Radio>
                 </RadioGroup>
 
-                <Checkbox
+                {/*  <Checkbox
                     checked={onlyShowForNavEmployees}
                     onChange={() =>
                         changeUpdatedOpsMessage({
@@ -565,7 +559,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                     }
                 >
                     Vises bare for ansatte?
-                </Checkbox>
+                </Checkbox>*/}
             </div>
             <div className="section">
                 <TextField
@@ -752,6 +746,7 @@ const ModifyAffectedServices = ({
             {
                 <div>
                     <Heading size="xsmall">Tilknyttede tjenester:</Heading>
+
                     <ul>
                         {opsMessageToUpdate.affectedServices.map((service) => {
                             return (
@@ -842,9 +837,11 @@ const SelectAffectedServicesComponent = ({
             <Select
                 hideLabel
                 label="Liste av tjenester"
-                value={selectedService !== null ? selectedService.id : ""}
                 onChange={handleNewSelectedService}
             >
+                <option value={"default"} key={0}>
+                    -
+                </option>
                 {availableServices.length > 0 ? (
                     availableServices.map((service) => {
                         return (
