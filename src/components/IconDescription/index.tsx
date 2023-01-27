@@ -1,6 +1,7 @@
 import styled from "styled-components"
 import {
     ErrorFilledCustomized,
+    HelpTextCustomizedGray,
     SuccessFilledCustomized,
     WarningFilledCustomized,
 } from "../TrafficLights"
@@ -31,6 +32,9 @@ const IconDescription = () => {
             </span>
             <span>
                 <ErrorFilledCustomized /> - Tjeneste utilgjengelig
+            </span>
+            <span>
+                <HelpTextCustomizedGray /> - Tjeneste mangler status
             </span>
         </IconDescriptionContainer>
     )

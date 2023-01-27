@@ -215,7 +215,6 @@ const Header = () => {
             <HeaderContent>
                 <HeadingCustomized size="2xlarge" level="1">
                     <b>Status</b> digitale tjenester{" "}
-                    <Detail>Under oppbygging</Detail>
                 </HeadingCustomized>
             </HeaderContent>
 
