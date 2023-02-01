@@ -15,6 +15,7 @@ import {
     RouterOpsMeldinger,
     RouterPrivatperson,
     RouterSamarbeidspartner,
+    RouterUUStatus,
 } from "../../../types/routes"
 
 const BurgerMenuContainer = styled.div`
@@ -127,6 +128,11 @@ const PopoverContent = () => {
                             </Link>
                         </li>
                         <li>
+                            <Link href={RouterUUStatus.PATH} legacyBehavior>
+                                {RouterUUStatus.NAME}
+                            </Link>
+                        </li>
+                        <li>
                             <Link href={RouterOpsMeldinger.PATH} legacyBehavior>
                                 {RouterOpsMeldinger.NAME}
                             </Link>
@@ -155,17 +161,15 @@ const PopoverContent = () => {
                     <>
                         <li>
                             <Link href={RouterAdmin.PATH}>
-
                                 <Employer className="popover-link-ikon" />
                                 {RouterAdmin.NAME}
-
                             </Link>
                         </li>
                     </>
                 )}
             </ul>
         </div>
-    );
+    )
 }
 
 export default BurgerMenu
