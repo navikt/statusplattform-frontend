@@ -1,39 +1,35 @@
 export const RestPath = () => {
-   //return "https://digitalstatus.ekstern.dev.nav.no/rest" //TODO fiks denne så den tilpasser seg etter miljø, altså med /sp for prod, og uten for dev
-   return "/rest";
+    //return "https://digitalstatus.ekstern.dev.nav.no/rest" //TODO fiks denne så den tilpasser seg etter miljø, altså med /sp for prod, og uten for dev
+    return "/rest"
     //Prod -> "/sp/rest"
     //Dev -> "/rest"
 }
 
-
 // Areas
-export const EndPathArea = () =>  {
-    return RestPath()+ "/Area"
+export const EndPathArea = () => {
+    return RestPath() + "/Area"
 }
 
-export const EndPathAreas = () =>  {
-    return RestPath()+ "/Areas"
+export const EndPathAreas = () => {
+    return RestPath() + "/Areas"
 }
 
-export const EndPathSpecificArea = (areaId: string) =>  {
+export const EndPathSpecificArea = (areaId: string) => {
     return EndPathArea() + "/" + areaId
 }
 
-export const EndPathServiceToArea = (areaId: string, serviceId: string) =>  {
+export const EndPathServiceToArea = (areaId: string, serviceId: string) => {
     return EndPathArea() + "/" + areaId + "/" + serviceId
 }
 // ---
 
-
-
 // Dashboards
 export const EndPathDashboard = () => {
-    return RestPath()+ "/Dashboard"
+    return RestPath() + "/Dashboard"
 }
 export const EndPathPutAreasToDashboard = (dashboardId: string) => {
     return EndPathDashboard() + "/" + dashboardId
 }
-
 
 export const EndPathSpecificDashboard = (dashboardId: string) => {
     return EndPathDashboard() + "/" + dashboardId
@@ -48,19 +44,17 @@ export const EndPathDashboardWithArea = (dashboardId: string) => {
 }
 
 export const EndPathDashboards = () => {
-    return RestPath()+ "/Dashboards"
+    return RestPath() + "/Dashboards"
 }
 // ---
 
-
-
 // Services
 export const EndPathService = () => {
-    return RestPath()+ "/Service"
+    return RestPath() + "/Service"
 }
 
 export const EndPathServices = () => {
-    return RestPath()+ "/Services"
+    return RestPath() + "/Services"
 }
 
 export const EndPathServiceHistory = (serviceId: string) => {
@@ -68,7 +62,7 @@ export const EndPathServiceHistory = (serviceId: string) => {
 }
 
 export const EndPathAreaContainingServices = (serviceId: string) => {
-    return RestPath()+ "/Service/Areas/" + serviceId
+    return RestPath() + "/Service/Areas/" + serviceId
 }
 
 export const EndPathServiceTypes = () => {
@@ -84,26 +78,28 @@ export const EndPathUpdateService = (serviceId: string) => {
 }
 
 export const EndPathSpecificService = (serviceId: string) => {
-    return RestPath()+ "/Service/" + serviceId
+    return RestPath() + "/Service/" + serviceId
 }
 
-export const EndPathPutServiceDependency = (serviceId: string, dependencyId: string) => {
+export const EndPathPutServiceDependency = (
+    serviceId: string,
+    dependencyId: string
+) => {
     return EndPathService() + "/addDependency/" + serviceId + "/" + dependencyId
 }
 // ---
 
-
 // Components
 export const EndPathComponent = () => {
-    return RestPath()+ "/Service"
+    return RestPath() + "/Service"
 }
 
 export const EndPathComponents = () => {
-    return RestPath()+ "/Components"
+    return RestPath() + "/Components"
 }
 
 export const EndPathAreaContainingComponents = (componentId: string) => {
-    return RestPath()+ "/Component/Areas/" + componentId
+    return RestPath() + "/Component/Areas/" + componentId
 }
 
 export const EndPathComponentTypes = () => {
@@ -119,14 +115,18 @@ export const EndPathUpdateComponent = (componentId: string) => {
 }
 
 export const EndPathSpecificComponent = (componentId: string) => {
-    return RestPath()+ "/Component/" + componentId
+    return RestPath() + "/Component/" + componentId
 }
 
-export const EndPathPutComponentDependency = (componentId: string, dependencyId: string) => {
-    return EndPathService() + "/addDependency/" + componentId + "/" + dependencyId
+export const EndPathPutComponentDependency = (
+    componentId: string,
+    dependencyId: string
+) => {
+    return (
+        EndPathService() + "/addDependency/" + componentId + "/" + dependencyId
+    )
 }
 // ---
-
 
 // Login
 export const EndPathGetLoginInfo = () => {
@@ -134,19 +134,20 @@ export const EndPathGetLoginInfo = () => {
 }
 // ---
 
-
-
 // SubAreas
 export const EndPathSubAreas = () => {
     return RestPath() + "/SubAreas/"
 }
 
-
 // OPS
 export const EndPathOps = () => {
-    return RestPath()+ "/OpsMessage"
+    return RestPath() + "/OpsMessage"
 }
 
 export const EndPathSpecificOps = (opsId: string) => {
     return EndPathOps() + "/" + opsId
+}
+
+export const EndPathUU = () => {
+    return RestPath() + "/Wcag/Tjeneste"
 }

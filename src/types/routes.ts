@@ -143,3 +143,10 @@ export enum RouterFeedbackForm {
     PATH = "/FeedbackSkjema",
 }
 // ---
+
+// Feedback form
+export enum RouterUUStatus {
+    NAME = "Status - Universell Utforming",
+    PATH = "/UUStatus",
+}
+// ---
