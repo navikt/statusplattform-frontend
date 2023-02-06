@@ -159,7 +159,7 @@ const UUDashboard = ({ UUdata }) => {
                                 <Accordion.Header>
                                     {name} <Tag variant="success">Passed</Tag>{" "}
                                     {countStatuses(krav, "Passed")}{" "}
-                                    <Tag variant="error">Error</Tag>{" "}
+                                    <Tag variant="error">Failed</Tag>{" "}
                                     {countStatuses(krav, "Failed")}{" "}
                                     <Tag variant="neutral">Other</Tag>{" "}
                                     {krav.length -
