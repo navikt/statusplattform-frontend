@@ -1,11 +1,7 @@
-type props = {
-    arr: []
-    find: String
-    item: {
-        result: String
-    }[]
+type StatusItem = {
+    result: string
 }
 
-export const countStatuses = (arr, find) => {
+export const countStatuses = (arr: StatusItem[], find: String) => {
     return arr.filter((item) => item.result === find).length
 }
