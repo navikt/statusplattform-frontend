@@ -7,7 +7,7 @@ import { UserStateContext } from "../../components/ContextProviders/UserStatusCo
 import { backendPath } from ".."
 import { EndPathUU } from "../../utils/apiHelper"
 import { Accordion, BodyShort, GuidePanel, Tag } from "@navikt/ds-react"
-import { countStatuses } from "src/components/UUStatus/utility"
+import { countStatuses } from "../../components/UUStatus/utility"
 
 const CustomAccordion = styled(Accordion)`
     width: 50rem;
@@ -164,8 +164,8 @@ const UUDashboard = ({ UUdata }) => {
                                     <Tag variant="neutral">Other</Tag>{" "}
                                     {krav.length -
                                         (countStatuses(krav, "Passed") +
-                                            countStatuses(krav, "Failed"))}{" "}
-                                    - av totalt {krav.length}
+                                            countStatuses(krav, "Failed"))}
+                                    {""}- av totalt {krav.length}
                                 </Accordion.Header>
                                 {krav &&
                                     krav.length > 0 &&
