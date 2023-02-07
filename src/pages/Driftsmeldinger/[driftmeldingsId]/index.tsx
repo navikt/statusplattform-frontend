@@ -1,37 +1,24 @@
-import { Edit, Back } from "@navikt/ds-icons"
-import {
-    BodyShort,
-    Button,
-    Checkbox,
-    Heading,
-    Select,
-    Textarea,
-    TextField,
-    Tag,
-} from "@navikt/ds-react"
+import { Back } from "@navikt/ds-icons"
+import { Button, Heading } from "@navikt/ds-react"
 
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import styled from "styled-components"
 import { backendPath } from "../.."
-import { BackButton } from "../../../components/BackButton"
 import { UserStateContext } from "../../../components/ContextProviders/UserStatusContext"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
 import Layout from "../../../components/Layout"
-import { Service } from "../../../types/types"
+import OpsMessageDetails from "../../../components/OpsMessageDetails"
+import { OpsScheme, Spacer } from "../../../styles/styles"
 import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
 import { RouterError, RouterOpsMeldinger } from "../../../types/routes"
+import { Service } from "../../../types/types"
 import { EndPathServices, EndPathSpecificOps } from "../../../utils/apiHelper"
-import {
-    fetchSpecificOpsMessage,
-    updateSpecificOpsMessage,
-} from "../../../utils/opsAPI"
-import { OpsScheme, Spacer } from "../../../styles/styles"
-import { CloseCustomized } from "../../Admin"
+import { datePrettifyer } from "../../../utils/datePrettifyer"
+import { fetchSpecificOpsMessage } from "../../../utils/opsAPI"
 import PublicOpsContent from "../PublicOpsContent"
-import DateSetterOps from "../../../components/DateSetterOps"
 
 const OpsMessageContainer = styled.div`
     display: flex;
@@ -167,26 +154,6 @@ const OpsMessageComponent = ({
 
     const { internalHeader, externalHeader, startTime, endTime } = opsMessage
 
-    const convertedStartTime = new Date(startTime)
-    const convertedEndTime = new Date(endTime)
-
-    const datePrettifyer = (date: Date) => {
-        return `${
-            date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
-        }/${
-            date.getMonth() + 1 < 10
-                ? `0${date.getMonth() + 1}`
-                : date.getMonth() + 1
-        }/${date.getFullYear().toString().substr(-2)} kl ${
-            date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()
-        }:${
-            date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
-        }`
-    }
-
-    const prettifiedStartTime = datePrettifyer(convertedStartTime)
-    const prettifiedEndTime = datePrettifyer(convertedEndTime)
-
     return (
         <OpsScheme
             className={updatedSeverity ? updatedSeverity.toLowerCase() : "none"}
@@ -205,22 +172,9 @@ const OpsMessageComponent = ({
                 <SubHeader size="small" level="3">
                     Driftsmelding:{" "}
                 </SubHeader>
-                <Spacer height="0.8rem" />
-                <Heading size="large" level="1">
-                    {approvedUsers.includes(navIdent)
-                        ? internalHeader
-                        : externalHeader}
-                </Heading>
-                <Spacer height="1.2rem" />
+                <Spacer height="0.3rem" />
             </div>
-            <DetailsOfOpsMessage
-                opsMessage={opsMessage}
-                navIdent={navIdent}
-                convertedStartTime={convertedStartTime}
-                convertedEndTime={convertedEndTime}
-                prettifiedStartTime={prettifiedStartTime}
-                prettifiedEndTime={prettifiedEndTime}
-            />
+            <OpsMessageDetails opsMessage={opsMessage} navIdent={navIdent} />
 
             <div className="button-container">
                 <Button variant="secondary" onClick={() => router.back()}>
@@ -270,97 +224,4 @@ const OpsDetailsContainer = styled.div`
         border: 3px solid var(--a-border-warning);
     }
 `
-
-interface DetailsOpsMsgI {
-    opsMessage: OpsMessageI
-    navIdent: string
-    prettifiedStartTime: string
-    prettifiedEndTime: string
-    convertedStartTime: Date
-    convertedEndTime: Date
-}
-
-const DetailsOfOpsMessage = (props: DetailsOpsMsgI) => {
-    const {
-        externalMessage,
-        affectedServices,
-        isActive,
-        onlyShowForNavEmployees,
-    } = props.opsMessage
-
-    const {
-        opsMessage,
-        navIdent,
-        prettifiedEndTime,
-        prettifiedStartTime,
-        convertedEndTime,
-        convertedStartTime,
-    } = props
-
-    return (
-        <OpsDetailsContainer>
-            {navIdent ? (
-                <div className="opsMessageContainer">
-                    <BodyShort spacing>
-                        <span
-                            dangerouslySetInnerHTML={{
-                                __html: opsMessage.internalMessage,
-                            }}
-                        />
-                    </BodyShort>
-                </div>
-            ) : (
-                <div>{externalMessage}</div>
-            )}
-
-            {affectedServices.length > 0 && (
-                <>
-                    <Heading size="xsmall" level="2">
-                        Tilknyttede tjenester:
-                    </Heading>
-                    <div className="labelContainer">
-                        {affectedServices.map((service) => {
-                            return (
-                                <Tag variant="info" key={service.id}>
-                                    {service.name}
-                                </Tag>
-                            )
-                        })}
-                    </div>
-                </>
-            )}
-
-            <Spacer height="1rem" />
-
-            <Heading size="xsmall" level="2">
-                Detaljer:
-            </Heading>
-
-            {navIdent && (
-                <>
-                    <div className="labelContainer">
-                        {onlyShowForNavEmployees ? (
-                            <Tag variant="info">Intern</Tag>
-                        ) : (
-                            <Tag variant="info">Interne og eksterne</Tag>
-                        )}
-                        {isActive ? (
-                            <Tag variant="success">Aktiv</Tag>
-                        ) : (
-                            <Tag variant="error">Inaktiv</Tag>
-                        )}
-                    </div>
-
-                    {convertedStartTime && convertedEndTime && (
-                        <BodyShort>
-                            Aktiv fra {prettifiedStartTime} til{" "}
-                            {prettifiedEndTime}
-                        </BodyShort>
-                    )}
-                </>
-            )}
-        </OpsDetailsContainer>
-    )
-}
-
 export default opsMessageDetails
