@@ -8,6 +8,7 @@ import { backendPath } from ".."
 import { EndPathUU } from "../../utils/apiHelper"
 import { Accordion, BodyShort, GuidePanel, Tag } from "@navikt/ds-react"
 import { countStatuses } from "../../components/UUStatus/utility"
+import { SuccessColored, ErrorColored, HelptextFilled } from "@navikt/ds-icons"
 
 const CustomAccordion = styled(Accordion)`
     width: 50rem;
@@ -22,6 +23,13 @@ const CustomAccordion = styled(Accordion)`
 
     @media (min-width: 850px) {
         width: 50rem;
+    }
+`
+const CustomAccordionHeader = styled(Accordion.Header)`
+    .resultpanel {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
     }
 `
 
@@ -47,6 +55,10 @@ const CustomAccordionContent = styled(Accordion.Content)`
     .serviceName {
         margin-top: 0.5rem;
     }
+`
+
+const CustomHelptextFilled = styled(HelptextFilled)`
+    color: gray;
 `
 
 export const getServerSideProps = async () => {
@@ -156,17 +168,30 @@ const UUDashboard = ({ UUdata }) => {
                         UUdata.length > 0 &&
                         UUdata.map(({ name, krav }, index) => (
                             <Accordion.Item>
-                                <Accordion.Header>
-                                    {name} <Tag variant="success">Passed</Tag>{" "}
-                                    {countStatuses(krav, "Passed")}{" "}
-                                    <Tag variant="error">Failed</Tag>{" "}
-                                    {countStatuses(krav, "Failed")}{" "}
-                                    <Tag variant="neutral">Other</Tag>{" "}
-                                    {krav.length -
-                                        (countStatuses(krav, "Passed") +
-                                            countStatuses(krav, "Failed"))}
-                                    {""}- av totalt {krav.length}
-                                </Accordion.Header>
+                                <CustomAccordionHeader>
+                                    {name}
+                                    <div className="resultpanel">
+                                        <BodyShort>
+                                            <SuccessColored />{" "}
+                                            {countStatuses(krav, "Passed")}
+                                            {"   "}
+                                        </BodyShort>
+                                        <BodyShort>
+                                            <ErrorColored />{" "}
+                                            {countStatuses(krav, "Failed")}
+                                            {"   "}
+                                        </BodyShort>
+                                        <BodyShort>
+                                            <CustomHelptextFilled />{" "}
+                                            {krav.length -
+                                                (countStatuses(krav, "Passed") +
+                                                    countStatuses(
+                                                        krav,
+                                                        "Failed"
+                                                    ))}
+                                        </BodyShort>
+                                    </div>
+                                </CustomAccordionHeader>
                                 {krav &&
                                     krav.length > 0 &&
                                     krav.map(({ id, result }) => (
