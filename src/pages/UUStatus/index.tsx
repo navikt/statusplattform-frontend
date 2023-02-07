@@ -48,6 +48,7 @@ const UUHeading = styled.div`
 `
 const CustomBodyShort = styled(BodyShort)`
     margin-right: 1rem;
+    margin-left: 0.3rem;
 `
 
 const CustomAccordionContent = styled(Accordion.Content)`
