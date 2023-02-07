@@ -1,12 +1,11 @@
 import { Delete } from "@navikt/ds-icons"
 import { BodyShort, Button, Heading, Modal } from "@navikt/ds-react"
 import { useRouter } from "next/router"
-import { userAgent } from "next/server"
 import { useContext, useState } from "react"
 import { toast } from "react-toastify"
+import { datePrettifyer } from "../../utils/datePrettifyer"
 import styled from "styled-components"
 
-import { VerticalSeparator } from "../../pages"
 import { OpsMessageI } from "../../types/opsMessage"
 import { RouterOpsMeldinger } from "../../types/routes"
 import { deleteOpsMessage, updateSpecificOpsMessage } from "../../utils/opsAPI"
@@ -44,9 +43,9 @@ const MessageCard = styled.div`
     }
 
     .message-content {
-        margin: -0rem 0px 0 -0.5rem;
+        margin: -0.3rem 0px 0 -0.5rem;
         padding: 0.5rem;
-        height: 13.2rem;
+        height: 11.8rem;
 
         -webkit-box-orient: vertical;
         overflow-y: scroll;
@@ -197,22 +196,7 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
         }
     }
 
-    const datePrettifyer = (date) => {
-        return `${
-            date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
-        }/${
-            date.getMonth() + 1 < 10
-                ? `0${date.getMonth() + 1}`
-                : date.getMonth() + 1
-        }/${date.getFullYear().toString().substr(-2)} kl ${
-            date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()
-        }:${
-            date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
-        }`
-    }
-    const convertedEndTime = new Date(opsMessage.startTime)
-
-    const prettifiedStartTime = datePrettifyer(convertedEndTime)
+    const prettifiedStartTime = datePrettifyer(opsMessage.startTime)
 
     return (
         <MessageCard className={opsMessage.severity}>

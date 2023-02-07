@@ -1,24 +1,18 @@
-import styled from "styled-components"
 import router, { useRouter } from "next/router"
+import styled from "styled-components"
 
-import { Clock, Edit, Next } from "@navikt/ds-icons"
-import {
-    Alert,
-    BodyLong,
-    BodyShort,
-    Button,
-    Heading,
-    Tooltip,
-} from "@navikt/ds-react"
+import { Edit, Next } from "@navikt/ds-icons"
+import { Alert, BodyShort, Button, Heading, Tooltip } from "@navikt/ds-react"
 
-import { Area, Dashboard, Service } from "../../types/types"
-import { countHealthyServicesInListOfAreas } from "../../utils/servicesOperations"
-import { RouterAvvikshistorikk, RouterOpsMeldinger } from "../../types/routes"
-import { useContext, useEffect, useState } from "react"
-import CustomNavSpinner from "../CustomNavSpinner"
-import { OpsMessageI, SeverityEnum } from "../../types/opsMessage"
+import { useEffect, useState } from "react"
+import { OpsMessageI } from "../../types/opsMessage"
+import { RouterOpsMeldinger } from "../../types/routes"
+import { Dashboard, Service } from "../../types/types"
 import { UserData } from "../../types/userData"
-import { UserStateContext } from "../ContextProviders/UserStatusContext"
+import { datePrettifyer } from "../../utils/datePrettifyer"
+import { countHealthyServicesInListOfAreas } from "../../utils/servicesOperations"
+import CustomNavSpinner from "../CustomNavSpinner"
+import OpsMessageModal from "../OpsMessageModal"
 
 const StatusSummary = styled.div`
     margin-top: 1rem;
@@ -140,24 +134,6 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
     if (allGood) {
         return (
             <StatusSummary>
-                <div className="top-row">
-                    <div className="deviation-button-wrapper">
-                        {/* <Button
-                            variant="tertiary"
-                            size="small"
-                            onClick={() =>
-                                router.push(RouterAvvikshistorikk.PATH)
-                            }
-                        >
-                            Se avvikshistorikk <Clock />{" "}
-                        </Button> */}
-                    </div>
-                    <div></div>
-                    <div className="planlagte-vedlikehold">
-                        {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
-                    </div>
-                </div>
-
                 <Alert variant="success">
                     Alle våre systemer fungerer normalt
                 </Alert>
@@ -382,21 +358,7 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
     const { internalHeader, startTime, internalMessage, severity, id } =
         opsMessage
 
-    const convertedStartTime = new Date(startTime)
-
-    const datePrettifyer = (date: Date) => {
-        return `${
-            date.getDate() < 10 ? `0${date.getDate()}` : date.getDate()
-        }/${
-            date.getMonth() + 1 < 10
-                ? `0${date.getMonth() + 1}`
-                : date.getMonth() + 1
-        }/${date.getFullYear().toString().substr(-2)} kl ${
-            date.getHours() < 10 ? `0${date.getHours()}` : date.getHours()
-        }:${
-            date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes()
-        }`
-    }
+    const [modalOpen, setModalOpen] = useState(false)
 
     const approvedUsers = [
         "L152423",
@@ -421,12 +383,12 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
             className={
                 !severity ? "has-neutral" : "has-" + severity.toLowerCase()
             }
-            onClick={() => router.push(RouterOpsMeldinger.PATH + `/${id}`)}
+            onClick={() => setModalOpen(!modalOpen)}
         >
             <div className="content">
                 <div className="topcontent">
                     <div className="opsMsgTime">
-                        {datePrettifyer(convertedStartTime)}
+                        {datePrettifyer(startTime)}
                     </div>
 
                     {approvedUsers.includes(user.navIdent) && (
@@ -458,20 +420,14 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
                     </BodyShort>
                 </div>
             </div>
+            <OpsMessageModal
+                opsMessage={opsMessage}
+                navIdent={user.navIdent}
+                modalOpen={modalOpen}
+                setModalOpen={setModalOpen}
+            />
         </DeviationCardContainer>
     )
-    // }
-
-    // return (
-    //     <DeviationCardContainer aria-label={opsMessage.externalHeader + ". Trykk her for mer informasjon"} className={"has-" + severity.toLowerCase()}>
-    //         {/* <span className={status.toLowerCase()} /> */}
-    //         <div className="content">
-    //             {/* <Detail size="small">01.03.2022</Detail> */}
-    //             <Heading size="small" level="3">{opsMessage.externalHeader}</Heading>
-    //             {/* <BodyShort size="small">{titleOfDeviation}</BodyShort> */}
-    //         </div>
-    //     </DeviationCardContainer>
-    // )
 }
 
 export default StatusOverview
