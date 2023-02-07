@@ -8,7 +8,11 @@ import { backendPath } from ".."
 import { EndPathUU } from "../../utils/apiHelper"
 import { Accordion, BodyShort, GuidePanel, Tag } from "@navikt/ds-react"
 import { countStatuses } from "../../components/UUStatus/utility"
-import { SuccessColored, ErrorColored, HelptextFilled } from "@navikt/ds-icons"
+import {
+    ErrorFilledCustomized,
+    HelpTextCustomizedGray,
+    SuccessFilledCustomized,
+} from "../../components/TrafficLights"
 
 const CustomAccordion = styled(Accordion)`
     width: 50rem;
@@ -59,10 +63,6 @@ const CustomAccordionContent = styled(Accordion.Content)`
     .serviceName {
         margin-top: 0.5rem;
     }
-`
-
-const CustomHelptextFilled = styled(HelptextFilled)`
-    color: gray;
 `
 
 export const getServerSideProps = async () => {
@@ -175,15 +175,15 @@ const UUDashboard = ({ UUdata }) => {
                                 <CustomAccordionHeader>
                                     {name}
                                     <div className="resultpanel">
-                                        <SuccessColored />
+                                        <SuccessFilledCustomized />
                                         <CustomBodyShort>
                                             {countStatuses(krav, "Passed")}
                                         </CustomBodyShort>
-                                        <ErrorColored />
+                                        <ErrorFilledCustomized />
                                         <CustomBodyShort>
                                             {countStatuses(krav, "Failed")}
                                         </CustomBodyShort>
-                                        <CustomHelptextFilled />
+                                        <HelpTextCustomizedGray />
                                         <CustomBodyShort>
                                             {krav.length -
                                                 (countStatuses(krav, "Passed") +
