@@ -53,6 +53,7 @@ const UUHeading = styled.div`
 const CustomBodyShort = styled(BodyShort)`
     margin-right: 1rem;
     margin-left: 0.3rem;
+    color: var(--a-gray-800);
 `
 
 const CustomAccordionContent = styled(Accordion.Content)`
@@ -80,15 +81,35 @@ const UUDashboard = ({ UUdata }) => {
     const statusLabel = (result) => {
         switch (result) {
             case "Passed":
-                return <Tag variant="success">Passed</Tag>
+                return (
+                    <Tag variant="success">
+                        Passed <SuccessFilledCustomized />
+                    </Tag>
+                )
             case "Failed":
-                return <Tag variant="error">Failed</Tag>
+                return (
+                    <Tag variant="error">
+                        Failed <ErrorFilledCustomized />
+                    </Tag>
+                )
             case "Cannot tell":
-                return <Tag variant="neutral">Cannot tell</Tag>
+                return (
+                    <Tag variant="neutral">
+                        Cannot tell <HelpTextCustomizedGray />
+                    </Tag>
+                )
             case "Not checked":
-                return <Tag variant="neutral">Not checked</Tag>
+                return (
+                    <Tag variant="neutral">
+                        Not checked <HelpTextCustomizedGray />
+                    </Tag>
+                )
             case "Not present":
-                return <Tag variant="neutral">Not present</Tag>
+                return (
+                    <Tag variant="neutral">
+                        Not present <HelpTextCustomizedGray />
+                    </Tag>
+                )
             default:
                 return <Tag variant="neutral">Ingen status</Tag>
         }
