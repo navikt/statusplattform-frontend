@@ -46,6 +46,9 @@ const UUHeading = styled.div`
         }
     }
 `
+const CustomBodyShort = styled(BodyShort)`
+    margin-right: 1rem;
+`
 
 const CustomAccordionContent = styled(Accordion.Content)`
     display: flex;
@@ -171,25 +174,23 @@ const UUDashboard = ({ UUdata }) => {
                                 <CustomAccordionHeader>
                                     {name}
                                     <div className="resultpanel">
-                                        <BodyShort>
-                                            <SuccessColored />{" "}
+                                        <SuccessColored />
+                                        <CustomBodyShort>
                                             {countStatuses(krav, "Passed")}
-                                            {"   "}
-                                        </BodyShort>
-                                        <BodyShort>
-                                            <ErrorColored />{" "}
+                                        </CustomBodyShort>
+                                        <ErrorColored />
+                                        <CustomBodyShort>
                                             {countStatuses(krav, "Failed")}
-                                            {"   "}
-                                        </BodyShort>
-                                        <BodyShort>
-                                            <CustomHelptextFilled />{" "}
+                                        </CustomBodyShort>
+                                        <CustomHelptextFilled />
+                                        <CustomBodyShort>
                                             {krav.length -
                                                 (countStatuses(krav, "Passed") +
                                                     countStatuses(
                                                         krav,
                                                         "Failed"
                                                     ))}
-                                        </BodyShort>
+                                        </CustomBodyShort>
                                     </div>
                                 </CustomAccordionHeader>
                                 {krav &&
