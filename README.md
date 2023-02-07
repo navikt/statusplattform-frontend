@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 Install the following:
 
 ```
-Node version 14.15.5
+Node version 16.17.0
 JDK 17.x.x
 Maven 3.8.6
 ```
