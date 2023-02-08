@@ -45,7 +45,7 @@ const UUStatusDetails = (result, number) => {
         case "Not present":
             return (
                 <Tag variant="neutral" size="xsmall">
-                    {number + " - Not Present "}
+                    {number + " - Not present "}
                     <HelpTextCustomizedGray />
                 </Tag>
             )

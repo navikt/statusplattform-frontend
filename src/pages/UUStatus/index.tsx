@@ -74,7 +74,11 @@ const CustomAccordionContent = styled(Accordion.Content)`
     justify-content: space-between;
 
     .serviceName {
-        margin-top: 0.5rem;
+        margin-top: 0.45rem;
+    }
+
+    .resultTag {
+        margin-bottom: -0.4rem;
     }
 `
 
@@ -93,31 +97,31 @@ const UUDashboard = ({ UUdata }) => {
         switch (result) {
             case "Passed":
                 return (
-                    <Tag variant="success">
+                    <Tag variant="success" className="resultTag">
                         Passed <SuccessFilledCustomized />
                     </Tag>
                 )
             case "Failed":
                 return (
-                    <Tag variant="error">
+                    <Tag variant="error" className="resultTag">
                         Failed <ErrorFilledCustomized />
                     </Tag>
                 )
             case "Cannot tell":
                 return (
-                    <Tag variant="neutral">
+                    <Tag variant="neutral" className="resultTag">
                         Cannot tell <HelpTextCustomizedGray />
                     </Tag>
                 )
             case "Not checked":
                 return (
-                    <Tag variant="neutral">
+                    <Tag variant="neutral" className="resultTag">
                         Not checked <HelpTextCustomizedGray />
                     </Tag>
                 )
             case "Not present":
                 return (
-                    <Tag variant="neutral">
+                    <Tag variant="neutral" className="resultTag">
                         Not present <HelpTextCustomizedGray />
                     </Tag>
                 )
@@ -205,15 +209,6 @@ const UUDashboard = ({ UUdata }) => {
                 </GuidePanel>
             </UUHeading>
             <div>
-                <DetailSwitch
-                    position="right"
-                    size="small"
-                    onChange={() => handleDetailSwitch()}
-                    checked={showDetails}
-                >
-                    Vis detaljert informasjon
-                </DetailSwitch>
-
                 <CustomAccordion>
                     {UUdata &&
                         UUdata.length > 0 &&
@@ -222,74 +217,37 @@ const UUDashboard = ({ UUdata }) => {
                                 <CustomAccordionHeader>
                                     {serviceName}
 
-                                    {showDetails ? (
-                                        <DetailContainer>
-                                            {UUStatusDetails(
-                                                "Passed",
-                                                countStatuses(
-                                                    criterias,
-                                                    "Passed"
-                                                )
-                                            )}
-                                            {UUStatusDetails(
-                                                "Failed",
-                                                countStatuses(
-                                                    criterias,
-                                                    "Failed"
-                                                )
-                                            )}{" "}
-                                            {UUStatusDetails(
-                                                "Not checked",
-                                                countStatuses(
-                                                    criterias,
-                                                    "Not checked"
-                                                )
-                                            )}
-                                            {UUStatusDetails(
-                                                "Not present",
-                                                countStatuses(
-                                                    criterias,
-                                                    "Not present"
-                                                )
-                                            )}
-                                            {UUStatusDetails(
-                                                "Cannot tell",
-                                                countStatuses(
-                                                    criterias,
-                                                    "Cannot tell"
-                                                )
-                                            )}
-                                        </DetailContainer>
-                                    ) : (
-                                        <div className="resultpanel">
-                                            <SuccessFilledCustomized />
-                                            <CustomBodyShort>
-                                                {countStatuses(
-                                                    criterias,
-                                                    "Passed"
-                                                )}
-                                            </CustomBodyShort>
-                                            <ErrorFilledCustomized />
-                                            <CustomBodyShort>
-                                                {countStatuses(
-                                                    criterias,
-                                                    "Failed"
-                                                )}
-                                            </CustomBodyShort>
-                                            <HelpTextCustomizedGray />
-                                            <CustomBodyShort>
-                                                {criterias.length -
-                                                    (countStatuses(
-                                                        criterias,
-                                                        "Passed"
-                                                    ) +
-                                                        countStatuses(
-                                                            criterias,
-                                                            "Failed"
-                                                        ))}
-                                            </CustomBodyShort>
-                                        </div>
-                                    )}
+                                    <DetailContainer>
+                                        {UUStatusDetails(
+                                            "Passed",
+                                            countStatuses(criterias, "Passed")
+                                        )}
+                                        {UUStatusDetails(
+                                            "Failed",
+                                            countStatuses(criterias, "Failed")
+                                        )}{" "}
+                                        {UUStatusDetails(
+                                            "Not checked",
+                                            countStatuses(
+                                                criterias,
+                                                "Not checked"
+                                            )
+                                        )}
+                                        {UUStatusDetails(
+                                            "Not present",
+                                            countStatuses(
+                                                criterias,
+                                                "Not present"
+                                            )
+                                        )}
+                                        {UUStatusDetails(
+                                            "Cannot tell",
+                                            countStatuses(
+                                                criterias,
+                                                "Cannot tell"
+                                            )
+                                        )}
+                                    </DetailContainer>
                                 </CustomAccordionHeader>
                                 {criterias &&
                                     criterias.length > 0 &&
