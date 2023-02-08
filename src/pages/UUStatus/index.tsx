@@ -41,7 +41,7 @@ const CustomAccordionHeader = styled(Accordion.Header)`
 const DetailContainer = styled.div`
     display: flex;
     flex-direction: row;
-    margin: 0.5rem 0 0.4rem;
+    margin: 0.3rem 0 0.2rem;
     gap: 0.3rem;
 `
 
@@ -221,29 +221,8 @@ const UUDashboard = ({ UUdata }) => {
                             <Accordion.Item>
                                 <CustomAccordionHeader>
                                     {serviceName}
-                                    <div className="resultpanel">
-                                        <SuccessFilledCustomized />
-                                        <CustomBodyShort>
-                                            {countStatuses(criterias, "Passed")}
-                                        </CustomBodyShort>
-                                        <ErrorFilledCustomized />
-                                        <CustomBodyShort>
-                                            {countStatuses(criterias, "Failed")}
-                                        </CustomBodyShort>
-                                        <HelpTextCustomizedGray />
-                                        <CustomBodyShort>
-                                            {criterias.length -
-                                                (countStatuses(
-                                                    criterias,
-                                                    "Passed"
-                                                ) +
-                                                    countStatuses(
-                                                        criterias,
-                                                        "Failed"
-                                                    ))}
-                                        </CustomBodyShort>
-                                    </div>
-                                    {showDetails && (
+
+                                    {showDetails ? (
                                         <DetailContainer>
                                             {UUStatusDetails(
                                                 "Passed",
@@ -281,6 +260,35 @@ const UUDashboard = ({ UUdata }) => {
                                                 )
                                             )}
                                         </DetailContainer>
+                                    ) : (
+                                        <div className="resultpanel">
+                                            <SuccessFilledCustomized />
+                                            <CustomBodyShort>
+                                                {countStatuses(
+                                                    criterias,
+                                                    "Passed"
+                                                )}
+                                            </CustomBodyShort>
+                                            <ErrorFilledCustomized />
+                                            <CustomBodyShort>
+                                                {countStatuses(
+                                                    criterias,
+                                                    "Failed"
+                                                )}
+                                            </CustomBodyShort>
+                                            <HelpTextCustomizedGray />
+                                            <CustomBodyShort>
+                                                {criterias.length -
+                                                    (countStatuses(
+                                                        criterias,
+                                                        "Passed"
+                                                    ) +
+                                                        countStatuses(
+                                                            criterias,
+                                                            "Failed"
+                                                        ))}
+                                            </CustomBodyShort>
+                                        </div>
                                     )}
                                 </CustomAccordionHeader>
                                 {criterias &&

@@ -2,6 +2,11 @@ import styled from "styled-components"
 import { Tag } from "@navikt/ds-react"
 import { countStatuses } from "../../components/UUStatus/utility"
 import { StatusItem } from "../../types/types"
+import {
+    ErrorFilledCustomized,
+    HelpTextCustomizedGray,
+    SuccessFilledCustomized,
+} from "../TrafficLights"
 
 const DetailContainer = styled.div`
     display: flex;
@@ -15,31 +20,33 @@ const UUStatusDetails = (result, number) => {
         case "Passed":
             return (
                 <Tag variant="success" size="xsmall">
-                    {number + " - Passed "}
+                    {number + " - Passed "} <SuccessFilledCustomized />
                 </Tag>
             )
         case "Failed":
             return (
                 <Tag variant="error" size="xsmall">
-                    {number + " - Failed "}
+                    {number + " - Failed "} <ErrorFilledCustomized />
                 </Tag>
             )
         case "Cannot tell":
             return (
                 <Tag variant="neutral" size="xsmall">
-                    {number + " - Cannot tell "}
+                    {number + " - Cannot tell "} <HelpTextCustomizedGray />
                 </Tag>
             )
         case "Not checked":
             return (
                 <Tag variant="neutral" size="xsmall">
                     {number + " - Not checked "}
+                    <HelpTextCustomizedGray />
                 </Tag>
             )
         case "Not present":
             return (
                 <Tag variant="neutral" size="xsmall">
                     {number + " - Not Present "}
+                    <HelpTextCustomizedGray />
                 </Tag>
             )
         default:
