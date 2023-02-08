@@ -1,41 +1,13 @@
 import Head from "next/head"
 import styled from "styled-components"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 
 import Layout from "../../components/Layout"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import { backendPath } from ".."
-import { EndPathUU } from "../../utils/apiHelper"
-import { Accordion, BodyShort, GuidePanel, Tag } from "@navikt/ds-react"
-import { countStatuses } from "../../components/UUStatus/utility"
-import {
-    ErrorFilledCustomized,
-    HelpTextCustomizedGray,
-    SuccessFilledCustomized,
-} from "../../components/TrafficLights"
-
-const CustomAccordion = styled(Accordion)`
-    width: 50rem;
-    background: white;
-    border: 2px solid var(--a-gray-200);
-    border-radius: 8px;
-
-    @media (min-width: 390px) {
-        width: 100%;
-        display: block;
-    }
-
-    @media (min-width: 850px) {
-        width: 50rem;
-    }
-`
-const CustomAccordionHeader = styled(Accordion.Header)`
-    .resultpanel {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-`
+import { EndPathUUTjeneste, EndPathUUKrav } from "../../utils/apiHelper"
+import { GuidePanel, Tabs } from "@navikt/ds-react"
+import StatusTableUUTjeneste from "../../components/StatusTableUUTjeneste"
 
 const UUHeading = styled.div`
     .guidepanel {
@@ -50,77 +22,50 @@ const UUHeading = styled.div`
         }
     }
 `
-const CustomBodyShort = styled(BodyShort)`
-    margin-right: 1rem;
-    margin-left: 0.3rem;
-    color: var(--a-gray-800);
-`
-
-const CustomAccordionContent = styled(Accordion.Content)`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-
-    .serviceName {
-        margin-top: 0.5rem;
-    }
+const TabsCustomized = styled(Tabs)`
+    border-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 `
 
 export const getServerSideProps = async () => {
-    const resUniversellUtforming = await fetch(backendPath + EndPathUU())
-    const UUdata = await resUniversellUtforming.json()
+    const resUniversellUtforming = await fetch(
+        backendPath + EndPathUUTjeneste()
+    )
+    const UUDataTjenester = await resUniversellUtforming.json()
     return {
-        props: { UUdata },
+        props: { UUDataTjenester },
     }
 }
 
-const UUDashboard = ({ UUdata }) => {
+/* export async function getServerSideProps(context) {
+    console.log("Context inside getserverSideProps: " + context)
+    const [resUUTjenester, resUUKrav] = await Promise.all([
+        fetch(backendPath + EndPathUUTjeneste()),
+        fetch(backendPath + EndPathUUKrav()),
+    ])
+    const [UUDataTjenester, UUDataKrav] = await Promise.all([
+        resUUTjenester.json(),
+        resUUKrav.json(),
+    ])
+    return { props: { UUDataTjenester, UUDataKrav } }
+} */
+
+const UUDashboard = ({ UUDataTjenester, UUDataKrav }) => {
     const user = useContext(UserStateContext)
-    console.log(UUdata)
 
-    const statusLabel = (result) => {
-        switch (result) {
-            case "Passed":
-                return (
-                    <Tag variant="success">
-                        Passed <SuccessFilledCustomized />
-                    </Tag>
-                )
-            case "Failed":
-                return (
-                    <Tag variant="error">
-                        Failed <ErrorFilledCustomized />
-                    </Tag>
-                )
-            case "Cannot tell":
-                return (
-                    <Tag variant="neutral">
-                        Cannot tell <HelpTextCustomizedGray />
-                    </Tag>
-                )
-            case "Not checked":
-                return (
-                    <Tag variant="neutral">
-                        Not checked <HelpTextCustomizedGray />
-                    </Tag>
-                )
-            case "Not present":
-                return (
-                    <Tag variant="neutral">
-                        Not present <HelpTextCustomizedGray />
-                    </Tag>
-                )
-            default:
-                return <Tag variant="neutral">Ingen status</Tag>
+    const [state, setState] = useState("tjeneste")
+
+    const handleNewSelectedTab = (aksjon: String) => {
+        switch (aksjon) {
+            case "tjeneste":
+                console.log("Tjeneste er valgt")
+
+                return ""
+            case "krav":
+                console.log("Krav er valgt")
+                return ""
         }
-    }
-
-    const uuServiceName = (name) => {
-        let shortName = name.replace("WCAG21:", "")
-        let formattedName = shortName.replaceAll("-", " ")
-        let capitalizedName =
-            formattedName.charAt(0).toUpperCase() + formattedName.slice(1)
-        return capitalizedName
     }
 
     return (
@@ -188,47 +133,44 @@ const UUDashboard = ({ UUdata }) => {
                 </GuidePanel>
             </UUHeading>
             <div>
-                <CustomAccordion>
-                    {UUdata &&
-                        UUdata.length > 0 &&
-                        UUdata.map(({ name, krav }, index) => (
-                            <Accordion.Item>
-                                <CustomAccordionHeader>
-                                    {name}
-                                    <div className="resultpanel">
-                                        <SuccessFilledCustomized />
-                                        <CustomBodyShort>
-                                            {countStatuses(krav, "Passed")}
-                                        </CustomBodyShort>
-                                        <ErrorFilledCustomized />
-                                        <CustomBodyShort>
-                                            {countStatuses(krav, "Failed")}
-                                        </CustomBodyShort>
-                                        <HelpTextCustomizedGray />
-                                        <CustomBodyShort>
-                                            {krav.length -
-                                                (countStatuses(krav, "Passed") +
-                                                    countStatuses(
-                                                        krav,
-                                                        "Failed"
-                                                    ))}
-                                        </CustomBodyShort>
-                                    </div>
-                                </CustomAccordionHeader>
-                                {krav &&
-                                    krav.length > 0 &&
-                                    krav.map(({ id, result }) => (
-                                        <CustomAccordionContent>
-                                            <BodyShort className="serviceName">
-                                                {uuServiceName(id)}
-                                            </BodyShort>
-
-                                            {statusLabel(result)}
-                                        </CustomAccordionContent>
-                                    ))}
-                            </Accordion.Item>
-                        ))}
-                </CustomAccordion>
+                <TabsCustomized
+                    defaultValue="Tjenester"
+                    value={state}
+                    onChange={setState}
+                >
+                    <Tabs.List>
+                        <Tabs.Tab
+                            key={0}
+                            value={"tjeneste"}
+                            label={"Tjeneste"}
+                            onClick={() => handleNewSelectedTab("tjeneste")}
+                        />
+                        <Tabs.Tab
+                            key={1}
+                            value={"krav"}
+                            label={"Krav"}
+                            onClick={() => handleNewSelectedTab("krav")}
+                        />
+                    </Tabs.List>
+                    <Tabs.Panel
+                        value="tjeneste"
+                        className="h-24 w-full bg-gray-50 p-4"
+                    >
+                        Tjeneste-tab
+                        <StatusTableUUTjeneste
+                            UUdataTjeneste={UUDataTjenester}
+                        />
+                    </Tabs.Panel>
+                    <Tabs.Panel
+                        value="krav"
+                        className="h-24 w-full bg-gray-50 p-4"
+                    >
+                        Krav-tab
+                        <StatusTableUUTjeneste
+                            UUdataTjeneste={UUDataTjenester}
+                        />
+                    </Tabs.Panel>
+                </TabsCustomized>
             </div>
         </Layout>
     )
