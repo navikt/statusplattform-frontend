@@ -13,7 +13,7 @@ import {
     HelpTextCustomizedGray,
     SuccessFilledCustomized,
 } from "../../components/TrafficLights"
-import UUStatusDetails from "src/components/UUStatusDetails"
+import UUStatusDetails from "../../components/UUStatusDetails"
 
 const CustomAccordion = styled(Accordion)`
     width: 50rem;
