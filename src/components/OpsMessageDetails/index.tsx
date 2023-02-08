@@ -17,9 +17,12 @@ const OpsDetailsContainer = styled.div`
 
     .labelContainer {
         display: flex;
+        flex-direction: row;
         margin: 1rem 0 1rem;
         gap: 0.5rem;
+        flex-wrap: wrap;
     }
+
     &.neutral {
         border: 3px solid #ccc;
     }
@@ -56,6 +59,14 @@ const OpsMessageDetails = (props: DetailsOpsMsgI) => {
 
     const { opsMessage, navIdent } = props
 
+    var servicesList = affectedServices.sort((a, b) =>
+        a.name.toUpperCase() > b.name.toUpperCase()
+            ? 1
+            : b.name.toUpperCase() > a.name.toUpperCase()
+            ? -1
+            : 0
+    )
+
     return (
         <OpsDetailsContainer>
             <Heading size="large" level="1">
@@ -85,7 +96,7 @@ const OpsMessageDetails = (props: DetailsOpsMsgI) => {
                         Tilknyttede tjenester:
                     </Heading>
                     <div className="labelContainer">
-                        {affectedServices.map((service) => {
+                        {servicesList.map((service) => {
                             return (
                                 <Tag variant="info" key={service.id}>
                                     {service.name}
