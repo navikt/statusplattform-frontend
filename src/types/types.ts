@@ -7,7 +7,6 @@ export interface Dashboard {
     opsMessages: OpsMessageI[]
 }
 
-
 export interface Tile {
     services: Service[]
     status: string
@@ -59,14 +58,6 @@ export interface SubArea {
     services: Service[]
 }
 
-
-
-
-
-
-
-
-
 export interface HistoryOfSpecificService {
     history: HistoryOfSpecificServiceMonths[]
 }
@@ -82,20 +73,14 @@ export interface HistoryOfSpecificServiceDayEntry {
     information?: string
 }
 
-
-
-
-
-
 export interface MaintenanceObject {
-    isPlanned: boolean,
+    isPlanned: boolean
     message: string
 }
 
-
-
-
-
+export interface StatusItem {
+    result: string
+}
 
 export interface Record {
     serviceId: string

@@ -1,18 +1,19 @@
 import Head from "next/head"
 import styled from "styled-components"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 
 import Layout from "../../components/Layout"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import { backendPath } from ".."
 import { EndPathUU } from "../../utils/apiHelper"
-import { Accordion, BodyShort, GuidePanel, Tag } from "@navikt/ds-react"
+import { Accordion, BodyShort, GuidePanel, Switch, Tag } from "@navikt/ds-react"
 import { countStatuses } from "../../components/UUStatus/utility"
 import {
     ErrorFilledCustomized,
     HelpTextCustomizedGray,
     SuccessFilledCustomized,
 } from "../../components/TrafficLights"
+import UUStatusDetails from "../../components/UUStatusDetails"
 
 const CustomAccordion = styled(Accordion)`
     width: 50rem;
@@ -31,10 +32,17 @@ const CustomAccordion = styled(Accordion)`
 `
 const CustomAccordionHeader = styled(Accordion.Header)`
     .resultpanel {
+        margin-top: 0.1rem;
         display: flex;
         flex-direction: row;
         align-items: center;
     }
+`
+const DetailContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin: 0.3rem 0 0.2rem;
+    gap: 0.3rem;
 `
 
 const UUHeading = styled.div`
@@ -54,6 +62,10 @@ const CustomBodyShort = styled(BodyShort)`
     margin-right: 1rem;
     margin-left: 0.3rem;
     color: var(--a-gray-800);
+`
+const DetailSwitch = styled(Switch)`
+    display: flex;
+    justify-content: right;
 `
 
 const CustomAccordionContent = styled(Accordion.Content)`
@@ -76,7 +88,6 @@ export const getServerSideProps = async () => {
 
 const UUDashboard = ({ UUdata }) => {
     const user = useContext(UserStateContext)
-    console.log(UUdata)
 
     const statusLabel = (result) => {
         switch (result) {
@@ -121,6 +132,12 @@ const UUDashboard = ({ UUdata }) => {
         let capitalizedName =
             formattedName.charAt(0).toUpperCase() + formattedName.slice(1)
         return capitalizedName
+    }
+
+    const [showDetails, setShowDetails] = useState(false)
+
+    const handleDetailSwitch = () => {
+        setShowDetails(!showDetails)
     }
 
     return (
@@ -188,36 +205,95 @@ const UUDashboard = ({ UUdata }) => {
                 </GuidePanel>
             </UUHeading>
             <div>
+                <DetailSwitch
+                    position="right"
+                    size="small"
+                    onChange={() => handleDetailSwitch()}
+                    checked={showDetails}
+                >
+                    Vis detaljert informasjon
+                </DetailSwitch>
+
                 <CustomAccordion>
                     {UUdata &&
                         UUdata.length > 0 &&
-                        UUdata.map(({ name, krav }, index) => (
+                        UUdata.map(({ serviceName, criterias }, index) => (
                             <Accordion.Item>
                                 <CustomAccordionHeader>
-                                    {name}
-                                    <div className="resultpanel">
-                                        <SuccessFilledCustomized />
-                                        <CustomBodyShort>
-                                            {countStatuses(krav, "Passed")}
-                                        </CustomBodyShort>
-                                        <ErrorFilledCustomized />
-                                        <CustomBodyShort>
-                                            {countStatuses(krav, "Failed")}
-                                        </CustomBodyShort>
-                                        <HelpTextCustomizedGray />
-                                        <CustomBodyShort>
-                                            {krav.length -
-                                                (countStatuses(krav, "Passed") +
-                                                    countStatuses(
-                                                        krav,
-                                                        "Failed"
-                                                    ))}
-                                        </CustomBodyShort>
-                                    </div>
+                                    {serviceName}
+
+                                    {showDetails ? (
+                                        <DetailContainer>
+                                            {UUStatusDetails(
+                                                "Passed",
+                                                countStatuses(
+                                                    criterias,
+                                                    "Passed"
+                                                )
+                                            )}
+                                            {UUStatusDetails(
+                                                "Failed",
+                                                countStatuses(
+                                                    criterias,
+                                                    "Failed"
+                                                )
+                                            )}{" "}
+                                            {UUStatusDetails(
+                                                "Not checked",
+                                                countStatuses(
+                                                    criterias,
+                                                    "Not checked"
+                                                )
+                                            )}
+                                            {UUStatusDetails(
+                                                "Not present",
+                                                countStatuses(
+                                                    criterias,
+                                                    "Not present"
+                                                )
+                                            )}
+                                            {UUStatusDetails(
+                                                "Cannot tell",
+                                                countStatuses(
+                                                    criterias,
+                                                    "Cannot tell"
+                                                )
+                                            )}
+                                        </DetailContainer>
+                                    ) : (
+                                        <div className="resultpanel">
+                                            <SuccessFilledCustomized />
+                                            <CustomBodyShort>
+                                                {countStatuses(
+                                                    criterias,
+                                                    "Passed"
+                                                )}
+                                            </CustomBodyShort>
+                                            <ErrorFilledCustomized />
+                                            <CustomBodyShort>
+                                                {countStatuses(
+                                                    criterias,
+                                                    "Failed"
+                                                )}
+                                            </CustomBodyShort>
+                                            <HelpTextCustomizedGray />
+                                            <CustomBodyShort>
+                                                {criterias.length -
+                                                    (countStatuses(
+                                                        criterias,
+                                                        "Passed"
+                                                    ) +
+                                                        countStatuses(
+                                                            criterias,
+                                                            "Failed"
+                                                        ))}
+                                            </CustomBodyShort>
+                                        </div>
+                                    )}
                                 </CustomAccordionHeader>
-                                {krav &&
-                                    krav.length > 0 &&
-                                    krav.map(({ id, result }) => (
+                                {criterias &&
+                                    criterias.length > 0 &&
+                                    criterias.map(({ id, result }) => (
                                         <CustomAccordionContent>
                                             <BodyShort className="serviceName">
                                                 {uuServiceName(id)}
