@@ -3,11 +3,12 @@ import {
     BodyShort,
     Button,
     Checkbox,
+    Chips,
     Heading,
-    Select,
-    TextField,
     Radio,
     RadioGroup,
+    Select,
+    TextField,
 } from "@navikt/ds-react"
 
 import Head from "next/head"
@@ -18,20 +19,19 @@ import styled from "styled-components"
 import { backendPath } from "../.."
 import { UserStateContext } from "../../../components/ContextProviders/UserStatusContext"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
+import DateSetterOps from "../../../components/DateSetterOps"
 import Layout from "../../../components/Layout"
-import { Service } from "../../../types/types"
+import TextEditor from "../../../components/TextEditor"
+import { OpsScheme, Spacer } from "../../../styles/styles"
 import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
 import { RouterError, RouterOpsMeldinger } from "../../../types/routes"
+import { Service } from "../../../types/types"
 import { EndPathServices, EndPathSpecificOps } from "../../../utils/apiHelper"
 import {
     fetchSpecificOpsMessage,
     updateSpecificOpsMessage,
 } from "../../../utils/opsAPI"
-import { OpsScheme, Spacer } from "../../../styles/styles"
-import { CloseCustomized } from "../../Admin"
 import PublicOpsContent from "../PublicOpsContent"
-import DateSetterOps from "../../../components/DateSetterOps"
-import TextEditor from "../../../components/TextEditor"
 
 const OpsMessageContainer = styled.div`
     display: flex;
@@ -597,11 +597,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                 }
                 services={services}
             />
-            <div className="section">
-                <Heading size="medium" level="3">
-                    Detaljer:
-                </Heading>
-            </div>
+
             <div className="timeframe-container">
                 <div className="section">
                     <div className="section">
@@ -665,9 +661,8 @@ const EditAffectedServicesContainer = styled.div`
     display: flex;
     flex-direction: column;
 
-    button {
-        background: none;
-        border: none;
+    .chipsContainer {
+        margin: 0.3rem 0 0.3rem 0;
     }
 `
 
@@ -701,6 +696,8 @@ const ModifyAffectedServices = ({
             ...opsMessageToUpdate,
             affectedServices: adjustedServices,
         }
+        console.log("lagt til:")
+        console.log(service)
         handleUpdateOpsMessageAffectedServices(updatedOpsMessage)
     }
 
@@ -741,22 +738,18 @@ const ModifyAffectedServices = ({
                 <div>
                     <Heading size="xsmall">Tilknyttede tjenester:</Heading>
 
-                    <ul>
-                        {opsMessageToUpdate.affectedServices.map((service) => {
-                            return (
-                                <li key={service.id}>
-                                    {service.name}
-                                    <button
-                                        onClick={() =>
-                                            handleNewServiceToDelete(service)
-                                        }
-                                    >
-                                        <CloseCustomized />
-                                    </button>
-                                </li>
-                            )
-                        })}
-                    </ul>
+                    <Chips className="chipsContainer">
+                        {opsMessageToUpdate.affectedServices.map((service) => (
+                            <Chips.Removable
+                                key={service.id}
+                                onClick={() =>
+                                    handleNewServiceToDelete(service)
+                                }
+                            >
+                                {service.name}
+                            </Chips.Removable>
+                        ))}
+                    </Chips>
                 </div>
             }
 
@@ -773,11 +766,14 @@ const ModifyAffectedServices = ({
 
 const SelectAndAddServiceComponent = styled.div`
     display: flex;
-    flex-direction: column;
-    gap: 1rem;
+    flex-direction: row;
 
     select:hover {
         cursor: pointer;
+    }
+
+    .selectContainer {
+        width: 30.2rem;
     }
 `
 
@@ -798,32 +794,35 @@ const SelectAffectedServicesComponent = ({
                 .map((s) => s.id)
                 .includes(service.id)
     )
-    const [selectedService, updateSelectedService] = useState<Service | null>(
-        () => (availableServices.length > 0 ? availableServices[0] : null)
-    )
+
+    const [serviceNew, setServiceNew] = useState<Service>(availableServices[0])
 
     useEffect(() => {
         if (availableServices.length > 0) {
-            updateSelectedService(availableServices[0])
+            setServiceNew(availableServices[0])
         } else {
-            updateSelectedService(null)
+            setServiceNew(null)
         }
-    }, [allServices, availableServices])
+    }, [allServices, opsMessageToUpdate.affectedServices])
 
     const handleNewSelectedService = (event) => {
         const idOfSelectedService: string = event.target.value
         const newSelectedService: Service = availableServices.find(
             (service) => idOfSelectedService === service.id
         )
-        updateSelectedService(newSelectedService)
+        console.log(newSelectedService)
+
+        setServiceNew(newSelectedService)
     }
 
-    const handleNewServiceToAdd = (selectedService: Service) => {
-        if (!selectedService) {
+    const putHandler = () => {
+        if (!serviceNew) {
             toast.info("Ingen tjeneste valgt")
             return
         }
-        addNewAffectedServices(selectedService)
+        console.log("valgt")
+        console.log(serviceNew)
+        addNewAffectedServices(serviceNew)
     }
 
     return (
@@ -832,8 +831,9 @@ const SelectAffectedServicesComponent = ({
                 hideLabel
                 label="Liste av tjenester"
                 onChange={handleNewSelectedService}
+                className="selectContainer"
             >
-                <option value={"default"} key={0}>
+                <option key={undefined} value={""}>
                     -
                 </option>
 
@@ -853,11 +853,7 @@ const SelectAffectedServicesComponent = ({
             </Select>
 
             <div>
-                <Button
-                    variant="secondary"
-                    type="button"
-                    onClick={() => handleNewServiceToAdd(selectedService)}
-                >
+                <Button variant="secondary" type="button" onClick={putHandler}>
                     {" "}
                     Legg til
                 </Button>

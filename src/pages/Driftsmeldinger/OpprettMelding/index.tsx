@@ -1,35 +1,32 @@
 import {
     Alert,
     Button,
-    Tooltip,
+    Chips,
     Heading,
+    Label,
     Radio,
     RadioGroup,
     Select,
-    Textarea,
     TextField,
 } from "@navikt/ds-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
-import { useContext, useEffect, useState, useRef } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
+import "react-datepicker/dist/react-datepicker.css"
 import { toast } from "react-toastify"
 import styled from "styled-components"
+import { backendPath } from "../.."
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
-import TextEditor from "../../../components/TextEditor"
+import DateSetterOps from "../../../components/DateSetterOps"
 import Layout from "../../../components/Layout"
+import TextEditor from "../../../components/TextEditor"
+import { OpsScheme, Spacer } from "../../../styles/styles"
 import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
 import { RouterOpsMeldinger } from "../../../types/routes"
-import { postOpsMessage } from "../../../utils/opsAPI"
-import { OpsScheme, Spacer } from "../../../styles/styles"
-import "react-datepicker/dist/react-datepicker.css"
 import { Service } from "../../../types/types"
-import { backendPath } from "../.."
 import { EndPathServices } from "../../../utils/apiHelper"
-import { Copy } from "@navikt/ds-icons"
-import { CloseCustomized, HorizontalSeparator } from "../../Admin"
-import DateSetterOps from "../../../components/DateSetterOps"
-import { cursorTo } from "readline"
+import { postOpsMessage } from "../../../utils/opsAPI"
 
 export const getServerSideProps = async () => {
     const res = await fetch(backendPath + EndPathServices())
@@ -341,44 +338,11 @@ const OpsComponent = ({
                     title="Innhold:"
                     handleUpdateInternalMsg={handleUpdateMessageInternal}
                 />
-
-                {/*
-                <Textarea
-                    label="Innhold:"
-                    value={internalMessage}
-                    onChange={(e) =>
-                        handleUpdateMessageInternal(e.target.value)
-                    }
-                    maxLength={500}
-                />*/}
             </div>
 
             {!onlyShowForNavEmployees && (
                 <div className="input-area">
                     <div>
-                        {/* --gjør denne synlig igjen når tekst kan kopieres
-                        
-                        <CopyOpsMsg>
-                            <Tooltip
-                                content="Kopier intern melding"
-                                placement="right"
-                            >
-                                <Button
-                                    size="small"
-                                    variant="tertiary"
-                                    title="Kopier interntekst"
-                                    onClick={() => {
-                                        handleCopyInternal(
-                                            internalHeader,
-                                            internalMessage
-                                        )
-                                    }}
-                                >
-                                    <Copy />
-                                </Button>
-                            </Tooltip>
-                        </CopyOpsMsg>*/}
-
                         <Heading level="5" size="xsmall">
                             Ekstern melding:
                         </Heading>
@@ -531,15 +495,11 @@ const OpsComponent = ({
     )
 }
 
-const AffectedServicesContainer = styled.div`
-    display: flex;
-    flex-direction: column;
+export const AffectedServicesContainer = styled.div`
+    margin: 1rem 0;
 
-    ul {
-        button {
-            background: none;
-            border: none;
-        }
+    .chipsContainer {
+        margin: 0.3rem 0 0.7rem 0;
     }
 `
 
@@ -583,25 +543,19 @@ const AffectedServicesComponent = ({
 
     return (
         <AffectedServicesContainer>
-            <ul>
-                {newAffectedServices.map((service) => {
-                    return (
-                        <li key={service.id} value={service.name}>
-                            {service.name}
-                            <button
-                                type="button"
-                                aria-label="Fjern kobling til tjeneste"
-                                onClick={() =>
-                                    handleDeleteListOfAffectedServices(service)
-                                }
-                            >
-                                <CloseCustomized />
-                            </button>
-                        </li>
-                    )
-                })}
-            </ul>
-
+            <Label>Tilknyttede tjenester:</Label>
+            <Chips className="chipsContainer">
+                {newAffectedServices.map((service) => (
+                    <Chips.Removable
+                        key={service.id}
+                        onClick={() =>
+                            handleDeleteListOfAffectedServices(service)
+                        }
+                    >
+                        {service.name}
+                    </Chips.Removable>
+                ))}
+            </Chips>
             <AffectedServicesSelect
                 services={services}
                 affectedServicesAttachedToOpsMessage={newAffectedServices}
@@ -653,6 +607,7 @@ const AffectedServicesSelect = ({
         const newSelectedService: Service = availableServices.find(
             (service) => idOfSelectedService === service.id
         )
+
         updateSelectedService(newSelectedService)
     }
 
@@ -667,8 +622,9 @@ const AffectedServicesSelect = ({
     return (
         <AffectedServicesSelectComponent>
             <Select
-                label="Tilknyttede tjenester:"
                 onChange={handleNewSelectedService}
+                label="Tilknyttede tjenester:"
+                hideLabel
             >
                 <option key={undefined} value={""}>
                     -
