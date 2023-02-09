@@ -116,6 +116,11 @@ const OpsMessageDetails = (props: DetailsOpsMsgI) => {
             {navIdent && (
                 <>
                     <div className="labelContainer">
+                        {affectedServices.length == 0 && (
+                            <Tag variant="neutral">
+                                Ingen tilknyttede tjenester
+                            </Tag>
+                        )}
                         {onlyShowForNavEmployees ? (
                             <Tag variant="info">Intern</Tag>
                         ) : (
