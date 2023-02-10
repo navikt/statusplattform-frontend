@@ -30,13 +30,13 @@ const CustomBodyShort = styled(BodyShort)`
     color: var(--a-gray-800);
 `
 
-const uuServiceName = (name) => {
+/* const uuServiceName = (name) => {
     let shortName = name.replace("WCAG21:", "")
     let formattedName = shortName.replaceAll("-", " ")
     let capitalizedName =
         formattedName.charAt(0).toUpperCase() + formattedName.slice(1)
     return capitalizedName
-}
+} */
 
 const statusLabel = (result) => {
     switch (result) {
@@ -75,18 +75,7 @@ const statusLabel = (result) => {
     }
 }
 
-// type OwnProps = {
-//   name: String;
-//   krav: {
-//     id: String;
-//     result: String;
-//     date: String;
-//     subject: String;
-//   }[];
-// };
-
-// const StatusRad = ({ name, krav }: OwnProps) => {
-const StatusRadUUTjeneste = ({ name, krav }) => {
+const StatusRadUUTjeneste = ({ name, subItem, uuType }) => {
     return (
         <Accordion.Item>
             <CustomAccordionHeader>
@@ -94,32 +83,41 @@ const StatusRadUUTjeneste = ({ name, krav }) => {
                 <div className="resultpanel">
                     <SuccessFilledCustomized />
                     <CustomBodyShort>
-                        {countStatuses(krav, "Passed")}
+                        {countStatuses(subItem, "Passed")}
                     </CustomBodyShort>
                     <ErrorFilledCustomized />
                     <CustomBodyShort>
-                        {countStatuses(krav, "Failed")}
+                        {countStatuses(subItem, "Failed")}
                     </CustomBodyShort>
                     <HelpTextCustomizedGray />
                     <CustomBodyShort>
-                        {krav.length -
-                            (countStatuses(krav, "Passed") +
-                                countStatuses(krav, "Failed"))}
+                        {subItem.length -
+                            (countStatuses(subItem, "Passed") +
+                                countStatuses(subItem, "Failed"))}
                     </CustomBodyShort>
                 </div>
             </CustomAccordionHeader>
+            {uuType === "krav"
+                ? subItem &&
+                  subItem.length > 0 &&
+                  subItem.map(({ subject, result }, index: number) => (
+                      <CustomAccordionContent key={index}>
+                          <BodyShort className="serviceName">
+                              {subject}
+                          </BodyShort>
 
-            {krav &&
-                krav.length > 0 &&
-                krav.map(({ id, result }, index: any) => (
-                    <CustomAccordionContent key={index}>
-                        <BodyShort className="serviceName">
-                            {uuServiceName(id)}
-                        </BodyShort>
+                          {statusLabel(result)}
+                      </CustomAccordionContent>
+                  ))
+                : subItem &&
+                  subItem.length > 0 &&
+                  subItem.map(({ id, result }, index: number) => (
+                      <CustomAccordionContent key={index}>
+                          <BodyShort className="serviceName">{id}</BodyShort>
 
-                        {statusLabel(result)}
-                    </CustomAccordionContent>
-                ))}
+                          {statusLabel(result)}
+                      </CustomAccordionContent>
+                  ))}
         </Accordion.Item>
     )
 }
