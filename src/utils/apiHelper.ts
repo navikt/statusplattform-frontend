@@ -148,6 +148,11 @@ export const EndPathSpecificOps = (opsId: string) => {
     return EndPathOps() + "/" + opsId
 }
 
-export const EndPathUU = () => {
+// UU
+export const EndPathUUTjeneste = () => {
     return RestPath() + "/Wcag/Tjeneste"
+}
+
+export const EndPathUUKrav = () => {
+    return RestPath() + "/Wcag/Krav"
 }

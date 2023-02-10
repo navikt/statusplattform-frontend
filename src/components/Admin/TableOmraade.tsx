@@ -651,9 +651,9 @@ interface EditProps {
     allServices: Service[]
     isExpanded: boolean
     reloadAreas: () => void
-    toggleExpanded: (area) => void
-    toggleEditArea: (area) => void
-    setAreaToDelete: (area) => void
+    toggleExpanded: (area: any) => void
+    toggleEditArea: (area: any) => void
+    setAreaToDelete: (area: any) => void
 }
 
 const CurrentlyEdittingArea = ({
