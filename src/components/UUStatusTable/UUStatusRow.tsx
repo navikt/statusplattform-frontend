@@ -7,6 +7,7 @@ import {
     HelpTextCustomizedGray,
     SuccessFilledCustomized,
 } from "../TrafficLights"
+import UUStatusDetails from "../../components/UUStatusDetails"
 
 const CustomAccordionHeader = styled(Accordion.Header)`
     .resultpanel {
@@ -29,15 +30,12 @@ const CustomBodyShort = styled(BodyShort)`
     margin-left: 0.3rem;
     color: var(--a-gray-800);
 `
-
-/* const uuServiceName = (name) => {
-    let shortName = name.replace("WCAG21:", "")
-    let formattedName = shortName.replaceAll("-", " ")
-    let capitalizedName =
-        formattedName.charAt(0).toUpperCase() + formattedName.slice(1)
-    return capitalizedName
-} */
-
+const DetailContainer = styled.div`
+    display: flex;
+    flex-direction: row;
+    margin: 0.3rem 0 0.2rem;
+    gap: 0.3rem;
+`
 const statusLabel = (result) => {
     switch (result) {
         case "Passed":
@@ -80,22 +78,28 @@ const StatusRadUUTjeneste = ({ name, subItem, uuType }) => {
         <Accordion.Item>
             <CustomAccordionHeader>
                 {name}
-                <div className="resultpanel">
-                    <SuccessFilledCustomized />
-                    <CustomBodyShort>
-                        {countStatuses(subItem, "Passed")}
-                    </CustomBodyShort>
-                    <ErrorFilledCustomized />
-                    <CustomBodyShort>
-                        {countStatuses(subItem, "Failed")}
-                    </CustomBodyShort>
-                    <HelpTextCustomizedGray />
-                    <CustomBodyShort>
-                        {subItem.length -
-                            (countStatuses(subItem, "Passed") +
-                                countStatuses(subItem, "Failed"))}
-                    </CustomBodyShort>
-                </div>
+                <DetailContainer>
+                    {UUStatusDetails(
+                        "Passed",
+                        countStatuses(subItem, "Passed")
+                    )}
+                    {UUStatusDetails(
+                        "Failed",
+                        countStatuses(subItem, "Failed")
+                    )}{" "}
+                    {UUStatusDetails(
+                        "Not checked",
+                        countStatuses(subItem, "Not checked")
+                    )}
+                    {UUStatusDetails(
+                        "Not present",
+                        countStatuses(subItem, "Not present")
+                    )}
+                    {UUStatusDetails(
+                        "Cannot tell",
+                        countStatuses(subItem, "Cannot tell")
+                    )}
+                </DetailContainer>
             </CustomAccordionHeader>
             {uuType === "krav"
                 ? subItem &&
