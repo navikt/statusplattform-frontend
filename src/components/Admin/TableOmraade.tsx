@@ -646,14 +646,14 @@ const EditDependeciesContainer = styled.div`
     }
 `
 
- EditProps {
+interface EditProps {
     area: Area
     allServices: Service[]
     isExpanded: boolean
     reloadAreas: () => void
-    toggleExpanded: (area) => void
-    toggleEditArea: (area) => void
-    setinterfaceAreaToDelete: (area) => void
+    toggleExpanded: (area: any) => void
+    toggleEditArea: (area: any) => void
+    setAreaToDelete: (area: any) => void
 }
 
 const CurrentlyEdittingArea = ({
