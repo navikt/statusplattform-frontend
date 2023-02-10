@@ -144,7 +144,7 @@ export enum RouterFeedbackForm {
 }
 // ---
 
-// Feedback form
+// UU status
 export enum RouterUUStatus {
     NAME = "Status - Universell Utforming",
     PATH = "/UUStatus/tjeneste",
