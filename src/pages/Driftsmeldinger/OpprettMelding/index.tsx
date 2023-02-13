@@ -8,6 +8,7 @@ import {
     RadioGroup,
     Select,
     TextField,
+    UNSAFE_DatePicker,
 } from "@navikt/ds-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -250,9 +251,9 @@ const OpsComponent = ({
         setOpsMessage({ ...opsMessage, severity: newSelectedSeverity })
     }
 
-    const handleUpdateStartDate = (event) => {
-        const dateInput: Date = new Date(event)
-        setStartDateForActiveOpsMessage(dateInput)
+    const handleUpdateDates = (startDateInput: Date, endDateInput: Date) => {
+        setStartDateForActiveOpsMessage(startDateInput)
+        setEndDateForActiveOpsMessage(endDateInput)
     }
 
     const handleUpdateStartMinutes = (event) => {
@@ -267,10 +268,7 @@ const OpsComponent = ({
         setStartDateForActiveOpsMessage(newDate)
     }
 
-    const handleUpdateEndDate = (event) => {
-        const dateInput: Date = new Date(event)
-        setEndDateForActiveOpsMessage(dateInput)
-    }
+    const handleUpdateEndDate = (dateInput: Date) => {}
 
     const handleUpdateEndMinutes = (event) => {
         const newDate: Date = new Date(endDateForActiveOpsMessage)
@@ -414,73 +412,6 @@ const OpsComponent = ({
                     handleUpdateEndHours={handleUpdateEndHours}
                     handleUpdateEndMinutes={handleUpdateEndMinutes}
                 />
-
-                //
-                //-------- CODE USING COMPONENTS FROM AKSEL 2.0---------
-                //
-                // <div className="input-area">
-                //     <label htmlFor="#startDate">
-                //         <b>Startdato</b>
-                //     </label>
-                //     <DatePicker
-                //         id="startDate"
-                //         selected={startDateForActiveOpsMessage}
-                //         onChange={handleUpdateStartDate}
-                //     />
-
-                //     <div className="input-area">
-                //         <BodyShort>
-                //             <b>Startklokkeslett</b>
-                //         </BodyShort>
-                //         <Select label="Timer" onChange={handleUpdateStartHours}>
-                //             {hours.map((hour, i) => {
-                //                 return <option key={i}>{hour}</option>
-                //             })}
-                //         </Select>
-                //         <Select
-                //             label="Minutter"
-                //             onChange={handleUpdateStartMinutes}
-                //         >
-                //             {options.map((minutes, i) => (
-                //                 <option key={i} value={minutes}>
-                //                     {minutes}
-                //                 </option>
-                //             ))}
-                //         </Select>
-                //     </div>
-
-                //     <HorizontalSeparator />
-
-                //     <label htmlFor="#endDate">
-                //         <b>Sluttdato</b>
-                //     </label>
-                //     <DatePicker
-                //         id="endDate"
-                //         selected={endDateForActiveOpsMessage}
-                //         onChange={handleUpdateEndDate}
-                //     />
-
-                //     <div className="input-area">
-                //         <BodyShort>
-                //             <b>Sluttklokkeslett</b>
-                //         </BodyShort>
-                //         <Select label="Timer" onChange={handleUpdateEndHours}>
-                //             {hours.map((hour, i) => {
-                //                 return <option key={i}>{hour}</option>
-                //             })}
-                //         </Select>
-                //         <Select
-                //             label="Minutter"
-                //             onChange={handleUpdateEndMinutes}
-                //         >
-                //             {options.map((minutes, i) => (
-                //                 <option key={i} value={minutes}>
-                //                     {minutes}
-                //                 </option>
-                //             ))}
-                //         </Select>
-                //     </div>
-                // </div>
             )}
 
             <div className="button-container">

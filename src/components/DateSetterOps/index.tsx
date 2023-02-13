@@ -2,20 +2,21 @@ import { BodyShort, Select } from "@navikt/ds-react"
 import DatePicker from "react-datepicker"
 import styled from "styled-components"
 import { HorizontalSeparator } from "../../pages/Admin"
+import { UNSAFE_DatePicker, UNSAFE_useRangeDatepicker } from "@navikt/ds-react"
+import { DateRange } from "react-day-picker"
 
 const DateSetterContainer = styled.div`
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     gap: 1rem;
 `
 
 interface DateSetterI {
     startDateForActiveOpsMessage: Date
     endDateForActiveOpsMessage: Date
-    handleUpdateStartDate: (event) => void
+    handleUpdateDates: (startDateInput: Date, endDateInput: Date) => void
     handleUpdateStartHours: (event) => void
     handleUpdateStartMinutes: (event) => void
-    handleUpdateEndDate: (event) => void
     handleUpdateEndHours: (event) => void
     handleUpdateEndMinutes: (event) => void
 }
@@ -27,10 +28,9 @@ const DateSetterOps = (props: DateSetterI) => {
     const {
         startDateForActiveOpsMessage,
         endDateForActiveOpsMessage,
-        handleUpdateStartDate,
+        handleUpdateDates,
         handleUpdateStartHours,
         handleUpdateStartMinutes,
-        handleUpdateEndDate,
         handleUpdateEndHours,
         handleUpdateEndMinutes,
     } = props
@@ -43,64 +43,111 @@ const DateSetterOps = (props: DateSetterI) => {
         }
     }
 
+    const handleSetDateRange = (selectedRange: DateRange) => {
+        const startDate = selectedRange.from
+        const endDate = selectedRange.to
+        selectedRange
+            ? handleUpdateDates(startDate, endDate)
+            : handleUpdateDates(
+                  startDateForActiveOpsMessage,
+                  endDateForActiveOpsMessage
+              )
+    }
+
+    const { datepickerProps, toInputProps, fromInputProps, selectedRange } =
+        UNSAFE_useRangeDatepicker({
+            fromDate: new Date("Aug 23 2019"),
+            onRangeChange: console.log,
+        })
+
+    const currentDate = new Date()
+
     return (
-        <DateSetterContainer>
-            <label htmlFor="#startDate">
-                <b>Startdato</b>
-            </label>
-            <DatePicker
-                id="startDate"
-                selected={startDateForActiveOpsMessage}
-                onChange={handleUpdateStartDate}
-            />
+        <div>
+            <UNSAFE_DatePicker
+                {...datepickerProps}
+                showWeekNumber
+                onChange={handleSetDateRange(selectedRange)}
+            >
+                <DateSetterContainer>
+                    <UNSAFE_DatePicker.Input {...fromInputProps} label="Fra" />
+                    <UNSAFE_DatePicker.Input {...toInputProps} label="Til" />
+                </DateSetterContainer>
+            </UNSAFE_DatePicker>
 
-            <div className="input-area">
-                <BodyShort>
-                    <b>Startklokkeslett</b>
-                </BodyShort>
-                <Select label="Timer" onChange={handleUpdateStartHours}>
-                    {hours.map((hour, i) => {
-                        return <option key={i}>{hour}</option>
-                    })}
-                </Select>
-                <Select label="Minutter" onChange={handleUpdateStartMinutes}>
-                    {minuteOptions.map((minutes, i) => (
-                        <option key={i} value={minutes}>
-                            {minutes}
-                        </option>
-                    ))}
-                </Select>
+            <div>
+                {selectedRange && (
+                    <div className="pt-4">
+                        <div>
+                            {selectedRange?.from &&
+                                selectedRange.from.toDateString()}
+                        </div>
+                        <div>
+                            {selectedRange?.to &&
+                                selectedRange.to.toDateString()}
+                        </div>
+                    </div>
+                )}
             </div>
+        </div>
 
-            <HorizontalSeparator />
+        // <DateSetterContainer>
+        //     <label htmlFor="#startDate">
+        //         <b>Startdato</b>
+        //     </label>
+        //     <DatePicker
+        //         id="startDate"
+        //         selected={startDateForActiveOpsMessage}
+        //         onChange={handleUpdateStartDate}
+        //     />
 
-            <label htmlFor="#startDate">
-                <b>Sluttdato</b>
-            </label>
-            <DatePicker
-                id="startDate"
-                selected={endDateForActiveOpsMessage}
-                onChange={handleUpdateEndDate}
-            />
+        //     <div className="input-area">
+        //         <BodyShort>
+        //             <b>Startklokkeslett</b>
+        //         </BodyShort>
+        //         <Select label="Timer" onChange={handleUpdateStartHours}>
+        //             {hours.map((hour, i) => {
+        //                 return <option key={i}>{hour}</option>
+        //             })}
+        //         </Select>
+        //         <Select label="Minutter" onChange={handleUpdateStartMinutes}>
+        //             {minuteOptions.map((minutes, i) => (
+        //                 <option key={i} value={minutes}>
+        //                     {minutes}
+        //                 </option>
+        //             ))}
+        //         </Select>
+        //     </div>
 
-            <div className="input-area">
-                <BodyShort>
-                    <b>Sluttklokkeslett</b>
-                </BodyShort>
-                <Select label="Timer" onChange={handleUpdateEndHours}>
-                    {hours.map((hour, i) => {
-                        return <option key={i}>{hour}</option>
-                    })}
-                </Select>
-                <Select label="Minutter" onChange={handleUpdateEndMinutes}>
-                    {minuteOptions.map((minutes, i) => (
-                        <option key={i} value={minutes}>
-                            {minutes}
-                        </option>
-                    ))}
-                </Select>
-            </div>
-        </DateSetterContainer>
+        //     <HorizontalSeparator />
+
+        //     <label htmlFor="#startDate">
+        //         <b>Sluttdato</b>
+        //     </label>
+        //     <DatePicker
+        //         id="startDate"
+        //         selected={endDateForActiveOpsMessage}
+        //         onChange={handleUpdateEndDate}
+        //     />
+
+        //     <div className="input-area">
+        //         <BodyShort>
+        //             <b>Sluttklokkeslett</b>
+        //         </BodyShort>
+        //         <Select label="Timer" onChange={handleUpdateEndHours}>
+        //             {hours.map((hour, i) => {
+        //                 return <option key={i}>{hour}</option>
+        //             })}
+        //         </Select>
+        //         <Select label="Minutter" onChange={handleUpdateEndMinutes}>
+        //             {minuteOptions.map((minutes, i) => (
+        //                 <option key={i} value={minutes}>
+        //                     {minutes}
+        //                 </option>
+        //             ))}
+        //         </Select>
+        //     </div>
+        // </DateSetterContainer>
     )
 }
 
