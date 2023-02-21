@@ -1,14 +1,4 @@
-import { DateRange } from "react-day-picker"
-import styled from "styled-components"
 import CustomDatePicker from "../DatePicker"
-
-import { useState } from "react"
-
-const DateSetterContainer = styled.div`
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-`
 
 interface DateSetterI {
     startDateForActiveOpsMessage: Date
@@ -21,9 +11,6 @@ interface DateSetterI {
 }
 
 const DateSetterOps = (props: DateSetterI) => {
-    const minuteOptions = ["00", "15", "30", "45"]
-    const hours = []
-
     const {
         startDateForActiveOpsMessage,
         endDateForActiveOpsMessage,
@@ -34,28 +21,6 @@ const DateSetterOps = (props: DateSetterI) => {
         handleUpdateEndMinutes,
     } = props
 
-    for (let i = 0; i < 24; i++) {
-        if (i < 10) {
-            hours.push(`0${i}:00`)
-        } else {
-            hours.push(`${i}:00`)
-        }
-    }
-
-    const handleSetDateRange = (selectedRange: DateRange) => {
-        const startDate = selectedRange.from
-        const endDate = selectedRange.to
-        selectedRange
-            ? handleUpdateDates(startDate, endDate)
-            : handleUpdateDates(
-                  startDateForActiveOpsMessage,
-                  endDateForActiveOpsMessage
-              )
-    }
-
-    const currentDate = new Date()
-    const [value, onChange] = useState("10:00")
-
     return (
         <div>
             <CustomDatePicker
@@ -65,6 +30,8 @@ const DateSetterOps = (props: DateSetterI) => {
                         handleUpdateDates(fra, til)
                     }
                 }}
+                startDateForActiveOpsMessage={startDateForActiveOpsMessage}
+                endDateForActiveOpsMessage={endDateForActiveOpsMessage}
                 handleUpdateStartHours={handleUpdateStartHours}
                 handleUpdateEndHours={handleUpdateEndHours}
                 handleUpdateStartMinutes={handleUpdateStartMinutes}

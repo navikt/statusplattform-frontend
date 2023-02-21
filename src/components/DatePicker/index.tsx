@@ -2,6 +2,7 @@ import {
     UNSAFE_DatePicker,
     UNSAFE_useRangeDatepicker,
     Select,
+    Alert,
 } from "@navikt/ds-react"
 import { DateRange } from "react-day-picker"
 import { datePrettifyer } from "src/utils/datePrettifyer"
@@ -92,6 +93,8 @@ const CustomTimePicker = (props: TimePickerI) => {
 
 interface DatePickerI {
     onRangeChange: (periode: DateRange | undefined) => void
+    startDateForActiveOpsMessage: Date
+    endDateForActiveOpsMessage: Date
     handleUpdateStartHours: (event) => void
     handleUpdateStartMinutes: (event) => void
     handleUpdateEndHours: (event) => void
@@ -107,6 +110,8 @@ const DateSetterContainer = styled.div`
 const CustomDatePicker = (props: DatePickerI) => {
     const {
         onRangeChange,
+        startDateForActiveOpsMessage,
+        endDateForActiveOpsMessage,
         handleUpdateStartHours,
         handleUpdateStartMinutes,
         handleUpdateEndHours,
@@ -140,17 +145,13 @@ const CustomDatePicker = (props: DatePickerI) => {
             </DateSetterContainer>
 
             <div>
-                {selectedRange && (
-                    <div className="pt-4">
-                        <div>
-                            {selectedRange?.from &&
-                                selectedRange?.to &&
-                                "Fra " +
-                                    datePrettifyer(selectedRange.from) +
-                                    " til " +
-                                    datePrettifyer(selectedRange.to)}
-                        </div>
-                    </div>
+                {selectedRange?.from && selectedRange?.to && (
+                    <Alert variant="info">
+                        {"Driftsmeldingen blir aktiv fra " +
+                            datePrettifyer(startDateForActiveOpsMessage) +
+                            ", til " +
+                            datePrettifyer(endDateForActiveOpsMessage)}
+                    </Alert>
                 )}
             </div>
         </div>

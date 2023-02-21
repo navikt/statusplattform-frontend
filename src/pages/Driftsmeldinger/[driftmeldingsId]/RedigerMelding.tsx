@@ -468,9 +468,9 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
     }
 
     // Handlers for start- and endtime
-    const handleUpdateStartDate = (event) => {
-        const dateInput: Date = new Date(event)
-        setStartDateForActiveOpsMessage(dateInput)
+    const handleUpdateDates = (startDateInput: Date, endDateInput: Date) => {
+        setStartDateForActiveOpsMessage(startDateInput)
+        setEndDateForActiveOpsMessage(endDateInput)
     }
 
     const handleUpdateStartMinutes = (event) => {
@@ -485,12 +485,6 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
         setStartDateForActiveOpsMessage(newDate)
     }
 
-    const handleUpdateEndDate = (event) => {
-        const dateInput: Date = new Date(event)
-        console.log("Inni metoden, input er: " + dateInput)
-
-        setEndDateForActiveOpsMessage(dateInput)
-    }
     // console.log("Ny sluttdato: " + opsMessage.endTime)
 
     const handleUpdateEndMinutes = (event) => {
@@ -633,10 +627,9 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                             startDateForActiveOpsMessage
                         }
                         endDateForActiveOpsMessage={endDateForActiveOpsMessage}
-                        handleUpdateStartDate={handleUpdateStartDate}
+                        handleUpdateDates={handleUpdateDates}
                         handleUpdateStartHours={handleUpdateStartHours}
                         handleUpdateStartMinutes={handleUpdateStartMinutes}
-                        handleUpdateEndDate={handleUpdateEndDate}
                         handleUpdateEndHours={handleUpdateEndHours}
                         handleUpdateEndMinutes={handleUpdateEndMinutes}
                     />
