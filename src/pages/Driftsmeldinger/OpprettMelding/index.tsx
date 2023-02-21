@@ -268,8 +268,6 @@ const OpsComponent = ({
         setStartDateForActiveOpsMessage(newDate)
     }
 
-    const handleUpdateEndDate = (dateInput: Date) => {}
-
     const handleUpdateEndMinutes = (event) => {
         const newDate: Date = new Date(endDateForActiveOpsMessage)
         newDate.setMinutes(parseInt(event.target.value))
@@ -402,16 +400,19 @@ const OpsComponent = ({
             )}
 
             {!isActive && (
-                <DateSetterOps
-                    startDateForActiveOpsMessage={startDateForActiveOpsMessage}
-                    endDateForActiveOpsMessage={endDateForActiveOpsMessage}
-                    handleUpdateStartDate={handleUpdateStartDate}
-                    handleUpdateStartHours={handleUpdateStartHours}
-                    handleUpdateStartMinutes={handleUpdateStartMinutes}
-                    handleUpdateEndDate={handleUpdateEndDate}
-                    handleUpdateEndHours={handleUpdateEndHours}
-                    handleUpdateEndMinutes={handleUpdateEndMinutes}
-                />
+                <>
+                    <DateSetterOps
+                        startDateForActiveOpsMessage={
+                            startDateForActiveOpsMessage
+                        }
+                        endDateForActiveOpsMessage={endDateForActiveOpsMessage}
+                        handleUpdateDates={handleUpdateDates}
+                        handleUpdateStartHours={handleUpdateStartHours}
+                        handleUpdateStartMinutes={handleUpdateStartMinutes}
+                        handleUpdateEndHours={handleUpdateEndHours}
+                        handleUpdateEndMinutes={handleUpdateEndMinutes}
+                    />
+                </>
             )}
 
             <div className="button-container">

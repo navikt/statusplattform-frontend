@@ -1,9 +1,8 @@
-import { BodyShort, Select } from "@navikt/ds-react"
-import DatePicker from "react-datepicker"
-import styled from "styled-components"
-import { HorizontalSeparator } from "../../pages/Admin"
-import { UNSAFE_DatePicker, UNSAFE_useRangeDatepicker } from "@navikt/ds-react"
 import { DateRange } from "react-day-picker"
+import styled from "styled-components"
+import CustomDatePicker from "../DatePicker"
+
+import { useState } from "react"
 
 const DateSetterContainer = styled.div`
     display: flex;
@@ -54,100 +53,24 @@ const DateSetterOps = (props: DateSetterI) => {
               )
     }
 
-    const { datepickerProps, toInputProps, fromInputProps, selectedRange } =
-        UNSAFE_useRangeDatepicker({
-            fromDate: new Date("Aug 23 2019"),
-            onRangeChange: console.log,
-        })
-
     const currentDate = new Date()
+    const [value, onChange] = useState("10:00")
 
     return (
         <div>
-            <UNSAFE_DatePicker
-                {...datepickerProps}
-                showWeekNumber
-                onChange={handleSetDateRange(selectedRange)}
-            >
-                <DateSetterContainer>
-                    <UNSAFE_DatePicker.Input {...fromInputProps} label="Fra" />
-                    <UNSAFE_DatePicker.Input {...toInputProps} label="Til" />
-                </DateSetterContainer>
-            </UNSAFE_DatePicker>
-
-            <div>
-                {selectedRange && (
-                    <div className="pt-4">
-                        <div>
-                            {selectedRange?.from &&
-                                selectedRange.from.toDateString()}
-                        </div>
-                        <div>
-                            {selectedRange?.to &&
-                                selectedRange.to.toDateString()}
-                        </div>
-                    </div>
-                )}
-            </div>
+            <CustomDatePicker
+                onRangeChange={(periode) => {
+                    if (periode) {
+                        const { from: fra, to: til } = periode
+                        handleUpdateDates(fra, til)
+                    }
+                }}
+                handleUpdateStartHours={handleUpdateStartHours}
+                handleUpdateEndHours={handleUpdateEndHours}
+                handleUpdateStartMinutes={handleUpdateStartMinutes}
+                handleUpdateEndMinutes={handleUpdateEndMinutes}
+            />
         </div>
-
-        // <DateSetterContainer>
-        //     <label htmlFor="#startDate">
-        //         <b>Startdato</b>
-        //     </label>
-        //     <DatePicker
-        //         id="startDate"
-        //         selected={startDateForActiveOpsMessage}
-        //         onChange={handleUpdateStartDate}
-        //     />
-
-        //     <div className="input-area">
-        //         <BodyShort>
-        //             <b>Startklokkeslett</b>
-        //         </BodyShort>
-        //         <Select label="Timer" onChange={handleUpdateStartHours}>
-        //             {hours.map((hour, i) => {
-        //                 return <option key={i}>{hour}</option>
-        //             })}
-        //         </Select>
-        //         <Select label="Minutter" onChange={handleUpdateStartMinutes}>
-        //             {minuteOptions.map((minutes, i) => (
-        //                 <option key={i} value={minutes}>
-        //                     {minutes}
-        //                 </option>
-        //             ))}
-        //         </Select>
-        //     </div>
-
-        //     <HorizontalSeparator />
-
-        //     <label htmlFor="#startDate">
-        //         <b>Sluttdato</b>
-        //     </label>
-        //     <DatePicker
-        //         id="startDate"
-        //         selected={endDateForActiveOpsMessage}
-        //         onChange={handleUpdateEndDate}
-        //     />
-
-        //     <div className="input-area">
-        //         <BodyShort>
-        //             <b>Sluttklokkeslett</b>
-        //         </BodyShort>
-        //         <Select label="Timer" onChange={handleUpdateEndHours}>
-        //             {hours.map((hour, i) => {
-        //                 return <option key={i}>{hour}</option>
-        //             })}
-        //         </Select>
-        //         <Select label="Minutter" onChange={handleUpdateEndMinutes}>
-        //             {minuteOptions.map((minutes, i) => (
-        //                 <option key={i} value={minutes}>
-        //                     {minutes}
-        //                 </option>
-        //             ))}
-        //         </Select>
-        //     </div>
-        // </DateSetterContainer>
     )
 }
 
