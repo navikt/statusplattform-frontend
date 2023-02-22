@@ -502,7 +502,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
 
     return (
         <EditOpsMessageContainer>
-            <div className="section">
+            {/* <div className="section">
                 <Checkbox
                     checked={isActive}
                     onChange={() =>
@@ -514,7 +514,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                 >
                     Sett meldingen som <b>aktiv</b>
                 </Checkbox>
-            </div>
+            </div> */}
             <div className="section">
                 <Select
                     label="Velg alvorlighetsgrad"
@@ -536,21 +536,6 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                     <Radio value="Internal">Kun interne brukere</Radio>
                     <Radio value="Public">Interne og eksterne brukere</Radio>
                 </RadioGroup>
-
-                {/*  <Checkbox
-
-                    checked={onlyShowForNavEmployees}
-                    onChange={() =>
-                        changeUpdatedOpsMessage({
-                            ...updatedOpsMessage,
-                            onlyShowForNavEmployees:
-                                !updatedOpsMessage.onlyShowForNavEmployees,
-                        })
-                    }
-                >
-                    Vises bare for ansatte?
-
-                </Checkbox>*/}
             </div>
             <div className="section">
                 <TextField
