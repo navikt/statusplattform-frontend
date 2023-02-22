@@ -7,7 +7,7 @@ import {
     UNSAFE_useRangeDatepicker,
 } from "@navikt/ds-react"
 import { DateRange } from "react-day-picker"
-import { datePrettifyer } from "src/utils/datePrettifyer"
+import { datePrettifyer } from "../../utils/datePrettifyer"
 import styled from "styled-components"
 
 interface TimePickerI {
