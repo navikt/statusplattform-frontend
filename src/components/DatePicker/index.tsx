@@ -1,13 +1,14 @@
+import { Clock } from "@navikt/ds-icons"
 import {
+    Alert,
+    Label,
+    Select,
     UNSAFE_DatePicker,
     UNSAFE_useRangeDatepicker,
-    Select,
-    Alert,
 } from "@navikt/ds-react"
 import { DateRange } from "react-day-picker"
 import { datePrettifyer } from "src/utils/datePrettifyer"
 import styled from "styled-components"
-import { Clock } from "@navikt/ds-icons"
 
 interface TimePickerI {
     handleUpdateHours: (event) => void
@@ -25,12 +26,22 @@ const TimePickerContainer = styled.div`
     padding: 0.5rem 0.8rem 0.4rem 0.45rem;
 `
 
+const TimeSeparator = styled.div`
+    color: black;
+    margin: 0.2rem 0.7rem 0 -1.5rem;
+    z-index: 100;
+`
+
 const TimeSelect = styled(Select)`
-    width: 4rem;
+    width: 3.45rem;
     border: none;
     box-shadow: none;
-    background: none;
+
+    &.selectFieldMinute {
+        margin-left: -0.3rem;
+    }
     .navds-select__input {
+        padding-left: -0.5rem;
         border: none;
     }
     .navds-select__input:focus {
@@ -38,11 +49,23 @@ const TimeSelect = styled(Select)`
         box-shadow: none;
         outline: none;
     }
+
+    .navds-select__input:hover {
+        border: none;
+        box-shadow: none;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .navds-select__chevron {
+        display: none;
+    }
 `
 
 const CustomClock = styled(Clock)`
     height: 2rem;
-    margin: -0.05rem 0 0 0.3rem;
+    margin: -0.05rem 0 0 0rem;
+    z-index: 100;
 `
 
 const CustomTimePicker = (props: TimePickerI) => {
@@ -71,12 +94,14 @@ const CustomTimePicker = (props: TimePickerI) => {
                         return <option key={i}>{hour}</option>
                     })}
                 </TimeSelect>
-
+                <TimeSeparator>
+                    <Label>:</Label>
+                </TimeSeparator>
                 <TimeSelect
                     label="Minutter"
                     onChange={handleUpdateMinutes}
                     hideLabel
-                    className="selectField"
+                    className="selectFieldMinute"
                     size="small"
                 >
                     {minuteOptions.map((minutes, i) => (
@@ -117,6 +142,7 @@ const CustomDatePicker = (props: DatePickerI) => {
         handleUpdateEndHours,
         handleUpdateEndMinutes,
     } = props
+
     const { datepickerProps, toInputProps, fromInputProps, selectedRange } =
         UNSAFE_useRangeDatepicker({
             onRangeChange,
