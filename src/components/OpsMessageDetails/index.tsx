@@ -73,7 +73,11 @@ const OpsMessageDetails = (props: DetailsOpsMsgI) => {
                 {navIdent ? internalHeader : externalHeader}
             </Heading>
             {opsMessage.startTime && opsMessage.endTime && (
-                <TimeStamp>{datePrettifyer(opsMessage.startTime)}</TimeStamp>
+                <TimeStamp>
+                    {datePrettifyer(opsMessage.startTime) +
+                        " - " +
+                        datePrettifyer(opsMessage.endTime)}
+                </TimeStamp>
             )}
 
             {navIdent ? (
