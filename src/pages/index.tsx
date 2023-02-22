@@ -23,25 +23,6 @@ export const VerticalSeparator = styled.span`
     background-color: var(--a-gray-200);
 `
 
-const UUHeading = styled.div`
-    .guidepanel {
-        @media (min-width: 390px) {
-            margin: 0;
-            width: 100%;
-        }
-
-        @media (min-width: 850px) {
-            margin: 1rem 0 2rem -2.5rem;
-            width: 52.2rem;
-        }
-    }
-`
-// const TabsCustomized = styled(Tabs)`
-//     border-top: 0;
-//     border-top-left-radius: 0;
-//     border-top-right-radius: 0;
-// `
-
 export default function Home() {
     const router = useRouter()
     const [atHomePage] = useState(false)
@@ -124,23 +105,7 @@ export default function Home() {
                     content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"
                 />
             </Head>
-            <UUHeading>
-                <GuidePanel className="guidepanel">
-                    Her finner du informasjon om status for universell utforming
-                    for digitale tjenester i NAV. Kravene er hentet fra
-                    <b> Web Content Accessibility Guidelines (WCAG) 2.1.</b>
-                </GuidePanel>
-            </UUHeading>
-            <div>
-                <ul>
-                    <li>
-                        <Link href="UUStatus/tjeneste" />
-                    </li>
-                    <li>
-                        <Link href="UUStatus/krav" />
-                    </li>
-                </ul>
-            </div>
+
             {atHomePage && (
                 <DashboardFromName dashboards={null} initialDashboard={null} />
             )}
