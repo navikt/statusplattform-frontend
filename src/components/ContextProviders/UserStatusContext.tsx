@@ -1,4 +1,4 @@
-import { useRouter } from "next/router"
+    import { useRouter } from "next/router"
 import { createContext, ReactNode, useEffect, useState } from "react"
 import { UserData } from "../../types/userData"
 import { checkLoginInfoAndState } from "../../utils/checkLoginInfoAndState"
@@ -20,7 +20,8 @@ export const UserStateContext = createContext<UserStateInterface>({
 export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) => {
     const [user, setUser] = useState<UserStateInterface | null>({
         name: "",
-        navIdent: ""
+        navIdent: "",
+        adminAccess:false
     })
     const [isLoading, setIsLoading] = useState(true)
 
