@@ -48,7 +48,8 @@ export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) =
     return (
         <UserStateContext.Provider value={{
             name,
-            navIdent
+            navIdent,
+            adminAccess:false
         }}>
             {children}
         </UserStateContext.Provider>

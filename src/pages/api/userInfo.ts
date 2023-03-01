@@ -42,11 +42,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
   
     let claims = decodeJwt(accessToken);
     const usersWithAccess = process.env.NEXT_PUBLIC_APPROVED_USERS?.split(",")
-
     let userInfo = {
                        name: claims.name,
                        navIdent: claims.NAVident,
-                       adminAccess: usersWithAccess.includes(claims.NAVident)
+                       adminAccess: usersWithAccess.includes(String(claims.NAVident))
                    }
                    
     res.status(200).json(userInfo);
