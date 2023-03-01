@@ -1,8 +1,6 @@
-
 import { Alert } from "@navikt/ds-react"
 import { useState } from "react"
-import { datePrettifyer } from "src/utils/datePrettifyer"
-
+import { datePrettifyer } from "../../utils/datePrettifyer"
 import CustomDatePicker from "../DatePicker"
 
 interface DateSetterI {
@@ -58,7 +56,6 @@ const DateSetterOps = (props: DateSetterI) => {
                         datePrettifyer(endDateForActiveOpsMessage)}
                 </Alert>
             )}
-
         </div>
     )
 }
