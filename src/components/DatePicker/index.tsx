@@ -1,13 +1,10 @@
 import { Clock } from "@navikt/ds-icons"
 import {
-    Alert,
     Label,
     Select,
     UNSAFE_DatePicker,
-    UNSAFE_useRangeDatepicker,
+    UNSAFE_useDatepicker,
 } from "@navikt/ds-react"
-import { DateRange } from "react-day-picker"
-import { datePrettifyer } from "../../utils/datePrettifyer"
 import styled from "styled-components"
 
 interface TimePickerI {
@@ -117,13 +114,10 @@ const CustomTimePicker = (props: TimePickerI) => {
 }
 
 interface DatePickerI {
-    onRangeChange: (periode: DateRange | undefined) => void
-    startDateForActiveOpsMessage: Date
-    endDateForActiveOpsMessage: Date
-    handleUpdateStartHours: (event) => void
-    handleUpdateStartMinutes: (event) => void
-    handleUpdateEndHours: (event) => void
-    handleUpdateEndMinutes: (event) => void
+    handleUpdateDate: (event) => void
+    handleUpdateHours: (event) => void
+    handleUpdateMinutes: (event) => void
+    title: string
 }
 
 const DateSetterContainer = styled.div`
@@ -134,52 +128,29 @@ const DateSetterContainer = styled.div`
 `
 const CustomDatePicker = (props: DatePickerI) => {
     const {
-        onRangeChange,
-        startDateForActiveOpsMessage,
-        endDateForActiveOpsMessage,
-        handleUpdateStartHours,
-        handleUpdateStartMinutes,
-        handleUpdateEndHours,
-        handleUpdateEndMinutes,
+        handleUpdateDate,
+        handleUpdateHours,
+        handleUpdateMinutes,
+
+        title,
     } = props
 
-    const { datepickerProps, toInputProps, fromInputProps, selectedRange } =
-        UNSAFE_useRangeDatepicker({
-            onRangeChange,
-        })
+    const { datepickerProps, inputProps, selectedDay } = UNSAFE_useDatepicker({
+        fromDate: new Date("Aug 23 2019"),
+        onDateChange: (date) => handleUpdateDate(date),
+    })
 
     return (
         <div>
             <DateSetterContainer>
                 <UNSAFE_DatePicker {...datepickerProps}>
-                    <UNSAFE_DatePicker.Input {...fromInputProps} label="Fra" />
+                    <UNSAFE_DatePicker.Input {...inputProps} label={title} />
                 </UNSAFE_DatePicker>
                 <CustomTimePicker
-                    handleUpdateHours={handleUpdateStartHours}
-                    handleUpdateMinutes={handleUpdateStartMinutes}
+                    handleUpdateHours={handleUpdateHours}
+                    handleUpdateMinutes={handleUpdateMinutes}
                 />
             </DateSetterContainer>
-
-            <DateSetterContainer>
-                <UNSAFE_DatePicker {...datepickerProps}>
-                    <UNSAFE_DatePicker.Input {...toInputProps} label="Til" />
-                </UNSAFE_DatePicker>
-                <CustomTimePicker
-                    handleUpdateHours={handleUpdateEndHours}
-                    handleUpdateMinutes={handleUpdateEndMinutes}
-                />
-            </DateSetterContainer>
-
-            <div>
-                {selectedRange?.from && selectedRange?.to && (
-                    <Alert variant="info">
-                        {"Driftsmeldingen blir aktiv fra " +
-                            datePrettifyer(startDateForActiveOpsMessage) +
-                            ", til " +
-                            datePrettifyer(endDateForActiveOpsMessage)}
-                    </Alert>
-                )}
-            </div>
         </div>
     )
 }
