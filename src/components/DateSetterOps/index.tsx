@@ -1,13 +1,17 @@
+
 import { Alert } from "@navikt/ds-react"
 import { useState } from "react"
 import { datePrettifyer } from "src/utils/datePrettifyer"
+
 import CustomDatePicker from "../DatePicker"
 
 interface DateSetterI {
     startDateForActiveOpsMessage: Date
     endDateForActiveOpsMessage: Date
+
     handleUpdateStartDate: (event) => void
     handleUpdateEndDate: (event) => void
+
     handleUpdateStartHours: (event) => void
     handleUpdateStartMinutes: (event) => void
     handleUpdateEndHours: (event) => void
@@ -19,8 +23,10 @@ const DateSetterOps = (props: DateSetterI) => {
     const {
         startDateForActiveOpsMessage,
         endDateForActiveOpsMessage,
+
         handleUpdateStartDate,
         handleUpdateEndDate,
+
         handleUpdateStartHours,
         handleUpdateStartMinutes,
         handleUpdateEndHours,
@@ -52,6 +58,7 @@ const DateSetterOps = (props: DateSetterI) => {
                         datePrettifyer(endDateForActiveOpsMessage)}
                 </Alert>
             )}
+
         </div>
     )
 }

@@ -1,10 +1,12 @@
 import { Clock } from "@navikt/ds-icons"
 import {
+
     Label,
     Select,
     UNSAFE_DatePicker,
     UNSAFE_useDatepicker,
 } from "@navikt/ds-react"
+
 import styled from "styled-components"
 
 interface TimePickerI {
@@ -114,10 +116,12 @@ const CustomTimePicker = (props: TimePickerI) => {
 }
 
 interface DatePickerI {
+
     handleUpdateDate: (event) => void
     handleUpdateHours: (event) => void
     handleUpdateMinutes: (event) => void
     title: string
+
 }
 
 const DateSetterContainer = styled.div`
@@ -128,6 +132,7 @@ const DateSetterContainer = styled.div`
 `
 const CustomDatePicker = (props: DatePickerI) => {
     const {
+
         handleUpdateDate,
         handleUpdateHours,
         handleUpdateMinutes,
@@ -140,10 +145,12 @@ const CustomDatePicker = (props: DatePickerI) => {
         onDateChange: (date) => handleUpdateDate(date),
     })
 
+
     return (
         <div>
             <DateSetterContainer>
                 <UNSAFE_DatePicker {...datepickerProps}>
+
                     <UNSAFE_DatePicker.Input {...inputProps} label={title} />
                 </UNSAFE_DatePicker>
                 <CustomTimePicker
@@ -151,6 +158,7 @@ const CustomDatePicker = (props: DatePickerI) => {
                     handleUpdateMinutes={handleUpdateMinutes}
                 />
             </DateSetterContainer>
+
         </div>
     )
 }

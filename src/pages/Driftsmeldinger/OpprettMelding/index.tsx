@@ -255,11 +255,13 @@ const OpsComponent = ({
     const handleUpdateDates = (startDateInput: Date, endDateInput: Date) => {
         setStartDateForActiveOpsMessage(startDateInput)
         setEndDateForActiveOpsMessage(endDateInput)
+
     }
 
     const handleUpdateStartDate = (event) => {
         const dateInput: Date = new Date(event)
         setStartDateForActiveOpsMessage(dateInput)
+
     }
 
     const handleUpdateEndDate = (event) => {
@@ -418,13 +420,17 @@ const OpsComponent = ({
                             startDateForActiveOpsMessage
                         }
                         endDateForActiveOpsMessage={endDateForActiveOpsMessage}
+
                         handleUpdateStartDate={handleUpdateStartDate}
                         handleUpdateEndDate={handleUpdateEndDate}
+
                         handleUpdateStartHours={handleUpdateStartHours}
                         handleUpdateStartMinutes={handleUpdateStartMinutes}
                         handleUpdateEndHours={handleUpdateEndHours}
                         handleUpdateEndMinutes={handleUpdateEndMinutes}
+
                         showCustomDates={showCustomDates}
+
                     />
                 </>
             )}

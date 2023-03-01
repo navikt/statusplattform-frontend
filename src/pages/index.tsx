@@ -7,7 +7,9 @@ import { RouterInternt, RouterPrivatperson } from "../types/routes"
 import CustomNavSpinner from "../components/CustomNavSpinner"
 import { UserData } from "../types/userData"
 import { checkLoginInfoAndState } from "../utils/checkLoginInfoAndState"
+import { GuidePanel } from "@navikt/ds-react"
 import styled from "styled-components"
+import Link from "next/link"
 
 export const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
 
@@ -103,6 +105,7 @@ export default function Home() {
                     content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"
                 />
             </Head>
+
             {atHomePage && (
                 <DashboardFromName dashboards={null} initialDashboard={null} />
             )}

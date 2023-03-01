@@ -16,7 +16,6 @@ import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
 import { RouterError, RouterOpsMeldinger } from "../../../types/routes"
 import { Service } from "../../../types/types"
 import { EndPathServices, EndPathSpecificOps } from "../../../utils/apiHelper"
-import { datePrettifyer } from "../../../utils/datePrettifyer"
 import { fetchSpecificOpsMessage } from "../../../utils/opsAPI"
 import PublicOpsContent from "../PublicOpsContent"
 

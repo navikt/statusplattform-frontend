@@ -1,4 +1,4 @@
-import { useRouter } from "next/router"
+    import { useRouter } from "next/router"
 import { createContext, ReactNode, useEffect, useState } from "react"
 import { UserData } from "../../types/userData"
 import { checkLoginInfoAndState } from "../../utils/checkLoginInfoAndState"
@@ -7,18 +7,21 @@ import CustomNavSpinner from "../CustomNavSpinner"
 export interface UserStateInterface {
     name: string
     navIdent: string
+    adminAccess:boolean
 }
 
 export const UserStateContext = createContext<UserStateInterface>({
     navIdent: "",
-    name: ""
+    name: "",
+    adminAccess:false
 })
 
 
 export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) => {
     const [user, setUser] = useState<UserStateInterface | null>({
         name: "",
-        navIdent: ""
+        navIdent: "",
+        adminAccess:false
     })
     const [isLoading, setIsLoading] = useState(true)
 
@@ -45,7 +48,8 @@ export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) =
     return (
         <UserStateContext.Provider value={{
             name,
-            navIdent
+            navIdent,
+            adminAccess:false
         }}>
             {children}
         </UserStateContext.Provider>
