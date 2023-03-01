@@ -42,12 +42,9 @@ const MenuSelector: React.FC<{ user }> = ({ user }) => {
         })
         setSelectedTab(newTab)
     }
-
-    const usersWithAccess = process.env.NEXT_PUBLIC_APPROVED_USERS?.split(",")
-    console.log(usersWithAccess)
     let adminMenuWithAccessControl = adminMenu
 
-    if (!usersWithAccess.includes(user.navIdent)) {
+    if (user.adminAccess) {
         adminMenuWithAccessControl = adminMenu.filter(
             (menu) => menu !== "Dashbord" && menu !== "Områder"
         )

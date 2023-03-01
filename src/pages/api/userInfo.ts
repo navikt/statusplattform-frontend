@@ -14,7 +14,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         //For lokal kjøring:
         let userInfo = {
             name: "LOKAL, BRUKER",
-            navIdent: "L152423"
+            navIdent: "L152423",
+            adminAccess: true
         }
         res.status(200).json(userInfo);
         return;
@@ -36,14 +37,16 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     let accessToken = getAccessTokenFromBearerToken(authorizationHeader);
     //TODO hva skjer om token er expired her:
    await validateClaimsAndSignature(accessToken);
-   
+
 
   
     let claims = decodeJwt(accessToken);
+    const usersWithAccess = process.env.NEXT_PUBLIC_APPROVED_USERS?.split(",")
 
     let userInfo = {
                        name: claims.name,
-                       navIdent: claims.NAVident
+                       navIdent: claims.NAVident,
+                       adminAccess: usersWithAccess.includes(claims.NAVident)
                    }
                    
     res.status(200).json(userInfo);
