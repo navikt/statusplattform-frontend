@@ -7,11 +7,13 @@ import CustomNavSpinner from "../CustomNavSpinner"
 export interface UserStateInterface {
     name: string
     navIdent: string
+    adminAccess:boolean
 }
 
 export const UserStateContext = createContext<UserStateInterface>({
     navIdent: "",
-    name: ""
+    name: "",
+    adminAccess:false
 })
 
 
