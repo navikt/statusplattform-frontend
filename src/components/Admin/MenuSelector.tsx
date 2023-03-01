@@ -44,7 +44,7 @@ const MenuSelector: React.FC<{ user }> = ({ user }) => {
     }
 
     const usersWithAccess = process.env.NEXT_PUBLIC_APPROVED_USERS?.split(",")
-
+    console.log(usersWithAccess)
     let adminMenuWithAccessControl = adminMenu
 
     if (!usersWithAccess.includes(user.navIdent)) {
