@@ -40,6 +40,7 @@ spec:
                     - "azp_name"
             # optional, defaults shown
             singlePageApplication: false
+            allowAllUsers: true
         sidecar:
             enabled: true
             autoLogin: true
