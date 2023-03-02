@@ -311,6 +311,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
 
     const [endDateForActiveOpsMessage, setEndDateForActiveOpsMessage] =
         useState<Date>(props.convertedEndTime)
+    const [showCustomDates, setShowCustomDates] = useState(false)
 
     const editorRef = useRef(null)
 
@@ -468,9 +469,15 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
     }
 
     // Handlers for start- and endtime
-    const handleUpdateDates = (startDateInput: Date, endDateInput: Date) => {
-        setStartDateForActiveOpsMessage(startDateInput)
-        setEndDateForActiveOpsMessage(endDateInput)
+    const handleUpdateStartDate = (event) => {
+        const dateInput: Date = new Date(event)
+        setStartDateForActiveOpsMessage(dateInput)
+    }
+
+    const handleUpdateEndDate = (event) => {
+        const dateInput: Date = new Date(event)
+        setEndDateForActiveOpsMessage(dateInput)
+        setShowCustomDates(true)
     }
 
     const handleUpdateStartMinutes = (event) => {
@@ -612,11 +619,13 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                             startDateForActiveOpsMessage
                         }
                         endDateForActiveOpsMessage={endDateForActiveOpsMessage}
-                        handleUpdateDates={handleUpdateDates}
+                        handleUpdateStartDate={handleUpdateStartDate}
+                        handleUpdateEndDate={handleUpdateEndDate}
                         handleUpdateStartHours={handleUpdateStartHours}
                         handleUpdateStartMinutes={handleUpdateStartMinutes}
                         handleUpdateEndHours={handleUpdateEndHours}
                         handleUpdateEndMinutes={handleUpdateEndMinutes}
+                        showCustomDates={showCustomDates}
                     />
                 )}
             </div>
