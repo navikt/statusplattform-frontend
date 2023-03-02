@@ -27,6 +27,7 @@ spec:
     azure:
         application:
             enabled: true
+            allowAllUsers: true
             # optional, enum of {trygdeetaten.no, nav.no}
             # defaults to trygdeetaten.no in dev-* clusters, nav.no in production
             tenant: nav.no
