@@ -190,7 +190,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
             <ListOfOpsMessages opsMessages={opsMessages} /> */}
 
             <OpsSectionContainer>
-                {arrayActive.length == 0 && arrayInActive.length >= 0 && (
+                {arrayActive.length == 0 && arrayInActive.length == 0 && (
                     <>
                         <OpsHeadNoMsgs>
                             <Button
@@ -251,7 +251,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
                     </>
                 )}
 
-                {arrayInActive.length < 0 && (
+                {arrayInActive.length > 0 && (
                     <div>
                         <OpsHead>
                             <Heading
