@@ -1,3 +1,4 @@
+import { Back } from "@navikt/ds-icons"
 import { Button, Heading } from "@navikt/ds-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -21,6 +22,32 @@ const OpsHead = styled.div`
     flex-direction: row;
     justify-content: space-between;
     height: 3rem;
+`
+const OpsHeadNoMsgs = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 7rem 8rem 7rem 8rem;
+    gap: 1rem;
+    border-radius: 0.5rem;
+    z-index: 1000;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+    .createMsgBtn {
+        width: 18rem;
+        margin-left: 4.5rem;
+    }
+
+    .goBackBtn {
+        position: absolute;
+        top: 1rem;
+        left: 1rem;
+    }
 `
 const OpsSectionContainer = styled.div`
     display: flex;
@@ -156,33 +183,50 @@ const OpsMessages = ({ serverOpsMessages }) => {
     return (
         <Layout>
             <Head>
-                <title>Operasjonsmeldinger - status.nav.no</title>
+                <title>Driftsmeldinger - status.nav.no</title>
             </Head>
 
             {/* <Heading level="2" size="small">Alle driftsmeldinger</Heading>            
             <ListOfOpsMessages opsMessages={opsMessages} /> */}
 
             <OpsSectionContainer>
-                {arrayActive.length == 0 && arrayInActive.length == 0 && (
-                    <OpsHead>
-                        <Heading level="2" size="xlarge">
-                            Ingen meldinger
-                        </Heading>
-                        {approvedUsers.includes(user.navIdent) && (
+                {arrayActive.length == 0 && arrayInActive.length >= 0 && (
+                    <>
+                        <OpsHeadNoMsgs>
                             <Button
-                                onClick={() =>
-                                    router.push(RouterOpprettOpsMelding.PATH)
-                                }
+                                variant="tertiary"
+                                onClick={() => router.back()}
+                                icon={<Back />}
+                                className="goBackBtn"
                             >
-                                Opprett ny driftsmelding
+                                Gå tilbake
                             </Button>
-                        )}
-                    </OpsHead>
+                            <Heading level="2" size="large" className="heading">
+                                Ingen driftsmeldinger tilgjengelig
+                            </Heading>
+                            {approvedUsers.includes(user.navIdent) && (
+                                <Button
+                                    onClick={() =>
+                                        router.push(
+                                            RouterOpprettOpsMelding.PATH
+                                        )
+                                    }
+                                    className="createMsgBtn"
+                                >
+                                    Opprett ny driftsmelding
+                                </Button>
+                            )}
+                        </OpsHeadNoMsgs>
+                    </>
                 )}
                 {arrayActive.length > 0 && (
                     <>
                         <OpsHead>
-                            <Heading level="2" size="xlarge">
+                            <Heading
+                                level="2"
+                                size="xlarge"
+                                className="heading"
+                            >
                                 Aktive meldinger
                             </Heading>
                             {approvedUsers.includes(user.navIdent) && (
@@ -207,10 +251,14 @@ const OpsMessages = ({ serverOpsMessages }) => {
                     </>
                 )}
 
-                {arrayInActive.length > 0 && (
+                {arrayInActive.length < 0 && (
                     <div>
                         <OpsHead>
-                            <Heading level="2" size="xlarge">
+                            <Heading
+                                level="2"
+                                size="xlarge"
+                                className="heading"
+                            >
                                 Inaktive meldinger
                             </Heading>
                             {arrayActive.length <= 0 &&
