@@ -163,6 +163,22 @@ const OpsMessages = ({ serverOpsMessages }) => {
             <ListOfOpsMessages opsMessages={opsMessages} /> */}
 
             <OpsSectionContainer>
+                {arrayActive.length == 0 && arrayInActive.length == 0 && (
+                    <OpsHead>
+                        <Heading level="2" size="xlarge">
+                            Ingen meldinger
+                        </Heading>
+                        {approvedUsers.includes(user.navIdent) && (
+                            <Button
+                                onClick={() =>
+                                    router.push(RouterOpprettOpsMelding.PATH)
+                                }
+                            >
+                                Opprett ny driftsmelding
+                            </Button>
+                        )}
+                    </OpsHead>
+                )}
                 {arrayActive.length > 0 && (
                     <>
                         <OpsHead>
