@@ -95,7 +95,6 @@ export default function Navbar() {
                         onClick={() => router.push(RouterInternt.PATH)}
                     >
                         <Link href={RouterInternt.PATH}>
-
                             <LenkeSpacer
                                 className={`${
                                     router.asPath === RouterInternt.PATH
@@ -114,7 +113,6 @@ export default function Navbar() {
                                     {RouterInternt.NAME}
                                 </BodyShort>
                             </LenkeSpacer>
-
                         </Link>
                     </li>
                 )}
@@ -123,7 +121,6 @@ export default function Navbar() {
                     onClick={() => router.push(RouterPrivatperson.PATH)}
                 >
                     <Link href={RouterPrivatperson.PATH}>
-
                         <LenkeSpacer
                             className={`${
                                 router.asPath === RouterPrivatperson.PATH
@@ -142,7 +139,6 @@ export default function Navbar() {
                                 {RouterPrivatperson.NAME}
                             </BodyShort>
                         </LenkeSpacer>
-
                     </Link>
                 </li>
 
@@ -151,7 +147,6 @@ export default function Navbar() {
                     onClick={() => router.push(RouterArbeidsgiver.PATH)}
                 >
                     <Link href={RouterArbeidsgiver.PATH}>
-
                         <LenkeSpacer
                             className={`${
                                 router.asPath === RouterArbeidsgiver.PATH
@@ -170,7 +165,6 @@ export default function Navbar() {
                                 {RouterArbeidsgiver.NAME}
                             </BodyShort>
                         </LenkeSpacer>
-
                     </Link>
                 </li>
 
@@ -179,11 +173,9 @@ export default function Navbar() {
                     onClick={() => router.push(RouterSamarbeidspartner.PATH)}
                 >
                     <Link href={RouterSamarbeidspartner.PATH}>
-
                         <LenkeSpacer
                             className={`${
-                                router.asPath ===
-                                RouterSamarbeidspartner.PATH
+                                router.asPath === RouterSamarbeidspartner.PATH
                                     ? "active"
                                     : "inactive"
                             }`}
@@ -199,20 +191,17 @@ export default function Navbar() {
                                 {RouterSamarbeidspartner.NAME}
                             </BodyShort>
                         </LenkeSpacer>
-
                     </Link>
                 </li>
 
                 <li role="tab">
-                    <Link href={"https://vaktor.dev.nav.no/"}>
-
+                    <Link href={"https://status.nav.no/vaktor"}>
                         <LenkeSpacer>
                             <BodyShort size="small">Vaktor</BodyShort>
                         </LenkeSpacer>
-
                     </Link>
                 </li>
             </ul>
         </Nav>
-    );
+    )
 }
