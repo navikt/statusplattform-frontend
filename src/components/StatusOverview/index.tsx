@@ -95,8 +95,9 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
         const allAreaStatusesOk =
             countServicesInAreas() === countHealthyServicesInListOfAreas(areas)
         const areaStatuses = areas.map((area) => area.status)
+        const activeOpsmessages = opsMessages.map((opsMsg) => opsMsg.isActive)
 
-        if (allAreaStatusesOk) {
+        if (allAreaStatusesOk && activeOpsmessages.length != 0) {
             setAllGood(true)
         } else if (areaStatuses.includes("DOWN")) {
             setAllGood(false)
