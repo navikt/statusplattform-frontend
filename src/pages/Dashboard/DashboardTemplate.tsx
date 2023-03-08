@@ -56,7 +56,7 @@ const DigitalServicesContainer = styled.div`
 
 const PortalServiceTileContainer = styled.div<{ maxWidth: number }>`
     flex: 1;
-    padding: 2rem 0;
+    padding: 1rem 0;
     width: 100%;
 
     display: flex;

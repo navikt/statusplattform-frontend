@@ -2,6 +2,7 @@ import router, { useRouter } from "next/router"
 import styled from "styled-components"
 
 import { Edit, Next } from "@navikt/ds-icons"
+import { MenuElipsisHorizontalIcon } from "@navikt/aksel-icons"
 import { Alert, BodyShort, Button, Heading, Tooltip } from "@navikt/ds-react"
 
 import { useEffect, useState } from "react"
@@ -35,23 +36,20 @@ const StatusSummary = styled.div`
 
     .ops-container {
         display: grid;
-        row-gap: 1.5rem;
+
         column-gap: 2rem;
 
         overflow: hidden;
 
         @media (min-width: 800px) {
-            grid-auto-rows: 7.4rem;
             grid-template-columns: repeat(2, 425px);
         }
 
         @media (min-width: 1150px) {
-            grid-auto-rows: 7.4rem;
             grid-template-columns: repeat(3, 425px);
         }
 
         @media (min-width: 1600px) {
-            grid-auto-rows: 7.4rem;
             grid-template-columns: repeat(3, 425px);
         }
     }
@@ -93,9 +91,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
         const areaStatuses = areas.map((area) => area.status)
         const activeOpsmessages = opsMessages.map((opsMsg) => opsMsg.isActive)
 
-
         if (allAreaStatusesOk && activeOpsmessages.length == 0) {
-
             setAllGood(true)
         } else if (areaStatuses.includes("DOWN")) {
             setAllGood(false)
@@ -163,18 +159,35 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                             iconPosition="right"
                             onClick={() => router.push(RouterOpsMeldinger.PATH)}
                         >
-                            {opsMessages.length == 0
-                                ? "Ingen aktive driftsmeldinger"
-                                : "Se alle driftsmeldinger"}
+                            Se alle driftsmeldinger
                         </Button>
                     </div>
-                    <div className="affectedservices">
-                        {`Avvik på ${
-                            countIssueServices() + countDownServices()
-                        } av ${countServicesInAreas()} tjenester`}
-                    </div>
+                    {opsMessages.length != 0 && (
+                        <div className="affectedservices">
+                            {`Avvik på ${
+                                countIssueServices() + countDownServices()
+                            } av ${countServicesInAreas()} tjenester`}
+                        </div>
+                    )}
                 </div>
-                {opsMessages.length != 0 && (
+                {opsMessages.length == 0 ? (
+                    <div className="ops-container">
+                        {hasIssue == true && !hasDown && (
+                            <DeviationCardIfNoOpsMessage
+                                status={"ISSUE"}
+                                message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`}
+                            />
+                        )}
+                        {hasDown == true && (
+                            <DeviationCardIfNoOpsMessage
+                                status={"DOWN"}
+                                message={`Avvik på ${
+                                    countIssueServices() + countDownServices()
+                                } av ${countServicesInAreas()} tjenester`}
+                            />
+                        )}
+                    </div>
+                ) : (
                     <div className="ops-container">
                         {opsMessages.map((opsMessage, i) => {
                             return (
@@ -200,10 +213,16 @@ const EditOpsButton = styled(Button)`
     color: var(--a-gray-400);
 `
 
+const ReadOpsButton = styled(Button)`
+    height: 2rem;
+    margin: -0.6rem 0.2rem 0;
+    color: var(--a-gray-400);
+`
+
 const DeviationCardContainer = styled.div`
     position: relative;
-    height: 100%;
-    padding: 1rem 0;
+    height: fit-content;
+    padding: 1rem 0 2rem;
     border: none;
     border-radius: 5px;
     border-left: 7.5px solid transparent;
@@ -226,6 +245,11 @@ const DeviationCardContainer = styled.div`
         }
     }
 
+    &.noOps {
+        padding: 3rem 0 2.8rem 5rem;
+        margin-top: 1rem;
+    }
+
     &.has-issue {
         border-left-color: var(--a-orange-200);
     }
@@ -240,10 +264,10 @@ const DeviationCardContainer = styled.div`
 
     .headercontent {
         padding-right: 1rem;
-        text-overflow: ellipsis;
+
         overflow: hidden;
         display: -webkit-box;
-        -webkit-line-clamp: 1;
+
         -webkit-box-orient: vertical;
     }
 
@@ -256,10 +280,9 @@ const DeviationCardContainer = styled.div`
         justify-content: space-between;
 
         .navds-heading {
-            text-overflow: ellipsis;
             overflow: hidden;
             display: -webkit-box;
-            -webkit-line-clamp: 1;
+
             -webkit-box-orient: vertical;
         }
     }
@@ -273,7 +296,6 @@ const DeviationCardContainer = styled.div`
         height: 2.8rem;
         padding-right: 1rem;
 
-        text-overflow: ellipsis;
         overflow: hidden;
         display: -webkit-box;
         -webkit-line-clamp: 1;
@@ -315,7 +337,7 @@ const DeviationCardIfNoOpsMessage = ({
     return (
         <DeviationCardContainer
             aria-label={message + ". Trykk her for mer informasjon"}
-            className={"has-" + status.toLowerCase()}
+            className={"noOps has-" + status.toLowerCase()}
         >
             <div className="content">
                 <BodyShort>{message}</BodyShort>
@@ -371,21 +393,33 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
                         {datePrettifyer(startTime)}
                     </div>
 
-                    {approvedUsers.includes(user.navIdent) && (
-                        <Tooltip
-                            content="Rediger driftsmelding"
-                            placement="right"
-                        >
-                            <EditOpsButton
-                                icon={<Edit />}
+                    <div className="opsMsgButtons">
+                        {approvedUsers.includes(user.navIdent) && (
+                            <Tooltip
+                                content="Rediger driftsmelding"
+                                placement="right"
+                            >
+                                <EditOpsButton
+                                    icon={<Edit />}
+                                    aria-label="Rediger driftsmelding"
+                                    size="small"
+                                    variant="tertiary"
+                                    className={severity.toLowerCase()}
+                                    onClick={(e) => handleEditOpsClick(e, id)}
+                                ></EditOpsButton>
+                            </Tooltip>
+                        )}
+                        <Tooltip content="Se mer informasjon" placement="right">
+                            <ReadOpsButton
+                                icon={<MenuElipsisHorizontalIcon />}
                                 aria-label="Rediger driftsmelding"
                                 size="small"
                                 variant="tertiary"
                                 className={severity.toLowerCase()}
-                                onClick={(e) => handleEditOpsClick(e, id)}
-                            ></EditOpsButton>
+                                onClick={() => setModalOpen(!modalOpen)}
+                            ></ReadOpsButton>
                         </Tooltip>
-                    )}
+                    </div>
                 </div>
                 <div className="headercontent">
                     <Heading size="small">{internalHeader}</Heading>
