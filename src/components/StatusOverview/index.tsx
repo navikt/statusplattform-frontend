@@ -93,7 +93,9 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
         const areaStatuses = areas.map((area) => area.status)
         const activeOpsmessages = opsMessages.map((opsMsg) => opsMsg.isActive)
 
-        if (allAreaStatusesOk && activeOpsmessages.length != 0) {
+
+        if (allAreaStatusesOk && activeOpsmessages.length == 0) {
+
             setAllGood(true)
         } else if (areaStatuses.includes("DOWN")) {
             setAllGood(false)
