@@ -138,9 +138,9 @@ const NewService = () => {
         // Eksempelbruk i en standard nextjs app
         Modal.setAppElement("#__next")
         ;(async function () {
-            const retrievedServices: Service[] = await fetchServices()
-            const retrievedComponents: Component[] = await fetchComponents()
-            const retrievedAreas: Area[] = await fetchAreas()
+            const retrievedServices: Service[] = await fetchServicesMinimal()
+            const retrievedComponents: Component[] = await fetchComponentsMinimal()
+            const retrievedAreas: Area[] = await fetchAreasMinimal()
             setAllServices(retrievedServices)
             setAllComponents(retrievedComponents)
             setAllAreas(retrievedAreas)
