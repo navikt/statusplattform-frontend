@@ -1,6 +1,6 @@
 
 import { Area, SubArea } from "../types/types";
-import { EndPathAreasMinimal,EndPathArea, EndPathAreaContainingServices, EndPathAreas, EndPathDashboardWithArea, EndPathPutAreasToDashboard, EndPathServiceToArea, EndPathSpecificArea, EndPathSubAreas } from "./apiHelper";
+import { EndPathArea, EndPathAreaContainingServices, EndPathAreas, EndPathDashboardWithArea, EndPathPutAreasToDashboard, EndPathServiceToArea, EndPathSpecificArea, EndPathSubAreas } from "./apiHelper";
 import { createApiRequest } from "./createApiRequest";
 
 export class ResponseError extends Error {
