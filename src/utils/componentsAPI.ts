@@ -24,6 +24,21 @@ export const fetchComponents = async (): Promise<Component[]> => {
 }
 
 
+export const fetchComponentsMinimal = async (): Promise<Component[]> => {
+    let path = EndPathComponents() + "/Minimal"
+    let response
+
+    let request = createApiRequest(path, "GET")
+    response = await fetch(request)
+
+    if (response.ok) {
+        return response.json()
+    }
+
+    throw new ResponseError("Failed to fetch from server", response)
+}
+
+
 
 
 export const postComponent = async (component: Component): Promise<Component> =>{

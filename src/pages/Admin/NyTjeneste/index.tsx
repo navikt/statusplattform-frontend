@@ -22,10 +22,10 @@ import {
 import { Copy, Delete, InformationColored } from "@navikt/ds-icons"
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
-import { fetchServices, postService } from "../../../utils/servicesAPI"
-import { fetchAreas } from "../../../utils/areasAPI"
+import { fetchServicesMinimal, postService } from "../../../utils/servicesAPI"
+import { fetchAreasMinimal } from "../../../utils/areasAPI"
 import { RouterAdminTjenester } from "../../../types/routes"
-import { fetchComponents } from "../../../utils/componentsAPI"
+import { fetchComponentsMinimal } from "../../../utils/componentsAPI"
 import { HelptextCustomizedBlue } from "../../../components/TrafficLights"
 
 const NewServiceContainer = styled.div`
@@ -138,9 +138,9 @@ const NewService = () => {
         // Eksempelbruk i en standard nextjs app
         Modal.setAppElement("#__next")
         ;(async function () {
-            const retrievedServices: Service[] = await fetchServices()
-            const retrievedComponents: Component[] = await fetchComponents()
-            const retrievedAreas: Area[] = await fetchAreas()
+            const retrievedServices: Service[] = await fetchServicesMinimal()
+            const retrievedComponents: Component[] = await fetchComponentsMinimal()
+            const retrievedAreas: Area[] = await fetchAreasMinimal()
             setAllServices(retrievedServices)
             setAllComponents(retrievedComponents)
             setAllAreas(retrievedAreas)

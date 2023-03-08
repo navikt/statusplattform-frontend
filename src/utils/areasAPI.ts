@@ -19,6 +19,22 @@ const createRequest = (path, headers)  => new Request(path, {
 })
 
 
+export const fetchAreasMinimal = async (): Promise<Area[]> => {
+    let response;
+    let endPath = EndPathAreas() + "/Minimal"
+
+    let request = createApiRequest(endPath,"GET")
+    response = await fetch(request);
+
+    if (response.ok) {
+
+        return response.json()
+    }
+    throw new ResponseError("Failed to fetch from server", response)
+}
+
+
+
 export const fetchAreas = async (): Promise<Area[]> => {
     let response;
     let endPath = EndPathAreas()
