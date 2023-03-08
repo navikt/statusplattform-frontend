@@ -25,15 +25,11 @@ const StatusSummary = styled.div`
     .top-row {
         width: 100%;
 
-        display: grid;
-        grid-auto-columns: 1fr;
-        grid-auto-flow: column;
-
-        div:nth-child(2) {
-            text-align: center;
+        .deviation-button-wrapper {
+            position: absolute;
         }
-        .avvikshistorikk-button {
-            visibility: hidden;
+        .affectedservices {
+            text-align: center;
         }
     }
 
@@ -41,7 +37,7 @@ const StatusSummary = styled.div`
         display: grid;
         row-gap: 1.5rem;
         column-gap: 2rem;
-        height: 17rem;
+
         overflow: hidden;
 
         @media (min-width: 800px) {
@@ -165,37 +161,18 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                             iconPosition="right"
                             onClick={() => router.push(RouterOpsMeldinger.PATH)}
                         >
-                            Se alle driftsmeldinger
+                            {opsMessages.length == 0
+                                ? "Ingen aktive driftsmeldinger"
+                                : "Se alle driftsmeldinger"}
                         </Button>
                     </div>
-                    <div>
+                    <div className="affectedservices">
                         {`Avvik på ${
                             countIssueServices() + countDownServices()
                         } av ${countServicesInAreas()} tjenester`}
                     </div>
-
-                    <div className="planlagte-vedlikehold">
-                        {/* Dette må synliggjøres når det er klart. HUSK: Dette er top-row seksjonen. Her skal altså bare tittel vises. */}
-                    </div>
                 </div>
-                {opsMessages.length == 0 ? (
-                    <div className="ops-container">
-                        {hasIssue == true && !hasDown && (
-                            <DeviationCardIfNoOpsMessage
-                                status={"ISSUE"}
-                                message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`}
-                            />
-                        )}
-                        {hasDown == true && (
-                            <DeviationCardIfNoOpsMessage
-                                status={"DOWN"}
-                                message={`Avvik på ${
-                                    countIssueServices() + countDownServices()
-                                } av ${countServicesInAreas()} tjenester`}
-                            />
-                        )}
-                    </div>
-                ) : (
+                {opsMessages.length != 0 && (
                     <div className="ops-container">
                         {opsMessages.map((opsMessage, i) => {
                             return (
