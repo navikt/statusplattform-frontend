@@ -10,6 +10,21 @@ export class ResponseError extends Error {
 }
 
 
+export const fetchServicesMinimal = async (): Promise<Service[]> => {
+    let response;
+    let endPath = EndPathServices()+ "/Minimal"
+
+
+    let request = createApiRequest(endPath,"GET")
+    response = await fetch(request);
+
+    if (response.ok) {
+        let json = await response.json()
+        return json
+    }
+    throw new ResponseError("Failed to fetch from server", response)
+}
+
 
 export const fetchServices = async (): Promise<Service[]> => {
     let response;

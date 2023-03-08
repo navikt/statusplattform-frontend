@@ -1,6 +1,6 @@
 
 import { Area, SubArea } from "../types/types";
-import { EndPathArea, EndPathAreaContainingServices, EndPathAreas, EndPathDashboardWithArea, EndPathPutAreasToDashboard, EndPathServiceToArea, EndPathSpecificArea, EndPathSubAreas } from "./apiHelper";
+import { EndPathAreasMinimal,EndPathArea, EndPathAreaContainingServices, EndPathAreas, EndPathDashboardWithArea, EndPathPutAreasToDashboard, EndPathServiceToArea, EndPathSpecificArea, EndPathSubAreas } from "./apiHelper";
 import { createApiRequest } from "./createApiRequest";
 
 export class ResponseError extends Error {
@@ -17,6 +17,22 @@ myHeaders.append("backendpath", EndPathArea())
 const createRequest = (path, headers)  => new Request(path, {
     headers: new Headers(headers)
 })
+
+
+export const fetchAreasMinimal = async (): Promise<Area[]> => {
+    let response;
+    let endPath = EndPathAreas() + "/Minimal"
+
+    let request = createApiRequest(endPath,"GET")
+    response = await fetch(request);
+
+    if (response.ok) {
+
+        return response.json()
+    }
+    throw new ResponseError("Failed to fetch from server", response)
+}
+
 
 
 export const fetchAreas = async (): Promise<Area[]> => {
