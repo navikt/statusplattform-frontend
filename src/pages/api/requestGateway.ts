@@ -14,8 +14,6 @@ const api_key = process.env.NEXT_API_KEY
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 
-    console.log("IN REQUEST GATEWAY")
-
     let NO_AUTHORIZATION_HEADER = "No Authorization header"
 
 
@@ -66,7 +64,6 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     await resp.json()
     .then(body => {
         if (body) {
-            console.log("SUCCSESFULLY READ USERDATA")
             res.status(200).json(body)
         }
         else {
