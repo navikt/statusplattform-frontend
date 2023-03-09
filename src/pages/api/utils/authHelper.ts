@@ -58,7 +58,6 @@ export const requestBearerTokenForBackend = async (accessToken: String) => {
 
     if(resp.status == 200){
         let data = await resp.text()
-        console.log(data)
         return data
     }
     else {
