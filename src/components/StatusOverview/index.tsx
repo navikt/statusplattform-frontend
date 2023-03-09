@@ -130,7 +130,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
         return (
             <StatusSummary>
                 <Alert variant="success">
-                    Alle våre systemer fungerer normalt
+                    Alle systemer fungerer normalt
                 </Alert>
 
                 <div className="ops-container">
