@@ -1,5 +1,6 @@
 import { Back } from "@navikt/ds-icons"
 import {
+    Alert,
     BodyShort,
     Button,
     Checkbox,
@@ -266,11 +267,15 @@ const EditOpsMessageContainer = styled.div`
         padding: 0 0 1rem;
     }
 
+    .inactiveAlert {
+        margin: 1rem 0 1rem 0;
+    }
+
     .buttonContainer {
         display: flex;
         flex-direction: row;
         gap: 0.5rem;
-        margin: 1rem 0 -0.5rem 20rem;
+        margin: 1.5rem 0 -0.5rem 20rem;
     }
     @media (min-width: 600px) {
         .text-area-wrapper  {
@@ -303,6 +308,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
         ...props.opsMessage,
     })
     const [updateTimeframe, setUpdateTimeframe] = useState(false)
+
     const [selectedSeverity, setSelectedSeverity] = useState<string>(
         props.opsMessage.severity
     )
@@ -312,7 +318,8 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
     const [endDateForActiveOpsMessage, setEndDateForActiveOpsMessage] =
         useState<Date>(props.convertedEndTime)
     const [showCustomDates, setShowCustomDates] = useState(false)
-
+    const [isInactive, setIsInactive] = useState(false)
+    const [makeActive, setMakeActive] = useState(false)
     const editorRef = useRef(null)
 
     const {
@@ -468,6 +475,23 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
         }
     }
 
+    const handleSetAsInactive = () => {
+        setIsInactive(!isInactive)
+        const newDate: Date = new Date()
+        startDateForActiveOpsMessage < newDate
+            ? setEndDateForActiveOpsMessage(newDate)
+            : console.log("Kan ikke sette sluttdato etter startdato")
+    }
+
+    const handleSetAsActive = () => {
+        setMakeActive(!makeActive)
+        const newStartDate: Date = new Date()
+        const newEndDate: Date = new Date()
+        newEndDate.setDate(newStartDate.getDate() + 14)
+        setStartDateForActiveOpsMessage(newStartDate)
+        setEndDateForActiveOpsMessage(newEndDate)
+    }
+
     // Handlers for start- and endtime
     const handleUpdateStartDate = (event) => {
         const dateInput: Date = new Date(event)
@@ -607,12 +631,15 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                         )}
                     </div>
                 </div>
-                <Checkbox
-                    checked={updateTimeframe}
-                    onChange={() => setUpdateTimeframe(!updateTimeframe)}
-                >
-                    Ønsker du å endre datoer og klokkeslett?
-                </Checkbox>
+
+                {!isInactive && (
+                    <Checkbox
+                        checked={updateTimeframe}
+                        onChange={() => setUpdateTimeframe(!updateTimeframe)}
+                    >
+                        Tilpass datoer og klokkeslett
+                    </Checkbox>
+                )}
                 {updateTimeframe && (
                     <DateSetterOps
                         startDateForActiveOpsMessage={
@@ -628,11 +655,53 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                         showCustomDates={showCustomDates}
                     />
                 )}
+
+                {isActive && !updateTimeframe && (
+                    <Checkbox
+                        checked={isInactive}
+                        onChange={() => handleSetAsInactive()}
+                    >
+                        Gjør inaktiv
+                    </Checkbox>
+                )}
+
+                {!isActive && !updateTimeframe && (
+                    <Checkbox
+                        checked={makeActive}
+                        onChange={() => handleSetAsActive()}
+                    >
+                        Gjør aktiv
+                    </Checkbox>
+                )}
+                {isInactive && (
+                    <div className="inactiveAlert">
+                        <Alert variant="info">
+                            Driftsmeldingen gjøres inaktiv umiddelbart.{" "}
+                        </Alert>
+                    </div>
+                )}
+                {makeActive && (
+                    <div className="inactiveAlert">
+                        <Alert
+                            variant="info"
+                            size="small"
+                        >{`Driftsmeldingen gjøres aktiv umiddelbart, og forblir aktiv i 14 dager. Driftsmeldingen blir inaktiv ${endDateForActiveOpsMessage.toLocaleDateString(
+                            "nb",
+                            {
+                                month: "long",
+                                weekday: "long",
+                                day: "numeric",
+                                year: "numeric",
+                            }
+                        )}.`}</Alert>
+                    </div>
+                )}
             </div>
             <div className="buttonContainer">
                 <Button variant="secondary" onClick={() => router.back()}>
                     Avbryt
                 </Button>
+
                 <Button
                     variant="primary"
                     onClick={handleSubmitChangesOpsMessage}
