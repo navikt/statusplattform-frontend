@@ -7,7 +7,7 @@ import { validateClaimsAndSignature, getAccessTokenFromBearerToken, requestBeare
 const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
 
 
-const env = process.env.NEXT_PUBLIC_ENV
+const env = process.env.ENV
 const api_key = process.env.NEXT_API_KEY
 
 
@@ -34,7 +34,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const fetch = require("node-fetch");
     let https  = require('https');
     if(env == "dev"){
-    console.log("Env is dev")
+        console.log("Env is dev")
         https = require('http');
     }
 
