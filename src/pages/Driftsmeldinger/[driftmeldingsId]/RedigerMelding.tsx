@@ -412,20 +412,6 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
     }
 
     const handleSubmitChangesOpsMessage = async () => {
-        if (updatedOpsMessage.internalMessage.length > 500) {
-            toast.error(
-                "Intern melding er for lang. Den kan ikke være mer enn 500 tegn"
-            )
-            document.getElementById("internal-message-wrapper").focus()
-            return
-        }
-        if (updatedOpsMessage.externalMessage.length > 500) {
-            toast.error(
-                "Ekstern melding er for lang. Den kan ikke være mer enn 500 tegn"
-            )
-            document.getElementById("external-message-wrapper").focus()
-            return
-        }
         try {
             await updateSpecificOpsMessage(updatedOpsMessage)
                 .then(() => {
@@ -461,18 +447,14 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
     }
 
     const handleUpdateMessageInternal = (message: string) => {
-        if (message.length < 501) {
-            changeUpdatedOpsMessage({ ...opsMessage, internalMessage: message })
-        }
+        changeUpdatedOpsMessage({ ...opsMessage, internalMessage: message })
     }
 
     const handleUpdateMessageExternal = (message: string) => {
-        if (message.length < 501) {
-            changeUpdatedOpsMessage({
-                ...opsMessage,
-                externalMessage: message,
-            })
-        }
+        changeUpdatedOpsMessage({
+            ...opsMessage,
+            externalMessage: message,
+        })
     }
 
     const handleSetAsInactive = () => {
