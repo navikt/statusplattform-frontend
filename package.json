@@ -36,7 +36,7 @@
         "react-time-picker": "^5.2.0",
         "react-toastify": "^8.0.2",
         "styled-components": "^5.2.1",
-        "webpack": "^5.75.0"
+        "webpack": "^5.76.0"
     },
     "devDependencies": {
         "@babel/core": "^7.16.0",
