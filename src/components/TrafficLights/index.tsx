@@ -73,6 +73,10 @@ export const SuccessFilledCustomized = styled(SuccessFilled)`
     }
 `
 
+export const SuccessFilledGray = styled(SuccessFilled)`
+    color: var(--a-gray-600) !important;
+`
+
 export const ErrorCustomized = styled(Error)`
     color: var(--a-red-500) !important;
 `
@@ -84,6 +88,10 @@ export const ErrorFilledCustomized = styled(ErrorFilled)`
         border: double;
         border-radius: 50%;
     }
+`
+
+export const ErrorFilledGray = styled(ErrorFilled)`
+    color: var(--a-gray-600) !important;
 `
 
 export const NoStatusAvailableCircle = styled.span`
@@ -244,6 +252,26 @@ export const WarningFilledCustomized = ({ className }: CustomSvgCompI) => {
                 clipRule="evenodd"
                 d="M12 0C18.6274 0 24 5.37258 24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12C0 5.37258 5.37258 0 12 0ZM12 16C12.8284 16 13.5 16.6716 13.5 17.5C13.5 18.3284 12.8284 19 12 19C11.1716 19 10.5 18.3284 10.5 17.5C10.5 16.6716 11.1716 16 12 16ZM13 5V14H11V5H13Z"
                 fill="var(--a-orange-500)"
+            />
+        </WarningDownloadedFilledCustomized>
+    )
+}
+
+export const WarningFilledGray = ({ className }: CustomSvgCompI) => {
+    return (
+        <WarningDownloadedFilledCustomized
+            className={className}
+            xmlns="http://www.w3.org/2000/svg"
+            width="1em"
+            height="1em"
+            viewBox="0 0 24 24"
+            fill="none"
+        >
+            <path
+                fillRule="evenodd"
+                clipRule="evenodd"
+                d="M12 0C18.6274 0 24 5.37258 24 12C24 18.6274 18.6274 24 12 24C5.37258 24 0 18.6274 0 12C0 5.37258 5.37258 0 12 0ZM12 16C12.8284 16 13.5 16.6716 13.5 17.5C13.5 18.3284 12.8284 19 12 19C11.1716 19 10.5 18.3284 10.5 17.5C10.5 16.6716 11.1716 16 12 16ZM13 5V14H11V5H13Z"
+                fill="var(--a-gray-600)"
             />
         </WarningDownloadedFilledCustomized>
     )

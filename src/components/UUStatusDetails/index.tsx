@@ -4,8 +4,12 @@ import { countStatuses } from "../../components/UUStatus/utility"
 import { StatusItem } from "../../types/types"
 import {
     ErrorFilledCustomized,
+    ErrorFilledGray,
     HelpTextCustomizedGray,
     SuccessFilledCustomized,
+    SuccessFilledGray,
+    WarningFilledCustomized,
+    WarningFilledGray,
 } from "../TrafficLights"
 
 const DetailContainer = styled.div`
@@ -18,35 +22,59 @@ const DetailContainer = styled.div`
 const UUStatusDetails = (result, number) => {
     switch (result) {
         case "Passed":
-            return (
+            return number == 0 ? (
+                <Tag variant="neutral" size="xsmall">
+                    {number + " - Passed "} <SuccessFilledGray />
+                </Tag>
+            ) : (
                 <Tag variant="success" size="xsmall">
                     {number + " - Passed "} <SuccessFilledCustomized />
                 </Tag>
             )
         case "Failed":
-            return (
+            return number == 0 ? (
+                <Tag variant="neutral" size="xsmall">
+                    {number + " - Failed "} <ErrorFilledGray />
+                </Tag>
+            ) : (
                 <Tag variant="error" size="xsmall">
                     {number + " - Failed "} <ErrorFilledCustomized />
                 </Tag>
             )
         case "Cannot tell":
-            return (
+            return number == 0 ? (
                 <Tag variant="neutral" size="xsmall">
-                    {number + " - Cannot tell "} <HelpTextCustomizedGray />
+                    {number + " - Cannot tell "}{" "}
+                    <WarningFilledGray className="" />
+                </Tag>
+            ) : (
+                <Tag variant="warning" size="xsmall">
+                    {number + " - Cannot tell "}{" "}
+                    <WarningFilledCustomized className="" />
                 </Tag>
             )
         case "Not checked":
-            return (
+            return number == 0 ? (
                 <Tag variant="neutral" size="xsmall">
-                    {number + " - Not checked "}
-                    <HelpTextCustomizedGray />
+                    {number + " - Not checked "}{" "}
+                    <WarningFilledGray className="" />
+                </Tag>
+            ) : (
+                <Tag variant="warning" size="xsmall">
+                    {number + " - Not checked "}{" "}
+                    <WarningFilledCustomized className="" />
                 </Tag>
             )
         case "Not present":
-            return (
+            return number == 0 ? (
                 <Tag variant="neutral" size="xsmall">
-                    {number + " - Not present "}
-                    <HelpTextCustomizedGray />
+                    {number + " - Not present "}{" "}
+                    <WarningFilledGray className="" />
+                </Tag>
+            ) : (
+                <Tag variant="warning" size="xsmall">
+                    {number + " - Not present "}{" "}
+                    <WarningFilledCustomized className="" />
                 </Tag>
             )
         default:
