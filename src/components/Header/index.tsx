@@ -14,7 +14,8 @@ const CustomHeader = styled.header`
     height: 100%;
     padding-bottom: 0.5rem;
     background-color: white;
-    border-bottom: 1px solid #c6c2bf;
+
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.1);
 
     position: relative;
     display: flex;
