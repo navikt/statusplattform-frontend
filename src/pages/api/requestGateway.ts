@@ -32,7 +32,11 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     let path = backendPath + backendEndpath
 
     const fetch = require("node-fetch");
-    const https = require('https');
+    let https  = require('https');
+    if(env == "dev"){
+    console.log("Env is dev")
+        https = require('http');
+    }
 
 
     const httpsAgent = new https.Agent({
