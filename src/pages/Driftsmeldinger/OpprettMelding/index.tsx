@@ -203,25 +203,12 @@ const OpsComponent = ({
     }
 
     const handleUpdateMessageInternal = (message: string) => {
-        if (message.length < 501) {
-            setOpsMessage({ ...opsMessage, internalMessage: message })
-        }
+        setOpsMessage({ ...opsMessage, internalMessage: message })
+        console.log(message.length)
     }
 
     const handleUpdateMessageExternal = (message: string) => {
-        if (message.length < 501) {
-            setOpsMessage({ ...opsMessage, externalMessage: message })
-        }
-    }
-
-    const handleCopyInternal = (title: string, message: string) => {
-        if (message.length < 501) {
-            setOpsMessage({
-                ...opsMessage,
-                externalHeader: title,
-                externalMessage: message,
-            })
-        }
+        setOpsMessage({ ...opsMessage, externalMessage: message })
     }
 
     const handleIsActive = (newValue) => {
@@ -255,13 +242,11 @@ const OpsComponent = ({
     const handleUpdateDates = (startDateInput: Date, endDateInput: Date) => {
         setStartDateForActiveOpsMessage(startDateInput)
         setEndDateForActiveOpsMessage(endDateInput)
-
     }
 
     const handleUpdateStartDate = (event) => {
         const dateInput: Date = new Date(event)
         setStartDateForActiveOpsMessage(dateInput)
-
     }
 
     const handleUpdateEndDate = (event) => {
@@ -420,17 +405,13 @@ const OpsComponent = ({
                             startDateForActiveOpsMessage
                         }
                         endDateForActiveOpsMessage={endDateForActiveOpsMessage}
-
                         handleUpdateStartDate={handleUpdateStartDate}
                         handleUpdateEndDate={handleUpdateEndDate}
-
                         handleUpdateStartHours={handleUpdateStartHours}
                         handleUpdateStartMinutes={handleUpdateStartMinutes}
                         handleUpdateEndHours={handleUpdateEndHours}
                         handleUpdateEndMinutes={handleUpdateEndMinutes}
-
                         showCustomDates={showCustomDates}
-
                     />
                 </>
             )}

@@ -32,16 +32,14 @@ const TextEditor = React.forwardRef(
                 <Heading size="xsmall">{title ? title : "Innhold:"}</Heading>
                 <Editor
                     onInit={(editor) => (ref.current = editor)}
-
                     value={initialValue ? initialValue : ""}
-
                     onEditorChange={handleEditorChange}
                     init={{
                         height: 300,
                         menubar: "format edit help",
                         plugins: "lists advlist wordcount",
                         toolbar:
-                            "undo redo | bold italic underline strikethrough  |fontsize | forecolor backcolor | bullist numlist removeformat ",
+                            "undo redo | pastetext | bold italic underline strikethrough  |fontsize | forecolor backcolor | bullist numlist removeformat ",
 
                         content_style:
                             "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
