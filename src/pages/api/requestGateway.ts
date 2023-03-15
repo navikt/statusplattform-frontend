@@ -36,7 +36,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     //For dev with local backend and on test env:
     if(env == "dev"){
-        const https = require('http');
+        https = require('http');
     }
 
     const httpsAgent = new https.Agent({
