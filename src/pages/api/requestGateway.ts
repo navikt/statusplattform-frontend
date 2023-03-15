@@ -34,8 +34,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const fetch = require("node-fetch");
     const https = require('https');
 
-    //For dev with local backend:
-    //const https = require('http');
+    //For dev with local backend and on test env:
+    if(env == "dev"){
+        const https = require('http');
+    }
 
     const httpsAgent = new https.Agent({
         rejectUnauthorized: false,
