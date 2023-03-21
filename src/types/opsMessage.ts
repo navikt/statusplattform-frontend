@@ -12,6 +12,7 @@ export interface OpsMessageI {
     startTime: Date
     endTime: Date
     severity: SeverityEnum
+    status: StatusEnum
     state: string
 }
 
@@ -19,5 +20,11 @@ export enum SeverityEnum {
     OK = "OK",
     ISSUE = "ISSUE",
     DOWN = "DOWN",
-    NEUTRAL = "NEUTRAL"
+    NEUTRAL = "NEUTRAL",
+}
+
+export enum StatusEnum {
+    EXAMINING = "EXAMINING",
+    SOLVING = "SOLVING",
+    SOLVED = "SOLVED",
 }
