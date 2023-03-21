@@ -7,8 +7,38 @@ interface EditorProps {
     isInternal: Boolean
     initialValue?: string
     title?: string
+    status?: string
     handleUpdateInternalMsg?: (message: string) => void
     handleUpdateExternalMsg?: (message: string) => void
+}
+
+const DefaultMessage = (status: string) => {
+    var opsStatus = ""
+    var statusMsg = ""
+
+    switch (status) {
+        case "EXAMINING":
+            opsStatus = "Undersøkes"
+            statusMsg = "Det jobbes med å undersøke og identifisere feilen."
+            break
+        case "SOLVING":
+            opsStatus = "Feilretting pågår"
+            statusMsg = "Det jobbes med feilretting."
+            break
+        case "SOLVED":
+            opsStatus = "Løst"
+            statusMsg = "Feilen er nå rettet."
+            break
+    }
+
+    return `
+    <b>Problemer med: </b>  </br>
+  <b>Status: </b> ${opsStatus}
+</br></br>
+${statusMsg}</br></br>
+
+<b>Forventet rettetid er:
+`
 }
 
 const TextEditor = React.forwardRef(
@@ -17,6 +47,7 @@ const TextEditor = React.forwardRef(
             isInternal,
             initialValue,
             title,
+            status,
             handleUpdateInternalMsg,
             handleUpdateExternalMsg,
         }: EditorProps,
@@ -33,6 +64,7 @@ const TextEditor = React.forwardRef(
                 <Editor
                     onInit={(editor) => (ref.current = editor)}
                     value={initialValue ? initialValue : ""}
+                    initialValue={DefaultMessage(status)}
                     onEditorChange={handleEditorChange}
                     init={{
                         height: 300,

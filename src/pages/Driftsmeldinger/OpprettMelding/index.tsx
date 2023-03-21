@@ -8,7 +8,6 @@ import {
     RadioGroup,
     Select,
     TextField,
-    UNSAFE_DatePicker,
 } from "@navikt/ds-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -23,7 +22,11 @@ import DateSetterOps from "../../../components/DateSetterOps"
 import Layout from "../../../components/Layout"
 import TextEditor from "../../../components/TextEditor"
 import { OpsScheme, Spacer } from "../../../styles/styles"
-import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
+import {
+    OpsMessageI,
+    SeverityEnum,
+    StatusEnum,
+} from "../../../types/opsMessage"
 import { RouterOpsMeldinger } from "../../../types/routes"
 import { Service } from "../../../types/types"
 import { EndPathServices } from "../../../utils/apiHelper"
@@ -52,6 +55,7 @@ const CreateOpsMessage = ({ services }) => {
         startTime: new Date(),
         endTime: new Date(),
         severity: SeverityEnum.NEUTRAL,
+        status: StatusEnum.EXAMINING,
         state: "",
     })
     // EKSEMPEL: "2017-07-21T17:30:00Z"
@@ -141,8 +145,10 @@ const OpsComponent = ({
 
     const [isLoading, setIsLoading] = useState(true)
     const [selectedSeverity, setSelectedSeverity] = useState<string>("NEUTRAL")
+    const [selectedStatus, setSelectedStatus] = useState<string>("EXAMINING")
     const [showAutomaticTimeMsg, setShowAutomaticTimeMsg] = useState(true)
     const [showCustomDates, setShowCustomDates] = useState(false)
+
     const router = useRouter()
     const createMsgRef = useRef(null)
     const hours = []
@@ -175,6 +181,7 @@ const OpsComponent = ({
         internalMessage,
         isActive,
         onlyShowForNavEmployees,
+        status,
     } = opsMessage
 
     if (!router.isReady || isLoading) {
@@ -239,6 +246,12 @@ const OpsComponent = ({
         setOpsMessage({ ...opsMessage, severity: newSelectedSeverity })
     }
 
+    const handleUpdateSelectedStatus = (event) => {
+        const newSelectedStatus: StatusEnum = event.target.value
+        setSelectedStatus(newSelectedStatus)
+        setOpsMessage({ ...opsMessage, status: newSelectedStatus })
+    }
+
     const handleUpdateDates = (startDateInput: Date, endDateInput: Date) => {
         setStartDateForActiveOpsMessage(startDateInput)
         setEndDateForActiveOpsMessage(endDateInput)
@@ -299,6 +312,18 @@ const OpsComponent = ({
                 </Select>
             </div>
 
+            <div className="input-area">
+                <Select
+                    label="Velg status:"
+                    value={selectedStatus !== null ? selectedStatus : ""}
+                    onChange={handleUpdateSelectedStatus}
+                >
+                    <option value="EXAMINING">Undersøkes</option>
+                    <option value="SOLVING">Feilretting pågår</option>
+                    <option value="SOLVED">Løst</option>
+                </Select>
+            </div>
+
             <Spacer height="0.5rem" />
 
             <RadioGroup
@@ -329,6 +354,7 @@ const OpsComponent = ({
                 <TextEditor
                     ref={createMsgRef}
                     isInternal={true}
+                    status={selectedStatus}
                     initialValue={internalMessage}
                     title="Innhold:"
                     handleUpdateInternalMsg={handleUpdateMessageInternal}

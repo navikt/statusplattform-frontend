@@ -24,7 +24,11 @@ import DateSetterOps from "../../../components/DateSetterOps"
 import Layout from "../../../components/Layout"
 import TextEditor from "../../../components/TextEditor"
 import { OpsScheme, Spacer } from "../../../styles/styles"
-import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
+import {
+    OpsMessageI,
+    SeverityEnum,
+    StatusEnum,
+} from "../../../types/opsMessage"
 import { RouterError, RouterOpsMeldinger } from "../../../types/routes"
 import { Service } from "../../../types/types"
 import { EndPathServices, EndPathSpecificOps } from "../../../utils/apiHelper"
@@ -113,6 +117,9 @@ const OpsMessageComponent = ({
         useState<OpsMessageI>(serverSideOpsMessage)
     const [updatedSeverity, changeUpdatedSeverity] = useState<SeverityEnum>(
         serverSideOpsMessage.severity
+    )
+    const [updatedStatus, changeUpdatedStatus] = useState<StatusEnum>(
+        serverSideOpsMessage.status
     )
     const [isLoading, setIsLoading] = useState(false)
 
@@ -220,6 +227,7 @@ const OpsMessageComponent = ({
                 services={services}
                 toggleisEditing={(newValue) => toggleisEditing(newValue)}
                 changeUpdatedSeverity={changeUpdatedSeverity}
+                changeUpdatedStatus={changeUpdatedStatus}
                 convertedStartTime={convertedStartTime}
                 convertedEndTime={convertedEndTime}
                 prettifiedStartTime={prettifiedStartTime}
@@ -296,6 +304,7 @@ interface EditOpsMessageI {
     services: Service[]
     toggleisEditing: (newValue) => void
     changeUpdatedSeverity: (newValue) => void
+    changeUpdatedStatus: (newValue) => void
     prettifiedStartTime: string
     prettifiedEndTime: string
     convertedStartTime: Date
@@ -311,6 +320,10 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
 
     const [selectedSeverity, setSelectedSeverity] = useState<string>(
         props.opsMessage.severity
+    )
+
+    const [selectedStatus, setSelectedStatus] = useState<string>(
+        props.opsMessage.status
     )
     const [startDateForActiveOpsMessage, setStartDateForActiveOpsMessage] =
         useState<Date>(props.convertedStartTime)
@@ -328,6 +341,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
         services,
         toggleisEditing,
         changeUpdatedSeverity,
+        changeUpdatedStatus,
         prettifiedEndTime,
         prettifiedStartTime,
         convertedEndTime,
@@ -409,6 +423,16 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
             severity: newSelectedSeverity,
         })
         changeUpdatedSeverity(newSelectedSeverity)
+    }
+
+    const handleUpdateSelectedStatus = (event) => {
+        const newSelectedStatus: StatusEnum = event.target.value
+        setSelectedStatus(newSelectedStatus)
+        changeUpdatedOpsMessage({
+            ...opsMessage,
+            status: newSelectedStatus,
+        })
+        changeUpdatedStatus(newSelectedStatus)
     }
 
     const handleSubmitChangesOpsMessage = async () => {
@@ -539,6 +563,17 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                     <option value={SeverityEnum.DOWN}>Høy - Rød</option>
                 </Select>
             </div>
+            <div className="section">
+                <Select
+                    label="Velg status:"
+                    value={selectedStatus !== null ? selectedStatus : ""}
+                    onChange={handleUpdateSelectedStatus}
+                >
+                    <option value="EXAMINING">Undersøkes</option>
+                    <option value="SOLVING">Feilretting pågår</option>
+                    <option value="SOLVED">Løst</option>
+                </Select>
+            </div>
 
             <div className="section">
                 <RadioGroup
@@ -561,6 +596,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                     ref={editorRef}
                     isInternal={true}
                     initialValue={internalMessage}
+                    status={selectedStatus}
                     title="Intern tekst:"
                     handleUpdateInternalMsg={handleUpdateMessageInternal}
                 />
