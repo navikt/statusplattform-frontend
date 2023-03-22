@@ -1,7 +1,7 @@
 import { Checkbox, Heading } from "@navikt/ds-react"
 import { Editor } from "@tinymce/tinymce-react"
 import React, { MutableRefObject, useEffect, useState } from "react"
-import { datePrettifyer } from "src/utils/datePrettifyer"
+import { datePrettifyer } from "../../utils/datePrettifyer"
 import styled from "styled-components"
 
 const EditorTitle = styled.div`
