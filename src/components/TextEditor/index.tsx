@@ -53,7 +53,7 @@ const DefaultMessage = (
 
     return editing && showHistory
         ? `<b>Oppdatert: </b> ${formattedDate}
-        </br>
+        </br></br>
         <b>Status: </b> ${opsStatus}
 </br></br>
 ${statusMsg}
