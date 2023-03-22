@@ -4,11 +4,11 @@ export const datePrettifyer = (date) => {
         convertDate.getDate() < 10
             ? `0${convertDate.getDate()}`
             : convertDate.getDate()
-    }/${
+    }.${
         convertDate.getMonth() + 1 < 10
             ? `0${convertDate.getMonth() + 1}`
             : convertDate.getMonth() + 1
-    }/${convertDate.getFullYear().toString().substr(-2)} kl ${
+    }.${convertDate.getFullYear().toString().substr(-2)}  ${
         convertDate.getHours() < 10
             ? `0${convertDate.getHours()}`
             : convertDate.getHours()

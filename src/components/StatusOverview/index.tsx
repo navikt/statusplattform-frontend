@@ -18,10 +18,13 @@ import OpsMessageModal from "../OpsMessageModal"
 const StatusSummary = styled.div`
     margin-top: 1rem;
     width: 100%;
-
     display: flex;
     flex-direction: column;
     gap: 32px;
+
+    .noOpsContainer {
+        max-height: 7.5rem !important;
+    }
 
     .top-row {
         width: 100%;
@@ -36,21 +39,24 @@ const StatusSummary = styled.div`
 
     .ops-container {
         display: grid;
-
+        row-gap: 5rem;
         column-gap: 2rem;
-
+        grid-template-rows: repeat(1, 7.5rem);
         overflow: hidden;
 
         @media (min-width: 800px) {
             grid-template-columns: repeat(2, 425px);
+            grid-template-rows: repeat(1, 7.5rem);
         }
 
         @media (min-width: 1150px) {
             grid-template-columns: repeat(3, 425px);
+            grid-template-rows: repeat(1, 7.5rem);
         }
 
         @media (min-width: 1600px) {
             grid-template-columns: repeat(3, 425px);
+            grid-template-rows: repeat(1, 7.5rem);
         }
     }
 
@@ -171,13 +177,12 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                     )}
                 </div>
                 {opsMessages.length == 0 ? (
-                    <div className="ops-container">
-                        {hasIssue == true && !hasDown && (
-                            <DeviationCardIfNoOpsMessage
-                                status={"ISSUE"}
-                                message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`}
-                            />
-                        )}
+                    <div className="noOpsContainer">
+                        <DeviationCardIfNoOpsMessage
+                            status={"ISSUE"}
+                            message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`}
+                        />
+
                         {hasDown == true && (
                             <DeviationCardIfNoOpsMessage
                                 status={"DOWN"}
@@ -222,7 +227,8 @@ const ReadOpsButton = styled(Button)`
 const DeviationCardContainer = styled.div`
     position: relative;
     height: fit-content;
-    padding: 1rem 0 2rem;
+    min-height: 7rem;
+    padding: 0.75rem 0 1rem;
     border: none;
     border-radius: 5px;
     border-left: 7.5px solid transparent;
@@ -246,20 +252,30 @@ const DeviationCardContainer = styled.div`
     }
 
     &.noOps {
-        padding: 3rem 0 2.8rem 5rem;
-        margin-top: 1rem;
+        min-height: 3rem !important;
+        max-width: 17rem;
+        padding: 0.8rem 0 0 1.1rem;
     }
 
     &.has-issue {
         border-left-color: var(--a-orange-200);
+        :hover {
+            background: var(--a-orange-50);
+        }
     }
 
     &.has-down {
         border-left-color: var(--a-red-200);
+        :hover {
+            background: var(--a-red-50);
+        }
     }
 
     &.has-neutral {
         border-left-color: var(--a-blue-200);
+        :hover {
+            background: var(--a-blue-50);
+        }
     }
 
     .headercontent {
@@ -293,11 +309,12 @@ const DeviationCardContainer = styled.div`
 
     .opsMsgContainer {
         margin: -0.9rem 0;
-        height: 2.8rem;
+        height: fit-content;
+        max-height: 2.8rem;
         padding-right: 1rem;
 
         overflow: hidden;
-        display: -webkit-box;
+        text-overflow: clip;
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
     }
@@ -409,16 +426,6 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
                                 ></EditOpsButton>
                             </Tooltip>
                         )}
-                        <Tooltip content="Se mer informasjon" placement="right">
-                            <ReadOpsButton
-                                icon={<MenuElipsisHorizontalIcon />}
-                                aria-label="Rediger driftsmelding"
-                                size="small"
-                                variant="tertiary"
-                                className={severity.toLowerCase()}
-                                onClick={() => setModalOpen(!modalOpen)}
-                            ></ReadOpsButton>
-                        </Tooltip>
                     </div>
                 </div>
                 <div className="headercontent">

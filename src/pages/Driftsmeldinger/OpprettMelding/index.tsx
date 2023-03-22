@@ -7,6 +7,7 @@ import {
     Radio,
     RadioGroup,
     Select,
+    Textarea,
     TextField,
 } from "@navikt/ds-react"
 import Head from "next/head"
@@ -211,7 +212,6 @@ const OpsComponent = ({
 
     const handleUpdateMessageInternal = (message: string) => {
         setOpsMessage({ ...opsMessage, internalMessage: message })
-        console.log(message.length)
     }
 
     const handleUpdateMessageExternal = (message: string) => {
@@ -224,7 +224,7 @@ const OpsComponent = ({
             var endTime = new Date()
             currentTime.setDate(currentTime.getDate())
             endTime.setDate(endTime.getDate() + 14)
-            console.log("starttime " + currentTime + " endtime " + endTime)
+
             setStartDateForActiveOpsMessage(currentTime)
             setEndDateForActiveOpsMessage(endTime)
             setShowAutomaticTimeMsg(true)
@@ -341,7 +341,7 @@ const OpsComponent = ({
                 </Heading>
                 <TextField
                     label="Tittel:"
-                    value={internalHeader}
+                    defaultValue="Problemer med:"
                     onChange={(e) =>
                         setOpsMessage({
                             ...opsMessage,
@@ -357,7 +357,7 @@ const OpsComponent = ({
                     status={selectedStatus}
                     initialValue={internalMessage}
                     title="Innhold:"
-                    handleUpdateInternalMsg={handleUpdateMessageInternal}
+                    handleUpdateMsg={handleUpdateMessageInternal}
                 />
             </div>
 
@@ -370,7 +370,7 @@ const OpsComponent = ({
                     </div>
                     <TextField
                         label="Tittel:"
-                        value={externalHeader}
+                        defaultValue="Problemer med:"
                         onChange={(e) =>
                             setOpsMessage({
                                 ...opsMessage,
@@ -383,7 +383,7 @@ const OpsComponent = ({
                         isInternal={true}
                         initialValue={externalMessage}
                         title="Innhold:"
-                        handleUpdateInternalMsg={handleUpdateMessageExternal}
+                        handleUpdateMsg={handleUpdateMessageExternal}
                     />
                 </div>
             )}
