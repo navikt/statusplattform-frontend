@@ -1,20 +1,36 @@
-import { MutableRefObject } from "react"
-import { Heading } from "@navikt/ds-react"
-import React from "react"
+import { Checkbox, Heading } from "@navikt/ds-react"
 import { Editor } from "@tinymce/tinymce-react"
+import React, { MutableRefObject, useEffect, useState } from "react"
+import { datePrettifyer } from "src/utils/datePrettifyer"
+import styled from "styled-components"
 
+const EditorTitle = styled.div`
+    display: flex;
+    flex-direction: column;
+`
 interface EditorProps {
     isInternal: Boolean
     initialValue?: string
     title?: string
     status?: string
-    handleUpdateInternalMsg?: (message: string) => void
-    handleUpdateExternalMsg?: (message: string) => void
+    editing?: boolean
+    handleUpdateMsg?: (message: string) => void
 }
 
-const DefaultMessage = (status: string) => {
+const DefaultMessage = (
+    status: string,
+    editing: boolean,
+    initialvalue: string,
+    showHistory: boolean
+) => {
     var opsStatus = ""
     var statusMsg = ""
+    var currentDate = new Date()
+    var formattedDate = datePrettifyer(currentDate)
+
+    var grayText =
+        "<p style='color:#757575'>------------------------------------------------- </p>" +
+        initialvalue.replace("<p>", '<p style="color:#757575"')
 
     switch (status) {
         case "EXAMINING":
@@ -29,13 +45,28 @@ const DefaultMessage = (status: string) => {
             opsStatus = "Løst"
             statusMsg = "Feilen er nå rettet."
             break
+        default:
+            opsStatus = "Undersøkes"
+            statusMsg = "Det jobbes med å undersøke og identifisere feilen."
+            break
     }
 
-    return `
-    <b>Problemer med: </b>  </br>
-  <b>Status: </b> ${opsStatus}
+    return editing && showHistory
+        ? `<b>Oppdatert: </b> ${formattedDate}
+        </br>
+        <b>Status: </b> ${opsStatus}
 </br></br>
-${statusMsg}</br></br>
+${statusMsg}
+</br></br>
+
+<b>Forventet rettetid er: </b>
+
+
+${grayText} `
+        : ` <b>Status: </b> ${opsStatus}
+</br></br>
+${statusMsg}
+</br></br>
 
 <b>Forventet rettetid er:
 `
@@ -48,24 +79,44 @@ const TextEditor = React.forwardRef(
             initialValue,
             title,
             status,
-            handleUpdateInternalMsg,
-            handleUpdateExternalMsg,
+            editing,
+            handleUpdateMsg,
         }: EditorProps,
         ref: MutableRefObject<any>
     ) => {
-        const handleEditorChange = (content: any, editor: any) => {
-            isInternal
-                ? handleUpdateInternalMsg(content)
-                : handleUpdateExternalMsg(content)
-        }
+        const [message, setMessage] = useState("")
+        const [showHistory, setShowHistory] = useState(true)
+
+        useEffect(() => {
+            setMessage(initialValue)
+        }, [])
+
         return (
             <>
-                <Heading size="xsmall">{title ? title : "Innhold:"}</Heading>
+                <EditorTitle>
+                    <Heading size="xsmall">
+                        {title ? title : "Innhold:"}
+                    </Heading>
+                    {editing && (
+                        <Checkbox
+                            checked={showHistory}
+                            onChange={() => setShowHistory(!showHistory)}
+                            size="small"
+                        >
+                            Vis historikk
+                        </Checkbox>
+                    )}
+                </EditorTitle>
                 <Editor
                     onInit={(editor) => (ref.current = editor)}
                     value={initialValue ? initialValue : ""}
-                    initialValue={DefaultMessage(status)}
-                    onEditorChange={handleEditorChange}
+                    initialValue={DefaultMessage(
+                        status,
+                        editing,
+                        message,
+                        showHistory
+                    )}
+                    onEditorChange={handleUpdateMsg}
                     init={{
                         height: 300,
                         menubar: "format edit help",
