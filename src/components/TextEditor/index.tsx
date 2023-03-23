@@ -68,7 +68,7 @@ ${grayText} `
 ${statusMsg}
 </br></br>
 
-<b>Forventet rettetid er:
+<b>Forventet rettetid er:</b>&nbsp;
 `
 }
 
