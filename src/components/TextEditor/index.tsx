@@ -52,16 +52,13 @@ const DefaultMessage = (
     }
 
     return editing && showHistory
-        ? `<b>Oppdatert: </b> ${formattedDate}
+        ? `<b>Status: </b> ${opsStatus}
         </br></br>
-        <b>Status: </b> ${opsStatus}
+        <b>Oppdatert: </b> ${formattedDate}
 </br></br>
 ${statusMsg}
 </br></br>
-
-<b>Forventet rettetid er: </b>
-
-
+<b>Forventet rettetid er:</b>&nbsp;
 ${grayText} `
         : ` <b>Status: </b> ${opsStatus}
 </br></br>
