@@ -17,10 +17,12 @@ import {
 import { ChevronDownIcon } from "@navikt/aksel-icons"
 
 const MainNav = styled.nav`
+
     height: 2.35rem;
 
     display: none;
     border-bottom: 1px solid var(--a-gray-100);
+
 
     ul {
         list-style: none;
@@ -56,7 +58,7 @@ const MainNav = styled.nav`
                 display: flex;
                 flex-direction: row;
                 color: black;
-
+p
                 width: 5.5rem;
                 padding-left: 0.65rem;
 
@@ -64,7 +66,9 @@ const MainNav = styled.nav`
                 outline: none;
                 outline-offset: -3px;
 
+
                 border-bottom: var(--a-blue-500) 3px solid;
+
             }
 
             a {
@@ -80,6 +84,7 @@ const MainNav = styled.nav`
 `
 
 const SubNav = styled.nav`
+
     box-shadow: inset 0px -1px 1px rgba(0, 0, 0, 0.075);
     height: 2.1rem;
     padding-left: 25rem;
@@ -87,6 +92,7 @@ const SubNav = styled.nav`
     z-index: 1000;
     display: none;
     background-color: transparent;
+
     border-bottom: 1px solid #e6e5e4;
 
     ul {

@@ -1,31 +1,57 @@
-import styled from "styled-components"
-import { useState } from "react"
 import { useRouter } from "next/router"
+import { useState } from "react"
+import styled from "styled-components"
+import { EnvelopeClosedIcon, PhoneIcon } from "@navikt/aksel-icons"
+import { BodyShort, Label } from "@navikt/ds-react"
+import { useContext } from "react"
+import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
+import { UserData } from "../../types/userData"
 
-import TrafficLights from "../../components/TrafficLights"
-import { BodyShort } from "@navikt/ds-react"
+const ContactInformation = styled.div`
+    margin: -2.5rem 0;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    text-align: center;
+    gap: 1rem;
 
+    .externalTextLeft {
+        width: 20rem;
+        text-align: right;
+    }
+    .externalTextRight {
+        width: 20rem;
+        text-align: left;
+    }
+    .section {
+        display: flex;
+        flex-direction: row;
+        gap: 0.5rem;
+        .icon {
+            height: 1.4rem;
+            width: 1.4rem;
+            margin: 0.1rem 0;
+        }
+    }
+`
 const FooterContainer = styled.footer`
     width: 100%;
     margin-top: auto; /*Footer always at bottom (if min.height of container is 100vh)*/
-    padding: 0 1.5rem;
-
+    padding: 0;
+    height: 5.5rem;
     background-color: white;
     border-top: 1px solid #eaeaea;
 
-    display: flex;
-    flex-direction: column;
-
     img {
         width: 63px;
-        margin-right: 1.2rem;
+        margin: 1.5rem 0 0 -1.5rem;
+        position: sticky;
 
         :hover {
             transform: scale(1.05);
         }
     }
-
-    span {
+    .span {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -53,35 +79,22 @@ const FooterContainer = styled.footer`
         padding: 0 50px;
 
         flex-direction: row;
-        justify-content: space-between;
 
         ul {
             flex-direction: row;
-            justify-content: flex-end;
+
             gap: 1.5rem;
         }
     }
 `
 
-const Separator = styled.span`
-    display: none;
-    @media (min-width: 700px) {
-        display: block;
-        border-left: 1px solid var(--a-blue-100);
-        height: 100%;
-        width: 1px;
-        padding: 0 5ch;
-    }
-`
-
 const Footer = () => {
-    const [isInternal, changePrivilege] = useState(false)
-
     const router = useRouter()
+    const user = useContext<UserData>(UserStateContext)
 
     return (
         <FooterContainer>
-            <span>
+            <div className="footerImage">
                 <a
                     href="https://www.nav.no/no/person#"
                     aria-label="Lenke til nav.no"
@@ -92,28 +105,37 @@ const Footer = () => {
                         aria-hidden="true"
                     />
                 </a>
-                <BodyShort>Arbeids- og velferdsetaten</BodyShort>
-            </span>
-
-            <ul>
-                <li>
-                    <a href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten">
-                        Personvern og informasjonskapsler
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.nav.no/no/nav-og-samfunn/kontakt-nav/teknisk-brukerstotte/nyttig-a-vite/tilgjengelighet">
-                        Tilgjengelighet
-                    </a>
-                </li>
-            </ul>
-
-            {/* <Separator style={{display: router.pathname.includes("Dashboard") ? "block" : "none"}} />
-            {router.pathname.includes("Dashboard") &&
-                <div>
-                    <TrafficLights isInternal={isInternal}/>
-                </div>
-            } */}
+            </div>
+            {user.navIdent ? (
+                <ContactInformation>
+                    <Label> NAV IT Operasjonssenteret </Label>
+                    <Label>|</Label>
+                    <div className="section">
+                        <EnvelopeClosedIcon className="icon" />
+                        <BodyShort>
+                            <a href="mailto:ops@nav.no">ops@nav.no</a>
+                        </BodyShort>
+                    </div>
+                    <div className="section">
+                        <PhoneIcon className="icon" />
+                        <BodyShort>{"908 64 954 (døgnbemannet)"}</BodyShort>
+                    </div>
+                </ContactInformation>
+            ) : (
+                <ContactInformation>
+                    <BodyShort className="externalTextLeft">
+                        <a href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten">
+                            Personvern og informasjonskapsler
+                        </a>
+                    </BodyShort>
+                    <Label>|</Label>
+                    <BodyShort className="externalTextRight">
+                        <a href="https://www.nav.no/no/nav-og-samfunn/kontakt-nav/teknisk-brukerstotte/nyttig-a-vite/tilgjengelighet">
+                            Tilgjengelighet
+                        </a>
+                    </BodyShort>
+                </ContactInformation>
+            )}
         </FooterContainer>
     )
 }
