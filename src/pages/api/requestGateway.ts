@@ -7,7 +7,7 @@ import { validateClaimsAndSignature, getAccessTokenFromBearerToken, requestBeare
 const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
 
 
-const env = process.env.NEXT_PUBLIC_ENV
+const env = process.env.ENV
 const api_key = process.env.NEXT_API_KEY
 
 
@@ -32,12 +32,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     let path = backendPath + backendEndpath
 
     const fetch = require("node-fetch");
-    const https = require('https');
-
-    //For dev with local backend and on test env:
+    let https  = require('https');
     if(env == "dev"){
-        const https = require('http');
+        console.log("Env is dev")
+        https = require('http');
     }
+
 
     const httpsAgent = new https.Agent({
         rejectUnauthorized: false,

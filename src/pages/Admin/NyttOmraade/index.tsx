@@ -1,24 +1,22 @@
 import styled from "styled-components"
-import router from "next/router";
-import { useContext, useEffect, useState } from "react";
+import router from "next/router"
+import { useContext, useEffect, useState } from "react"
 
-import { Delete } from "@navikt/ds-icons";
-import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react";
+import { Delete } from "@navikt/ds-icons"
+import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react"
 import { toast, ToastContainer } from "react-toastify"
 
-import { Area, Service } from "../../../types/types";
-import { useLoader } from "../../../utils/useLoader";
-import Layout from '../../../components/Layout';
-import CustomNavSpinner from "../../../components/CustomNavSpinner";
-import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from "..";
-import { TitleContext } from "../../../components/ContextProviders/TitleContext";
-import { fetchServices } from "../../../utils/servicesAPI";
-import { postAdminArea } from "../../../utils/areasAPI";
-import { RouterAdminOmråder } from "../../../types/routes";
-import { EndPathServices } from "../../../utils/apiHelper";
-import { backendPath } from "../..";
-
-
+import { Area, Service } from "../../../types/types"
+import { useLoader } from "../../../utils/useLoader"
+import Layout from "../../../components/Layout"
+import CustomNavSpinner from "../../../components/CustomNavSpinner"
+import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
+import { TitleContext } from "../../../components/ContextProviders/TitleContext"
+import { fetchServices } from "../../../utils/servicesAPI"
+import { postAdminArea } from "../../../utils/areasAPI"
+import { RouterAdminOmråder } from "../../../types/routes"
+import { EndPathServices } from "../../../utils/apiHelper"
+import { backendPath } from "../.."
 
 const NewAreaContainer = styled.div`
     display: flex;
@@ -28,29 +26,27 @@ const NewAreaContainer = styled.div`
         width: 600px;
     }
 
-    input, select {
+    input,
+    select {
         margin: 1rem 0;
     }
 `
 
 export const getServerSideProps = async () => {
     const [resServices] = await Promise.all([
-        fetch(backendPath + EndPathServices())
+        fetch(backendPath + EndPathServices()),
     ])
-    
+
     const allServicesProps: Service[] = await resServices.json()
-    console.log(allServicesProps)
 
     return {
         props: {
             allServicesProps,
-        }
+        },
     }
 }
 
-
-
-const NewArea = ({allServicesProps}) => {
+const NewArea = ({ allServicesProps }) => {
     const allServices: Service[] = allServicesProps
     const [isLoading, setIsLoading] = useState(true)
     const [newArea, updateNewArea] = useState<Area>({
@@ -58,90 +54,130 @@ const NewArea = ({allServicesProps}) => {
         description: "",
         icon: "0001",
         services: [],
-        components: []
+        components: [],
     })
 
     useEffect(() => {
         setIsLoading(false)
-    },[])
+    }, [])
 
-
-    if(isLoading) {
-        return (
-            <CustomNavSpinner />
-        )
+    if (isLoading) {
+        return <CustomNavSpinner />
     }
 
     const { name, description, icon, services, components } = newArea
 
-    const handleAreaDataChange = (field: keyof typeof newArea) => (evt: React.ChangeEvent<HTMLInputElement>) => {
-        const updatedNewArea = {
-            ...newArea,
-            [field]: evt.target.getAttribute("type") === "number" ? parseInt(evt.target.value) : evt.target.value        }
-            
+    const handleAreaDataChange =
+        (field: keyof typeof newArea) =>
+        (evt: React.ChangeEvent<HTMLInputElement>) => {
+            const updatedNewArea = {
+                ...newArea,
+                [field]:
+                    evt.target.getAttribute("type") === "number"
+                        ? parseInt(evt.target.value)
+                        : evt.target.value,
+            }
+
             updateNewArea(updatedNewArea)
-    }
+        }
 
     const handleAddServiceToArea = (serviceToAdd: Service) => {
-        if(newArea.services.includes(serviceToAdd)) {
-            toast.warn("Tjeneste " + serviceToAdd.name + " er allerede i området")
+        if (newArea.services.includes(serviceToAdd)) {
+            toast.warn(
+                "Tjeneste " + serviceToAdd.name + " er allerede i området"
+            )
             return
         }
         const updatedList = [...newArea.services, serviceToAdd]
         const updatedArea: Area = {
-            name: name, services: updatedList, components: components, description: description, icon: icon
+            name: name,
+            services: updatedList,
+            components: components,
+            description: description,
+            icon: icon,
         }
         updateNewArea(updatedArea)
         toast.success("Lagt tjeneste til område")
     }
 
     const handleDeleteServiceOnArea = (serviceToDelete: Service) => {
-        const newServicesList: Service[] = [...newArea.services.filter(service => service != serviceToDelete)]
+        const newServicesList: Service[] = [
+            ...newArea.services.filter((service) => service != serviceToDelete),
+        ]
         const updatedArea: Area = {
-            name: name, description: description, components: components, icon: icon, services: newServicesList
+            name: name,
+            description: description,
+            components: components,
+            icon: icon,
+            services: newServicesList,
         }
         updateNewArea(updatedArea)
         toast.success("Fjernet tjeneste fra område")
     }
 
-
     const handlePostNewArea = (event) => {
         event.preventDefault()
-        postAdminArea(newArea).then(() => {
-            toast.success("Område lastet opp")
-            router.push(RouterAdminOmråder.PATH)
-        }).catch(() => {
-            toast.error("Klarte ikke å laste opp område")
-        })
+        postAdminArea(newArea)
+            .then(() => {
+                toast.success("Område lastet opp")
+                router.push(RouterAdminOmråder.PATH)
+            })
+            .catch(() => {
+                toast.error("Klarte ikke å laste opp område")
+            })
     }
-    
 
     return (
         <Layout>
-
             <NewAreaContainer>
+                <form onSubmit={(event) => handlePostNewArea(event)}>
+                    <Detail size="small" spacing>
+                        Felter markert med * er obligatoriske
+                    </Detail>
 
-                <form onSubmit={event => handlePostNewArea(event)}>
+                    <TextField
+                        type="text"
+                        required
+                        label="Navn på område"
+                        value={name}
+                        onChange={handleAreaDataChange("name")}
+                        placeholder="Navn*"
+                    />
+                    <TextField
+                        type="text"
+                        required
+                        label="Beskrivelse"
+                        value={description}
+                        onChange={handleAreaDataChange("description")}
+                        placeholder="Beskrivelse"
+                    />
 
-                    <Detail size="small" spacing>Felter markert med * er obligatoriske</Detail>
-                    
-                    <TextField type="text" required label="Navn på område" value={name} onChange={handleAreaDataChange("name")} placeholder="Navn*" />
-                    <TextField type="text" required label="Beskrivelse" value={description} onChange={handleAreaDataChange("description")} placeholder="Beskrivelse" />
-
-                    <AreaServices 
+                    <AreaServices
                         newArea={newArea}
                         allServices={allServices}
-                        handleDeleteServiceOnArea={(areaToDelete) => handleDeleteServiceOnArea(areaToDelete)}
-                        handleAddServiceToArea={(serviceToAdd) => handleAddServiceToArea(serviceToAdd)}
+                        handleDeleteServiceOnArea={(areaToDelete) =>
+                            handleDeleteServiceOnArea(areaToDelete)
+                        }
+                        handleAddServiceToArea={(serviceToAdd) =>
+                            handleAddServiceToArea(serviceToAdd)
+                        }
                     />
 
                     <HorizontalSeparator />
 
                     <ButtonContainer>
-                        <Button variant="secondary" type="button" value="Avbryt" onClick={() => router.push(RouterAdminOmråder.PATH)}>Avbryt</Button>
-                        <Button type="submit" value="Legg til">Lagre</Button>
+                        <Button
+                            variant="secondary"
+                            type="button"
+                            value="Avbryt"
+                            onClick={() => router.push(RouterAdminOmråder.PATH)}
+                        >
+                            Avbryt
+                        </Button>
+                        <Button type="submit" value="Legg til">
+                            Lagre
+                        </Button>
                     </ButtonContainer>
-
                 </form>
 
                 <ToastContainer />
@@ -150,12 +186,7 @@ const NewArea = ({allServicesProps}) => {
     )
 }
 
-
-
-
-
 /*-----------_Helpers_-------------*/
-
 
 interface AreaProps {
     newArea: Area
@@ -164,38 +195,43 @@ interface AreaProps {
     handleAddServiceToArea: (serviceToAdd) => void
 }
 
-
-
-
-const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDeleteServiceOnArea, handleAddServiceToArea: handleAddServiceToArea}: AreaProps) => {
-    const availableServices: Service[] = allServices.filter(area => !newArea.services.map(a => a.id).includes(area.id))
+const AreaServices = ({
+    newArea,
+    allServices,
+    handleDeleteServiceOnArea: handleDeleteServiceOnArea,
+    handleAddServiceToArea: handleAddServiceToArea,
+}: AreaProps) => {
+    const availableServices: Service[] = allServices.filter(
+        (area) => !newArea.services.map((a) => a.id).includes(area.id)
+    )
     const { changeTitle } = useContext(TitleContext)
-    const [selectedService, changeSelectedService] = useState<Service | null>(() => availableServices.length > 0 ? availableServices[0] : null)
+    const [selectedService, changeSelectedService] = useState<Service | null>(
+        () => (availableServices.length > 0 ? availableServices[0] : null)
+    )
 
     // useEffect(() => {
     //     console.log(allServices)
     // }, [])
-    
+
     useEffect(() => {
         changeTitle("Opprett nytt område")
-        if(availableServices.length > 0){
+        if (availableServices.length > 0) {
             changeSelectedService(availableServices[0])
-        }
-        else {
+        } else {
             changeSelectedService(null)
         }
     }, [allServices, newArea.services])
-    
-
 
     const handleUpdateSelectedArea = (event) => {
         const idOfSelectedArea: string = event.target.value
-        const newSelectedService: Service = availableServices.find(area => idOfSelectedArea === area.id)
+        const newSelectedService: Service = availableServices.find(
+            (area) => idOfSelectedArea === area.id
+        )
         changeSelectedService(newSelectedService)
     }
 
     const dependencyHandler = () => {
-        if(!selectedService) {
+        if (!selectedService) {
             toast.info("Ingen tjeneste valgt")
             return
         }
@@ -204,37 +240,57 @@ const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDe
 
     return (
         <DynamicListContainer>
-            
             <div className="column">
-                <Select label="Legg tjenester i ditt nye område" value={selectedService !== null ? selectedService.id : ""} onChange={handleUpdateSelectedArea}>
-                    {availableServices.length > 0 ?
-                        availableServices.map(area => {
+                <Select
+                    label="Legg tjenester i ditt nye område"
+                    value={selectedService !== null ? selectedService.id : ""}
+                    onChange={handleUpdateSelectedArea}
+                >
+                    {availableServices.length > 0 ? (
+                        availableServices.map((area) => {
                             return (
-                                <option key={area.id} value={area.id}>{area.name}</option>
+                                <option key={area.id} value={area.id}>
+                                    {area.name}
+                                </option>
                             )
                         })
-                    :
-                        <option key={undefined} value="">Ingen tjenester å legge til</option>
-                    }
+                    ) : (
+                        <option key={undefined} value="">
+                            Ingen tjenester å legge til
+                        </option>
+                    )}
                 </Select>
 
-                <Button variant="secondary" type="button" onClick={dependencyHandler}>Legg til</Button>
+                <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={dependencyHandler}
+                >
+                    Legg til
+                </Button>
             </div>
-            
 
             <div className="column">
-                {newArea.services.length > 0 &&
+                {newArea.services.length > 0 && (
                     <div>
                         <b>Tjenester i området</b>
                         <ul className="new-list">
-                            {newArea.services.map(service => {
+                            {newArea.services.map((service) => {
                                 return (
                                     <li key={service.id}>
                                         <BodyShort>
                                             {service.name}
-                                            <button className="colored" type="button" onClick={() => handleDeleteServiceOnArea(service)}>
+                                            <button
+                                                className="colored"
+                                                type="button"
+                                                onClick={() =>
+                                                    handleDeleteServiceOnArea(
+                                                        service
+                                                    )
+                                                }
+                                            >
                                                 <label>{service.name}</label>
-                                                <Delete/> Slett
+                                                <Delete /> Slett
                                             </button>
                                         </BodyShort>
                                     </li>
@@ -242,9 +298,8 @@ const AreaServices = ({newArea, allServices, handleDeleteServiceOnArea: handleDe
                             })}
                         </ul>
                     </div>
-                }
+                )}
             </div>
-
         </DynamicListContainer>
     )
 }
