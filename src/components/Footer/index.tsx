@@ -1,10 +1,18 @@
-import styled from "styled-components"
-import { useState } from "react"
 import { useRouter } from "next/router"
+import { useState } from "react"
+import styled from "styled-components"
 
-import TrafficLights from "../../components/TrafficLights"
-import { BodyShort } from "@navikt/ds-react"
+import { EnvelopeClosedIcon, PhoneIcon } from "@navikt/aksel-icons"
+import { BodyShort, Label, Link } from "@navikt/ds-react"
 
+const ContactInformation = styled.div`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+
+    .section {
+    }
+`
 const FooterContainer = styled.footer`
     width: 100%;
     margin-top: auto; /*Footer always at bottom (if min.height of container is 100vh)*/
@@ -95,18 +103,16 @@ const Footer = () => {
                 <BodyShort>Arbeids- og velferdsetaten</BodyShort>
             </span>
 
-            <ul>
-                <li>
-                    <a href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten">
-                        Personvern og informasjonskapsler
-                    </a>
-                </li>
-                <li>
-                    <a href="https://www.nav.no/no/nav-og-samfunn/kontakt-nav/teknisk-brukerstotte/nyttig-a-vite/tilgjengelighet">
-                        Tilgjengelighet
-                    </a>
-                </li>
-            </ul>
+            <ContactInformation>
+                <Label> NAV IT Operasjonssenteret</Label>
+                <BodyShort>
+                    <Link>ops@nav.no</Link>
+                </BodyShort>
+
+                <a href="https://www.nav.no/no/nav-og-samfunn/kontakt-nav/teknisk-brukerstotte/nyttig-a-vite/tilgjengelighet">
+                    Tilgjengelighet
+                </a>
+            </ContactInformation>
 
             {/* <Separator style={{display: router.pathname.includes("Dashboard") ? "block" : "none"}} />
             {router.pathname.includes("Dashboard") &&
