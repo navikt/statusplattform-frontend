@@ -178,11 +178,12 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                 </div>
                 {opsMessages.length == 0 ? (
                     <div className="noOpsContainer">
-                        <DeviationCardIfNoOpsMessage
-                            status={"ISSUE"}
-                            message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`}
-                        />
-
+                        {hasIssue == true && !hasDown && (
+                            <DeviationCardIfNoOpsMessage
+                                status={"ISSUE"}
+                                message={`Avvik på ${countIssueServices()} av ${countServicesInAreas()} tjenester`}
+                            />
+                        )}
                         {hasDown == true && (
                             <DeviationCardIfNoOpsMessage
                                 status={"DOWN"}
