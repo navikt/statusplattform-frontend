@@ -9,6 +9,7 @@ const ContactInformation = styled.div`
     display: flex;
     flex-direction: row;
     justify-content: center;
+    text-align: center;
 
     .section {
     }
@@ -20,7 +21,9 @@ const FooterContainer = styled.footer`
 
     background-color: white;
     border-top: 1px solid #eaeaea;
-
+    justify-content: center;
+    text-align: center;
+    align-items: center;
     display: flex;
     flex-direction: column;
 
@@ -32,8 +35,7 @@ const FooterContainer = styled.footer`
             transform: scale(1.05);
         }
     }
-
-    span {
+    . Fo span {
         display: flex;
         flex-direction: row;
         align-items: center;
@@ -61,11 +63,10 @@ const FooterContainer = styled.footer`
         padding: 0 50px;
 
         flex-direction: row;
-        justify-content: space-between;
 
         ul {
             flex-direction: row;
-            justify-content: flex-end;
+
             gap: 1.5rem;
         }
     }
@@ -89,7 +90,7 @@ const Footer = () => {
 
     return (
         <FooterContainer>
-            <span>
+            <div className="footerImage">
                 <a
                     href="https://www.nav.no/no/person#"
                     aria-label="Lenke til nav.no"
@@ -100,8 +101,7 @@ const Footer = () => {
                         aria-hidden="true"
                     />
                 </a>
-                <BodyShort>Arbeids- og velferdsetaten</BodyShort>
-            </span>
+            </div>
 
             <ContactInformation>
                 <Label> NAV IT Operasjonssenteret</Label>
