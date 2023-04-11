@@ -59,6 +59,7 @@ const DefaultMessage = (
 ${statusMsg}
 </br></br>
 <b>Forventet rettetid er:</b>&nbsp;
+</br>
 ${grayText} `
         : ` <b>Status: </b> ${opsStatus}
 </br></br>
