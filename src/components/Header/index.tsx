@@ -28,14 +28,14 @@ const CustomHeader = styled.header`
     }
 
     .last {
-        @media (max-width: 1149px) {
+        @media (max-width: 768px) {
             padding: 3px 0;
             min-height: inherit;
 
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            justify-content: space-between;
+            justify-content: right;
 
             button {
                 margin: 0;
@@ -220,8 +220,7 @@ const Header = () => {
             </HeaderContent>
 
             <div className="header-menues last">
-                <BurgerMenu />
-                <ProfileMenu name={name} navIdent={navIdent} />
+                <ProfileMenu name={name} navIdent={navIdent} /> <BurgerMenu />
             </div>
         </CustomHeader>
     )

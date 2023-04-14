@@ -12,6 +12,7 @@ import {
 } from "@navikt/aksel-icons"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import {
+    RouterAdmin,
     RouterArbeidsgiver,
     RouterInternt,
     RouterOpsMeldinger,
@@ -20,6 +21,7 @@ import {
     RouterUUStatus,
 } from "../../types/routes"
 import { UserData } from "../../types/userData"
+import { Employer } from "@navikt/ds-icons"
 
 const MainNav = styled.nav`
     height: 2.35rem;
@@ -100,12 +102,6 @@ const CustomChevron = styled(ChevronDownIcon)`
     position: absolute;
     margin-top: 0.1rem;
     margin-left: 0.1rem;
-
-    &.rightChevron {
-        margin-left: 22rem;
-        color: red;
-        transform: rotate(270deg);
-    }
 `
 
 const CustomPopoverContent = styled.div`
@@ -126,6 +122,13 @@ const CustomPopoverContent = styled.div`
         .subMenuIcon {
             width: 1.5rem;
             height: 1.5rem;
+            margin: 0 0 0 -2rem;
+            position: absolute;
+        }
+
+        .adminIcon {
+            width: 1.3rem;
+            height: 1.3rem;
             margin: 0 0 0 -2rem;
             position: absolute;
         }
@@ -263,7 +266,9 @@ export default function Navbar() {
                             <LenkeSpacer
                                 className={`${
                                     router.asPath === RouterInternt.PATH ||
-                                    router.asPath === RouterUUStatus.PATH
+                                    router.asPath === RouterUUStatus.PATH ||
+                                    router.asPath === RouterAdmin.PATH ||
+                                    router.asPath === RouterOpsMeldinger.PATH
                                         ? "activeIntern"
                                         : "inactiveIntern"
                                 }`}
@@ -277,7 +282,10 @@ export default function Navbar() {
                                     }`}
                                 >
                                     {router.asPath === RouterInternt.PATH ||
-                                    router.asPath === RouterUUStatus.PATH ? (
+                                    router.asPath === RouterUUStatus.PATH ||
+                                    router.asPath === RouterAdmin.PATH ||
+                                    router.asPath ===
+                                        RouterOpsMeldinger.PATH ? (
                                         <>
                                             {" "}
                                             <b>{RouterInternt.NAME}</b> {}{" "}
@@ -348,6 +356,64 @@ export default function Navbar() {
                             </Link>
                         </li>
                     )}
+                    {user.navIdent && router.asPath === RouterAdmin.PATH && (
+                        <li
+                            role="tab"
+                            onClick={() => router.push(RouterAdmin.PATH)}
+                        >
+                            <Link href={RouterAdmin.PATH}>
+                                <LenkeSpacer
+                                    className={`${
+                                        router.asPath === RouterAdmin.PATH
+                                            ? "active"
+                                            : "inactive"
+                                    }`}
+                                >
+                                    <BodyShort
+                                        size="small"
+                                        className={`${
+                                            router.pathname === "/UUStatus"
+                                                ? "active"
+                                                : ""
+                                        }`}
+                                    >
+                                        {RouterAdmin.NAME}
+                                    </BodyShort>
+                                </LenkeSpacer>
+                            </Link>
+                        </li>
+                    )}
+                    {user.navIdent &&
+                        router.asPath === RouterOpsMeldinger.PATH && (
+                            <li
+                                role="tab"
+                                onClick={() =>
+                                    router.push(RouterOpsMeldinger.PATH)
+                                }
+                            >
+                                <Link href={RouterOpsMeldinger.PATH}>
+                                    <LenkeSpacer
+                                        className={`${
+                                            router.asPath ===
+                                            RouterOpsMeldinger.PATH
+                                                ? "active"
+                                                : "inactive"
+                                        }`}
+                                    >
+                                        <BodyShort
+                                            size="small"
+                                            className={`${
+                                                router.pathname === "/UUStatus"
+                                                    ? "active"
+                                                    : ""
+                                            }`}
+                                        >
+                                            {RouterOpsMeldinger.NAME}
+                                        </BodyShort>
+                                    </LenkeSpacer>
+                                </Link>
+                            </li>
+                        )}
                 </ul>
             </MainNav>
             <Popover
@@ -394,6 +460,16 @@ export default function Navbar() {
                             >
                                 <ChatExclamationmarkIcon className="subMenuIcon" />{" "}
                                 {RouterOpsMeldinger.NAME}
+                            </a>
+
+                            <SubMenuDivider />
+
+                            <a
+                                onClick={() => router.push(RouterAdmin.PATH)}
+                                className="internalLinks"
+                            >
+                                <Employer className="adminIcon" />{" "}
+                                {RouterAdmin.NAME}
                             </a>
                         </CustomPopoverContent>
                     )}
