@@ -1,10 +1,15 @@
-import { BodyShort, Button, Popover } from "@navikt/ds-react"
+import { BodyShort, Button, Heading, Popover } from "@navikt/ds-react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useContext, useRef, useState } from "react"
 import styled from "styled-components"
 
-import { ChevronDownIcon } from "@navikt/aksel-icons"
+import {
+    ChatExclamationmarkIcon,
+    ChevronDownIcon,
+    FigureIcon,
+    MenuGridIcon,
+} from "@navikt/aksel-icons"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import {
     RouterArbeidsgiver,
@@ -15,10 +20,6 @@ import {
     RouterUUStatus,
 } from "../../types/routes"
 import { UserData } from "../../types/userData"
-
-const CustomPopover = styled(Popover.Content)`
-    display: flex;
-`
 
 const MainNav = styled.nav`
     height: 2.35rem;
@@ -107,6 +108,38 @@ const CustomChevron = styled(ChevronDownIcon)`
     }
 `
 
+const CustomPopoverContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    color: var(--a-gray-800);
+
+    .internalLinks {
+        color: var(--a-blue-800);
+        text-decoration: none;
+        margin: 0 0 0 2.5rem;
+
+        :hover {
+            text-decoration: underline;
+        }
+
+        .subMenuIcon {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin: 0 0 0 -2rem;
+            position: absolute;
+        }
+    }
+    .SubMenuHead {
+        text-align: center;
+        text-decoration: none;
+
+        :hover {
+            text-decoration: none;
+        }
+    }
+`
+
 const LenkeSpacer = styled.div`
     margin: 0 1rem;
     height: 100%;
@@ -124,24 +157,12 @@ const LenkeSpacer = styled.div`
     }
 `
 
-const Example = () => {
-    const buttonRef = useRef<HTMLButtonElement>(null)
-    const [openState, setOpenState] = useState(false)
-    return (
-        <>
-            <Button ref={buttonRef} onClick={() => setOpenState(true)}>
-                Åpne popover
-            </Button>
-            <Popover
-                open={openState}
-                onClose={() => setOpenState(false)}
-                anchorEl={buttonRef.current}
-            >
-                <Popover.Content>Innhold her!</Popover.Content>
-            </Popover>
-        </>
-    )
-}
+const SubMenuDivider = styled.div`
+    width: 17rem;
+    height: 1px;
+
+    background-color: var(--a-gray-300);
+`
 
 export default function Navbar() {
     const router = useRouter()
@@ -236,7 +257,7 @@ export default function Navbar() {
                     {user.navIdent && (
                         <li
                             role="tab"
-                            onClick={() => setOpenState(true)}
+                            onClick={() => setOpenState(!openState)}
                             ref={buttonRef}
                         >
                             <LenkeSpacer
@@ -336,19 +357,45 @@ export default function Navbar() {
             >
                 <Popover.Content>
                     {user.navIdent && (
-                        <>
-                            <Link href={RouterInternt.PATH} legacyBehavior>
+                        <CustomPopoverContent>
+                            {/* <Heading
+                                size="xsmall"
+                                level="2"
+                                className="SubMenuHead"
+                            >
+                                Internområder
+                            </Heading>
+                            <SubMenuDivider /> */}
+                            <a
+                                onClick={() => router.push(RouterInternt.PATH)}
+                                className="internalLinks"
+                            >
+                                <MenuGridIcon className="subMenuIcon" />
                                 Produktområder
-                            </Link>
+                            </a>
 
-                            <Link href={RouterUUStatus.PATH} legacyBehavior>
+                            <SubMenuDivider />
+
+                            <a
+                                onClick={() => router.push(RouterUUStatus.PATH)}
+                                className="internalLinks"
+                            >
+                                <FigureIcon className="subMenuIcon" />{" "}
                                 {RouterUUStatus.NAME}
-                            </Link>
+                            </a>
 
-                            <Link href={RouterOpsMeldinger.PATH} legacyBehavior>
+                            <SubMenuDivider />
+
+                            <a
+                                onClick={() =>
+                                    router.push(RouterOpsMeldinger.PATH)
+                                }
+                                className="internalLinks"
+                            >
+                                <ChatExclamationmarkIcon className="subMenuIcon" />{" "}
                                 {RouterOpsMeldinger.NAME}
-                            </Link>
-                        </>
+                            </a>
+                        </CustomPopoverContent>
                     )}
                 </Popover.Content>
             </Popover>
