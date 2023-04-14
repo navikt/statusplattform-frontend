@@ -1,36 +1,19 @@
 import styled from "styled-components"
 import { useState } from "react"
 import { useRouter } from "next/router"
-import { Logout, PeopleFilled } from "@navikt/ds-icons"
+import { Logout, People, PeopleFilled } from "@navikt/ds-icons"
 import { BodyShort, Button, Popover } from "@navikt/ds-react"
 import { RouterLogin, RouterLogout } from "../../../types/routes"
 
 const ProfileButton = styled(Button)`
-    border-radius: 50px;
     min-width: 148px;
     color: black;
-    box-shadow: inset 0 0 0 2px black;
-
-    :hover {
-        background: black;
-    }
-`
-
-const LoginButton = styled(Button)`
-    border-radius: 50px;
-    min-width: 148px;
-    color: black;
-    box-shadow: inset 0 0 0 2px black;
-
-    :hover {
-        background: black;
-    }
+    box-shadow: none;
+    border: none;
 `
 
 const PopoverCustomized = styled(Popover)`
-    position: absolute;
     width: max-content;
-    margin: 4rem 0 0 7rem;
 
     ul {
         padding: 0;
@@ -66,6 +49,7 @@ const ProfileMenu: React.FC<{ name: string; navIdent: string }> = ({
 
     const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(undefined)
+    const [anchor, setAnchor] = useState<HTMLSelectElement>(null)
 
     const handleSetOpen = (event) => {
         setOpen(!open)
@@ -91,12 +75,16 @@ const ProfileMenu: React.FC<{ name: string; navIdent: string }> = ({
                         variant="secondary"
                         onClick={(event) => handleSetOpen(event.currentTarget)}
                         aria-expanded={!!anchorEl}
-                        icon={<PeopleFilled />}
-                    />
+                        ref={setAnchor}
+                        icon={<People />}
+                        iconPosition="right"
+                    >
+                        {navIdent}
+                    </ProfileButton>
                     <PopoverCustomized
                         open={open}
                         onClose={closePopover}
-                        anchorEl={anchorEl}
+                        anchorEl={anchor}
                         placement="bottom-end"
                     >
                         <PopoverCustomized.Content>
@@ -115,14 +103,15 @@ const ProfileMenu: React.FC<{ name: string; navIdent: string }> = ({
                     </PopoverCustomized>
                 </>
             ) : (
-                <LoginButton
+                <ProfileButton
                     variant="secondary"
                     onClick={() => router.push(RouterLogin.PATH)}
+                    aria-expanded={!!anchorEl}
+                    icon={<People />}
+                    iconPosition="right"
                 >
-                    <BodyShort>
-                        <b>Logg inn</b>
-                    </BodyShort>
-                </LoginButton>
+                    Logg inn
+                </ProfileButton>
             )}
         </>
     )

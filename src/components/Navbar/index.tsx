@@ -1,28 +1,33 @@
-import { useContext } from "react"
-import { useRouter } from "next/router"
+import { BodyShort, Button, Heading, Popover } from "@navikt/ds-react"
 import Link from "next/link"
+import { useRouter } from "next/router"
+import { useContext, useRef, useState } from "react"
 import styled from "styled-components"
 
-import { BodyShort, Label } from "@navikt/ds-react"
-
-import { UserData } from "../../types/userData"
+import {
+    ChatExclamationmarkIcon,
+    ChevronDownIcon,
+    FigureIcon,
+    MenuGridIcon,
+} from "@navikt/aksel-icons"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import {
+    RouterAdmin,
     RouterArbeidsgiver,
     RouterInternt,
+    RouterOpsMeldinger,
     RouterPrivatperson,
     RouterSamarbeidspartner,
     RouterUUStatus,
 } from "../../types/routes"
-import { ChevronDownIcon } from "@navikt/aksel-icons"
+import { UserData } from "../../types/userData"
+import { Employer } from "@navikt/ds-icons"
 
 const MainNav = styled.nav`
-
     height: 2.35rem;
 
     display: none;
     border-bottom: 1px solid var(--a-gray-100);
-
 
     ul {
         list-style: none;
@@ -58,72 +63,24 @@ const MainNav = styled.nav`
                 display: flex;
                 flex-direction: row;
                 color: black;
-p
-                width: 5.5rem;
-                padding-left: 0.65rem;
+
+                width: 4.5rem;
+                padding-left: 0.3rem;
 
                 border: none;
                 outline: none;
                 outline-offset: -3px;
 
-
-                border-bottom: var(--a-blue-500) 3px solid;
-
+                border-bottom: var(--a-gray-400) 3px solid;
             }
-
-            a {
-                text-decoration: none;
-                color: black;
-            }
-        }
-    }
-
-    @media (min-width: 768px) {
-        display: block;
-    }
-`
-
-const SubNav = styled.nav`
-
-    box-shadow: inset 0px -1px 1px rgba(0, 0, 0, 0.075);
-    height: 2.1rem;
-    padding-left: 25rem;
-    padding-top: 0.2rem;
-    z-index: 1000;
-    display: none;
-    background-color: transparent;
-
-    border-bottom: 1px solid #e6e5e4;
-
-    ul {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-        height: 100%;
-        width: 100%;
-
-        display: flex;
-        justify-content: center;
-
-        li {
-            :hover {
-                cursor: pointer;
-            }
-
-            .inactive {
-                border-bottom: invisible 3px solid;
+            .inactiveIntern {
+                width: 4.5rem;
+                padding-left: 0.3rem;
+                border-bottom: transparent 3px solid;
 
                 :hover {
                     border-bottom: var(--a-blue-500) 3px solid;
                 }
-            }
-
-            :focus,
-            :active {
-                color: black;
-                background-color: transparent;
-                outline: var(--a-border-focus) 3px solid;
-                box-shadow: 0 0 0 0;
             }
 
             a {
@@ -140,10 +97,50 @@ const SubNav = styled.nav`
 
 const CustomChevron = styled(ChevronDownIcon)`
     color: var(--a-gray-700);
-    height: 2.5rem;
+    height: 1.15rem;
+    width: 1.15rem;
     position: absolute;
-    margin-top: -0.55rem;
-    margin-left: 0.2rem;
+    margin-top: 0.1rem;
+    margin-left: 0.1rem;
+`
+
+const CustomPopoverContent = styled.div`
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    color: var(--a-gray-800);
+
+    .internalLinks {
+        color: var(--a-blue-800);
+        text-decoration: none;
+        margin: 0 0 0 2.5rem;
+
+        :hover {
+            text-decoration: underline;
+        }
+
+        .subMenuIcon {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin: 0 0 0 -2rem;
+            position: absolute;
+        }
+
+        .adminIcon {
+            width: 1.3rem;
+            height: 1.3rem;
+            margin: 0 0 0 -2rem;
+            position: absolute;
+        }
+    }
+    .SubMenuHead {
+        text-align: center;
+        text-decoration: none;
+
+        :hover {
+            text-decoration: none;
+        }
+    }
 `
 
 const LenkeSpacer = styled.div`
@@ -163,10 +160,20 @@ const LenkeSpacer = styled.div`
     }
 `
 
+const SubMenuDivider = styled.div`
+    width: 17rem;
+    height: 1px;
+
+    background-color: var(--a-gray-300);
+`
+
 export default function Navbar() {
     const router = useRouter()
 
     const user = useContext<UserData>(UserStateContext)
+
+    const buttonRef = useRef<HTMLLIElement>(null)
+    const [openState, setOpenState] = useState(false)
 
     return (
         <>
@@ -253,14 +260,58 @@ export default function Navbar() {
                     {user.navIdent && (
                         <li
                             role="tab"
+                            onClick={() => setOpenState(!openState)}
+                            ref={buttonRef}
+                        >
+                            <LenkeSpacer
+                                className={`${
+                                    router.asPath === RouterInternt.PATH ||
+                                    router.asPath === RouterUUStatus.PATH ||
+                                    router.asPath === RouterAdmin.PATH ||
+                                    router.asPath === RouterOpsMeldinger.PATH
+                                        ? "activeIntern"
+                                        : "inactiveIntern"
+                                }`}
+                            >
+                                <BodyShort
+                                    size="small"
+                                    className={`${
+                                        router.pathname === "/Internt"
+                                            ? "activeIntern"
+                                            : ""
+                                    }`}
+                                >
+                                    {router.asPath === RouterInternt.PATH ||
+                                    router.asPath === RouterUUStatus.PATH ||
+                                    router.asPath === RouterAdmin.PATH ||
+                                    router.asPath ===
+                                        RouterOpsMeldinger.PATH ? (
+                                        <>
+                                            {" "}
+                                            <b>{RouterInternt.NAME}</b> {}{" "}
+                                            <CustomChevron />
+                                        </>
+                                    ) : (
+                                        <>
+                                            {RouterInternt.NAME}
+                                            <CustomChevron />
+                                        </>
+                                    )}
+                                </BodyShort>
+                            </LenkeSpacer>
+                        </li>
+                    )}
+
+                    {user.navIdent && router.asPath === RouterInternt.PATH && (
+                        <li
+                            role="tab"
                             onClick={() => router.push(RouterInternt.PATH)}
                         >
                             <Link href={RouterInternt.PATH}>
                                 <LenkeSpacer
                                     className={`${
-                                        router.asPath === RouterInternt.PATH ||
-                                        router.asPath === RouterUUStatus.PATH
-                                            ? "activeIntern"
+                                        router.asPath === RouterInternt.PATH
+                                            ? "active"
                                             : "inactive"
                                     }`}
                                 >
@@ -268,68 +319,83 @@ export default function Navbar() {
                                         size="small"
                                         className={`${
                                             router.pathname === "/Internt"
-                                                ? "activeIntern"
+                                                ? "active"
                                                 : ""
                                         }`}
                                     >
-                                        {router.asPath === RouterInternt.PATH ||
-                                        router.asPath ===
-                                            RouterUUStatus.PATH ? (
-                                            <>
-                                                {" "}
-                                                <b>{RouterInternt.NAME}</b>{" "}
-                                                <CustomChevron />
-                                            </>
-                                        ) : (
-                                            RouterInternt.NAME
-                                        )}
+                                        Produktområder
                                     </BodyShort>
                                 </LenkeSpacer>
                             </Link>
                         </li>
                     )}
-                </ul>
-            </MainNav>
-
-            {user.navIdent &&
-                (router.asPath === RouterInternt.PATH ||
-                    router.asPath === RouterUUStatus.PATH) && (
-                    <SubNav>
-                        <ul>
-                            <li
-                                role="tab"
-                                onClick={() => router.push(RouterInternt.PATH)}
-                            >
-                                <Link href={RouterInternt.PATH}>
-                                    <LenkeSpacer
+                    {user.navIdent && router.asPath === RouterUUStatus.PATH && (
+                        <li
+                            role="tab"
+                            onClick={() => router.push(RouterUUStatus.PATH)}
+                        >
+                            <Link href={RouterUUStatus.PATH}>
+                                <LenkeSpacer
+                                    className={`${
+                                        router.asPath === RouterUUStatus.PATH
+                                            ? "active"
+                                            : "inactive"
+                                    }`}
+                                >
+                                    <BodyShort
+                                        size="small"
                                         className={`${
-                                            router.asPath === RouterInternt.PATH
+                                            router.pathname === "/UUStatus"
                                                 ? "active"
-                                                : "inactive"
+                                                : ""
                                         }`}
                                     >
-                                        <BodyShort
-                                            size="small"
-                                            className={`${
-                                                router.pathname === "/Internt"
-                                                    ? "active"
-                                                    : ""
-                                            }`}
-                                        >
-                                            Produktområder
-                                        </BodyShort>
-                                    </LenkeSpacer>
-                                </Link>
-                            </li>
+                                        UU Status
+                                    </BodyShort>
+                                </LenkeSpacer>
+                            </Link>
+                        </li>
+                    )}
+                    {user.navIdent && router.asPath === RouterAdmin.PATH && (
+                        <li
+                            role="tab"
+                            onClick={() => router.push(RouterAdmin.PATH)}
+                        >
+                            <Link href={RouterAdmin.PATH}>
+                                <LenkeSpacer
+                                    className={`${
+                                        router.asPath === RouterAdmin.PATH
+                                            ? "active"
+                                            : "inactive"
+                                    }`}
+                                >
+                                    <BodyShort
+                                        size="small"
+                                        className={`${
+                                            router.pathname === "/UUStatus"
+                                                ? "active"
+                                                : ""
+                                        }`}
+                                    >
+                                        {RouterAdmin.NAME}
+                                    </BodyShort>
+                                </LenkeSpacer>
+                            </Link>
+                        </li>
+                    )}
+                    {user.navIdent &&
+                        router.asPath === RouterOpsMeldinger.PATH && (
                             <li
                                 role="tab"
-                                onClick={() => router.push(RouterUUStatus.PATH)}
+                                onClick={() =>
+                                    router.push(RouterOpsMeldinger.PATH)
+                                }
                             >
-                                <Link href={RouterUUStatus.PATH}>
+                                <Link href={RouterOpsMeldinger.PATH}>
                                     <LenkeSpacer
                                         className={`${
                                             router.asPath ===
-                                            RouterUUStatus.PATH
+                                            RouterOpsMeldinger.PATH
                                                 ? "active"
                                                 : "inactive"
                                         }`}
@@ -342,23 +408,73 @@ export default function Navbar() {
                                                     : ""
                                             }`}
                                         >
-                                            UU Status
+                                            {RouterOpsMeldinger.NAME}
                                         </BodyShort>
                                     </LenkeSpacer>
                                 </Link>
                             </li>
-                            <li role="tab">
-                                <Link href={"https://status.nav.no/vaktor"}>
-                                    <LenkeSpacer className="inactive">
-                                        <BodyShort size="small">
-                                            Vaktor
-                                        </BodyShort>
-                                    </LenkeSpacer>
-                                </Link>
-                            </li>
-                        </ul>
-                    </SubNav>
-                )}
+                        )}
+                </ul>
+            </MainNav>
+            <Popover
+                open={openState}
+                onClose={() => setOpenState(false)}
+                anchorEl={buttonRef.current}
+            >
+                <Popover.Content>
+                    {user.navIdent && (
+                        <CustomPopoverContent>
+                            {/* <Heading
+                                size="xsmall"
+                                level="2"
+                                className="SubMenuHead"
+                            >
+                                Internområder
+                            </Heading>
+                            <SubMenuDivider /> */}
+                            <a
+                                onClick={() => router.push(RouterInternt.PATH)}
+                                className="internalLinks"
+                            >
+                                <MenuGridIcon className="subMenuIcon" />
+                                Produktområder
+                            </a>
+
+                            <SubMenuDivider />
+
+                            <a
+                                onClick={() => router.push(RouterUUStatus.PATH)}
+                                className="internalLinks"
+                            >
+                                <FigureIcon className="subMenuIcon" />{" "}
+                                {RouterUUStatus.NAME}
+                            </a>
+
+                            <SubMenuDivider />
+
+                            <a
+                                onClick={() =>
+                                    router.push(RouterOpsMeldinger.PATH)
+                                }
+                                className="internalLinks"
+                            >
+                                <ChatExclamationmarkIcon className="subMenuIcon" />{" "}
+                                {RouterOpsMeldinger.NAME}
+                            </a>
+
+                            <SubMenuDivider />
+
+                            <a
+                                onClick={() => router.push(RouterAdmin.PATH)}
+                                className="internalLinks"
+                            >
+                                <Employer className="adminIcon" />{" "}
+                                {RouterAdmin.NAME}
+                            </a>
+                        </CustomPopoverContent>
+                    )}
+                </Popover.Content>
+            </Popover>
         </>
     )
 }
