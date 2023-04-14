@@ -8,7 +8,7 @@ import { UserStateContext } from "../../components/ContextProviders/UserStatusCo
 import { UserData } from "../../types/userData"
 
 const ContactInformation = styled.div`
-    margin: -2.5rem 0;
+    margin: 2rem 0;
     display: flex;
     flex-direction: row;
     justify-content: center;
@@ -44,7 +44,7 @@ const FooterContainer = styled.footer`
 
     img {
         width: 63px;
-        margin: 1.5rem 0 0 -1.5rem;
+        margin: -1rem 0;
         position: sticky;
 
         :hover {
@@ -94,20 +94,19 @@ const Footer = () => {
 
     return (
         <FooterContainer>
-            <div className="footerImage">
-                <a
-                    href="https://www.nav.no/no/person#"
-                    aria-label="Lenke til nav.no"
-                >
-                    <img
-                        src="/sp/assets/nav-logo/png/black.png"
-                        alt="Til forsiden"
-                        aria-hidden="true"
-                    />
-                </a>
-            </div>
             {user.navIdent ? (
                 <ContactInformation>
+                    {" "}
+                    <a
+                        href="https://www.nav.no/no/person#"
+                        aria-label="Lenke til nav.no"
+                    >
+                        <img
+                            src="/sp/assets/nav-logo/png/black.png"
+                            alt="Til forsiden"
+                            aria-hidden="true"
+                        />
+                    </a>
                     <Label> NAV IT Operasjonssenteret </Label>
                     <Label>|</Label>
                     <div className="section">

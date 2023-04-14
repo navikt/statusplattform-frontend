@@ -13,9 +13,7 @@ const ProfileButton = styled(Button)`
 `
 
 const PopoverCustomized = styled(Popover)`
-    position: absolute;
     width: max-content;
-    margin: 4rem 0 0 0rem;
 
     ul {
         padding: 0;
@@ -51,6 +49,7 @@ const ProfileMenu: React.FC<{ name: string; navIdent: string }> = ({
 
     const [open, setOpen] = useState(false)
     const [anchorEl, setAnchorEl] = useState(undefined)
+    const [anchor, setAnchor] = useState<HTMLSelectElement>(null)
 
     const handleSetOpen = (event) => {
         setOpen(!open)
@@ -76,6 +75,7 @@ const ProfileMenu: React.FC<{ name: string; navIdent: string }> = ({
                         variant="secondary"
                         onClick={(event) => handleSetOpen(event.currentTarget)}
                         aria-expanded={!!anchorEl}
+                        ref={setAnchor}
                         icon={<People />}
                         iconPosition="right"
                     >
@@ -84,7 +84,7 @@ const ProfileMenu: React.FC<{ name: string; navIdent: string }> = ({
                     <PopoverCustomized
                         open={open}
                         onClose={closePopover}
-                        anchorEl={anchorEl}
+                        anchorEl={anchor}
                         placement="bottom-end"
                     >
                         <PopoverCustomized.Content>
