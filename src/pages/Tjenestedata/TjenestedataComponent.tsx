@@ -787,15 +787,18 @@ const ServicesAndComponentsList: React.FC<{
                 {componentDependencies.map((component) => {
                     return (
                         <li key={component.id}>
-                            <Link href={RouterTjenestedata.PATH + component.id} legacyBehavior>
-                                {handleAndSetStatusIcon(component.status)}{" "}
+                            <a
+                                href={RouterTjenestedata.PATH + component.id}
+                                legacyBehavior
+                            >
+                                {handleAndSetStatusIcon(component.status)}
                                 {component.name}
-                            </Link>
+                            </a>
                         </li>
-                    );
+                    )
                 })}
             </ServiceAndComponentDependencies>
-        );
+        )
     }
 
     return (
@@ -803,15 +806,18 @@ const ServicesAndComponentsList: React.FC<{
             {serviceDependencies.map((service) => {
                 return (
                     <li key={service.id}>
-                        <Link href={RouterTjenestedata.PATH + service.id} legacyBehavior>
+                        <a
+                            href={RouterTjenestedata.PATH + service.id}
+                            legacyBehavior
+                        >
                             {handleAndSetStatusIcon(service.record.status)}{" "}
                             {service.name}
-                        </Link>
+                        </a>
                     </li>
-                );
+                )
             })}
         </ServiceAndComponentDependencies>
-    );
+    )
 }
 
 /* STYLES FOR DAILY ENTRIES*/
