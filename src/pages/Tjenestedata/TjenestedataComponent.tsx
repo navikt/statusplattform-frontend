@@ -787,7 +787,13 @@ const ServicesAndComponentsList: React.FC<{
                 {componentDependencies.map((component) => {
                     return (
                         <li key={component.id}>
-                            <a href={RouterTjenestedata.PATH + component.id}>
+                            <a
+                                href={
+                                    "/sp" +
+                                    RouterTjenestedata.PATH +
+                                    component.id
+                                }
+                            >
                                 {handleAndSetStatusIcon(component.status)}
                                 {component.name}
                             </a>
@@ -803,7 +809,7 @@ const ServicesAndComponentsList: React.FC<{
             {serviceDependencies.map((service) => {
                 return (
                     <li key={service.id}>
-                        <a href={RouterTjenestedata.PATH + service.id}>
+                        <a href={"/sp" + RouterTjenestedata.PATH + service.id}>
                             {handleAndSetStatusIcon(service.record.status)}{" "}
                             {service.name}
                         </a>
