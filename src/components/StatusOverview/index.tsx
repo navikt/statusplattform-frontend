@@ -28,12 +28,14 @@ const StatusSummary = styled.div`
     .top-row {
         width: 100%;
         display: flex;
-
         justify-content: right;
-        .deviation-button-wrapper {
-        }
+        float: right;
+
         .affectedservices {
-            text-align: center;
+            position: absolute;
+            left: 50%;
+            -webkit-transform: translateX(-50%);
+            transform: translateX(-50%);
         }
     }
 
@@ -171,6 +173,13 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
         return (
             <StatusSummary>
                 <div className="top-row">
+                    {opsMessages.length != 0 && (
+                        <div className="affectedservices">
+                            {`Avvik på ${
+                                countIssueServices() + countDownServices()
+                            } av ${countServicesInAreas()} tjenester`}
+                        </div>
+                    )}
                     <div className="deviation-button-wrapper">
                         <Button
                             variant="tertiary"
@@ -182,13 +191,6 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                             Se alle driftsmeldinger
                         </Button>
                     </div>
-                    {opsMessages.length != 0 && (
-                        <div className="affectedservices">
-                            {`Avvik på ${
-                                countIssueServices() + countDownServices()
-                            } av ${countServicesInAreas()} tjenester`}
-                        </div>
-                    )}
                 </div>
                 {opsMessages.length == 0 ? (
                     <div className="noOpsContainer">
