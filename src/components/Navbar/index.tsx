@@ -7,6 +7,9 @@ import styled from "styled-components"
 import {
     ChatExclamationmarkIcon,
     ChevronDownIcon,
+
+    ChevronRightIcon,
+
     FigureIcon,
     MenuGridIcon,
 } from "@navikt/aksel-icons"
@@ -19,6 +22,7 @@ import {
     RouterPrivatperson,
     RouterSamarbeidspartner,
     RouterUUStatus,
+    RouterVaktor,
 } from "../../types/routes"
 import { UserData } from "../../types/userData"
 import { Employer } from "@navikt/ds-icons"
@@ -64,14 +68,17 @@ const MainNav = styled.nav`
                 flex-direction: row;
                 color: black;
 
-                width: 4.5rem;
+
+                width: 6rem;
+
                 padding-left: 0.3rem;
 
                 border: none;
                 outline: none;
                 outline-offset: -3px;
 
-                border-bottom: var(--a-gray-400) 3px solid;
+                border-bottom: var(--a-blue-500) 3px solid;
+
             }
             .inactiveIntern {
                 width: 4.5rem;
@@ -95,7 +102,9 @@ const MainNav = styled.nav`
     }
 `
 
-const CustomChevron = styled(ChevronDownIcon)`
+
+const CustomChevron = styled(ChevronRightIcon)`
+
     color: var(--a-gray-700);
     height: 1.15rem;
     width: 1.15rem;
@@ -160,12 +169,40 @@ const LenkeSpacer = styled.div`
     }
 `
 
+
+const SubLenkeSpacer = styled.div`
+    margin: 0 1rem 0 -2rem;
+    height: 100%;
+
+    border-bottom: 3px transparent;
+    display: flex;
+    align-items: center;
+
+    &.active {
+        border-bottom: var(--a-blue-500) 3px solid;
+
+        p {
+            font-weight: bold !important;
+        }
+    }
+`
+
+
 const SubMenuDivider = styled.div`
     width: 17rem;
     height: 1px;
 
     background-color: var(--a-gray-300);
 `
+
+
+const VaktorLogo = styled.img`
+    height: 1.4rem;
+    width: 1.4rem;
+    position: absolute;
+    margin: -0.1rem 0 0 -2rem;
+`
+
 
 export default function Navbar() {
     const router = useRouter()
@@ -266,9 +303,9 @@ export default function Navbar() {
                             <LenkeSpacer
                                 className={`${
                                     router.asPath === RouterInternt.PATH ||
-                                    router.asPath === RouterUUStatus.PATH ||
-                                    router.asPath === RouterAdmin.PATH ||
-                                    router.asPath === RouterOpsMeldinger.PATH
+
+                                    router.asPath === RouterUUStatus.PATH
+
                                         ? "activeIntern"
                                         : "inactiveIntern"
                                 }`}
@@ -281,22 +318,20 @@ export default function Navbar() {
                                             : ""
                                     }`}
                                 >
-                                    {router.asPath === RouterInternt.PATH ||
-                                    router.asPath === RouterUUStatus.PATH ||
-                                    router.asPath === RouterAdmin.PATH ||
-                                    router.asPath ===
-                                        RouterOpsMeldinger.PATH ? (
-                                        <>
-                                            {" "}
-                                            <b>{RouterInternt.NAME}</b> {}{" "}
-                                            <CustomChevron />
-                                        </>
-                                    ) : (
-                                        <>
-                                            {RouterInternt.NAME}
-                                            <CustomChevron />
-                                        </>
-                                    )}
+
+                                    {/* {router.asPath === RouterInternt.PATH ||
+                                    router.asPath === RouterUUStatus.PATH ? ( 
+                                    //     <>
+                                    //         {" "}
+                                    //         <b>{RouterInternt.NAME}</b> {}{" "}
+                                    //         <CustomChevron />
+                                    //     </>
+                                    // ) : (*/}
+                                    <>
+                                        {RouterInternt.NAME}
+                                        <CustomChevron />
+                                    </>
+
                                 </BodyShort>
                             </LenkeSpacer>
                         </li>
@@ -308,7 +343,7 @@ export default function Navbar() {
                             onClick={() => router.push(RouterInternt.PATH)}
                         >
                             <Link href={RouterInternt.PATH}>
-                                <LenkeSpacer
+                                <SubLenkeSpacer
                                     className={`${
                                         router.asPath === RouterInternt.PATH
                                             ? "active"
@@ -325,7 +360,7 @@ export default function Navbar() {
                                     >
                                         Produktområder
                                     </BodyShort>
-                                </LenkeSpacer>
+                                </SubLenkeSpacer>
                             </Link>
                         </li>
                     )}
@@ -335,7 +370,9 @@ export default function Navbar() {
                             onClick={() => router.push(RouterUUStatus.PATH)}
                         >
                             <Link href={RouterUUStatus.PATH}>
-                                <LenkeSpacer
+
+                                <SubLenkeSpacer
+
                                     className={`${
                                         router.asPath === RouterUUStatus.PATH
                                             ? "active"
@@ -350,70 +387,13 @@ export default function Navbar() {
                                                 : ""
                                         }`}
                                     >
-                                        UU Status
+
+                                        Status Universell Utforming
                                     </BodyShort>
-                                </LenkeSpacer>
+                                </SubLenkeSpacer>
                             </Link>
                         </li>
                     )}
-                    {user.navIdent && router.asPath === RouterAdmin.PATH && (
-                        <li
-                            role="tab"
-                            onClick={() => router.push(RouterAdmin.PATH)}
-                        >
-                            <Link href={RouterAdmin.PATH}>
-                                <LenkeSpacer
-                                    className={`${
-                                        router.asPath === RouterAdmin.PATH
-                                            ? "active"
-                                            : "inactive"
-                                    }`}
-                                >
-                                    <BodyShort
-                                        size="small"
-                                        className={`${
-                                            router.pathname === "/UUStatus"
-                                                ? "active"
-                                                : ""
-                                        }`}
-                                    >
-                                        {RouterAdmin.NAME}
-                                    </BodyShort>
-                                </LenkeSpacer>
-                            </Link>
-                        </li>
-                    )}
-                    {user.navIdent &&
-                        router.asPath === RouterOpsMeldinger.PATH && (
-                            <li
-                                role="tab"
-                                onClick={() =>
-                                    router.push(RouterOpsMeldinger.PATH)
-                                }
-                            >
-                                <Link href={RouterOpsMeldinger.PATH}>
-                                    <LenkeSpacer
-                                        className={`${
-                                            router.asPath ===
-                                            RouterOpsMeldinger.PATH
-                                                ? "active"
-                                                : "inactive"
-                                        }`}
-                                    >
-                                        <BodyShort
-                                            size="small"
-                                            className={`${
-                                                router.pathname === "/UUStatus"
-                                                    ? "active"
-                                                    : ""
-                                            }`}
-                                        >
-                                            {RouterOpsMeldinger.NAME}
-                                        </BodyShort>
-                                    </LenkeSpacer>
-                                </Link>
-                            </li>
-                        )}
                 </ul>
             </MainNav>
             <Popover
@@ -424,14 +404,6 @@ export default function Navbar() {
                 <Popover.Content>
                     {user.navIdent && (
                         <CustomPopoverContent>
-                            {/* <Heading
-                                size="xsmall"
-                                level="2"
-                                className="SubMenuHead"
-                            >
-                                Internområder
-                            </Heading>
-                            <SubMenuDivider /> */}
                             <a
                                 onClick={() => router.push(RouterInternt.PATH)}
                                 className="internalLinks"
@@ -446,6 +418,7 @@ export default function Navbar() {
                                 onClick={() => router.push(RouterUUStatus.PATH)}
                                 className="internalLinks"
                             >
+
                                 <FigureIcon className="subMenuIcon" />{" "}
                                 {RouterUUStatus.NAME}
                             </a>
@@ -453,23 +426,19 @@ export default function Navbar() {
                             <SubMenuDivider />
 
                             <a
-                                onClick={() =>
-                                    router.push(RouterOpsMeldinger.PATH)
-                                }
+
+                                href="https://status.nav.no/vaktor"
+                                aria-label="Lenke til Vaktor"
                                 className="internalLinks"
                             >
-                                <ChatExclamationmarkIcon className="subMenuIcon" />{" "}
-                                {RouterOpsMeldinger.NAME}
-                            </a>
+                                <VaktorLogo
+                                    src="/sp/assets/images/vaktor.png"
+                                    alt="Vaktor"
+                                    aria-hidden="true"
+                                />
 
-                            <SubMenuDivider />
+                                {RouterVaktor.NAME}
 
-                            <a
-                                onClick={() => router.push(RouterAdmin.PATH)}
-                                className="internalLinks"
-                            >
-                                <Employer className="adminIcon" />{" "}
-                                {RouterAdmin.NAME}
                             </a>
                         </CustomPopoverContent>
                     )}
