@@ -4,8 +4,10 @@ import { useRouter } from "next/router"
 import { useContext, useRef, useState } from "react"
 import styled from "styled-components"
 
+
 import { ChevronRightIcon, FigureIcon, MenuGridIcon } from "@navikt/aksel-icons"
 import { CustomPopoverContent } from "../../styles/styles"
+
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import {
     RouterArbeidsgiver,
@@ -58,6 +60,7 @@ const MainNav = styled.nav`
                 flex-direction: row;
                 color: black;
 
+
                 width: 6rem;
 
                 padding-left: 0.3rem;
@@ -67,6 +70,7 @@ const MainNav = styled.nav`
                 outline-offset: -3px;
 
                 border-bottom: var(--a-blue-500) 3px solid;
+
             }
             .inactiveIntern {
                 width: 4.5rem;
@@ -90,7 +94,9 @@ const MainNav = styled.nav`
     }
 `
 
+
 const CustomChevron = styled(ChevronRightIcon)`
+
     color: var(--a-gray-700);
     height: 1.15rem;
     width: 1.15rem;
@@ -131,6 +137,8 @@ const SubLenkeSpacer = styled.div`
         }
     }
 `
+
+
 const SubMenuDivider = styled.div`
     width: 15.5rem;
     height: 1px;
@@ -138,12 +146,14 @@ const SubMenuDivider = styled.div`
     background-color: var(--a-gray-300);
 `
 
+
 const VaktorLogo = styled.img`
     height: 1.4rem;
     width: 1.4rem;
     position: absolute;
     margin: -0.1rem 0 0 -2rem;
 `
+
 
 export default function Navbar() {
     const router = useRouter()
@@ -244,8 +254,9 @@ export default function Navbar() {
                             <LenkeSpacer
                                 className={`${
                                     router.asPath === RouterInternt.PATH ||
+
                                     router.asPath === RouterUUStatus.PATH
-                                        ? "activeIntern"
+                       ? "activeIntern"
                                         : "inactiveIntern"
                                 }`}
                             >
@@ -257,6 +268,7 @@ export default function Navbar() {
                                             : ""
                                     }`}
                                 >
+
                                     {/* {router.asPath === RouterInternt.PATH ||
                                     router.asPath === RouterUUStatus.PATH ? ( 
                                     //     <>
@@ -269,6 +281,7 @@ export default function Navbar() {
                                         {RouterInternt.NAME}
                                         <CustomChevron />
                                     </>
+
                                 </BodyShort>
                             </LenkeSpacer>
                         </li>
@@ -307,7 +320,9 @@ export default function Navbar() {
                             onClick={() => router.push(RouterUUStatus.PATH)}
                         >
                             <Link href={RouterUUStatus.PATH}>
+
                                 <SubLenkeSpacer
+
                                     className={`${
                                         router.asPath === RouterUUStatus.PATH
                                             ? "active"
@@ -322,6 +337,7 @@ export default function Navbar() {
                                                 : ""
                                         }`}
                                     >
+
                                         Status Universell Utforming
                                     </BodyShort>
                                 </SubLenkeSpacer>
@@ -336,6 +352,7 @@ export default function Navbar() {
                 anchorEl={buttonRef.current}
             >
                 <Popover.Content>
+
                     <CustomPopoverContent>
                         {user.navIdent && (
                             <>
@@ -383,6 +400,7 @@ export default function Navbar() {
                             </>
                         )}
                     </CustomPopoverContent>
+
                 </Popover.Content>
             </Popover>
         </>
