@@ -1,31 +1,23 @@
-import { BodyShort, Button, Heading, Popover } from "@navikt/ds-react"
+import { BodyShort, Popover } from "@navikt/ds-react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useContext, useRef, useState } from "react"
 import styled from "styled-components"
 
-import {
-    ChatExclamationmarkIcon,
-    ChevronDownIcon,
 
-    ChevronRightIcon,
+import { ChevronRightIcon, FigureIcon, MenuGridIcon } from "@navikt/aksel-icons"
+import { CustomPopoverContent } from "../../styles/styles"
 
-    FigureIcon,
-    MenuGridIcon,
-} from "@navikt/aksel-icons"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import {
-    RouterAdmin,
     RouterArbeidsgiver,
     RouterInternt,
-    RouterOpsMeldinger,
     RouterPrivatperson,
     RouterSamarbeidspartner,
     RouterUUStatus,
     RouterVaktor,
 } from "../../types/routes"
 import { UserData } from "../../types/userData"
-import { Employer } from "@navikt/ds-icons"
 
 const MainNav = styled.nav`
     height: 2.35rem;
@@ -113,45 +105,6 @@ const CustomChevron = styled(ChevronRightIcon)`
     margin-left: 0.1rem;
 `
 
-const CustomPopoverContent = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    color: var(--a-gray-800);
-
-    .internalLinks {
-        color: var(--a-blue-800);
-        text-decoration: none;
-        margin: 0 0 0 2.5rem;
-
-        :hover {
-            text-decoration: underline;
-        }
-
-        .subMenuIcon {
-            width: 1.5rem;
-            height: 1.5rem;
-            margin: 0 0 0 -2rem;
-            position: absolute;
-        }
-
-        .adminIcon {
-            width: 1.3rem;
-            height: 1.3rem;
-            margin: 0 0 0 -2rem;
-            position: absolute;
-        }
-    }
-    .SubMenuHead {
-        text-align: center;
-        text-decoration: none;
-
-        :hover {
-            text-decoration: none;
-        }
-    }
-`
-
 const LenkeSpacer = styled.div`
     margin: 0 1rem;
     height: 100%;
@@ -168,8 +121,6 @@ const LenkeSpacer = styled.div`
         }
     }
 `
-
-
 const SubLenkeSpacer = styled.div`
     margin: 0 1rem 0 -2rem;
     height: 100%;
@@ -189,9 +140,9 @@ const SubLenkeSpacer = styled.div`
 
 
 const SubMenuDivider = styled.div`
-    width: 17rem;
+    width: 15.5rem;
     height: 1px;
-
+    margin: 0.6rem 0 0.6rem;
     background-color: var(--a-gray-300);
 `
 
@@ -305,8 +256,7 @@ export default function Navbar() {
                                     router.asPath === RouterInternt.PATH ||
 
                                     router.asPath === RouterUUStatus.PATH
-
-                                        ? "activeIntern"
+                       ? "activeIntern"
                                         : "inactiveIntern"
                                 }`}
                             >
@@ -402,46 +352,55 @@ export default function Navbar() {
                 anchorEl={buttonRef.current}
             >
                 <Popover.Content>
-                    {user.navIdent && (
-                        <CustomPopoverContent>
-                            <a
-                                onClick={() => router.push(RouterInternt.PATH)}
-                                className="internalLinks"
-                            >
-                                <MenuGridIcon className="subMenuIcon" />
-                                Produktområder
-                            </a>
 
-                            <SubMenuDivider />
+                    <CustomPopoverContent>
+                        {user.navIdent && (
+                            <>
+                                <div>
+                                    <a
+                                        onClick={() =>
+                                            router.push(RouterInternt.PATH)
+                                        }
+                                        className="internalLinks"
+                                    >
+                                        <MenuGridIcon className="subMenuIcon" />
+                                        Produktområder
+                                    </a>
+                                </div>
+                                <div>
+                                    <SubMenuDivider />
 
-                            <a
-                                onClick={() => router.push(RouterUUStatus.PATH)}
-                                className="internalLinks"
-                            >
+                                    <a
+                                        onClick={() =>
+                                            router.push(RouterUUStatus.PATH)
+                                        }
+                                        className="internalLinks"
+                                    >
+                                        <FigureIcon className="subMenuIcon" />{" "}
+                                        {RouterUUStatus.NAME}
+                                    </a>
+                                </div>
+                                <div>
+                                    <SubMenuDivider />
 
-                                <FigureIcon className="subMenuIcon" />{" "}
-                                {RouterUUStatus.NAME}
-                            </a>
+                                    <a
+                                        href="https://status.nav.no/vaktor"
+                                        aria-label="Lenke til Vaktor"
+                                        className="internalLinks"
+                                    >
+                                        <VaktorLogo
+                                            src="/sp/assets/images/vaktor.png"
+                                            alt="Vaktor"
+                                            aria-hidden="true"
+                                        />
 
-                            <SubMenuDivider />
+                                        {RouterVaktor.NAME}
+                                    </a>
+                                </div>
+                            </>
+                        )}
+                    </CustomPopoverContent>
 
-                            <a
-
-                                href="https://status.nav.no/vaktor"
-                                aria-label="Lenke til Vaktor"
-                                className="internalLinks"
-                            >
-                                <VaktorLogo
-                                    src="/sp/assets/images/vaktor.png"
-                                    alt="Vaktor"
-                                    aria-hidden="true"
-                                />
-
-                                {RouterVaktor.NAME}
-
-                            </a>
-                        </CustomPopoverContent>
-                    )}
                 </Popover.Content>
             </Popover>
         </>
