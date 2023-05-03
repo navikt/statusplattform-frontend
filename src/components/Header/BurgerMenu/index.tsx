@@ -19,7 +19,7 @@ import {
 } from "../../../types/routes"
 
 const BurgerMenuContainer = styled.div`
-    & > * {
+    display:block & > * {
         color: black !important;
     }
 
@@ -41,6 +41,10 @@ const BurgerMenuContainer = styled.div`
     }
 
     .closed-burger {
+        display: none;
+    }
+
+    @media (min-width: 768px) {
         display: none;
     }
 

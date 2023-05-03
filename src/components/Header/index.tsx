@@ -27,14 +27,14 @@ const CustomHeader = styled.header`
     }
 
     .last {
-        @media (max-width: 1149px) {
+        @media (max-width: 768px) {
             padding: 3px 0;
             min-height: inherit;
 
             display: flex;
             flex-direction: column;
             align-items: flex-end;
-            justify-content: space-between;
+            justify-content: right;
 
             button {
                 margin: 0;
@@ -42,9 +42,7 @@ const CustomHeader = styled.header`
         }
 
         @media (min-width: 1150px) {
-            position: absolute;
             display: flex;
-            right: 150px;
         }
     }
 
@@ -84,16 +82,12 @@ const CustomHeader = styled.header`
 `
 
 const HeaderContent = styled.span`
-    width: 100%;
+    width: 1330px;
 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: space-between;
     align-items: center;
-
-    @media (min-width: 1150px) {
-        margin-right: 150px;
-    }
 `
 
 const HeadingCustomized = styled(Heading)`
@@ -202,26 +196,27 @@ const Header = () => {
 
     return (
         <CustomHeader>
-            <div className="header-menues">
-                <a href={RouterHomePage.PATH} aria-label="Lenke til forside">
-                    <img
-                        src="/sp/assets/nav-logo/png/black.png"
-                        alt="Til forsiden"
-                        aria-hidden="true"
-                    />
-                </a>
-            </div>
-
             <HeaderContent>
+                <div className="header-menues">
+                    <a
+                        href={RouterHomePage.PATH}
+                        aria-label="Lenke til forside"
+                    >
+                        <img
+                            src="/sp/assets/nav-logo/png/black.png"
+                            alt="Til forsiden"
+                            aria-hidden="true"
+                        />
+                    </a>
+                </div>
                 <HeadingCustomized size="2xlarge" level="1">
                     <b>Status</b> digitale tjenester{" "}
                 </HeadingCustomized>
+                <div className="header-menues last">
+                    <ProfileMenu name={name} navIdent={navIdent} />{" "}
+                    <BurgerMenu />
+                </div>{" "}
             </HeaderContent>
-
-            <div className="header-menues last">
-                <BurgerMenu />
-                <ProfileMenu name={name} navIdent={navIdent} />
-            </div>
         </CustomHeader>
     )
 }

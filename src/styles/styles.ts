@@ -59,3 +59,49 @@ export const OpsScheme = styled.div`
 export const Spacer = styled.div.attrs((props: { height: string }) => props)`
     height: ${(props) => props.height};
 `
+
+export const CustomPopoverContent = styled.div`
+    display: flex;
+    flex-direction: column;
+
+    color: var(--a-gray-800);
+
+    .internalLinks {
+        color: var(--a-blue-800);
+        text-decoration: none;
+        margin: 2.5rem 0 0 2rem;
+
+        :hover {
+            text-decoration: underline;
+        }
+
+        .subMenuIcon {
+            width: 1.5rem;
+            height: 1.5rem;
+            margin: 0 0 0 -2rem;
+            position: absolute;
+        }
+
+        .adminIcon {
+            width: 1.3rem;
+            height: 1.3rem;
+            margin: 0 0 0 -2rem;
+            position: absolute;
+        }
+
+        .logOutIcon {
+            width: 1.2rem;
+            height: 1.2rem;
+            margin: 0 0 0 -2rem;
+            position: absolute;
+        }
+    }
+    .SubMenuHead {
+        text-align: center;
+        text-decoration: none;
+
+        :hover {
+            text-decoration: none;
+        }
+    }
+`
