@@ -165,7 +165,7 @@ const UUDashboard = ({ UUData, uutype }) => {
     return (
         <Layout>
             <Head>
-                <title>UU Status - status.nav.no</title>
+                <title>Status Universell Utforming - status.nav.no</title>
                 <link rel="icon" href="/sp/favicon.ico" />
                 <meta
                     name="viewport"

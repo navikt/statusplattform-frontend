@@ -146,7 +146,15 @@ export enum RouterFeedbackForm {
 
 // UU status
 export enum RouterUUStatus {
-    NAME = "Status - Universell Utforming",
+    NAME = "Status Universell Utforming",
     PATH = "/UUStatus/tjeneste",
+}
+// ---
+
+// Vaktor
+//NB - skal ikke ha /sp prefix
+export enum RouterVaktor {
+    NAME = "Vaktor",
+    PATH = "/vaktor",
 }
 // ---
