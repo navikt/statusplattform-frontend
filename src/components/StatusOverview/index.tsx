@@ -16,11 +16,10 @@ import CustomNavSpinner from "../CustomNavSpinner"
 import OpsMessageModal from "../OpsMessageModal"
 
 const StatusSummary = styled.div`
-    margin-top: 1rem;
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 32px;
+    gap: 0.7rem;
 
     .noOpsContainer {
         max-height: 7.5rem !important;
@@ -28,9 +27,10 @@ const StatusSummary = styled.div`
 
     .top-row {
         width: 100%;
+        display: flex;
 
+        justify-content: right;
         .deviation-button-wrapper {
-            position: absolute;
         }
         .affectedservices {
             text-align: center;
@@ -135,22 +135,36 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
     if (allGood) {
         return (
             <StatusSummary>
+                <div className="top-row">
+                    <div className="deviation-button-wrapper">
+                        <Button
+                            variant="tertiary"
+                            size="small"
+                            icon={<Next />}
+                            iconPosition="right"
+                            onClick={() => router.push(RouterOpsMeldinger.PATH)}
+                        >
+                            Se alle driftsmeldinger
+                        </Button>
+                    </div>
+                </div>
                 <Alert variant="success">
                     Alle tjenestene fungerer normalt
                 </Alert>
-
-                <div className="ops-container">
-                    {(!hasIssue || !hasDown) &&
-                        opsMsgList.map((opsMessage, i) => {
-                            return (
-                                <DeviationReportCard
-                                    key={i}
-                                    opsMessage={opsMessage}
-                                    user={user}
-                                />
-                            )
-                        })}
-                </div>
+                {opsMsgList.length != 0 && (
+                    <div className="ops-container">
+                        {(!hasIssue || !hasDown) &&
+                            opsMsgList.map((opsMessage, i) => {
+                                return (
+                                    <DeviationReportCard
+                                        key={i}
+                                        opsMessage={opsMessage}
+                                        user={user}
+                                    />
+                                )
+                            })}
+                    </div>
+                )}
             </StatusSummary>
         )
     } else {
