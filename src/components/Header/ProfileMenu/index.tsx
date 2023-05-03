@@ -3,7 +3,7 @@ import { Employer, Logout, People } from "@navikt/ds-icons"
 import { Button, Link, Popover } from "@navikt/ds-react"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import { CustomPopoverContent } from "src/styles/styles"
+import { CustomPopoverContent } from "../../../styles/styles"
 
 import styled from "styled-components"
 import {
