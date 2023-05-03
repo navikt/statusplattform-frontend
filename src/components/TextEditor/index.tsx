@@ -57,8 +57,9 @@ const DefaultMessage = (
         <b>Oppdatert: </b> ${formattedDate}
 </br></br>
 ${statusMsg}
-</br></br>
-<b>Forventet rettetid er:</b>&nbsp;
+</br>
+${status != "SOLVED" ? "</br><b>Forventet rettetid er:</b>&nbsp;</br> " : ""}
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
 ${grayText} `
         : ` <b>Status: </b> ${opsStatus}
 </br></br>

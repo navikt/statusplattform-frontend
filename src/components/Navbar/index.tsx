@@ -7,7 +7,9 @@ import styled from "styled-components"
 import {
     ChatExclamationmarkIcon,
     ChevronDownIcon,
+
     ChevronRightIcon,
+
     FigureIcon,
     MenuGridIcon,
 } from "@navikt/aksel-icons"
@@ -66,7 +68,9 @@ const MainNav = styled.nav`
                 flex-direction: row;
                 color: black;
 
+
                 width: 6rem;
+
                 padding-left: 0.3rem;
 
                 border: none;
@@ -74,6 +78,7 @@ const MainNav = styled.nav`
                 outline-offset: -3px;
 
                 border-bottom: var(--a-blue-500) 3px solid;
+
             }
             .inactiveIntern {
                 width: 4.5rem;
@@ -97,7 +102,9 @@ const MainNav = styled.nav`
     }
 `
 
+
 const CustomChevron = styled(ChevronRightIcon)`
+
     color: var(--a-gray-700);
     height: 1.15rem;
     width: 1.15rem;
@@ -162,6 +169,7 @@ const LenkeSpacer = styled.div`
     }
 `
 
+
 const SubLenkeSpacer = styled.div`
     margin: 0 1rem 0 -2rem;
     height: 100%;
@@ -179,6 +187,7 @@ const SubLenkeSpacer = styled.div`
     }
 `
 
+
 const SubMenuDivider = styled.div`
     width: 17rem;
     height: 1px;
@@ -186,12 +195,14 @@ const SubMenuDivider = styled.div`
     background-color: var(--a-gray-300);
 `
 
+
 const VaktorLogo = styled.img`
     height: 1.4rem;
     width: 1.4rem;
     position: absolute;
     margin: -0.1rem 0 0 -2rem;
 `
+
 
 export default function Navbar() {
     const router = useRouter()
@@ -292,7 +303,9 @@ export default function Navbar() {
                             <LenkeSpacer
                                 className={`${
                                     router.asPath === RouterInternt.PATH ||
+
                                     router.asPath === RouterUUStatus.PATH
+
                                         ? "activeIntern"
                                         : "inactiveIntern"
                                 }`}
@@ -305,6 +318,7 @@ export default function Navbar() {
                                             : ""
                                     }`}
                                 >
+
                                     {/* {router.asPath === RouterInternt.PATH ||
                                     router.asPath === RouterUUStatus.PATH ? ( 
                                     //     <>
@@ -317,6 +331,7 @@ export default function Navbar() {
                                         {RouterInternt.NAME}
                                         <CustomChevron />
                                     </>
+
                                 </BodyShort>
                             </LenkeSpacer>
                         </li>
@@ -355,7 +370,9 @@ export default function Navbar() {
                             onClick={() => router.push(RouterUUStatus.PATH)}
                         >
                             <Link href={RouterUUStatus.PATH}>
+
                                 <SubLenkeSpacer
+
                                     className={`${
                                         router.asPath === RouterUUStatus.PATH
                                             ? "active"
@@ -370,6 +387,7 @@ export default function Navbar() {
                                                 : ""
                                         }`}
                                     >
+
                                         Status Universell Utforming
                                     </BodyShort>
                                 </SubLenkeSpacer>
@@ -400,6 +418,7 @@ export default function Navbar() {
                                 onClick={() => router.push(RouterUUStatus.PATH)}
                                 className="internalLinks"
                             >
+
                                 <FigureIcon className="subMenuIcon" />{" "}
                                 {RouterUUStatus.NAME}
                             </a>
@@ -407,6 +426,7 @@ export default function Navbar() {
                             <SubMenuDivider />
 
                             <a
+
                                 href="https://status.nav.no/vaktor"
                                 aria-label="Lenke til Vaktor"
                                 className="internalLinks"
@@ -418,6 +438,7 @@ export default function Navbar() {
                                 />
 
                                 {RouterVaktor.NAME}
+
                             </a>
                         </CustomPopoverContent>
                     )}
