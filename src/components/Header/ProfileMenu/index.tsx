@@ -3,7 +3,7 @@ import { Employer, Logout, People } from "@navikt/ds-icons"
 import { Button, Link, Popover } from "@navikt/ds-react"
 import { useRouter } from "next/router"
 import { useState } from "react"
-import { CustomPopoverContent } from "src/styles/styles"
+import { CustomPopoverContent } from "../../../styles/styles"
 
 import styled from "styled-components"
 import {
@@ -69,8 +69,14 @@ const ProfileMenu: React.FC<{
     const [anchorEl, setAnchorEl] = useState(undefined)
     const [anchor, setAnchor] = useState<HTMLSelectElement>(null)
 
-    const usersWithAccess = process.env.NEXT_PUBLIC_APPROVED_USERS?.split(",")
-    const usersWithOpsAccess = process.env.NEXT_PUBLIC_OPS_ACCESS?.split(",")
+    const usersWithAccess =
+        "L152423,H161540,K146221,J104568,G124938,M106261,G121973,H166137".split(
+            ","
+        )
+    const usersWithOpsAccess =
+        "L152423,K132081,H123099,L110875,K125327,F110862,A110886,L120166,G121973,H166137".split(
+            ","
+        )
 
     const handleSetOpen = (event) => {
         setOpen(!open)
