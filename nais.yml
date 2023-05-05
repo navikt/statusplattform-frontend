@@ -14,7 +14,7 @@ spec:
     #       ^--- interpolated from the ${{ env.docker_image }} variable in the action
     env:
         - name: NEXT_PUBLIC_BACKENDPATH
-          value: "https://status-api.nav.no"
+          value: "http://portalserver"
         - name: NEXT_PUBLIC_APPROVED_USERS
           value: "L152423,H161540,K146221,J104568,G124938,M106261,G121973,H166137"
         - name: NEXT_PUBLIC_OPS_ACCESS
@@ -49,3 +49,7 @@ spec:
             enabled: true
             autoLogin: true
             errorPath: "https://status.nav.no/sp/Login"
+    accessPolicy:
+        outbound:
+            rules:
+                - application: portalserver
