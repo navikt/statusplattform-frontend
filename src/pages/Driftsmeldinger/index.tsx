@@ -191,7 +191,6 @@ const OpsMessages = ({ serverOpsMessages }) => {
 
             <OpsSectionContainer>
                 {arrayActive.length == 0 && arrayInActive.length == 0 && (
-
                     <>
                         <OpsHeadNoMsgs>
                             <Button
@@ -219,72 +218,31 @@ const OpsMessages = ({ serverOpsMessages }) => {
                             )}
                         </OpsHeadNoMsgs>
                     </>
-
                 )}
-                {arrayActive.length > 0 && (
-                    <>
-                        <OpsHead>
-                            <Heading
-                                level="2"
-                                size="xlarge"
-                                className="heading"
+
+                <div>
+                    <OpsHead>
+                        <Heading level="2" size="xlarge" className="heading">
+                            Driftsmeldinger
+                        </Heading>
+                        {approvedUsers.includes(user.navIdent) && (
+                            <Button
+                                onClick={() =>
+                                    router.push(RouterOpprettOpsMelding.PATH)
+                                }
                             >
-                                Aktive meldinger
-                            </Heading>
-                            {approvedUsers.includes(user.navIdent) && (
-                                <Button
-                                    onClick={() =>
-                                        router.push(
-                                            RouterOpprettOpsMelding.PATH
-                                        )
-                                    }
-                                >
-                                    Opprett ny driftsmelding
-                                </Button>
-                            )}
-                        </OpsHead>
-                        <HorizontalSeparator />
+                                Opprett ny driftsmelding
+                            </Button>
+                        )}
+                    </OpsHead>
+                    <HorizontalSeparator />
 
-                        <ListOfOpsMessages
-                            opsMessages={arrayActive}
-                            notifyChangedOpsMessage={notifyChangedOpsMessage}
-                            notifyDeletedOpsMessage={notifyDeletedOpsMessage}
-                        />
-                    </>
-                )}
-
-                {arrayInActive.length > 0 && (
-                    <div>
-                        <OpsHead>
-                            <Heading
-                                level="2"
-                                size="xlarge"
-                                className="heading"
-                            >
-                                Inaktive meldinger
-                            </Heading>
-                            {arrayActive.length <= 0 &&
-                                approvedUsers.includes(user.navIdent) && (
-                                    <Button
-                                        onClick={() =>
-                                            router.push(
-                                                RouterOpprettOpsMelding.PATH
-                                            )
-                                        }
-                                    >
-                                        Opprett ny driftsmelding
-                                    </Button>
-                                )}
-                        </OpsHead>
-                        <HorizontalSeparator />
-
-                        <ListOfOpsMessages
-                            opsMessages={arrayInActive}
-                            notifyChangedOpsMessage={notifyChangedOpsMessage}
-                            notifyDeletedOpsMessage={notifyDeletedOpsMessage}
-                        />
-                    </div>
-                )}
+                    <ListOfOpsMessages
+                        opsMessages={opsMessages}
+                        notifyChangedOpsMessage={notifyChangedOpsMessage}
+                        notifyDeletedOpsMessage={notifyDeletedOpsMessage}
+                    />
+                </div>
             </OpsSectionContainer>
 
             <ToastContainer />
@@ -327,9 +285,18 @@ const ListOfOpsMessages = (props: ListOfOpsMessagesI) => {
         return <>Ingen driftsmeldinger å vise</>
     }
 
-    const opsMsgList = opsMessages.sort((a, b) =>
+    const opsMsgLists = opsMessages.sort((a, b) =>
         a.severity > b.severity ? 1 : b.severity > a.severity ? -1 : 0
     )
+
+    var opsMsgList = opsMessages
+        .sort((a, b) => {
+            return (
+                new Date(a.startTime).getTime() -
+                new Date(b.startTime).getTime()
+            )
+        })
+        .reverse()
 
     return (
         <OpsMessagesList>
