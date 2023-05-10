@@ -32,7 +32,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     let path = backendPath + backendEndpath
 
     const fetch = require("node-fetch");
-    const https = require('https');
+    const https = require('http');
 
     //For dev with local backend:
     //const https = require('http');
