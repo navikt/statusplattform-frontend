@@ -6,6 +6,7 @@ import {
     ErrorFilledCustomized,
     HelpTextCustomizedGray,
     SuccessFilledCustomized,
+    WarningFilledCustomized,
 } from "../TrafficLights"
 import UUStatusDetails from "../../components/UUStatusDetails"
 
@@ -52,20 +53,20 @@ const statusLabel = (result) => {
             )
         case "Cannot tell":
             return (
-                <Tag variant="neutral">
-                    Cannot tell <HelpTextCustomizedGray />
+                <Tag variant="warning">
+                    Cannot tell <WarningFilledCustomized className="" />
                 </Tag>
             )
         case "Not checked":
             return (
-                <Tag variant="neutral">
-                    Not checked <HelpTextCustomizedGray />
+                <Tag variant="warning">
+                    Not checked <WarningFilledCustomized className="" />
                 </Tag>
             )
         case "Not present":
             return (
-                <Tag variant="neutral">
-                    Not present <HelpTextCustomizedGray />
+                <Tag variant="warning">
+                    Not present <WarningFilledCustomized className="" />
                 </Tag>
             )
         default:

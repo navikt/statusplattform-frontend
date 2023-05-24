@@ -18,6 +18,7 @@ const PublishedTime = styled.div`
 
 const MessageCard = styled.div`
     background: white;
+    /* width: 60rem; */
     padding: 1rem 1rem;
     border-radius: 4px;
     border-left: 0.4rem solid var(--a-gray-300);
@@ -37,6 +38,7 @@ const MessageCard = styled.div`
 
     .ops-card-content {
         padding: 0.5rem 0 0.5rem;
+        /* padding: 0.5rem 10rem 0 1rem; */
 
         display: flex;
         flex-direction: column;
@@ -45,6 +47,8 @@ const MessageCard = styled.div`
     .message-content {
         margin: -0.3rem 0px 0 -0.5rem;
         padding: 0.5rem;
+        /* margin: -0.3rem 0 0 -0.5rem;
+        padding: 0.5rem 0rem 0 1rem; */
         height: 11.8rem;
 
         -webkit-box-orient: vertical;

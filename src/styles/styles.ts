@@ -73,6 +73,7 @@ export const CustomPopoverContent = styled.div`
 
         :hover {
             text-decoration: underline;
+            cursor: pointer;
         }
 
         .subMenuIcon {

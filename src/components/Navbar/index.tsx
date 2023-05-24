@@ -1,29 +1,23 @@
-import { BodyShort, Button, Heading, Popover } from "@navikt/ds-react"
+import { BodyShort, Popover } from "@navikt/ds-react"
 import Link from "next/link"
 import { useRouter } from "next/router"
 import { useContext, useRef, useState } from "react"
 import styled from "styled-components"
 
-import {
-    ChatExclamationmarkIcon,
-    ChevronDownIcon,
-    ChevronRightIcon,
-    FigureIcon,
-    MenuGridIcon,
-} from "@navikt/aksel-icons"
+
+import { ChevronRightIcon, FigureIcon, MenuGridIcon } from "@navikt/aksel-icons"
+import { CustomPopoverContent } from "../../styles/styles"
+
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import {
-    RouterAdmin,
     RouterArbeidsgiver,
     RouterInternt,
-    RouterOpsMeldinger,
     RouterPrivatperson,
     RouterSamarbeidspartner,
     RouterUUStatus,
     RouterVaktor,
 } from "../../types/routes"
 import { UserData } from "../../types/userData"
-import { Employer } from "@navikt/ds-icons"
 
 const MainNav = styled.nav`
     height: 2.35rem;
@@ -66,6 +60,7 @@ const MainNav = styled.nav`
                 flex-direction: row;
                 color: black;
 
+
                 width: 6rem;
 
                 padding-left: 0.3rem;
@@ -75,6 +70,7 @@ const MainNav = styled.nav`
                 outline-offset: -3px;
 
                 border-bottom: var(--a-blue-500) 3px solid;
+
             }
             .inactiveIntern {
                 width: 4.5rem;
@@ -98,52 +94,15 @@ const MainNav = styled.nav`
     }
 `
 
+
 const CustomChevron = styled(ChevronRightIcon)`
+
     color: var(--a-gray-700);
     height: 1.15rem;
     width: 1.15rem;
     position: absolute;
     margin-top: 0.1rem;
     margin-left: 0.1rem;
-`
-
-const CustomPopoverContent = styled.div`
-    display: flex;
-    flex-direction: column;
-    gap: 0.6rem;
-    color: var(--a-gray-800);
-
-    .internalLinks {
-        color: var(--a-blue-800);
-        text-decoration: none;
-        margin: 0 0 0 2.5rem;
-
-        :hover {
-            text-decoration: underline;
-        }
-
-        .subMenuIcon {
-            width: 1.5rem;
-            height: 1.5rem;
-            margin: 0 0 0 -2rem;
-            position: absolute;
-        }
-
-        .adminIcon {
-            width: 1.3rem;
-            height: 1.3rem;
-            margin: 0 0 0 -2rem;
-            position: absolute;
-        }
-    }
-    .SubMenuHead {
-        text-align: center;
-        text-decoration: none;
-
-        :hover {
-            text-decoration: none;
-        }
-    }
 `
 
 const LenkeSpacer = styled.div`
@@ -162,7 +121,6 @@ const LenkeSpacer = styled.div`
         }
     }
 `
-
 const SubLenkeSpacer = styled.div`
     margin: 0 1rem 0 -2rem;
     height: 100%;
@@ -180,12 +138,14 @@ const SubLenkeSpacer = styled.div`
     }
 `
 
-const SubMenuDivider = styled.div`
-    width: 17rem;
-    height: 1px;
 
+const SubMenuDivider = styled.div`
+    width: 15.5rem;
+    height: 1px;
+    margin: 0.6rem 0 0.6rem;
     background-color: var(--a-gray-300);
 `
+
 
 const VaktorLogo = styled.img`
     height: 1.4rem;
@@ -193,6 +153,7 @@ const VaktorLogo = styled.img`
     position: absolute;
     margin: -0.1rem 0 0 -2rem;
 `
+
 
 export default function Navbar() {
     const router = useRouter()
@@ -293,8 +254,9 @@ export default function Navbar() {
                             <LenkeSpacer
                                 className={`${
                                     router.asPath === RouterInternt.PATH ||
+
                                     router.asPath === RouterUUStatus.PATH
-                                        ? "activeIntern"
+                       ? "activeIntern"
                                         : "inactiveIntern"
                                 }`}
                             >
@@ -306,6 +268,7 @@ export default function Navbar() {
                                             : ""
                                     }`}
                                 >
+
                                     {/* {router.asPath === RouterInternt.PATH ||
                                     router.asPath === RouterUUStatus.PATH ? ( 
                                     //     <>
@@ -318,6 +281,7 @@ export default function Navbar() {
                                         {RouterInternt.NAME}
                                         <CustomChevron />
                                     </>
+
                                 </BodyShort>
                             </LenkeSpacer>
                         </li>
@@ -356,7 +320,9 @@ export default function Navbar() {
                             onClick={() => router.push(RouterUUStatus.PATH)}
                         >
                             <Link href={RouterUUStatus.PATH}>
+
                                 <SubLenkeSpacer
+
                                     className={`${
                                         router.asPath === RouterUUStatus.PATH
                                             ? "active"
@@ -371,6 +337,7 @@ export default function Navbar() {
                                                 : ""
                                         }`}
                                     >
+
                                         Status Universell Utforming
                                     </BodyShort>
                                 </SubLenkeSpacer>
@@ -385,43 +352,55 @@ export default function Navbar() {
                 anchorEl={buttonRef.current}
             >
                 <Popover.Content>
-                    {user.navIdent && (
-                        <CustomPopoverContent>
-                            <a
-                                onClick={() => router.push(RouterInternt.PATH)}
-                                className="internalLinks"
-                            >
-                                <MenuGridIcon className="subMenuIcon" />
-                                Produktområder
-                            </a>
 
-                            <SubMenuDivider />
+                    <CustomPopoverContent>
+                        {user.navIdent && (
+                            <>
+                                <div>
+                                    <a
+                                        onClick={() =>
+                                            router.push(RouterInternt.PATH)
+                                        }
+                                        className="internalLinks"
+                                    >
+                                        <MenuGridIcon className="subMenuIcon" />
+                                        Produktområder
+                                    </a>
+                                </div>
+                                <div>
+                                    <SubMenuDivider />
 
-                            <a
-                                onClick={() => router.push(RouterUUStatus.PATH)}
-                                className="internalLinks"
-                            >
-                                <FigureIcon className="subMenuIcon" />{" "}
-                                {RouterUUStatus.NAME}
-                            </a>
+                                    <a
+                                        onClick={() =>
+                                            router.push(RouterUUStatus.PATH)
+                                        }
+                                        className="internalLinks"
+                                    >
+                                        <FigureIcon className="subMenuIcon" />{" "}
+                                        {RouterUUStatus.NAME}
+                                    </a>
+                                </div>
+                                <div>
+                                    <SubMenuDivider />
 
-                            <SubMenuDivider />
+                                    <a
+                                        href="https://status.nav.no/vaktor"
+                                        aria-label="Lenke til Vaktor"
+                                        className="internalLinks"
+                                    >
+                                        <VaktorLogo
+                                            src="/sp/assets/images/vaktor.png"
+                                            alt="Vaktor"
+                                            aria-hidden="true"
+                                        />
 
-                            <a
-                                href="https://status.nav.no/vaktor"
-                                aria-label="Lenke til Vaktor"
-                                className="internalLinks"
-                            >
-                                <VaktorLogo
-                                    src="/sp/assets/images/vaktor.png"
-                                    alt="Vaktor"
-                                    aria-hidden="true"
-                                />
+                                        {RouterVaktor.NAME}
+                                    </a>
+                                </div>
+                            </>
+                        )}
+                    </CustomPopoverContent>
 
-                                {RouterVaktor.NAME}
-                            </a>
-                        </CustomPopoverContent>
-                    )}
                 </Popover.Content>
             </Popover>
         </>

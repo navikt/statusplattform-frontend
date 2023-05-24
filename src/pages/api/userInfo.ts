@@ -4,7 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { decodeJwt} from "jose";
 import { validateClaimsAndSignature, getAccessTokenFromBearerToken } from "./utils/authHelper";
 
-const env = process.env.NEXT_PUBLIC_ENV
+const env = process.env.ENV
 
 
 
