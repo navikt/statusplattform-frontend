@@ -146,7 +146,7 @@ const OpsComponent = ({
 
     const [isLoading, setIsLoading] = useState(true)
     const [selectedSeverity, setSelectedSeverity] = useState<string>("NEUTRAL")
-    const [selectedStatus, setSelectedStatus] = useState("MAITENANCE")
+    const [selectedStatus, setSelectedStatus] = useState<string>("EXAMINING")
     const [showAutomaticTimeMsg, setShowAutomaticTimeMsg] = useState(true)
     const [showCustomDates, setShowCustomDates] = useState(false)
 
