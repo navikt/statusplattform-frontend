@@ -146,7 +146,7 @@ const OpsComponent = ({
 
     const [isLoading, setIsLoading] = useState(true)
     const [selectedSeverity, setSelectedSeverity] = useState<string>("NEUTRAL")
-    const [selectedStatus, setSelectedStatus] = useState<string>("EXAMINING")
+    const [selectedStatus, setSelectedStatus] = useState("MAITENANCE")
     const [showAutomaticTimeMsg, setShowAutomaticTimeMsg] = useState(true)
     const [showCustomDates, setShowCustomDates] = useState(false)
 
@@ -250,6 +250,7 @@ const OpsComponent = ({
         const newSelectedStatus: StatusEnum = event.target.value
         setSelectedStatus(newSelectedStatus)
         setOpsMessage({ ...opsMessage, status: newSelectedStatus })
+        console.log(selectedStatus)
     }
 
     const handleUpdateDates = (startDateInput: Date, endDateInput: Date) => {
@@ -318,7 +319,9 @@ const OpsComponent = ({
                     value={selectedStatus !== null ? selectedStatus : ""}
                     onChange={handleUpdateSelectedStatus}
                 >
-                    <option value="EXAMINING">Undersøkes</option>
+                    {" "}
+                    <option value="EXAMINING">Undersøkes</option>{" "}
+                    <option value="MAITENANCE">Vedlikehold</option>
                     <option value="SOLVING">Feilretting pågår</option>
                     <option value="SOLVED">Løst</option>
                 </Select>
@@ -341,7 +344,11 @@ const OpsComponent = ({
                 </Heading>
                 <TextField
                     label="Tittel:"
-                    defaultValue="Problemer med:"
+                    value={
+                        selectedStatus != "MAITENANCE"
+                            ? "Problemer med:"
+                            : "Vedlikehold på:"
+                    }
                     onChange={(e) =>
                         setOpsMessage({
                             ...opsMessage,
@@ -370,7 +377,7 @@ const OpsComponent = ({
                     </div>
                     <TextField
                         label="Tittel:"
-                        defaultValue="Problemer med:"
+                        defaultValue={selectedStatus}
                         onChange={(e) =>
                             setOpsMessage({
                                 ...opsMessage,

@@ -113,18 +113,6 @@ const OpsMessageDetails = (props: DetailsOpsMsgI) => {
             )}
 
             <Spacer height="1rem" />
-            {/* <Heading size="xsmall" level="2">
-                Status:
-            </Heading>
-            <div className="labelContainer">
-                {status === "EXAMINING" && (
-                    <Tag variant="neutral">Undersøkes</Tag>
-                )}
-                {status === "SOLVING" && (
-                    <Tag variant="info">Feilretting pågår</Tag>
-                )}
-                {status === "SOLVED" && <Tag variant="success">Løst</Tag>}
-            </div> */}
 
             <Heading size="xsmall" level="2">
                 Detaljer:

@@ -25,6 +25,7 @@ export enum SeverityEnum {
 
 export enum StatusEnum {
     EXAMINING = "EXAMINING",
+    MAITENANCE = "MAITENANCE",
     SOLVING = "SOLVING",
     SOLVED = "SOLVED",
 }

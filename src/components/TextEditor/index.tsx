@@ -37,6 +37,10 @@ const DefaultMessage = (
             opsStatus = "Undersøkes"
             statusMsg = "Det jobbes med å undersøke og identifisere feilen."
             break
+        case "MAITENANCE":
+            opsStatus = "Vedlikehold"
+            statusMsg = "Det er for tiden vedlikehold på:"
+            break
         case "SOLVING":
             opsStatus = "Feilretting pågår"
             statusMsg = "Det jobbes med feilretting."
@@ -45,6 +49,7 @@ const DefaultMessage = (
             opsStatus = "Løst"
             statusMsg = "Feilen er nå rettet."
             break
+
         default:
             opsStatus = "Undersøkes"
             statusMsg = "Det jobbes med å undersøke og identifisere feilen."
@@ -58,7 +63,12 @@ const DefaultMessage = (
 </br></br>
 ${statusMsg}
 </br>
-${status != "SOLVED" ? "</br><b>Forventet rettetid er:</b>&nbsp;</br> " : ""}
+${
+    status != "SOLVED" && status != "MAITENANCE"
+        ? "</br><b>Forventet rettetid er:</b>&nbsp;</br> "
+        : ""
+}
+${status == "MAITENANCE" && "</br><b>Forventet ferdig:</b>&nbsp;</br> "}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 ${grayText} `
         : ` <b>Status: </b> ${opsStatus}
@@ -66,7 +76,11 @@ ${grayText} `
 ${statusMsg}
 </br></br>
 
-<b>Forventet rettetid er:</b>&nbsp;
+${
+    status != "MAITENANCE"
+        ? "<b>Forventet rettetid er:</b>&nbsp;</br> "
+        : "<b>Forventet ferdig:</b>&nbsp;</br> "
+}
 `
 }
 

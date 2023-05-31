@@ -550,7 +550,8 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                     value={selectedStatus !== null ? selectedStatus : ""}
                     onChange={handleUpdateSelectedStatus}
                 >
-                    <option value="EXAMINING">Undersøkes</option>
+                    <option value="EXAMINING">Undersøkes</option>{" "}
+                    <option value="MAITENANCE">Vedlikehold</option>
                     <option value="SOLVING">Feilretting pågår</option>
                     <option value="SOLVED">Løst</option>
                 </Select>
