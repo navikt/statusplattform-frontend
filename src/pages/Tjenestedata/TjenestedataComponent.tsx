@@ -794,7 +794,9 @@ const ServicesAndComponentsList: React.FC<{
                                     component.id
                                 }
                             >
-                                {handleAndSetStatusIcon(component.status)}
+                                {handleAndSetStatusIcon(
+                                    component.record.status
+                                )}
                                 {component.name}
                             </a>
                         </li>
