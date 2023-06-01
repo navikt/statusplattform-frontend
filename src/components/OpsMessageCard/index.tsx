@@ -13,13 +13,12 @@ import { UserStateContext } from "../ContextProviders/UserStatusContext"
 
 const PublishedTime = styled.div`
     color: var(--a-gray-500);
-    margin: -0.4rem 0 0.4rem;
 `
 
 const MessageCard = styled.div`
     background: white;
-    /* width: 60rem; */
-    padding: 1rem 1rem;
+    width: 48rem;
+
     border-radius: 4px;
     border-left: 0.4rem solid var(--a-gray-300);
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
@@ -37,22 +36,20 @@ const MessageCard = styled.div`
     }
 
     .ops-card-content {
-        padding: 0.5rem 0 0.5rem;
-        /* padding: 0.5rem 10rem 0 1rem; */
+        padding: 0.7rem 1.2rem 0.5rem 1.2rem;
 
         display: flex;
         flex-direction: column;
     }
 
     .message-content {
-        margin: -0.3rem 0px 0 -0.5rem;
-        padding: 0.5rem;
-        /* margin: -0.3rem 0 0 -0.5rem;
-        padding: 0.5rem 0rem 0 1rem; */
-        height: 11.8rem;
-
+        padding: 0 5rem 0 1rem;
+        height: 7.8rem;
+        border-radius: 5px;
+        border: 1px solid var(--a-gray-200);
         -webkit-box-orient: vertical;
         overflow-y: scroll;
+        margin: -0.4rem 0 0.2rem;
 
         display: -webkit-box;
         ::-webkit-scrollbar {
@@ -98,20 +95,12 @@ const MessageCard = styled.div`
         display: flex;
         flex-direction: row;
         gap: 0.2rem;
-
-        margin: 18.4rem 0 0 9.5rem;
-
-        position: absolute;
     }
 
     .se-mer-ops {
         display: flex;
         flex-direction: row;
         gap: 0.2rem;
-
-        margin: 18.4rem 0 0 16.5rem;
-
-        position: absolute;
     }
 `
 
@@ -259,60 +248,58 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
 
             <div className="ops-card-content">
                 <PublishedTime>{prettifiedStartTime}</PublishedTime>
-                <Heading spacing size="medium">
+                <Heading spacing size="small">
                     {opsMessage.internalHeader}
                 </Heading>
-
                 <BodyShort spacing className="message-content">
                     <span
                         dangerouslySetInnerHTML={{
                             __html: opsMessage.internalMessage,
                         }}
                     />
-                </BodyShort>
-            </div>
-
-            <div
-                className={
-                    approvedUsers.includes(navIdent)
-                        ? "se-mer-wrapper"
-                        : "se-mer-ops"
-                }
-            >
-                {approvedUsers.includes(navIdent) && (
-                    <>
-                        <Button
-                            size="small"
-                            variant="tertiary"
-                            className="top-row-button"
-                            onClick={handleModal}
-                            icon={<Delete />}
-                        />
-                        <Button
-                            variant="tertiary"
-                            size="small"
-                            onClick={() =>
-                                router.push(
-                                    RouterOpsMeldinger.PATH +
-                                        `/${opsMessage.id}/RedigerMelding`
-                                )
-                            }
-                        >
-                            Rediger
-                        </Button>
-                    </>
-                )}
-                <Button
-                    variant="tertiary"
-                    size="small"
-                    onClick={() =>
-                        router.push(
-                            RouterOpsMeldinger.PATH + `/${opsMessage.id}`
-                        )
+                </BodyShort>{" "}
+                <div
+                    className={
+                        approvedUsers.includes(navIdent)
+                            ? "se-mer-wrapper"
+                            : "se-mer-ops"
                     }
                 >
-                    Se mer
-                </Button>
+                    {approvedUsers.includes(navIdent) && (
+                        <>
+                            <Button
+                                size="small"
+                                variant="tertiary"
+                                className="top-row-button"
+                                onClick={handleModal}
+                                icon={<Delete />}
+                            />
+                            <Button
+                                variant="tertiary"
+                                size="small"
+                                onClick={() =>
+                                    router.push(
+                                        RouterOpsMeldinger.PATH +
+                                            `/${opsMessage.id}/RedigerMelding`
+                                    )
+                                }
+                            >
+                                Rediger
+                            </Button>
+                        </>
+                    )}
+                    <Button
+                        variant="tertiary"
+                        size="small"
+                        onClick={() =>
+                            router.push(
+                                RouterOpsMeldinger.PATH + `/${opsMessage.id}`
+                            )
+                        }
+                    >
+                        Se mer
+                    </Button>
+                </div>
             </div>
         </MessageCard>
     )

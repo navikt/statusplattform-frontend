@@ -29,7 +29,7 @@ const DefaultMessage = (
     var formattedDate = datePrettifyer(currentDate)
 
     var grayText =
-        "<p style='color:#757575'>------------------------------------------------- </p>" +
+        "<span style='color:#757575'>------------------------------------------------- </span>" +
         initialvalue.replace("<p>", '<p style="color:#757575"')
 
     switch (status) {
@@ -53,18 +53,18 @@ const DefaultMessage = (
 
     return editing && showHistory
         ? `<b>Status: </b> ${opsStatus}
-        </br></br>
+        </br>
         <b>Oppdatert: </b> ${formattedDate}
-</br></br>
+</br>
 ${statusMsg}
 </br>
-${status != "SOLVED" ? "</br><b>Forventet rettetid er:</b>&nbsp;</br> " : ""}
+${status != "SOLVED" ? "<b>Forventet rettetid er:</b>&nbsp;</br> " : ""}
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
 ${grayText} `
         : ` <b>Status: </b> ${opsStatus}
-</br></br>
+</br>
 ${statusMsg}
-</br></br>
+</br>
 
 <b>Forventet rettetid er:</b>&nbsp;
 `

@@ -251,15 +251,13 @@ const OpsMessages = ({ serverOpsMessages }) => {
 }
 
 const OpsMessagesList = styled.div`
-    display: grid;
-    grid-gap: 3rem;
-    /* display: flex;
+    display: flex;
     flex-direction: column;
- 
-    gap: 2rem; */
+
+    gap: 2rem;
     margin-bottom: 2rem;
 
-    @media (min-width: 800px) {
+    /* @media (min-width: 800px) {
         grid-auto-rows: 350px;
         grid-template-columns: repeat(2, 370px);
     }
@@ -267,12 +265,11 @@ const OpsMessagesList = styled.div`
     @media (min-width: 1150px) {
         grid-auto-rows: 350px;
         grid-template-columns: repeat(3, 370px);
-    }
 
     @media (min-width: 1600px) {
         grid-auto-rows: 350px;
         grid-template-columns: repeat(3, 370px);
-    }
+    } */
 `
 
 interface ListOfOpsMessagesI {
