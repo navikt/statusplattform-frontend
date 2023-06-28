@@ -45,7 +45,9 @@ export const countHealthyServicesInListOfAreas = (areas: Area[]) => {
     areas.map((area) => {
         healthyServices += area.services.filter(
             (service: Service) =>
-                service.record.status == "OK" || service.record.status == null
+                service.record.status == "OK" ||
+                service.record.status == null ||
+                service.record.status == "UNKNOWN"
         ).length
     })
     return healthyServices

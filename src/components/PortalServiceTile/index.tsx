@@ -159,6 +159,8 @@ export const handleAndSetStatusIcon = (
             return <ErrorFilledCustomized />
         case "MAINTENANCE":
             return <WrenchFilledCustomized />
+        case "UNKNOWN":
+            return <HelpTextCustomizedGray />
         case null:
             if (isInternal) {
                 return (
@@ -447,6 +449,21 @@ export const StatusIconHandler: React.FC<{
                                     isArea
                                         ? "Områdestatus: Tjenester i området er nede"
                                         : "Tjenestestatus: Nede"
+                                }
+                            />
+                        )
+                    case "UNKNOWN":
+                        return (
+                            <HelpTextCustomizedGray
+                                className={
+                                    statusNotFromTeam && isIntern
+                                        ? "status-not-from-team"
+                                        : ""
+                                }
+                                aria-label={
+                                    isArea
+                                        ? "Områdestatus: Tjenester i området mangler status"
+                                        : "Tjenestestatus: Mangler status"
                                 }
                             />
                         )
