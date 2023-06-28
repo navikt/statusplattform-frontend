@@ -344,7 +344,7 @@ const OpsComponent = ({
                 </Heading>
                 <TextField
                     label="Tittel:"
-                    value={
+                    defaultValue={
                         selectedStatus != "MAITENANCE"
                             ? "Problemer med:"
                             : "Vedlikehold på:"
