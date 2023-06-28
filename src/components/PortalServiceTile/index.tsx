@@ -387,6 +387,13 @@ export const PortalServiceTile = ({
     )
 }
 
+const IconWrapper = styled.div`
+    height: 1.38rem;
+    width: 1.38rem;
+
+    margin-right: 0.5rem;
+`
+
 export const StatusIconHandler: React.FC<{
     status: string
     isArea: boolean
@@ -409,67 +416,77 @@ export const StatusIconHandler: React.FC<{
                 switch (status) {
                     case "OK":
                         return (
-                            <SuccessFilledCustomized
-                                className={
-                                    statusNotFromTeam && isIntern
-                                        ? "status-not-from-team"
-                                        : ""
-                                }
-                                aria-label={
-                                    isArea
-                                        ? "Områdestatus: OK"
-                                        : "Tjenestestatus: OK"
-                                }
-                            />
+                            <IconWrapper>
+                                <SuccessFilledCustomized
+                                    className={
+                                        statusNotFromTeam && isIntern
+                                            ? "status-not-from-team"
+                                            : ""
+                                    }
+                                    aria-label={
+                                        isArea
+                                            ? "Områdestatus: OK"
+                                            : "Tjenestestatus: OK"
+                                    }
+                                />
+                            </IconWrapper>
                         )
                     case "ISSUE":
                         return (
-                            <WarningFilledCustomized
-                                className={
-                                    statusNotFromTeam && isIntern
-                                        ? "status-not-from-team"
-                                        : ""
-                                }
-                                aria-label={
-                                    isArea
-                                        ? "Områdestatus: Tjenester i området har feil"
-                                        : "Tjenestestatus: Feil på tjeneste"
-                                }
-                            />
+                            <IconWrapper>
+                                <WarningFilledCustomized
+                                    className={
+                                        statusNotFromTeam && isIntern
+                                            ? "status-not-from-team"
+                                            : ""
+                                    }
+                                    aria-label={
+                                        isArea
+                                            ? "Områdestatus: Tjenester i området har feil"
+                                            : "Tjenestestatus: Feil på tjeneste"
+                                    }
+                                />
+                            </IconWrapper>
                         )
                     case "DOWN":
                         return (
-                            <ErrorFilledCustomized
-                                className={
-                                    statusNotFromTeam && isIntern
-                                        ? "status-not-from-team"
-                                        : ""
-                                }
-                                aria-label={
-                                    isArea
-                                        ? "Områdestatus: Tjenester i området er nede"
-                                        : "Tjenestestatus: Nede"
-                                }
-                            />
+                            <IconWrapper>
+                                <ErrorFilledCustomized
+                                    className={
+                                        statusNotFromTeam && isIntern
+                                            ? "status-not-from-team"
+                                            : ""
+                                    }
+                                    aria-label={
+                                        isArea
+                                            ? "Områdestatus: Tjenester i området er nede"
+                                            : "Tjenestestatus: Nede"
+                                    }
+                                />
+                            </IconWrapper>
                         )
                     case "UNKNOWN":
                         return (
-                            <HelpTextCustomizedGray
-                                className={
-                                    statusNotFromTeam && isIntern
-                                        ? "status-not-from-team"
-                                        : ""
-                                }
-                                aria-label={
-                                    isArea
-                                        ? "Områdestatus: Tjenester i området mangler status"
-                                        : "Tjenestestatus: Mangler status"
-                                }
-                            />
+                            <IconWrapper>
+                                <HelpTextCustomizedGray
+                                    className={
+                                        statusNotFromTeam && isIntern
+                                            ? "status-not-from-team"
+                                            : ""
+                                    }
+                                    aria-label={
+                                        isArea
+                                            ? "Områdestatus: Tjenester i området mangler status"
+                                            : "Tjenestestatus: Mangler status"
+                                    }
+                                />
+                            </IconWrapper>
                         )
                     case null:
                         return (
-                            <HelpTextCustomizedGray aria-label="Ingen status tilgjengelig" />
+                            <IconWrapper>
+                                <HelpTextCustomizedGray aria-label="Ingen status tilgjengelig" />
+                            </IconWrapper>
                         )
                     default:
                         return null
