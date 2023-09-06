@@ -21,6 +21,7 @@ export interface Service {
     serviceDependencies?: Service[]
     componentDependencies?: Component[]
     monitorlink?: string
+    pollingOnPrem?:boolean
     pollingUrl?: string
     record?: Record
     areasContainingThisService: Area[]

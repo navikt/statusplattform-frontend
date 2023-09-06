@@ -106,8 +106,8 @@ const ModalContent = styled(Modal.Content)`
 const popoverContentList = [
     "Navnet på tjenesten slik den omtales ut mot brukerne av tjenesten",
     "Navnet på team slik det er skrevet i Teamkatalogen",
-    "URL til statusendepunkt som Statusplattformen skal polle for status",
     "Link til et eventuelt dashboard eller monitor med mer detaljert informasjon. Eksempelvis Grafana dashboard",
+    "URL til statusendepunkt som Statusplattformen skal polle for status. Angi i radioknapp hvor endepunktet befinner seg.",
     "Her kan man legge inn andre tjenester det er avhengigheter til. Informasjon om status på disse vil da vises i tjenestebildet.Velg i liste og klikk Legg til for hver tjeneste.",
     "Her legger man inn områder hvor tjenesten skal vises. Velg i liste og klikk Legg til for hvert område.",
 ]
@@ -126,11 +126,12 @@ const NewService = () => {
         componentDependencies: [],
         monitorlink: "",
         pollingUrl: "",
+        pollingOnPrem:false,
         areasContainingThisService: [],
         statusNotFromTeam: false,
     })
 
-    const buttonRef = useRef()
+    const buttonRef = useRef<HTMLButtonElement>(null)
     const [openState, setOpenState] = useState(false)
     const [popoverText, setPopoverText] = useState("")
 
@@ -160,6 +161,7 @@ const NewService = () => {
         componentDependencies: componentdependencies,
         monitorlink,
         pollingUrl,
+        pollingOnPrem:pollingOnPrem,
         areasContainingThisService,
         statusNotFromTeam,
     } = newService
@@ -167,14 +169,24 @@ const NewService = () => {
     const handleServiceDataChange =
         (field: keyof typeof newService) =>
         (evt: React.ChangeEvent<HTMLInputElement>) => {
-            const updatedNewArea = {
+            const updatedNewService = {
                 ...newService,
                 [field]:
                     evt.target.getAttribute("type") === "number"
                         ? parseInt(evt.target.value)
                         : evt.target.value,
             }
-            updateNewService(updatedNewArea)
+            updateNewService(updatedNewService)
+        }
+
+    const handleSetPollingOnPremChange =
+        (pollingOnPrem: boolean) =>
+        {
+            const updatedNewService = {
+                ...newService,
+                pollingOnPrem:pollingOnPrem,
+            }
+            updateNewService(updatedNewService)
         }
 
     const validatePollingUrl = (urlInput) => {
@@ -208,6 +220,7 @@ const NewService = () => {
             componentDependencies: componentdependencies,
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
+            pollingOnPrem:pollingOnPrem,
             areasContainingThisService: areasContainingThisService,
             statusNotFromTeam: statusNotFromTeam,
         }
@@ -229,6 +242,7 @@ const NewService = () => {
             componentDependencies: componentdependencies,
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
+            pollingOnPrem:pollingOnPrem,
             areasContainingThisService: areasContainingThisService,
             statusNotFromTeam: statusNotFromTeam,
         }
@@ -258,6 +272,7 @@ const NewService = () => {
             componentDependencies: newComponentsList,
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
+            pollingOnPrem:pollingOnPrem,
             areasContainingThisService: areasContainingThisService,
             statusNotFromTeam: statusNotFromTeam,
         }
@@ -279,6 +294,7 @@ const NewService = () => {
             componentDependencies: newComponentsList,
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
+            pollingOnPrem:pollingOnPrem,
             areasContainingThisService: areasContainingThisService,
             statusNotFromTeam: statusNotFromTeam,
         }
@@ -432,6 +448,35 @@ const NewService = () => {
                             </button>
                         </div>
                     </div>
+                     <div className="input-wrapper">
+                                            <TextField
+                                                type="text"
+                                                label="Monitorlink"
+                                                value={monitorlink}
+                                                error={
+                                                    !validateMonitorLink(monitorlink)
+                                                        ? "Feil i formatet på urlen"
+                                                        : undefined
+                                                }
+                                                onChange={handleServiceDataChange("monitorlink")}
+                                                placeholder="Monitorlink"
+                                            />
+                                            <div className="help-button-wrapper">
+                                                <button
+                                                    className="help-button"
+                                                    type="button"
+                                                    ref={buttonRef}
+                                                    onClick={(event) =>
+                                                        handleTriggerHelpText(event, 2)
+                                                    }
+                                                >
+                                                    <InformationColored
+                                                        width="1.5em"
+                                                        height="1.5em"
+                                                    />
+                                                </button>
+                                            </div>
+                                        </div>
 
                     <div className="input-wrapper">
                         <TextField
@@ -452,7 +497,7 @@ const NewService = () => {
                                 type="button"
                                 ref={buttonRef}
                                 onClick={(event) =>
-                                    handleTriggerHelpText(event, 2)
+                                    handleTriggerHelpText(event, 3)
                                 }
                             >
                                 <InformationColored
@@ -464,34 +509,18 @@ const NewService = () => {
                     </div>
 
                     <div className="input-wrapper">
-                        <TextField
-                            type="text"
-                            label="Monitorlink"
-                            value={monitorlink}
-                            error={
-                                !validateMonitorLink(monitorlink)
-                                    ? "Feil i formatet på urlen"
-                                    : undefined
-                            }
-                            onChange={handleServiceDataChange("monitorlink")}
-                            placeholder="Monitorlink"
-                        />
-                        <div className="help-button-wrapper">
-                            <button
-                                className="help-button"
-                                type="button"
-                                ref={buttonRef}
-                                onClick={(event) =>
-                                    handleTriggerHelpText(event, 3)
-                                }
-                            >
-                                <InformationColored
-                                    width="1.5em"
-                                    height="1.5em"
-                                />
-                            </button>
-                        </div>
+                                           <RadioGroup
+                                           legend=""
+                                           defaultValue="false"
+                                           size="small"
+                                          onChange={(val: boolean) => (handleSetPollingOnPremChange(val)) }
+                                        >
+                                              <Radio value="false">GCP</Radio>
+                                              <Radio value="true">FSS</Radio>
+                    </RadioGroup>
                     </div>
+
+
 
                     <HorizontalSeparator />
 

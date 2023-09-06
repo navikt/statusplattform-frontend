@@ -139,7 +139,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
     const allServices: Service[] = allServicesProps
     const [isLoading, setIsLoading] = useState(true)
     const [didComponentCreate, changeDidComponentCreate] = useState(false)
-    const buttonRef = useRef()
+    const buttonRef = useRef<HTMLButtonElement>(null)
     const [openState, setOpenState] = useState(false)
     const [popoverText, setPopoverText] = useState("")
 
