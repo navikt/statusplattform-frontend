@@ -90,3 +90,8 @@ export interface Record {
     logLink: string
     timestamp: string
 }
+
+export interface Team {
+    id: string
+    name: string
+}

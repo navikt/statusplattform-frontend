@@ -4,7 +4,7 @@ import { useContext, useEffect, useRef, useState } from "react"
 import router from "next/router"
 
 import Layout from "../../../components/Layout"
-import { Area, Component, Service } from "../../../types/types"
+import { Area, Component, Service, Team } from "../../../types/types"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
 
 import {
@@ -26,6 +26,7 @@ import { fetchServicesMinimal, postService } from "../../../utils/servicesAPI"
 import { fetchAreasMinimal } from "../../../utils/areasAPI"
 import { RouterAdminTjenester } from "../../../types/routes"
 import { fetchComponentsMinimal } from "../../../utils/componentsAPI"
+import { fetchAllTeams } from "../../../utils/teamKatalogAPI"
 import { HelptextCustomizedBlue } from "../../../components/TrafficLights"
 
 const NewServiceContainer = styled.div`
@@ -114,6 +115,7 @@ const popoverContentList = [
 
 const NewService = () => {
     const [allAreas, setAllAreas] = useState<Area[]>()
+    const [allTeams, setAllTeams] = useState<Team[]>()
     const [allServices, setAllServices] = useState<Service[]>()
     const [allComponents, setAllComponents] = useState<Component[]>()
     const [isLoading, setIsLoading] = useState(true)
@@ -142,6 +144,21 @@ const NewService = () => {
             const retrievedServices: Service[] = await fetchServicesMinimal()
             const retrievedComponents: Component[] = await fetchComponentsMinimal()
             const retrievedAreas: Area[] = await fetchAreasMinimal()
+            let retrievedTeams: Team[] = await fetchAllTeams()
+            retrievedTeams = retrievedTeams.sort((a:Team,b:Team) =>{
+                const nameA = a.name.toUpperCase();
+                const nameB = b.name.toUpperCase();
+                if (nameA < nameB) {
+                    return -1;
+                }
+                if (nameA > nameB) {
+                    return 1;
+                }
+
+                // names must be equal
+                return 0;
+            })
+            setAllTeams(retrievedTeams)
             setAllServices(retrievedServices)
             setAllComponents(retrievedComponents)
             setAllAreas(retrievedAreas)
@@ -380,6 +397,11 @@ const NewService = () => {
         setPopoverText(popoverContentList[index])
     }
 
+    const teamOptions = [];
+    allTeams.forEach((team) => {
+        teamOptions.push(<option value={team.id}>{team.name}</option>)
+    })
+
     return (
         <Layout>
             <PopoverCustomized
@@ -390,7 +412,6 @@ const NewService = () => {
             >
                 <Popover.Content>{popoverText}</Popover.Content>
             </PopoverCustomized>
-
             <NewServiceContainer>
                 <form onSubmit={(event) => handlePostNewService(event)}>
                     <Detail size="small" spacing>
@@ -424,14 +445,10 @@ const NewService = () => {
                     </div>
 
                     <div className="input-wrapper">
-                        <TextField
-                            type="text"
-                            required
-                            label="Team*"
-                            value={team}
-                            onChange={handleServiceDataChange("team")}
-                            placeholder="Team"
-                        />
+                        <Select label="Velg team">
+                            <option value="">Velg team</option>
+                            {teamOptions}
+                        </Select>
                         <div className="help-button-wrapper">
                             <button
                                 className="help-button"
