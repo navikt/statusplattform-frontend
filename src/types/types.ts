@@ -18,6 +18,7 @@ export interface Service {
     name: string
     type: string
     team?: string
+    teamId?:string
     serviceDependencies?: Service[]
     componentDependencies?: Component[]
     monitorlink?: string
