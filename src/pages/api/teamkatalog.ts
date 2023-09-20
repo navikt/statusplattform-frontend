@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import https from "https";
 
-
+const env = process.env.ENV
 
 
 
@@ -22,6 +22,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     const fetch = require("node-fetch");
     let https  = require('https')
+
+    if(env == "local"){
+        https = require('https');
+    }
     // console.log(ENV)
     const httpsAgent = new https.Agent({
         rejectUnauthorized: false,
