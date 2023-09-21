@@ -389,6 +389,14 @@ const NewService = () => {
         teamOptions.push(<option value={team.id}>{team.name}</option>)
     })
 
+    const handleUpdatedTeam = (event) => {
+        console.log(event.target.value)
+        updateNewService({
+            ...newService,
+            team: event.target.value
+        })
+    }
+
     return (
         <Layout>
             <PopoverCustomized
@@ -433,7 +441,7 @@ const NewService = () => {
 
                     <div className="input-wrapper">
                         <Select label="Velg team"
-                                onChange= {handleServiceDataChange("team")}>
+                                onChange= {handleUpdatedTeam}>
                             <option value="">Velg team</option>
                             {teamOptions}
                         </Select>
