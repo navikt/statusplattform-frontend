@@ -9,10 +9,6 @@ const env = process.env.ENV
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
 
-
-    console.log("IN TEAMKATALOG API")
-
-    // let teamkatalogPath = "https://teamkatalog-api.dev.intern.nav.no/team?status=ACTIVE%2CPLANNED%2CINACTIVE"
     let teamkatalogPath= process.env.TEAMKATALOG_API + "/team?status=ACTIVE%2CPLANNED%2CINACTIVE"
     let method = "GET"
     let ENV = process.env.ENV
@@ -21,7 +17,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
 
     const fetch = require("node-fetch");
-    let https  = require('https')
+    let https  = require('http')
 
     if(env == "local"){
         https = require('https');
@@ -42,11 +38,10 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     await resp.json()
         .then(body => {
             if (body) {
-                console.log(body)
                 res.status(200).json(body.content)
             }
             else {
-                res.send("Cant read userdate")
+                res.send("Cant connect with team katalog api")
             }
 
         })

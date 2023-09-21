@@ -145,19 +145,6 @@ const NewService = () => {
             const retrievedComponents: Component[] = await fetchComponentsMinimal()
             const retrievedAreas: Area[] = await fetchAreasMinimal()
             let retrievedTeams: Team[] = await fetchAllTeams()
-            retrievedTeams = retrievedTeams.sort((a:Team,b:Team) =>{
-                const nameA = a.name.toUpperCase();
-                const nameB = b.name.toUpperCase();
-                if (nameA < nameB) {
-                    return -1;
-                }
-                if (nameA > nameB) {
-                    return 1;
-                }
-
-                // names must be equal
-                return 0;
-            })
             setAllTeams(retrievedTeams)
             setAllServices(retrievedServices)
             setAllComponents(retrievedComponents)
@@ -445,7 +432,8 @@ const NewService = () => {
                     </div>
 
                     <div className="input-wrapper">
-                        <Select label="Velg team">
+                        <Select label="Velg team"
+                                onChange= {handleServiceDataChange("team")}>
                             <option value="">Velg team</option>
                             {teamOptions}
                         </Select>

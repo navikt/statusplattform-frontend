@@ -17,10 +17,11 @@ import {
     Select,
     TextField,
 } from "@navikt/ds-react"
-import { Area, Component, Service } from "../../types/types"
+import { Area, Component, Service, Team } from "../../types/types"
 import { useLoader } from "../../utils/useLoader"
 import { fetchComponents } from "../../utils/componentsAPI"
 import { fetchAreas } from "../../utils/areasAPI"
+import { fetchAllTeams } from "../../utils/teamKatalogAPI"
 import {
     deleteService,
     fetchServices,
@@ -91,7 +92,12 @@ const TjenesteContent = styled.div`
         border-top: 2px solid rgba(0, 0, 0, 0.55);
         border-bottom: 2px solid rgba(0, 0, 0, 0.55);
     }
-
+        .select-wrapper{
+        display: flex;
+        width: 100%;
+        background-color: blueviolet;
+        
+        }
     display: flex;
     align-items: center;
 
@@ -108,6 +114,7 @@ const TjenesteContent = styled.div`
 
     &.editting {
         border-color: var(--a-blue-500);
+      
     }
 `
 
@@ -126,6 +133,7 @@ const TableTjeneste = () => {
     const [serviceToDelete, setServiceToDelete] = useState<Service>()
     const [services, setServices] = useState<Service[]>()
     const [isLoading, setIsLoading] = useState(false)
+    const [allTeams, setAllTeams] = useState<Team[]>()
 
     const { changeTitle } = useContext(TitleContext)
 
@@ -134,8 +142,15 @@ const TableTjeneste = () => {
         setIsLoading(true)
         let controlVar = true
         const setup = async () => {
+
             if (controlVar) {
                 try {
+                    let retrievedTeams: Team[] = await fetchAllTeams()
+                    setAllTeams(retrievedTeams)
+                } catch (error) {
+                    console.log(error)
+                    toast.error("Noe gikk galt ved henting av team fra teamkatalogen")
+                }try {
                     const services: Service[] = await fetchServices()
                     await setServices(services)
                 } catch (error) {
@@ -146,6 +161,8 @@ const TableTjeneste = () => {
                 }
             }
         }
+
+
         if (controlVar) {
             setup()
         }
@@ -301,6 +318,7 @@ const TableTjeneste = () => {
                                                     setServiceToDelete(service)
                                                 }
                                                 allServices={services}
+                                                teams={allTeams}
                                                 reload={reload}
                                             />
                                         )}
@@ -430,6 +448,7 @@ const ServiceRowContent = styled.div`
 interface ServiceRowProps {
     service: Service
     allServices?: Service[]
+    teams?: Team[]
     toggleEditService: (service) => void
     toggleExpanded: (service) => void
     isExpanded: boolean
@@ -619,6 +638,7 @@ const ServiceRowEditting = ({
     isExpanded,
     setServiceToDelete,
     reload,
+    teams,
 }: ServiceRowProps) => {
     const [updatedService, changeUpdatedService] = useState<Service>({
         id: service.id,
@@ -652,6 +672,7 @@ const ServiceRowEditting = ({
         name,
         type,
         team,
+        teamId,
         serviceDependencies,
         componentDependencies,
         monitorlink,
@@ -660,6 +681,7 @@ const ServiceRowEditting = ({
     } = updatedService
 
     useEffect(() => {
+        console.log(teams)
         setIsLoading(true)
         if (monitorlink == null || monitorlink == undefined) {
             changeUpdatedService({ ...updatedService, monitorlink: "" })
@@ -740,6 +762,13 @@ const ServiceRowEditting = ({
                 toast.error("Noe gikk galt i oppdatering av tjenesten.")
             })
     }
+    const teamOptions = [];
+    teams.forEach((team) => {
+        teamOptions.push(<option key = {team.id} value={team.id}>{team.name}</option>)
+    })
+    const handleUpdatedTeam = (event) => {
+        console.log(event.target.value)
+    }
 
     return (
         <ServiceRowContainer>
@@ -757,14 +786,15 @@ const ServiceRowEditting = ({
                         onClick={(event) => event.stopPropagation()}
                     />
 
-                    <TextField
-                        label="Team"
-                        hideLabel
-                        className="service-row-column editting"
-                        value={team}
-                        onChange={handleUpdatedService("team")}
-                        onClick={(event) => event.stopPropagation()}
-                    />
+                        <Select
+                                label=""
+                                onClick={e => e.stopPropagation()}
+                                onChange={handleUpdatedService("team")}
+                                style={{ width: '10%'}}>
+                            <option value={service.teamId? service.teamId : service.team} >{ service.team}</option>
+                                      {teamOptions}
+                        </Select>
+
                 </div>
 
                 {isExpanded && (
