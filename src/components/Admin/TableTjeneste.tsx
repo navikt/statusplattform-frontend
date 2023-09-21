@@ -768,6 +768,10 @@ const ServiceRowEditting = ({
     })
     const handleUpdatedTeam = (event) => {
         console.log(event.target.value)
+        changeUpdatedService({
+            ...service,
+            team: event.target.value
+        })
     }
 
     return (
@@ -789,7 +793,7 @@ const ServiceRowEditting = ({
                         <Select
                                 label=""
                                 onClick={e => e.stopPropagation()}
-                                onChange={handleUpdatedService("team")}
+                                onChange={handleUpdatedTeam}
                                 style={{ width: '10%'}}>
                             <option value={service.teamId? service.teamId : service.team} >{ service.team}</option>
                                       {teamOptions}
