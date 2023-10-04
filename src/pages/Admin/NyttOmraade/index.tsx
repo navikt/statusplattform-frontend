@@ -55,6 +55,7 @@ const NewArea = ({ allServicesProps }) => {
         icon: "0001",
         services: [],
         components: [],
+        contains_components:false,
     })
 
     useEffect(() => {
@@ -95,6 +96,7 @@ const NewArea = ({ allServicesProps }) => {
             components: components,
             description: description,
             icon: icon,
+            contains_components:false,
         }
         updateNewArea(updatedArea)
         toast.success("Lagt tjeneste til område")
@@ -110,6 +112,7 @@ const NewArea = ({ allServicesProps }) => {
             components: components,
             icon: icon,
             services: newServicesList,
+            contains_components:false,
         }
         updateNewArea(updatedArea)
         toast.success("Fjernet tjeneste fra område")
