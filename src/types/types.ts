@@ -51,6 +51,7 @@ export interface Area {
     components: Component[]
     status?: string
     subAreas?: SubArea[]
+    contains_components: boolean
 }
 
 export interface SubArea {

@@ -158,6 +158,7 @@ const TableOmraade = () => {
             try {
                 const reloadedAreas: Area[] = await fetchAreas()
                 setAllAreas(reloadedAreas)
+                setIsLoadingAreas(false)
             } catch (error) {
                 console.log(error)
                 setIsLoadingAreas(false)
@@ -550,7 +551,6 @@ const AreaTableRow = ({
                 <div className="top-row">
                     <span className="row-element">{name}</span>
                     <span className="row-element">{beskrivelse}</span>
-                    {/* <span className="row-element"><IconContainer>{getIconsFromGivenCode(ikon)}</IconContainer></span> */}
                 </div>
 
                 {isExpanded && (
@@ -673,6 +673,7 @@ const CurrentlyEdittingArea = ({
         services: area.services,
         components: area.components,
         subAreas: area.subAreas,
+        contains_components: area.contains_components
     })
 
     const [servicesInArea, setServicesInArea] = useState<Service[]>(() =>
