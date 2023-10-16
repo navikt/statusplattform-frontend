@@ -652,6 +652,7 @@ const ServiceRowEditting = ({
         areasContainingThisService: service.areasContainingThisService,
         statusNotFromTeam: service.statusNotFromTeam,
         record: service.record,
+        pollingOnPrem: service.pollingOnPrem,
     })
     const [isValidMonitorUrl, setIsValidMonitorUrl] = useState(true)
     const [isValidPollingUrl, setIsvalidPollingUrl] = useState(true)
@@ -678,6 +679,7 @@ const ServiceRowEditting = ({
         monitorlink,
         pollingUrl,
         statusNotFromTeam,
+        pollingOnPrem ,
     } = updatedService
 
     useEffect(() => {
@@ -721,6 +723,13 @@ const ServiceRowEditting = ({
         changeUpdatedService({
             ...service,
             statusNotFromTeam: !statusNotFromTeam,
+        })
+    }
+
+    const handleIsPollingOnPrem = () => {
+        changeUpdatedService({
+            ...service,
+            pollingOnPrem: !pollingOnPrem,
         })
     }
 
@@ -895,6 +904,21 @@ const ServiceRowEditting = ({
                                         defaultChecked={statusNotFromTeam}
                                     >
                                         Statuskilde ikke godkjent av teamet
+                                    </Checkbox>
+                                </CheckboxGroup>
+                            </span>
+                            <span className="service-data-element editting">
+                                <CheckboxGroup
+                                    legend=""
+                                    onChange={() => handleIsPollingOnPrem()}
+                                >
+                                    <Checkbox
+                                        value={
+                                            pollingOnPrem ? "true" : "false"
+                                        }
+                                        defaultChecked={pollingOnPrem}
+                                    >
+                                        Statuskilde er on prem (fss)
                                     </Checkbox>
                                 </CheckboxGroup>
                             </span>
@@ -1330,6 +1354,7 @@ const EditConnectedAreas: React.FC<{
             ) : (
                 <>Ingen områder å legge tjenesten i</>
             )}
+            hallo
 
             <div>
                 <Button
