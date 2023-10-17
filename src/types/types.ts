@@ -34,12 +34,14 @@ export interface Component {
     name: string
     type: string
     team?: string
+    teamId?:string
     componentDependencies?: Component[]
     monitorlink?: string
     pollingUrl?: string
     status?: string
     servicesDependentOnThisComponent?: Service[]
     record?: Record
+    pollingOnPrem?:boolean
 }
 
 export interface Area {

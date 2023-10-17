@@ -4,28 +4,27 @@ import { useContext, useEffect, useRef, useState } from "react"
 import router from "next/router"
 
 import Layout from "../../../components/Layout"
-import { Service, Component } from "../../../types/types"
+import {Service, Component, Team, Area} from "../../../types/types"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
-import { fetchTypes } from "../../../utils/fetchTypes"
 
 import {
     BodyShort,
     Button,
     Detail,
-    Heading,
     Modal,
-    Popover,
+    Popover, Radio, RadioGroup,
     Select,
     TextField,
 } from "@navikt/ds-react"
 import { Copy, Delete, InformationColored } from "@navikt/ds-icons"
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
-import { fetchAreas } from "../../../utils/areasAPI"
-import { fetchComponents, postComponent } from "../../../utils/componentsAPI"
+import { fetchAllTeams } from "../../../utils/teamKatalogAPI"
+import { postComponent} from "../../../utils/componentsAPI"
 import { RouterAdminKomponenter } from "../../../types/routes"
 import { EndPathComponents, EndPathServices } from "../../../utils/apiHelper"
 import { backendPath } from "../.."
+
 
 const NewComponentContainer = styled.div`
     display: flex;
@@ -142,6 +141,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const [openState, setOpenState] = useState(false)
     const [popoverText, setPopoverText] = useState("")
+    const [allTeams, setAllTeams] = useState<Team[]>()
 
     const [newComponent, updateNewComponent] = useState<Component>({
         name: "",
@@ -151,10 +151,16 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
         monitorlink: "",
         pollingUrl: "",
         servicesDependentOnThisComponent: [],
+        pollingOnPrem: false,
     })
 
     useEffect(() => {
-        setIsLoading(false)
+        Modal.setAppElement("#__next")
+        ;(async function () {
+            let retrievedTeams: Team[] = await fetchAllTeams()
+            setAllTeams(retrievedTeams)
+            setIsLoading(false)
+        })()
     }, [])
 
     if (isLoading) {
@@ -169,6 +175,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
         monitorlink,
         pollingUrl,
         servicesDependentOnThisComponent,
+        pollingOnPrem,
     } = newComponent
 
     const handleComponentDataChange =
@@ -205,6 +212,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
             componentDependencies: newComponentsList,
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
+            pollingOnPrem: pollingOnPrem,
             servicesDependentOnThisComponent,
         }
         updateNewComponent(updatedComponent)
@@ -224,6 +232,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
             componentDependencies: newComponentsList,
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
+            pollingOnPrem: pollingOnPrem,
             servicesDependentOnThisComponent,
         }
         updateNewComponent(updatedComponent)
@@ -252,6 +261,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
             servicesDependentOnThisComponent: newServicesList,
+            pollingOnPrem: pollingOnPrem,
         }
         updateNewComponent(updatedComponent)
         toast.success("Lagt til komponentavhengighet")
@@ -273,6 +283,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
             servicesDependentOnThisComponent: newServicesList,
+            pollingOnPrem: pollingOnPrem,
         }
         updateNewComponent(updatedComponent)
         toast.success("Fjernet tjenestekobling")
@@ -295,6 +306,16 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
         router.push(RouterAdminKomponenter.PATH)
     }
 
+    const handleSetPollingOnPremChange =
+        (pollingOnPrem: boolean) =>
+        {
+            const updatedNewComponent = {
+                ...newComponent,
+                pollingOnPrem:pollingOnPrem,
+            }
+            updateNewComponent(updatedNewComponent)
+        }
+
     const handleTriggerHelpText = (event, index) => {
         if (openState) {
             setOpenState(false)
@@ -304,6 +325,19 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
         buttonRef.current = event.target
         setPopoverText(popoverContentList[index])
     }
+
+    const handleUpdatedTeam = (event) => {
+        console.log(event.target.value)
+        updateNewComponent({
+            ...newComponent,
+            team: event.target.value
+        })
+    }
+
+    const teamOptions = [];
+    allTeams.forEach((team) => {
+        teamOptions.push(<option value={team.id}>{team.name}</option>)
+    })
 
     return (
         <Layout>
@@ -349,14 +383,11 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
                     </div>
 
                     <div className="input-wrapper">
-                        <TextField
-                            type="text"
-                            required
-                            label="Team*"
-                            value={team}
-                            onChange={handleComponentDataChange("team")}
-                            placeholder="Team"
-                        />
+                        <Select label="Velg team"
+                                onChange= {handleUpdatedTeam}>
+                            <option value="">Velg team</option>
+                            {teamOptions}
+                        </Select>
                         <div className="help-button-wrapper">
                             <button
                                 className="help-button"
@@ -364,6 +395,31 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
                                 ref={buttonRef}
                                 onClick={(event) =>
                                     handleTriggerHelpText(event, 1)
+                                }
+                            >
+                                <InformationColored
+                                    width="1.5em"
+                                    height="1.5em"
+                                />
+                            </button>
+                        </div>
+                    </div>
+
+                    <div className="input-wrapper">
+                        <TextField
+                            type="text"
+                            label="Monitorlink"
+                            value={monitorlink}
+                            onChange={handleComponentDataChange("monitorlink")}
+                            placeholder="Monitorlink"
+                        />
+                        <div className="help-button-wrapper">
+                            <button
+                                className="help-button"
+                                type="button"
+                                ref={buttonRef}
+                                onClick={(event) =>
+                                    handleTriggerHelpText(event, 3)
                                 }
                             >
                                 <InformationColored
@@ -400,29 +456,18 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
                     </div>
 
                     <div className="input-wrapper">
-                        <TextField
-                            type="text"
-                            label="Monitorlink"
-                            value={monitorlink}
-                            onChange={handleComponentDataChange("monitorlink")}
-                            placeholder="Monitorlink"
-                        />
-                        <div className="help-button-wrapper">
-                            <button
-                                className="help-button"
-                                type="button"
-                                ref={buttonRef}
-                                onClick={(event) =>
-                                    handleTriggerHelpText(event, 3)
-                                }
-                            >
-                                <InformationColored
-                                    width="1.5em"
-                                    height="1.5em"
-                                />
-                            </button>
-                        </div>
+                        <RadioGroup
+                            legend=""
+                            defaultValue="false"
+                            size="small"
+                            onChange={(val: boolean) => (handleSetPollingOnPremChange(val)) }
+                        >
+                            <Radio value="false">GCP</Radio>
+                            <Radio value="true">FSS</Radio>
+                        </RadioGroup>
                     </div>
+
+
 
                     <HorizontalSeparator />
 

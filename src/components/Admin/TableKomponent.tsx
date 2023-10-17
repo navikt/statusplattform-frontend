@@ -8,13 +8,13 @@ import "react-toastify/dist/ReactToastify.css"
 import { Close, Delete, Expand, Notes, SaveFile } from "@navikt/ds-icons"
 import {
     BodyShort,
-    Button,
+    Button, Checkbox, CheckboxGroup,
     Heading,
     Modal,
     Select,
     TextField,
 } from "@navikt/ds-react"
-import { Component, Service } from "../../types/types"
+import {Component, Service, Team} from "../../types/types"
 import {
     deleteComponent,
     fetchComponents,
@@ -32,6 +32,7 @@ import {
 } from "../../pages/Admin"
 import { RouterAdminAddKomponent } from "../../types/routes"
 import { fetchServices } from "../../utils/servicesAPI"
+import {fetchAllTeams} from "../../utils/teamKatalogAPI";
 
 const ComponentHeader = styled.div`
     padding: 1rem 0 1rem;
@@ -119,6 +120,7 @@ const TableKomponent = () => {
     const [components, setComponents] = useState<Component[]>()
     const [allServices, setAllServices] = useState<Service[]>()
     const [isLoading, setIsLoading] = useState(false)
+    const [allTeams, setAllTeams] = useState<Team[]>()
 
     const { changeTitle } = useContext(TitleContext)
 
@@ -129,6 +131,14 @@ const TableKomponent = () => {
         const setup = async () => {
             if (controlVar) {
                 try {
+                    let retrievedTeams: Team[] = await fetchAllTeams()
+                    setAllTeams(retrievedTeams)
+                } catch (error) {
+                    console.log(error)
+                    toast.error("Noe gikk galt ved henting av team fra teamkatalogen")
+                }
+                try {
+
                     const components: Component[] = await fetchComponents()
                     await setComponents(components)
                     const responseServices = await fetchServices()
@@ -303,6 +313,7 @@ const TableKomponent = () => {
                                                 }
                                                 allComponents={components}
                                                 allServices={allServices}
+                                                teams = {allTeams}
                                                 reload={reload}
                                             />
                                         )}
@@ -431,6 +442,7 @@ interface ComponentRowProps {
     setComponentToDelete: (component) => void
     reload?: () => void
     allServices?: Service[]
+    teams?: Team[]
 }
 
 const ComponentRow = ({
@@ -595,6 +607,7 @@ const ComponentRowEditting = ({
     setComponentToDelete,
     reload,
     allServices,
+    teams,
 }: ComponentRowProps) => {
     const [updatedComponent, changeUpdatedComponent] = useState<Component>({
         id: component.id,
@@ -606,6 +619,7 @@ const ComponentRowEditting = ({
         pollingUrl: component.pollingUrl,
         servicesDependentOnThisComponent:
             component.servicesDependentOnThisComponent,
+        pollingOnPrem: component.pollingOnPrem,
     })
     const [isLoading, setIsLoading] = useState(true)
 
@@ -617,6 +631,7 @@ const ComponentRowEditting = ({
         monitorlink,
         pollingUrl,
         servicesDependentOnThisComponent,
+        pollingOnPrem,
     } = updatedComponent
 
     useEffect(() => {
@@ -632,6 +647,13 @@ const ComponentRowEditting = ({
 
     if (isLoading) {
         return <CustomNavSpinner />
+    }
+
+    const handleIsPollingOnPrem = () => {
+        changeUpdatedComponent({
+            ...updatedComponent,
+            pollingOnPrem: !pollingOnPrem,
+        })
     }
 
     const handleUpdatedComponent =
@@ -667,6 +689,16 @@ const ComponentRowEditting = ({
         }
         toggleEditComponent(component)
     }
+    const teamOptions = [];
+    teams.forEach((team) => {
+        teamOptions.push(<option key = {team.id} value={team.id}>{team.name}</option>)
+    })
+    const handleUpdatedTeam = (event) => {
+        changeUpdatedComponent({
+            ...component,
+            team: event.target.value
+        })
+    }
 
     return (
         <ComponentRowContainer>
@@ -684,14 +716,14 @@ const ComponentRowEditting = ({
                         onClick={(event) => event.stopPropagation()}
                     />
 
-                    <TextField
-                        label="Team"
-                        hideLabel
-                        className="component-row-element editting"
-                        value={team}
-                        onChange={handleUpdatedComponent("team")}
-                        onClick={(event) => event.stopPropagation()}
-                    />
+                    <Select
+                        label=""
+                        onClick={e => e.stopPropagation()}
+                        onChange={handleUpdatedTeam}
+                        style={{ width: '10%'}}>
+                        <option value={component.teamId? component.teamId : component.team} >{ component.team}</option>
+                        {teamOptions}
+                    </Select>
                 </div>
 
                 {isExpanded && (
@@ -719,8 +751,8 @@ const ComponentRowEditting = ({
                                 updatedComponent={updatedComponent}
                             />
                         </div>
-
-                        <span className="component-row-element editting">
+                        <div>
+                         <span className="component-row-element editting">
                             <BodyShort spacing>
                                 <b>Monitorlink</b>
                             </BodyShort>
@@ -731,6 +763,10 @@ const ComponentRowEditting = ({
                                 onChange={handleUpdatedComponent("monitorlink")}
                             />
                         </span>
+
+
+                        </div>
+
                         <span className="component-row-element editting">
                             <BodyShort spacing>
                                 <b>PollingUrl</b>
@@ -741,6 +777,22 @@ const ComponentRowEditting = ({
                                 value={pollingUrl}
                                 onChange={handleUpdatedComponent("pollingUrl")}
                             />
+
+                                   <span className="service-data-element editting">
+                                <CheckboxGroup
+                                    legend=""
+                                    onChange={() => handleIsPollingOnPrem()}
+                                >
+                                    <Checkbox
+                                        value={
+                                            pollingOnPrem ? "true" : "false"
+                                        }
+                                        defaultChecked={pollingOnPrem}
+                                    >
+                                        Statuskilde er on prem (fss)
+                                    </Checkbox>
+                                </CheckboxGroup>
+                            </span>
                         </span>
                     </div>
                 )}

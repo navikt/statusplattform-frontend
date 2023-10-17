@@ -52,7 +52,8 @@ export const postComponent = async (component: Component): Promise<Component> =>
         dependencies: component.componentDependencies,
         servicesDependentOnThisComponent: component.servicesDependentOnThisComponent,
         monitorlink: component.monitorlink,
-        pollingUrl: component.pollingUrl
+        pollingUrl: component.pollingUrl,
+        pollingOnPrem:component.pollingOnPrem
     })
 
     let request = createApiRequest(path, "POST", body)
@@ -100,7 +101,8 @@ export const updateComponent = async (component: Component): Promise<void> =>{
         componentDependencies: component.componentDependencies,
         servicesDependentOnThisComponent: component.servicesDependentOnThisComponent,
         monitorlink: component.monitorlink,
-        pollingUrl: component.pollingUrl
+        pollingUrl: component.pollingUrl,
+        pollingOnPrem:component.pollingOnPrem
     })
 
     let request = createApiRequest(path, "PUT", body)

@@ -776,7 +776,6 @@ const ServiceRowEditting = ({
         teamOptions.push(<option key = {team.id} value={team.id}>{team.name}</option>)
     })
     const handleUpdatedTeam = (event) => {
-        console.log(event.target.value)
         changeUpdatedService({
             ...service,
             team: event.target.value
