@@ -25,6 +25,8 @@ spec:
           value: nav.no
         - name: ENV
           value: prod
+        - name: TEAMKATALOG_API
+          value: http://team-catalog-backend.org.svc.cluster.local
     replicas:
         min: 2
         max: 2
@@ -53,3 +55,6 @@ spec:
         outbound:
             rules:
                 - application: portalserver
+                - application: team-catalog-backend
+                  namespace: org
+                  cluster: prod-gcp
