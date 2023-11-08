@@ -1353,7 +1353,6 @@ const EditConnectedAreas: React.FC<{
             ) : (
                 <>Ingen områder å legge tjenesten i</>
             )}
-            hallo
 
             <div>
                 <Button
