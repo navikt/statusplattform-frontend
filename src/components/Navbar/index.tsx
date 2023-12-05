@@ -169,12 +169,12 @@ export default function Navbar() {
                 <ul role="tablist">
                     <li
                         role="tab"
-                        onClick={() => router.push(RouterPrivatperson.PATH)}
+                        onClick={() => router.push(RouterInternt.PATH)}
                     >
-                        <Link href={RouterPrivatperson.PATH}>
+                        <Link href={RouterInternt.PATH }>
                             <LenkeSpacer
                                 className={`${
-                                    router.asPath === RouterPrivatperson.PATH
+                                    router.asPath === RouterInternt.PATH
                                         ? "active"
                                         : "inactive"
                                 }`}
@@ -182,24 +182,24 @@ export default function Navbar() {
                                 <BodyShort
                                     size="small"
                                     className={`${
-                                        router.pathname === "/Privatperson"
+                                        router.asPath === RouterInternt.PATH
                                             ? "active"
                                             : ""
                                     }`}
                                 >
-                                    {RouterPrivatperson.NAME}
+                                    Produktområder
                                 </BodyShort>
                             </LenkeSpacer>
                         </Link>
                     </li>
                     <li
                         role="tab"
-                        onClick={() => router.push(RouterArbeidsgiver.PATH)}
+                        onClick={() => router.push(RouterUUStatus.PATH)}
                     >
-                        <Link href={RouterArbeidsgiver.PATH}>
+                        <Link href={RouterUUStatus.PATH}>
                             <LenkeSpacer
                                 className={`${
-                                    router.asPath === RouterArbeidsgiver.PATH
+                                    router.asPath === RouterUUStatus.PATH
                                         ? "active"
                                         : "inactive"
                                 }`}
@@ -207,12 +207,12 @@ export default function Navbar() {
                                 <BodyShort
                                     size="small"
                                     className={`${
-                                        router.pathname === "/Arbeidsgiver"
+                                        router.asPath === RouterUUStatus.PATH
                                             ? "active"
                                             : ""
                                     }`}
                                 >
-                                    {RouterArbeidsgiver.NAME}
+                                    {RouterUUStatus.NAME}
                                 </BodyShort>
                             </LenkeSpacer>
                         </Link>
@@ -220,14 +220,14 @@ export default function Navbar() {
                     <li
                         role="tab"
                         onClick={() =>
-                            router.push(RouterSamarbeidspartner.PATH)
+                            router.push(RouterVaktor.PATH)
                         }
                     >
-                        <Link href={RouterSamarbeidspartner.PATH}>
+                        <Link href={RouterVaktor.PATH}>
                             <LenkeSpacer
                                 className={`${
                                     router.asPath ===
-                                    RouterSamarbeidspartner.PATH
+                                    RouterVaktor.PATH
                                         ? "active"
                                         : "inactive"
                                 }`}
@@ -235,12 +235,12 @@ export default function Navbar() {
                                 <BodyShort
                                     size="small"
                                     className={`${
-                                        router.pathname === "/Samarbeidspartner"
+                                        router.asPath === RouterVaktor.PATH
                                             ? "active"
                                             : ""
                                     }`}
                                 >
-                                    {RouterSamarbeidspartner.NAME}
+                                    {RouterVaktor.NAME}
                                 </BodyShort>
                             </LenkeSpacer>
                         </Link>
@@ -253,9 +253,10 @@ export default function Navbar() {
                         >
                             <LenkeSpacer
                                 className={`${
-                                    router.asPath === RouterInternt.PATH ||
-
-                                    router.asPath === RouterUUStatus.PATH
+                                    router.asPath === RouterPrivatperson.PATH ||
+                                    router.asPath === RouterArbeidsgiver.PATH ||
+                                    router.asPath === RouterSamarbeidspartner.PATH
+                                        
                        ? "activeIntern"
                                         : "inactiveIntern"
                                 }`}
@@ -269,16 +270,8 @@ export default function Navbar() {
                                     }`}
                                 >
 
-                                    {/* {router.asPath === RouterInternt.PATH ||
-                                    router.asPath === RouterUUStatus.PATH ? ( 
-                                    //     <>
-                                    //         {" "}
-                                    //         <b>{RouterInternt.NAME}</b> {}{" "}
-                                    //         <CustomChevron />
-                                    //     </>
-                                    // ) : (*/}
                                     <>
-                                        {RouterInternt.NAME}
+                                        {"Ekstern"}
                                         <CustomChevron />
                                     </>
 
@@ -286,16 +279,15 @@ export default function Navbar() {
                             </LenkeSpacer>
                         </li>
                     )}
-
-                    {user.navIdent && router.asPath === RouterInternt.PATH && (
+                    {user.navIdent && router.asPath === RouterPrivatperson.PATH && (
                         <li
                             role="tab"
-                            onClick={() => router.push(RouterInternt.PATH)}
+                            onClick={() => router.push(RouterPrivatperson.PATH)}
                         >
-                            <Link href={RouterInternt.PATH}>
+                            <Link href={RouterPrivatperson.PATH}>
                                 <SubLenkeSpacer
                                     className={`${
-                                        router.asPath === RouterInternt.PATH
+                                        router.asPath === RouterPrivatperson.PATH
                                             ? "active"
                                             : "inactive"
                                     }`}
@@ -303,28 +295,30 @@ export default function Navbar() {
                                     <BodyShort
                                         size="small"
                                         className={`${
-                                            router.pathname === "/Internt"
+                                            router.pathname === RouterPrivatperson.PATH
                                                 ? "active"
                                                 : ""
                                         }`}
                                     >
-                                        Produktområder
+                                        {RouterPrivatperson.NAME}
                                     </BodyShort>
                                 </SubLenkeSpacer>
                             </Link>
                         </li>
                     )}
-                    {user.navIdent && router.asPath === RouterUUStatus.PATH && (
+
+
+                    {user.navIdent && router.asPath === RouterArbeidsgiver.PATH && (
                         <li
                             role="tab"
-                            onClick={() => router.push(RouterUUStatus.PATH)}
+                            onClick={() => router.push(RouterArbeidsgiver.PATH)}
                         >
-                            <Link href={RouterUUStatus.PATH}>
+                            <Link href={RouterArbeidsgiver.PATH}>
 
                                 <SubLenkeSpacer
 
                                     className={`${
-                                        router.asPath === RouterUUStatus.PATH
+                                        router.asPath === RouterArbeidsgiver.PATH
                                             ? "active"
                                             : "inactive"
                                     }`}
@@ -332,13 +326,43 @@ export default function Navbar() {
                                     <BodyShort
                                         size="small"
                                         className={`${
-                                            router.pathname === "/UUStatus"
+                                            router.pathname === RouterArbeidsgiver.PATH
                                                 ? "active"
                                                 : ""
                                         }`}
                                     >
 
-                                        Status Universell Utforming
+                                        {RouterArbeidsgiver.NAME}
+                                    </BodyShort>
+                                </SubLenkeSpacer>
+                            </Link>
+                        </li>
+                    )}
+                    {user.navIdent && router.asPath === RouterSamarbeidspartner.PATH && (
+                        <li
+                            role="tab"
+                            onClick={() => router.push(RouterSamarbeidspartner.PATH)}
+                        >
+                            <Link href={RouterSamarbeidspartner.PATH}>
+
+                                <SubLenkeSpacer
+
+                                    className={`${
+                                        router.asPath === RouterSamarbeidspartner.PATH
+                                            ? "active"
+                                            : "inactive"
+                                    }`}
+                                >
+                                    <BodyShort
+                                        size="small"
+                                        className={`${
+                                            router.pathname === RouterSamarbeidspartner.PATH
+                                                ? "active"
+                                                : ""
+                                        }`}
+                                    >
+
+                                        {RouterSamarbeidspartner.NAME}
                                     </BodyShort>
                                 </SubLenkeSpacer>
                             </Link>
@@ -359,12 +383,12 @@ export default function Navbar() {
                                 <div>
                                     <a
                                         onClick={() =>
-                                            router.push(RouterInternt.PATH)
+                                            router.push(RouterPrivatperson.PATH)
                                         }
                                         className="internalLinks"
                                     >
                                         <MenuGridIcon className="subMenuIcon" />
-                                        Produktområder
+                                        {RouterPrivatperson.NAME}
                                     </a>
                                 </div>
                                 <div>
@@ -372,29 +396,25 @@ export default function Navbar() {
 
                                     <a
                                         onClick={() =>
-                                            router.push(RouterUUStatus.PATH)
+                                            router.push(RouterArbeidsgiver.PATH)
                                         }
                                         className="internalLinks"
                                     >
                                         <FigureIcon className="subMenuIcon" />{" "}
-                                        {RouterUUStatus.NAME}
+                                        {RouterArbeidsgiver.NAME}
                                     </a>
                                 </div>
                                 <div>
                                     <SubMenuDivider />
 
                                     <a
-                                        href="https://status.nav.no/vaktor"
-                                        aria-label="Lenke til Vaktor"
+                                        onClick={() =>
+                                            router.push(RouterSamarbeidspartner.PATH)
+                                        }
                                         className="internalLinks"
                                     >
-                                        <VaktorLogo
-                                            src="/sp/assets/images/vaktor.png"
-                                            alt="Vaktor"
-                                            aria-hidden="true"
-                                        />
-
-                                        {RouterVaktor.NAME}
+                                        <FigureIcon className="subMenuIcon" />{" "}
+                                        {RouterSamarbeidspartner.NAME}
                                     </a>
                                 </div>
                             </>
