@@ -34,7 +34,7 @@ export interface Service {
     record?: Record
     areasContainingThisService: Area[]
     statusNotFromTeam: boolean
-    ohDisplay: OHdisplay
+    ohDisplay?: OHdisplay
 }
 
 export interface Component {
