@@ -67,6 +67,10 @@ export const SuccessCustomized = styled(Success)`
 export const SuccessFilledCustomized = styled(SuccessFilled)`
     color: var(--a-green-500) !important;
 
+    &.service-closed {
+      color: var(--a-gray-600) !important;
+    }
+
     &.status-not-from-team {
         border: double;
         border-radius: 50%;

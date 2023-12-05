@@ -13,6 +13,13 @@ export interface Tile {
     area: Area
 }
 
+export interface OHdisplay {
+    isOpen: boolean
+    rule: string
+    name: string
+    openingHours: string
+    displayText: string
+}
 export interface Service {
     id?: string
     name: string
@@ -27,6 +34,7 @@ export interface Service {
     record?: Record
     areasContainingThisService: Area[]
     statusNotFromTeam: boolean
+    ohDisplay: OHdisplay
 }
 
 export interface Component {

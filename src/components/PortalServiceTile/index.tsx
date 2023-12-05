@@ -137,6 +137,10 @@ const ServicesList = styled.ul`
         display: flex;
     }
 `
+const DisplayText = styled.span`
+  color:black;
+  text-decoration: none!important;
+`
 
 const LenkeCustomized = styled(Link)`
     text-decoration: none;
@@ -144,6 +148,7 @@ const LenkeCustomized = styled(Link)`
     :hover {
         text-decoration: underline;
     }
+
 `
 
 export const handleAndSetStatusIcon = (
@@ -293,6 +298,7 @@ export const PortalServiceTile = ({
                             </div>
 
                             {area.services.map((service) => {
+                                let displaytext = service.ohDisplay? " " +service.ohDisplay.displayText: "";
                                 if (filters.length == 0) {
                                     return (
                                         <li key={service.name}>
@@ -313,10 +319,13 @@ export const PortalServiceTile = ({
                                                             statusNotFromTeam={
                                                                 service.statusNotFromTeam
                                                             }
+                                                            isOpen={service.ohDisplay && service.ohDisplay.isOpen}
                                                         />{" "}
                                                         {service.name}
                                                     </section>
+                                                    <DisplayText>{displaytext}</DisplayText>
                                                 </LenkeCustomized>
+
                                             ) : (
                                                 <section>
                                                     <StatusIconHandler
@@ -356,7 +365,6 @@ export const PortalServiceTile = ({
                                                                 service.statusNotFromTeam
                                                             }
                                                         />{" "}
-                                                        {service.name}
                                                     </section>
                                                 </LenkeCustomized>
                                             ) : (
@@ -397,10 +405,16 @@ const IconWrapper = styled.div`
 export const StatusIconHandler: React.FC<{
     status: string
     isArea: boolean
+    isOpen?: boolean
     statusNotFromTeam?: boolean
-}> = ({ status, isArea, statusNotFromTeam }) => {
+}> = ({ status, isArea, statusNotFromTeam ,isOpen}) => {
     const router = useRouter()
     let isIntern = false
+    let className = statusNotFromTeam && isIntern? "status-not-from-team": ""
+
+    if(isOpen != undefined && !isOpen){
+        className += " service-closed"
+    }
 
     useEffect(() => {}, [router])
 
@@ -418,11 +432,7 @@ export const StatusIconHandler: React.FC<{
                         return (
                             <IconWrapper>
                                 <SuccessFilledCustomized
-                                    className={
-                                        statusNotFromTeam && isIntern
-                                            ? "status-not-from-team"
-                                            : ""
-                                    }
+                                    className={className}
                                     aria-label={
                                         isArea
                                             ? "Områdestatus: OK"
@@ -435,11 +445,7 @@ export const StatusIconHandler: React.FC<{
                         return (
                             <IconWrapper>
                                 <WarningFilledCustomized
-                                    className={
-                                        statusNotFromTeam && isIntern
-                                            ? "status-not-from-team"
-                                            : ""
-                                    }
+                                    className={className}
                                     aria-label={
                                         isArea
                                             ? "Områdestatus: Tjenester i området har feil"
@@ -452,11 +458,7 @@ export const StatusIconHandler: React.FC<{
                         return (
                             <IconWrapper>
                                 <ErrorFilledCustomized
-                                    className={
-                                        statusNotFromTeam && isIntern
-                                            ? "status-not-from-team"
-                                            : ""
-                                    }
+                                    className={className}
                                     aria-label={
                                         isArea
                                             ? "Områdestatus: Tjenester i området er nede"
@@ -469,11 +471,7 @@ export const StatusIconHandler: React.FC<{
                         return (
                             <IconWrapper>
                                 <HelpTextCustomizedGray
-                                    className={
-                                        statusNotFromTeam && isIntern
-                                            ? "status-not-from-team"
-                                            : ""
-                                    }
+                                    className={className}
                                     aria-label={
                                         isArea
                                             ? "Områdestatus: Tjenester i området mangler status"
