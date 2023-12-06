@@ -142,20 +142,18 @@ const ServiceWrapper = styled.div`
 
 interface TjenesteDataContentI {
     service?: Service
-    component?: Component
     areasContainingThisService?: Area[]
 }
 
 const TjenestedataContent = ({
     service,
-    component,
     areasContainingThisService,
 }: TjenesteDataContentI) => {
     service.areasContainingThisService = areasContainingThisService
 
     const router = useRouter()
 
-    if (!service && !component) {
+    if (!service) {
         return (
             <ErrorParagraph>
                 Kunne ikke hente tjenesten. Hvis problemet vedvarer, kontakt
@@ -164,48 +162,15 @@ const TjenestedataContent = ({
         )
     }
 
-    if (service && !component) {
         return (
             <ServiceData
                 service={service}
                 areasContainingThisService={areasContainingThisService}
             />
         )
-    }
-
-    return <ComponentData component={component} />
 }
 
-const ComponentData = ({ component }: TjenesteDataContentI) => {
-    return (
-        <CategoryContainer>
-            <div className="title-container">
-                <Heading level="1" size="large">
-                    {handleAndSetStatusIcon(component.record.status, true)}
-                    {component.name}
-                </Heading>
-            </div>
 
-            {/* <div>
-                <Button variant="secondary" onClick={() => router.push(RouterOpprettVarsling.PATH)}><Bell/> Bli varslet ved avvik</Button> 
-            </div> */}
-
-            <div className="top-row">
-                <Panel>
-                    <ServiceContainer>
-                        <ServiceWrapper>
-                            <TjenesteData component={component} />
-                        </ServiceWrapper>
-                    </ServiceContainer>
-                </Panel>
-
-                {component.record && <StatusRecord record={component.record} />}
-            </div>
-            {/* TODO: Denne må tilbake når det er klart! */}
-            {/* <IncidentHistoryComponent component={component} /> */}
-        </CategoryContainer>
-    )
-}
 
 const ServiceData = ({
     service,
@@ -267,10 +232,9 @@ const TjenesteDataContainer = styled.div`
 
 interface TjenesteDataI {
     service?: Service
-    component?: Component
 }
 
-const TjenesteData = ({ service, component }: TjenesteDataI) => {
+const TjenesteData = ({ service }: TjenesteDataI) => {
     const { navIdent } = useContext(UserStateContext)
 
     const regex = new RegExp(
