@@ -285,6 +285,7 @@ const TjenesteData = ({ service, component }: TjenesteDataI) => {
         monitorlink,
         team,
         areasContainingThisService,
+        ohDisplay,
     } = service
 
     return (
@@ -351,6 +352,16 @@ const TjenesteData = ({ service, component }: TjenesteDataI) => {
                             </BodyShort>
                         </div>
                     )}
+                    {ohDisplay && (
+                        <div className="row">
+                            <BodyShort spacing>
+                                <b>Åpningstid</b>
+                            </BodyShort>
+                            <BodyShort>
+                                {ohDisplay.displayText}
+                            </BodyShort>
+                        </div>
+                    )}
                 </TjenesteDataContainer>
             )}
         </>
@@ -383,11 +394,7 @@ const StatusRecord = ({ record }: StatusRecordI) => {
             ":" +
             (date.getMinutes() <= 9
                 ? `0${date.getMinutes()}`
-                : date.getMinutes()) +
-            ":" +
-            (date.getSeconds() <= 9
-                ? `0${date.getSeconds()}`
-                : date.getSeconds())
+                : date.getMinutes())
         return dateFromRecord
     }
 
