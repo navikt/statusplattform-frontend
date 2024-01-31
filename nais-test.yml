@@ -46,7 +46,6 @@ spec:
         sidecar:
             enabled: true
             autoLogin: false
-            errorPath: ""
     accessPolicy:
         outbound:
             rules:
