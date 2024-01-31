@@ -140,6 +140,8 @@ const ServicesList = styled.ul`
 const DisplayText = styled.span`
   color:black;
   text-decoration: none!important;
+  font-size: 1rem;
+  padding-left: 0.5rem;
 `
 
 const LenkeCustomized = styled(Link)`

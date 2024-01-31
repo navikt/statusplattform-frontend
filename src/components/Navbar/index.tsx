@@ -73,7 +73,6 @@ const MainNav = styled.nav`
 
             }
             .inactiveIntern {
-                width: 4.5rem;
                 padding-left: 0.3rem;
                 border-bottom: transparent 3px solid;
 
@@ -271,7 +270,7 @@ export default function Navbar() {
                                 >
 
                                     <>
-                                        {"Ekstern"}
+                                        {"Sider for publikum"}
                                         <CustomChevron />
                                     </>
 
