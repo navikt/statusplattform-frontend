@@ -300,7 +300,7 @@ export const PortalServiceTile = ({
                             </div>
 
                             {area.services.map((service) => {
-                                let displaytext = service.ohDisplay? " " +service.ohDisplay.displayText: "";
+                                let displaytext = service.ohDisplay? " (" +service.ohDisplay.displayText+")": "";
                                 if (filters.length == 0) {
                                     return (
                                         <li key={service.name}>
