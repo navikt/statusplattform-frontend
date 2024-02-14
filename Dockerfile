@@ -1,6 +1,10 @@
 # Base on offical Node.js Alpine image
 FROM node:16-alpine
 
+# Run container as non-root (unprivileged) user
+# The node user is provided in the Node.js Alpine base image
+USER node
+
 ARG NPM_AUTH_TOKEN
 ENV NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}
 
@@ -14,25 +18,17 @@ COPY .npmrc .npmrc
 COPY package*.json ./
 
 # Install dependencies
-RUN npm install
+COPY babel.config.json babel.config.json
+RUN npm ci
 
-# Copy all files
+# Build app
 COPY src/ src/
 COPY public/ public/
 COPY next.config.js next.config.js
-#COPY .babelrc .babelrc
-COPY babel.config.json babel.config.json
-
-
-# Build app
 RUN npm run build
 
 # Expose the listening port
 EXPOSE 3000
-
-# Run container as non-root (unprivileged) user
-# The node user is provided in the Node.js Alpine base image
-USER node
 
 # Run npm start script when container starts
 CMD [ "npm", "start" ]
