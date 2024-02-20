@@ -1,7 +1,6 @@
 import styled from "styled-components"
 
 import {
-    Wrench,
     Success,
     Warning,
     Error,
@@ -9,6 +8,7 @@ import {
     WarningFilled,
     ErrorFilled,
     HelptextFilled,
+    BabyChangingRoom,
 } from "@navikt/ds-icons"
 
 const TrafficLightsContainer = styled.div`
@@ -115,10 +115,10 @@ export const HelpTextCustomizedGray = styled(HelptextFilled)`
     color: var(--a-gray-600) !important;
 `
 
-const WrenchCustomizedBlue = styled(Wrench)`
+const WrenchCustomizedBlue = styled(BabyChangingRoom)`
     color: var(--a-deepblue-400) !important;
 `
-const WrenchCustomizedWhite = styled(Wrench)`
+const WrenchCustomizedWhite = styled(BabyChangingRoom)`
     color: var(--a-gray-100) !important;
 `
 
