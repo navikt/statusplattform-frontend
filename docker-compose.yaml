@@ -7,8 +7,11 @@ services:
       POSTGRES_DB: navstatus
       POSTGRES_USERNAME: postgres
       PGTZ: Europe/Oslo
+      TZ: Europe/Oslo
   javabackend:
     image: statusplattform-backend:default
+    ports:
+      - 3005:3005
     environment:
       teamkatalogApiUrl: https://teamkatalog-api.intern.dev.nav.no
       swagger-api-key: key
