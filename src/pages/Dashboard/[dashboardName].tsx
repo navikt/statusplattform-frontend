@@ -23,6 +23,14 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 
     const dashboards: Dashboard[] = await res.json()
 
+    if (dashboards.length === 0) {
+        return {
+            props: {
+                isEmpty: true,
+            },
+        }
+    }
+
     const dashboard = dashboards.find(
         ({ name }) => name === context.query.dashboardName
     )
@@ -41,6 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
 interface DashboardFromNameProps {
     dashboards: Dashboard[]
     initialDashboard: Dashboard
+    isEmpty?: boolean
 }
 
 const DashboardFromName = (props: DashboardFromNameProps) => {
@@ -57,11 +66,14 @@ const DashboardFromName = (props: DashboardFromNameProps) => {
     useEffect(() => {
         setIsLoading(true)
         let dashboardTarget: Object = router.query.dashboardName
-        const dashboardMatchingTarget: Dashboard | undefined =
-            props.dashboards.find((dashboard) =>
-                dashboard.name == dashboardTarget ? dashboard : undefined
-            )
-        setRetrievedDashboard(dashboardMatchingTarget)
+        if (!props.isEmpty) {
+            const dashboardMatchingTarget: Dashboard | undefined =
+                props.dashboards.find((dashboard) =>
+                    dashboard.name == dashboardTarget ? dashboard : undefined
+                )
+            setRetrievedDashboard(dashboardMatchingTarget)
+        }
+
         setIsLoading(false)
     }, [router])
 
@@ -70,7 +82,11 @@ const DashboardFromName = (props: DashboardFromNameProps) => {
     }
 
     if (!retrievedDashboard && router.isReady) {
-        return <Custom404 />
+        return (
+            <Layout>
+                Fant ikke dashboard med navn: {router.query.dashboardName}
+            </Layout>
+        )
     }
 
     if (router.asPath.includes("Internt") && !user.navIdent) {
