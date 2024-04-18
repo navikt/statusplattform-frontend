@@ -143,7 +143,7 @@ const ProfileMenu: React.FC<{
                                         </a>
                                     </div>
                                 )}
-                                {usersWithAccess.includes(navIdent) && (
+                                
                                     <div>
                                         <SubMenuDivider />
                                         <a
@@ -156,7 +156,7 @@ const ProfileMenu: React.FC<{
                                             {RouterAdmin.NAME}
                                         </a>
                                     </div>
-                                )}
+                                
 
                                 <SubMenuDivider />
                                 <div>
