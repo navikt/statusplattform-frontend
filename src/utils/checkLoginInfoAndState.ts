@@ -7,7 +7,8 @@ export class ResponseError extends Error {
 }
 
 export const checkLoginInfoAndState = async (): Promise<UserData | null> => {
-    let request = new Request("/sp/api/userInfo")
+    let base_url = process.env.BASE_URL || ""
+    let request = new Request(base_url + "/sp/api/userInfo")
     let response = await fetch(request)
 
     if (response.ok) {
