@@ -27,7 +27,10 @@ type Props = {
 export const getServerSideProps: GetServerSideProps<Props> = async (
     context
 ) => {
-    const userInfo = await checkLoginInfoAndState()
+    console.log("Context: ", context.req.headers)
+    const userInfo = await checkLoginInfoAndState(
+        context.req.headers.authorization as string
+    )
     const shoutOutUrl = `${process.env.SHOUT_OUT_URL}`
     console.log("UserInfo: ", userInfo)
 
