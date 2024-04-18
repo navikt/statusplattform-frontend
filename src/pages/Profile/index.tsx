@@ -5,6 +5,7 @@ import styled from "styled-components"
 import Layout from "../../components/Layout"
 import { checkLoginInfoAndState } from "../../utils/checkLoginInfoAndState"
 import { GetServerSideProps } from "next"
+import { requestBearerTokenForShoutOutAPI } from "../api/utils/authHelper"
 
 export const NumberChangerContainer = styled.div`
     display: flex;
@@ -27,16 +28,21 @@ type Props = {
 export const getServerSideProps: GetServerSideProps<Props> = async (
     context
 ) => {
-    console.log("Context: ", context.req.headers)
-    const userInfo = await checkLoginInfoAndState(
-        context.req.headers.authorization as string
-    )
+    const authToken = context.req.headers.authorization as string
+    const userInfo = await checkLoginInfoAndState(authToken)
+    const shoutOutToken = await requestBearerTokenForShoutOutAPI(authToken)
     const shoutOutUrl = `${process.env.SHOUT_OUT_URL}`
-    console.log("UserInfo: ", userInfo)
+
+    console.log("UserInfo: ", userInfo, "ShoutOutToken: ", shoutOutToken)
 
     try {
         const res = await fetch(
-            `${shoutOutUrl}/api/v1/number/${userInfo.navIdent}`
+            `${shoutOutUrl}/api/v1/number/${userInfo.navIdent}`,
+            {
+                headers: {
+                    Authorization: `Bearer ${shoutOutToken}`,
+                },
+            }
         )
         if (!res.ok) {
             throw new Error(`Failed to fetch data, status: ${res.status}`)
