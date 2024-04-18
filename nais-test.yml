@@ -53,5 +53,8 @@ spec:
                 - application: team-catalog-backend
                   namespace: org
                   cluster: dev-gcp
+                - application: shout-out-api
+                  namespace: shout-out
+                  cluster: dev-gcp
 
 
