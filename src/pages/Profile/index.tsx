@@ -3,7 +3,7 @@ import { Alert, Button, TextField } from "@navikt/ds-react"
 import { ChangeEvent, useState } from "react"
 import styled from "styled-components"
 import Layout from "../../components/Layout"
-import { checkLoginInfoAndState } from "src/utils/checkLoginInfoAndState"
+import { checkLoginInfoAndState } from "../../utils/checkLoginInfoAndState"
 import { GetServerSideProps } from "next"
 
 export const NumberChangerContainer = styled.div`
