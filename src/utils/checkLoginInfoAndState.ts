@@ -1,6 +1,4 @@
-import { requestBearerTokenForBackend } from "src/pages/api/utils/authHelper"
 import { UserData } from "../types/userData"
-import { NextApiRequest } from "next"
 
 export class ResponseError extends Error {
     public constructor(message: string, public response: Response) {
@@ -9,15 +7,23 @@ export class ResponseError extends Error {
 }
 
 export const checkLoginInfoAndState = async (
-    authorization: string
+    authorization: string = ""
 ): Promise<UserData | null> => {
     let base_url = process.env.BASE_URL || ""
     let request = new Request(base_url + "/sp/api/userInfo")
-    let response = await fetch(request, {
+    let response: Response
+
+    const fetchOptions = {
         headers: {
             Authorization: authorization,
         },
-    })
+    }
+
+    if (authorization === "") {
+        response = await fetch(request)
+    } else {
+        response = await fetch(request, fetchOptions)
+    }
 
     if (response.ok) {
         let data = response.json()
