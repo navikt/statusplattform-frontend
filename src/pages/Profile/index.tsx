@@ -1,12 +1,9 @@
-import { NOMPersonPhone } from "src/types/types"
+import { NOMPersonPhone } from "../../types/types"
 import { Alert, Button, TextField } from "@navikt/ds-react"
-import { ChangeEvent, use, useContext, useEffect, useState } from "react"
-//import { requestBearerTokenForBackend } from "../api/utils/authHelper"
+import { ChangeEvent, useState } from "react"
 import styled from "styled-components"
 import Layout from "../../components/Layout"
-import { UserData } from "src/types/userData"
 import { checkLoginInfoAndState } from "src/utils/checkLoginInfoAndState"
-import { UserStateContext } from "src/components/ContextProviders/UserStatusContext"
 import { GetServerSideProps } from "next"
 
 export const NumberChangerContainer = styled.div`
@@ -59,9 +56,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 }
 
 const Profile: React.FC<Props> = ({ data }) => {
-    const current_user: NOMPersonPhone = {} as NOMPersonPhone
     const [newNumber, setNewNumber] = useState("")
-    const [displayedNumber, setDisplayedNumber] = useState("")
+    const [displayedNumber] = useState(data.phoneNumber)
     const [status, setStatus] = useState<"success" | "error" | undefined>()
     const [statusMessage, setStatusMessage] = useState<string | undefined>()
 
@@ -82,8 +78,8 @@ const Profile: React.FC<Props> = ({ data }) => {
             return
         }
 
-        const updatedPersonPhone = {
-            navident: current_user.navident,
+        const updatedPersonPhone: NOMPersonPhone = {
+            navident: data.navident,
             phoneNumber: "+47" + newNumber,
         }
 
@@ -109,7 +105,7 @@ const Profile: React.FC<Props> = ({ data }) => {
 
     return (
         <Layout>
-            <h1>Hei {current_user.navident}</h1>
+            <h1>Hei {data.navident}</h1>
             <NumberChangerContainer>
                 <PhoneWarning>
                     {status && <Alert variant={status}>{statusMessage}</Alert>}
