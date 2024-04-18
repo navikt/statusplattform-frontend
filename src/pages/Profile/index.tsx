@@ -29,6 +29,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
 ) => {
     const userInfo = await checkLoginInfoAndState()
     const shoutOutUrl = `${process.env.SHOUT_OUT_URL}`
+    console.log("UserInfo: ", userInfo)
 
     try {
         const res = await fetch(
