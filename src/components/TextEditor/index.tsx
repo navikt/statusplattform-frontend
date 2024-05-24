@@ -1,8 +1,12 @@
 import { Checkbox, Heading } from "@navikt/ds-react"
-import { Editor } from "@tinymce/tinymce-react"
 import React, { MutableRefObject, useEffect, useState } from "react"
 import { datePrettifyer } from "../../utils/datePrettifyer"
 import styled from "styled-components"
+import dynamic from "next/dynamic"
+
+const SunEditorComponent = dynamic(() => import("./SunEditor"), {
+    ssr: false,
+})
 
 const EditorTitle = styled.div`
     display: flex;
@@ -101,6 +105,7 @@ const TextEditor = React.forwardRef(
 
         useEffect(() => {
             setMessage(initialValue)
+            editing = true
         }, [])
 
         return (
@@ -119,26 +124,15 @@ const TextEditor = React.forwardRef(
                         </Checkbox>
                     )}
                 </EditorTitle>
-                <Editor
-                    onInit={(editor) => (ref.current = editor)}
-                    value={initialValue ? initialValue : ""}
+                <SunEditorComponent
+                    value={message}
+                    onChange={setMessage}
                     initialValue={DefaultMessage(
                         status,
                         editing,
                         message,
                         showHistory
                     )}
-                    onEditorChange={handleUpdateMsg}
-                    init={{
-                        height: 300,
-                        menubar: "format edit help",
-                        plugins: "lists advlist wordcount",
-                        toolbar:
-                            "undo redo | pastetext | bold italic underline strikethrough  |fontsize | forecolor backcolor | bullist numlist removeformat ",
-
-                        content_style:
-                            "body { font-family:Helvetica,Arial,sans-serif; font-size:14px }",
-                    }}
                 />
             </>
         )
