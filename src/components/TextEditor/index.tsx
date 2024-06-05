@@ -126,7 +126,7 @@ const TextEditor = React.forwardRef(
                 </EditorTitle>
                 <SunEditorComponent
                     value={message}
-                    onChange={setMessage}
+                    onChange={handleUpdateMsg}
                     initialValue={DefaultMessage(
                         status,
                         editing,
