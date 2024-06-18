@@ -155,6 +155,6 @@ export enum RouterUUStatus {
 //NB - skal ikke ha /sp prefix
 export enum RouterVaktor {
     NAME = "Vaktor",
-    PATH = "/vaktor",
+    PATH = "https://vaktor.ansatt.nav.no/",
 }
 // ---
