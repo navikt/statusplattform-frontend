@@ -10,6 +10,7 @@ spec:
     port: 3000
     ingresses:
         - https://status.intern.dev.nav.no/sp
+        - https://status.ansatt.dev.nav.no/sp
 
     envFrom:
     - secret: status-portal
