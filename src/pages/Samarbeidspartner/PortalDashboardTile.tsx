@@ -1,6 +1,6 @@
 import Link from "next/link";
 import styled from "styled-components";
-import { Dashboard } from "src/types/types";
+import { Dashboard } from "../../types/types";
 
 const DashboardGrid = styled.div`
   display: grid;

@@ -1,7 +1,7 @@
 import { BodyShort, Heading, Panel, Label, Detail } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
-import { OpsMessageI } from "src/types/opsMessage";
-import { Service } from "src/types/types";
+import { OpsMessageI } from "../../../types/opsMessage";
+import { Service } from "../../../types/types";
 import styled from "styled-components";
 
 const StatusContainer = styled(Panel)`

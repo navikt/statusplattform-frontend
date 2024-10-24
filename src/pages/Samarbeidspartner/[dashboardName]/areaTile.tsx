@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { BodyShort, Heading } from "@navikt/ds-react";
 import { CheckmarkCircleIcon, BookmarkFillIcon } from '@navikt/aksel-icons';
-import { Area } from "src/types/types";
+import { Area } from "../../../types/types";
 
 // Styled component for the container
 const BoxContainer = styled.div`
