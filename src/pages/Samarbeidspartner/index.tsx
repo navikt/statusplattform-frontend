@@ -1,7 +1,7 @@
 import { GetServerSideProps } from "next"
 import Layout from "../../components/LayoutExternal"
 import { Dashboard } from "../../types/types"
-import { PortalDashboardTile } from "./PortalDashboardTile"
+import PortalDashboardTile from "./PortalDashboardTile"
 
 export const getServerSideProps: GetServerSideProps = async () => {
     const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH

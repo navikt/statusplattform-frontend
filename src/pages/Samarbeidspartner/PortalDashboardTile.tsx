@@ -49,7 +49,7 @@ interface PortalDashboardTileProps {
   dashboards: Dashboard[];
 }
 
-export const PortalDashboardTile = ({ dashboards }: PortalDashboardTileProps) => {
+const PortalDashboardTile = ({ dashboards }: PortalDashboardTileProps) => {
   return (
     <>
       <h2 style={{ padding: "1rem" }}>Dashboards for samarbeidspartner:</h2>
@@ -69,3 +69,5 @@ export const PortalDashboardTile = ({ dashboards }: PortalDashboardTileProps) =>
     </>
   );
 };
+
+export default PortalDashboardTile
