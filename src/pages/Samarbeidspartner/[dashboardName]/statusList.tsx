@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { OpsMessageI } from "../../../types/opsMessage";
 import { Service } from "../../../types/types";
 import styled from "styled-components";
+import { fetchMessageByDashboardId } from "../../../utils/dashboardsAPI";
 
 const StatusContainer = styled(Panel)`
   padding: 2rem;
@@ -65,6 +66,7 @@ const fetchOpsMessages = async (dashboardId: string) => {
   const messageRes = await fetch(`${backendPath}/rest/Dashboards/external/${dashboardId}/messages`);
   const serverOpsMessages: OpsMessageI[] = await messageRes.json();
   return serverOpsMessages;
+
 };
 
 const StatusList = ({ dashboardId }) => {
@@ -73,7 +75,7 @@ const StatusList = ({ dashboardId }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const messages = await fetchOpsMessages(dashboardId);
+        const messages = await fetchMessageByDashboardId(dashboardId);
         // Sorter meldingene etter startTime i synkende rekkefølge (nyeste først)
         messages.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
         setServerOpsMessages(messages);

@@ -1,3 +1,4 @@
+import { OpsMessageI } from "../types/opsMessage";
 import { Dashboard } from "../types/types";
 import { EndPathDashboard, EndPathDashboards, EndPathSpecificDashboard, EndPathUpdateDashboard } from "./apiHelper";
 import { createApiRequest } from "./createApiRequest";
@@ -132,3 +133,14 @@ export const fetchExternalDashboardsList = async (): Promise<Dashboard[]> => {
     throw new ResponseError("Failed to fetch from server", response)
 }
 
+export const fetchMessageByDashboardId = async (dashboardId: String): Promise<OpsMessageI[]> => {
+
+    let request = createApiRequest(`/rest/Dashboards/external/${dashboardId}/messages`, "GET")
+    const response = await fetch(request)
+
+    if (response.ok) {
+        let json = await response.json()
+        return json
+    }
+    throw new ResponseError("Failed to fetch from server", response)
+}
