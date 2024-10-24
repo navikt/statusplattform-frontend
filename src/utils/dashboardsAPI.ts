@@ -1,3 +1,4 @@
+import { UUID } from "crypto";
 import { Dashboard } from "../types/types";
 import { EndPathDashboard, EndPathDashboards, EndPathSpecificDashboard, EndPathUpdateDashboard } from "./apiHelper";
 import { createApiRequest } from "./createApiRequest";
@@ -37,9 +38,24 @@ export const fetchDashboard = async (dashboardId: string): Promise<Dashboard> =>
     throw new ResponseError("Failed to fetch from server", response)
 }
 
+// dashboard must exist
+export const postExternalDashboard = async (dashboardId: string): Promise<Object[]> =>{
+    //const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
+    //const response = await fetch(backendPath + `/rest/Dashboards/external?dashboardId=${dashboardId}`, {
+    //    method: "POST"
+    //})
+    const endPath = `/rest/Dashboards/external?dashboardId=${dashboardId}`
+    let request = createApiRequest(endPath,"POST")
+    const response = await fetch(request)
+    
+    if (response.ok) {
+        return await response.json()
+    }
 
+    throw new ResponseError("Failed to POST external dashboard to server", response)
+}
 
-export const postDashboard = async (dashboard: Dashboard): Promise<Object[]> =>{
+export const postDashboard = async (dashboard: Dashboard, isExternal: boolean): Promise<Object[]> =>{
     let response
     let endPath = EndPathDashboard()
 
@@ -53,10 +69,12 @@ export const postDashboard = async (dashboard: Dashboard): Promise<Object[]> =>{
     response = await fetch(request)
 
 
-
     if (response.ok) {
-        return await response.json()
-
+        const dashboard = await response.json()
+        if (isExternal === true) {
+            await postExternalDashboard(dashboard.id)
+        }
+        return dashboard
     }
     throw new ResponseError("Failed to POST to server", response)
 }
@@ -101,3 +119,17 @@ export const updateDashboard = async (dashboard: Dashboard): Promise<void> =>{
     }
     throw new ResponseError("Failed to PUT to server", response)
 }
+
+export const fetchExternalDashboardsList = async (): Promise<Dashboard[]> => {
+
+
+    let request = createApiRequest("/rest/dashboards/external", "GET")
+    const response = await fetch(request)
+
+    if (response.ok) {
+        let json = await response.json()
+        return json
+    }
+    throw new ResponseError("Failed to fetch from server", response)
+}
+

@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
 
-import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react"
+import { BodyShort, Button, Detail, Select, TextField, ToggleGroup } from "@navikt/ds-react"
 import { Delete } from "@navikt/ds-icons"
 
 import { useLoader } from "../../../utils/useLoader"
@@ -12,7 +12,7 @@ import Layout from "../../../components/Layout"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
-import { postDashboard } from "../../../utils/dashboardsAPI"
+import { postDashboard, postExternalDashboard } from "../../../utils/dashboardsAPI"
 import { fetchAreas } from "../../../utils/areasAPI"
 import { RouterAdminDashboards } from "../../../types/routes"
 import { backendPath } from "../.."
@@ -36,7 +36,7 @@ const NewDashboardContainer = styled.div`
 export const getServerSideProps = async () => {
     const [resAreas] = await Promise.all([fetch(backendPath + EndPathAreas())])
 
-    const allAreasProps = resAreas.json()
+    const allAreasProps = await resAreas.json()
 
     return {
         props: {
@@ -52,6 +52,7 @@ const NewDashboard = ({ allAreasProps }) => {
         areas: [],
         opsMessages: [],
     })
+    const [isExternal, setIsExternal] = useState(false)
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
@@ -101,14 +102,25 @@ const NewDashboard = ({ allAreasProps }) => {
 
     const handlePostNewDashboard = (event) => {
         event.preventDefault()
-        postDashboard(newDashboard)
+        postDashboard(newDashboard, isExternal)
             .then(() => {
                 toast.success("Dashbord lastet opp")
+                
                 router.push(RouterAdminDashboards.PATH)
             })
             .catch(() => {
                 toast.error("Klarte ikke å laste opp dashbord")
             })
+    }
+
+    const handleToggleExternal = (eventString) => {
+        console.log(eventString)
+        if (eventString === 'internal'){
+            setIsExternal(false)
+        }
+        else if (eventString === 'external') {
+            setIsExternal(true)
+        }
     }
 
     const { name } = newDashboard
@@ -140,8 +152,13 @@ const NewDashboard = ({ allAreasProps }) => {
                             handleAddAreaToDashboard(areaToAdd)
                         }
                     />
-
-                    <HorizontalSeparator />
+                    <div style={{height: "20px"}}/>
+                    <ToggleGroup defaultValue="internal" onChange={handleToggleExternal} label="Synlighet på dashboard: ">
+                        <ToggleGroup.Item value="internal" children="Intern" /> 
+                        <ToggleGroup.Item value="external" children="Ekstern" /> 
+                    </ToggleGroup>
+                    
+                   <HorizontalSeparator />
 
                     <ButtonContainer>
                         <Button
