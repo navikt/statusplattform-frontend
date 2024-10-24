@@ -1,4 +1,4 @@
-import { OpsMessageI } from "src/types/opsMessage";
+import { OpsMessageI } from "../types/opsMessage";
 import { Dashboard } from "../types/types";
 import { EndPathDashboard, EndPathDashboards, EndPathSpecificDashboard, EndPathUpdateDashboard } from "./apiHelper";
 import { createApiRequest } from "./createApiRequest";
