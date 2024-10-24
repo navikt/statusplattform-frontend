@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { OpsMessageI } from "../../../types/opsMessage";
 import { Service } from "../../../types/types";
 import styled from "styled-components";
-import { fetchMessageByDashboardId } from "src/utils/dashboardsAPI";
+import { fetchMessageByDashboardId } from "../../../utils/dashboardsAPI";
 
 const StatusContainer = styled(Panel)`
   padding: 2rem;
