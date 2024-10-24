@@ -1,22 +1,34 @@
-import { UserData } from "../types/userData";
+import { UserData } from "../types/userData"
 
 export class ResponseError extends Error {
-    public constructor (message: string, public response: Response) {
+    public constructor(message: string, public response: Response) {
         super(message)
     }
 }
 
+export const checkLoginInfoAndState = async (
+    authorization: string = ""
+): Promise<UserData | null> => {
+    let base_url = process.env.BASE_URL || ""
+    let request = new Request(base_url + "/sp/api/userInfo")
+    let response: Response
 
-export const checkLoginInfoAndState = async (): Promise<UserData | null> => {
+    const fetchOptions = {
+        headers: {
+            Authorization: authorization,
+        },
+    }
 
-    let request = new Request("/sp/api/userInfo")
-    let response = await fetch(request)
+    if (authorization === "") {
+        response = await fetch(request)
+    } else {
+        response = await fetch(request, fetchOptions)
+    }
 
-    if(response.ok) {
+    if (response.ok) {
         let data = response.json()
-        console.log(data)
         return data
     }
-    
+
     throw new ResponseError("Failed to fetch from server", response)
 }

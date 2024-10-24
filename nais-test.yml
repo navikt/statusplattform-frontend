@@ -10,8 +10,11 @@ spec:
     port: 3000
     ingresses:
         - https://status.intern.dev.nav.no/sp
-        #image: ghcr.io/navikt/myapplication:417dcaa2c839b9da72e0189e2cfdd4e90e9cc6fd
-        #       ^--- interpolated from the ${{ env.docker_image }} variable in the action
+        - https://status.ansatt.dev.nav.no/sp
+
+    envFrom:
+    - secret: status-portal
+
     env:
         - name: NEXT_PUBLIC_BACKENDPATH
           value: "http://portalserver"

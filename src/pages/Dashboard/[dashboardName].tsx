@@ -8,7 +8,6 @@ import { BodyShort, Button } from "@navikt/ds-react"
 import Layout from "../../components/Layout"
 import CustomNavSpinner from "../../components/CustomNavSpinner"
 import DashboardTemplate from "./DashboardTemplate"
-import Custom404 from "../404"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import { RouterPrivatperson } from "../../types/routes"
 import { Dashboard } from "../../types/types"
@@ -30,9 +29,9 @@ export const getServerSideProps: GetServerSideProps = async (context) => {
             },
         }
     }
-
+    const queryDashboard = context.query.dashboardName as string
     const dashboard = dashboards.find(
-        ({ name }) => name === context.query.dashboardName
+        ({ name }) => name.toLowerCase() === queryDashboard.toLowerCase()
     )
     const initialDashboard = await fetch(
         process.env.NEXT_PUBLIC_BACKENDPATH + `/rest/Dashboard/${dashboard.id}`
@@ -65,11 +64,11 @@ const DashboardFromName = (props: DashboardFromNameProps) => {
 
     useEffect(() => {
         setIsLoading(true)
-        let dashboardTarget: Object = router.query.dashboardName
+        let dashboardTarget: string = router.query.dashboardName as string
         if (!props.isEmpty) {
             const dashboardMatchingTarget: Dashboard | undefined =
                 props.dashboards.find((dashboard) =>
-                    dashboard.name == dashboardTarget ? dashboard : undefined
+                    dashboard.name.toLowerCase() === dashboardTarget.toLowerCase() ? dashboard : undefined
                 )
             setRetrievedDashboard(dashboardMatchingTarget)
         }
@@ -96,12 +95,6 @@ const DashboardFromName = (props: DashboardFromNameProps) => {
     if (isFullScreen) {
         return (
             <>
-                {/* <FullScreenButton
-                    isFullScreen={isFullScreen}
-                    changeIsFullScreen={(changed: boolean) =>
-                        changeIsFullScreen(changed)
-                    }
-                /> */}
                 <DashboardTemplate
                     dashboardProp={retrievedDashboard}
                     isFullScreen={isFullScreen}
@@ -169,12 +162,6 @@ const DashboardFromName = (props: DashboardFromNameProps) => {
                     content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"
                 />
             </Head>
-            {/* <FullScreenButton
-                isFullScreen={isFullScreen}
-                changeIsFullScreen={(changed: boolean) =>
-                    changeIsFullScreen(changed)
-                }
-            /> */}
             <DashboardTemplate
                 dashboardProp={retrievedDashboard}
                 isFullScreen={isFullScreen}

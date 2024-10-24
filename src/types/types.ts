@@ -25,11 +25,11 @@ export interface Service {
     name: string
     type: string
     team?: string
-    teamId?:string
+    teamId?: string
     serviceDependencies?: Service[]
     componentDependencies?: Component[]
     monitorlink?: string
-    pollingOnPrem?:boolean
+    pollingOnPrem?: boolean
     pollingUrl?: string
     record?: Record
     areasContainingThisService: Area[]
@@ -42,14 +42,14 @@ export interface Component {
     name: string
     type: string
     team?: string
-    teamId?:string
+    teamId?: string
     componentDependencies?: Component[]
     monitorlink?: string
     pollingUrl?: string
     status?: string
     servicesDependentOnThisComponent?: Service[]
     record?: Record
-    pollingOnPrem?:boolean
+    pollingOnPrem?: boolean
 }
 
 export interface Area {
@@ -106,4 +106,17 @@ export interface Record {
 export interface Team {
     id: string
     name: string
+}
+
+export interface NOMPersonPhone {
+    /**
+     * @minLength 0
+     * @maxLength 7
+     */
+    navident: string
+    /**
+     * @minLength 0
+     * @maxLength 20
+     */
+    phoneNumber: string
 }

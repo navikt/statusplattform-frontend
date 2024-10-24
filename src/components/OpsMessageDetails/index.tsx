@@ -43,7 +43,7 @@ const TimeStamp = styled(BodyShort)`
 
 interface DetailsOpsMsgI {
     opsMessage: OpsMessageI
-    navIdent: string
+    navIdent: string | undefined
 }
 
 const OpsMessageDetails = (props: DetailsOpsMsgI) => {
