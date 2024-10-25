@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 
 import { Expand } from "@navikt/ds-icons"
-import { BodyShort, Button, Heading } from "@navikt/ds-react"
+import { Alert, BodyShort, Button, Heading } from "@navikt/ds-react"
 
 import { Area, Dashboard } from "../../../types/types"
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
@@ -279,7 +279,9 @@ const DashboardTemplate = ({
         <DashboardContainer>
             <h1>{dashboard.name}</h1>
             <DigitalServicesContainer>
-                <StatusOverview dashboard={dashboard} user={user} />
+            <Alert variant="success" style={{width: "100%"}}>
+                Alle tjenestene fungerer normalt
+            </Alert>
 
                 {dashboard.areas.length > 0 && (
                     <PortalServiceTileContainer maxWidth={maxWidth}>

@@ -1,16 +1,8 @@
-import Link from "next/link"
 import styled from "styled-components"
-import { useContext, useEffect } from "react"
 import { useRouter } from "next/router"
-
-import { BodyShort, Button, Heading } from "@navikt/ds-react"
-import { Clock, Home, Next } from "@navikt/ds-icons"
-
 import Footer from "../../components/Footer"
 import Header from "../../components/Header"
-import Navbar from "../../components/Navbar"
-import { TitleContext } from "../ContextProviders/TitleContext"
-import { RouterHomePage } from "../../types/routes"
+
 
 import "react-toastify/dist/ReactToastify.css"
 import { ToastContainer } from "react-toastify"
@@ -99,7 +91,7 @@ const Layout = (props) => {
         <MainContentContainer>
             <ToastContainer />
                 <div>
-                    <Header />
+                <Header isExternal={true} />
                 </div>
             <Content id="content">{props.children}</Content>
 
