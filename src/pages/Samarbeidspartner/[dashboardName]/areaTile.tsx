@@ -6,13 +6,14 @@ import { Area } from "../../../types/types";
 // Styled component for the container
 const BoxContainer = styled.div`
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Alltid 2 kolonner */
+  grid-template-columns: repeat(3, 1fr); /* Alltid 2 kolonner */
   gap: 1.5rem;
   padding: 2rem;
-  background-color: #f5f5f5;
-  min-width: 80vw;
+  background-color: #f5f5f1;
+  min-width: 1500px;
   min-height: 30vh;
-  max-width: 75vw;
+  max-width: max-content;
+  align-self: center;
 `;
 
 const Box = styled.div`

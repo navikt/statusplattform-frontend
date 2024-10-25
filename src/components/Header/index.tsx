@@ -153,14 +153,15 @@ const FilterButtonWrapper = styled.div`
         display: block;
     }
 `
+interface headerProps{
+    isExternal?: boolean
+}
 
-const Header = () => {
+const Header = ( { isExternal } : headerProps) => {
     const router = useRouter()
     const [subscribeModalHidden, setSubscribeModalBoolean] = useState(false)
     const [showFilters, toggleFilters] = useState(false)
-
     const [anchor, setAnchor] = useState(undefined)
-
     const { name, navIdent } = useContext(UserStateContext)
 
     const filterRef = createRef()
@@ -200,7 +201,7 @@ const Header = () => {
             <HeaderContent>
                 <div className="header-menues">
                     <a
-                        href={RouterHomePage.PATH}
+                        href={isExternal ? "/sp/Samarbeidspartner" : RouterHomePage.PATH}
                         aria-label="Lenke til forside"
                     >
                         <img
@@ -214,8 +215,15 @@ const Header = () => {
                     <b>Status</b> digitale tjenester{" "}
                 </HeadingCustomized>
                 <div className="header-menues last">
-                    <ProfileMenu name={name} navIdent={navIdent} />{" "}
+                {isExternal ? (
                     <BurgerMenu />
+                    ) : (
+                      <>
+                        <ProfileMenu name={name} navIdent={navIdent} />
+                        <BurgerMenu />
+                      </>
+                    )}
+                    
                 </div>{" "}
             </HeaderContent>
         </CustomHeader>
