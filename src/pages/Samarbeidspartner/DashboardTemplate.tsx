@@ -36,7 +36,7 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
           
       <OpsMessagesLabelContainer>
         <ActivityLabel> Aktivitet </ActivityLabel>
-       {user ? ( <AddOpsMessageLabel> <a href={"/sp/Driftsmeldinger/ekstern/OpprettMelding"}> Legg til ny driftsmelding </a> </AddOpsMessageLabel>) : <></>}
+       {user ? ( <AddOpsMessageLabel> <a href={"/sp/ekstern/OpprettMelding"}> Legg til ny driftsmelding </a> </AddOpsMessageLabel>) : <></>}
       </OpsMessagesLabelContainer>
           
       <StatusList service_ids={services_ids_list}/>
