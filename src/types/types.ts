@@ -106,6 +106,7 @@ export interface Record {
 export interface Team {
     id: string
     name: string
+    members?: string[]
 }
 
 export interface NOMPersonPhone {
