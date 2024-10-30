@@ -127,6 +127,33 @@ const CustomButton = styled.button`
     }
 `
 
+// function for adding team as owner of service
+const saveTeamChange = async (serviceId: string, newTeamId: string) => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/service/owner`, {
+        method: 'POST', // Or 'PUT' based on your backend API
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          serviceId,
+          teamId: newTeamId,
+        }),
+      });
+  
+      if (!response.ok) {
+        throw new Error('Failed to save team changes');
+      }
+  
+      const result = await response.json();
+      console.log('Team change saved successfully:', result);
+      return result;
+    } catch (error) {
+      console.error('Error saving team change:', error);
+      // Handle error, e.g., show error message to user
+    }
+  };
+
 const TableTjeneste = () => {
     const [expanded, toggleExpanded] = useState<string[]>([])
     const [servicesToEdit, changeServicesToEdit] = useState<string[]>([])

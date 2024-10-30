@@ -9,27 +9,10 @@ export class ResponseError extends Error {
     }
 }
 
-
-// export
-const createTeamRequest = (endpath: string, method: string, body? :string) =>{
-//     let headers = new Headers()
-//     headers.append("backendendpath",endpath)
-//     headers.append("method", method)
-//     body && headers.append("body", body)
-
-    return new Request(apiPath, {
-//         headers: new Headers(headers)
-    })
-}
-
-
 export const fetchAllTeams = async (): Promise<Team[]> => {
-    let response
-    let endPath = "";
 
-
-    let request = createTeamRequest(endPath, "GET")
-    response = await fetch(request)
+    const request = new Request(apiPath)
+    const response = await fetch(request)
 
     if (response.ok) {
         let retrievedTeams = await response.json()
@@ -48,3 +31,68 @@ export const fetchAllTeams = async (): Promise<Team[]> => {
     }
     throw new ResponseError("Failed to fetch from server", response)
 }
+
+export const searchTeamsByName = async (name: string): Promise<Team> => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/teams/search/${name}`);
+  
+      if (!response.ok) {
+        throw new Error(`Failed to search teams with name: ${name}`);
+      }
+  
+      const team: Team = await response.json();
+      return team; // This should return a map with UUID and team name
+    } catch (error) {
+      console.error('Error searching teams by name:', error);
+      return null;
+    }
+};
+  
+export const searchSimplifiedTeamsByName = async (name: string): Promise<Team> => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/teams/simplified/search/${name}`);
+  
+      if (!response.ok) {
+        throw new Error(`Failed to search simplified teams with name: ${name}`);
+      }
+  
+      const team: Team = await response.json();
+      return team; // This should return a simplified team info object
+    } catch (error) {
+      console.error('Error searching simplified teams by name:', error);
+      return null;
+    }
+};
+  
+export const getTeamById = async (id: string): Promise<Team> => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/teams/${id}`);
+  
+      if (!response.ok) {
+        throw new Error(`Failed to fetch team with ID: ${id}`);
+      }
+  
+      const team: Team = await response.json();
+      return team; // This should return a team info object
+    } catch (error) {
+      console.error('Error fetching team by ID:', error);
+      return null;
+    }
+};
+  
+export const isUserInTeam = async (teamId, userId): Promise<boolean> => {
+    try {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/teams/check-user?team_id=${teamId}&user_id=${userId}`);
+  
+      if (!response.ok) {
+        throw new Error('Failed to check if user is in team');
+      }
+  
+      const isMember: boolean = await response.json();
+      return isMember; 
+        
+    } catch (error) {
+      console.error('Error checking if user is in team:', error);
+      return false;
+    }
+  };
