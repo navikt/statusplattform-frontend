@@ -28,18 +28,16 @@ import {
     SeverityEnum,
     StatusEnum,
 } from "../../../types/opsMessage"
-import { RouterOpsMeldinger } from "../../../types/routes"
 import { Service, Team } from "../../../types/types"
-import { EndPathServices } from "../../../utils/apiHelper"
 import { postOpsMessage } from "../../../utils/opsAPI"
 import { UserStateContext } from "../../../components/ContextProviders/UserStatusContext";
 import { UserData } from "../../../types/userData"
-import { fetchServiceFromId } from "../../../utils/servicesAPI"
+import { fetchServiceFromId, fetchServicesMinimal } from "../../../utils/servicesAPI"
 import { searchSimplifiedTeamsByName } from "../../../utils/teamKatalogAPI"
 
 export const getServerSideProps = async () => {
-    const res = await fetch(backendPath + EndPathServices())
-    const services = await res.json()
+    const response = await fetch(`${backendPath}/rest/Services/Minimal`)
+    const services: Service[] =  await response.json()
 
     return {
         props: {
@@ -48,7 +46,10 @@ export const getServerSideProps = async () => {
     }
 }
 
-const CreateOpsMessage = ({ services }) => {
+interface CreateOpsMessageProps{
+    services: Service[]
+}
+const CreateOpsMessage = ({ services }: CreateOpsMessageProps) => {
     const [opsMessage, setOpsMessage] = useState<OpsMessageI>({
         internalHeader: "",
         internalMessage: "",
