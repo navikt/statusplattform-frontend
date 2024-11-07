@@ -163,9 +163,6 @@ export const fetchServiceFromId = async (serviceId: string): Promise<Service> =>
 }
 
 
-
-
-
 export const fetchServiceStatuses = async (): Promise<string[]> => {
     let endPath = EndPathServiceStatus();
     let response;
