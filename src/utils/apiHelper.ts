@@ -89,6 +89,15 @@ export const EndPathPutServiceDependency = (
 }
 // ---
 
+// ---- Teams:
+
+export const EndPathSimpleTeamBySearch = (name: string) => {
+    // ${backendPath}/rest/teams/simplified/search/${name}
+    return RestPath() + "/teams/" + name
+}
+
+// ------
+
 // Components
 export const EndPathComponent = () => {
     return RestPath() + "/Service"

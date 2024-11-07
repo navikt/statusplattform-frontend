@@ -1,5 +1,8 @@
 const apiPath = "/sp/api/teamkatalog";
 import { Team } from "../types/types";
+import { backendPath } from "../pages"
+import { EndPathSpecificService } from "./apiHelper";
+
 
 
 
@@ -63,23 +66,7 @@ export const searchSimplifiedTeamsByName = async (name: string): Promise<Team> =
       return null;
     }
 };
-  
-export const getTeamById = async (id: string): Promise<Team> => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/teams/${id}`);
-  
-      if (!response.ok) {
-        throw new Error(`Failed to fetch team with ID: ${id}`);
-      }
-  
-      const team: Team = await response.json();
-      return team; // This should return a team info object
-    } catch (error) {
-      console.error('Error fetching team by ID:', error);
-      return null;
-    }
-};
-  
+
 export const isUserInTeam = async (teamId, userId): Promise<boolean> => {
     try {
       const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/teams/check-user?team_id=${teamId}&user_id=${userId}`);

@@ -1,76 +1,50 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { validateClaimsAndSignature, getAccessTokenFromBearerToken, requestBearerTokenForBackend } from "./utils/authHelper";
 
-
-
-
-const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
-
-
-const env = process.env.ENV
-const api_key = process.env.NEXT_API_KEY
-
+const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH;
+const env = process.env.ENV;
+const api_key = process.env.NEXT_API_KEY;
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
+    const NO_AUTHORIZATION_HEADER = "No Authorization header";
+    const authorizationHeader = req.headers.authorization || NO_AUTHORIZATION_HEADER;
+    let apiAccessToken = "";
 
-
-    let NO_AUTHORIZATION_HEADER = "No Authorization header"
-
-
-    let authorizationHeader = req.headers && req.headers.authorization?  req.headers.authorization: NO_AUTHORIZATION_HEADER
-    let apiAccessToken = ""
-    if(authorizationHeader != NO_AUTHORIZATION_HEADER){
-        let userAccessToken = getAccessTokenFromBearerToken(authorizationHeader);
+    if (authorizationHeader !== NO_AUTHORIZATION_HEADER) {
+        const userAccessToken = getAccessTokenFromBearerToken(authorizationHeader);
         await validateClaimsAndSignature(userAccessToken);
         apiAccessToken = await requestBearerTokenForBackend(userAccessToken);
     }
 
-    let backendEndpath = req.headers.backendendpath
-    let method = req.headers.method
-    let body = req.headers.body
+    const backendEndpath = req.headers.backendendpath;
+    const method = req.headers.method ? String(req.headers.method) : "GET";
+    const body = typeof req.headers.body === "string" ? JSON.parse(req.headers.body) : req.headers.body;
+    const path = `${backendPath}${backendEndpath}`;
 
-    let path = backendPath + backendEndpath
-
-    const fetch = require("node-fetch");
-    let https  = require('http');
-
-    const httpsAgent = new https.Agent({
-        rejectUnauthorized: false,
-    })
-
-    let authHeaderType = 'Authorization';
-
-    if(env == "local"){
-        authHeaderType = 'Apikey';
+    let authHeaderType = "Authorization";
+    if (env === "local") {
+        authHeaderType = "Apikey";
         apiAccessToken = api_key;
     }
 
-    let authHeader = {[authHeaderType]: apiAccessToken};
+    const authHeader = { [authHeaderType]: apiAccessToken };
 
+    try {
+        const response = await fetch(path, {
+            headers: { ...authHeader, "Content-Type": "application/json" },
+            method,
+            body: JSON.stringify(body),
+        });
 
+        const responseBody = await response.json();
 
-    const resp = await fetch(
-        path,
-        {
-            headers: authHeader,
-            method: method,
-            agent: httpsAgent,
-            body: body,
-        },
-      )
-    await resp.json()
-    .then(body => {
-        if (body) {
-            res.status(200).json(body)
+        if (response.ok) {
+            res.status(200).json(responseBody);
+        } else {
+            res.status(response.status).json({ error: responseBody });
         }
-        else {
-            res.send("Cant read userdate")
-        }
-
-    })
-    .catch(e => {
-        console.log(e)
-        res.status(resp.status).send(e)
-    })
+    } catch (error) {
+        console.error("Error fetching from backend:", error);
+        res.status(500).json({ error: "Error fetching data from backend" });
+    }
 };
-

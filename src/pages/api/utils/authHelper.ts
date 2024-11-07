@@ -26,7 +26,7 @@ export const validateClaimsAndSignature = async (accessToken: string) => {
 }
 
 export const requestBearerTokenForBackend = async (accessToken: String) => {
-    const fetch = require("node-fetch")
+    //const fetch = require("node-fetch")
     const https = require("https")
 
     const url =
@@ -83,7 +83,7 @@ export const getAccessTokenFromBearerToken = (bearerToken: String) => {
 }
 
 export const requestBearerTokenForShoutOutAPI = async (accessToken: String) => {
-    const fetch = require("node-fetch")
+    //const fetch = require("node-fetch")
     const https = require("https")
 
     const url =

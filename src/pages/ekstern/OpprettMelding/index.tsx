@@ -16,7 +16,7 @@ import { useContext, useEffect, useRef, useState } from "react"
 import "react-datepicker/dist/react-datepicker.css"
 import { toast } from "react-toastify"
 import styled from "styled-components"
-import { backendPath } from "../.."
+import { backendPath } from "../../"
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
 import DateSetterOps from "../../../components/DateSetterOps"
@@ -509,7 +509,7 @@ const AffectedServicesSelect = ({
   
     const checkUserMembership = async (teamId, userId) => {
         try {
-            const url = `${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/teams/check-user?team_id=${teamId}&user_id=${userId}`
+            const url = `${backendPath}/rest/teams/check-user?team_id=${teamId}&user_id=${userId}`
             const response = await fetch(url)
         
         if (!response.ok) {
@@ -534,6 +534,7 @@ const AffectedServicesSelect = ({
       // Check if the current user is a member of the team that owns the selected service
         const service: Service = await fetchServiceFromId(selectedService.id)
         const team: Team = await searchSimplifiedTeamsByName(service.team)
+        console.log("Team: ", team, " Service: ", service)
         const isMember = await checkUserMembership(team.id, user.navIdent);
       if (isMember) {
         handleUpdateListOfAffectedServices(selectedService);
