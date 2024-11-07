@@ -2,12 +2,12 @@ const apiPath = "/sp/api/requestGateway"
 
 export const createApiRequest = (endpath: string, method: string, body? :string) =>{
     let headers = new Headers()
-    headers.append("backendendpath",endpath)
+    headers.append("backendendpath", endpath)
     headers.append("method", method)
     body && headers.append("body", body) 
 
 
     return new Request(apiPath, {
-        headers: new Headers(headers)
+        headers: headers
     })
 }

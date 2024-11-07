@@ -1,11 +1,7 @@
 import { NextApiRequest, NextApiResponse } from "next";
 import { validateClaimsAndSignature, getAccessTokenFromBearerToken, requestBearerTokenForBackend } from "./utils/authHelper";
 
-
-
-
 const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
-
 
 const env = process.env.ENV
 const api_key = process.env.NEXT_API_KEY
@@ -26,12 +22,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     }
 
     let backendEndpath = req.headers.backendendpath
-    let method = req.headers.method
+    let method = String(req.headers.method)
     let body = req.headers.body
 
     let path = backendPath + backendEndpath
 
-    const fetch = require("node-fetch");
+    //const fetch = require("node-fetch");
     let https  = require('http');
 
     const httpsAgent = new https.Agent({
@@ -47,16 +43,13 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
     let authHeader = {[authHeaderType]: apiAccessToken};
 
-
-
     const resp = await fetch(
         path,
         {
             headers: authHeader,
             method: method,
-            agent: httpsAgent,
             body: body,
-        },
+        }, 
       )
     await resp.json()
     .then(body => {
