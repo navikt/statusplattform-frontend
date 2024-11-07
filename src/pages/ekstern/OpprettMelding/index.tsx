@@ -33,7 +33,7 @@ import { postOpsMessage } from "../../../utils/opsAPI"
 import { UserStateContext } from "../../../components/ContextProviders/UserStatusContext";
 import { UserData } from "../../../types/userData"
 import { fetchServiceFromId, fetchServicesMinimal } from "../../../utils/servicesAPI"
-import { searchSimplifiedTeamsByName } from "../../../utils/teamKatalogAPI"
+import { checkUserMembershipInTeam, fetchSimplifiedTeamByName } from "../../../utils/teamKatalogAPI"
 
 export const getServerSideProps = async () => {
     const response = await fetch(`${backendPath}/rest/Services/Minimal`)
@@ -532,10 +532,10 @@ const AffectedServicesSelect = ({
       }
   
       // Check if the current user is a member of the team that owns the selected service
-        const service: Service = await fetchServiceFromId(selectedService.id)
-        const team: Team = await searchSimplifiedTeamsByName(service.team)
+        const service: Service = await fetchServiceFromId(selectedService.id);
+        const team: Team = await fetchSimplifiedTeamByName(service.team);
         console.log("Team: ", team, " Service: ", service)
-        const isMember = await checkUserMembership(team.id, user.navIdent);
+        const isMember = await checkUserMembershipInTeam(team.id, user.navIdent);
       if (isMember) {
         handleUpdateListOfAffectedServices(selectedService);
       } else {

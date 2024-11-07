@@ -51,35 +51,24 @@ export const searchTeamsByName = async (name: string): Promise<Team> => {
     }
 };
   
-export const searchSimplifiedTeamsByName = async (name: string): Promise<Team> => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/teams/simplified/search/${name}`);
-  
-      if (!response.ok) {
-        throw new Error(`Failed to search simplified teams with name: ${name}`);
-      }
-  
+export const fetchSimplifiedTeamByName = async (name: string): Promise<Team> => {
+  const response = await fetch(`/sp/api/teams/searchSimplifiedByName?name=${name}`);
+
+  if (response.ok) {
       const team: Team = await response.json();
-      return team; // This should return a simplified team info object
-    } catch (error) {
-      console.error('Error searching simplified teams by name:', error);
-      return null;
-    }
+      return team;
+  }
+
+  throw new Error(`Failed to fetch team with name: ${name}`);
 };
 
-export const isUserInTeam = async (teamId, userId): Promise<boolean> => {
-    try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/teams/check-user?team_id=${teamId}&user_id=${userId}`);
-  
-      if (!response.ok) {
-        throw new Error('Failed to check if user is in team');
-      }
-  
-      const isMember: boolean = await response.json();
-      return isMember; 
-        
-    } catch (error) {
-      console.error('Error checking if user is in team:', error);
-      return false;
-    }
-  };
+export const checkUserMembershipInTeam = async (teamId: string, userId: string): Promise<boolean> => {
+  const response = await fetch(`/sp/api/teams/checkUserInTeam?teamId=${teamId}&userId=${userId}`);
+
+  if (response.ok) {
+      const { isMember } = await response.json();
+      return isMember;
+  }
+
+  throw new Error(`Failed to check if user is in team ${teamId}`);
+};
