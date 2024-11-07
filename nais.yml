@@ -51,7 +51,8 @@ spec:
             enabled: true
             autoLogin: true
             autoLoginIgnorePaths:
-              - /sp/Samarbeidspartner
+              - /sp/Samarbeidspartner*
+              - /sp/_next*
 #            errorPath: "https://status.nav.no/sp/Login"
     accessPolicy:
         outbound:
