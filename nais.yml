@@ -50,6 +50,8 @@ spec:
         sidecar:
             enabled: true
             autoLogin: true
+            autoLoginIgnorePaths:
+              - /sp/Samarbeidspartner
 #            errorPath: "https://status.nav.no/sp/Login"
     accessPolicy:
         outbound:
