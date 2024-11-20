@@ -54,6 +54,8 @@ spec:
               - /sp/Samarbeidspartner/**
               - /sp/_next/**
               - /sp/api/requestGateway
+              - /sp/api/userInfo
+              - /sp/favicon.ico
 #            errorPath: "https://status.nav.no/sp/Login"
     accessPolicy:
         outbound:
