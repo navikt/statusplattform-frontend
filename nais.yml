@@ -53,6 +53,7 @@ spec:
             autoLoginIgnorePaths:
               - /sp/Samarbeidspartner/**
               - /sp/_next/**
+              - /sp/api/requestGateway
 #            errorPath: "https://status.nav.no/sp/Login"
     accessPolicy:
         outbound:
