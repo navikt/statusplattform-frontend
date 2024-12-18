@@ -1,34 +1,49 @@
-# Base on offical Node.js Alpine image
-FROM node:16-alpine
+# Base on official Node.js Alpine image
+FROM node:16-alpine AS builder
 
 # Run container as non-root (unprivileged) user
-# The node user is provided in the Node.js Alpine base image
 USER node
-
-ARG NPM_AUTH_TOKEN
-ENV NPM_AUTH_TOKEN=${NPM_AUTH_TOKEN}
 
 # Set working directory
 WORKDIR /usr/src/app
 
-COPY .npmrc .npmrc
+# Pass the NPM token securely as a build argument
+ARG NPM_AUTH_TOKEN
 
-# Copy package.json and package-lock.json before other files
-# Utilise Docker cache to save re-installing dependencies if unchanged
+# Copy package.json and package-lock.json to utilize Docker cache
 COPY package*.json ./
 
-# Install dependencies
-COPY babel.config.json babel.config.json
-RUN npm ci
+# Temporarily configure npm with the auth token
+RUN --mount=type=secret,id=npmrc \
+    echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc && \
+    npm ci && \
+    rm -f .npmrc
 
-# Build app
+# Copy the remaining files for the build process
+COPY babel.config.json babel.config.json
 COPY src/ src/
 COPY public/ public/
 COPY next.config.js next.config.js
+
+# Build the app
 RUN npm run build
+
+# --- Runtime image ---
+FROM node:16-alpine
+
+# Run container as non-root user
+USER node
+
+# Set working directory
+WORKDIR /usr/src/app
+
+# Copy the build output and required files from the builder stage
+COPY --from=builder /usr/src/app/.next/ .next/
+COPY --from=builder /usr/src/app/node_modules/ node_modules/
+COPY --from=builder /usr/src/app/package*.json ./
 
 # Expose the listening port
 EXPOSE 3000
 
-# Run npm start script when container starts
-CMD [ "npm", "start" ]
+# Start the app
+CMD ["npm", "start"]
