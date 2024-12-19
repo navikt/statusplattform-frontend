@@ -7,17 +7,14 @@ USER node
 # Set working directory
 WORKDIR /usr/src/app
 
-# Pass the NPM token securely as a build argument
-ARG NPM_AUTH_TOKEN
-
 # Copy package.json and package-lock.json to utilize Docker cache
 COPY package*.json ./
 
-# Temporarily configure npm with the auth token
-RUN --mount=type=secret,id=npmrc \
-    echo "//registry.npmjs.org/:_authToken=${NPM_AUTH_TOKEN}" > .npmrc && \
-    npm ci && \
-    rm -f .npmrc
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN sh -c \
+    'npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)'
+RUN npm config set @navikt:registry=https://npm.pkg.github.com
+
+RUN npm ci
 
 # Copy the remaining files for the build process
 COPY babel.config.json babel.config.json
