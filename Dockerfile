@@ -1,19 +1,16 @@
 # Base on official Node.js Alpine image
 FROM node:16-alpine AS builder
 
-# Run container as non-root (unprivileged) user
-USER node
-
 # Set working directory
 WORKDIR /usr/src/app
 
-# Use secret for NPM authentication
-RUN --mount=type=secret,id=NODE_AUTH_TOKEN sh -c \
-    'echo "//npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)" > .npmrc && \
-     npm config set @navikt:registry=https://npm.pkg.github.com'
+# Copy package.json and package-lock.json to utilize Docker cache
+COPY package*.json ./
 
-# Install dependencies
-COPY package.json package-lock.json ./
+RUN --mount=type=secret,id=NODE_AUTH_TOKEN sh -c \
+    'npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)'
+RUN npm config set @navikt:registry=https://npm.pkg.github.com
+
 RUN npm ci
 
 # Copy the remaining files for the build process
@@ -27,9 +24,6 @@ RUN npm run build
 
 # --- Runtime image ---
 FROM node:16-alpine
-
-# Run container as non-root user
-USER node
 
 # Set working directory
 WORKDIR /usr/src/app
