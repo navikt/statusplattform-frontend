@@ -7,13 +7,13 @@ USER node
 # Set working directory
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to utilize Docker cache
-COPY package*.json ./
-
+# Use secret for NPM authentication
 RUN --mount=type=secret,id=NODE_AUTH_TOKEN sh -c \
-    'npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)'
-RUN npm config set @navikt:registry=https://npm.pkg.github.com
+    'echo "//npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)" > .npmrc && \
+     npm config set @navikt:registry=https://npm.pkg.github.com'
 
+# Install dependencies
+COPY package.json package-lock.json ./
 RUN npm ci
 
 # Copy the remaining files for the build process
