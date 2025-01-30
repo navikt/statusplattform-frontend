@@ -5,7 +5,7 @@ import { UserData } from "../../types/userData";
 import { Service } from "../../types/types";
 import StatusList from "./statusList";
 import ServiceTiles from "./serviceTile";
-import { Spacer } from "src/styles/styles";
+import { Spacer } from "../../styles/styles";
 
 interface DashboardTemplateProps {
   services: Service[];
