@@ -8,7 +8,7 @@ interface ServiceTilesProps {
 }
 
 const ServiceTiles = ({ services }: ServiceTilesProps) => {
-  const isSingleService = services.length === 1;
+  const isSingleService = services.length < 4;
 
   return (
     <BoxContainer isSingle={isSingleService}>
@@ -29,7 +29,7 @@ const ServiceTiles = ({ services }: ServiceTilesProps) => {
 // Styled component for the container
 const BoxContainer = styled.div<{ isSingle: boolean }>`
   display: grid;
-  grid-template-columns: ${({ isSingle }) => (isSingle ? "1fr" : "repeat(2, 1fr)")};
+  grid-template-columns: ${({ isSingle }) => (isSingle ? "1fr" : "repeat(2, 2fr)")};
   gap: 1rem;
   padding: 1rem;
   min-width: ${({ isSingle }) => (isSingle ? "350px" : "1000px")};

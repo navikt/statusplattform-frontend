@@ -32,7 +32,7 @@ export const getServerSideProps = async (context) => {
 
     const [resOpsMsg, resServices] = await Promise.all([
         fetch(backendPath + EndPathSpecificOps(driftmeldingsId)),
-        fetch(backendPath + EndPathServices()),
+        fetch(backendPath + EndPathServices() + "/Minimal"),
     ])
 
     const opsMessage: OpsMessageI = await resOpsMsg.json()

@@ -24,7 +24,6 @@ interface props {
 
 const Dashboard = ({ services }: props) => {
     const user = useContext(UserStateContext)
-    console.log(user)
     return (
         <Layout>
             <Head>

@@ -5,6 +5,7 @@ import { UserData } from "../../types/userData";
 import { Service } from "../../types/types";
 import StatusList from "./statusList";
 import ServiceTiles from "./serviceTile";
+import { Spacer } from "src/styles/styles";
 
 interface DashboardTemplateProps {
   services: Service[];
@@ -32,14 +33,14 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
             <ServiceTiles services={services} />
           </PortalServiceTileContainer>
         )}
-          </DigitalServicesContainer>
-          
+      </DigitalServicesContainer>
+      <Spacer height="10vh"/>
       <OpsMessagesLabelContainer>
         <ActivityLabel> Aktivitet </ActivityLabel>
        {user ? ( <AddOpsMessageLabel> <a href={"/sp/ekstern/OpprettMelding"}> Legg til ny driftsmelding </a> </AddOpsMessageLabel>) : <></>}
       </OpsMessagesLabelContainer>
           
-      <StatusList service_ids={services_ids_list}/>
+      <StatusList service_ids={services_ids_list} user={user}/>
     </DashboardContainer>
   );
 };

@@ -1,4 +1,4 @@
-import { BodyShort, Heading, Panel, Label, Detail } from "@navikt/ds-react";
+import { BodyShort, Heading, Panel, Label, Detail, Button } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
 import { OpsMessageI } from "../../types/opsMessage";
 import { Service } from "../../types/types";
@@ -6,13 +6,16 @@ import styled from "styled-components";
 import { fetchMessageByServiceList } from "../../utils/dashboardsAPI";
 import { formatDistanceToNow, parseISO } from "date-fns";
 import { nb } from "date-fns/locale";
+import { UserData } from "../../types/userData";
+import { PencilIcon } from '@navikt/aksel-icons';
 import opsMessageDetails from "../Driftsmeldinger/[driftmeldingsId]";
 
 interface StatusListProps {
   service_ids: string[];
+  user?: UserData;
 }
 
-const StatusList = ({ service_ids }: StatusListProps) => {
+const StatusList = ({ service_ids, user }: StatusListProps) => {
   const [serverOpsMessages, setServerOpsMessages] = useState<OpsMessageI[]>([]);
   const [groupedMessages, setGroupedMessages] = useState<Record<string, OpsMessageI[]>>({});
 
@@ -64,6 +67,7 @@ const StatusList = ({ service_ids }: StatusListProps) => {
                     <Header level="3" size="medium" spacing>
                       {message.internalHeader}
                     </Header>
+                    {user ? ( <AddOpsMessageLabel> <a href={`ekstern/${message.id}/rediger`}><PencilIcon title="a11y-title" fontSize="1.5rem" /></a> </AddOpsMessageLabel>) : <></>}
                     
                   </HeaderContainer>
                   {message.internalMessage && (
@@ -95,10 +99,12 @@ const StatusList = ({ service_ids }: StatusListProps) => {
                       minute: "2-digit",
                       timeZoneName: "short",
                     })}
+                     
                   </DetailItem>
                 </EventDetails>
               </DateSection>
             ))}
+           
           </div>
         ))
       )}
@@ -176,6 +182,12 @@ const EventDetails = styled.div<{ severityColor: string }>`
   border-left: 6px solid ${(props) => props.severityColor}; /* Tydeligere bred farget venstremarg */
   background-color: #f9f9f9;
   border-radius: 8px;
+`;
+
+const AddOpsMessageLabel = styled.div`
+  padding: 0;
+  font-size: 15px;
+  text-align: end;
 `;
 
 // Funksjon for å vise hvor lenge siden meldingen ble postet
