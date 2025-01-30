@@ -30,7 +30,7 @@ import {
     fetchSpecificOpsMessage,
     updateSpecificOpsMessage,
 } from "../../../utils/opsAPI";
-import { checkUserMembershipInTeam } from "src/utils/teamKatalogAPI";
+import { checkUserMembershipInTeam } from "../../../utils/teamKatalogAPI";
 
 const OpsMessageContainer = styled.div`
     display: flex;
