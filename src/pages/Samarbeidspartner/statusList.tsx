@@ -23,10 +23,8 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
     const fetchData = async () => {
       try {
         const messages = await fetchMessageByServiceList(service_ids);
-        // Sorter meldingene etter startTime i synkende rekkefølge (nyeste først)
         messages.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
 
-        // Gruppere meldingene etter dato
         const grouped = messages.reduce((acc: Record<string, OpsMessageI[]>, message) => {
           const messageDate = new Date(message.startTime).toLocaleDateString("nb-NO", {
             day: "numeric",
@@ -39,7 +37,7 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
           acc[messageDate].push(message);
           return acc;
         }, {});
-        setServerOpsMessages(messages)
+        setServerOpsMessages(messages);
         setGroupedMessages(grouped);
       } catch (error) {
         console.error("Failed to fetch operations messages:", error);
@@ -49,9 +47,7 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
     fetchData();
   }, [service_ids]);
 
-  console.log(serverOpsMessages)
-
-
+  console.log(serverOpsMessages);
   return (
     <StatusContainer>
       {serverOpsMessages.length === 0 ? (
@@ -67,21 +63,31 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
                     <Header level="3" size="medium" spacing>
                       {message.internalHeader}
                     </Header>
-                    {user ? ( <AddOpsMessageLabel> <a href={`ekstern/${message.id}/rediger`}><PencilIcon title="a11y-title" fontSize="1.5rem" /></a> </AddOpsMessageLabel>) : <></>}
-                    
+                    {user ? (
+                      <AddOpsMessageLabel>
+                        <a href={`ekstern/${message.id}/rediger`}>
+                          <PencilIcon title="Rediger melding" fontSize="1.5rem" />
+                        </a>
+                      </AddOpsMessageLabel>
+                    ) : null}
                   </HeaderContainer>
+                  
+                  {/* Viser status basert på isActive */}
+                  <StatusText isActive={message.isActive}>
+                    Status: {message.isActive ? "Aktiv" : "Inaktiv"}
+                  </StatusText>
+
                   {message.internalMessage && (
                     <InternalMessage
-                    dangerouslySetInnerHTML={{
-                      __html: getLastUpdate(message.internalMessage),
-                    }}
-                  />
+                      dangerouslySetInnerHTML={{
+                        __html: getLastUpdate(message.internalMessage),
+                      }}
+                    />
                   )}
+
                   {message.affectedServices.length > 0 && (
                     <>
-                      <Label as="h4" size="medium">
-                        Berørte tjenester:
-                      </Label>
+                      <Label as="h4" size="medium">Berørte tjenester:</Label>
                       <AffectedServices>
                         {message.affectedServices.map((service: Service) => (
                           <ServiceName key={service.name}>{service.name}</ServiceName>
@@ -89,22 +95,24 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
                       </AffectedServices>
                     </>
                   )}
+
                   <DetailItem>
-                    Postet: {getPostedTime(message.startTime)} • {new Date(message.startTime).toLocaleDateString("nb-NO", {
+                    Postet: {getPostedTime(message.startTime)} •{" "}
+                    {new Date(message.startTime).toLocaleDateString("nb-NO", {
                       month: "short",
                       day: "numeric",
                       year: "numeric",
-                    })} - {new Date(message.startTime).toLocaleTimeString("nb-NO", {
+                    })}{" "}
+                    -{" "}
+                    {new Date(message.startTime).toLocaleTimeString("nb-NO", {
                       hour: "2-digit",
                       minute: "2-digit",
                       timeZoneName: "short",
                     })}
-                     
                   </DetailItem>
                 </EventDetails>
               </DateSection>
             ))}
-           
           </div>
         ))
       )}
@@ -112,7 +120,13 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
   );
 };
 
-// Styled components
+// Styled komponent for status
+const StatusText = styled(BodyShort)<{ isActive: boolean }>`
+  font-size: 1rem;
+  font-weight: 600;
+  color: ${(props) => (props.isActive ? "#2e7d32" : "#d32f2f")}; // Grønn for aktiv, rød for inaktiv
+  margin-top: 0.5rem;
+`;
 
 const StatusContainer = styled(Panel)`
   padding: 1.5rem;

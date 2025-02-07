@@ -1,20 +1,17 @@
-import { Back } from "@navikt/ds-icons";
 import {
     Alert,
-    BodyShort,
     Button,
     Select,
+    Switch,
     TextField,
 } from "@navikt/ds-react";
 import Head from "next/head";
 import { useRouter } from "next/router";
 import { useContext, useEffect, useRef, useState } from "react";
 import { toast } from "react-toastify";
-import { datePrettifyer } from "../../../utils/datePrettifyer";
 import styled from "styled-components";
 import { backendPath } from "../..";
 import { UserStateContext } from "../../../components/ContextProviders/UserStatusContext";
-import CustomNavSpinner from "../../../components/CustomNavSpinner";
 import Layout from "../../../components/Layout";
 import TextEditor from "../../../components/TextEditor";
 import { OpsScheme, Spacer } from "../../../styles/styles";
@@ -23,14 +20,12 @@ import {
     SeverityEnum,
     StatusEnum,
 } from "../../../types/opsMessage";
-import { RouterError, RouterOpsMeldinger } from "../../../types/routes";
-import { Service } from "../../../types/types";
-import { EndPathServices, EndPathSpecificOps } from "../../../utils/apiHelper";
+import {  EndPathSpecificOps } from "../../../utils/apiHelper";
 import {
-    fetchSpecificOpsMessage,
     updateSpecificOpsMessage,
 } from "../../../utils/opsAPI";
 import { checkUserMembershipInTeam } from "../../../utils/teamKatalogAPI";
+
 
 const OpsMessageContainer = styled.div`
     display: flex;
@@ -83,8 +78,7 @@ const opsMessageDetails = ({
 
 const OpsMessageComponent = ({ opsMessage: serverSideOpsMessage }) => {
     const [opsMessage, changeOpsMessage] = useState<OpsMessageI>(serverSideOpsMessage);
-    const [updatedStatus, changeUpdatedStatus] = useState<StatusEnum>(serverSideOpsMessage.status);
-    const [isMember, setIsMember] = useState<boolean>(false);
+    const [isMember, setIsMember] = useState<boolean>();
 
     const user = useContext(UserStateContext);
 
@@ -100,7 +94,7 @@ const OpsMessageComponent = ({ opsMessage: serverSideOpsMessage }) => {
     fetchMembership();
   }, [opsMessage, user]);
     
-    if (!isMember) {
+    if (isMember === false) {
         toast.error("Du har ikke tilgang til å redigere denne driftsmeldingen");
     }
 
@@ -117,27 +111,21 @@ const OpsMessageComponent = ({ opsMessage: serverSideOpsMessage }) => {
 
             <EditOpsMessage
                 opsMessage={opsMessage}
-                changeUpdatedStatus={changeUpdatedStatus}
                 isMember={isMember}
             />
         </OpsScheme>
     );
 };
 
-const EditOpsMessage = ({ opsMessage, changeUpdatedStatus, isMember }) => {
+const EditOpsMessage = ({ opsMessage, isMember }) => {
     const [updatedOpsMessage, changeUpdatedOpsMessage] = useState<OpsMessageI>(opsMessage);
-    const editorRef = useRef(null);
     const router = useRouter();
 
-    const handleUpdateOpsTextArea = (message: string) => {
-        changeUpdatedOpsMessage(prevState => ({
-            ...prevState,
-            externalMessage: message,
-            internalMessage: message
-        }));
-    };
-
     const handleSubmitChangesOpsMessage = async () => {
+        if (checkLength(updatedOpsMessage.externalMessage)) {
+            toast.error("Meldingen er for lang");
+            return;
+        }
         try {
             await updateSpecificOpsMessage(updatedOpsMessage);
             toast.success("Endringer lagret");
@@ -148,57 +136,85 @@ const EditOpsMessage = ({ opsMessage, changeUpdatedStatus, isMember }) => {
         }
     };
 
+    const checkLength = (str: string) => {
+        return str.length >= 5500;
+    }
+
+    const handleToggleActive = () => {
+        changeUpdatedOpsMessage(prevState => ({
+            ...prevState,
+            isActive: !prevState.isActive
+        }));
+    };
+
     const changeUpdatedSeverity = (severity: SeverityEnum) => {
         changeUpdatedOpsMessage(prevState => ({
             ...prevState,
             severity: severity
         }));
-    }
+    };
+
+    const handleUpdateOpsTextArea = (message: string) => {
+        changeUpdatedOpsMessage(prevState => ({
+            ...prevState,
+            externalMessage: message,
+            internalMessage: message
+        }));
+    };
 
     return (
         <div>
-            
-            <div>
-                <TextField
-                    label="Tittel:"
-                    value={updatedOpsMessage.externalHeader}
-                    onChange={(e) =>
-                        changeUpdatedOpsMessage(prevState => ({
-                            ...prevState,
-                            externalHeader: e.target.value,
-                            internalHeader: e.target.value,
-                        }))
-                    }
-                />
-            </div>
-            <div>
-                <Select
-                    label="Velg alvorlighetsgrad"
-                    value={updatedOpsMessage.severity}
-                    onChange={(e) => changeUpdatedSeverity(e.target.value as SeverityEnum)}
-                >
-                    <option value={SeverityEnum.NEUTRAL}>Nøytral - Blå</option>
-                    <option value={SeverityEnum.ISSUE}>Middels - Gul</option>
-                    <option value={SeverityEnum.DOWN}>Høy - Rød</option>
-                </Select>
-            </div>
+            <TextField
+                label="Tittel:"
+                value={updatedOpsMessage.externalHeader}
+                disabled={!isMember}
+                onChange={(e) =>
+                    changeUpdatedOpsMessage(prevState => ({
+                        ...prevState,
+                        externalHeader: e.target.value,
+                        internalHeader: e.target.value,
+                    }))
+                }
+            />
+            <Select
+                label="Velg alvorlighetsgrad"
+                value={updatedOpsMessage.severity}
+                disabled={!isMember}
+                onChange={(e) => changeUpdatedSeverity(e.target.value as SeverityEnum)}
+            >
+                <option value={SeverityEnum.NEUTRAL}>Nøytral - Blå</option>
+                <option value={SeverityEnum.ISSUE}>Middels - Gul</option>
+                <option value={SeverityEnum.DOWN}>Høy - Rød</option>
+            </Select>
+
             <Spacer height="1.9rem"/>
-            <div>
-                <TextEditor
-                    ref={editorRef}
-                    editing={true}
-                    initialValue={updatedOpsMessage.externalMessage}
-                    title="Tekst:"
-                    handleUpdateMsg={handleUpdateOpsTextArea}
-                    isInternal={false}
-                />
-            </div>
+
+            <TextEditor
+                editing={true}
+                initialValue={updatedOpsMessage.externalMessage}
+                title="Tekst:"
+                handleUpdateMsg={handleUpdateOpsTextArea}
+                isInternal={false}
+            />
+
+            <Spacer height="1.9rem"/>
+
+            <Switch
+                checked={updatedOpsMessage.isActive}
+                onChange={handleToggleActive}
+                disabled={!isMember}
+            >
+                {updatedOpsMessage.isActive ? "Aktiv" : "Inaktiv"}
+            </Switch>
+
             <ButtonContainer>
                 <Button variant="secondary" onClick={() => router.back()}>Avbryt</Button>
-                <Button variant="primary" onClick={handleSubmitChangesOpsMessage} disabled={isMember}>Lagre endringer</Button>
+                <Button variant="primary" onClick={handleSubmitChangesOpsMessage} disabled={!isMember}>Lagre endringer</Button>
             </ButtonContainer>
         </div>
     );
 };
+
+
 
 export default opsMessageDetails;
