@@ -250,10 +250,33 @@ const OpsMessages = ({ serverOpsMessages }) => {
     )
 }
 
+
 const OpsMessagesList = styled.div`
     display: grid;
+    grid-gap: 10px
+
+    /* Alle meldinger vises på én rad */
+    grid-template-columns: 1fr; 
+
+    @media (min-width: 800px) {
+        grid-auto-rows: 350px;
+        grid-template-columns: repeat(1, 87vw);
+    }
+
+    @media (min-width: 1150px) {
+        grid-auto-rows: 350px;
+        grid-template-columns: repeat(1, 70vw);
+    }
+
+    @media (min-width: 1600px) {
+        grid-auto-rows: 300px;
+        grid-template-columns: repeat(1, 70vw);
+    }
+`;
+
+const abc = styled.div`
+    display: grid;
     grid-gap: 3rem;
-    /* display: flex;
     flex-direction: column;
  
     gap: 2rem; */
