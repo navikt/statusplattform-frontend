@@ -15,6 +15,7 @@ import StatusOverview from "../../components/StatusOverview"
 import { PortalServiceTile } from "../../components/PortalServiceTile"
 import { UserData } from "../../types/userData"
 import IconDescription from "../../components/IconDescription"
+import StatusList from "./statusList"
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
@@ -255,6 +256,16 @@ const DashboardTemplate = ({
         }
     }
 
+    const getAllServiceIds = (areas: Area[]): string[] => {
+        let serviceIds: string[] = []
+        areas.forEach((area) => {
+            area.services.forEach((service) => {
+                serviceIds.push(service.id)
+            })
+        })
+        return serviceIds
+    }
+
     if (dashboard.areas.length == 0) {
         changeTitle("Feil ved henting av dashbord")
         return <NoAreasInDashboard />
@@ -277,7 +288,6 @@ const DashboardTemplate = ({
         <DashboardContainer>
             <DigitalServicesContainer>
                 <StatusOverview dashboard={dashboard} user={user} />
-
                 {dashboard.areas.length > 0 && (
                     <PortalServiceTileContainer maxWidth={maxWidth}>
                         <AllAreas
@@ -294,6 +304,7 @@ const DashboardTemplate = ({
             </DigitalServicesContainer>
             {/* <MaintenanceScheduling /> */}
             <IconDescription />
+            <StatusList service_ids={getAllServiceIds(dashboard.areas)} user={user}/>
         </DashboardContainer>
     )
 }
