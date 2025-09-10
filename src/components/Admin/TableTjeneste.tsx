@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
-import { Close, Delete, Expand, Notes, SaveFile } from "@navikt/ds-icons"
+import { XMarkIcon, TrashIcon, ChevronDownIcon, FileTextIcon, FloppydiskIcon } from "@navikt/aksel-icons"
 import {
     BodyShort,
     Button,
@@ -253,22 +253,25 @@ const TableTjeneste = () => {
             <Modal
                 open={!!serviceToDelete}
                 onClose={() => setServiceToDelete(null)}
+                header={{ heading: "Bekreft sletting" }}
             >
-                <ModalInner>
+                <Modal.Body>
                     Ønsker du å slette tjenesten?
-                    <Button
-                        variant="secondary"
-                        onClick={confirmDeleteServiceHandler}
-                    >
-                        Slett tjeneste
-                    </Button>
+                </Modal.Body>
+                <Modal.Footer>
                     <Button
                         variant="secondary"
                         onClick={() => setServiceToDelete(null)}
                     >
                         Avbryt
                     </Button>
-                </ModalInner>
+                    <Button
+                        variant="danger"
+                        onClick={confirmDeleteServiceHandler}
+                    >
+                        Slett tjeneste
+                    </Button>
+                </Modal.Footer>
             </Modal>
 
             <div className="centered">
@@ -628,7 +631,7 @@ const ServiceRow = ({
                     onClick={() => handleEditService(service)}
                 >
                     <a>
-                        <Notes /> Rediger
+                        <FileTextIcon /> Rediger
                     </a>
                 </CustomButton>
 
@@ -638,14 +641,14 @@ const ServiceRow = ({
                     aria-label="Slett tjeneste"
                 >
                     <a>
-                        <Delete /> Slett
+                        <TrashIcon /> Slett
                     </a>
                 </button>
                 <button
                     className="option"
                     onClick={() => toggleExpanded(service)}
                 >
-                    <Expand
+                    <ChevronDownIcon
                         className={isExpanded ? "expanded" : "not-expanded"}
                         aria-expanded={isExpanded}
                     />
@@ -956,7 +959,7 @@ const ServiceRowEditting = ({
             <div className="button-container">
                 <button type="button" className="option" onClick={handleSubmit}>
                     <a>
-                        <SaveFile /> Lagre
+                        <FloppydiskIcon /> Lagre
                     </a>
                 </button>
                 <CustomButton
@@ -964,7 +967,7 @@ const ServiceRowEditting = ({
                     onClick={() => handleCloseEditService(service)}
                 >
                     <a>
-                        <Close /> Avbryt
+                        <XMarkIcon /> Avbryt
                     </a>
                 </CustomButton>
                 <button
@@ -973,14 +976,14 @@ const ServiceRowEditting = ({
                     aria-label="Slett tjeneste"
                 >
                     <a>
-                        <Delete /> Slett
+                        <TrashIcon /> Slett
                     </a>
                 </button>
                 <button
                     className="option"
                     onClick={() => toggleExpanded(service)}
                 >
-                    <Expand
+                    <ChevronDownIcon
                         className={isExpanded ? "expanded" : "not-expanded"}
                         aria-expanded={isExpanded}
                     />

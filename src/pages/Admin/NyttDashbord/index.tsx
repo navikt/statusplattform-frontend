@@ -4,7 +4,7 @@ import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
 
 import { BodyShort, Button, Detail, Select, TextField, ToggleGroup } from "@navikt/ds-react"
-import { Delete } from "@navikt/ds-icons"
+import { TrashIcon } from "@navikt/aksel-icons"
 
 import { useLoader } from "../../../utils/useLoader"
 import { Area, Dashboard } from "../../../types/types"
@@ -154,8 +154,8 @@ const NewDashboard = ({ allAreasProps }) => {
                     />
                     <div style={{height: "20px"}}/>
                     <ToggleGroup defaultValue="internal" onChange={handleToggleExternal} label="Synlighet på dashboard: ">
-                        <ToggleGroup.Item value="internal" children="Intern" /> 
-                        <ToggleGroup.Item value="external" children="Ekstern" /> 
+                        <ToggleGroup.Item value="internal">Intern</ToggleGroup.Item> 
+                        <ToggleGroup.Item value="external">Ekstern</ToggleGroup.Item> 
                     </ToggleGroup>
                     
                    <HorizontalSeparator />
@@ -282,7 +282,7 @@ const DashboardAreas = ({
                                                 }
                                             >
                                                 <label>{area.name}</label>
-                                                <Delete /> Slett
+                                                <TrashIcon /> Slett
                                             </button>
                                         </BodyShort>
                                     </li>

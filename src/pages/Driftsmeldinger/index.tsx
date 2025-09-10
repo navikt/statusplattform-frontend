@@ -1,4 +1,4 @@
-import { Back } from "@navikt/ds-icons"
+import { ChevronLeftIcon } from "@navikt/aksel-icons"
 import { Button, Heading } from "@navikt/ds-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -196,7 +196,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
                             <Button
                                 variant="tertiary"
                                 onClick={() => router.back()}
-                                icon={<Back />}
+                                icon={<ChevronLeftIcon />}
                                 className="goBackBtn"
                             >
                                 Gå tilbake

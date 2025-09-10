@@ -20,6 +20,9 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const method = req.headers.method ? String(req.headers.method) : "GET";
     const body = typeof req.headers.body === "string" ? JSON.parse(req.headers.body) : req.headers.body;
     const path = `${backendPath}${backendEndpath}`;
+    
+    console.log('requestGateway - backendEndpath:', backendEndpath);
+    console.log('requestGateway - full path:', path);
 
     let authHeaderType = "Authorization";
     if (env === "local") {

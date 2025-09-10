@@ -16,7 +16,7 @@ import {
     Select,
     TextField,
 } from "@navikt/ds-react"
-import { Copy, Delete, InformationColored } from "@navikt/ds-icons"
+import { DocPencilIcon, TrashIcon, InformationSquareIcon } from "@navikt/aksel-icons"
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
 import { fetchAllTeams } from "../../../utils/teamKatalogAPI"
@@ -90,7 +90,7 @@ const PopoverCustomized = styled(Popover)`
     }
 `
 
-const ModalContent = styled(Modal.Content)`
+const ModalContent = styled(Modal.Body)`
     width: 100vw;
 
     display: flex;
@@ -155,7 +155,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
     })
 
     useEffect(() => {
-        Modal.setAppElement("#__next")
+        // Modal.setAppElement is no longer needed in newer versions
         ;(async function () {
             let retrievedTeams: Team[] = await fetchAllTeams()
             setAllTeams(retrievedTeams)
@@ -374,7 +374,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
                                     handleTriggerHelpText(event, 0)
                                 }
                             >
-                                <InformationColored
+                                <InformationSquareIcon
                                     width="1.5em"
                                     height="1.5em"
                                 />
@@ -397,7 +397,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
                                     handleTriggerHelpText(event, 1)
                                 }
                             >
-                                <InformationColored
+                                <InformationSquareIcon
                                     width="1.5em"
                                     height="1.5em"
                                 />
@@ -422,7 +422,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
                                     handleTriggerHelpText(event, 3)
                                 }
                             >
-                                <InformationColored
+                                <InformationSquareIcon
                                     width="1.5em"
                                     height="1.5em"
                                 />
@@ -447,7 +447,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
                                     handleTriggerHelpText(event, 2)
                                 }
                             >
-                                <InformationColored
+                                <InformationSquareIcon
                                     width="1.5em"
                                     height="1.5em"
                                 />
@@ -625,7 +625,7 @@ const ComponentDependencies = ({
                             ref={buttonRef}
                             onClick={(event) => handleTriggerHelpText(event, 4)}
                         >
-                            <InformationColored width="1.5em" height="1.5em" />
+                            <InformationSquareIcon width="1.5em" height="1.5em" />
                         </button>
                     </div>
                 </div>
@@ -658,7 +658,7 @@ const ComponentDependencies = ({
                                                     <label>
                                                         {component.name}
                                                     </label>
-                                                    <Delete /> Slett
+                                                    <TrashIcon /> Slett
                                                 </button>
                                             </BodyShort>
                                         </li>
@@ -761,7 +761,7 @@ const ConnectToServiceComponent = ({
                             ref={buttonRef}
                             onClick={(event) => handleTriggerHelpText(event, 5)}
                         >
-                            <InformationColored width="1.5em" height="1.5em" />
+                            <InformationSquareIcon width="1.5em" height="1.5em" />
                         </button>
                     </div>
                 </div>
@@ -794,7 +794,7 @@ const ConnectToServiceComponent = ({
                                                     <label>
                                                         {service.name}
                                                     </label>
-                                                    <Delete /> Slett
+                                                    <TrashIcon /> Slett
                                                 </button>
                                             </BodyShort>
                                         </li>

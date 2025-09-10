@@ -3,11 +3,12 @@ import { createRef, useContext, useState } from "react"
 import { useRouter } from "next/router"
 import ProfileMenu from "./ProfileMenu"
 import BurgerMenu from "./BurgerMenu"
-import { Collapse, Expand } from "@navikt/ds-icons"
+import { ChevronUpIcon, ChevronDownIcon } from "@navikt/aksel-icons"
 import { Checkbox, Detail, Heading } from "@navikt/ds-react"
 import { FilterContext, FilterOption } from "../ContextProviders/FilterContext"
 import { RouterHomePage, RouterInternt } from "../../types/routes"
 import { UserStateContext } from "../ContextProviders/UserStatusContext"
+import Image from "next/image"
 
 const CustomHeader = styled.header`
     min-height: 106px;
@@ -204,10 +205,12 @@ const Header = ( { isExternal } : headerProps) => {
                         href={isExternal ? "/sp/Samarbeidspartner" : RouterHomePage.PATH}
                         aria-label="Lenke til forside"
                     >
-                        <img
+                        <Image
                             src="/sp/assets/nav-logo/png/black.png"
                             alt="Til forsiden"
                             aria-hidden="true"
+                            width={100}
+                            height={50}
                         />
                     </a>
                 </div>
@@ -290,9 +293,9 @@ const Filters = () => {
             >
                 <span>Tjenestestatus ({filters.length})</span>
                 {!filterCategoriesExpanded.includes("Tjenestestatus") ? (
-                    <Expand />
+                    <ChevronDownIcon />
                 ) : (
-                    <Collapse />
+                    <ChevronUpIcon />
                 )}
             </FilterCategoryButton>
 

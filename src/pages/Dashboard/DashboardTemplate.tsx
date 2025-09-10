@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 
-import { Expand } from "@navikt/ds-icons"
+import { ExpandIcon } from "@navikt/aksel-icons"
 import { BodyShort, Button, Heading } from "@navikt/ds-react"
 
 import { Area, Dashboard } from "../../types/types"
@@ -287,9 +287,11 @@ const DashboardTemplate = ({
     return (
         <DashboardContainer>
             <DigitalServicesContainer>
-                <StatusOverview dashboard={dashboard} user={user} />
-                {dashboard.areas.length > 0 && (
-                    <PortalServiceTileContainer maxWidth={maxWidth}>
+                <PortalServiceTileContainer maxWidth={maxWidth}>
+                    <div style={{ marginBottom: '3rem' }}>
+                        <StatusOverview dashboard={dashboard} user={user} />
+                    </div>
+                    {dashboard.areas.length > 0 && (
                         <AllAreas
                             expandAll={expandAll}
                             isTileExpanded={isTileExpanded}
@@ -299,12 +301,12 @@ const DashboardTemplate = ({
                             numberOfTilesPerRow={numberOfTilesPerRow}
                             rows={rows}
                         />
-                    </PortalServiceTileContainer>
-                )}
+                    )}
+                    {/* <MaintenanceScheduling /> */}
+                    <IconDescription />
+                    <StatusList service_ids={getAllServiceIds(dashboard.areas)} user={user}/>
+                </PortalServiceTileContainer>
             </DigitalServicesContainer>
-            {/* <MaintenanceScheduling /> */}
-            <IconDescription />
-            <StatusList service_ids={getAllServiceIds(dashboard.areas)} user={user}/>
         </DashboardContainer>
     )
 }
@@ -395,7 +397,7 @@ const AllAreas = ({
     }
 
     return (
-        <PortalServiceTileContainer maxWidth={maxWidth}>
+        <>
             {/*  <span className="expand-all-wrapper">
                 <ExpandAllToggle
                     toggleExpandAll={toggleExpandAll}
@@ -419,7 +421,7 @@ const AllAreas = ({
                     ))}
                 </PortalServiceTileRow>
             ))}
-        </PortalServiceTileContainer>
+        </>
     )
 }
 
@@ -540,7 +542,7 @@ const ExpandAllToggle: React.FC<{
                 <BodyShort size="small">Trekk sammen områder</BodyShort>
             )}
             <span className={expanded ? "expanded" : ""}>
-                <Expand />
+                <ExpandIcon />
             </span>
         </ToggleExpandAllButton>
     )

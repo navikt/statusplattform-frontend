@@ -1,4 +1,4 @@
-import { Delete } from "@navikt/ds-icons"
+import { TrashIcon } from "@navikt/aksel-icons"
 import { BodyShort, Button, Heading, Modal } from "@navikt/ds-react"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
@@ -205,33 +205,28 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
             <CustomizedModal
                 open={!!isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                header={{ heading: "Slette melding" }}
             >
-                <Modal.Content>
-                    <Heading spacing level="1" size="large">
-                        Slette melding
-                    </Heading>
+                <Modal.Body>
                     Ønsker du å slette meldingen med tittel:{" "}
                     <b>{opsMessage.internalHeader}</b>?
-                    <div className="modal-buttons">
-                        <Button onClick={() => setIsModalOpen(false)}>
-                            Avbryt
-                        </Button>
-                        <Button onClick={() => handleDeleteMessage()}>
-                            Slett
-                        </Button>
-                    </div>
-                </Modal.Content>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setIsModalOpen(false)}>
+                        Avbryt
+                    </Button>
+                    <Button variant="danger" onClick={() => handleDeleteMessage()}>
+                        Slett
+                    </Button>
+                </Modal.Footer>
             </CustomizedModal>
 
             <CustomizedModal
                 open={!!isActiveModalOpen}
                 onClose={() => setIsActiveModalOpen(false)}
+                header={{ heading: "Endre aktivitetsstatus" }}
             >
-                <Modal.Content>
-                    <Heading spacing level="1" size="large">
-                        Endre aktivitetsstatus
-                    </Heading>
-
+                <Modal.Body>
                     {opsMessage.isActive ? (
                         <>
                             Ønsker du å sette meldingen:{" "}
@@ -243,16 +238,15 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
                             <b>{opsMessage.internalHeader}</b>?
                         </>
                     )}
-
-                    <div className="modal-buttons">
-                        <Button onClick={() => setIsActiveModalOpen(false)}>
-                            Nei
-                        </Button>
-                        <Button onClick={() => handleChangeActiveOpsMessage()}>
-                            Ja
-                        </Button>
-                    </div>
-                </Modal.Content>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setIsActiveModalOpen(false)}>
+                        Nei
+                    </Button>
+                    <Button onClick={() => handleChangeActiveOpsMessage()}>
+                        Ja
+                    </Button>
+                </Modal.Footer>
             </CustomizedModal>
 
             <div className="ops-card-content">
@@ -272,7 +266,7 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
                             variant="tertiary"
                             className="top-row-button"
                             onClick={handleModal}
-                            icon={<Delete />}
+                            icon={<TrashIcon />}
                         />
                         <Button
                             variant="tertiary"
