@@ -56,9 +56,8 @@ const OpsMessageModal = (props: OpsMessageModalI) => {
         <>
             <CustomOpsModal
                 open={modalOpen}
-                aria-label="Modal demo"
                 onClose={() => setModalOpen(!modalOpen)}
-                aria-labelledby="modal-heading"
+                header={{ heading: "Driftsmelding" }}
                 className={opsMessage.severity.toLowerCase()}
             >
                 <Modal.Body>

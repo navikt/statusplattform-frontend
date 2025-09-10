@@ -1,4 +1,4 @@
-import { Back } from "@navikt/aksel-icons"
+import { ChevronLeftIcon } from "@navikt/aksel-icons"
 import {
     Alert,
     BodyShort,
@@ -192,7 +192,7 @@ const OpsMessageComponent = ({
                     size="small"
                     onClick={() => router.push(RouterOpsMeldinger.PATH)}
                 >
-                    <Back />
+                    <ChevronLeftIcon />
                     Se alle driftsmeldinger
                 </Button>
             </div>

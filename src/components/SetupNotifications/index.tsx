@@ -13,7 +13,7 @@ import {
     RadioGroup,
     TextField,
 } from "@navikt/ds-react"
-import { Refresh } from "@navikt/aksel-icons"
+import { ArrowCirclepathIcon } from "@navikt/aksel-icons"
 import { RouterConfirmedCreation, RouterHomePage } from "../../types/routes"
 
 const NotificationsContainer = styled.div`
@@ -208,7 +208,7 @@ const Otp: React.FC<{
                 Mottok du ikke passordet?{" "}
                 <span className="colored">
                     {" "}
-                    <Refresh />{" "}
+                    <ArrowCirclepathIcon />{" "}
                     <span
                         className="linkify"
                         onClick={() => toast.info("Nytt passord sent")}

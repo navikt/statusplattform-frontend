@@ -4,7 +4,7 @@ import { useContext, useEffect } from "react"
 import { useRouter } from "next/router"
 
 import { BodyShort, Button, Heading } from "@navikt/ds-react"
-import { Clock, Home, Next } from "@navikt/aksel-icons"
+import { ClockIcon, HouseIcon, ChevronRightIcon } from "@navikt/aksel-icons"
 
 import Footer from "../../components/Footer"
 import Header from "../../components/Header"

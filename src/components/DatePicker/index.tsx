@@ -1,4 +1,4 @@
-import { Clock } from "@navikt/aksel-icons"
+import { ClockIcon } from "@navikt/aksel-icons"
 import {
     Label,
     Select,
@@ -60,7 +60,7 @@ const TimeSelect = styled(Select)`
     }
 `
 
-const CustomClock = styled(Clock)`
+const CustomClock = styled(ClockIcon)`
     height: 2rem;
     margin: -0.05rem 0 0 0rem;
     z-index: 100;

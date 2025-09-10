@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 
-import { Expand } from "@navikt/aksel-icons"
+import { ExpandIcon } from "@navikt/aksel-icons"
 import { BodyShort, Button, Heading } from "@navikt/ds-react"
 
 import { Area, Dashboard } from "../../types/types"
@@ -542,7 +542,7 @@ const ExpandAllToggle: React.FC<{
                 <BodyShort size="small">Trekk sammen områder</BodyShort>
             )}
             <span className={expanded ? "expanded" : ""}>
-                <Expand />
+                <ExpandIcon />
             </span>
         </ToggleExpandAllButton>
     )

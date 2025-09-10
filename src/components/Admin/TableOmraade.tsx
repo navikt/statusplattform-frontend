@@ -18,7 +18,7 @@ import {
     HeartIcon,
     HeartIcon as HealthCaseIcon,
     KronerIcon,
-    NotesIcon,
+    DocPencilIcon,
     FloppydiskIcon,
     KronerIcon as SavingIcon,
     PersonGroupIcon as SocialAidIcon,
@@ -616,7 +616,7 @@ const AreaTableRow = ({
                     onClick={() => handleToggleEditArea()}
                 >
                     <a>
-                        <NotesIcon /> Rediger
+                        <DocPencilIcon /> Rediger
                     </a>
                 </CustomButton>
                 <button

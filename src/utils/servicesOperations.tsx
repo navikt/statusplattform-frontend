@@ -66,18 +66,18 @@ export const countFailingServices = (props: AreaPropsI) => {
 }
 
 const iconMap: Map<string, any> = new Map<string, any>([
-    ["0001", <BaggageIcon />],
-    ["0002", <KronerIcon />],
-    ["0003", <HeartIcon />],
-    ["0004", <PersonGroupIcon />],
-    ["0005", <HandBandageIcon />],
-    ["0006", <TasklistIcon />], //Denne er feil ifht nav.no
-    ["0007", <HeartFillIcon />],
-    ["0008", <PersonGroupFillIcon />],
-    ["0009", <KronerIcon />], //Denne er feil ifht nav.no
-    ["0010", <CalculatorIcon />],
-    ["0011", <FlowerPetalFallingIcon />],
-    ["0012", <FolderIcon />],
+    ["0001", <BaggageIcon key="0001" />],
+    ["0002", <KronerIcon key="0002" />],
+    ["0003", <HeartIcon key="0003" />],
+    ["0004", <PersonGroupIcon key="0004" />],
+    ["0005", <HandBandageIcon key="0005" />],
+    ["0006", <TasklistIcon key="0006" />], //Denne er feil ifht nav.no
+    ["0007", <HeartFillIcon key="0007" />],
+    ["0008", <PersonGroupFillIcon key="0008" />],
+    ["0009", <KronerIcon key="0009" />], //Denne er feil ifht nav.no
+    ["0010", <CalculatorIcon key="0010" />],
+    ["0011", <FlowerPetalFallingIcon key="0011" />],
+    ["0012", <FolderIcon key="0012" />],
 ])
 
 export const getIconsFromGivenCode: any = (ikon: string) => {

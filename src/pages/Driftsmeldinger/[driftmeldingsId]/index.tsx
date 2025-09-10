@@ -1,4 +1,4 @@
-import { Back } from "@navikt/aksel-icons"
+import { ChevronLeftIcon } from "@navikt/aksel-icons"
 import { Button, Heading } from "@navikt/ds-react"
 
 import Head from "next/head"
@@ -10,7 +10,7 @@ import { backendPath } from "../.."
 import { UserStateContext } from "../../../components/ContextProviders/UserStatusContext"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
 import Layout from "../../../components/Layout"
-import OpsMessageDetails from "../../../components/OpsMessageDetails"
+import OpsMessageDetailsComponent from "../../../components/OpsMessageDetails"
 import { OpsScheme, Spacer } from "../../../styles/styles"
 import { OpsMessageI, SeverityEnum } from "../../../types/opsMessage"
 import { RouterError, RouterOpsMeldinger } from "../../../types/routes"
@@ -163,7 +163,7 @@ const OpsMessageComponent = ({
                     size="small"
                     onClick={() => router.push(RouterOpsMeldinger.PATH)}
                 >
-                    <Back />
+                    <ChevronLeftIcon />
                     Se alle driftsmeldinger
                 </Button>
             </div>
@@ -173,7 +173,7 @@ const OpsMessageComponent = ({
                 </SubHeader>
                 <Spacer height="0.3rem" />
             </div>
-            <OpsMessageDetails opsMessage={opsMessage} navIdent={navIdent} />
+            <OpsMessageDetailsComponent opsMessage={opsMessage} navIdent={navIdent} />
 
             <div className="button-container">
                 <Button variant="secondary" onClick={() => router.back()}>

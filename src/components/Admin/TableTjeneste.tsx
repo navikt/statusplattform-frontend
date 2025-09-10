@@ -253,22 +253,25 @@ const TableTjeneste = () => {
             <Modal
                 open={!!serviceToDelete}
                 onClose={() => setServiceToDelete(null)}
+                header={{ heading: "Bekreft sletting" }}
             >
-                <ModalInner>
+                <Modal.Body>
                     Ønsker du å slette tjenesten?
-                    <Button
-                        variant="secondary"
-                        onClick={confirmDeleteServiceHandler}
-                    >
-                        Slett tjeneste
-                    </Button>
+                </Modal.Body>
+                <Modal.Footer>
                     <Button
                         variant="secondary"
                         onClick={() => setServiceToDelete(null)}
                     >
                         Avbryt
                     </Button>
-                </ModalInner>
+                    <Button
+                        variant="danger"
+                        onClick={confirmDeleteServiceHandler}
+                    >
+                        Slett tjeneste
+                    </Button>
+                </Modal.Footer>
             </Modal>
 
             <div className="centered">

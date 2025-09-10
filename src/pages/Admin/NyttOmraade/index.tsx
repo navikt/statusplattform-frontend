@@ -2,7 +2,7 @@ import styled from "styled-components"
 import router from "next/router"
 import { useContext, useEffect, useState } from "react"
 
-import { Delete } from "@navikt/aksel-icons"
+import { TrashIcon } from "@navikt/aksel-icons"
 import { BodyShort, Button, Detail, Select, TextField } from "@navikt/ds-react"
 import { toast, ToastContainer } from "react-toastify"
 
@@ -293,7 +293,7 @@ const AreaServices = ({
                                                 }
                                             >
                                                 <label>{service.name}</label>
-                                                <Delete /> Slett
+                                                <TrashIcon /> Slett
                                             </button>
                                         </BodyShort>
                                     </li>
