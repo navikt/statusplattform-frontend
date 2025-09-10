@@ -13,7 +13,7 @@ import {
     RadioGroup,
     TextField,
 } from "@navikt/ds-react"
-import { Refresh } from "@navikt/ds-icons"
+import { Refresh } from "@navikt/aksel-icons"
 import { RouterConfirmedCreation, RouterHomePage } from "../../types/routes"
 
 const NotificationsContainer = styled.div`

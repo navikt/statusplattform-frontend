@@ -2,7 +2,7 @@ import Link from "next/link"
 import styled from "styled-components"
 import { useContext, useEffect, useState } from "react"
 import { Accordion, Button } from "@navikt/ds-react"
-import { Expand } from "@navikt/ds-icons"
+import { ChevronDownIcon } from "@navikt/aksel-icons"
 import { BodyShort, Detail, Heading } from "@navikt/ds-react"
 import {
     ErrorFilledCustomized,
@@ -571,7 +571,7 @@ const SubAreaComponent: React.FC<{
                 {" "}
                 <StatusIconHandler status={subArea.status} isArea={false} />
                 <b>{subArea.name}</b>
-                <Expand className={!isToggled ? "expanded" : "not-expanded"} />
+                <ChevronDownIcon className={!isToggled ? "expanded" : "not-expanded"} />
             </button>
 
             <Collapse isOpened={isToggled}>

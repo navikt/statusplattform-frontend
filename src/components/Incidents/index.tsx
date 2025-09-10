@@ -3,7 +3,7 @@ import { useContext } from "react"
 import { useRouter } from "next/router"
 
 import { BodyShort, Button, Heading, Panel } from "@navikt/ds-react"
-import { Bell } from "@navikt/ds-icons"
+import { Bell } from "@navikt/aksel-icons"
 
 import { handleAndSetStatusIcon } from "../PortalServiceTile"
 import { UserStateContext } from "../ContextProviders/UserStatusContext"

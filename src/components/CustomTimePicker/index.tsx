@@ -1,4 +1,4 @@
-import { Clock } from "@navikt/ds-icons"
+import { Clock } from "@navikt/aksel-icons"
 import { BodyShort, Select } from "@navikt/ds-react"
 import styled from "styled-components"
 

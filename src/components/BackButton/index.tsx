@@ -1,7 +1,7 @@
 
 import { useRouter } from 'next/router'
 
-import { Back } from "@navikt/ds-icons"
+import { Back } from "@navikt/aksel-icons"
 import { Button } from '@navikt/ds-react'
 
 

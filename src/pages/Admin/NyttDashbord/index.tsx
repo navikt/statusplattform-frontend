@@ -4,7 +4,7 @@ import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
 
 import { BodyShort, Button, Detail, Select, TextField, ToggleGroup } from "@navikt/ds-react"
-import { Delete } from "@navikt/ds-icons"
+import { Delete } from "@navikt/aksel-icons"
 
 import { useLoader } from "../../../utils/useLoader"
 import { Area, Dashboard } from "../../../types/types"

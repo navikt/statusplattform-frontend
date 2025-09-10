@@ -6,7 +6,7 @@ import { useContext, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
-import { Close, Delete, Expand, Notes, SaveFile } from "@navikt/ds-icons"
+import { XMarkIcon, TrashIcon, ChevronDownIcon, FileTextIcon, FloppydiskIcon } from "@navikt/aksel-icons"
 import {
     BodyShort,
     Button,
@@ -628,7 +628,7 @@ const ServiceRow = ({
                     onClick={() => handleEditService(service)}
                 >
                     <a>
-                        <Notes /> Rediger
+                        <FileTextIcon /> Rediger
                     </a>
                 </CustomButton>
 
@@ -638,14 +638,14 @@ const ServiceRow = ({
                     aria-label="Slett tjeneste"
                 >
                     <a>
-                        <Delete /> Slett
+                        <TrashIcon /> Slett
                     </a>
                 </button>
                 <button
                     className="option"
                     onClick={() => toggleExpanded(service)}
                 >
-                    <Expand
+                    <ChevronDownIcon
                         className={isExpanded ? "expanded" : "not-expanded"}
                         aria-expanded={isExpanded}
                     />
@@ -956,7 +956,7 @@ const ServiceRowEditting = ({
             <div className="button-container">
                 <button type="button" className="option" onClick={handleSubmit}>
                     <a>
-                        <SaveFile /> Lagre
+                        <FloppydiskIcon /> Lagre
                     </a>
                 </button>
                 <CustomButton
@@ -964,7 +964,7 @@ const ServiceRowEditting = ({
                     onClick={() => handleCloseEditService(service)}
                 >
                     <a>
-                        <Close /> Avbryt
+                        <XMarkIcon /> Avbryt
                     </a>
                 </CustomButton>
                 <button
@@ -973,14 +973,14 @@ const ServiceRowEditting = ({
                     aria-label="Slett tjeneste"
                 >
                     <a>
-                        <Delete /> Slett
+                        <TrashIcon /> Slett
                     </a>
                 </button>
                 <button
                     className="option"
                     onClick={() => toggleExpanded(service)}
                 >
-                    <Expand
+                    <ChevronDownIcon
                         className={isExpanded ? "expanded" : "not-expanded"}
                         aria-expanded={isExpanded}
                     />

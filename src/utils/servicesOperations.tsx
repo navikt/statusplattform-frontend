@@ -1,19 +1,18 @@
 import { Area, Service } from "../types/types"
 
 import {
-    Bag,
-    Folder,
-    HealthCase,
-    Money,
-    FillForms,
-    HandBandage,
-    GuideDog,
-    Calculator,
-    FlowerBladeFall,
-    SocialAid,
-    Heart,
-    Saving,
-} from "@navikt/ds-icons"
+    BaggageIcon,
+    FolderIcon,
+    HeartIcon,
+    TasklistIcon,
+    HandBandageIcon,
+    PersonGroupIcon,
+    CalculatorIcon,
+    FlowerPetalFallingIcon,
+    PersonGroupFillIcon,
+    HeartFillIcon,
+    KronerIcon,
+} from "@navikt/aksel-icons"
 
 interface AreaPropsI {
     areas: Area[]
@@ -67,23 +66,23 @@ export const countFailingServices = (props: AreaPropsI) => {
 }
 
 const iconMap: Map<string, any> = new Map<string, any>([
-    ["0001", <Bag />],
-    ["0002", <Saving />],
-    ["0003", <Heart />],
-    ["0004", <SocialAid />],
-    ["0005", <HandBandage />],
-    ["0006", <FillForms />], //Denne er feil ifht nav.no
-    ["0007", <HealthCase />],
-    ["0008", <GuideDog />],
-    ["0009", <Money />], //Denne er feil ifht nav.no
-    ["0010", <Calculator />],
-    ["0011", <FlowerBladeFall />],
-    ["0012", <Folder />],
+    ["0001", <BaggageIcon />],
+    ["0002", <KronerIcon />],
+    ["0003", <HeartIcon />],
+    ["0004", <PersonGroupIcon />],
+    ["0005", <HandBandageIcon />],
+    ["0006", <TasklistIcon />], //Denne er feil ifht nav.no
+    ["0007", <HeartFillIcon />],
+    ["0008", <PersonGroupFillIcon />],
+    ["0009", <KronerIcon />], //Denne er feil ifht nav.no
+    ["0010", <CalculatorIcon />],
+    ["0011", <FlowerPetalFallingIcon />],
+    ["0012", <FolderIcon />],
 ])
 
 export const getIconsFromGivenCode: any = (ikon: string) => {
     if (typeof ikon != "string") {
-        return <Folder />
+        return <FolderIcon />
     }
     if (iconMap.has(ikon)) {
         return iconMap.get(ikon)

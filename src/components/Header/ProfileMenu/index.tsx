@@ -1,5 +1,4 @@
-import { ChatExclamationmarkIcon } from "@navikt/aksel-icons"
-import { Employer, Logout, People } from "@navikt/ds-icons"
+import { ChatExclamationmarkIcon, Buildings2Icon, LeaveIcon, PersonGroupIcon } from "@navikt/aksel-icons"
 import { Button, Link, Popover } from "@navikt/ds-react"
 import { useRouter } from "next/router"
 import { useState } from "react"
@@ -109,7 +108,7 @@ const ProfileMenu: React.FC<{
                         onClick={(event) => handleSetOpen(event.currentTarget)}
                         aria-expanded={!!anchorEl}
                         ref={setAnchor}
-                        icon={<People />}
+                        icon={<PersonGroupIcon />}
                         iconPosition="right"
                     >
                         {navIdent}
@@ -120,7 +119,6 @@ const ProfileMenu: React.FC<{
                         anchorEl={anchor}
                         placement="bottom-end"
                     >
-                        <Popover.Content>
                             <CustomPopoverContent>
                                 <UserName>
                                     <b>̧{name}</b>
@@ -152,7 +150,7 @@ const ProfileMenu: React.FC<{
                                             }
                                             className="internalLinks"
                                         >
-                                            <Employer className="adminIcon" />{" "}
+                                            <Buildings2Icon className="adminIcon" />{" "}
                                             {RouterAdmin.NAME}
                                         </a>
                                     </div>
@@ -164,12 +162,11 @@ const ProfileMenu: React.FC<{
                                         href={RouterLogout.PATH}
                                         className="internalLinks"
                                     >
-                                        <Logout className="logOutIcon" /> Logg
+                                        <LeaveIcon className="logOutIcon" /> Logg
                                         ut
                                     </a>
                                 </div>
-                            </CustomPopoverContent>{" "}
-                        </Popover.Content>
+                            </CustomPopoverContent>
                     </Popover>
                 </>
             ) : (
@@ -177,7 +174,7 @@ const ProfileMenu: React.FC<{
                     variant="secondary"
                     onClick={() => router.push(RouterLogin.PATH)}
                     aria-expanded={!!anchorEl}
-                    icon={<People />}
+                    icon={<PersonGroupIcon />}
                     iconPosition="right"
                 >
                     Logg inn

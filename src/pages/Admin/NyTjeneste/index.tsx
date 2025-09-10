@@ -19,7 +19,7 @@ import {
     Select,
     TextField,
 } from "@navikt/ds-react"
-import { Copy, Delete, InformationColored } from "@navikt/ds-icons"
+import { Copy, Delete, InformationColored } from "@navikt/aksel-icons"
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
 import { fetchServicesMinimal, postService } from "../../../utils/servicesAPI"
@@ -87,7 +87,7 @@ const PopoverCustomized = styled(Popover)`
     }
 `
 
-const ModalContent = styled(Modal.Content)`
+const ModalContent = styled(Modal.Body)`
     width: 100vw;
 
     display: flex;
@@ -138,8 +138,7 @@ const NewService = () => {
     const [popoverText, setPopoverText] = useState("")
 
     useEffect(() => {
-        // Eksempelbruk i en standard nextjs app
-        Modal.setAppElement("#__next")
+        // Modal.setAppElement is no longer needed in newer versions
         ;(async function () {
             const retrievedServices: Service[] = await fetchServicesMinimal()
             const retrievedComponents: Component[] = await fetchComponentsMinimal()

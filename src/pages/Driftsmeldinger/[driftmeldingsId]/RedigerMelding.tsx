@@ -1,4 +1,4 @@
-import { Back } from "@navikt/ds-icons"
+import { Back } from "@navikt/aksel-icons"
 import {
     Alert,
     BodyShort,

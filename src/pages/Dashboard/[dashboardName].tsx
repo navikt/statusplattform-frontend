@@ -11,7 +11,7 @@ import DashboardTemplate from "./DashboardTemplate"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import { RouterPrivatperson } from "../../types/routes"
 import { Dashboard } from "../../types/types"
-import { FullscreenEnter, FullscreenExit } from "@navikt/ds-icons"
+import { FullscreenEnter, FullscreenExit } from "@navikt/aksel-icons"
 import { EndPathDashboards } from "../../utils/apiHelper"
 import { GetServerSideProps } from "next"
 

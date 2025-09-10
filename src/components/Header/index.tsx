@@ -3,7 +3,7 @@ import { createRef, useContext, useState } from "react"
 import { useRouter } from "next/router"
 import ProfileMenu from "./ProfileMenu"
 import BurgerMenu from "./BurgerMenu"
-import { Collapse, Expand } from "@navikt/ds-icons"
+import { ChevronUpIcon, ChevronDownIcon } from "@navikt/aksel-icons"
 import { Checkbox, Detail, Heading } from "@navikt/ds-react"
 import { FilterContext, FilterOption } from "../ContextProviders/FilterContext"
 import { RouterHomePage, RouterInternt } from "../../types/routes"
@@ -290,9 +290,9 @@ const Filters = () => {
             >
                 <span>Tjenestestatus ({filters.length})</span>
                 {!filterCategoriesExpanded.includes("Tjenestestatus") ? (
-                    <Expand />
+                    <ChevronDownIcon />
                 ) : (
-                    <Collapse />
+                    <ChevronUpIcon />
                 )}
             </FilterCategoryButton>
 

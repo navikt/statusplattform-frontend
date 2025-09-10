@@ -1,7 +1,7 @@
 import React from "react"
 import styled from "styled-components"
 
-import { Telephone, Email } from "@navikt/ds-icons"
+import { Telephone, Email } from "@navikt/aksel-icons"
 import { Button, TextField } from "@navikt/ds-react"
 
 import { ISource, SourceType } from "../../types/source"

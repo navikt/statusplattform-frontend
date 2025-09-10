@@ -4,7 +4,7 @@ import Head from "next/head"
 import { toast } from "react-toastify"
 import styled from "styled-components"
 
-import { Close, Delete, Expand, Notes, SaveFile } from "@navikt/ds-icons"
+import { XMarkIcon, TrashIcon, ChevronDownIcon, FileTextIcon, FloppydiskIcon } from "@navikt/aksel-icons"
 import { BodyShort, Button, Modal, Select, TextField } from "@navikt/ds-react"
 
 import CustomNavSpinner from "../CustomNavSpinner"
@@ -227,22 +227,25 @@ const Dashboards: React.FC<{
             <Modal
                 open={!!dashboardToDelete}
                 onClose={() => setDashboardToDelete(null)}
+                header={{ heading: "Bekreft sletting" }}
             >
-                <ModalInner>
+                <Modal.Body>
                     Ønsker du å slette dashbordet?
-                    <Button
-                        variant="secondary"
-                        onClick={confirmDeleteDashboardHandler}
-                    >
-                        Slett dashbord
-                    </Button>
+                </Modal.Body>
+                <Modal.Footer>
                     <Button
                         variant="secondary"
                         onClick={() => setDashboardToDelete(null)}
                     >
                         Avbryt
                     </Button>
-                </ModalInner>
+                    <Button
+                        variant="danger"
+                        onClick={confirmDeleteDashboardHandler}
+                    >
+                        Slett dashbord
+                    </Button>
+                </Modal.Footer>
             </Modal>
 
             <div>
@@ -346,7 +349,7 @@ const CurrentDashboardData = ({
             <div className="button-container">
                 <CustomButton className="option" onClick={handleEditDashboard}>
                     <a>
-                        <Notes /> Rediger
+                        <FileTextIcon /> Rediger
                     </a>
                 </CustomButton>
                 <button
@@ -355,7 +358,7 @@ const CurrentDashboardData = ({
                     aria-label="Slett område"
                 >
                     <a>
-                        <Delete /> Slett
+                        <TrashIcon /> Slett
                     </a>
                 </button>
                 <button
@@ -363,7 +366,7 @@ const CurrentDashboardData = ({
                     onClick={toggleExpanded}
                     aria-expanded={expandedList.includes(dashboard.id)}
                 >
-                    <Expand
+                    <ChevronDownIcon
                         className={
                             expandedList.includes(dashboard.id)
                                 ? "expanded"
@@ -482,7 +485,7 @@ const CurrentlyEdittingDashboard = ({
                         onClick={handleSubmit}
                     >
                         <a>
-                            <SaveFile /> Lagre
+                            <FloppydiskIcon /> Lagre
                         </a>
                     </button>
 
@@ -492,7 +495,7 @@ const CurrentlyEdittingDashboard = ({
                         onClick={handleDisableEdit}
                     >
                         <a>
-                            <Close /> Avbryt
+                            <XMarkIcon /> Avbryt
                         </a>
                     </button>
 
@@ -503,7 +506,7 @@ const CurrentlyEdittingDashboard = ({
                         aria-label="Slett dashbord"
                     >
                         <a>
-                            <Delete /> Slett
+                            <TrashIcon /> Slett
                         </a>
                     </button>
 
@@ -513,7 +516,7 @@ const CurrentlyEdittingDashboard = ({
                         onClick={toggleExpanded}
                         aria-expanded={isExpanded}
                     >
-                        <Expand
+                        <ChevronDownIcon
                             className={isExpanded ? "expanded" : "not-expanded"}
                         />
                     </button>

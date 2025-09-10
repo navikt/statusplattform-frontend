@@ -5,24 +5,24 @@ import styled from "styled-components"
 import { toast } from "react-toastify"
 
 import {
-    Bag,
-    Calculator,
-    Close,
-    Delete,
-    Expand,
-    FillForms,
-    FlowerBladeFall,
-    Folder,
-    GuideDog,
-    HandBandage,
-    HealthCase,
-    Heart,
-    Money,
-    Notes,
-    SaveFile,
-    Saving,
-    SocialAid,
-} from "@navikt/ds-icons"
+    BaggageIcon,
+    CalculatorIcon,
+    XMarkIcon,
+    TrashIcon,
+    ChevronDownIcon,
+    TasklistIcon,
+    FlowerPetalFallingIcon,
+    FolderIcon,
+    PersonGroupIcon,
+    HandBandageIcon,
+    HeartIcon,
+    HeartIcon as HealthCaseIcon,
+    KronerIcon,
+    NotesIcon,
+    FloppydiskIcon,
+    KronerIcon as SavingIcon,
+    PersonGroupIcon as SocialAidIcon,
+} from "@navikt/aksel-icons"
 
 import { BodyShort, Button, Modal, Select, TextField } from "@navikt/ds-react"
 import { useLoader } from "../../utils/useLoader"
@@ -233,22 +233,28 @@ const TableOmraade = () => {
                 <title>Admin - Områder - status.nav.no</title>
             </Head>
 
-            <Modal open={!!areaToDelete} onClose={() => setAreaToDelete(null)}>
-                <ModalInner>
+            <Modal 
+                open={!!areaToDelete} 
+                onClose={() => setAreaToDelete(null)}
+                header={{ heading: "Bekreft sletting" }}
+            >
+                <Modal.Body>
                     Ønsker du å slette området?
-                    <Button
-                        variant="secondary"
-                        onClick={confirmDeleteAreaHandler}
-                    >
-                        Slett området
-                    </Button>
+                </Modal.Body>
+                <Modal.Footer>
                     <Button
                         variant="secondary"
                         onClick={() => setAreaToDelete(null)}
                     >
                         Avbryt
                     </Button>
-                </ModalInner>
+                    <Button
+                        variant="danger"
+                        onClick={confirmDeleteAreaHandler}
+                    >
+                        Slett området
+                    </Button>
+                </Modal.Footer>
             </Modal>
 
             <div className="centered">
@@ -331,18 +337,18 @@ const TableOmraade = () => {
 /* ------------------------------------------- COMMON DATA BELOW --------------------------------------------------------- */
 
 export const options = [
-    { value: "0001", label: "Bag", icon: <Bag /> },
-    { value: "0002", label: "Sparepenger", icon: <Saving /> },
-    { value: "0003", label: "Hjerte", icon: <Heart /> },
-    { value: "0004", label: "Sosialstøtte", icon: <SocialAid /> },
-    { value: "0005", label: "Bandasje", icon: <HandBandage /> },
-    { value: "0006", label: "Skjemautfylt", icon: <FillForms /> },
-    { value: "0007", label: "Førstehjelp", icon: <HealthCase /> },
-    { value: "0008", label: "Guidehund", icon: <GuideDog /> },
-    { value: "0009", label: "Penger", icon: <Money /> },
-    { value: "0010", label: "Kalkulator", icon: <Calculator /> },
-    { value: "0011", label: "Blomst", icon: <FlowerBladeFall /> },
-    { value: "0012", label: "Mappe", icon: <Folder /> },
+    { value: "0001", label: "Bag", icon: <BaggageIcon /> },
+    { value: "0002", label: "Sparepenger", icon: <SavingIcon /> },
+    { value: "0003", label: "Hjerte", icon: <HeartIcon /> },
+    { value: "0004", label: "Sosialstøtte", icon: <SocialAidIcon /> },
+    { value: "0005", label: "Bandasje", icon: <HandBandageIcon /> },
+    { value: "0006", label: "Skjemautfylt", icon: <TasklistIcon /> },
+    { value: "0007", label: "Førstehjelp", icon: <HealthCaseIcon /> },
+    { value: "0008", label: "Guidehund", icon: <PersonGroupIcon /> },
+    { value: "0009", label: "Penger", icon: <KronerIcon /> },
+    { value: "0010", label: "Kalkulator", icon: <CalculatorIcon /> },
+    { value: "0011", label: "Blomst", icon: <FlowerPetalFallingIcon /> },
+    { value: "0012", label: "Mappe", icon: <FolderIcon /> },
 ]
 
 /* -------------------------------------------  --------------------------------------------------------- */
@@ -610,7 +616,7 @@ const AreaTableRow = ({
                     onClick={() => handleToggleEditArea()}
                 >
                     <a>
-                        <Notes /> Rediger
+                        <NotesIcon /> Rediger
                     </a>
                 </CustomButton>
                 <button
@@ -619,7 +625,7 @@ const AreaTableRow = ({
                     aria-label="Slett område"
                 >
                     <a>
-                        <Delete /> Slett
+                        <TrashIcon /> Slett
                     </a>
                 </button>
                 <button
@@ -627,7 +633,7 @@ const AreaTableRow = ({
                     onClick={toggleExpanded}
                     aria-expanded={isExpanded}
                 >
-                    <Expand
+                    <ChevronDownIcon
                         className={isExpanded ? "expanded" : "not-expanded"}
                     />
                 </button>
@@ -916,7 +922,7 @@ const CurrentlyEdittingArea = ({
                         onClick={handleSubmit}
                     >
                         <a>
-                            <SaveFile /> Lagre
+                            <FloppydiskIcon /> Lagre
                         </a>
                     </button>
                     <button
@@ -926,7 +932,7 @@ const CurrentlyEdittingArea = ({
                         aria-label="Fjern dashbord"
                     >
                         <a>
-                            <Close /> Avbryt
+                            <XMarkIcon /> Avbryt
                         </a>
                     </button>
                     <button
@@ -936,7 +942,7 @@ const CurrentlyEdittingArea = ({
                         aria-label="Slett område"
                     >
                         <a>
-                            <Delete /> Slett
+                            <TrashIcon /> Slett
                         </a>
                     </button>
                     <button
@@ -945,7 +951,7 @@ const CurrentlyEdittingArea = ({
                         onClick={toggleExpanded}
                         aria-expanded={isExpanded}
                     >
-                        <Expand
+                        <ChevronDownIcon
                             className={isExpanded ? "expanded" : "not-expanded"}
                         />
                     </button>

@@ -15,7 +15,7 @@ import { Area, Component, Dashboard, Service } from "../../types/types"
 import { TitleContext } from "../../components/ContextProviders/TitleContext"
 import { Heading } from "@navikt/ds-react"
 import TableDashbord from "../../components/Admin/TableDashbord"
-import { Close } from "@navikt/ds-icons"
+import { XMarkIcon } from "@navikt/aksel-icons"
 import TableOmraade from "../../components/Admin/TableOmraade"
 import TableTjeneste from "../../components/Admin/TableTjeneste"
 import TableKomponent from "../../components/Admin/TableKomponent"
@@ -352,7 +352,7 @@ const AdminPage = ({
 
 // HELPER BELOW
 
-export const CloseCustomized = styled(Close)`
+export const CloseCustomized = styled(XMarkIcon)`
     color: red;
     :hover {
         color: grey;
