@@ -46,7 +46,7 @@ export const getServerSideProps = async (context) => {
     }
 }
 
-const opsMessageDetails = ({ opsMessage, retrievedServices }) => {
+const OpsMessageDetails = ({ opsMessage, retrievedServices }) => {
     const [isLoading, setIsLoading] = useState(true)
 
     const user = useContext(UserStateContext)
@@ -223,4 +223,4 @@ const OpsDetailsContainer = styled.div`
         border: 3px solid var(--a-border-warning);
     }
 `
-export default opsMessageDetails
+export default OpsMessageDetails

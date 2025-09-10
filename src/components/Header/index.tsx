@@ -8,6 +8,7 @@ import { Checkbox, Detail, Heading } from "@navikt/ds-react"
 import { FilterContext, FilterOption } from "../ContextProviders/FilterContext"
 import { RouterHomePage, RouterInternt } from "../../types/routes"
 import { UserStateContext } from "../ContextProviders/UserStatusContext"
+import Image from "next/image"
 
 const CustomHeader = styled.header`
     min-height: 106px;
@@ -204,10 +205,12 @@ const Header = ( { isExternal } : headerProps) => {
                         href={isExternal ? "/sp/Samarbeidspartner" : RouterHomePage.PATH}
                         aria-label="Lenke til forside"
                     >
-                        <img
+                        <Image
                             src="/sp/assets/nav-logo/png/black.png"
                             alt="Til forsiden"
                             aria-hidden="true"
+                            width={100}
+                            height={50}
                         />
                     </a>
                 </div>

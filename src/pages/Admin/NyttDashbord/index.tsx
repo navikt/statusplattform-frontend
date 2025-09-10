@@ -154,8 +154,8 @@ const NewDashboard = ({ allAreasProps }) => {
                     />
                     <div style={{height: "20px"}}/>
                     <ToggleGroup defaultValue="internal" onChange={handleToggleExternal} label="Synlighet på dashboard: ">
-                        <ToggleGroup.Item value="internal" children="Intern" /> 
-                        <ToggleGroup.Item value="external" children="Ekstern" /> 
+                        <ToggleGroup.Item value="internal">Intern</ToggleGroup.Item> 
+                        <ToggleGroup.Item value="external">Ekstern</ToggleGroup.Item> 
                     </ToggleGroup>
                     
                    <HorizontalSeparator />

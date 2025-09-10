@@ -93,7 +93,7 @@ const CreateNotifications = () => {
     return (
         <NotificationsContainer>
             <Heading spacing level="2" size="medium">
-                For å få "varsler" må du opprette en profil
+                For å få &quot;varsler&quot; må du opprette en profil
             </Heading>
 
             <BodyShort>

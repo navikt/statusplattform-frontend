@@ -5,6 +5,7 @@ import { Telephone, Email } from "@navikt/aksel-icons"
 import { Button, TextField } from "@navikt/ds-react"
 
 import { ISource, SourceType } from "../../types/source"
+import Image from "next/image"
 
 const SubscribeModalContainer = styled.div`
     position: relative;
@@ -100,10 +101,12 @@ const subscribeSources: ISource[] = [
         id: SourceType.slack,
         title: "Slack",
         content: (
-            <img
+            <Image
                 src="/sp/assets/images/slack-icon.svg"
                 alt="Slack icon"
                 aria-labelledby="Slack-ikon"
+                width={40}
+                height={40}
             />
         ),
         text: "Du kan få statusmeldinger rett i Slack. Trykk nedenfor for å starte abonnering",

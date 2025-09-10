@@ -55,7 +55,7 @@ const TableDashbord = () => {
             setup()
         }
         controlVar = false
-    }, [])
+    }, [changeTitle])
 
     const reload = async () => {
         await fetchDashboardsList()
@@ -426,7 +426,7 @@ const CurrentlyEdittingDashboard = ({
                     toast.error("Noe gikk galt ved henting av dashbord-data")
                 })
         })()
-    }, [])
+    }, [dashboard.id])
 
     if (isLoading) {
         return <CustomNavSpinner />
@@ -555,7 +555,7 @@ const EditAreasInDashboard: React.FC<{
         } else {
             updateSelectedArea(null)
         }
-    }, [allAreas, updatedDashboard.areas])
+    }, [allAreas, updatedDashboard.areas, availableAreas])
 
     const handleUpdateSelectedArea = (event) => {
         const idOfSelectedArea: string = event.target.value
