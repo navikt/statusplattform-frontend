@@ -202,7 +202,7 @@ const Header = ( { isExternal } : headerProps) => {
             <HeaderContent>
                 <div className="header-menues">
                     <a
-                        href={isExternal ? "/sp/Samarbeidspartner" : RouterHomePage.PATH}
+                        href={isExternal ? "/Samarbeidspartner" : RouterHomePage.PATH}
                         aria-label="Lenke til forside"
                     >
                         <Image
