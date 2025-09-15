@@ -2,11 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Button, TextField, Select } from '@navikt/ds-react';
 import { XMarkIcon } from '@navikt/aksel-icons';
-
-interface Service {
-  id: string;
-  name: string;
-}
+import { Service } from '../types/types';
 
 interface SubscriptionModalProps {
   isOpen: boolean;
@@ -138,18 +134,18 @@ const SubscriptionModal: React.FC<SubscriptionModalProps> = ({
                 <ServiceMultiSelect>
                   <SectionTitle>Velg tjenester</SectionTitle>
                   <ServiceCheckboxGroup>
-                    {services.map((service) => (
+                    {services.filter(service => service.id).map((service) => (
                       <ServiceCheckboxOption key={service.id}>
                         <input
                           type="checkbox"
                           id={`service-${service.id}`}
-                          value={service.id}
-                          checked={selectedServices.includes(service.id)}
+                          value={service.id!}
+                          checked={selectedServices.includes(service.id!)}
                           onChange={(e) => {
                             if (e.target.checked) {
-                              setSelectedServices([...selectedServices, service.id]);
+                              setSelectedServices([...selectedServices, service.id!]);
                             } else {
-                              setSelectedServices(selectedServices.filter(id => id !== service.id));
+                              setSelectedServices(selectedServices.filter(id => id !== service.id!));
                             }
                           }}
                         />
