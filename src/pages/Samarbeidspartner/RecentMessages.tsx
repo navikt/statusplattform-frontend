@@ -4,36 +4,35 @@ import { OpsMessageI } from "../../types/opsMessage";
 import { Service } from "../../types/types";
 import styled from "styled-components";
 import { fetchMessageByServiceList } from "../../utils/dashboardsAPI";
-import { formatDistanceToNow, parseISO, isAfter } from "date-fns";
+import { formatDistanceToNow, parseISO, isAfter, subDays } from "date-fns";
 import { nb } from "date-fns/locale";
 import { UserData } from "../../types/userData";
 import { PencilIcon } from '@navikt/aksel-icons';
-import opsMessageDetails from "../Driftsmeldinger/[driftmeldingsId]";
 
-interface StatusListProps {
+interface RecentMessagesProps {
   service_ids: string[];
   user?: UserData;
 }
 
-const StatusList = ({ service_ids, user }: StatusListProps) => {
-  const [serverOpsMessages, setServerOpsMessages] = useState<OpsMessageI[]>([]);
+const RecentMessages = ({ service_ids, user }: RecentMessagesProps) => {
+  const [recentMessages, setRecentMessages] = useState<OpsMessageI[]>([]);
   const [groupedMessages, setGroupedMessages] = useState<Record<string, OpsMessageI[]>>({});
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const messages = await fetchMessageByServiceList(service_ids);
+        const sevenDaysAgo = subDays(new Date(), 7);
 
-        // Filter to only show future maintenance messages
-        const currentTime = new Date();
-        const maintenanceMessages = messages.filter(message => {
-          const messageStartTime = new Date(message.startTime);
-          return message.status === "MAITENANCE" && isAfter(messageStartTime, currentTime);
+        // Filter messages from the last 7 days (including maintenance that has passed)
+        const recent = messages.filter(message => {
+          const messageDate = new Date(message.startTime);
+          return isAfter(messageDate, sevenDaysAgo);
         });
 
-        maintenanceMessages.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+        recent.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
 
-        const grouped = maintenanceMessages.reduce((acc: Record<string, OpsMessageI[]>, message) => {
+        const grouped = recent.reduce((acc: Record<string, OpsMessageI[]>, message) => {
           const messageDate = new Date(message.startTime).toLocaleDateString("nb-NO", {
             day: "numeric",
             month: "long",
@@ -45,21 +44,21 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
           acc[messageDate].push(message);
           return acc;
         }, {});
-        setServerOpsMessages(maintenanceMessages);
+
+        setRecentMessages(recent);
         setGroupedMessages(grouped);
       } catch (error) {
-        console.error("Failed to fetch operations messages:", error);
+        console.error("Failed to fetch recent operations messages:", error);
       }
     };
 
     fetchData();
   }, [service_ids]);
 
-  console.log(serverOpsMessages);
   return (
-    <StatusContainer>
-      {serverOpsMessages.length === 0 ? (
-        <NoMessages>Ingen varsler eller meldinger tilgjengelig.</NoMessages>
+    <MessagesContainer>
+      {recentMessages.length === 0 ? (
+        <NoMessages>Ingen driftsmeldinger siste 7 dagene.</NoMessages>
       ) : (
         Object.keys(groupedMessages).map((date) => (
           <div key={date}>
@@ -79,8 +78,7 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
                       </AddOpsMessageLabel>
                     ) : null}
                   </HeaderContainer>
-                  
-                  {/* Viser status basert på isActive */}
+
                   <StatusText isActive={message.isActive}>
                     Status: {message.isActive ? "Aktiv" : "Inaktiv"}
                   </StatusText>
@@ -124,11 +122,11 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
           </div>
         ))
       )}
-    </StatusContainer>
+    </MessagesContainer>
   );
 };
 
-// Styled komponent for status
+// Styled components (reusing from statusList.tsx)
 const StatusText = styled(BodyShort)<{ isActive: boolean }>`
   font-size: 0.8125rem;
   font-weight: 500;
@@ -148,7 +146,7 @@ const StatusText = styled(BodyShort)<{ isActive: boolean }>`
   }
 `;
 
-const StatusContainer = styled.div`
+const MessagesContainer = styled.div`
   padding: 2.5rem;
   width: 100%;
   background-color: white;
@@ -159,7 +157,6 @@ const HeaderContainer = styled.div`
   justify-content: space-between;
   align-items: center;
 `;
-
 
 const InternalMessage = styled(BodyShort)`
   margin: 0.75rem 0;
@@ -246,30 +243,26 @@ const AddOpsMessageLabel = styled.div`
   text-align: end;
 `;
 
-// Funksjon for å vise hvor lenge siden meldingen ble postet
+// Helper functions (reusing from statusList.tsx)
 const getPostedTime = (startTime) => {
   return formatDistanceToNow(parseISO(startTime), { addSuffix: true, locale: nb });
 };
 
 const getLastUpdate = (messageHtml) => {
-  // Splitt meldingen basert på separatoren "<p>------------------------------------------------- </p>"
   const sections = messageHtml.split("<p>------------------------------------------------- </p>");
-  // Returner den første delen som HTML
   return removeEmptyExpectedFixTime(sections[0]);
-}; 
-
-const removeEmptyExpectedFixTime = (htmlContent) => {
-  // Fjern &nbsp; og sjekk for linjer der "Forventet rettetid er:" er tom eller inneholder "false"
-  return htmlContent
-    .replace(/(&nbsp;|\s)+<br>/g, "") // Fjern unødvendige &nbsp; og tomme linjer
-    .replace(/<strong>Forventet rettetid er:<\/strong>\s*false(\s*|<br>)/g, "") // Fjern linjer med "false" som forventet rettetid
-    .replace(/<strong>Forventet rettetid er:<\/strong>\s*(<br>)?/g, "") // Fjern helt tomme linjer
-    .replace(/<p>\s*false\s*<\/p>/g, "") // Fjern p-tagger som kun inneholder "false"
-    .replace(/Feilen er nå rettet.<br>\s*false/g, "Feilen er nå rettet.") // Fjern "false" etter "Feilen er nå rettet."
-    .replace(/<p><strong>Status: <\/strong> Løst\s*<\/p>/g, ""); // Fjern linjer som angir "Løst" hvis det er tomt
 };
 
-// Funksjon for å få farge basert på alvorlighetsgrad
+const removeEmptyExpectedFixTime = (htmlContent) => {
+  return htmlContent
+    .replace(/(&nbsp;|\s)+<br>/g, "")
+    .replace(/<strong>Forventet rettetid er:<\/strong>\s*false(\s*|<br>)/g, "")
+    .replace(/<strong>Forventet rettetid er:<\/strong>\s*(<br>)?/g, "")
+    .replace(/<p>\s*false\s*<\/p>/g, "")
+    .replace(/Feilen er nå rettet.<br>\s*false/g, "Feilen er nå rettet.")
+    .replace(/<p><strong>Status: <\/strong> Løst\s*<\/p>/g, "");
+};
+
 const getSeverityColor = (severity: string) => {
   switch (severity) {
     case "DOWN":
@@ -283,4 +276,4 @@ const getSeverityColor = (severity: string) => {
   }
 };
 
-export default StatusList;
+export default RecentMessages;
