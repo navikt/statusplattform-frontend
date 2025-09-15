@@ -85,9 +85,18 @@ const OpsMessageComponent = ({ opsMessage: serverSideOpsMessage }) => {
 
   useEffect(() => {
     const fetchMembership = async () => {
-      if (opsMessage.affectedServices.length > 0) {
-        const result = await checkUserMembershipInTeam(opsMessage.affectedServices[0].teamId, user.navIdent);
-        setIsMember(result);
+      if (opsMessage.affectedServices.length > 0 && opsMessage.affectedServices[0].teamId) {
+        try {
+          const result = await checkUserMembershipInTeam(opsMessage.affectedServices[0].teamId, user.navIdent);
+          setIsMember(result);
+        } catch (error) {
+          console.error('Error checking team membership:', error);
+          setIsMember(false);
+        }
+      } else {
+        // No team associated or teamId is null - deny editing
+        setIsMember(false);
+        toast.error("Du har ikke tilgang til å redigere denne driftsmeldingen - ingen team tilknyttet");
       }
     };
 

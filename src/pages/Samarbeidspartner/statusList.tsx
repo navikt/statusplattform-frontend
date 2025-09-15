@@ -8,6 +8,8 @@ import { formatDistanceToNow, parseISO, isAfter } from "date-fns";
 import { nb } from "date-fns/locale";
 import { UserData } from "../../types/userData";
 import { PencilIcon } from '@navikt/aksel-icons';
+import { toast } from "react-toastify";
+import { checkUserMembershipInTeam } from "../../utils/teamKatalogAPI";
 import opsMessageDetails from "../Driftsmeldinger/[driftmeldingsId]";
 
 interface StatusListProps {
@@ -19,16 +21,43 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
   const [serverOpsMessages, setServerOpsMessages] = useState<OpsMessageI[]>([]);
   const [groupedMessages, setGroupedMessages] = useState<Record<string, OpsMessageI[]>>({});
 
+  const handleEditClick = async (message: OpsMessageI, e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (!user?.navIdent) {
+      toast.error("Du må være logget inn for å redigere meldinger");
+      return;
+    }
+
+    // Check if message has team association
+    if (message.affectedServices.length === 0 || !message.affectedServices[0].teamId) {
+      toast.error("Du har ikke tilgang til å redigere denne driftsmeldingen - ingen team tilknyttet");
+      return;
+    }
+
+    try {
+      const isMember = await checkUserMembershipInTeam(message.affectedServices[0].teamId, user.navIdent);
+      if (isMember) {
+        window.location.href = `ekstern/${message.id}/rediger`;
+      } else {
+        toast.error("Du har ikke tilgang til å redigere denne driftsmeldingen");
+      }
+    } catch (error) {
+      console.error('Error checking team membership:', error);
+      toast.error("Kunne ikke verifisere tilgang til redigering");
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const messages = await fetchMessageByServiceList(service_ids);
 
-        // Filter to only show future maintenance messages
+        // Filter to only show future messages (planned maintenance)
         const currentTime = new Date();
         const maintenanceMessages = messages.filter(message => {
           const messageStartTime = new Date(message.startTime);
-          return message.status === "MAITENANCE" && isAfter(messageStartTime, currentTime);
+          return isAfter(messageStartTime, currentTime);
         });
 
         maintenanceMessages.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
@@ -59,69 +88,51 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
   return (
     <StatusContainer>
       {serverOpsMessages.length === 0 ? (
-        <NoMessages>Ingen varsler eller meldinger tilgjengelig.</NoMessages>
+        <NoMaintenanceCard>
+          <NoMaintenanceText>Ingen planlagt vedlikehold</NoMaintenanceText>
+        </NoMaintenanceCard>
       ) : (
-        Object.keys(groupedMessages).map((date) => (
-          <div key={date}>
-            <DateHeading>{date}</DateHeading>
-            {groupedMessages[date].map((message) => (
-              <DateSection key={message.id}>
-                <EventDetails severityColor={getSeverityColor(message.severity)}>
-                  <HeaderContainer>
-                    <Header level="3" size="medium" spacing>
-                      {message.internalHeader}
-                    </Header>
-                    {user ? (
-                      <AddOpsMessageLabel>
-                        <a href={`ekstern/${message.id}/rediger`}>
-                          <PencilIcon title="Rediger melding" fontSize="1.5rem" />
-                        </a>
-                      </AddOpsMessageLabel>
-                    ) : null}
-                  </HeaderContainer>
-                  
-                  {/* Viser status basert på isActive */}
-                  <StatusText isActive={message.isActive}>
-                    Status: {message.isActive ? "Aktiv" : "Inaktiv"}
-                  </StatusText>
+        serverOpsMessages.map((message, index) => (
+          <MaintenanceCard key={message.id} isLast={index === serverOpsMessages.length - 1}>
+            <HeaderContainer>
+              <Header level="3" size="medium">
+                {message.internalHeader}
+              </Header>
+              {user && user.navIdent ? (
+                <AddOpsMessageLabel>
+                  <button
+                    onClick={(e) => handleEditClick(message, e)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                  >
+                    <PencilIcon title="Rediger melding" fontSize="1.5rem" />
+                  </button>
+                </AddOpsMessageLabel>
+              ) : null}
+            </HeaderContainer>
 
-                  {message.internalMessage && (
-                    <InternalMessage
-                      dangerouslySetInnerHTML={{
-                        __html: getLastUpdate(message.internalMessage),
-                      }}
-                    />
-                  )}
-
-                  {message.affectedServices.length > 0 && (
-                    <>
-                      <Label as="h4" size="medium">Berørte tjenester:</Label>
-                      <AffectedServices>
-                        {message.affectedServices.map((service: Service) => (
-                          <ServiceName key={service.name}>{service.name}</ServiceName>
-                        ))}
-                      </AffectedServices>
-                    </>
-                  )}
-
-                  <DetailItem>
-                    Postet: {getPostedTime(message.startTime)} •{" "}
-                    {new Date(message.startTime).toLocaleDateString("nb-NO", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })}{" "}
-                    -{" "}
-                    {new Date(message.startTime).toLocaleTimeString("nb-NO", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      timeZoneName: "short",
-                    })}
-                  </DetailItem>
-                </EventDetails>
-              </DateSection>
-            ))}
-          </div>
+            <DateRange>
+              Planlagt til{" "}
+              {new Date(message.startTime).toLocaleDateString("nb-NO", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}{" "}
+              {new Date(message.startTime).toLocaleTimeString("nb-NO", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}{" "}
+              -{" "}
+              {new Date(message.endTime).toLocaleDateString("nb-NO", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}{" "}
+              {new Date(message.endTime).toLocaleTimeString("nb-NO", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </DateRange>
+          </MaintenanceCard>
         ))
       )}
     </StatusContainer>
@@ -149,9 +160,12 @@ const StatusText = styled(BodyShort)<{ isActive: boolean }>`
 `;
 
 const StatusContainer = styled.div`
-  padding: 2.5rem;
+  padding: 0;
   width: 100%;
-  background-color: white;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 `;
 
 const HeaderContainer = styled.div`
@@ -184,23 +198,40 @@ const ServiceName = styled(BodyShort)`
   font-weight: 500;
 `;
 
-const NoMessages = styled.p`
-  text-align: center;
-  margin: 2rem 0;
-  color: #666;
-  font-size: 1rem;
-  padding: 2rem;
+const MaintenanceCard = styled.div<{ isLast: boolean }>`
   background: white;
-  border-radius: 8px;
-  border: 1px solid #e6e6e6;
+  border: 1px solid #e1e5e9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin-bottom: ${props => props.isLast ? '0' : '1.5rem'};
+  padding: 1.5rem 2rem;
+
+  &:hover {
+    background-color: #fafbfc;
+  }
+`;
+
+const NoMaintenanceCard = styled.div`
+  background: white;
+  border: 1px solid #e1e5e9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  text-align: center;
+`;
+
+const NoMaintenanceText = styled.div`
+  color: #5e6c84;
+  font-size: 0.875rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 `;
 
 const Header = styled(Heading)`
-  font-size: 1rem;
+  font-size: 0.9375rem;
   font-weight: 500;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.75rem 0;
   color: #172b4d;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.4;
 `;
 
 const DetailItem = styled(Detail)`
@@ -210,35 +241,15 @@ const DetailItem = styled(Detail)`
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 `;
 
-const DateHeading = styled(Heading)`
-  font-size: 1rem;
-  margin: 1.5rem 0 0.75rem 0;
-  color: #172b4d;
-  font-weight: 500;
+const DateRange = styled.div`
+  font-size: 0.875rem;
+  color: #5e6c84;
+  margin-top: 0.5rem;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-
-  &:first-child {
-    margin-top: 0;
-  }
 `;
 
-const DateSection = styled.div`
-  margin: 0 0 1rem 0;
-  &:last-child {
-    margin-bottom: 0;
-  }
-`;
 
-const EventDetails = styled.div<{ severityColor: string }>`
-  padding: 1.25rem 0;
-  border-bottom: 1px solid #e1e5e9;
-  margin: 0;
-  background-color: transparent;
 
-  &:last-child {
-    border-bottom: none;
-  }
-`;
 
 const AddOpsMessageLabel = styled.div`
   padding: 0;
