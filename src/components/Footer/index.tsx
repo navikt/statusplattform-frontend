@@ -6,6 +6,7 @@ import { BodyShort, Label } from "@navikt/ds-react"
 import { useContext } from "react"
 import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
 import { UserData } from "../../types/userData"
+import Image from "next/image"
 
 const ContactInformation = styled.div`
     margin: 2rem 0;
@@ -101,10 +102,12 @@ const Footer = () => {
                         href="https://www.nav.no/no/person#"
                         aria-label="Lenke til nav.no"
                     >
-                        <img
+                        <Image
                             src="/sp/assets/nav-logo/png/black.png"
                             alt="Til forsiden"
                             aria-hidden="true"
+                            width={100}
+                            height={50}
                         />
                     </a>
                     <Label> NAV IT Operasjonssenteret </Label>

@@ -1,7 +1,7 @@
 import router, { useRouter } from "next/router"
 import styled from "styled-components"
 
-import { Edit, Next } from "@navikt/ds-icons"
+import { PencilIcon, ChevronRightIcon } from "@navikt/aksel-icons"
 import { MenuElipsisHorizontalIcon } from "@navikt/aksel-icons"
 import { Alert, BodyShort, Button, Heading, Tooltip } from "@navikt/ds-react"
 
@@ -142,7 +142,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                         <Button
                             variant="tertiary"
                             size="small"
-                            icon={<Next />}
+                            icon={<ChevronRightIcon />}
                             iconPosition="right"
                             onClick={() => router.push(RouterOpsMeldinger.PATH)}
                         >
@@ -184,7 +184,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                         <Button
                             variant="tertiary"
                             size="small"
-                            icon={<Next />}
+                            icon={<ChevronRightIcon />}
                             iconPosition="right"
                             onClick={() => router.push(RouterOpsMeldinger.PATH)}
                         >
@@ -229,7 +229,7 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
     }
 }
 
-const EditOpsButton = styled(Button)`
+const PencilIconOpsButton = styled(Button)`
     height: 2rem;
     margin: -0.6rem 0.2rem 0;
     color: var(--a-gray-400);
@@ -380,7 +380,7 @@ const DeviationCardIfNoOpsMessage = ({
     )
 }
 
-const handleEditOpsClick = (e, id) => {
+const handlePencilIconOpsClick = (e, id) => {
     e.stopPropagation()
     router.push(RouterOpsMeldinger.PATH + `/${id}/RedigerMelding`)
 }
@@ -433,14 +433,14 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
                                 content="Rediger driftsmelding"
                                 placement="right"
                             >
-                                <EditOpsButton
-                                    icon={<Edit />}
+                                <PencilIconOpsButton
+                                    icon={<PencilIcon />}
                                     aria-label="Rediger driftsmelding"
                                     size="small"
                                     variant="tertiary"
                                     className={severity.toLowerCase()}
-                                    onClick={(e) => handleEditOpsClick(e, id)}
-                                ></EditOpsButton>
+                                    onClick={(e) => handlePencilIconOpsClick(e, id)}
+                                ></PencilIconOpsButton>
                             </Tooltip>
                         )}
                     </div>

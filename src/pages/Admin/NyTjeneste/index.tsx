@@ -19,7 +19,7 @@ import {
     Select,
     TextField,
 } from "@navikt/ds-react"
-import { Copy, Delete, InformationColored } from "@navikt/ds-icons"
+import { DocPencilIcon, TrashIcon, InformationSquareIcon } from "@navikt/aksel-icons"
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
 import { fetchServicesMinimal, postService } from "../../../utils/servicesAPI"
@@ -87,7 +87,7 @@ const PopoverCustomized = styled(Popover)`
     }
 `
 
-const ModalContent = styled(Modal.Content)`
+const ModalContent = styled(Modal.Body)`
     width: 100vw;
 
     display: flex;
@@ -138,8 +138,7 @@ const NewService = () => {
     const [popoverText, setPopoverText] = useState("")
 
     useEffect(() => {
-        // Eksempelbruk i en standard nextjs app
-        Modal.setAppElement("#__next")
+        // Modal.setAppElement is no longer needed in newer versions
         ;(async function () {
             const retrievedServices: Service[] = await fetchServicesMinimal()
             const retrievedComponents: Component[] = await fetchComponentsMinimal()
@@ -431,7 +430,7 @@ const NewService = () => {
                                     handleTriggerHelpText(event, 0)
                                 }
                             >
-                                <InformationColored
+                                <InformationSquareIcon
                                     width="1.5em"
                                     height="1.5em"
                                 />
@@ -454,7 +453,7 @@ const NewService = () => {
                                     handleTriggerHelpText(event, 1)
                                 }
                             >
-                                <InformationColored
+                                <InformationSquareIcon
                                     width="1.5em"
                                     height="1.5em"
                                 />
@@ -483,7 +482,7 @@ const NewService = () => {
                                                         handleTriggerHelpText(event, 2)
                                                     }
                                                 >
-                                                    <InformationColored
+                                                    <InformationSquareIcon
                                                         width="1.5em"
                                                         height="1.5em"
                                                     />
@@ -513,7 +512,7 @@ const NewService = () => {
                                     handleTriggerHelpText(event, 3)
                                 }
                             >
-                                <InformationColored
+                                <InformationSquareIcon
                                     width="1.5em"
                                     height="1.5em"
                                 />
@@ -696,7 +695,7 @@ const ServiceDependencies = ({
                             ref={buttonRef}
                             onClick={(event) => handleTriggerHelpText(event, 4)}
                         >
-                            <InformationColored width="1.5em" height="1.5em" />
+                            <InformationSquareIcon width="1.5em" height="1.5em" />
                         </button>
                     </div>
                 </div>
@@ -730,7 +729,7 @@ const ServiceDependencies = ({
                                                 }
                                             >
                                                 <label>{service.name}</label>
-                                                <Delete /> Slett
+                                                <TrashIcon /> Slett
                                             </button>
                                         </BodyShort>
                                     </li>
@@ -829,7 +828,7 @@ const ComponentDependencies = ({
                         ref={buttonRef}
                         onClick={(event) => handleTriggerHelpText(event, 4)}
                     >
-                        <InformationColored width="2em" height="2em" />
+                        <InformationSquareIcon width="2em" height="2em" />
                     </button>
                 </div>
             </div>
@@ -859,7 +858,7 @@ const ComponentDependencies = ({
                                         }
                                     >
                                         <label>{component.name}</label>
-                                        <Delete /> Slett
+                                        <TrashIcon /> Slett
                                     </button>
                                 </BodyShort>
                             </li>
@@ -959,7 +958,7 @@ const ConnectServiceToArea = ({
                             ref={buttonRef}
                             onClick={(event) => handleTriggerHelpText(event, 5)}
                         >
-                            <InformationColored width="1.5em" height="1.5em" />
+                            <InformationSquareIcon width="1.5em" height="1.5em" />
                         </button>
                     </div>
                 </div>
@@ -994,7 +993,7 @@ const ConnectServiceToArea = ({
                                                     }
                                                 >
                                                     <label>{area.name}</label>
-                                                    <Delete /> Slett
+                                                    <TrashIcon /> Slett
                                                 </button>
                                             </BodyShort>
                                         </li>

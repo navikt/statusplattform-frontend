@@ -1,10 +1,11 @@
 import React from "react"
 import styled from "styled-components"
 
-import { Telephone, Email } from "@navikt/ds-icons"
+import { PhoneIcon, EnvelopeClosedIcon } from "@navikt/aksel-icons"
 import { Button, TextField } from "@navikt/ds-react"
 
 import { ISource, SourceType } from "../../types/source"
+import Image from "next/image"
 
 const SubscribeModalContainer = styled.div`
     position: relative;
@@ -87,23 +88,25 @@ const subscribeSources: ISource[] = [
     {
         id: SourceType.phone,
         title: "Telefon",
-        content: <Telephone />,
+        content: <PhoneIcon />,
         text: "Du kan motta sms-varsler når statusmeldinger oppdateres. Dersom du ønsker dette, fyll inn nummeret nedenfor: ",
     },
     {
         id: SourceType.email,
         title: "Epost",
-        content: <Email />,
+        content: <EnvelopeClosedIcon />,
         text: "Ved oppdaterte statusmeldinger kan du motta varsling på email. Fyll inn epost nedenfor om dette er ønskelig",
     },
     {
         id: SourceType.slack,
         title: "Slack",
         content: (
-            <img
+            <Image
                 src="/sp/assets/images/slack-icon.svg"
                 alt="Slack icon"
                 aria-labelledby="Slack-ikon"
+                width={40}
+                height={40}
             />
         ),
         text: "Du kan få statusmeldinger rett i Slack. Trykk nedenfor for å starte abonnering",

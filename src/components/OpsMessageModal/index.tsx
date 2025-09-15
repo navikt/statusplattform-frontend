@@ -50,25 +50,22 @@ interface OpsMessageModalI {
 const OpsMessageModal = (props: OpsMessageModalI) => {
     const { opsMessage, navIdent, modalOpen, setModalOpen } = props
 
-    useEffect(() => {
-        Modal.setAppElement("#__next")
-    }, [])
+    // Modal.setAppElement is no longer needed in newer versions
 
     return (
         <>
             <CustomOpsModal
                 open={modalOpen}
-                aria-label="Modal demo"
                 onClose={() => setModalOpen(!modalOpen)}
-                aria-labelledby="modal-heading"
+                header={{ heading: "Driftsmelding" }}
                 className={opsMessage.severity.toLowerCase()}
             >
-                <CustomOpsModal.Content>
+                <Modal.Body>
                     <OpsMessageDetails
                         opsMessage={opsMessage}
                         navIdent={navIdent}
                     />
-                </CustomOpsModal.Content>
+                </Modal.Body>
             </CustomOpsModal>
         </>
     )

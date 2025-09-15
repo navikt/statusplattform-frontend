@@ -5,7 +5,7 @@ import { useContext, useEffect, useState } from "react"
 import { toast } from "react-toastify"
 import "react-toastify/dist/ReactToastify.css"
 
-import { Close, Delete, Expand, Notes, SaveFile } from "@navikt/ds-icons"
+import { XMarkIcon, TrashIcon, ChevronDownIcon, FileTextIcon, FloppydiskIcon } from "@navikt/aksel-icons"
 import {
     BodyShort,
     Button, Checkbox, CheckboxGroup,
@@ -215,22 +215,25 @@ const TableKomponent = () => {
             <Modal
                 open={!!componentToDelete}
                 onClose={() => setComponentToDelete(null)}
+                header={{ heading: "Bekreft sletting" }}
             >
-                <ModalInner>
+                <Modal.Body>
                     Ønsker du å slette komponenten?
-                    <Button
-                        variant="secondary"
-                        onClick={confirmDeleteComponentHandler}
-                    >
-                        Slett komponent
-                    </Button>
+                </Modal.Body>
+                <Modal.Footer>
                     <Button
                         variant="secondary"
                         onClick={() => setComponentToDelete(null)}
                     >
                         Avbryt
                     </Button>
-                </ModalInner>
+                    <Button
+                        variant="danger"
+                        onClick={confirmDeleteComponentHandler}
+                    >
+                        Slett komponent
+                    </Button>
+                </Modal.Footer>
             </Modal>
 
             <div className="centered">
@@ -569,7 +572,7 @@ const ComponentRow = ({
                     onClick={() => handleEditComponent(component)}
                 >
                     <a>
-                        <Notes /> Rediger
+                        <FileTextIcon /> Rediger
                     </a>
                 </CustomButton>
                 <button
@@ -578,7 +581,7 @@ const ComponentRow = ({
                     aria-label="Slett komponent"
                 >
                     <a>
-                        <Delete />
+                        <TrashIcon />
                         Slett
                     </a>
                 </button>
@@ -586,7 +589,7 @@ const ComponentRow = ({
                     className="option"
                     onClick={() => toggleExpanded(component)}
                 >
-                    <Expand
+                    <ChevronDownIcon
                         className={isExpanded ? "expanded" : "not-expanded"}
                         aria-expanded={isExpanded}
                     />
@@ -801,7 +804,7 @@ const ComponentRowEditting = ({
             <div className="button-container">
                 <button type="button" className="option" onClick={handleSubmit}>
                     <a>
-                        <SaveFile /> Lagre
+                        <FloppydiskIcon /> Lagre
                     </a>
                 </button>
                 <CustomButton
@@ -809,7 +812,7 @@ const ComponentRowEditting = ({
                     onClick={() => handleCancelEditting(component)}
                 >
                     <a>
-                        <Close /> Avbryt
+                        <XMarkIcon /> Avbryt
                     </a>
                 </CustomButton>
                 <button
@@ -818,14 +821,14 @@ const ComponentRowEditting = ({
                     aria-label="Slett komponent"
                 >
                     <a>
-                        <Delete /> Slett
+                        <TrashIcon /> Slett
                     </a>
                 </button>
                 <button
                     className="option"
                     onClick={() => toggleExpanded(component)}
                 >
-                    <Expand
+                    <ChevronDownIcon
                         className={isExpanded ? "expanded" : "not-expanded"}
                         aria-expanded={isExpanded}
                     />

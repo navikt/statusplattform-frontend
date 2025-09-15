@@ -559,8 +559,6 @@ const TabHistory = ({ setIsLast90Days, isLast90Days }: History) => {
     }, [selectedHistoryTab])
 
     const findSelectedHistoryTab = (historyMenu: string[]) => {
-        const router = useRouter()
-        // const tab = router.query.tab || ""
         const tab = selectedHistoryTab
 
         let selected = historyMenu.indexOf(Array.isArray(tab) ? tab[0] : tab)

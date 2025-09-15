@@ -1,30 +1,68 @@
-import { BodyShort, Heading, Panel, Label, Detail } from "@navikt/ds-react";
+import { BodyShort, Heading, Panel, Label, Detail, Button } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
 import { OpsMessageI } from "../../types/opsMessage";
 import { Service } from "../../types/types";
 import styled from "styled-components";
 import { fetchMessageByServiceList } from "../../utils/dashboardsAPI";
-import { formatDistanceToNow, parseISO } from "date-fns";
+import { formatDistanceToNow, parseISO, isAfter } from "date-fns";
 import { nb } from "date-fns/locale";
+import { UserData } from "../../types/userData";
+import { PencilIcon } from '@navikt/aksel-icons';
+import { toast } from "react-toastify";
+import { checkUserMembershipInTeam } from "../../utils/teamKatalogAPI";
 import opsMessageDetails from "../Driftsmeldinger/[driftmeldingsId]";
 
 interface StatusListProps {
   service_ids: string[];
+  user?: UserData;
 }
 
-const StatusList = ({ service_ids }: StatusListProps) => {
+const StatusList = ({ service_ids, user }: StatusListProps) => {
   const [serverOpsMessages, setServerOpsMessages] = useState<OpsMessageI[]>([]);
   const [groupedMessages, setGroupedMessages] = useState<Record<string, OpsMessageI[]>>({});
+
+  const handleEditClick = async (message: OpsMessageI, e: React.MouseEvent) => {
+    e.preventDefault();
+
+    if (!user?.navIdent) {
+      toast.error("Du må være logget inn for å redigere meldinger");
+      return;
+    }
+
+    // Check if message has team association
+    if (message.affectedServices.length === 0 || !message.affectedServices[0].teamId) {
+      toast.error("Du har ikke tilgang til å redigere denne driftsmeldingen - ingen team tilknyttet");
+      return;
+    }
+
+    try {
+      const isMember = await checkUserMembershipInTeam(message.affectedServices[0].teamId, user.navIdent);
+      if (isMember) {
+        window.location.href = `ekstern/${message.id}/rediger`;
+      } else {
+        toast.error("Du har ikke tilgang til å redigere denne driftsmeldingen");
+      }
+    } catch (error) {
+      console.error('Error checking team membership:', error);
+      toast.error("Kunne ikke verifisere tilgang til redigering");
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const messages = await fetchMessageByServiceList(service_ids);
-        // Sorter meldingene etter startTime i synkende rekkefølge (nyeste først)
-        messages.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
 
-        // Gruppere meldingene etter dato
-        const grouped = messages.reduce((acc: Record<string, OpsMessageI[]>, message) => {
+        // Filter to only show future messages (planned maintenance)
+        const currentTime = new Date();
+        const maintenanceMessages = messages.filter(message => {
+          const messageStartTime = new Date(message.startTime);
+          return isAfter(messageStartTime, currentTime);
+        });
+
+        maintenanceMessages.sort((a, b) => new Date(b.startTime).getTime() - new Date(a.startTime).getTime());
+
+        const grouped = maintenanceMessages.reduce((acc: Record<string, OpsMessageI[]>, message) => {
           const messageDate = new Date(message.startTime).toLocaleDateString("nb-NO", {
             day: "numeric",
             month: "long",
@@ -36,7 +74,7 @@ const StatusList = ({ service_ids }: StatusListProps) => {
           acc[messageDate].push(message);
           return acc;
         }, {});
-        setServerOpsMessages(messages)
+        setServerOpsMessages(maintenanceMessages);
         setGroupedMessages(grouped);
       } catch (error) {
         console.error("Failed to fetch operations messages:", error);
@@ -46,74 +84,88 @@ const StatusList = ({ service_ids }: StatusListProps) => {
     fetchData();
   }, [service_ids]);
 
-  console.log(serverOpsMessages)
-
-
+  console.log(serverOpsMessages);
   return (
     <StatusContainer>
       {serverOpsMessages.length === 0 ? (
-        <NoMessages>Ingen varsler eller meldinger tilgjengelig.</NoMessages>
+        <NoMaintenanceCard>
+          <NoMaintenanceText>Ingen planlagt vedlikehold</NoMaintenanceText>
+        </NoMaintenanceCard>
       ) : (
-        Object.keys(groupedMessages).map((date) => (
-          <div key={date}>
-            <DateHeading>{date}</DateHeading>
-            {groupedMessages[date].map((message) => (
-              <DateSection key={message.id}>
-                <EventDetails severityColor={getSeverityColor(message.severity)}>
-                  <HeaderContainer>
-                    <Header level="3" size="medium" spacing>
-                      {message.internalHeader}
-                    </Header>
-                    
-                  </HeaderContainer>
-                  {message.internalMessage && (
-                    <InternalMessage
-                    dangerouslySetInnerHTML={{
-                      __html: getLastUpdate(message.internalMessage),
-                    }}
-                  />
-                  )}
-                  {message.affectedServices.length > 0 && (
-                    <>
-                      <Label as="h4" size="medium">
-                        Berørte tjenester:
-                      </Label>
-                      <AffectedServices>
-                        {message.affectedServices.map((service: Service) => (
-                          <ServiceName key={service.name}>{service.name}</ServiceName>
-                        ))}
-                      </AffectedServices>
-                    </>
-                  )}
-                  <DetailItem>
-                    Postet: {getPostedTime(message.startTime)} • {new Date(message.startTime).toLocaleDateString("nb-NO", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })} - {new Date(message.startTime).toLocaleTimeString("nb-NO", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                      timeZoneName: "short",
-                    })}
-                  </DetailItem>
-                </EventDetails>
-              </DateSection>
-            ))}
-          </div>
+        serverOpsMessages.map((message, index) => (
+          <MaintenanceCard key={message.id} isLast={index === serverOpsMessages.length - 1}>
+            <HeaderContainer>
+              <Header level="3" size="medium">
+                {message.internalHeader}
+              </Header>
+              {user && user.navIdent ? (
+                <AddOpsMessageLabel>
+                  <button
+                    onClick={(e) => handleEditClick(message, e)}
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', padding: 0 }}
+                  >
+                    <PencilIcon title="Rediger melding" fontSize="1.5rem" />
+                  </button>
+                </AddOpsMessageLabel>
+              ) : null}
+            </HeaderContainer>
+
+            <DateRange>
+              Planlagt til{" "}
+              {new Date(message.startTime).toLocaleDateString("nb-NO", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}{" "}
+              {new Date(message.startTime).toLocaleTimeString("nb-NO", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}{" "}
+              -{" "}
+              {new Date(message.endTime).toLocaleDateString("nb-NO", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })}{" "}
+              {new Date(message.endTime).toLocaleTimeString("nb-NO", {
+                hour: "2-digit",
+                minute: "2-digit",
+              })}
+            </DateRange>
+          </MaintenanceCard>
         ))
       )}
     </StatusContainer>
   );
 };
 
-// Styled components
+// Styled komponent for status
+const StatusText = styled(BodyShort)<{ isActive: boolean }>`
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: ${(props) => (props.isActive ? "#de350b" : "#36b37e")};
+  margin: 0.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
-const StatusContainer = styled(Panel)`
-  padding: 1.5rem;
+  &::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: ${(props) => (props.isActive ? "#de350b" : "#36b37e")};
+  }
+`;
+
+const StatusContainer = styled.div`
+  padding: 0;
   width: 100%;
-  background-color: #ffffff;
-  border-radius: 8px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
 `;
 
 const HeaderContainer = styled.div`
@@ -124,58 +176,85 @@ const HeaderContainer = styled.div`
 
 
 const InternalMessage = styled(BodyShort)`
-  margin: 0;
-  color: #555;
+  margin: 0.75rem 0;
+  color: #5e6c84;
+  font-size: 0.875rem;
+  line-height: 1.5;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 `;
 
 const AffectedServices = styled.div`
-  margin-top: 0.5rem;
+  margin: 0.75rem 0;
+  padding: 0.75rem;
+  background: #f8f9fa;
+  border-radius: 6px;
+  border: 1px solid #e6e6e6;
 `;
 
 const ServiceName = styled(BodyShort)`
   font-size: 0.9rem;
   margin-bottom: 0.25rem;
-  color: #333;
+  color: #555;
+  font-weight: 500;
 `;
 
-const NoMessages = styled.p`
-  text-align: center;
-  margin: 2rem 0;
-  color: #7d7d7d;
-  font-size: 1rem;
-`;
+const MaintenanceCard = styled.div<{ isLast: boolean }>`
+  background: white;
+  border: 1px solid #e1e5e9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  margin-bottom: ${props => props.isLast ? '0' : '1.5rem'};
+  padding: 1.5rem 2rem;
 
-const Header = styled(Heading)`
-  font-size: 1.25rem;
-  font-weight: 600;
-`;
-
-const DetailItem = styled(Detail)`
-  margin: 0.5rem 0 0;
-  font-size: 0.9rem;
-  color: #888;
-`;
-
-const DateHeading = styled(Heading)`
-  font-size: 1.5rem;
-  margin: 1rem 0;
-  color: #333;
-`;
-
-const DateSection = styled.div`
-  padding-bottom: 40px;
-  border-bottom: 1px solid #e9e9e9;
-  &:last-child {
-    border-bottom: none;
+  &:hover {
+    background-color: #fafbfc;
   }
 `;
 
-const EventDetails = styled.div<{ severityColor: string }>`
-  margin-top: 1rem;
-  padding: 1.5rem;
-  border-left: 6px solid ${(props) => props.severityColor}; /* Tydeligere bred farget venstremarg */
-  background-color: #f9f9f9;
-  border-radius: 8px;
+const NoMaintenanceCard = styled.div`
+  background: white;
+  border: 1px solid #e1e5e9;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  padding: 2rem;
+  text-align: center;
+`;
+
+const NoMaintenanceText = styled.div`
+  color: #5e6c84;
+  font-size: 0.875rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+`;
+
+const Header = styled(Heading)`
+  font-size: 0.9375rem;
+  font-weight: 500;
+  margin: 0 0 0.75rem 0;
+  color: #172b4d;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  line-height: 1.4;
+`;
+
+const DetailItem = styled(Detail)`
+  margin: 0.75rem 0 0;
+  font-size: 0.8125rem;
+  color: #5e6c84;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+`;
+
+const DateRange = styled.div`
+  font-size: 0.875rem;
+  color: #5e6c84;
+  margin-top: 0.5rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+`;
+
+
+
+
+const AddOpsMessageLabel = styled.div`
+  padding: 0;
+  font-size: 15px;
+  text-align: end;
 `;
 
 // Funksjon for å vise hvor lenge siden meldingen ble postet

@@ -13,7 +13,7 @@ import {
     RadioGroup,
     TextField,
 } from "@navikt/ds-react"
-import { Refresh } from "@navikt/ds-icons"
+import { ArrowCirclepathIcon } from "@navikt/aksel-icons"
 import { RouterConfirmedCreation, RouterHomePage } from "../../types/routes"
 
 const NotificationsContainer = styled.div`
@@ -93,7 +93,7 @@ const CreateNotifications = () => {
     return (
         <NotificationsContainer>
             <Heading spacing level="2" size="medium">
-                For å få "varsler" må du opprette en profil
+                For å få &quot;varsler&quot; må du opprette en profil
             </Heading>
 
             <BodyShort>
@@ -208,7 +208,7 @@ const Otp: React.FC<{
                 Mottok du ikke passordet?{" "}
                 <span className="colored">
                     {" "}
-                    <Refresh />{" "}
+                    <ArrowCirclepathIcon />{" "}
                     <span
                         className="linkify"
                         onClick={() => toast.info("Nytt passord sent")}

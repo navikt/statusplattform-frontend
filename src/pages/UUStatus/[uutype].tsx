@@ -224,6 +224,13 @@ const UUDashboard = ({ UUData, uutype }) => {
                     Her finner du informasjon om status for universell utforming
                     for digitale tjenester i NAV. Kravene er hentet fra
                     <b> Web Content Accessibility Guidelines (WCAG) 2.1.</b>
+                    <p>
+                        Denne statussiden for UU krav er for øyeblikket ikke oppdatert. Automatisk oppdatering mot gjeldende rapporteringsverktøy vil komme senere. 
+                        Inntil videre henvises til rapporteringsverktøyet:
+                        <a href="http://a11y-statement.nav.no/" target="_blank" rel="noopener noreferrer">
+                            http://a11y-statement.nav.no/
+                        </a>
+                    </p>
                 </GuidePanel>
             </UUHeading>
             <Nav>

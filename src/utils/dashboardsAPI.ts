@@ -145,18 +145,18 @@ export const fetchMessageByDashboardId = async (dashboardId: String): Promise<Op
     throw new ResponseError("Failed to fetch from server", response)
 }
 
-export const fetchMessageByServiceList = async (service_ids: String[]): Promise<OpsMessageI[]> => {
-    // Join the service IDs as a comma-separated string
-    const service_ids_as_list = service_ids.join(',');
+export const fetchMessageByServiceList = async (service_ids: string[]): Promise<OpsMessageI[]> => {
+    // Map service IDs to query string format
+    const queryParams = service_ids.map(id => `service_ids=${encodeURIComponent(id)}`).join('&');
 
     // Create the API request with properly formatted query parameters
-    let request = createApiRequest(`/rest/OpsMessage/services?service_ids=${encodeURIComponent(service_ids_as_list)}`, "GET");
+    let request = createApiRequest(`/rest/OpsMessage/services?${queryParams}`, "GET");
 
-    const response = await fetch(request)
+    const response = await fetch(request);
 
     if (response.ok) {
-        let json = await response.json()
-        return json
+        let json = await response.json();
+        return json;
     }
-    throw new ResponseError("Failed to fetch from server", response)
-}
+    throw new ResponseError("Failed to fetch from server", response);
+};

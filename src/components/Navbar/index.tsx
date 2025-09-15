@@ -374,8 +374,6 @@ export default function Navbar() {
                 onClose={() => setOpenState(false)}
                 anchorEl={buttonRef.current}
             >
-                <Popover.Content>
-
                     <CustomPopoverContent>
                         {user.navIdent && (
                             <>
@@ -419,8 +417,6 @@ export default function Navbar() {
                             </>
                         )}
                     </CustomPopoverContent>
-
-                </Popover.Content>
             </Popover>
         </>
     )

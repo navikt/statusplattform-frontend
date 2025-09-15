@@ -1,4 +1,4 @@
-import { Delete } from "@navikt/ds-icons"
+import { TrashIcon } from "@navikt/aksel-icons"
 import { BodyShort, Button, Heading, Modal } from "@navikt/ds-react"
 import { useRouter } from "next/router"
 import { useContext, useState } from "react"
@@ -25,6 +25,7 @@ const MessageCard = styled.div`
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
+    height: 250px;
 
     &.NEUTRAL {
         border-color: var(--a-blue-200);
@@ -47,9 +48,7 @@ const MessageCard = styled.div`
     .message-content {
         margin: -0.3rem 0px 0 -0.5rem;
         padding: 0.5rem;
-        /* margin: -0.3rem 0 0 -0.5rem;
-        padding: 0.5rem 0rem 0 1rem; */
-        height: 11.8rem;
+        height: 9.0rem;
 
         -webkit-box-orient: vertical;
         overflow-y: scroll;
@@ -94,24 +93,23 @@ const MessageCard = styled.div`
         outline: 1px solid black;
     }
 
+    .top-row-container {
+        display: flex;
+        justify-content: space-between; /* Dato til venstre, knapper til høyre */
+        align-items: center; /* Sørger for vertikal justering */
+        width: 100%;
+    }
+
     .se-mer-wrapper {
         display: flex;
         flex-direction: row;
-        gap: 0.2rem;
-
-        margin: 18.4rem 0 0 9.5rem;
-
-        position: absolute;
+        gap: 0.5rem; /* Mer luft mellom knappene */
     }
 
     .se-mer-ops {
         display: flex;
         flex-direction: row;
-        gap: 0.2rem;
-
-        margin: 18.4rem 0 0 16.5rem;
-
-        position: absolute;
+        gap: 0.5rem; /* Mer luft mellom knappene */
     }
 `
 
@@ -207,33 +205,28 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
             <CustomizedModal
                 open={!!isModalOpen}
                 onClose={() => setIsModalOpen(false)}
+                header={{ heading: "Slette melding" }}
             >
-                <Modal.Content>
-                    <Heading spacing level="1" size="large">
-                        Slette melding
-                    </Heading>
+                <Modal.Body>
                     Ønsker du å slette meldingen med tittel:{" "}
                     <b>{opsMessage.internalHeader}</b>?
-                    <div className="modal-buttons">
-                        <Button onClick={() => setIsModalOpen(false)}>
-                            Avbryt
-                        </Button>
-                        <Button onClick={() => handleDeleteMessage()}>
-                            Slett
-                        </Button>
-                    </div>
-                </Modal.Content>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setIsModalOpen(false)}>
+                        Avbryt
+                    </Button>
+                    <Button variant="danger" onClick={() => handleDeleteMessage()}>
+                        Slett
+                    </Button>
+                </Modal.Footer>
             </CustomizedModal>
 
             <CustomizedModal
                 open={!!isActiveModalOpen}
                 onClose={() => setIsActiveModalOpen(false)}
+                header={{ heading: "Endre aktivitetsstatus" }}
             >
-                <Modal.Content>
-                    <Heading spacing level="1" size="large">
-                        Endre aktivitetsstatus
-                    </Heading>
-
+                <Modal.Body>
                     {opsMessage.isActive ? (
                         <>
                             Ønsker du å sette meldingen:{" "}
@@ -245,33 +238,20 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
                             <b>{opsMessage.internalHeader}</b>?
                         </>
                     )}
-
-                    <div className="modal-buttons">
-                        <Button onClick={() => setIsActiveModalOpen(false)}>
-                            Nei
-                        </Button>
-                        <Button onClick={() => handleChangeActiveOpsMessage()}>
-                            Ja
-                        </Button>
-                    </div>
-                </Modal.Content>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={() => setIsActiveModalOpen(false)}>
+                        Nei
+                    </Button>
+                    <Button onClick={() => handleChangeActiveOpsMessage()}>
+                        Ja
+                    </Button>
+                </Modal.Footer>
             </CustomizedModal>
 
             <div className="ops-card-content">
-                <PublishedTime>{prettifiedStartTime}</PublishedTime>
-                <Heading spacing size="medium">
-                    {opsMessage.internalHeader}
-                </Heading>
-
-                <BodyShort spacing className="message-content">
-                    <span
-                        dangerouslySetInnerHTML={{
-                            __html: opsMessage.internalMessage,
-                        }}
-                    />
-                </BodyShort>
-            </div>
-
+            <div className="top-row-container">
+            <PublishedTime>{prettifiedStartTime}</PublishedTime>
             <div
                 className={
                     approvedUsers.includes(navIdent)
@@ -286,7 +266,7 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
                             variant="tertiary"
                             className="top-row-button"
                             onClick={handleModal}
-                            icon={<Delete />}
+                            icon={<TrashIcon />}
                         />
                         <Button
                             variant="tertiary"
@@ -313,6 +293,19 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
                 >
                     Se mer
                 </Button>
+            </div>
+        </div>
+                <Heading spacing size="medium">
+                    {opsMessage.internalHeader}
+                </Heading>
+
+                <BodyShort spacing className="message-content">
+                    <span
+                        dangerouslySetInnerHTML={{
+                            __html: opsMessage.internalMessage,
+                        }}
+                    />
+                </BodyShort>
             </div>
         </MessageCard>
     )

@@ -3,7 +3,7 @@ import { useContext } from "react"
 import { useRouter } from "next/router"
 
 import { BodyShort, Button, Heading, Panel } from "@navikt/ds-react"
-import { Bell } from "@navikt/ds-icons"
+import { BellIcon } from "@navikt/aksel-icons"
 
 import { handleAndSetStatusIcon } from "../PortalServiceTile"
 import { UserStateContext } from "../ContextProviders/UserStatusContext"
@@ -71,7 +71,7 @@ const Incidents: React.FC<{ allOpsMessages: OpsMessageI[] }> = ({
                 className="button-to-notifications"
                 onClick={() => router.push(RouterOpprettVarsling.PATH)}
             >
-                <Bell /> Bli varslet ved driftshendelser
+                <BellIcon /> Bli varslet ved driftshendelser
             </Button>
 
             <IncidentsContainer>

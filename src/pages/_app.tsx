@@ -23,7 +23,7 @@ function MyApp({ Component, pageProps }) {
                 }
             }
         }, 200)
-        Modal.setAppElement(document.getElementsByClassName("ReactModalPortal"))
+        // Modal.setAppElement is no longer needed in newer versions
         setIsLoading(false)
     })
 

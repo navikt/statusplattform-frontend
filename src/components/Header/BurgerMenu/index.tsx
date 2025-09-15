@@ -3,7 +3,7 @@ import { useRouter } from "next/router"
 import { useContext, useRef, useState } from "react"
 import styled from "styled-components"
 
-import { Close, Employer, Hamburger } from "@navikt/ds-icons"
+import { XMarkIcon, Buildings2Icon, MenuHamburgerIcon } from "@navikt/aksel-icons"
 import { Button, Popover } from "@navikt/ds-react"
 
 import { UserStateContext } from "../../ContextProviders/UserStatusContext"
@@ -96,7 +96,7 @@ const BurgerMenu = () => {
                 ref={buttonRef}
                 onClick={() => setOpen(!open)}
                 iconPosition="right"
-                icon={open ? <Close /> : <Hamburger />}
+                icon={open ? <XMarkIcon /> : <MenuHamburgerIcon />}
             >
                 <span className="menu-text">Meny</span>
             </Button>
@@ -107,9 +107,7 @@ const BurgerMenu = () => {
                 anchorEl={buttonRef.current}
                 placement="bottom"
             >
-                <Popover.Content>
-                    <PopoverContent />
-                </Popover.Content>
+                <PopoverContent />
             </PopoverCustomized>
         </BurgerMenuContainer>
     )
@@ -165,7 +163,7 @@ const PopoverContent = () => {
                     <>
                         <li>
                             <Link href={RouterAdmin.PATH}>
-                                <Employer className="popover-link-ikon" />
+                                <Buildings2Icon className="popover-link-ikon" />
                                 {RouterAdmin.NAME}
                             </Link>
                         </li>

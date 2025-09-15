@@ -35,3 +35,7 @@ yarn-error.log*
 # Nix stuffs
 .direnv/
 result*
+
+# Claude Code files
+claude.md
+CLAUDE.md

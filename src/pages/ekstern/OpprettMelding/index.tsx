@@ -217,7 +217,6 @@ const OpsComponent = ({
         const newSelectedStatus: StatusEnum = event.target.value
         setSelectedStatus(newSelectedStatus)
         setOpsMessage({ ...opsMessage, status: newSelectedStatus })
-        console.log(selectedStatus)
     }
 
     const handleUpdateDates = (startDateInput: Date, endDateInput: Date) => {
@@ -534,7 +533,6 @@ const AffectedServicesSelect = ({
       // Check if the current user is a member of the team that owns the selected service
         const service: Service = await fetchServiceFromId(selectedService.id);
         const team: Team = await fetchSimplifiedTeamByName(service.team);
-        console.log("Team: ", team, " Service: ", service)
         const isMember = await checkUserMembershipInTeam(team.id, user.navIdent);
       if (isMember) {
         handleUpdateListOfAffectedServices(selectedService);

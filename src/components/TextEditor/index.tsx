@@ -1,5 +1,5 @@
 import { Checkbox, Heading } from "@navikt/ds-react"
-import React, { MutableRefObject, useEffect, useState } from "react"
+import React, { MutableRefObject, useEffect, useState, useRef } from "react"
 import { datePrettifyer } from "../../utils/datePrettifyer"
 import styled from "styled-components"
 import dynamic from "next/dynamic"
@@ -88,7 +88,7 @@ ${
 `
 }
 
-const TextEditor = React.forwardRef(
+const TextEditor = React.forwardRef<any, EditorProps>(
     (
         {
             isInternal,
@@ -102,11 +102,12 @@ const TextEditor = React.forwardRef(
     ) => {
         const [message, setMessage] = useState("")
         const [showHistory, setShowHistory] = useState(true)
+        const editingRef = useRef(editing)
 
         useEffect(() => {
             setMessage(initialValue)
-            editing = true
-        }, [])
+            editingRef.current = true
+        }, [initialValue])
 
         return (
             <>
@@ -114,7 +115,7 @@ const TextEditor = React.forwardRef(
                     <Heading size="xsmall">
                         {title ? title : "Innhold:"}
                     </Heading>
-                    {editing && (
+                    {editingRef.current && (
                         <Checkbox
                             checked={showHistory}
                             onChange={() => setShowHistory(!showHistory)}
@@ -138,5 +139,7 @@ const TextEditor = React.forwardRef(
         )
     }
 )
+
+TextEditor.displayName = 'TextEditor'
 
 export default TextEditor

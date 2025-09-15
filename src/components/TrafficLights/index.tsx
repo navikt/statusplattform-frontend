@@ -1,15 +1,15 @@
 import styled from "styled-components"
 
 import {
-    Wrench,
-    Success,
-    Warning,
-    Error,
-    SuccessFilled,
-    WarningFilled,
-    ErrorFilled,
-    HelptextFilled,
-} from "@navikt/ds-icons"
+    WrenchIcon,
+    CheckmarkCircleIcon,
+    ExclamationmarkTriangleIcon,
+    XMarkOctagonIcon,
+    CheckmarkCircleFillIcon,
+    ExclamationmarkTriangleFillIcon,
+    XMarkOctagonFillIcon,
+    QuestionmarkDiamondFillIcon,
+} from "@navikt/aksel-icons"
 
 const TrafficLightsContainer = styled.div`
     display: none;
@@ -60,11 +60,11 @@ const TrafficLightsContainer = styled.div`
     }
 `
 
-export const SuccessCustomized = styled(Success)`
+export const SuccessCustomized = styled(CheckmarkCircleIcon)`
     color: var(--a-green-500) !important;
 `
 
-export const SuccessFilledCustomized = styled(SuccessFilled)`
+export const SuccessFilledCustomized = styled(CheckmarkCircleFillIcon)`
     color: var(--a-green-500) !important;
 
     &.service-closed {
@@ -77,15 +77,15 @@ export const SuccessFilledCustomized = styled(SuccessFilled)`
     }
 `
 
-export const SuccessFilledGray = styled(SuccessFilled)`
+export const SuccessFilledGray = styled(CheckmarkCircleFillIcon)`
     color: var(--a-gray-600) !important;
 `
 
-export const ErrorCustomized = styled(Error)`
+export const ErrorCustomized = styled(XMarkOctagonIcon)`
     color: var(--a-red-500) !important;
 `
 
-export const ErrorFilledCustomized = styled(ErrorFilled)`
+export const ErrorFilledCustomized = styled(XMarkOctagonFillIcon)`
     color: var(--a-red-500) !important;
 
     &.status-not-from-team {
@@ -94,7 +94,7 @@ export const ErrorFilledCustomized = styled(ErrorFilled)`
     }
 `
 
-export const ErrorFilledGray = styled(ErrorFilled)`
+export const ErrorFilledGray = styled(XMarkOctagonFillIcon)`
     color: var(--a-gray-600) !important;
 `
 
@@ -107,18 +107,18 @@ export const NoStatusAvailableCircle = styled.span`
     display: inline-block;
 `
 
-export const HelptextCustomizedBlue = styled(HelptextFilled)`
+export const HelptextCustomizedBlue = styled(QuestionmarkDiamondFillIcon)`
     color: var(--a-deepblue-400) !important;
 `
 
-export const HelpTextCustomizedGray = styled(HelptextFilled)`
+export const HelpTextCustomizedGray = styled(QuestionmarkDiamondFillIcon)`
     color: var(--a-gray-600) !important;
 `
 
-const WrenchCustomizedBlue = styled(Wrench)`
+const WrenchCustomizedBlue = styled(WrenchIcon)`
     color: var(--a-deepblue-400) !important;
 `
-const WrenchCustomizedWhite = styled(Wrench)`
+const WrenchCustomizedWhite = styled(WrenchIcon)`
     color: var(--a-gray-100) !important;
 `
 
@@ -236,7 +236,7 @@ export const WarningDownloadedFilledCustomized = styled.svg`
 `
 
 // Everything revolving the Warning icon is due to be changed eventually, as this was the only way to ensure we could keep the Warning Icon they used in the old system.
-// If anything needs to be changed, old icons can be found here: https://unpkg.com/browse/@navikt/ds-icons@0.8.5/svg/
+// If anything needs to be changed, old icons can be found here: https://unpkg.com/browse/@navikt/aksel-icons@0.8.5/svg/
 interface CustomSvgCompI {
     className: string
 }

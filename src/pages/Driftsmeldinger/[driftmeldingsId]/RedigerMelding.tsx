@@ -1,4 +1,4 @@
-import { Back } from "@navikt/ds-icons"
+import { ChevronLeftIcon } from "@navikt/aksel-icons"
 import {
     Alert,
     BodyShort,
@@ -66,7 +66,7 @@ export const getServerSideProps = async (context) => {
     }
 }
 
-const opsMessageDetails = ({ opsMessage, retrievedServices }) => {
+const OpsMessageDetails = ({ opsMessage, retrievedServices }) => {
     const [isLoading, setIsLoading] = useState(true)
 
     const user = useContext(UserStateContext)
@@ -192,7 +192,7 @@ const OpsMessageComponent = ({
                     size="small"
                     onClick={() => router.push(RouterOpsMeldinger.PATH)}
                 >
-                    <Back />
+                    <ChevronLeftIcon />
                     Se alle driftsmeldinger
                 </Button>
             </div>
@@ -922,4 +922,4 @@ const SelectAffectedServicesComponent = ({
     )
 }
 
-export default opsMessageDetails
+export default OpsMessageDetails

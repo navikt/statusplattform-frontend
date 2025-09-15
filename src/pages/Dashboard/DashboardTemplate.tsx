@@ -4,7 +4,7 @@ import styled from "styled-components"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 
-import { Expand } from "@navikt/ds-icons"
+import { ExpandIcon } from "@navikt/aksel-icons"
 import { BodyShort, Button, Heading } from "@navikt/ds-react"
 
 import { Area, Dashboard } from "../../types/types"
@@ -15,6 +15,7 @@ import StatusOverview from "../../components/StatusOverview"
 import { PortalServiceTile } from "../../components/PortalServiceTile"
 import { UserData } from "../../types/userData"
 import IconDescription from "../../components/IconDescription"
+import StatusList from "./statusList"
 
 /* --------------------------------------- Styles start --------------------------------------- */
 
@@ -255,6 +256,16 @@ const DashboardTemplate = ({
         }
     }
 
+    const getAllServiceIds = (areas: Area[]): string[] => {
+        let serviceIds: string[] = []
+        areas.forEach((area) => {
+            area.services.forEach((service) => {
+                serviceIds.push(service.id)
+            })
+        })
+        return serviceIds
+    }
+
     if (dashboard.areas.length == 0) {
         changeTitle("Feil ved henting av dashbord")
         return <NoAreasInDashboard />
@@ -276,10 +287,11 @@ const DashboardTemplate = ({
     return (
         <DashboardContainer>
             <DigitalServicesContainer>
-                <StatusOverview dashboard={dashboard} user={user} />
-
-                {dashboard.areas.length > 0 && (
-                    <PortalServiceTileContainer maxWidth={maxWidth}>
+                <PortalServiceTileContainer maxWidth={maxWidth}>
+                    <div style={{ marginBottom: '3rem' }}>
+                        <StatusOverview dashboard={dashboard} user={user} />
+                    </div>
+                    {dashboard.areas.length > 0 && (
                         <AllAreas
                             expandAll={expandAll}
                             isTileExpanded={isTileExpanded}
@@ -289,11 +301,12 @@ const DashboardTemplate = ({
                             numberOfTilesPerRow={numberOfTilesPerRow}
                             rows={rows}
                         />
-                    </PortalServiceTileContainer>
-                )}
+                    )}
+                    {/* <MaintenanceScheduling /> */}
+                    <IconDescription />
+                    <StatusList service_ids={getAllServiceIds(dashboard.areas)} user={user}/>
+                </PortalServiceTileContainer>
             </DigitalServicesContainer>
-            {/* <MaintenanceScheduling /> */}
-            <IconDescription />
         </DashboardContainer>
     )
 }
@@ -384,7 +397,7 @@ const AllAreas = ({
     }
 
     return (
-        <PortalServiceTileContainer maxWidth={maxWidth}>
+        <>
             {/*  <span className="expand-all-wrapper">
                 <ExpandAllToggle
                     toggleExpandAll={toggleExpandAll}
@@ -408,7 +421,7 @@ const AllAreas = ({
                     ))}
                 </PortalServiceTileRow>
             ))}
-        </PortalServiceTileContainer>
+        </>
     )
 }
 
@@ -529,7 +542,7 @@ const ExpandAllToggle: React.FC<{
                 <BodyShort size="small">Trekk sammen områder</BodyShort>
             )}
             <span className={expanded ? "expanded" : ""}>
-                <Expand />
+                <ExpandIcon />
             </span>
         </ToggleExpandAllButton>
     )

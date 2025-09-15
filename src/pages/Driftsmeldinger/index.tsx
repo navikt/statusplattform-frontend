@@ -1,4 +1,4 @@
-import { Back } from "@navikt/ds-icons"
+import { ChevronLeftIcon } from "@navikt/aksel-icons"
 import { Button, Heading } from "@navikt/ds-react"
 import Head from "next/head"
 import { useRouter } from "next/router"
@@ -196,7 +196,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
                             <Button
                                 variant="tertiary"
                                 onClick={() => router.back()}
-                                icon={<Back />}
+                                icon={<ChevronLeftIcon />}
                                 className="goBackBtn"
                             >
                                 Gå tilbake
@@ -250,10 +250,33 @@ const OpsMessages = ({ serverOpsMessages }) => {
     )
 }
 
+
 const OpsMessagesList = styled.div`
     display: grid;
+    grid-gap: 10px
+
+    /* Alle meldinger vises på én rad */
+    grid-template-columns: 1fr; 
+
+    @media (min-width: 800px) {
+        grid-auto-rows: 350px;
+        grid-template-columns: repeat(1, 87vw);
+    }
+
+    @media (min-width: 1150px) {
+        grid-auto-rows: 350px;
+        grid-template-columns: repeat(1, 70vw);
+    }
+
+    @media (min-width: 1600px) {
+        grid-auto-rows: 300px;
+        grid-template-columns: repeat(1, 70vw);
+    }
+`;
+
+const abc = styled.div`
+    display: grid;
     grid-gap: 3rem;
-    /* display: flex;
     flex-direction: column;
  
     gap: 2rem; */

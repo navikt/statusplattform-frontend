@@ -50,6 +50,13 @@ spec:
         sidecar:
             enabled: true
             autoLogin: true
+            autoLoginIgnorePaths:
+              - /sp/Samarbeidspartner/**
+              - /sp/_next/**
+              - /sp/api/requestGateway
+              - /sp/api/userInfo
+              - /sp/favicon.ico
+              - /sp/assets/nav-logo/png/black.png
 #            errorPath: "https://status.nav.no/sp/Login"
     accessPolicy:
         outbound:
