@@ -10,6 +10,7 @@ import Link from "next/link";
 import { PlusIcon } from '@navikt/aksel-icons';
 import { fetchMessageByServiceList } from "../../utils/dashboardsAPI";
 import { isAfter, isBefore } from "date-fns";
+import SubscriptionModal from "../../components/SubscriptionModal";
 
 interface DashboardTemplateProps {
   services: Service[];
@@ -19,6 +20,7 @@ interface DashboardTemplateProps {
 const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
   const [servicesWithStatus, setServicesWithStatus] = useState<Service[]>(services);
   const [opsMessages, setOpsMessages] = useState<OpsMessageI[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const services_ids_list = services.map((service: Service) => service.id);
 
   useEffect(() => {
@@ -60,7 +62,7 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
               : "Alle våre systemer fungerer normalt"
             }
           </StatusOverview>
-          <SubscribeButton variant="secondary" size="small">
+          <SubscribeButton variant="secondary" size="small" onClick={() => setIsModalOpen(true)}>
             Abonner
           </SubscribeButton>
         </PageHeader>
@@ -141,6 +143,13 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
           </SectionHeader>
           <RecentMessages service_ids={services_ids_list} user={user} />
         </MaintenanceSection>
+
+        {/* Subscription Modal */}
+        <SubscriptionModal
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+          services={services}
+        />
       </ContentWrapper>
     </PageContainer>
   );
