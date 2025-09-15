@@ -3,7 +3,7 @@ import Head from "next/head"
 import { useEffect, useState } from "react"
 
 import DashboardFromName from "./Dashboard/[dashboardName]"
-import { RouterInternt, RouterPrivatperson } from "../types/routes"
+import { RouterInternt, RouterPrivatperson, RouterSPSamarbeidspartner, RouterSPInternt } from "../types/routes"
 import CustomNavSpinner from "../components/CustomNavSpinner"
 import { UserData } from "../types/userData"
 import { checkLoginInfoAndState } from "../utils/checkLoginInfoAndState"
@@ -34,13 +34,15 @@ export default function Home() {
             await user
 
             if (user.navIdent && router.isReady && router.asPath == "/") {
-                router.push(RouterInternt.PATH)
+                // NAV employee with SSO session - route to internal dashboard
+                router.push(RouterSPInternt.PATH)
             } else if (
                 !user.navIdent &&
                 router.isReady &&
                 router.asPath == "/"
             ) {
-                router.push(RouterPrivatperson.PATH)
+                // External user without SSO session - route to external statuspage
+                router.push(RouterSPSamarbeidspartner.PATH)
             }
         })()
     }, [router])

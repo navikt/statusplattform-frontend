@@ -25,6 +25,17 @@ export enum RouterInternt {
     NAME = "Internt",
     PATH = "/Dashboard/Internt",
 }
+
+// New SP routes for external/internal access
+export enum RouterSPSamarbeidspartner {
+    NAME = "SP Samarbeidspartner",
+    PATH = "/sp/Samarbeidspartner",
+}
+
+export enum RouterSPInternt {
+    NAME = "SP Internt",
+    PATH = "/sp/Dashboard/internt",
+}
 // ---
 
 // Admin
