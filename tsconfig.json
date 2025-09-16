@@ -7,6 +7,14 @@
       "esnext"
     ],
     "baseUrl": "./",
+    "paths": {
+      "@/*": ["src/*"],
+      "@/components/*": ["src/components/*"],
+      "@/pages/*": ["src/pages/*"],
+      "@/utils/*": ["src/utils/*"],
+      "@/types/*": ["src/types/*"],
+      "@/styles/*": ["src/styles/*"]
+    },
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,

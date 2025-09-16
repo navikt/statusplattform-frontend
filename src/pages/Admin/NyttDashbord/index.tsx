@@ -1,23 +1,36 @@
+// External libraries
 import router from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
 
+// NAV Design System
 import { BodyShort, Button, Detail, Select, TextField, ToggleGroup } from "@navikt/ds-react"
 import { TrashIcon } from "@navikt/aksel-icons"
 
-import { useLoader } from "../../../utils/useLoader"
-import { Area, Dashboard } from "../../../types/types"
-import Layout from "../../../components/Layout"
-import CustomNavSpinner from "../../../components/CustomNavSpinner"
+// Internal components
+import Layout from "@/components/Layout"
+import CustomNavSpinner from "@/components/CustomNavSpinner"
+import OpsMessages from "@/pages/driftsmeldinger"
+
+// Contexts
+import { TitleContext } from "@/components/ContextProviders/TitleContext"
+
+// Styles
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
-import { TitleContext } from "../../../components/ContextProviders/TitleContext"
-import { postDashboard, postExternalDashboard } from "../../../utils/dashboardsAPI"
-import { fetchAreas } from "../../../utils/areasAPI"
-import { RouterAdminDashboards } from "../../../types/routes"
+
+// Utils
+import { useLoader } from "@/utils/useLoader"
+import { postDashboard, postExternalDashboard } from "@/utils/dashboardsAPI"
+import { fetchAreas } from "@/utils/areasAPI"
+import { EndPathAreas } from "@/utils/apiHelper"
+
+// Types
+import { Area, Dashboard } from "@/types/types"
+import { RouterAdminDashboards } from "@/types/routes"
+
+// Config
 import { backendPath } from "../.."
-import { EndPathAreas } from "../../../utils/apiHelper"
-import OpsMessages from "../../../components/OpsMessages"
 
 const NewDashboardContainer = styled.div`
     display: flex;

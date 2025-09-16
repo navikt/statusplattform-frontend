@@ -1,10 +1,17 @@
+// External libraries
 import Head from "next/head"
-import { useContext } from "react"
-import Layout from "../../components/LayoutExternal"
-import DashboardTemplate from "./DashboardTemplate"
-import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
-import { Service } from "../../types/types"
 import { GetServerSideProps } from "next"
+import { useContext } from "react"
+
+// Internal components
+import Layout from "@/components/LayoutExternal"
+import DashboardTemplate from "./DashboardTemplate"
+
+// Contexts
+import { UserStateContext } from "@/components/ContextProviders/UserStatusContext"
+
+// Types
+import { Service } from "@/types/types"
 
 export const getServerSideProps: GetServerSideProps = async () => {
     const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
