@@ -8,13 +8,33 @@ import { GetServerSideProps } from "next"
 
 export const getServerSideProps: GetServerSideProps = async () => {
     const backendPath = process.env.NEXT_PUBLIC_BACKENDPATH
-    const res = await fetch(backendPath + "/rest/services/external")
 
-    const services: Service[] = await res.json()
-    return {
-        props: {
-            services,
-        },
+    try {
+        const res = await fetch(backendPath + "/rest/services/external")
+
+        if (!res.ok) {
+            console.error('API response not OK:', res.status, res.statusText)
+            return {
+                props: {
+                    services: [],
+                },
+            }
+        }
+
+        const services: Service[] = await res.json()
+
+        return {
+            props: {
+                services,
+            },
+        }
+    } catch (error) {
+        console.error('Error fetching services:', error)
+        return {
+            props: {
+                services: [],
+            },
+        }
     }
 }
 

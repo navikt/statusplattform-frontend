@@ -84,7 +84,6 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
     fetchData();
   }, [service_ids]);
 
-  console.log(serverOpsMessages);
   return (
     <StatusContainer>
       {serverOpsMessages.length === 0 ? (

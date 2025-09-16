@@ -92,35 +92,48 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
         </StatusLegend>
 
         {/* Service Status Grid */}
-        <ServiceGrid>
-          {servicesWithStatus.map((service) => (
-            <ServiceCard key={service.id}>
-              <ServiceLeft>
-                <ServiceIcon>
-                  <span>📄</span>
-                </ServiceIcon>
-                <ServiceName>{service.name}</ServiceName>
-              </ServiceLeft>
-              <ServiceStatus status={getServiceStatus(service)}>
-                {getStatusText(getServiceStatus(service))}
-              </ServiceStatus>
-            </ServiceCard>
-          ))}
-          {/* Placeholder cards to fill grid to 10 places */}
-          {Array.from({ length: Math.max(0, 10 - services.length) }, (_, index) => (
-            <PlaceholderCard key={`placeholder-${index}`}>
-              <ServiceLeft>
-                <ServiceIcon>
-                  <span>📄</span>
-                </ServiceIcon>
-                <ServiceName>Placeholder Service {index + services.length + 1}</ServiceName>
-              </ServiceLeft>
-              <ServiceStatus status="operational">
-                Operativ
-              </ServiceStatus>
-            </PlaceholderCard>
-          ))}
-        </ServiceGrid>
+        {servicesWithStatus.length > 0 ? (
+          <ServiceGrid>
+            {servicesWithStatus.map((service) => (
+              <ServiceCard key={service.id}>
+                <ServiceLeft>
+                  <ServiceIcon>
+                    <span>📄</span>
+                  </ServiceIcon>
+                  <ServiceName>{service.name}</ServiceName>
+                </ServiceLeft>
+                <ServiceStatus status={getServiceStatus(service)}>
+                  {getStatusText(getServiceStatus(service))}
+                </ServiceStatus>
+              </ServiceCard>
+            ))}
+            {/* Only show placeholders if we have real services but fewer than 10 */}
+            {servicesWithStatus.length < 10 && servicesWithStatus.length > 0 &&
+              Array.from({ length: Math.max(0, 10 - servicesWithStatus.length) }, (_, index) => (
+                <PlaceholderCard key={`placeholder-${index}`}>
+                  <ServiceLeft>
+                    <ServiceIcon>
+                      <span>📄</span>
+                    </ServiceIcon>
+                    <ServiceName>Placeholder Service {index + servicesWithStatus.length + 1}</ServiceName>
+                  </ServiceLeft>
+                  <ServiceStatus status="operational">
+                    Operativ
+                  </ServiceStatus>
+                </PlaceholderCard>
+              ))
+            }
+          </ServiceGrid>
+        ) : (
+          <NoServicesCard>
+            <NoServicesText>
+              Ingen tjenester tilgjengelig. Kontroller at backend-tjenesten kjører og er tilgjengelig.
+            </NoServicesText>
+            <NoServicesDetail>
+              Backend URL: {process.env.NEXT_PUBLIC_BACKENDPATH}/rest/services/external
+            </NoServicesDetail>
+          </NoServicesCard>
+        )}
 
         {/* Planned Maintenance */}
         <MaintenanceSection>
@@ -408,6 +421,30 @@ const PlaceholderCard = styled(ServiceCard)`
   &:hover {
     background-color: #f8f9fa;
   }
+`;
+
+const NoServicesCard = styled.div`
+  background: white;
+  border: 1px solid #e1e5e9;
+  border-radius: 6px;
+  padding: 3rem 2rem;
+  text-align: center;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+`;
+
+const NoServicesText = styled.div`
+  font-size: 1.125rem;
+  color: #172b4d;
+  margin-bottom: 1rem;
+  font-weight: 500;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+`;
+
+const NoServicesDetail = styled.div`
+  font-size: 0.875rem;
+  color: #5e6c84;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  word-break: break-all;
 `;
 
 const ServiceLeft = styled.div`
