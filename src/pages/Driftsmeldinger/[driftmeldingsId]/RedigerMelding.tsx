@@ -377,16 +377,16 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
 
     const updateOpsMessage =
         (field: keyof typeof updatedOpsMessage) =>
-        (evt: React.ChangeEvent<HTMLInputElement>) => {
-            const newOpsMessage: OpsMessageI = {
-                ...updatedOpsMessage,
-                [field]:
-                    evt.target.getAttribute("type") === "number"
-                        ? parseInt(evt.target.value)
-                        : evt.target.value,
+            (evt: React.ChangeEvent<HTMLInputElement>) => {
+                const newOpsMessage: OpsMessageI = {
+                    ...updatedOpsMessage,
+                    [field]:
+                        evt.target.getAttribute("type") === "number"
+                            ? parseInt(evt.target.value)
+                            : evt.target.value,
+                }
+                changeUpdatedOpsMessage(newOpsMessage)
             }
-            changeUpdatedOpsMessage(newOpsMessage)
-        }
 
     const handleUpdateOpsTextArea = (field, evt) => {
         const newOpsMsg: OpsMessageI = {
@@ -436,13 +436,13 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
                     router.push(RouterOpsMeldinger.PATH)
                 })
         } catch (error) {
-            console.log(error)
+            // console.log(error)
             toast.error("Noe gikk galt ved oppdatering av meldingen")
         }
     }
 
     const handleIsInternal = (newValue) => {
-        console.log(onlyShowForNavEmployees)
+        // console.log(onlyShowForNavEmployees)
         if (newValue == "Internal") {
             setShowExternalEditor(false)
             changeUpdatedOpsMessage({
@@ -480,7 +480,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
         const newDate: Date = new Date()
         startDateForActiveOpsMessage < newDate
             ? setEndDateForActiveOpsMessage(newDate)
-            : console.log("Kan ikke sette sluttdato etter startdato")
+            : // console.log("Kan ikke sette sluttdato etter startdato")
     }
 
     const handleSetAsActive = () => {
@@ -516,7 +516,7 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
         setStartDateForActiveOpsMessage(newDate)
     }
 
-    // console.log("Ny sluttdato: " + opsMessage.endTime)
+    //  console.log("Ny sluttdato: " + opsMessage.endTime)
 
     const handleUpdateEndMinutes = (event) => {
         const newDate: Date = new Date(endDateForActiveOpsMessage)
@@ -871,7 +871,7 @@ const SelectAffectedServicesComponent = ({
         const newSelectedService: Service = availableServices.find(
             (service) => idOfSelectedService === service.id
         )
-        console.log(newSelectedService)
+        // console.log(newSelectedService)
 
         setServiceNew(newSelectedService)
     }

@@ -128,7 +128,7 @@ const NewService = () => {
         componentDependencies: [],
         monitorlink: "",
         pollingUrl: "",
-        pollingOnPrem:false,
+        pollingOnPrem: false,
         areasContainingThisService: [],
         statusNotFromTeam: false,
     })
@@ -139,7 +139,7 @@ const NewService = () => {
 
     useEffect(() => {
         // Modal.setAppElement is no longer needed in newer versions
-        ;(async function () {
+        ; (async function () {
             const retrievedServices: Service[] = await fetchServicesMinimal()
             const retrievedComponents: Component[] = await fetchComponentsMinimal()
             const retrievedAreas: Area[] = await fetchAreasMinimal()
@@ -164,30 +164,29 @@ const NewService = () => {
         componentDependencies: componentdependencies,
         monitorlink,
         pollingUrl,
-        pollingOnPrem:pollingOnPrem,
+        pollingOnPrem: pollingOnPrem,
         areasContainingThisService,
         statusNotFromTeam,
     } = newService
 
     const handleServiceDataChange =
         (field: keyof typeof newService) =>
-        (evt: React.ChangeEvent<HTMLInputElement>) => {
-            const updatedNewService = {
-                ...newService,
-                [field]:
-                    evt.target.getAttribute("type") === "number"
-                        ? parseInt(evt.target.value)
-                        : evt.target.value,
+            (evt: React.ChangeEvent<HTMLInputElement>) => {
+                const updatedNewService = {
+                    ...newService,
+                    [field]:
+                        evt.target.getAttribute("type") === "number"
+                            ? parseInt(evt.target.value)
+                            : evt.target.value,
+                }
+                updateNewService(updatedNewService)
             }
-            updateNewService(updatedNewService)
-        }
 
     const handleSetPollingOnPremChange =
-        (pollingOnPrem: boolean) =>
-        {
+        (pollingOnPrem: boolean) => {
             const updatedNewService = {
                 ...newService,
-                pollingOnPrem:pollingOnPrem,
+                pollingOnPrem: pollingOnPrem,
             }
             updateNewService(updatedNewService)
         }
@@ -206,8 +205,8 @@ const NewService = () => {
         if (serviceDependencies.includes(serviceToAdd)) {
             toast.warn(
                 "Tjenesteavhengighet " +
-                    serviceToAdd.name +
-                    " er allerede lagt til"
+                serviceToAdd.name +
+                " er allerede lagt til"
             )
             return
         }
@@ -223,7 +222,7 @@ const NewService = () => {
             componentDependencies: componentdependencies,
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
-            pollingOnPrem:pollingOnPrem,
+            pollingOnPrem: pollingOnPrem,
             areasContainingThisService: areasContainingThisService,
             statusNotFromTeam: statusNotFromTeam,
         }
@@ -245,7 +244,7 @@ const NewService = () => {
             componentDependencies: componentdependencies,
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
-            pollingOnPrem:pollingOnPrem,
+            pollingOnPrem: pollingOnPrem,
             areasContainingThisService: areasContainingThisService,
             statusNotFromTeam: statusNotFromTeam,
         }
@@ -275,7 +274,7 @@ const NewService = () => {
             componentDependencies: newComponentsList,
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
-            pollingOnPrem:pollingOnPrem,
+            pollingOnPrem: pollingOnPrem,
             areasContainingThisService: areasContainingThisService,
             statusNotFromTeam: statusNotFromTeam,
         }
@@ -297,7 +296,7 @@ const NewService = () => {
             componentDependencies: newComponentsList,
             monitorlink: monitorlink,
             pollingUrl: pollingUrl,
-            pollingOnPrem:pollingOnPrem,
+            pollingOnPrem: pollingOnPrem,
             areasContainingThisService: areasContainingThisService,
             statusNotFromTeam: statusNotFromTeam,
         }
@@ -389,7 +388,7 @@ const NewService = () => {
     })
 
     const handleUpdatedTeam = (event) => {
-        console.log(event.target.value)
+        // console.log(event.target.value)
         updateNewService({
             ...newService,
             team: event.target.value
@@ -440,7 +439,7 @@ const NewService = () => {
 
                     <div className="input-wrapper">
                         <Select label="Velg team"
-                                onChange= {handleUpdatedTeam}>
+                            onChange={handleUpdatedTeam}>
                             <option value="">Velg team</option>
                             {teamOptions}
                         </Select>
@@ -460,35 +459,35 @@ const NewService = () => {
                             </button>
                         </div>
                     </div>
-                     <div className="input-wrapper">
-                                            <TextField
-                                                type="text"
-                                                label="Monitorlink"
-                                                value={monitorlink}
-                                                error={
-                                                    !validateMonitorLink(monitorlink)
-                                                        ? "Feil i formatet på urlen"
-                                                        : undefined
-                                                }
-                                                onChange={handleServiceDataChange("monitorlink")}
-                                                placeholder="Monitorlink"
-                                            />
-                                            <div className="help-button-wrapper">
-                                                <button
-                                                    className="help-button"
-                                                    type="button"
-                                                    ref={buttonRef}
-                                                    onClick={(event) =>
-                                                        handleTriggerHelpText(event, 2)
-                                                    }
-                                                >
-                                                    <InformationSquareIcon
-                                                        width="1.5em"
-                                                        height="1.5em"
-                                                    />
-                                                </button>
-                                            </div>
-                                        </div>
+                    <div className="input-wrapper">
+                        <TextField
+                            type="text"
+                            label="Monitorlink"
+                            value={monitorlink}
+                            error={
+                                !validateMonitorLink(monitorlink)
+                                    ? "Feil i formatet på urlen"
+                                    : undefined
+                            }
+                            onChange={handleServiceDataChange("monitorlink")}
+                            placeholder="Monitorlink"
+                        />
+                        <div className="help-button-wrapper">
+                            <button
+                                className="help-button"
+                                type="button"
+                                ref={buttonRef}
+                                onClick={(event) =>
+                                    handleTriggerHelpText(event, 2)
+                                }
+                            >
+                                <InformationSquareIcon
+                                    width="1.5em"
+                                    height="1.5em"
+                                />
+                            </button>
+                        </div>
+                    </div>
 
                     <div className="input-wrapper">
                         <TextField
@@ -521,15 +520,15 @@ const NewService = () => {
                     </div>
 
                     <div className="input-wrapper">
-                                           <RadioGroup
-                                           legend=""
-                                           defaultValue="false"
-                                           size="small"
-                                          onChange={(val: boolean) => (handleSetPollingOnPremChange(val)) }
-                                        >
-                                              <Radio value="false">GCP</Radio>
-                                              <Radio value="true">FSS</Radio>
-                    </RadioGroup>
+                        <RadioGroup
+                            legend=""
+                            defaultValue="false"
+                            size="small"
+                            onChange={(val: boolean) => (handleSetPollingOnPremChange(val))}
+                        >
+                            <Radio value="false">GCP</Radio>
+                            <Radio value="true">FSS</Radio>
+                        </RadioGroup>
                     </div>
 
 

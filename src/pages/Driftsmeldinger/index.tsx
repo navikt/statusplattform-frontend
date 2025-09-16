@@ -110,7 +110,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
                     setOpsMessages(reloadedOpsMessages)
                 }
             } catch (error) {
-                console.log(error)
+                // console.log(error)
                 toast.error("Noe gikk galt ved henting av driftsmeldinger")
                 isMounted = false
             } finally {
@@ -142,7 +142,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
                         setOpsMessages(reloadedOpsMessages)
                     }
                 } catch (error) {
-                    console.log(error)
+                    // console.log(error)
                     toast.error("Noe gikk galt ved henting av driftsmeldinger")
                     changeRefetchOpsMessages(false)
                 } finally {
@@ -151,7 +151,7 @@ const OpsMessages = ({ serverOpsMessages }) => {
                         changeRefetchOpsMessages(false)
                     }
                 }
-            } catch (error) {}
+            } catch (error) { }
         }
         if (reFetchOpsMessages == true) {
             refetch()

@@ -2,7 +2,7 @@ import { useRouter } from "next/router"
 import Head from "next/head"
 import { useEffect, useState } from "react"
 
-import DashboardFromName from "./Dashboard/[dashboardName]"
+import DashboardFromName from "./dashboard/[dashboardName]"
 import { RouterInternt, RouterPrivatperson, RouterSPSamarbeidspartner, RouterSPInternt } from "../types/routes"
 import CustomNavSpinner from "../components/CustomNavSpinner"
 import { UserData } from "../types/userData"

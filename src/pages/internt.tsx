@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 
 import Layout from "../components/Layout"
 import CustomNavSpinner from "../components/CustomNavSpinner"
-import DashboardTemplate from "./Dashboard/DashboardTemplate"
+import DashboardTemplate from "./dashboard/DashboardTemplate"
 import { UserStateContext } from "../components/ContextProviders/UserStatusContext"
 import { RouterSPSamarbeidspartner } from "../types/routes"
 import { Dashboard } from "../types/types"

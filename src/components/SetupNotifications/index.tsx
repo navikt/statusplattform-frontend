@@ -76,7 +76,7 @@ const CreateNotifications = () => {
     }
 
     const handleUpdateAcceptsTerms = (event) => {
-        console.log(event)
+        // console.log(event)
     }
 
     if (clickedSendOtp) {

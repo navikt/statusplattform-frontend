@@ -84,104 +84,104 @@ const ProfileMenu: React.FC<{
             return
         }
         setAnchorEl(event)
-        console.log(
-            "Adminaccess: " +
-                usersWithAccess +
-                " ||| OpsAccess: " +
-                usersWithOpsAccess
+        // console.log(
+        "Adminaccess: " +
+            usersWithAccess +
+            " ||| OpsAccess: " +
+            usersWithOpsAccess
         )
     }
 
-    const closePopover = () => {
-        setOpen(!open)
-        if (anchorEl) {
-            setAnchorEl(undefined)
-        }
+const closePopover = () => {
+    setOpen(!open)
+    if (anchorEl) {
+        setAnchorEl(undefined)
     }
+}
 
-    return (
-        <>
-            {name && navIdent ? (
-                <>
-                    <ProfileButton
-                        variant="secondary"
-                        onClick={(event) => handleSetOpen(event.currentTarget)}
-                        aria-expanded={!!anchorEl}
-                        ref={setAnchor}
-                        icon={<PersonGroupIcon />}
-                        iconPosition="right"
-                    >
-                        {navIdent}
-                    </ProfileButton>
-                    <Popover
-                        open={open}
-                        onClose={closePopover}
-                        anchorEl={anchor}
-                        placement="bottom-end"
-                    >
-                            <CustomPopoverContent>
-                                <UserName>
-                                    <b>̧{name}</b>
-                                </UserName>
-                                {usersWithOpsAccess.includes(navIdent) && (
-                                    <div>
-                                        <SubMenuDivider />
-
-                                        <a
-                                            onClick={() =>
-                                                router.push(
-                                                    RouterOpsMeldinger.PATH +
-                                                        "/OpprettMelding"
-                                                )
-                                            }
-                                            className="internalLinks"
-                                        >
-                                            <ChatExclamationmarkIcon className="subMenuIcon" />{" "}
-                                            {"Opprett driftsmelding"}
-                                        </a>
-                                    </div>
-                                )}
-                                
-                                    <div>
-                                        <SubMenuDivider />
-                                        <a
-                                            onClick={() =>
-                                                router.push(RouterAdmin.PATH)
-                                            }
-                                            className="internalLinks"
-                                        >
-                                            <Buildings2Icon className="adminIcon" />{" "}
-                                            {RouterAdmin.NAME}
-                                        </a>
-                                    </div>
-                                
-
-                                <SubMenuDivider />
-                                <div>
-                                    <a
-                                        href={RouterLogout.PATH}
-                                        className="internalLinks"
-                                    >
-                                        <LeaveIcon className="logOutIcon" /> Logg
-                                        ut
-                                    </a>
-                                </div>
-                            </CustomPopoverContent>
-                    </Popover>
-                </>
-            ) : (
+return (
+    <>
+        {name && navIdent ? (
+            <>
                 <ProfileButton
                     variant="secondary"
-                    onClick={() => router.push(RouterLogin.PATH)}
+                    onClick={(event) => handleSetOpen(event.currentTarget)}
                     aria-expanded={!!anchorEl}
+                    ref={setAnchor}
                     icon={<PersonGroupIcon />}
                     iconPosition="right"
                 >
-                    Logg inn
+                    {navIdent}
                 </ProfileButton>
-            )}
-        </>
-    )
+                <Popover
+                    open={open}
+                    onClose={closePopover}
+                    anchorEl={anchor}
+                    placement="bottom-end"
+                >
+                    <CustomPopoverContent>
+                        <UserName>
+                            <b>̧{name}</b>
+                        </UserName>
+                        {usersWithOpsAccess.includes(navIdent) && (
+                            <div>
+                                <SubMenuDivider />
+
+                                <a
+                                    onClick={() =>
+                                        router.push(
+                                            RouterOpsMeldinger.PATH +
+                                            "/OpprettMelding"
+                                        )
+                                    }
+                                    className="internalLinks"
+                                >
+                                    <ChatExclamationmarkIcon className="subMenuIcon" />{" "}
+                                    {"Opprett driftsmelding"}
+                                </a>
+                            </div>
+                        )}
+
+                        <div>
+                            <SubMenuDivider />
+                            <a
+                                onClick={() =>
+                                    router.push(RouterAdmin.PATH)
+                                }
+                                className="internalLinks"
+                            >
+                                <Buildings2Icon className="adminIcon" />{" "}
+                                {RouterAdmin.NAME}
+                            </a>
+                        </div>
+
+
+                        <SubMenuDivider />
+                        <div>
+                            <a
+                                href={RouterLogout.PATH}
+                                className="internalLinks"
+                            >
+                                <LeaveIcon className="logOutIcon" /> Logg
+                                ut
+                            </a>
+                        </div>
+                    </CustomPopoverContent>
+                </Popover>
+            </>
+        ) : (
+            <ProfileButton
+                variant="secondary"
+                onClick={() => router.push(RouterLogin.PATH)}
+                aria-expanded={!!anchorEl}
+                icon={<PersonGroupIcon />}
+                iconPosition="right"
+            >
+                Logg inn
+            </ProfileButton>
+        )}
+    </>
+)
 }
 
 export default ProfileMenu

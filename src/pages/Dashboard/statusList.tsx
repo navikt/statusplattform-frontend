@@ -59,7 +59,7 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
                 <MessageCard
                   key={message.id}
                   severityColor={getSeverityColor(message.severity)}
-                  onClick={() => router.push(`/Driftsmeldinger/${message.id}`)} // Navigering
+                  onClick={() => router.push(`/driftsmeldinger/${message.id}`)} // Navigering
                 >
                   <HeaderContainer>
                     <Heading level="4" size="small">{message.internalHeader}</Heading>
@@ -80,7 +80,7 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
                 <MessageCard
                   key={message.id}
                   severityColor={getSeverityColor(message.severity)}
-                  onClick={() => router.push(`/Driftsmeldinger/${message.id}`)} // Navigering
+                  onClick={() => router.push(`/driftsmeldinger/${message.id}`)} // Navigering
                 >
                   <HeaderContainer>
                     <Heading level="4" size="small">{message.internalHeader}</Heading>
@@ -94,7 +94,7 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
           )}
 
           {/* Link til alle driftsmeldinger */}
-          <AllMessagesLink href="/Driftsmeldinger">Se alle driftsmeldinger</AllMessagesLink>
+          <AllMessagesLink href="/driftsmeldinger">Se alle driftsmeldinger</AllMessagesLink>
         </>
       )}
     </StatusContainer>

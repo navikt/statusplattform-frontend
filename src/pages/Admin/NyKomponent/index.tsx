@@ -4,7 +4,7 @@ import { useContext, useEffect, useRef, useState } from "react"
 import router from "next/router"
 
 import Layout from "../../../components/Layout"
-import {Service, Component, Team, Area} from "../../../types/types"
+import { Service, Component, Team, Area } from "../../../types/types"
 import CustomNavSpinner from "../../../components/CustomNavSpinner"
 
 import {
@@ -20,7 +20,7 @@ import { DocPencilIcon, TrashIcon, InformationSquareIcon } from "@navikt/aksel-i
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
 import { TitleContext } from "../../../components/ContextProviders/TitleContext"
 import { fetchAllTeams } from "../../../utils/teamKatalogAPI"
-import { postComponent} from "../../../utils/componentsAPI"
+import { postComponent } from "../../../utils/componentsAPI"
 import { RouterAdminKomponenter } from "../../../types/routes"
 import { EndPathComponents, EndPathServices } from "../../../utils/apiHelper"
 import { backendPath } from "../.."
@@ -156,7 +156,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
 
     useEffect(() => {
         // Modal.setAppElement is no longer needed in newer versions
-        ;(async function () {
+        ; (async function () {
             let retrievedTeams: Team[] = await fetchAllTeams()
             setAllTeams(retrievedTeams)
             setIsLoading(false)
@@ -180,17 +180,17 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
 
     const handleComponentDataChange =
         (field: keyof typeof newComponent) =>
-        (evt: React.ChangeEvent<HTMLInputElement>) => {
-            const updatedNewArea = {
-                ...newComponent,
-                [field]:
-                    evt.target.getAttribute("type") === "number"
-                        ? parseInt(evt.target.value)
-                        : evt.target.value,
-            }
+            (evt: React.ChangeEvent<HTMLInputElement>) => {
+                const updatedNewArea = {
+                    ...newComponent,
+                    [field]:
+                        evt.target.getAttribute("type") === "number"
+                            ? parseInt(evt.target.value)
+                            : evt.target.value,
+                }
 
-            updateNewComponent(updatedNewArea)
-        }
+                updateNewComponent(updatedNewArea)
+            }
 
     /*Handlers for adding componentDependencies START*/
 
@@ -307,11 +307,10 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
     }
 
     const handleSetPollingOnPremChange =
-        (pollingOnPrem: boolean) =>
-        {
+        (pollingOnPrem: boolean) => {
             const updatedNewComponent = {
                 ...newComponent,
-                pollingOnPrem:pollingOnPrem,
+                pollingOnPrem: pollingOnPrem,
             }
             updateNewComponent(updatedNewComponent)
         }
@@ -327,7 +326,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
     }
 
     const handleUpdatedTeam = (event) => {
-        console.log(event.target.value)
+        // console.log(event.target.value)
         updateNewComponent({
             ...newComponent,
             team: event.target.value
@@ -384,7 +383,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
 
                     <div className="input-wrapper">
                         <Select label="Velg team"
-                                onChange= {handleUpdatedTeam}>
+                            onChange={handleUpdatedTeam}>
                             <option value="">Velg team</option>
                             {teamOptions}
                         </Select>
@@ -460,7 +459,7 @@ const NewComponent = ({ allComponentsProps, allServicesProps }) => {
                             legend=""
                             defaultValue="false"
                             size="small"
-                            onChange={(val: boolean) => (handleSetPollingOnPremChange(val)) }
+                            onChange={(val: boolean) => (handleSetPollingOnPremChange(val))}
                         >
                             <Radio value="false">GCP</Radio>
                             <Radio value="true">FSS</Radio>

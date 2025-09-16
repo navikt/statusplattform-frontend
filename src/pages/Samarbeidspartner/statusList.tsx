@@ -10,7 +10,7 @@ import { UserData } from "../../types/userData";
 import { PencilIcon } from '@navikt/aksel-icons';
 import { toast } from "react-toastify";
 import { checkUserMembershipInTeam } from "../../utils/teamKatalogAPI";
-import opsMessageDetails from "../Driftsmeldinger/[driftmeldingsId]";
+import opsMessageDetails from "../driftsmeldinger/[driftmeldingsId]";
 
 interface StatusListProps {
   service_ids: string[];

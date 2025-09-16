@@ -79,7 +79,7 @@ const CreateOpsMessage = ({ services }) => {
     }
 
     const handleSubmitOpsMessage = () => {
-        // console.log(opsMessage)
+        //  console.log(opsMessage)
         postOpsMessage(opsMessage)
             .then(() => {
                 toast.success("Driftsmelding opprettet")
@@ -194,7 +194,7 @@ const OpsComponent = ({
     }
 
     const handleIsInternal = (newValue) => {
-        console.log(onlyShowForNavEmployees)
+        // console.log(onlyShowForNavEmployees)
         if (newValue == "Internal") {
             setOpsMessage({
                 ...opsMessage,
@@ -250,7 +250,7 @@ const OpsComponent = ({
         const newSelectedStatus: StatusEnum = event.target.value
         setSelectedStatus(newSelectedStatus)
         setOpsMessage({ ...opsMessage, status: newSelectedStatus })
-        console.log(selectedStatus)
+        // console.log(selectedStatus)
     }
 
     const handleUpdateDates = (startDateInput: Date, endDateInput: Date) => {

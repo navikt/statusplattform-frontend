@@ -141,13 +141,13 @@ export const getServerSideProps = async (context) => {
     const UUData = data.map((item: TjenesteType & KravType): UUDataType => {
         return uutype === "krav"
             ? {
-                  name: item.criteriaName,
-                  subItem: item.services,
-              }
+                name: item.criteriaName,
+                subItem: item.services,
+            }
             : {
-                  name: item.serviceName,
-                  subItem: item.criterias,
-              }
+                name: item.serviceName,
+                subItem: item.criterias,
+            }
     })
 
     return {
@@ -160,7 +160,7 @@ const UUDashboard = ({ UUData, uutype }) => {
 
     const user = useContext(UserStateContext)
 
-    console.log("tjeneste/krav", uutype, UUData)
+    // console.log("tjeneste/krav", uutype, UUData)
 
     return (
         <Layout>
@@ -225,7 +225,7 @@ const UUDashboard = ({ UUData, uutype }) => {
                     for digitale tjenester i NAV. Kravene er hentet fra
                     <b> Web Content Accessibility Guidelines (WCAG) 2.1.</b>
                     <p>
-                        Denne statussiden for UU krav er for øyeblikket ikke oppdatert. Automatisk oppdatering mot gjeldende rapporteringsverktøy vil komme senere. 
+                        Denne statussiden for UU krav er for øyeblikket ikke oppdatert. Automatisk oppdatering mot gjeldende rapporteringsverktøy vil komme senere.
                         Inntil videre henvises til rapporteringsverktøyet:
                         <a href="http://a11y-statement.nav.no/" target="_blank" rel="noopener noreferrer">
                             http://a11y-statement.nav.no/
@@ -238,17 +238,15 @@ const UUDashboard = ({ UUData, uutype }) => {
                     <li role="tab">
                         <Link href="tjeneste">
                             <LenkeSpacer
-                                className={`${
-                                    uutype === "tjeneste"
+                                className={`${uutype === "tjeneste"
                                         ? "active"
                                         : "inactive"
-                                }`}
+                                    }`}
                             >
                                 <BodyShort
                                     size="small"
-                                    className={`${
-                                        uutype === "tjeneste" ? "active" : ""
-                                    }`}
+                                    className={`${uutype === "tjeneste" ? "active" : ""
+                                        }`}
                                 >
                                     Vis Tjeneste
                                 </BodyShort>
@@ -258,15 +256,13 @@ const UUDashboard = ({ UUData, uutype }) => {
                     <li role="tab">
                         <Link href="krav">
                             <LenkeSpacer
-                                className={`${
-                                    uutype === "krav" ? "active" : "inactive"
-                                }`}
+                                className={`${uutype === "krav" ? "active" : "inactive"
+                                    }`}
                             >
                                 <BodyShort
                                     size="small"
-                                    className={`${
-                                        uutype === "krav" ? "active" : ""
-                                    }`}
+                                    className={`${uutype === "krav" ? "active" : ""
+                                        }`}
                                 >
                                     Vis krav
                                 </BodyShort>

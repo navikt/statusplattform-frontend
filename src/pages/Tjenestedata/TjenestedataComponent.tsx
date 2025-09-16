@@ -162,12 +162,12 @@ const TjenestedataContent = ({
         )
     }
 
-        return (
-            <ServiceData
-                service={service}
-                areasContainingThisService={areasContainingThisService}
-            />
-        )
+    return (
+        <ServiceData
+            service={service}
+            areasContainingThisService={areasContainingThisService}
+        />
+    )
 }
 
 
@@ -421,7 +421,7 @@ const IncidentHistoryComponent = ({ service, component }: IncidentHistoryI) => {
                     fetching = false
                 }
             } catch (error) {
-                console.log(error)
+                // console.log(error)
             } finally {
                 if (fetching) {
                     setIsLoading(false)
@@ -928,7 +928,7 @@ const MonthlyCalendarStatuses = ({ currentMonth }: MonthlyProps) => {
     // const [isLoading, setIsLoading] = useState(true)
 
     // useEffect(() => {
-    //     console.log(currentMonth)
+    //     // console.log(currentMonth)
     //     setIsLoading(false)
     // },[])
 
@@ -942,9 +942,8 @@ const MonthlyCalendarStatuses = ({ currentMonth }: MonthlyProps) => {
     return (
         <MonthlyStatusContainer>
             <div className="calendar-header">
-                {`${
-                    currentMonth.month
-                } ${currentMonth.entries[0].date.substring(0, 4)}`}
+                {`${currentMonth.month
+                    } ${currentMonth.entries[0].date.substring(0, 4)}`}
             </div>
 
             <DaysInMonth>

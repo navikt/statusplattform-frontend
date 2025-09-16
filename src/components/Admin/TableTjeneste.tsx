@@ -130,29 +130,29 @@ const CustomButton = styled.button`
 // function for adding team as owner of service
 const saveTeamChange = async (serviceId: string, newTeamId: string) => {
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/service/owner`, {
-        method: 'POST', // Or 'PUT' based on your backend API
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          serviceId,
-          teamId: newTeamId,
-        }),
-      });
-  
-      if (!response.ok) {
-        throw new Error('Failed to save team changes');
-      }
-  
-      const result = await response.json();
-      console.log('Team change saved successfully:', result);
-      return result;
+        const response = await fetch(`${process.env.NEXT_PUBLIC_BACKENDPATH}/rest/service/owner`, {
+            method: 'POST', // Or 'PUT' based on your backend API
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                serviceId,
+                teamId: newTeamId,
+            }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to save team changes');
+        }
+
+        const result = await response.json();
+        // console.log('Team change saved successfully:', result);
+        return result;
     } catch (error) {
-      console.error('Error saving team change:', error);
-      // Handle error, e.g., show error message to user
+        console.error('Error saving team change:', error);
+        // Handle error, e.g., show error message to user
     }
-  };
+};
 
 const TableTjeneste = () => {
     const [expanded, toggleExpanded] = useState<string[]>([])
@@ -175,13 +175,13 @@ const TableTjeneste = () => {
                     let retrievedTeams: Team[] = await fetchAllTeams()
                     setAllTeams(retrievedTeams)
                 } catch (error) {
-                    console.log(error)
+                    // console.log(error)
                     toast.error("Noe gikk galt ved henting av team fra teamkatalogen")
-                }try {
+                } try {
                     const services: Service[] = await fetchServices()
                     await setServices(services)
                 } catch (error) {
-                    console.log(error)
+                    // console.log(error)
                     toast.error("Noe gikk galt ved henting av tjenestene")
                 } finally {
                     setIsLoading(false)
@@ -573,7 +573,7 @@ const ServiceRow = ({
                                     <b>Koblet til område</b>
                                 </BodyShort>
                                 {service.areasContainingThisService.length !=
-                                0 ? (
+                                    0 ? (
                                     <ul>
                                         {service.areasContainingThisService.map(
                                             (area, index) => {
@@ -709,11 +709,11 @@ const ServiceRowEditting = ({
         monitorlink,
         pollingUrl,
         statusNotFromTeam,
-        pollingOnPrem ,
+        pollingOnPrem,
     } = updatedService
 
     useEffect(() => {
-        console.log(teams)
+        // console.log(teams)
         setIsLoading(true)
         if (monitorlink == null || monitorlink == undefined) {
             changeUpdatedService({ ...updatedService, monitorlink: "" })
@@ -730,17 +730,17 @@ const ServiceRowEditting = ({
 
     const handleUpdatedService =
         (field: keyof typeof updatedService) =>
-        (evt: React.ChangeEvent<HTMLInputElement>) => {
-            const changedService = {
-                ...updatedService,
-                [field]:
-                    evt.target.getAttribute("type") === "number"
-                        ? parseInt(evt.target.value)
-                        : evt.target.value,
-            }
+            (evt: React.ChangeEvent<HTMLInputElement>) => {
+                const changedService = {
+                    ...updatedService,
+                    [field]:
+                        evt.target.getAttribute("type") === "number"
+                            ? parseInt(evt.target.value)
+                            : evt.target.value,
+                }
 
-            changeUpdatedService(changedService)
-        }
+                changeUpdatedService(changedService)
+            }
 
     const handleCloseEditService = (service) => {
         if (isExpanded) {
@@ -803,7 +803,7 @@ const ServiceRowEditting = ({
     }
     const teamOptions = [];
     teams.forEach((team) => {
-        teamOptions.push(<option key = {team.id} value={team.id}>{team.name}</option>)
+        teamOptions.push(<option key={team.id} value={team.id}>{team.name}</option>)
     })
     const handleUpdatedTeam = (event) => {
         changeUpdatedService({
@@ -828,14 +828,14 @@ const ServiceRowEditting = ({
                         onClick={(event) => event.stopPropagation()}
                     />
 
-                        <Select
-                                label=""
-                                onClick={e => e.stopPropagation()}
-                                onChange={handleUpdatedTeam}
-                                style={{ width: '10%'}}>
-                            <option value={service.teamId? service.teamId : service.team} >{ service.team}</option>
-                                      {teamOptions}
-                        </Select>
+                    <Select
+                        label=""
+                        onClick={e => e.stopPropagation()}
+                        onChange={handleUpdatedTeam}
+                        style={{ width: '10%' }}>
+                        <option value={service.teamId ? service.teamId : service.team} >{service.team}</option>
+                        {teamOptions}
+                    </Select>
 
                 </div>
 

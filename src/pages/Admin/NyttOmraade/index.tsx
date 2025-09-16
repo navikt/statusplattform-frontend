@@ -55,7 +55,7 @@ const NewArea = ({ allServicesProps }) => {
         icon: "0001",
         services: [],
         components: [],
-        contains_components:false,
+        contains_components: false,
     })
 
     useEffect(() => {
@@ -70,17 +70,17 @@ const NewArea = ({ allServicesProps }) => {
 
     const handleAreaDataChange =
         (field: keyof typeof newArea) =>
-        (evt: React.ChangeEvent<HTMLInputElement>) => {
-            const updatedNewArea = {
-                ...newArea,
-                [field]:
-                    evt.target.getAttribute("type") === "number"
-                        ? parseInt(evt.target.value)
-                        : evt.target.value,
-            }
+            (evt: React.ChangeEvent<HTMLInputElement>) => {
+                const updatedNewArea = {
+                    ...newArea,
+                    [field]:
+                        evt.target.getAttribute("type") === "number"
+                            ? parseInt(evt.target.value)
+                            : evt.target.value,
+                }
 
-            updateNewArea(updatedNewArea)
-        }
+                updateNewArea(updatedNewArea)
+            }
 
     const handleAddServiceToArea = (serviceToAdd: Service) => {
         if (newArea.services.includes(serviceToAdd)) {
@@ -96,7 +96,7 @@ const NewArea = ({ allServicesProps }) => {
             components: components,
             description: description,
             icon: icon,
-            contains_components:false,
+            contains_components: false,
         }
         updateNewArea(updatedArea)
         toast.success("Lagt tjeneste til område")
@@ -112,7 +112,7 @@ const NewArea = ({ allServicesProps }) => {
             components: components,
             icon: icon,
             services: newServicesList,
-            contains_components:false,
+            contains_components: false,
         }
         updateNewArea(updatedArea)
         toast.success("Fjernet tjeneste fra område")
@@ -213,7 +213,7 @@ const AreaServices = ({
     )
 
     // useEffect(() => {
-    //     console.log(allServices)
+    //     // console.log(allServices)
     // }, [])
 
     useEffect(() => {

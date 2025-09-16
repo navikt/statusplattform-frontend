@@ -64,12 +64,12 @@ export const fetchSimplifiedTeamByName = async (name: string): Promise<Team> => 
 
 export const checkUserMembershipInTeam = async (teamId: string, userId: string): Promise<boolean> => {
   const response = await fetch(`/api/teams/checkUserInTeam?teamId=${teamId}&userId=${userId}`);
-  console.log("url: ", `/api/teams/checkUserInTeam?teamId=${teamId}&userId=${userId}`)
+  // console.log("url: ", `/api/teams/checkUserInTeam?teamId=${teamId}&userId=${userId}`)
   if (response.ok) {
       const { isMember } = await response.json();
       return isMember;
   }
-  console.log(await response.json())
+  // console.log(await response.json())
 
   throw new Error(`Failed to check if user is in team ${teamId}`);
 };

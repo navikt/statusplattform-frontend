@@ -3,7 +3,7 @@ import { useEffect, useState } from "react"
 const UseUUTjenster = () => {
     const [UUTjenester, setUUtjenester] = useState<any[]>([])
 
-    useEffect(() => {}, [])
+    useEffect(() => { }, [])
 }
 
 export default UseUUTjenster
@@ -11,7 +11,7 @@ export default UseUUTjenster
 /*
 
 export async function getServerSideProps(context) {
-    console.log("Context inside getserverSideProps: " + context)
+    // console.log("Context inside getserverSideProps: " + context)
     const [resUUTjenester, resUUKrav] = await Promise.all([
         fetch(backendPath + EndPathUUTjeneste()),
         fetch(backendPath + EndPathUUKrav()),

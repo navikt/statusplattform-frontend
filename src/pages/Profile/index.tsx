@@ -33,7 +33,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (
     const shoutOutToken = await requestBearerTokenForShoutOutAPI(authToken)
     const shoutOutUrl = `${process.env.SHOUT_OUT_URL}`
 
-    console.log("UserInfo: ", userInfo, "ShoutOutToken: ", shoutOutToken)
+    // console.log("UserInfo: ", userInfo, "ShoutOutToken: ", shoutOutToken)
 
     try {
         const res = await fetch(

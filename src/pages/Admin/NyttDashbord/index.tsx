@@ -105,7 +105,7 @@ const NewDashboard = ({ allAreasProps }) => {
         postDashboard(newDashboard, isExternal)
             .then(() => {
                 toast.success("Dashbord lastet opp")
-                
+
                 router.push(RouterAdminDashboards.PATH)
             })
             .catch(() => {
@@ -114,8 +114,8 @@ const NewDashboard = ({ allAreasProps }) => {
     }
 
     const handleToggleExternal = (eventString) => {
-        console.log(eventString)
-        if (eventString === 'internal'){
+        // console.log(eventString)
+        if (eventString === 'internal') {
             setIsExternal(false)
         }
         else if (eventString === 'external') {
@@ -152,13 +152,13 @@ const NewDashboard = ({ allAreasProps }) => {
                             handleAddAreaToDashboard(areaToAdd)
                         }
                     />
-                    <div style={{height: "20px"}}/>
+                    <div style={{ height: "20px" }} />
                     <ToggleGroup defaultValue="internal" onChange={handleToggleExternal} label="Synlighet på dashboard: ">
-                        <ToggleGroup.Item value="internal">Intern</ToggleGroup.Item> 
-                        <ToggleGroup.Item value="external">Ekstern</ToggleGroup.Item> 
+                        <ToggleGroup.Item value="internal">Intern</ToggleGroup.Item>
+                        <ToggleGroup.Item value="external">Ekstern</ToggleGroup.Item>
                     </ToggleGroup>
-                    
-                   <HorizontalSeparator />
+
+                    <HorizontalSeparator />
 
                     <ButtonContainer>
                         <Button
