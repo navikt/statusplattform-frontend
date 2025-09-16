@@ -9,8 +9,8 @@ spec:
     image: {{ image }}
     port: 3000
     ingresses:
-        - https://status.intern.dev.nav.no/sp
-        - https://status.ansatt.dev.nav.no/sp
+        - https://status.intern.dev.nav.no
+        - https://status.ansatt.dev.nav.no
 
     envFrom:
     - secret: status-portal
