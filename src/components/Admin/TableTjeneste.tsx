@@ -35,7 +35,7 @@ import {
     HorizontalSeparator,
     ModalInner,
     NoContentContainer,
-} from "../../pages/admin"
+} from "../../pages/admin/index"
 import CustomNavSpinner from "../CustomNavSpinner"
 import { TitleContext } from "../ContextProviders/TitleContext"
 import { RouterAdminAddTjeneste } from "../../types/routes"

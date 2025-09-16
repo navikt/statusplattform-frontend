@@ -40,7 +40,7 @@ import {
     CloseCustomized,
     DependencyList,
     ModalInner,
-} from "../../pages/admin"
+} from "../../pages/admin/index"
 import { RouterAdminAddOmråde } from "../../types/routes"
 import CustomNavSpinner from "../CustomNavSpinner"
 
