@@ -10,7 +10,7 @@ export const checkLoginInfoAndState = async (
     authorization: string = ""
 ): Promise<UserData | null> => {
     let base_url = process.env.BASE_URL || ""
-    let request = new Request(base_url + "/sp/api/userInfo")
+    let request = new Request(base_url + "/api/userInfo")
     let response: Response
 
     const fetchOptions = {

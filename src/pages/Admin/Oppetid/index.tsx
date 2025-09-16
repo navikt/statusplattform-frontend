@@ -41,7 +41,7 @@ const UptimeReportPage = () => {
     useEffect(() => {
         // Use the internal API proxy to avoid CORS issues
         setLoadingServices(true)
-        fetch('/sp/api/requestGateway', {
+        fetch('/api/requestGateway', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -56,7 +56,7 @@ const UptimeReportPage = () => {
             .catch((error) => {
                 console.error('Services fetch error:', error)
                 // Fallback to regular Services endpoint
-                fetch('/sp/api/requestGateway', {
+                fetch('/api/requestGateway', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ const UptimeReportPage = () => {
         const from = encodeURIComponent(fromDateTime.toISOString())
         const to = encodeURIComponent(toDateTime.toISOString())
 
-        const resp = await fetch('/sp/api/requestGateway', {
+        const resp = await fetch('/api/requestGateway', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

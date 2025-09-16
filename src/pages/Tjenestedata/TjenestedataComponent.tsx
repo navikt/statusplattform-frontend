@@ -758,7 +758,6 @@ const ServicesAndComponentsList: React.FC<{
                         <li key={component.id}>
                             <a
                                 href={
-                                    "/sp" +
                                     RouterTjenestedata.PATH +
                                     component.id
                                 }
@@ -780,7 +779,7 @@ const ServicesAndComponentsList: React.FC<{
             {serviceDependencies.map((service) => {
                 return (
                     <li key={service.id}>
-                        <a href={"/sp" + RouterTjenestedata.PATH + service.id}>
+                        <a href={RouterTjenestedata.PATH + service.id}>
                             {handleAndSetStatusIcon(service.record.status)}{" "}
                             {service.name}
                         </a>

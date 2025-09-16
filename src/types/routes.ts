@@ -1,7 +1,7 @@
 // Landing page
 export enum RouterHomePage {
     NAME = "Home",
-    PATH = "/sp",
+    PATH = "/",
 }
 // ---
 
@@ -26,15 +26,15 @@ export enum RouterInternt {
     PATH = "/Dashboard/Internt",
 }
 
-// New SP routes for external/internal access
+// Routes for external/internal access
 export enum RouterSPSamarbeidspartner {
-    NAME = "SP Samarbeidspartner",
-    PATH = "/sp/Samarbeidspartner",
+    NAME = "Samarbeidspartner",
+    PATH = "/samarbeidspartner",
 }
 
 export enum RouterSPInternt {
-    NAME = "SP Internt",
-    PATH = "/sp/Dashboard/internt",
+    NAME = "Internt",
+    PATH = "/internt",
 }
 // ---
 
@@ -132,12 +132,12 @@ export enum RouterLogin {
 export enum RouterOauthLogin {
     NAME = "LoginAzure",
     //  PATH = "/authenticate/login"
-    PATH = "/oauth2/login?redirect=" + "/sp",
+    PATH = "/oauth2/login?redirect=" + "/",
 }
 
 export enum RouterLogout {
     NAME = "Logg ut",
-    PATH = "/sp/oauth2/logout",
+    PATH = "/oauth2/logout",
 }
 // ---
 
@@ -163,7 +163,7 @@ export enum RouterUUStatus {
 // ---
 
 // Vaktor
-//NB - skal ikke ha /sp prefix
+//NB - External URL, uses full domain
 export enum RouterVaktor {
     NAME = "Vaktor",
     PATH = "https://vaktor.ansatt.nav.no/",

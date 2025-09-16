@@ -80,7 +80,7 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
                 <MessageCard
                   key={message.id}
                   severityColor={getSeverityColor(message.severity)}
-                  onClick={() => router.push(`/sp/Driftsmelding/${message.id}`)} // Navigering
+                  onClick={() => router.push(`/Driftsmeldinger/${message.id}`)} // Navigering
                 >
                   <HeaderContainer>
                     <Heading level="4" size="small">{message.internalHeader}</Heading>
@@ -94,7 +94,7 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
           )}
 
           {/* Link til alle driftsmeldinger */}
-          <AllMessagesLink href="/sp/Driftsmeldinger">Se alle driftsmeldinger</AllMessagesLink>
+          <AllMessagesLink href="/Driftsmeldinger">Se alle driftsmeldinger</AllMessagesLink>
         </>
       )}
     </StatusContainer>

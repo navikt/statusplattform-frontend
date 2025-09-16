@@ -3,13 +3,13 @@ import styled from "styled-components"
 import { useContext, useEffect, useState } from "react"
 import { useRouter } from "next/router"
 
-import Layout from "../../../components/Layout"
-import CustomNavSpinner from "../../../components/CustomNavSpinner"
-import DashboardTemplate from "../../Dashboard/DashboardTemplate"
-import { UserStateContext } from "../../../components/ContextProviders/UserStatusContext"
-import { RouterSPSamarbeidspartner } from "../../../types/routes"
-import { Dashboard } from "../../../types/types"
-import { EndPathDashboards } from "../../../utils/apiHelper"
+import Layout from "../components/Layout"
+import CustomNavSpinner from "../components/CustomNavSpinner"
+import DashboardTemplate from "./Dashboard/DashboardTemplate"
+import { UserStateContext } from "../components/ContextProviders/UserStatusContext"
+import { RouterSPSamarbeidspartner } from "../types/routes"
+import { Dashboard } from "../types/types"
+import { EndPathDashboards } from "../utils/apiHelper"
 import { GetServerSideProps } from "next"
 
 export const getServerSideProps: GetServerSideProps = async (context) => {
@@ -104,7 +104,7 @@ const InternalDashboard = (props: InternalDashboardProps) => {
         <Layout>
             <Head>
                 <title>Internt Dashboard - status.nav.no</title>
-                <link rel="icon" href="/sp/favicon.ico" />
+                <link rel="icon" href="/favicon.ico" />
                 <meta
                     name="viewport"
                     content="initial-scale=1.0, width=device-width"

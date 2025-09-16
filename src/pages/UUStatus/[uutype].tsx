@@ -166,7 +166,7 @@ const UUDashboard = ({ UUData, uutype }) => {
         <Layout>
             <Head>
                 <title>Status Universell Utforming - status.nav.no</title>
-                <link rel="icon" href="/sp/favicon.ico" />
+                <link rel="icon" href="/favicon.ico" />
                 <meta
                     name="viewport"
                     content="initial-scale=1.0, width=device-width"
@@ -180,7 +180,7 @@ const UUDashboard = ({ UUData, uutype }) => {
                     property="image"
                     content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"
                 />
-                <meta property="url" content="https://status.nav.no/sp" />
+                <meta property="url" content="https://status.nav.no/" />
                 <meta property="type" content="website" />
 
                 {/* <!-- Open Graph / Facebook --> */}
@@ -200,14 +200,14 @@ const UUDashboard = ({ UUData, uutype }) => {
                     property="og:image"
                     content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"
                 />
-                <meta property="og:url" content="https://status.nav.no/sp" />
+                <meta property="og:url" content="https://status.nav.no/" />
                 <meta property="og:type" content="website" />
 
                 {/* <!-- Twitter --> */}
                 <meta property="twitter:card" content="summary_large_image" />
                 <meta
                     property="twitter:url"
-                    content="https://status.nav.no/sp"
+                    content="https://status.nav.no/"
                 />
                 <meta property="twitter:title" content="Navstatus" />
                 <meta

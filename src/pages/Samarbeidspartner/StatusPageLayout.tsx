@@ -21,7 +21,7 @@ const StatusPageLayout = ({ services, incidents }: StatusPageLayoutProps) => {
         <Layout>
             <Head>
                 <title>Status NAV digitale tjenester - Samarbeidspartnere</title>
-                <link rel="icon" href="/sp/favicon.ico" />
+                <link rel="icon" href="/favicon.ico" />
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
                 <meta name="title" content="Status NAV digitale tjenester" />
                 <meta
@@ -29,7 +29,7 @@ const StatusPageLayout = ({ services, incidents }: StatusPageLayoutProps) => {
                     content="Sanntidsstatus for NAVs digitale tjenester til samarbeidspartnere. Følg med på driftsmeldinger og planlagt vedlikehold."
                 />
                 <meta property="og:type" content="website" />
-                <meta property="og:url" content="https://status.nav.no/sp" />
+                <meta property="og:url" content="https://status.nav.no/samarbeidspartner" />
                 <meta property="og:title" content="Status NAV digitale tjenester" />
                 <meta
                     property="og:description"
@@ -40,7 +40,7 @@ const StatusPageLayout = ({ services, incidents }: StatusPageLayoutProps) => {
                     content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"
                 />
                 <meta property="twitter:card" content="summary_large_image" />
-                <meta property="twitter:url" content="https://status.nav.no/sp" />
+                <meta property="twitter:url" content="https://status.nav.no/samarbeidspartner" />
                 <meta property="twitter:title" content="Status NAV digitale tjenester" />
                 <meta
                     property="twitter:description"

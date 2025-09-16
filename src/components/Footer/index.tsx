@@ -103,7 +103,7 @@ const Footer = () => {
                         aria-label="Lenke til nav.no"
                     >
                         <Image
-                            src="/sp/assets/nav-logo/png/black.png"
+                            src="/assets/nav-logo/png/black.png"
                             alt="Til forsiden"
                             aria-hidden="true"
                             width={100}
