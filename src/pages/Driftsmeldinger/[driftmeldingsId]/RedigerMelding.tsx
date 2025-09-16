@@ -16,28 +16,28 @@ import Head from "next/head"
 import { useRouter } from "next/router"
 import { useContext, useEffect, useRef, useState } from "react"
 import { toast } from "react-toastify"
-import { datePrettifyer } from "../../../utils/datePrettifyer"
+import { datePrettifyer } from "@/utils/datePrettifyer"
 import styled from "styled-components"
-import { backendPath } from "../.."
-import { UserStateContext } from "../../../components/ContextProviders/UserStatusContext"
-import CustomNavSpinner from "../../../components/CustomNavSpinner"
-import DateSetterOps from "../../../components/DateSetterOps"
-import Layout from "../../../components/Layout"
-import TextEditor from "../../../components/TextEditor"
-import { OpsScheme, Spacer } from "../../../styles/styles"
+import { backendPath } from "@/pages"
+import { UserStateContext } from "@/components/ContextProviders/UserStatusContext"
+import CustomNavSpinner from "@/components/CustomNavSpinner"
+import DateSetterOps from "@/components/DateSetterOps"
+import Layout from "@/components/Layout"
+import TextEditor from "@/components/TextEditor"
+import { OpsScheme, Spacer } from "@/styles/styles"
 import {
     OpsMessageI,
     SeverityEnum,
     StatusEnum,
-} from "../../../types/opsMessage"
-import { RouterError, RouterOpsMeldinger } from "../../../types/routes"
-import { Service } from "../../../types/types"
-import { EndPathServices, EndPathSpecificOps } from "../../../utils/apiHelper"
+} from "@/types/opsMessage"
+import { RouterError, RouterOpsMeldinger } from "@/types/routes"
+import { Service } from "@/types/types"
+import { EndPathServices, EndPathSpecificOps } from "@/utils/apiHelper"
 import {
     fetchSpecificOpsMessage,
     updateSpecificOpsMessage,
-} from "../../../utils/opsAPI"
-import PublicOpsContent from "../publicopscontent"
+} from "@/utils/opsAPI"
+import PublicOpsContent from "@/pages/driftsmeldinger/publicopscontent"
 
 const OpsMessageContainer = styled.div`
     display: flex;
