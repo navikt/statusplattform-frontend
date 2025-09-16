@@ -5,7 +5,7 @@ import { useRouter } from "next/router"
 import { useContext, useEffect, useState } from "react"
 import { toast, ToastContainer } from "react-toastify"
 import styled from "styled-components"
-import { backendPath } from "@/pages"
+import { backendPath } from "@/pages/index"
 import { UserStateContext } from "@/components/ContextProviders/UserStatusContext"
 import CustomNavSpinner from "@/components/CustomNavSpinner"
 import Layout from "@/components/Layout"
@@ -14,7 +14,7 @@ import { OpsMessageI } from "@/types/opsMessage"
 import { RouterError, RouterOpprettOpsMelding } from "@/types/routes"
 import { EndPathOps } from "@/utils/apiHelper"
 import { fetchOpsMessages } from "@/utils/opsAPI"
-import { HorizontalSeparator } from "@/pages/admin"
+import { HorizontalSeparator } from "../admin"
 
 const CreateAvvikButtonWrapper = styled.div``
 const OpsHead = styled.div`
