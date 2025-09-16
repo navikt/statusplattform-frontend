@@ -125,16 +125,16 @@ const TextEditor = React.forwardRef<any, EditorProps>(
                         </Checkbox>
                     )}
                 </EditorTitle>
-                <SunEditorComponent
-                    value={message}
-                    onChange={handleUpdateMsg}
-                    initialValue={DefaultMessage(
+                {(SunEditorComponent as any)({
+                    value: message,
+                    onChange: handleUpdateMsg,
+                    initialValue: DefaultMessage(
                         status,
                         editing,
                         message,
                         showHistory
-                    )}
-                />
+                    )
+                })}
             </>
         )
     }

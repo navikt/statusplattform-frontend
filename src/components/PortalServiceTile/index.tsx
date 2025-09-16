@@ -17,6 +17,7 @@ import { FilterContext } from "../../components/ContextProviders/FilterContext"
 import { UserStateContext } from "../ContextProviders/UserStatusContext"
 import { useRouter } from "next/router"
 import { Collapse } from "react-collapse"
+import type { ReactNode } from "react"
 import { RouterTjenestedata } from "../../types/routes"
 
 const CustomAccordionHeader = styled(Accordion.Header)`
@@ -574,12 +575,13 @@ const SubAreaComponent: React.FC<{
                 <ChevronDownIcon className={!isToggled ? "expanded" : "not-expanded"} />
             </button>
 
-            <Collapse isOpened={isToggled}>
-                <ServicesList
-                    className={`sub-area-services ${
-                        isToggled ? "expanded" : ""
-                    }`}
-                >
+            {(Collapse as any)({ isOpened: isToggled, children: (
+                isToggled && (
+                    <ServicesList
+                        className={`sub-area-services ${
+                            isToggled ? "expanded" : ""
+                        }`}
+                    >
                     {subArea.services.map((service, index) => {
                         return (
                             <li
@@ -622,8 +624,9 @@ const SubAreaComponent: React.FC<{
                             </li>
                         )
                     })}
-                </ServicesList>
-            </Collapse>
+                    </ServicesList>
+                )
+            ) })}
         </SubAreaContent>
     )
 }
