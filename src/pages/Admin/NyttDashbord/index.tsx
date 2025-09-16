@@ -9,25 +9,25 @@ import { BodyShort, Button, Detail, Select, TextField, ToggleGroup } from "@navi
 import { TrashIcon } from "@navikt/aksel-icons"
 
 // Internal components
-import Layout from "../../../components/Layout"
-import CustomNavSpinner from "../../../components/CustomNavSpinner"
-import OpsMessages from "../../driftsmeldinger"
+import Layout from "@/components/Layout"
+import CustomNavSpinner from "@/components/CustomNavSpinner"
+import OpsMessages from "@/pages/driftsmeldinger"
 
 // Contexts
-import { TitleContext } from "../../../components/ContextProviders/TitleContext"
+import { TitleContext } from "@/components/ContextProviders/TitleContext"
 
 // Styles
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
 
 // Utils
-import { useLoader } from "../../../utils/useLoader"
-import { postDashboard, postExternalDashboard } from "../../../utils/dashboardsAPI"
-import { fetchAreas } from "../../../utils/areasAPI"
-import { EndPathAreas } from "../../../utils/apiHelper"
+import { useLoader } from "@/utils/useLoader"
+import { postDashboard, postExternalDashboard } from "@/utils/dashboardsAPI"
+import { fetchAreas } from "@/utils/areasAPI"
+import { EndPathAreas } from "@/utils/apiHelper"
 
 // Types
-import { Area, Dashboard } from "../../../types/types"
-import { RouterAdminDashboards } from "../../../types/routes"
+import { Area, Dashboard } from "@/types/types"
+import { RouterAdminDashboards } from "@/types/routes"
 
 // Config
 import { backendPath } from "../.."
