@@ -16,6 +16,8 @@ RUN npm install
 
 # Copy the remaining files for the build process
 COPY babel.config.json babel.config.json
+COPY tsconfig.json tsconfig.json
+COPY next-env.d.ts next-env.d.ts
 COPY src/ src/
 COPY public/ public/
 COPY next.config.js next.config.js
