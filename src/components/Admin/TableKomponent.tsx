@@ -29,7 +29,7 @@ import {
     DependencyList,
     ModalInner,
     NoContentContainer,
-} from "../../pages/Admin"
+} from "../../pages/admin"
 import { RouterAdminAddKomponent } from "../../types/routes"
 import { fetchServices } from "../../utils/servicesAPI"
 import { fetchAllTeams } from "../../utils/teamKatalogAPI";

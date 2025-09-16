@@ -17,7 +17,7 @@ import { RouterError, RouterOpsMeldinger } from "../../../types/routes"
 import { Service } from "../../../types/types"
 import { EndPathServices, EndPathSpecificOps } from "../../../utils/apiHelper"
 import { fetchSpecificOpsMessage } from "../../../utils/opsAPI"
-import PublicOpsContent from "../PublicOpsContent"
+import PublicOpsContent from "../publicopscontent"
 
 const OpsMessageContainer = styled.div`
     display: flex;

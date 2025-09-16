@@ -37,7 +37,7 @@ import {
     fetchSpecificOpsMessage,
     updateSpecificOpsMessage,
 } from "../../../utils/opsAPI"
-import PublicOpsContent from "../PublicOpsContent"
+import PublicOpsContent from "../publicopscontent"
 
 const OpsMessageContainer = styled.div`
     display: flex;
@@ -478,9 +478,9 @@ const EditOpsMessage = (props: EditOpsMessageI) => {
     const handleSetAsInactive = () => {
         setIsInactive(!isInactive)
         const newDate: Date = new Date()
-        startDateForActiveOpsMessage < newDate
-            ? setEndDateForActiveOpsMessage(newDate)
-            : // console.log("Kan ikke sette sluttdato etter startdato")
+        if (startDateForActiveOpsMessage < newDate) {
+            setEndDateForActiveOpsMessage(newDate)
+        }
     }
 
     const handleSetAsActive = () => {

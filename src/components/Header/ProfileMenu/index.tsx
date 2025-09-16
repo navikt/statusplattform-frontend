@@ -84,12 +84,6 @@ const ProfileMenu: React.FC<{
             return
         }
         setAnchorEl(event)
-        // console.log(
-        "Adminaccess: " +
-            usersWithAccess +
-            " ||| OpsAccess: " +
-            usersWithOpsAccess
-        )
     }
 
     const closePopover = () => {
