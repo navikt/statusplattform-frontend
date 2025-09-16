@@ -14,7 +14,7 @@ import { OpsMessageI } from "@/types/opsMessage"
 import { RouterError, RouterOpprettOpsMelding } from "@/types/routes"
 import { EndPathOps } from "@/utils/apiHelper"
 import { fetchOpsMessages } from "@/utils/opsAPI"
-import { HorizontalSeparator } from "@/pages/admin/index"
+import { HorizontalSeparator } from "@/pages/admin"
 
 const CreateAvvikButtonWrapper = styled.div``
 const OpsHead = styled.div`
