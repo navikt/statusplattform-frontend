@@ -1,7 +1,7 @@
 import { BodyLong, Heading } from "@navikt/ds-react"
 import styled from "styled-components"
-import { OpsMessageI } from "../../../types/opsMessage"
-import { Service } from "../../../types/types"
+import { OpsMessageI } from "@/types/opsMessage"
+import { Service } from "@/types/types"
 
 const PublicOpsContainer = styled.div`
     padding: 1rem 2rem;
