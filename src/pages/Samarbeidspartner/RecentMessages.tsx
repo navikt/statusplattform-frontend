@@ -1,15 +1,15 @@
 import { BodyShort, Heading, Panel, Label, Detail, Button } from "@navikt/ds-react";
 import { useEffect, useState } from "react";
-import { OpsMessageI } from "../../types/opsMessage";
-import { Service } from "../../types/types";
+import { OpsMessageI } from "@/types/opsMessage";
+import { Service } from "@/types/types";
 import styled from "styled-components";
-import { fetchMessageByServiceList } from "../../utils/dashboardsAPI";
+import { fetchMessageByServiceList } from "@/utils/dashboardsAPI";
 import { formatDistanceToNow, parseISO, isAfter, subDays, eachDayOfInterval, format } from "date-fns";
 import { nb } from "date-fns/locale";
-import { UserData } from "../../types/userData";
+import { UserData } from "@/types/userData";
 import { PencilIcon } from '@navikt/aksel-icons';
 import { toast } from "react-toastify";
-import { checkUserMembershipInTeam } from "../../utils/teamKatalogAPI";
+import { checkUserMembershipInTeam } from "@/utils/teamKatalogAPI";
 
 interface RecentMessagesProps {
   service_ids: string[];

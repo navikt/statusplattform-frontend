@@ -2,13 +2,13 @@ import { useRouter } from 'next/router'
 import { useContext, useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
-import { TitleContext } from '../../components/ContextProviders/TitleContext'
-import { UserStateContext } from '../../components/ContextProviders/UserStatusContext'
-import CustomNavSpinner from '../../components/CustomNavSpinner'
-import Layout from '../../components/Layout'
-import { RouterHomePage, RouterInternt } from '../../types/routes'
-import { UserData } from '../../types/userData'
-import { checkLoginInfoAndState } from '../../utils/checkLoginInfoAndState'
+import { TitleContext } from '@/components/ContextProviders/TitleContext'
+import { UserStateContext } from '@/components/ContextProviders/UserStatusContext'
+import CustomNavSpinner from '@/components/CustomNavSpinner'
+import Layout from '@/components/Layout'
+import { RouterHomePage, RouterInternt } from '@/types/routes'
+import { UserData } from '@/types/userData'
+import { checkLoginInfoAndState } from '@/utils/checkLoginInfoAndState'
 
 const ProfileCreated = () => {
     const router = useRouter()

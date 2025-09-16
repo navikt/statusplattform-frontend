@@ -5,14 +5,14 @@ import { useRouter } from "next/router"
 
 import { BodyShort, Button } from "@navikt/ds-react"
 
-import Layout from "../../components/Layout"
-import CustomNavSpinner from "../../components/CustomNavSpinner"
+import Layout from "@/components/Layout"
+import CustomNavSpinner from "@/components/CustomNavSpinner"
 import DashboardTemplate from "./DashboardTemplate"
-import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
-import { RouterPrivatperson } from "../../types/routes"
-import { Dashboard } from "../../types/types"
+import { UserStateContext } from "@/components/ContextProviders/UserStatusContext"
+import { RouterPrivatperson } from "@/types/routes"
+import { Dashboard } from "@/types/types"
 import { ExpandIcon } from "@navikt/aksel-icons"
-import { EndPathDashboards } from "../../utils/apiHelper"
+import { EndPathDashboards } from "@/utils/apiHelper"
 import { GetServerSideProps } from "next"
 
 export const getServerSideProps: GetServerSideProps = async (context) => {

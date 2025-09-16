@@ -1,13 +1,13 @@
 import { useState } from "react"
 import styled from "styled-components"
 import Head from "next/head"
-import Layout from "../../components/LayoutExternal"
+import Layout from "@/components/LayoutExternal"
 import { Button } from "@navikt/ds-react"
-import ServiceStatusGrid from "../../components/StatusPage/ServiceStatusGrid"
-import IncidentTimeline from "../../components/StatusPage/IncidentTimeline"
-import SubscriptionModal from "../../components/StatusPage/SubscriptionModal"
-import { Service } from "../../types/types"
-import { OpsMessageI } from "../../types/opsMessage"
+import ServiceStatusGrid from "@/components/StatusPage/ServiceStatusGrid"
+import IncidentTimeline from "@/components/StatusPage/IncidentTimeline"
+import SubscriptionModal from "@/components/StatusPage/SubscriptionModal"
+import { Service } from "@/types/types"
+import { OpsMessageI } from "@/types/opsMessage"
 
 interface StatusPageLayoutProps {
     services: Service[]

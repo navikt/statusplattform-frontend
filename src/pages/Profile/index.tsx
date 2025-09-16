@@ -1,9 +1,9 @@
-import { NOMPersonPhone } from "../../types/types"
+import { NOMPersonPhone } from "@/types/types"
 import { Alert, Button, TextField } from "@navikt/ds-react"
 import { ChangeEvent, useState } from "react"
 import styled from "styled-components"
-import Layout from "../../components/Layout"
-import { checkLoginInfoAndState } from "../../utils/checkLoginInfoAndState"
+import Layout from "@/components/Layout"
+import { checkLoginInfoAndState } from "@/utils/checkLoginInfoAndState"
 import { GetServerSideProps } from "next"
 import { requestBearerTokenForShoutOutAPI } from "../api/utils/authHelper"
 

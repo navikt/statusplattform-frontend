@@ -11,14 +11,14 @@ import {
     WarningFilledCustomized,
     HelptextCustomizedBlue,
     HelpTextCustomizedGray,
-} from "../../components/TrafficLights"
-import { Area, MaintenanceObject, SubArea } from "../../types/types"
-import { FilterContext } from "../../components/ContextProviders/FilterContext"
-import { UserStateContext } from "../ContextProviders/UserStatusContext"
+} from "@/components/TrafficLights"
+import { Area, MaintenanceObject, SubArea } from "@/types/types"
+import { FilterContext } from "@/components/ContextProviders/FilterContext"
+import { UserStateContext } from "@/components/ContextProviders/UserStatusContext"
 import { useRouter } from "next/router"
 import { Collapse } from "react-collapse"
 import type { ReactNode } from "react"
-import { RouterTjenestedata } from "../../types/routes"
+import { RouterTjenestedata } from "@/types/routes"
 
 const CustomAccordionHeader = styled(Accordion.Header)`
     border: none;

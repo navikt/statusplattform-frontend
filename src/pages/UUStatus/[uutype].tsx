@@ -3,12 +3,12 @@ import styled from "styled-components"
 import { useContext, useState } from "react"
 import { BodyShort } from "@navikt/ds-react"
 
-import Layout from "../../components/Layout"
-import { UserStateContext } from "../../components/ContextProviders/UserStatusContext"
+import Layout from "@/components/Layout"
+import { UserStateContext } from "@/components/ContextProviders/UserStatusContext"
 import { backendPath } from ".."
-import { EndPathUUTjeneste, EndPathUUKrav } from "../../utils/apiHelper"
+import { EndPathUUTjeneste, EndPathUUKrav } from "@/utils/apiHelper"
 import { GuidePanel, Tabs } from "@navikt/ds-react"
-import UUStatusTable from "../../components/UUStatusTable"
+import UUStatusTable from "@/components/UUStatusTable"
 import Link from "next/link"
 
 type TjenesteType = {

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { Heading } from "@navikt/ds-react";
 import { BookmarkFillIcon } from "@navikt/aksel-icons";
-import { Service } from "../../types/types";
+import { Service } from "@/types/types";
 
 interface ServiceTilesProps {
   services: Service[];

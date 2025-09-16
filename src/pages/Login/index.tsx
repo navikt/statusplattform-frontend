@@ -5,10 +5,10 @@ import { toast } from "react-toastify"
 
 import { Button, TextField } from "@navikt/ds-react"
 
-import Layout from "../../components/Layout"
-import { TitleContext } from "../../components/ContextProviders/TitleContext"
-import { RouterOauthLogin } from "../../types/routes"
-import CustomNavSpinner from "../../components/CustomNavSpinner"
+import Layout from "@/components/Layout"
+import { TitleContext } from "@/components/ContextProviders/TitleContext"
+import { RouterOauthLogin } from "@/types/routes"
+import CustomNavSpinner from "@/components/CustomNavSpinner"
 
 const LoginContainer = styled.div`
     margin-top: 2rem;

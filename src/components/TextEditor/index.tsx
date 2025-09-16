@@ -1,6 +1,6 @@
 import { Checkbox, Heading } from "@navikt/ds-react"
 import React, { MutableRefObject, useEffect, useState, useRef } from "react"
-import { datePrettifyer } from "../../utils/datePrettifyer"
+import { datePrettifyer } from "@/utils/datePrettifyer"
 import styled from "styled-components"
 import dynamic from "next/dynamic"
 

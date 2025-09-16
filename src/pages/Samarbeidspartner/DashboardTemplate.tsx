@@ -1,16 +1,16 @@
 import { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { Alert, Button } from "@navikt/ds-react";
-import { UserData } from "../../types/userData";
-import { Service } from "../../types/types";
-import { OpsMessageI } from "../../types/opsMessage";
+import { UserData } from "@/types/userData";
+import { Service } from "@/types/types";
+import { OpsMessageI } from "@/types/opsMessage";
 import StatusList from "./statusList";
 import RecentMessages from "./RecentMessages";
 import Link from "next/link";
 import { PlusIcon } from '@navikt/aksel-icons';
-import { fetchMessageByServiceList } from "../../utils/dashboardsAPI";
+import { fetchMessageByServiceList } from "@/utils/dashboardsAPI";
 import { isAfter, isBefore } from "date-fns";
-import SubscriptionModal from "../../components/SubscriptionModal";
+import SubscriptionModal from "@/components/SubscriptionModal";
 
 interface DashboardTemplateProps {
   services: Service[];

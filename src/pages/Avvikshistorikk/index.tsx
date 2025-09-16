@@ -1,14 +1,14 @@
 import styled from 'styled-components'
 import { useContext, useEffect, useState } from 'react'
 
-import Layout from '../../components/Layout'
-import Incidents from '../../components/Incidents'
-import { Area, Dashboard } from '../../types/types'
-import CustomNavSpinner from '../../components/CustomNavSpinner'
-import { fetchDashboard, fetchDashboardsList } from '../../utils/dashboardsAPI'
-import { TitleContext } from '../../components/ContextProviders/TitleContext'
+import Layout from '@/components/Layout'
+import Incidents from '@/components/Incidents'
+import { Area, Dashboard } from '@/types/types'
+import CustomNavSpinner from '@/components/CustomNavSpinner'
+import { fetchDashboard, fetchDashboardsList } from '@/utils/dashboardsAPI'
+import { TitleContext } from '@/components/ContextProviders/TitleContext'
 import { backendPath } from '..'
-import { EndPathOps, EndPathServices } from '../../utils/apiHelper'
+import { EndPathOps, EndPathServices } from '@/utils/apiHelper'
 import Head from 'next/head'
 
 
