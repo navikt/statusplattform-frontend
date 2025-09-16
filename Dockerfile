@@ -1,5 +1,5 @@
 # Base on official Node.js Alpine image
-FROM node:16-alpine 
+FROM node:18-alpine 
 # AS builder
 
 # Set working directory
@@ -24,7 +24,7 @@ COPY next.config.js next.config.js
 RUN npm run build
 
 # --- Runtime image ---
-#FROM node:16-alpine
+#FROM node:18-alpine
 
 # Set working directory
 # WORKDIR /usr/src/app
