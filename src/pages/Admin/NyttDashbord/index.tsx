@@ -17,7 +17,7 @@ import { fetchAreas } from "../../../utils/areasAPI"
 import { RouterAdminDashboards } from "../../../types/routes"
 import { backendPath } from "../.."
 import { EndPathAreas } from "../../../utils/apiHelper"
-import OpsMessages from "../../driftsmeldinger/index"
+import OpsMessages from "../../driftsmeldinger"
 
 const NewDashboardContainer = styled.div`
     display: flex;
