@@ -11,7 +11,6 @@ import { TrashIcon } from "@navikt/aksel-icons"
 // Internal components
 import Layout from "@/components/Layout"
 import CustomNavSpinner from "@/components/CustomNavSpinner"
-import OpsMessages from "@/pages/driftsmeldinger"
 
 // Contexts
 import { TitleContext } from "@/components/ContextProviders/TitleContext"
@@ -20,9 +19,7 @@ import { TitleContext } from "@/components/ContextProviders/TitleContext"
 import { ButtonContainer, DynamicListContainer, HorizontalSeparator } from ".."
 
 // Utils
-import { useLoader } from "@/utils/useLoader"
-import { postDashboard, postExternalDashboard } from "@/utils/dashboardsAPI"
-import { fetchAreas } from "@/utils/areasAPI"
+import { postDashboard } from "@/utils/dashboardsAPI"
 import { EndPathAreas } from "@/utils/apiHelper"
 
 // Types
