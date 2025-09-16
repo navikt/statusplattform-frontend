@@ -24,7 +24,7 @@ import {
     AdminCategoryContainer,
     CloseCustomized,
     ModalInner,
-} from "../../pages/admin/index"
+} from "./AdminStyles"
 import { backendPath } from "../../pages"
 import { EndPathDashboards } from "../../utils/apiHelper"
 
