@@ -84,7 +84,7 @@ const CreateOpsMessage = ({ services }: CreateOpsMessageProps) => {
 
     const handleSubmitOpsMessage = () => {
         postOpsMessage(opsMessage)
-        router.push("/Samarbeidspartner")
+        router.push("/samarbeidspartner")
     }
 
     return (

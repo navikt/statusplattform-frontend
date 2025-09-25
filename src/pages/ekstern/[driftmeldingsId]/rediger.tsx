@@ -138,7 +138,7 @@ const EditOpsMessage = ({ opsMessage, isMember }) => {
         try {
             await updateSpecificOpsMessage(updatedOpsMessage);
             toast.success("Endringer lagret");
-            router.push('/Samarbeidspartner');
+            router.push('/samarbeidspartner');
         } catch (error) {
             // console.log(error);
             toast.error("Noe gikk galt ved oppdatering av meldingen");
