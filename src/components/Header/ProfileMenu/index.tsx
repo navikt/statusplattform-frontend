@@ -125,7 +125,7 @@ const ProfileMenu: React.FC<{
                                         onClick={() =>
                                             router.push(
                                                 RouterOpsMeldinger.PATH +
-                                                "/OpprettMelding"
+                                                "/opprettmelding"
                                             )
                                         }
                                         className="internalLinks"
