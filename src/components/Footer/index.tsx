@@ -126,13 +126,13 @@ const Footer = () => {
             ) : (
                 <ContactInformation>
                     <BodyShort className="externalTextLeft">
-                        <a href="https://www.nav.no/no/nav-og-samfunn/om-nav/personvern-i-arbeids-og-velferdsetaten">
+                        <a href="https://www.nav.no/personvern">
                             Personvern og informasjonskapsler
                         </a>
                     </BodyShort>
                     <Label>|</Label>
                     <BodyShort className="externalTextRight">
-                        <a href="https://www.nav.no/no/nav-og-samfunn/kontakt-nav/teknisk-brukerstotte/nyttig-a-vite/tilgjengelighet">
+                        <a href="https://www.nav.no/tilgjengelighet">
                             Tilgjengelighet
                         </a>
                     </BodyShort>
