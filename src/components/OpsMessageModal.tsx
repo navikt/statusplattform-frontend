@@ -467,7 +467,7 @@ const OpsMessageModal: React.FC<OpsMessageModalProps> = ({
                   <DateFieldContainer>
                     <TextField
                       label="Startdato"
-                      type="datetime-local"
+
                       value={opsMessage.startTime.toISOString().slice(0, 16)}
                       onChange={(e) => setOpsMessage({
                         ...opsMessage,
@@ -479,7 +479,7 @@ const OpsMessageModal: React.FC<OpsMessageModalProps> = ({
                   <DateFieldContainer>
                     <TextField
                       label="Sluttdato"
-                      type="datetime-local"
+
                       value={opsMessage.endTime.toISOString().slice(0, 16)}
                       onChange={(e) => setOpsMessage({
                         ...opsMessage,
