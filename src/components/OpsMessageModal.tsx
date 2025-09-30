@@ -93,7 +93,7 @@ const OpsMessageModal: React.FC<OpsMessageModalProps> = ({
 
     let prefix = '';
     switch (status) {
-      case StatusEnum.MAINTENANCE:
+      case StatusEnum.MAITENANCE:
         prefix = 'Vedlikehold på';
         break;
       case StatusEnum.EXAMINING:
@@ -346,7 +346,7 @@ const OpsMessageModal: React.FC<OpsMessageModalProps> = ({
                 size="medium"
               >
                 <option value={StatusEnum.EXAMINING}>Undersøkes</option>
-                <option value={StatusEnum.MAINTENANCE}>Vedlikehold</option>
+                <option value={StatusEnum.MAITENANCE}>Vedlikehold</option>
                 <option value={StatusEnum.SOLVING}>Feilretting pågår</option>
                 <option value={StatusEnum.SOLVED}>Løst</option>
               </Select>
