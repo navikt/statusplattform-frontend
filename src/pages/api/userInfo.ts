@@ -14,7 +14,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         //For lokal kjøring:
         let userInfo = {
             name: "LOKAL, BRUKER",
-            navIdent: "L152423",
+            navIdent: "J162994",
             adminAccess: true
         }
         res.status(200).json(userInfo);

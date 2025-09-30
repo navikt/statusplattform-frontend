@@ -4,9 +4,9 @@ import { useRouter } from "next/router"
 import ProfileMenu from "./ProfileMenu"
 import BurgerMenu from "./BurgerMenu"
 import { ChevronUpIcon, ChevronDownIcon } from "@navikt/aksel-icons"
-import { Checkbox, Detail, Heading } from "@navikt/ds-react"
+import { Checkbox, Detail, Heading, Button } from "@navikt/ds-react"
 import { FilterContext, FilterOption } from "../ContextProviders/FilterContext"
-import { RouterHomePage, RouterInternt } from "../../types/routes"
+import { RouterHomePage, RouterInternt, RouterOauthLogin } from "../../types/routes"
 import { UserStateContext } from "../ContextProviders/UserStatusContext"
 import Image from "next/image"
 
@@ -218,15 +218,20 @@ const Header = ( { isExternal } : headerProps) => {
                     <b>Status</b> digitale tjenester{" "}
                 </HeadingCustomized>
                 <div className="header-menues last">
-                {isExternal ? (
-                    <BurgerMenu />
-                    ) : (
-                      <>
-                        <ProfileMenu name={name} navIdent={navIdent} />
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+                        {navIdent ? (
+                            <ProfileMenu name={name} navIdent={navIdent} />
+                        ) : (
+                            <Button
+                                variant="secondary"
+                                size="small"
+                                onClick={() => window.location.href = RouterOauthLogin.PATH}
+                            >
+                                Logg inn
+                            </Button>
+                        )}
                         <BurgerMenu />
-                      </>
-                    )}
-                    
+                    </div>
                 </div>{" "}
             </HeaderContent>
         </CustomHeader>

@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState, useMemo } from "react";
 import styled from "styled-components";
 import { Alert, Button } from "@navikt/ds-react";
 import { UserData } from "@/types/userData";
@@ -11,6 +11,8 @@ import { PlusIcon } from '@navikt/aksel-icons';
 import { fetchMessageByServiceList } from "@/utils/dashboardsAPI";
 import { isAfter, isBefore } from "date-fns";
 import SubscriptionModal from "@/components/SubscriptionModal";
+import OpsMessageModal from "@/components/OpsMessageModal";
+import { enrichMessagesWithServiceInfo } from "@/utils/messageServiceMapper";
 
 interface DashboardTemplateProps {
   services: Service[];
@@ -20,14 +22,21 @@ interface DashboardTemplateProps {
 const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
   const [servicesWithStatus, setServicesWithStatus] = useState<Service[]>(services);
   const [opsMessages, setOpsMessages] = useState<OpsMessageI[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const services_ids_list = services.map((service: Service) => service.id);
+  const [isSubscriptionModalOpen, setIsSubscriptionModalOpen] = useState(false);
+  const [isCreateOpsModalOpen, setIsCreateOpsModalOpen] = useState(false);
+
+  const services_ids_list = useMemo(() =>
+    services.map((service: Service) => service.id),
+    [services]
+  );
 
   useEffect(() => {
     const fetchOpsMessages = async () => {
       try {
         const messages = await fetchMessageByServiceList(services_ids_list);
-        setOpsMessages(messages);
+        // Enrich messages with service information (including teamId)
+        const enrichedMessages = await enrichMessagesWithServiceInfo(messages, services_ids_list);
+        setOpsMessages(enrichedMessages);
       } catch (error) {
         console.error('Failed to fetch ops messages:', error);
       }
@@ -62,7 +71,7 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
               : "Alle våre systemer fungerer normalt"
             }
           </StatusOverview>
-          <SubscribeButton variant="secondary" size="small" onClick={() => setIsModalOpen(true)}>
+          <SubscribeButton variant="secondary" size="small" onClick={() => setIsSubscriptionModalOpen(true)}>
             Abonner
           </SubscribeButton>
         </PageHeader>
@@ -130,12 +139,14 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
           <SectionHeader>
             <SectionTitle>Driftsmeldinger siste 7 dagene</SectionTitle>
             {user && user.navIdent && (
-              <Link href="/ekstern/opprettmelding" passHref>
-                <CreateOpsIconButton variant="tertiary-neutral" size="small">
-                  <PlusIcon aria-hidden fontSize="1rem" />
-                  Ny driftsmelding
-                </CreateOpsIconButton>
-              </Link>
+              <CreateOpsIconButton
+                variant="tertiary-neutral"
+                size="small"
+                onClick={() => setIsCreateOpsModalOpen(true)}
+              >
+                <PlusIcon aria-hidden fontSize="1rem" />
+                Ny driftsmelding
+              </CreateOpsIconButton>
             )}
           </SectionHeader>
           <RecentMessages service_ids={services_ids_list} user={user} />
@@ -143,8 +154,15 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
 
         {/* Subscription Modal */}
         <SubscriptionModal
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+          isOpen={isSubscriptionModalOpen}
+          onClose={() => setIsSubscriptionModalOpen(false)}
+          services={services}
+        />
+
+        {/* Create Ops Message Modal */}
+        <OpsMessageModal
+          isOpen={isCreateOpsModalOpen}
+          onClose={() => setIsCreateOpsModalOpen(false)}
           services={services}
         />
       </ContentWrapper>

@@ -10,6 +10,7 @@ import { UserData } from "@/types/userData";
 import { PencilIcon } from '@navikt/aksel-icons';
 import { toast } from "react-toastify";
 import { checkUserMembershipInTeam } from "@/utils/teamKatalogAPI";
+import { enrichMessagesWithServiceInfo } from "@/utils/messageServiceMapper";
 
 interface StatusListProps {
   service_ids: string[];
@@ -28,14 +29,22 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
       return;
     }
 
-    // Check if message has team association
-    if (message.affectedServices.length === 0 || !message.affectedServices[0].teamId) {
+    // Check if message has affected services
+    if (message.affectedServices.length === 0) {
+      toast.error("Du har ikke tilgang til å redigere denne driftsmeldingen - ingen tjenester tilknyttet");
+      return;
+    }
+
+    const firstService = message.affectedServices[0];
+
+    // Check if teamId exists
+    if (!firstService.teamId) {
       toast.error("Du har ikke tilgang til å redigere denne driftsmeldingen - ingen team tilknyttet");
       return;
     }
 
     try {
-      const isMember = await checkUserMembershipInTeam(message.affectedServices[0].teamId, user.navIdent);
+      const isMember = await checkUserMembershipInTeam(firstService.teamId, user.navIdent);
       if (isMember) {
         window.location.href = `ekstern/${message.id}/rediger`;
       } else {
@@ -52,9 +61,12 @@ const StatusList = ({ service_ids, user }: StatusListProps) => {
       try {
         const messages = await fetchMessageByServiceList(service_ids);
 
+        // Enrich messages with service information (including teamId)
+        const enrichedMessages = await enrichMessagesWithServiceInfo(messages, service_ids);
+
         // Filter to only show future messages (planned maintenance)
         const currentTime = new Date();
-        const maintenanceMessages = messages.filter(message => {
+        const maintenanceMessages = enrichedMessages.filter(message => {
           const messageStartTime = new Date(message.startTime);
           return isAfter(messageStartTime, currentTime);
         });
