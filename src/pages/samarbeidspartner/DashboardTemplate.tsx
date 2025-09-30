@@ -107,22 +107,6 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
                 </ServiceStatus>
               </ServiceCard>
             ))}
-            {/* Only show placeholders if we have real services but fewer than 10 */}
-            {servicesWithStatus.length < 10 && servicesWithStatus.length > 0 &&
-              Array.from({ length: Math.max(0, 10 - servicesWithStatus.length) }, (_, index) => (
-                <PlaceholderCard key={`placeholder-${index}`}>
-                  <ServiceLeft>
-                    <ServiceIcon>
-                      <span>📄</span>
-                    </ServiceIcon>
-                    <ServiceName>Placeholder Service {index + servicesWithStatus.length + 1}</ServiceName>
-                  </ServiceLeft>
-                  <ServiceStatus status="operational">
-                    Operativ
-                  </ServiceStatus>
-                </PlaceholderCard>
-              ))
-            }
           </ServiceGrid>
         ) : (
           <NoServicesCard>
@@ -413,15 +397,6 @@ const ServiceCard = styled.div`
   }
 `;
 
-const PlaceholderCard = styled(ServiceCard)`
-  opacity: 0.7;
-  background: #f8f9fa;
-  border: 1px solid #e9ecef;
-
-  &:hover {
-    background-color: #f8f9fa;
-  }
-`;
 
 const NoServicesCard = styled.div`
   background: white;
