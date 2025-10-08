@@ -34,8 +34,20 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
     const fetchOpsMessages = async () => {
       try {
         const messages = await fetchMessageByServiceList(services_ids_list);
+        console.log('📥 Fetched ops messages:', messages.map(m => ({
+          id: m.id,
+          status: m.status,
+          severity: m.severity,
+          affectedServices: m.affectedServices.map(s => s.id)
+        })));
         // Enrich messages with service information (including teamId)
         const enrichedMessages = await enrichMessagesWithServiceInfo(messages, services_ids_list);
+        console.log('✨ Enriched ops messages:', enrichedMessages.map(m => ({
+          id: m.id,
+          status: m.status,
+          severity: m.severity,
+          affectedServices: m.affectedServices.map(s => s.id)
+        })));
         setOpsMessages(enrichedMessages);
       } catch (error) {
         console.error('Failed to fetch ops messages:', error);
@@ -47,6 +59,18 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
   useEffect(() => {
     const updatedServices = services.map(service => {
       const maintenanceStatus = getMaintenanceStatus(service.id, opsMessages);
+      console.log(`🔧 Service ${service.name} (${service.id}):`, {
+        maintenanceStatus,
+        relatedMessages: opsMessages.filter(m =>
+          m.affectedServices?.some(s => s.id === service.id)
+        ).map(m => ({
+          id: m.id,
+          status: m.status,
+          severity: m.severity,
+          startTime: m.startTime,
+          endTime: m.endTime
+        }))
+      });
       return {
         ...service,
         maintenanceStatus
@@ -131,7 +155,7 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
         {/* Planned Maintenance */}
         <MaintenanceSection>
           <SectionTitle>Planlagt vedlikehold</SectionTitle>
-          <StatusList service_ids={services_ids_list} user={user} />
+          <StatusList service_ids={services_ids_list} user={user} services={services} />
         </MaintenanceSection>
 
         {/* Recent Messages (Last 7 Days) */}
@@ -149,7 +173,7 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
               </CreateOpsIconButton>
             )}
           </SectionHeader>
-          <RecentMessages service_ids={services_ids_list} user={user} />
+          <RecentMessages service_ids={services_ids_list} user={user} services={services} />
         </MaintenanceSection>
 
         {/* Subscription Modal */}
@@ -178,19 +202,30 @@ const getMaintenanceStatus = (serviceId: string, opsMessages: OpsMessageI[]): 'o
     const endTime = new Date(message.endTime);
     const isActive = isAfter(currentTime, startTime) && isBefore(currentTime, endTime);
 
-    // Since affectedServices is empty from API, for now we'll apply active messages
-    // to RogerTEST service specifically (known ID)
-    const isRogerTEST = serviceId === 'aafc64ba-70a8-4ae4-896e-69306aab0ab4';
+    // Check if this message affects the specific service
+    const isForThisService = message.affectedServices?.some(service => service.id === serviceId);
 
-    // For RogerTEST, apply any active message
-    // For other services, only if they have proper affectedServices
-    if (isRogerTEST && isActive) {
-      return true;
+    // Exclude solved messages from affecting service status
+    const isNotSolved = message.status !== 'SOLVED';
+
+    // Also exclude messages with undefined status (old messages)
+    const hasValidStatus = message.status !== undefined;
+
+    const shouldInclude = isForThisService && isActive && isNotSolved;
+
+    if (isForThisService) {
+      console.log(`🔍 Message ${message.id} for service ${serviceId}:`, {
+        status: message.status,
+        isActive,
+        isNotSolved,
+        shouldInclude,
+        startTime: message.startTime,
+        endTime: message.endTime,
+        currentTime: currentTime.toISOString()
+      });
     }
 
-    // Normal logic for services with proper affectedServices
-    const isForThisService = message.affectedServices?.some(service => service.id === serviceId);
-    return isForThisService && isActive;
+    return shouldInclude;
   });
 
   if (activeMessages.length === 0) return null;
@@ -218,6 +253,7 @@ const getMaintenanceStatus = (serviceId: string, opsMessages: OpsMessageI[]): 'o
 };
 
 const getServiceStatus = (service: any): 'operational' | 'degraded' | 'outage' | 'maintenance' => {
+
   // First check if there's an active ops message status
   if (service.maintenanceStatus) {
     return service.maintenanceStatus;

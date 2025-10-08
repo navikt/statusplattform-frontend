@@ -139,7 +139,7 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
     //const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS?.split(",")
 
     const approvedUsers = [
-        "L152423",
+        "J162994",
         "K132081",
         "H123099",
         "L110875",

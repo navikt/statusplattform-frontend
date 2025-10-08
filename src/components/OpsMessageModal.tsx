@@ -56,6 +56,7 @@ const OpsMessageModal: React.FC<OpsMessageModalProps> = ({
         ...editingOpsMessage,
         startTime: defaultDates.startTime,
         endTime: defaultDates.endTime,
+        status: editingOpsMessage.status || StatusEnum.EXAMINING,
       };
     } else {
       return {
@@ -163,6 +164,7 @@ const OpsMessageModal: React.FC<OpsMessageModalProps> = ({
           ...editingOpsMessage,
           startTime: defaultDates.startTime,
           endTime: defaultDates.endTime,
+          status: editingOpsMessage.status || StatusEnum.EXAMINING,
         });
 
         // Determine duration type for edit mode
@@ -467,24 +469,38 @@ const OpsMessageModal: React.FC<OpsMessageModalProps> = ({
                   <DateFieldContainer>
                     <TextField
                       label="Startdato"
-
-                      value={opsMessage.startTime.toISOString().slice(0, 16)}
-                      onChange={(e) => setOpsMessage({
-                        ...opsMessage,
-                        startTime: new Date(e.target.value)
-                      })}
+                      type="datetime-local"
+                      value={opsMessage.startTime instanceof Date && !isNaN(opsMessage.startTime.getTime())
+                        ? opsMessage.startTime.toISOString().slice(0, 16)
+                        : ''}
+                      onChange={(e) => {
+                        const newDate = new Date(e.target.value);
+                        if (!isNaN(newDate.getTime())) {
+                          setOpsMessage({
+                            ...opsMessage,
+                            startTime: newDate
+                          });
+                        }
+                      }}
                       size="medium"
                     />
                   </DateFieldContainer>
                   <DateFieldContainer>
                     <TextField
                       label="Sluttdato"
-
-                      value={opsMessage.endTime.toISOString().slice(0, 16)}
-                      onChange={(e) => setOpsMessage({
-                        ...opsMessage,
-                        endTime: new Date(e.target.value)
-                      })}
+                      type="datetime-local"
+                      value={opsMessage.endTime instanceof Date && !isNaN(opsMessage.endTime.getTime())
+                        ? opsMessage.endTime.toISOString().slice(0, 16)
+                        : ''}
+                      onChange={(e) => {
+                        const newDate = new Date(e.target.value);
+                        if (!isNaN(newDate.getTime())) {
+                          setOpsMessage({
+                            ...opsMessage,
+                            endTime: newDate
+                          });
+                        }
+                      }}
                       size="medium"
                     />
                   </DateFieldContainer>

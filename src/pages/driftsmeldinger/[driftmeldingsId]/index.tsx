@@ -131,7 +131,7 @@ const OpsMessageComponent = ({
     }, [updatedSeverity])
 
     const approvedUsers = [
-        "L152423",
+        "J162994",
         "K132081",
         "H123099",
         "L110875",

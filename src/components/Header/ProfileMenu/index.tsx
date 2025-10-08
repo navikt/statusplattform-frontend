@@ -69,11 +69,11 @@ const ProfileMenu: React.FC<{
     const [anchor, setAnchor] = useState<HTMLSelectElement>(null)
 
     const usersWithAccess =
-        "L152423,H161540,K146221,J104568,G124938,M106261,G121973,H166137".split(
+        "J162994,H161540,K146221,J104568,G124938,M106261,G121973,H166137".split(
             ","
         )
     const usersWithOpsAccess =
-        "L152423,K132081,H123099,L110875,K125327,F110862,A110886,L120166,G121973,H166137".split(
+        "J162994,K132081,H123099,L110875,K125327,F110862,A110886,L120166,G121973,H166137".split(
             ","
         )
 

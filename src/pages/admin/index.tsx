@@ -286,7 +286,7 @@ const AdminPage = ({
     // const [components, setComponents] = useState<Component[]>()
 
     const approvedUsers = [
-        "L152423",
+        "J162994",
         "H161540",
         "K146221",
         "J104568",

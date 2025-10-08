@@ -41,6 +41,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
         const responseBody = await response.json();
 
+        // Debug logging for ops messages
+        if (backendEndpath && backendEndpath.includes('OpsMessage')) {
+            console.log('🔍 OpsMessage Request:', { method, path, body });
+            console.log('🔍 OpsMessage Response:', JSON.stringify(responseBody, null, 2));
+        }
+
         if (response.ok) {
             res.status(200).json(responseBody);
         } else {

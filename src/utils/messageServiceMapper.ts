@@ -3,19 +3,18 @@ import { Service } from '../types/types';
 import { fetchExternalServices } from './servicesAPI';
 
 /**
- * Maps service information (including teamId) to ops messages
- * Since backend doesn't include service details in affectedServices,
- * we need to fetch services separately and match by service IDs
+ * Enriches messages with full service details (including teamId) for services that are already in affectedServices
+ * This only adds missing service details, it doesn't change which services are affected
  */
 export const enrichMessagesWithServiceInfo = async (
   messages: OpsMessageI[],
   serviceIds: string[]
 ): Promise<OpsMessageI[]> => {
   try {
-    // Fetch all external services
+    // Fetch all external services to get full service details (including teamId)
     const allServices = await fetchExternalServices();
 
-    // Create a map for quick lookup
+    // Create a map for quick lookup of full service details
     const serviceMap = new Map<string, Service>();
     allServices.forEach(service => {
       if (service.id) {
@@ -23,16 +22,18 @@ export const enrichMessagesWithServiceInfo = async (
       }
     });
 
-    // Enrich messages with service information
+    // Enrich messages with complete service information
     return messages.map(message => {
-      // Find services for this message based on serviceIds that have messages
-      const relevantServices = serviceIds
-        .map(serviceId => serviceMap.get(serviceId))
-        .filter((service): service is Service => service !== undefined);
+      // Only enrich services that are already in the message's affectedServices
+      const enrichedAffectedServices = message.affectedServices.map(affectedService => {
+        const fullServiceDetails = serviceMap.get(affectedService.id);
+        // Return full service details if available, otherwise keep original
+        return fullServiceDetails || affectedService;
+      });
 
       return {
         ...message,
-        affectedServices: relevantServices
+        affectedServices: enrichedAffectedServices
       };
     });
   } catch (error) {
