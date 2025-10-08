@@ -3,23 +3,22 @@ import { useEffect, useState } from "react";
 import { OpsMessageI } from "@/types/opsMessage";
 import { Service } from "@/types/types";
 import styled from "styled-components";
-import { fetchMessageByServiceList } from "@/utils/dashboardsAPI";
 import { formatDistanceToNow, parseISO, isAfter, isBefore } from "date-fns";
 import { nb } from "date-fns/locale";
 import { UserData } from "@/types/userData";
 import { PencilIcon } from '@navikt/aksel-icons';
 import { toast } from "react-toastify";
 import { checkUserMembershipInTeam } from "@/utils/teamKatalogAPI";
-import { enrichMessagesWithServiceInfo } from "@/utils/messageServiceMapper";
 import OpsMessageModal from "@/components/OpsMessageModal";
 
 interface StatusListProps {
   service_ids: string[];
   user?: UserData;
   services: Service[];
+  opsMessages: OpsMessageI[];
 }
 
-const StatusList = ({ service_ids, user, services }: StatusListProps) => {
+const StatusList = ({ service_ids, user, services, opsMessages }: StatusListProps) => {
   const [serverOpsMessages, setServerOpsMessages] = useState<OpsMessageI[]>([]);
   const [groupedMessages, setGroupedMessages] = useState<Record<string, OpsMessageI[]>>({});
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -75,48 +74,35 @@ const StatusList = ({ service_ids, user, services }: StatusListProps) => {
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const messages = await fetchMessageByServiceList(service_ids);
+    // Filter to show:
+    // 1. Future messages (planned maintenance)
+    // 2. Messages with status MAITENANCE (maintenance operations)
+    const currentTime = new Date();
+    const maintenanceMessages = opsMessages.filter(message => {
+      const messageStartTime = new Date(message.startTime);
+      const isFuture = isAfter(messageStartTime, currentTime);
+      const isMaintenance = message.status === 'MAITENANCE';
 
-        // Enrich messages with service information (including teamId)
-        const enrichedMessages = await enrichMessagesWithServiceInfo(messages, service_ids);
+      return isFuture || isMaintenance;
+    });
 
-        // Filter to show:
-        // 1. Future messages (planned maintenance)
-        // 2. Messages with status MAITENANCE (maintenance operations)
-        const currentTime = new Date();
-        const maintenanceMessages = enrichedMessages.filter(message => {
-          const messageStartTime = new Date(message.startTime);
-          const isFuture = isAfter(messageStartTime, currentTime);
-          const isMaintenance = message.status === 'MAITENANCE';
+    maintenanceMessages.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
 
-          return isFuture || isMaintenance;
-        });
-
-        maintenanceMessages.sort((a, b) => new Date(a.startTime).getTime() - new Date(b.startTime).getTime());
-
-        const grouped = maintenanceMessages.reduce((acc: Record<string, OpsMessageI[]>, message) => {
-          const messageDate = new Date(message.startTime).toLocaleDateString("nb-NO", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          });
-          if (!acc[messageDate]) {
-            acc[messageDate] = [];
-          }
-          acc[messageDate].push(message);
-          return acc;
-        }, {});
-        setServerOpsMessages(maintenanceMessages);
-        setGroupedMessages(grouped);
-      } catch (error) {
-        console.error("Failed to fetch operations messages:", error);
+    const grouped = maintenanceMessages.reduce((acc: Record<string, OpsMessageI[]>, message) => {
+      const messageDate = new Date(message.startTime).toLocaleDateString("nb-NO", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+      if (!acc[messageDate]) {
+        acc[messageDate] = [];
       }
-    };
-
-    fetchData();
-  }, [service_ids]);
+      acc[messageDate].push(message);
+      return acc;
+    }, {});
+    setServerOpsMessages(maintenanceMessages);
+    setGroupedMessages(grouped);
+  }, [opsMessages]);
 
   const getMessageStatus = (message: OpsMessageI) => {
     const currentTime = new Date();

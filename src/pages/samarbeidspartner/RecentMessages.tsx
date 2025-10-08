@@ -3,23 +3,22 @@ import { useEffect, useState } from "react";
 import { OpsMessageI } from "@/types/opsMessage";
 import { Service } from "@/types/types";
 import styled from "styled-components";
-import { fetchMessageByServiceList } from "@/utils/dashboardsAPI";
 import { formatDistanceToNow, parseISO, isAfter, isBefore, subDays, eachDayOfInterval, format } from "date-fns";
 import { nb } from "date-fns/locale";
 import { UserData } from "@/types/userData";
 import { PencilIcon } from '@navikt/aksel-icons';
 import { toast } from "react-toastify";
 import { checkUserMembershipInTeam } from "@/utils/teamKatalogAPI";
-import { enrichMessagesWithServiceInfo } from "@/utils/messageServiceMapper";
 import OpsMessageModal from "@/components/OpsMessageModal";
 
 interface RecentMessagesProps {
   service_ids: string[];
   user?: UserData;
   services: Service[];
+  opsMessages: OpsMessageI[];
 }
 
-const RecentMessages = ({ service_ids, user, services }: RecentMessagesProps) => {
+const RecentMessages = ({ service_ids, user, services, opsMessages }: RecentMessagesProps) => {
   const [recentMessages, setRecentMessages] = useState<OpsMessageI[]>([]);
   const [allDays, setAllDays] = useState<{ date: string; messages: OpsMessageI[] }[]>([]);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
@@ -75,72 +74,59 @@ const RecentMessages = ({ service_ids, user, services }: RecentMessagesProps) =>
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const messages = await fetchMessageByServiceList(service_ids);
+    const today = new Date();
+    const sevenDaysAgo = subDays(today, 6); // Last 7 days including today
 
-        // Enrich messages with service information (including teamId)
-        const enrichedMessages = await enrichMessagesWithServiceInfo(messages, service_ids);
+    // Generate all 7 days
+    const last7Days = eachDayOfInterval({
+      start: sevenDaysAgo,
+      end: today
+    });
 
-        const today = new Date();
-        const sevenDaysAgo = subDays(today, 6); // Last 7 days including today
+    // Filter messages from the last 7 days
+    // Exclude future messages (they're shown in "Planlagt vedlikehold")
+    const recent = opsMessages.filter(message => {
+      const messageDate = new Date(message.startTime);
+      const messageEndTime = new Date(message.endTime);
+      const isFromLast7Days = isAfter(messageDate, subDays(today, 7));
+      const isFuture = isAfter(messageDate, today);
+      const isOngoing = isAfter(messageEndTime, today) && !isAfter(messageDate, today);
+      const isMaintenance = message.status === 'MAITENANCE';
 
-        // Generate all 7 days
-        const last7Days = eachDayOfInterval({
-          start: sevenDaysAgo,
-          end: today
-        });
+      // Show if: from last 7 days AND not future AND (not ongoing maintenance OR is completed)
+      return isFromLast7Days && !isFuture && !(isMaintenance && isOngoing);
+    });
 
-        // Filter messages from the last 7 days
-        // Exclude future messages (they're shown in "Planlagt vedlikehold")
-        const recent = enrichedMessages.filter(message => {
-          const messageDate = new Date(message.startTime);
-          const messageEndTime = new Date(message.endTime);
-          const isFromLast7Days = isAfter(messageDate, subDays(today, 7));
-          const isFuture = isAfter(messageDate, today);
-          const isOngoing = isAfter(messageEndTime, today) && !isAfter(messageDate, today);
-          const isMaintenance = message.status === 'MAITENANCE';
-
-          // Show if: from last 7 days AND not future AND (not ongoing maintenance OR is completed)
-          return isFromLast7Days && !isFuture && !(isMaintenance && isOngoing);
-        });
-
-        // Group messages by date
-        const grouped = recent.reduce((acc: Record<string, OpsMessageI[]>, message) => {
-          const messageDate = new Date(message.startTime).toLocaleDateString("nb-NO", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          });
-          if (!acc[messageDate]) {
-            acc[messageDate] = [];
-          }
-          acc[messageDate].push(message);
-          return acc;
-        }, {});
-
-        // Create array of all days with their messages (or empty array)
-        const daysWithMessages = last7Days.reverse().map(day => {
-          const dateString = day.toLocaleDateString("nb-NO", {
-            day: "numeric",
-            month: "long",
-            year: "numeric",
-          });
-          return {
-            date: dateString,
-            messages: grouped[dateString] || []
-          };
-        });
-
-        setRecentMessages(recent);
-        setAllDays(daysWithMessages);
-      } catch (error) {
-        console.error("Failed to fetch recent operations messages:", error);
+    // Group messages by date
+    const grouped = recent.reduce((acc: Record<string, OpsMessageI[]>, message) => {
+      const messageDate = new Date(message.startTime).toLocaleDateString("nb-NO", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+      if (!acc[messageDate]) {
+        acc[messageDate] = [];
       }
-    };
+      acc[messageDate].push(message);
+      return acc;
+    }, {});
 
-    fetchData();
-  }, [service_ids]);
+    // Create array of all days with their messages (or empty array)
+    const daysWithMessages = last7Days.reverse().map(day => {
+      const dateString = day.toLocaleDateString("nb-NO", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      });
+      return {
+        date: dateString,
+        messages: grouped[dateString] || []
+      };
+    });
+
+    setRecentMessages(recent);
+    setAllDays(daysWithMessages);
+  }, [opsMessages]);
 
   const getMessageStatus = (message: OpsMessageI) => {
     const currentTime = new Date();

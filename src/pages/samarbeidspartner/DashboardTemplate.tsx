@@ -155,7 +155,7 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
         {/* Planned Maintenance */}
         <MaintenanceSection>
           <SectionTitle>Planlagt vedlikehold</SectionTitle>
-          <StatusList service_ids={services_ids_list} user={user} services={services} />
+          <StatusList service_ids={services_ids_list} user={user} services={services} opsMessages={opsMessages} />
         </MaintenanceSection>
 
         {/* Recent Messages (Last 7 Days) */}
@@ -173,7 +173,7 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
               </CreateOpsIconButton>
             )}
           </SectionHeader>
-          <RecentMessages service_ids={services_ids_list} user={user} services={services} />
+          <RecentMessages service_ids={services_ids_list} user={user} services={services} opsMessages={opsMessages} />
         </MaintenanceSection>
 
         {/* Subscription Modal */}
