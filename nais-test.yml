@@ -28,8 +28,6 @@ spec:
           value: nav.no
         - name: ENV
           value: dev
-        - name: TEAMKATALOG_API
-          value: https://teamkatalog-api.intern.nav.no
 
     replicas:
         min: 1
@@ -52,9 +50,6 @@ spec:
         outbound:
             rules:
                 - application: portalserver
-                - application: team-catalog-backend
-                  namespace: org
-                  cluster: dev-gcp
                 - application: shout-out-api
                   namespace: shout-out
                   cluster: dev-gcp

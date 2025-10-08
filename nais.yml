@@ -25,8 +25,6 @@ spec:
           value: nav.no
         - name: ENV
           value: prod
-        - name: TEAMKATALOG_API
-          value: https://teamkatalog-api.intern.nav.no
     replicas:
         min: 2
         max: 2
@@ -62,6 +60,3 @@ spec:
         outbound:
             rules:
                 - application: portalserver
-                - application: team-catalog-backend
-                  namespace: org
-                  cluster: prod-gcp
