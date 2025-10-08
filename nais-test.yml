@@ -29,8 +29,7 @@ spec:
         - name: ENV
           value: dev
         - name: TEAMKATALOG_API
-          value: http://team-catalog-backend.org.svc.cluster.local
-#          value: "www.teamkatalog-api.dev.intern.nav.no"
+          value: https://teamkatalog-api.intern.nav.no
 
     replicas:
         min: 1
