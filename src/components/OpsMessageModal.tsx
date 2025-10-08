@@ -467,8 +467,9 @@ const OpsMessageModal: React.FC<OpsMessageModalProps> = ({
               {durationType === 'custom' && (
                 <CustomDateContainer>
                   <DateFieldContainer>
-                    <TextField
-                      label="Startdato"
+                    <DateLabel htmlFor="startTime">Startdato</DateLabel>
+                    <DateInput
+                      id="startTime"
                       type="datetime-local"
                       value={opsMessage.startTime instanceof Date && !isNaN(opsMessage.startTime.getTime())
                         ? opsMessage.startTime.toISOString().slice(0, 16)
@@ -482,12 +483,12 @@ const OpsMessageModal: React.FC<OpsMessageModalProps> = ({
                           });
                         }
                       }}
-                      size="medium"
                     />
                   </DateFieldContainer>
                   <DateFieldContainer>
-                    <TextField
-                      label="Sluttdato"
+                    <DateLabel htmlFor="endTime">Sluttdato</DateLabel>
+                    <DateInput
+                      id="endTime"
                       type="datetime-local"
                       value={opsMessage.endTime instanceof Date && !isNaN(opsMessage.endTime.getTime())
                         ? opsMessage.endTime.toISOString().slice(0, 16)
@@ -501,7 +502,6 @@ const OpsMessageModal: React.FC<OpsMessageModalProps> = ({
                           });
                         }
                       }}
-                      size="medium"
                     />
                   </DateFieldContainer>
                 </CustomDateContainer>
@@ -664,7 +664,42 @@ const CustomDateContainer = styled.div`
 `;
 
 const DateFieldContainer = styled.div`
-  /* Container for date fields */
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+`;
+
+const DateLabel = styled.label`
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #23262a;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+`;
+
+const DateInput = styled.input`
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #c6c2bf;
+  border-radius: 4px;
+  font-size: 1rem;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: white;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: #a8a29e;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #0067c5;
+    box-shadow: 0 0 0 3px rgba(0, 103, 197, 0.1);
+  }
+
+  &:disabled {
+    background-color: #f4f5f7;
+    color: #78716c;
+    cursor: not-allowed;
+  }
 `;
 
 const ModalActions = styled.div`

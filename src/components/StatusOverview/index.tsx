@@ -13,7 +13,7 @@ import { UserData } from "../../types/userData"
 import { datePrettifyer } from "../../utils/datePrettifyer"
 import { countHealthyServicesInListOfAreas } from "../../utils/servicesOperations"
 import CustomNavSpinner from "../CustomNavSpinner"
-import OpsMessageModal from "../OpsMessageModal"
+import OpsMessageModal from "../OpsMessageModal/index"
 
 const StatusSummary = styled.div`
     width: 100%;
@@ -417,7 +417,7 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
             className={
                 !severity ? "has-neutral" : "has-" + severity.toLowerCase()
             }
-            onClick={() => setModalOpen(!modalOpen)}
+            onClick={() => setModalOpen(true)}
         >
             <div className="content">
                 <div className="topcontent">
