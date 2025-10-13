@@ -186,7 +186,7 @@ const RecentMessages = ({ service_ids, user, services, opsMessages }: RecentMess
                     </HeaderContainer>
 
                     <LastUpdated isInactive={isCompleted}>
-                      Sist oppdatert:{" "}
+                      {isCompleted ? 'Avsluttet' : 'Slutter'}:{" "}
                       {new Date(message.endTime).toLocaleDateString("nb-NO", {
                         day: "numeric",
                         month: "short",

@@ -158,7 +158,7 @@ const StatusList = ({ service_ids, user, services, opsMessages }: StatusListProp
               </HeaderContainer>
 
               <LastUpdated isInactive={isCompleted}>
-                Sist oppdatert:{" "}
+                {isCompleted ? 'Avsluttet' : 'Slutter'}:{" "}
                 {new Date(message.endTime).toLocaleDateString("nb-NO", {
                   day: "numeric",
                   month: "short",
