@@ -144,7 +144,7 @@ const UptimeReportPage = () => {
 
     const uptimePercentage = calculateUptimePercentage()
     const status = getUptimeStatus(uptimePercentage)
-    const downtimeMinutes = report ? report.sumOfExpectedUptime - (report.sumOfActualUptime ?? 0) : 0
+    const downtimeMinutes = report ? (report.sumOfExpectedUptime ?? 0) - (report.sumOfActualUptime ?? 0) : 0
 
     return (
         <Layout>
@@ -265,15 +265,15 @@ const UptimeReportPage = () => {
                                 <StatContent>
                                     <StatLabel>Faktisk oppetid</StatLabel>
                                     <StatValue>{formatMinutesToReadable(report.sumOfActualUptime ?? 0)}</StatValue>
-                                    <StatSubtext>{(report.sumOfActualUptime ?? 0).toLocaleString()} minutter</StatSubtext>
+                                    <StatSubtext>{((report.sumOfActualUptime ?? 0)).toLocaleString('nb-NO')} minutter</StatSubtext>
                                 </StatContent>
                             </StatCard>
 
                             <StatCard>
                                 <StatContent>
                                     <StatLabel>Forventet oppetid</StatLabel>
-                                    <StatValue>{formatMinutesToReadable(report.sumOfExpectedUptime)}</StatValue>
-                                    <StatSubtext>{report.sumOfExpectedUptime.toLocaleString()} minutter</StatSubtext>
+                                    <StatValue>{formatMinutesToReadable(report.sumOfExpectedUptime ?? 0)}</StatValue>
+                                    <StatSubtext>{(report.sumOfExpectedUptime ?? 0).toLocaleString('nb-NO')} minutter</StatSubtext>
                                 </StatContent>
                             </StatCard>
 
@@ -281,7 +281,7 @@ const UptimeReportPage = () => {
                                 <StatContent>
                                     <StatLabel>Total nedetid</StatLabel>
                                     <StatValue $error>{formatMinutesToReadable(downtimeMinutes)}</StatValue>
-                                    <StatSubtext>{downtimeMinutes.toLocaleString()} minutter</StatSubtext>
+                                    <StatSubtext>{(downtimeMinutes).toLocaleString('nb-NO')} minutter</StatSubtext>
                                 </StatContent>
                             </StatCard>
                         </StatsGrid>
