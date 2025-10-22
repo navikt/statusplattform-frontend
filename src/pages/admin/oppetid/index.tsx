@@ -320,6 +320,7 @@ const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 2rem;
+  min-height: 100vh;
 
   @media (max-width: 768px) {
     padding: 1rem;
@@ -328,6 +329,16 @@ const Container = styled.div`
 
 const Header = styled.div`
   margin-bottom: 3rem;
+  padding: 2rem 0;
+
+  h1 {
+    background: linear-gradient(135deg, #0067c5 0%, #003d73 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+  }
 `
 
 const FormSection = styled.div`
@@ -335,11 +346,22 @@ const FormSection = styled.div`
 `
 
 const FormCard = styled(Panel)`
-  padding: 2rem;
-  background: var(--a-surface-default);
-  border: 1px solid var(--a-border-subtle);
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+  border: 1px solid rgba(0, 103, 197, 0.1);
+  border-radius: 16px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 103, 197, 0.04);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow:
+      0 12px 48px rgba(0, 0, 0, 0.12),
+      0 4px 16px rgba(0, 103, 197, 0.08);
+    transform: translateY(-2px);
+  }
 `
 
 const FormGrid = styled.div`
@@ -373,25 +395,31 @@ const LoaderContainer = styled.div`
 `
 
 const ResultSection = styled.div`
-  animation: fadeIn 0.3s ease-in;
+  animation: fadeInUp 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 
-  @keyframes fadeIn {
+  @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(30px);
     }
     to {
       opacity: 1;
       transform: translateY(0);
     }
   }
+
+  h2 {
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: #0067c5;
+  }
 `
 
 const StatsGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 2rem;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 1.75rem;
+  margin-bottom: 2.5rem;
 
   @media (max-width: 768px) {
     grid-template-columns: 1fr;
@@ -399,29 +427,71 @@ const StatsGrid = styled.div`
 `
 
 const StatCard = styled(Panel)<{ $status?: string }>`
-  padding: 1.5rem;
-  background: var(--a-surface-default);
-  border: 1px solid var(--a-border-subtle);
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  padding: 2rem;
+  background: ${props => {
+    if (props.$status === 'success') return 'linear-gradient(135deg, rgba(6, 122, 69, 0.03) 0%, rgba(255, 255, 255, 0.98) 100%)'
+    if (props.$status === 'warning') return 'linear-gradient(135deg, rgba(236, 116, 0, 0.03) 0%, rgba(255, 255, 255, 0.98) 100%)'
+    if (props.$status === 'danger') return 'linear-gradient(135deg, rgba(199, 16, 30, 0.03) 0%, rgba(255, 255, 255, 0.98) 100%)'
+    return 'linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%)'
+  }};
+  border: 1px solid ${props => {
+    if (props.$status === 'success') return 'rgba(6, 122, 69, 0.2)'
+    if (props.$status === 'warning') return 'rgba(236, 116, 0, 0.2)'
+    if (props.$status === 'danger') return 'rgba(199, 16, 30, 0.2)'
+    return 'rgba(0, 103, 197, 0.1)'
+  }};
+  border-radius: 16px;
+  box-shadow:
+    0 4px 20px rgba(0, 0, 0, 0.06),
+    0 1px 4px rgba(0, 0, 0, 0.04);
   display: flex;
-  gap: 1rem;
+  gap: 1.25rem;
   align-items: flex-start;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
 
   ${props => props.$status && `
-    border-left: 4px solid var(--a-border-${props.$status});
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: ${
+        props.$status === 'success' ? 'linear-gradient(180deg, var(--a-green-600) 0%, var(--a-green-500) 100%)' :
+        props.$status === 'warning' ? 'linear-gradient(180deg, var(--a-orange-600) 0%, var(--a-orange-500) 100%)' :
+        'linear-gradient(180deg, var(--a-red-600) 0%, var(--a-red-500) 100%)'
+      };
+    }
   `}
 
   &:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow:
+      0 12px 40px rgba(0, 0, 0, 0.12),
+      0 4px 16px rgba(0, 103, 197, 0.08);
+    transform: translateY(-4px) scale(1.02);
+    border-color: ${props => {
+      if (props.$status === 'success') return 'rgba(6, 122, 69, 0.4)'
+      if (props.$status === 'warning') return 'rgba(236, 116, 0, 0.4)'
+      if (props.$status === 'danger') return 'rgba(199, 16, 30, 0.4)'
+      return 'rgba(0, 103, 197, 0.2)'
+    }};
   }
 `
 
 const StatIcon = styled.div`
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: var(--a-icon-success);
   flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, rgba(6, 122, 69, 0.1) 0%, rgba(6, 122, 69, 0.05) 100%);
 `
 
 const StatContent = styled.div`
@@ -438,23 +508,42 @@ const StatLabel = styled(BodyShort)`
 `
 
 const StatValue = styled.div<{ $error?: boolean }>`
-  font-size: 1.75rem;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   color: ${props => props.$error ? 'var(--a-text-danger)' : 'var(--a-text-default)'};
-  line-height: 1.2;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+
+  ${props => props.$error && `
+    background: linear-gradient(135deg, #c7101e 0%, #a30c18 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  `}
 `
 
 const StatSubtext = styled(BodyShort)`
   color: var(--a-text-subtle);
-  font-size: 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 500;
 `
 
 const ProgressCard = styled(Panel)`
-  padding: 2rem;
-  background: var(--a-surface-default);
-  border: 1px solid var(--a-border-subtle);
-  border-radius: 8px;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+  padding: 2.5rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.98) 100%);
+  border: 1px solid rgba(0, 103, 197, 0.1);
+  border-radius: 16px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 103, 197, 0.04);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow:
+      0 12px 48px rgba(0, 0, 0, 0.12),
+      0 4px 16px rgba(0, 103, 197, 0.08);
+  }
 `
 
 const ProgressHeader = styled.div`
@@ -466,28 +555,73 @@ const ProgressHeader = styled.div`
 
 const ProgressBarContainer = styled.div`
   width: 100%;
-  height: 32px;
-  background: var(--a-surface-subtle);
-  border-radius: 16px;
+  height: 40px;
+  background: linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0%, rgba(0, 0, 0, 0.02) 100%);
+  border-radius: 20px;
   overflow: hidden;
-  margin-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.06);
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
+    border-radius: 20px 20px 0 0;
+    pointer-events: none;
+  }
 `
 
 const ProgressBarFill = styled.div<{ $percentage: number; $status: string }>`
   height: 100%;
   width: ${props => Math.min(props.$percentage, 100)}%;
   background: ${props => {
-    if (props.$status === 'success') return 'linear-gradient(90deg, var(--a-green-600) 0%, var(--a-green-500) 100%)'
-    if (props.$status === 'warning') return 'linear-gradient(90deg, var(--a-orange-600) 0%, var(--a-orange-500) 100%)'
-    return 'linear-gradient(90deg, var(--a-red-600) 0%, var(--a-red-500) 100%)'
+    if (props.$status === 'success') return 'linear-gradient(90deg, #067a45 0%, #06a35b 50%, #067a45 100%)'
+    if (props.$status === 'warning') return 'linear-gradient(90deg, #ec7400 0%, #ff9533 50%, #ec7400 100%)'
+    return 'linear-gradient(90deg, #c7101e 0%, #e71929 50%, #c7101e 100%)'
   }};
-  transition: width 0.6s ease;
-  border-radius: 16px;
+  background-size: 200% 100%;
+  animation: shimmer 3s ease-in-out infinite;
+  transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 20px;
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  padding-right: 0.75rem;
-  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding-right: 1rem;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.4),
+    0 4px 16px ${props => {
+      if (props.$status === 'success') return 'rgba(6, 122, 69, 0.4)'
+      if (props.$status === 'warning') return 'rgba(236, 116, 0, 0.4)'
+      return 'rgba(199, 16, 30, 0.4)'
+    }};
+  position: relative;
+  overflow: hidden;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.3) 0%, transparent 100%);
+    border-radius: 20px 20px 0 0;
+  }
+
+  @keyframes shimmer {
+    0%, 100% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+  }
 `
 
 const ProgressLabels = styled.div`
@@ -505,10 +639,12 @@ const ProgressLabel = styled.div`
 `
 
 const ProgressDot = styled.div<{ $color: string }>`
-  width: 12px;
-  height: 12px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
   background: ${props => props.$color};
+  box-shadow: 0 2px 8px ${props => props.$color}40;
+  border: 2px solid white;
 `
 
 export default UptimeReportPage
