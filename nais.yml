@@ -9,9 +9,7 @@ spec:
     image: {{ image }}
     port: 3000
     ingresses:
-        - https://status.nav.no/sp
-    #image: ghcr.io/navikt/myapplication:417dcaa2c839b9da72e0189e2cfdd4e90e9cc6fd
-    #       ^--- interpolated from the ${{ env.docker_image }} variable in the action
+        - https://status.nav.no
     env:
         - name: NEXT_PUBLIC_BACKENDPATH
           value: "http://portalserver"
@@ -37,8 +35,8 @@ spec:
             tenant: nav.no
             # optional
             replyURLs:
-                - "https://status.nav.no/sp/oauth2/callback"
-                - "https://status.nav.no/sp/Dashboard/Internt"
+                - "https://status.nav.no/oauth2/callback"
+                - "https://status.nav.no/Dashboard/Internt"
             claims:
                 extra:
                     - "NAVident"
@@ -49,13 +47,12 @@ spec:
             enabled: true
             autoLogin: true
             autoLoginIgnorePaths:
-              - /sp/Samarbeidspartner/**
-              - /sp/_next/**
-              - /sp/api/requestGateway
-              - /sp/api/userInfo
-              - /sp/favicon.ico
-              - /sp/assets/nav-logo/png/black.png
-#            errorPath: "https://status.nav.no/sp/Login"
+              - /samarbeidspartner/**
+              - /_next/**
+              - /api/requestGateway
+              - /api/userInfo
+              - /favicon.ico
+              - /assets/nav-logo/png/black.png
     accessPolicy:
         outbound:
             rules:
