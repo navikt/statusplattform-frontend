@@ -9,8 +9,8 @@ spec:
     image: {{ image }}
     port: 3000
     ingresses:
-        - https://status.intern.dev.nav.no/sp
-        - https://status.ansatt.dev.nav.no/sp
+        - https://status.intern.dev.nav.no
+        - https://status.ansatt.dev.nav.no
 
     envFrom:
     - secret: status-portal
@@ -19,18 +19,15 @@ spec:
         - name: NEXT_PUBLIC_BACKENDPATH
           value: "http://portalserver"
         - name: NEXT_PUBLIC_APPROVED_USERS
-          value: "L152423,H161540,K146221,J104568,G124938,M106261,M137316,G121973,H166137,J162994"
+          value: "J162994,H161540,K146221,J104568,G124938,M106261,M137316,G121973,H166137,J162994"
         - name: NEXT_PUBLIC_OPS_ACCESS
-          value: "L152423,K132081,H123099,L110875,K125327,F110862,A110886,L120166,M106261,M137316,G121973,H166137"
+          value: "J162994,K132081,H123099,L110875,K125327,F110862,A110886,L120166,M106261,M137316,G121973,H166137"
         - name: NPM_CONFIG_CACHE
           value: /tmp
         - name: TENANT
           value: nav.no
         - name: ENV
           value: dev
-        - name: TEAMKATALOG_API
-          value: http://team-catalog-backend.org.svc.cluster.local
-#          value: "www.teamkatalog-api.dev.intern.nav.no"
 
     replicas:
         min: 1
@@ -53,9 +50,6 @@ spec:
         outbound:
             rules:
                 - application: portalserver
-                - application: team-catalog-backend
-                  namespace: org
-                  cluster: dev-gcp
                 - application: shout-out-api
                   namespace: shout-out
                   cluster: dev-gcp

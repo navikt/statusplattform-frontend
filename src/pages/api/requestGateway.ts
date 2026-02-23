@@ -21,8 +21,8 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     const body = typeof req.headers.body === "string" ? JSON.parse(req.headers.body) : req.headers.body;
     const path = `${backendPath}${backendEndpath}`;
     
-    console.log('requestGateway - backendEndpath:', backendEndpath);
-    console.log('requestGateway - full path:', path);
+    // console.log('requestGateway - backendEndpath:', backendEndpath);
+    // console.log('requestGateway - full path:', path);
 
     let authHeaderType = "Authorization";
     if (env === "local") {
@@ -40,6 +40,12 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         });
 
         const responseBody = await response.json();
+
+        // Debug logging for ops messages
+        if (backendEndpath && backendEndpath.includes('OpsMessage')) {
+            console.log('🔍 OpsMessage Request:', { method, path, body });
+            console.log('🔍 OpsMessage Response:', JSON.stringify(responseBody, null, 2));
+        }
 
         if (response.ok) {
             res.status(200).json(responseBody);

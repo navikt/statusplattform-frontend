@@ -24,7 +24,7 @@ import {
     AdminCategoryContainer,
     CloseCustomized,
     ModalInner,
-} from "../../pages/Admin"
+} from "./AdminStyles"
 import { backendPath } from "../../pages"
 import { EndPathDashboards } from "../../utils/apiHelper"
 
@@ -45,7 +45,7 @@ const TableDashbord = () => {
                     await setDashboards(dashboards)
                 } catch (error) {
                     toast.error("Noe gikk galt ved henting av dashbordene")
-                    console.log(error)
+                    // console.log(error)
                 } finally {
                     setIsLoading(false)
                 }
@@ -188,7 +188,7 @@ const Dashboards: React.FC<{
 
     const { data: allAreas, isLoading, reload } = useLoader(fetchAreas, [])
 
-    useEffect(() => {}, [])
+    useEffect(() => { }, [])
 
     const toggleExpanded = (dashboard: Dashboard) => {
         if (expandedList.includes(dashboard.id)) {
@@ -410,7 +410,7 @@ const CurrentlyEdittingDashboard = ({
     const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
-        ;(async function () {
+        ; (async function () {
             setIsLoading(true)
             await fetchDashboard(dashboard.id)
                 .then((response) => {

@@ -40,7 +40,7 @@ import {
     CloseCustomized,
     DependencyList,
     ModalInner,
-} from "../../pages/Admin"
+} from "./AdminStyles"
 import { RouterAdminAddOmråde } from "../../types/routes"
 import CustomNavSpinner from "../CustomNavSpinner"
 
@@ -121,7 +121,7 @@ const TableOmraade = () => {
                     await setAllAreas(areas)
                     await setAllServices(services)
                 } catch (e) {
-                    console.log(e)
+                    // console.log(e)
                     toast.error("Noe gikk galt ved henting av data")
                 } finally {
                     setIsLoadingAreas(false)
@@ -143,7 +143,7 @@ const TableOmraade = () => {
                 await reloadAreas()
                 await reloadServices()
             } catch (error) {
-                console.log(error)
+                // console.log(error)
                 toast.error("Noe gikk galt i hentingen.")
             }
         }
@@ -160,7 +160,7 @@ const TableOmraade = () => {
                 setAllAreas(reloadedAreas)
                 setIsLoadingAreas(false)
             } catch (error) {
-                console.log(error)
+                // console.log(error)
                 setIsLoadingAreas(false)
                 toast.error("Noe gikk galt i hentingen.")
             }
@@ -177,7 +177,7 @@ const TableOmraade = () => {
                 setAllServices(reloadedServices)
             } catch (error) {
                 setIsLoadingServices(false)
-                console.log(error)
+                // console.log(error)
                 toast.error("Noe gikk galt i hentingen.")
             }
         }
@@ -233,8 +233,8 @@ const TableOmraade = () => {
                 <title>Admin - Områder - status.nav.no</title>
             </Head>
 
-            <Modal 
-                open={!!areaToDelete} 
+            <Modal
+                open={!!areaToDelete}
                 onClose={() => setAreaToDelete(null)}
                 header={{ heading: "Bekreft sletting" }}
             >
@@ -749,17 +749,17 @@ const CurrentlyEdittingArea = ({
 
     const handleUpdatedArea =
         (field: keyof typeof updatedArea) =>
-        (evt: React.ChangeEvent<HTMLInputElement>) => {
-            const changedArea = {
-                ...updatedArea,
-                [field]:
-                    evt.target.getAttribute("type") === "number"
-                        ? parseInt(evt.target.value)
-                        : evt.target.value,
-            }
+            (evt: React.ChangeEvent<HTMLInputElement>) => {
+                const changedArea = {
+                    ...updatedArea,
+                    [field]:
+                        evt.target.getAttribute("type") === "number"
+                            ? parseInt(evt.target.value)
+                            : evt.target.value,
+                }
 
-            changeUpdatedArea(changedArea)
-        }
+                changeUpdatedArea(changedArea)
+            }
 
     const handleSubmit = () => {
         let fetching = true
@@ -776,7 +776,7 @@ const CurrentlyEdittingArea = ({
                 })
             }
         } catch (error) {
-            console.log(error)
+            // console.log(error)
             toast.error("Noe gikk galt i oppdatering av område")
         }
     }

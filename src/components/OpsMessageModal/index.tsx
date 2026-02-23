@@ -41,29 +41,29 @@ const CustomOpsModal = styled(Modal)`
 `
 
 interface OpsMessageModalI {
-    opsMessage: OpsMessageI
-    navIdent: string
-    modalOpen: boolean
-    setModalOpen: React.Dispatch<SetStateAction<boolean>>
+    isOpen: boolean
+    onClose: () => void
+    services?: any[]
+    editingOpsMessage: OpsMessageI | null
 }
 
 const OpsMessageModal = (props: OpsMessageModalI) => {
-    const { opsMessage, navIdent, modalOpen, setModalOpen } = props
+    const { isOpen, onClose, editingOpsMessage } = props
 
-    // Modal.setAppElement is no longer needed in newer versions
+    if (!editingOpsMessage || !isOpen) return null
 
     return (
         <>
             <CustomOpsModal
-                open={modalOpen}
-                onClose={() => setModalOpen(!modalOpen)}
+                open={isOpen}
+                onClose={onClose}
                 header={{ heading: "Driftsmelding" }}
-                className={opsMessage.severity.toLowerCase()}
+                className={editingOpsMessage.severity.toLowerCase()}
             >
                 <Modal.Body>
                     <OpsMessageDetails
-                        opsMessage={opsMessage}
-                        navIdent={navIdent}
+                        opsMessage={editingOpsMessage}
+                        navIdent={undefined}
                     />
                 </Modal.Body>
             </CustomOpsModal>

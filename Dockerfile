@@ -1,5 +1,5 @@
 # Base on official Node.js Alpine image
-FROM node:16-alpine 
+FROM node:18-alpine 
 # AS builder
 
 # Set working directory
@@ -16,6 +16,8 @@ RUN npm install
 
 # Copy the remaining files for the build process
 COPY babel.config.json babel.config.json
+COPY tsconfig.json tsconfig.json
+COPY next-env.d.ts next-env.d.ts
 COPY src/ src/
 COPY public/ public/
 COPY next.config.js next.config.js
@@ -24,7 +26,7 @@ COPY next.config.js next.config.js
 RUN npm run build
 
 # --- Runtime image ---
-#FROM node:16-alpine
+#FROM node:18-alpine
 
 # Set working directory
 # WORKDIR /usr/src/app

@@ -102,7 +102,7 @@ const subscribeSources: ISource[] = [
         title: "Slack",
         content: (
             <Image
-                src="/sp/assets/images/slack-icon.svg"
+                src="/assets/images/slack-icon.svg"
                 alt="Slack icon"
                 aria-labelledby="Slack-ikon"
                 width={40}

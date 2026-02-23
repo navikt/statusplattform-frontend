@@ -14,7 +14,7 @@ import {
     Select,
     TextField,
 } from "@navikt/ds-react"
-import {Component, Service, Team} from "../../types/types"
+import { Component, Service, Team } from "../../types/types"
 import {
     deleteComponent,
     fetchComponents,
@@ -29,10 +29,10 @@ import {
     DependencyList,
     ModalInner,
     NoContentContainer,
-} from "../../pages/Admin"
+} from "./AdminStyles"
 import { RouterAdminAddKomponent } from "../../types/routes"
 import { fetchServices } from "../../utils/servicesAPI"
-import {fetchAllTeams} from "../../utils/teamKatalogAPI";
+import { fetchAllTeams } from "../../utils/teamKatalogAPI";
 
 const ComponentHeader = styled.div`
     padding: 1rem 0 1rem;
@@ -134,7 +134,7 @@ const TableKomponent = () => {
                     let retrievedTeams: Team[] = await fetchAllTeams()
                     setAllTeams(retrievedTeams)
                 } catch (error) {
-                    console.log(error)
+                    // console.log(error)
                     toast.error("Noe gikk galt ved henting av team fra teamkatalogen")
                 }
                 try {
@@ -145,7 +145,7 @@ const TableKomponent = () => {
                     await setAllServices(responseServices)
                 } catch (error) {
                     toast.error("Noe gikk galt ved henting av dashbordene")
-                    console.log(error)
+                    // console.log(error)
                 } finally {
                     setIsLoading(false)
                 }
@@ -166,7 +166,7 @@ const TableKomponent = () => {
             })
             .catch((error) => {
                 toast.error("Noe gikk galt ved henting av tjenestene")
-                console.log(error)
+                // console.log(error)
             })
     }
 
@@ -316,7 +316,7 @@ const TableKomponent = () => {
                                                 }
                                                 allComponents={components}
                                                 allServices={allServices}
-                                                teams = {allTeams}
+                                                teams={allTeams}
                                                 reload={reload}
                                             />
                                         )}
@@ -661,17 +661,17 @@ const ComponentRowEditting = ({
 
     const handleUpdatedComponent =
         (field: keyof typeof updatedComponent) =>
-        (evt: React.ChangeEvent<HTMLInputElement>) => {
-            const changedService = {
-                ...updatedComponent,
-                [field]:
-                    evt.target.getAttribute("type") === "number"
-                        ? parseInt(evt.target.value)
-                        : evt.target.value,
-            }
+            (evt: React.ChangeEvent<HTMLInputElement>) => {
+                const changedService = {
+                    ...updatedComponent,
+                    [field]:
+                        evt.target.getAttribute("type") === "number"
+                            ? parseInt(evt.target.value)
+                            : evt.target.value,
+                }
 
-            changeUpdatedComponent(changedService)
-        }
+                changeUpdatedComponent(changedService)
+            }
 
     const handleSubmit = () => {
         updateComponent(updatedComponent)
@@ -694,7 +694,7 @@ const ComponentRowEditting = ({
     }
     const teamOptions = [];
     teams.forEach((team) => {
-        teamOptions.push(<option key = {team.id} value={team.id}>{team.name}</option>)
+        teamOptions.push(<option key={team.id} value={team.id}>{team.name}</option>)
     })
     const handleUpdatedTeam = (event) => {
         changeUpdatedComponent({
@@ -723,8 +723,8 @@ const ComponentRowEditting = ({
                         label=""
                         onClick={e => e.stopPropagation()}
                         onChange={handleUpdatedTeam}
-                        style={{ width: '10%'}}>
-                        <option value={component.teamId? component.teamId : component.team} >{ component.team}</option>
+                        style={{ width: '10%' }}>
+                        <option value={component.teamId ? component.teamId : component.team} >{component.team}</option>
                         {teamOptions}
                     </Select>
                 </div>
@@ -755,17 +755,17 @@ const ComponentRowEditting = ({
                             />
                         </div>
                         <div>
-                         <span className="component-row-element editting">
-                            <BodyShort spacing>
-                                <b>Monitorlink</b>
-                            </BodyShort>
-                            <TextField
-                                label="Monitorlink"
-                                hideLabel
-                                value={monitorlink}
-                                onChange={handleUpdatedComponent("monitorlink")}
-                            />
-                        </span>
+                            <span className="component-row-element editting">
+                                <BodyShort spacing>
+                                    <b>Monitorlink</b>
+                                </BodyShort>
+                                <TextField
+                                    label="Monitorlink"
+                                    hideLabel
+                                    value={monitorlink}
+                                    onChange={handleUpdatedComponent("monitorlink")}
+                                />
+                            </span>
 
 
                         </div>
@@ -781,7 +781,7 @@ const ComponentRowEditting = ({
                                 onChange={handleUpdatedComponent("pollingUrl")}
                             />
 
-                                   <span className="service-data-element editting">
+                            <span className="service-data-element editting">
                                 <CheckboxGroup
                                     legend=""
                                     onChange={() => handleIsPollingOnPrem()}

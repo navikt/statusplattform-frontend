@@ -19,6 +19,7 @@ export const postOpsMessage = async (opsMessage: OpsMessageI): Promise<Object> =
         externalMessage: opsMessage.externalMessage,
         onlyShowForNavEmployees: opsMessage.onlyShowForNavEmployees,
         severity: opsMessage.severity,
+        status: opsMessage.status,
         isActive: opsMessage.isActive,
         affectedServices: opsMessage.affectedServices,
         startTime: opsMessage.startTime,
@@ -92,15 +93,23 @@ export const updateSpecificOpsMessage = async (opsMessage: OpsMessageI): Promise
         affectedServices: opsMessage.affectedServices,
         startTime: opsMessage.startTime,
         endTime: opsMessage.endTime,
-        severity: opsMessage.severity
+        severity: opsMessage.severity,
+        status: opsMessage.status
     })
+
+    console.log('🔧 Updating ops message:', {
+        id: opsMessage.id,
+        status: opsMessage.status,
+        severity: opsMessage.severity,
+        body: JSON.parse(body)
+    });
 
     let request = createApiRequest(endPath, "PUT", body)
     response = await fetch(request)
-    
-    
+
+
     if (response.ok) {
-        return response
+        return response.json()
     }
     throw new ResponseError("Failed to fetch from server", response)
 }

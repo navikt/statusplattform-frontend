@@ -2,8 +2,8 @@ import { useRouter } from "next/router"
 import Head from "next/head"
 import { useEffect, useState } from "react"
 
-import DashboardFromName from "./Dashboard/[dashboardName]"
-import { RouterInternt, RouterPrivatperson } from "../types/routes"
+import DashboardFromName from "./dashboard/[dashboardName]"
+import { RouterInternt, RouterPrivatperson, RouterSPSamarbeidspartner, RouterSPInternt } from "../types/routes"
 import CustomNavSpinner from "../components/CustomNavSpinner"
 import { UserData } from "../types/userData"
 import { checkLoginInfoAndState } from "../utils/checkLoginInfoAndState"
@@ -34,13 +34,15 @@ export default function Home() {
             await user
 
             if (user.navIdent && router.isReady && router.asPath == "/") {
-                router.push(RouterInternt.PATH)
+                // NAV employee with SSO session - route to internal dashboard
+                router.push(RouterSPInternt.PATH)
             } else if (
                 !user.navIdent &&
                 router.isReady &&
                 router.asPath == "/"
             ) {
-                router.push(RouterPrivatperson.PATH)
+                // External user without SSO session - route to external statuspage
+                router.push(RouterSPSamarbeidspartner.PATH)
             }
         })()
     }, [router])
@@ -52,7 +54,7 @@ export default function Home() {
     return (
         <>
             <Head>
-                <link rel="icon" href="/sp/favicon.ico" />
+                <link rel="icon" href="/favicon.ico" />
                 <meta
                     name="viewport"
                     content="initial-scale=1.0, width=device-width"
@@ -66,7 +68,7 @@ export default function Home() {
                     property="image"
                     content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"
                 />
-                <meta property="url" content="https://status.nav.no/sp" />
+                <meta property="url" content="https://status.nav.no/" />
                 <meta property="type" content="website" />
 
                 {/* <!-- Open Graph / Facebook --> */}
@@ -86,14 +88,14 @@ export default function Home() {
                     property="og:image"
                     content="https://www.nav.no/dekoratoren/media/nav-logo-red.svg"
                 />
-                <meta property="og:url" content="https://status.nav.no/sp" />
+                <meta property="og:url" content="https://status.nav.no/" />
                 <meta property="og:type" content="website" />
 
                 {/* <!-- Twitter --> */}
                 <meta property="twitter:card" content="summary_large_image" />
                 <meta
                     property="twitter:url"
-                    content="https://status.nav.no/sp"
+                    content="https://status.nav.no/"
                 />
                 <meta property="twitter:title" content="Navstatus" />
                 <meta

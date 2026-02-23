@@ -20,7 +20,7 @@ import {
     SeverityEnum,
     StatusEnum,
 } from "../../../types/opsMessage";
-import {  EndPathSpecificOps } from "../../../utils/apiHelper";
+import { EndPathSpecificOps } from "../../../utils/apiHelper";
 import {
     updateSpecificOpsMessage,
 } from "../../../utils/opsAPI";
@@ -83,17 +83,26 @@ const OpsMessageComponent = ({ opsMessage: serverSideOpsMessage }) => {
     const user = useContext(UserStateContext);
 
 
-  useEffect(() => {
-    const fetchMembership = async () => {
-      if (opsMessage.affectedServices.length > 0) {
-        const result = await checkUserMembershipInTeam(opsMessage.affectedServices[0].teamId, user.navIdent);
-        setIsMember(result);
-      }
-    };
+    useEffect(() => {
+        const fetchMembership = async () => {
+            if (opsMessage.affectedServices.length > 0 && opsMessage.affectedServices[0].teamId) {
+                try {
+                    const result = await checkUserMembershipInTeam(opsMessage.affectedServices[0].teamId, user.navIdent);
+                    setIsMember(result);
+                } catch (error) {
+                    console.error('Error checking team membership:', error);
+                    setIsMember(false);
+                }
+            } else {
+                // No team associated or teamId is null - deny editing
+                setIsMember(false);
+                toast.error("Du har ikke tilgang til å redigere denne driftsmeldingen - ingen team tilknyttet");
+            }
+        };
 
-    fetchMembership();
-  }, [opsMessage, user]);
-    
+        fetchMembership();
+    }, [opsMessage, user]);
+
     if (isMember === false) {
         toast.error("Du har ikke tilgang til å redigere denne driftsmeldingen");
     }
@@ -129,9 +138,9 @@ const EditOpsMessage = ({ opsMessage, isMember }) => {
         try {
             await updateSpecificOpsMessage(updatedOpsMessage);
             toast.success("Endringer lagret");
-            router.push('/Samarbeidspartner');
+            router.push('/samarbeidspartner');
         } catch (error) {
-            console.log(error);
+            // console.log(error);
             toast.error("Noe gikk galt ved oppdatering av meldingen");
         }
     };
@@ -187,7 +196,7 @@ const EditOpsMessage = ({ opsMessage, isMember }) => {
                 <option value={SeverityEnum.DOWN}>Høy - Rød</option>
             </Select>
 
-            <Spacer height="1.9rem"/>
+            <Spacer height="1.9rem" />
 
             <TextEditor
                 editing={true}
@@ -197,7 +206,7 @@ const EditOpsMessage = ({ opsMessage, isMember }) => {
                 isInternal={false}
             />
 
-            <Spacer height="1.9rem"/>
+            <Spacer height="1.9rem" />
 
             <Switch
                 checked={updatedOpsMessage.isActive}

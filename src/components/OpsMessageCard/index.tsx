@@ -139,7 +139,7 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
     //const approvedUsers = process.env.NEXT_PUBLIC_OPS_ACCESS?.split(",")
 
     const approvedUsers = [
-        "L152423",
+        "J162994",
         "K132081",
         "H123099",
         "L110875",
@@ -166,13 +166,13 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
     }
 
     const handleDeleteMessage = () => {
-        ;(async function () {
+        ; (async function () {
             try {
                 await deleteOpsMessage(opsMessage.id)
                 toast.success("Meldingen er slettet")
                 notifyDeletedOpsMessage()
             } catch (error) {
-                console.log(error)
+                // console.log(error)
                 toast.error("Noe gikk galt")
             } finally {
                 setIsModalOpen(false)
@@ -185,14 +185,13 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
         try {
             await updateSpecificOpsMessage(changedOps)
             toast.success(
-                `Meldingen er nå satt til ${
-                    changedOps.isActive ? "aktiv" : "inaktiv"
+                `Meldingen er nå satt til ${changedOps.isActive ? "aktiv" : "inaktiv"
                 }`
             )
             setIsActiveModalOpen(false)
             notifyChangedOpsMessage(changedOps)
         } catch (error) {
-            console.log(error)
+            // console.log(error)
             toast.error("Noe gikk galt i oppdateringen")
             setIsActiveModalOpen(false)
         }
@@ -250,51 +249,51 @@ const OpsMessageCard = (props: OpsMessageCardI) => {
             </CustomizedModal>
 
             <div className="ops-card-content">
-            <div className="top-row-container">
-            <PublishedTime>{prettifiedStartTime}</PublishedTime>
-            <div
-                className={
-                    approvedUsers.includes(navIdent)
-                        ? "se-mer-wrapper"
-                        : "se-mer-ops"
-                }
-            >
-                {approvedUsers.includes(navIdent) && (
-                    <>
-                        <Button
-                            size="small"
-                            variant="tertiary"
-                            className="top-row-button"
-                            onClick={handleModal}
-                            icon={<TrashIcon />}
-                        />
+                <div className="top-row-container">
+                    <PublishedTime>{prettifiedStartTime}</PublishedTime>
+                    <div
+                        className={
+                            approvedUsers.includes(navIdent)
+                                ? "se-mer-wrapper"
+                                : "se-mer-ops"
+                        }
+                    >
+                        {approvedUsers.includes(navIdent) && (
+                            <>
+                                <Button
+                                    size="small"
+                                    variant="tertiary"
+                                    className="top-row-button"
+                                    onClick={handleModal}
+                                    icon={<TrashIcon />}
+                                />
+                                <Button
+                                    variant="tertiary"
+                                    size="small"
+                                    onClick={() =>
+                                        router.push(
+                                            RouterOpsMeldinger.PATH +
+                                            `/${opsMessage.id}/RedigerMelding`
+                                        )
+                                    }
+                                >
+                                    Rediger
+                                </Button>
+                            </>
+                        )}
                         <Button
                             variant="tertiary"
                             size="small"
                             onClick={() =>
                                 router.push(
-                                    RouterOpsMeldinger.PATH +
-                                        `/${opsMessage.id}/RedigerMelding`
+                                    RouterOpsMeldinger.PATH + `/${opsMessage.id}`
                                 )
                             }
                         >
-                            Rediger
+                            Se mer
                         </Button>
-                    </>
-                )}
-                <Button
-                    variant="tertiary"
-                    size="small"
-                    onClick={() =>
-                        router.push(
-                            RouterOpsMeldinger.PATH + `/${opsMessage.id}`
-                        )
-                    }
-                >
-                    Se mer
-                </Button>
-            </div>
-        </div>
+                    </div>
+                </div>
                 <Heading spacing size="medium">
                     {opsMessage.internalHeader}
                 </Heading>

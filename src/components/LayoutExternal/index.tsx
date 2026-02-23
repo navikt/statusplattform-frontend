@@ -60,8 +60,9 @@ const MainContentContainer = styled.div`
 
 const Content = styled.main`
     min-height: 100%;
-    margin: 2rem 10px 2rem;
+    margin: 1rem 0 2rem;
     white-space: pre-wrap;
+    width: 100%;
 
     h1 {
         text-align: center;

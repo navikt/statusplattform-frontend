@@ -1,4 +1,4 @@
-const apiPath = "/sp/api/requestGateway"
+const apiPath = "/api/requestGateway"
 
 export const createApiRequest = (endpath: string, method: string, body? :string) =>{
     let headers = new Headers()

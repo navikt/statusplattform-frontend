@@ -1,132 +1,143 @@
 // Landing page
 export enum RouterHomePage {
     NAME = "Home",
-    PATH = "/sp",
+    PATH = "/",
 }
 // ---
 
 // Default dashboards
 export enum RouterPrivatperson {
     NAME = "Privatperson",
-    PATH = "/Dashboard/Privatperson",
+    PATH = "/dashboard/privatperson",
 }
 
 export enum RouterArbeidsgiver {
     NAME = "Arbeidsgiver",
-    PATH = "/Dashboard/Arbeidsgiver",
+    PATH = "/dashboard/arbeidsgiver",
 }
 
 export enum RouterSamarbeidspartner {
     NAME = "Samarbeidspartner",
-    PATH = "/Dashboard/Samarbeidspartner",
+    PATH = "/dashboard/samarbeidspartner",
 }
 
 export enum RouterInternt {
     NAME = "Internt",
-    PATH = "/Dashboard/Internt",
+    PATH = "/dashboard/internt",
+}
+
+// Routes for external/internal access
+export enum RouterSPSamarbeidspartner {
+    NAME = "Samarbeidspartner",
+    PATH = "/samarbeidspartner",
+}
+
+export enum RouterSPInternt {
+    NAME = "Internt",
+    PATH = "/internt",
 }
 // ---
 
 // Admin
 export enum RouterAdmin {
     NAME = "Admin",
-    PATH = "/Admin?tab=Tjenester",
+    PATH = "/admin?tab=Tjenester",
 }
 
 export enum RouterAdminDashboards {
     NAME = "Admin - Dashboards",
-    PATH = "/Admin?tab=Dashbord",
+    PATH = "/admin?tab=Dashbord",
 }
 
 export enum RouterAdminAddDashboard {
     NAME = "Admin - NewDashboard",
-    PATH = "/Admin/NyttDashbord",
+    PATH = "/admin/nyttdashbord",
 }
 
 export enum RouterAdminOmråder {
     NAME = "Admin - Områder",
-    PATH = "/Admin?tab=Områder",
+    PATH = "/admin?tab=Områder",
 }
 
 export enum RouterAdminAddOmråde {
     NAME = "Admin - Områder",
-    PATH = "/Admin/NyttOmraade",
+    PATH = "/admin/nyttomraade",
 }
 
 export enum RouterAdminTjenester {
     NAME = "Admin - Tjenester",
-    PATH = "/Admin?tab=Tjenester",
+    PATH = "/admin?tab=Tjenester",
 }
 
 export enum RouterAdminAddTjeneste {
     NAME = "Admin - Tjenester",
-    PATH = "/Admin/NyTjeneste",
+    PATH = "/admin/nytjeneste",
 }
 
 export enum RouterAdminKomponenter {
     NAME = "Admin - Komponenter",
-    PATH = "/Admin?tab=Komponenter",
+    PATH = "/admin?tab=Komponenter",
 }
 
 export enum RouterAdminAddKomponent {
     NAME = "Admin - Komponenter",
-    PATH = "/Admin/NyKomponent",
+    PATH = "/admin/nykomponent",
 }
 // ---
 
 // TjensteData
 export enum RouterTjenestedata {
     NAME = "Admin - Tjenester",
-    PATH = "/Tjenestedata/",
+    PATH = "/tjenestedata/",
 }
 // ---
 
 // Avvikshistorikk
 export enum RouterAvvikshistorikk {
     NAME = "Avvikshistorikk",
-    PATH = "/Avvikshistorikk",
+    PATH = "/avvikshistorikk",
 }
 // ---
 
 // OPSMeldinger
 export enum RouterOpsMeldinger {
     NAME = "Driftsmeldinger",
-    PATH = "/Driftsmeldinger",
+    PATH = "/driftsmeldinger",
 }
 
 export enum RouterOpprettOpsMelding {
     NAME = "Opprett driftsmelding",
-    PATH = "Driftsmeldinger/OpprettMelding",
+    PATH = "driftsmeldinger/opprettmelding",
 }
 // ---
 
 // OpprettVarsling
 export enum RouterOpprettVarsling {
     NAME = "Opprett Varsling",
-    PATH = "/OpprettVarsling",
+    PATH = "/opprettvarsling",
 }
 
 export enum RouterConfirmedCreation {
     NAME = "Profil opprettet",
-    PATH = "/ProfilOpprettet",
+    PATH = "/profilopprettet",
 }
 // ---
 
 // Login & Logout
 export enum RouterLogin {
     NAME = "Logg inn",
-    PATH = "/Login",
+    PATH = "/login",
 }
 
 export enum RouterOauthLogin {
     NAME = "LoginAzure",
     //  PATH = "/authenticate/login"
-    PATH = "/oauth2/login?redirect=" + "/sp",
+    PATH = "/oauth2/login?redirect=" + "/",
 }
 
 export enum RouterLogout {
     NAME = "Logg ut",
-    PATH = "/sp/oauth2/logout",
+    PATH = "/oauth2/logout",
 }
 // ---
 
@@ -140,19 +151,19 @@ export enum RouterError {
 // Feedback form
 export enum RouterFeedbackForm {
     NAME = "Feedback skjema",
-    PATH = "/FeedbackSkjema",
+    PATH = "/feedbackskjema",
 }
 // ---
 
 // UU status
 export enum RouterUUStatus {
     NAME = "Status Universell Utforming",
-    PATH = "/UUStatus/tjeneste",
+    PATH = "/uustatus/tjeneste",
 }
 // ---
 
 // Vaktor
-//NB - skal ikke ha /sp prefix
+//NB - External URL, uses full domain
 export enum RouterVaktor {
     NAME = "Vaktor",
     PATH = "https://vaktor.ansatt.nav.no/",

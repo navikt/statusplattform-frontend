@@ -1,6 +1,6 @@
 import { Checkbox, Heading } from "@navikt/ds-react"
 import React, { MutableRefObject, useEffect, useState, useRef } from "react"
-import { datePrettifyer } from "../../utils/datePrettifyer"
+import { datePrettifyer } from "@/utils/datePrettifyer"
 import styled from "styled-components"
 import dynamic from "next/dynamic"
 
@@ -125,16 +125,16 @@ const TextEditor = React.forwardRef<any, EditorProps>(
                         </Checkbox>
                     )}
                 </EditorTitle>
-                <SunEditorComponent
-                    value={message}
-                    onChange={handleUpdateMsg}
-                    initialValue={DefaultMessage(
+                {React.createElement(SunEditorComponent as any, {
+                    value: message,
+                    onChange: handleUpdateMsg,
+                    initialValue: DefaultMessage(
                         status,
                         editing,
                         message,
                         showHistory
-                    )}
-                />
+                    )
+                })}
             </>
         )
     }

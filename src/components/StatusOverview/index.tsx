@@ -13,7 +13,7 @@ import { UserData } from "../../types/userData"
 import { datePrettifyer } from "../../utils/datePrettifyer"
 import { countHealthyServicesInListOfAreas } from "../../utils/servicesOperations"
 import CustomNavSpinner from "../CustomNavSpinner"
-import OpsMessageModal from "../OpsMessageModal"
+import OpsMessageModal from "../OpsMessageModal/index"
 
 const StatusSummary = styled.div`
     width: 100%;
@@ -175,9 +175,8 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                 <div className="top-row">
                     {opsMessages.length != 0 && (
                         <div className="affectedservices">
-                            {`Avvik på ${
-                                countIssueServices() + countDownServices()
-                            } av ${countServicesInAreas()} tjenester`}
+                            {`Avvik på ${countIssueServices() + countDownServices()
+                                } av ${countServicesInAreas()} tjenester`}
                         </div>
                     )}
                     <div className="deviation-button-wrapper">
@@ -203,9 +202,8 @@ const StatusOverview = ({ dashboard, user }: StatusOverviewI) => {
                         {hasDown == true && (
                             <DeviationCardIfNoOpsMessage
                                 status={"DOWN"}
-                                message={`Avvik på ${
-                                    countIssueServices() + countDownServices()
-                                } av ${countServicesInAreas()} tjenester`}
+                                message={`Avvik på ${countIssueServices() + countDownServices()
+                                    } av ${countServicesInAreas()} tjenester`}
                             />
                         )}
                     </div>
@@ -397,7 +395,7 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
     const [modalOpen, setModalOpen] = useState(false)
 
     const approvedUsers = [
-        "L152423",
+        "J162994",
         "K132081",
         "H123099",
         "L110875",
@@ -419,7 +417,7 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
             className={
                 !severity ? "has-neutral" : "has-" + severity.toLowerCase()
             }
-            onClick={() => setModalOpen(!modalOpen)}
+            onClick={() => setModalOpen(true)}
         >
             <div className="content">
                 <div className="topcontent">
@@ -459,10 +457,10 @@ const DeviationReportCard = ({ opsMessage, user }: DeviationCardI) => {
                 </div>
             </div>
             <OpsMessageModal
-                opsMessage={opsMessage}
-                navIdent={user.navIdent}
-                modalOpen={modalOpen}
-                setModalOpen={setModalOpen}
+                isOpen={modalOpen}
+                onClose={() => setModalOpen(false)}
+                services={[]}
+                editingOpsMessage={opsMessage}
             />
         </DeviationCardContainer>
     )

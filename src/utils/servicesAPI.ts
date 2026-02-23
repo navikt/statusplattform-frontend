@@ -41,6 +41,20 @@ export const fetchServices = async (): Promise<Service[]> => {
     throw new ResponseError("Failed to fetch from server", response)
 }
 
+export const fetchExternalServices = async (): Promise<Service[]> => {
+    let response;
+    let endPath = "/rest/services/external";
+
+    let request = createApiRequest(endPath,"GET")
+    response = await fetch(request);
+
+    if (response.ok) {
+        let json = await response.json()
+        return json
+    }
+    throw new ResponseError("Failed to fetch external services from server", response)
+}
+
 export const fetchServiceHistory = async (serviceId: string): Promise<HistoryOfSpecificService> => {
     let endPath = EndPathServiceHistory(serviceId);
     let response;

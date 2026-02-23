@@ -1,4 +1,4 @@
-const apiPath = "/sp/api/teamkatalog";
+const apiPath = "/api/teamkatalog";
 import { Team } from "../types/types";
 import { backendPath } from "../pages"
 import { EndPathSpecificService } from "./apiHelper";
@@ -52,7 +52,7 @@ export const searchTeamsByName = async (name: string): Promise<Team> => {
 };
   
 export const fetchSimplifiedTeamByName = async (name: string): Promise<Team> => {
-  const response = await fetch(`/sp/api/teams/searchSimplifiedByName?name=${name}`);
+  const response = await fetch(`/api/teams/searchSimplifiedByName?name=${name}`);
 
   if (response.ok) {
       const team: Team = await response.json();
@@ -62,14 +62,31 @@ export const fetchSimplifiedTeamByName = async (name: string): Promise<Team> => 
   throw new Error(`Failed to fetch team with name: ${name}`);
 };
 
-export const checkUserMembershipInTeam = async (teamId: string, userId: string): Promise<boolean> => {
-  const response = await fetch(`/sp/api/teams/checkUserInTeam?teamId=${teamId}&userId=${userId}`);
-  console.log("url: ", `/sp/api/teams/checkUserInTeam?teamId=${teamId}&userId=${userId}`)
-  if (response.ok) {
-      const { isMember } = await response.json();
-      return isMember;
-  }
-  console.log(await response.json())
+export const fetchTeamById = async (teamId: string): Promise<Team> => {
+  const response = await fetch(`/api/teams/${teamId}`);
 
-  throw new Error(`Failed to check if user is in team ${teamId}`);
+  if (response.ok) {
+      const team: Team = await response.json();
+      return team;
+  }
+
+  throw new Error(`Failed to fetch team with ID: ${teamId}`);
+};
+
+export const checkUserMembershipInTeam = async (teamId: string, userId: string): Promise<boolean> => {
+  try {
+    // First try the optimized backend endpoint
+    const response = await fetch(`/api/teams/checkUserInTeam?teamId=${teamId}&userId=${userId}`);
+    if (response.ok) {
+        const { isMember } = await response.json();
+        return isMember;
+    }
+
+    // Fallback: fetch team by ID and check members directly (using ID-based API route)
+    const team = await fetchTeamById(teamId);
+    return team.members?.includes(userId) || false;
+  } catch (error) {
+    console.error(`Error checking team membership for team ${teamId} and user ${userId}:`, error);
+    return false;
+  }
 };

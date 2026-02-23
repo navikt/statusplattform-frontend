@@ -1,10 +1,10 @@
 import "../styles/globals.css"
 import "@navikt/ds-css"
 
-import { Providers } from "../components/ContextProviders/Providers"
+import { Providers } from "@/components/ContextProviders/Providers"
 import { useEffect, useState } from "react"
 import { Modal } from "@navikt/ds-react"
-import CustomNavSpinner from "../components/CustomNavSpinner"
+import CustomNavSpinner from "@/components/CustomNavSpinner"
 
 function MyApp({ Component, pageProps }) {
     const [isLoading, setIsLoading] = useState(false)
