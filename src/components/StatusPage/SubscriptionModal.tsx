@@ -1,15 +1,18 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import styled from "styled-components"
 import { Modal, Button, TextField, Checkbox, Alert, Heading, BodyShort } from "@navikt/ds-react"
 import { Service } from "../../types/types"
+import { UserData } from "../../types/userData"
 
 interface SubscriptionModalProps {
     isOpen: boolean
     onClose: () => void
     services: Service[]
+    user?: UserData
 }
 
-const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps) => {
+const SubscriptionModal = ({ isOpen, onClose, services, user }: SubscriptionModalProps) => {
+    const isInternalUser = !!(user && user.navIdent)
     const [email, setEmail] = useState("")
     const [otpCode, setOtpCode] = useState("")
     const [selectedServices, setSelectedServices] = useState<string[]>([])
@@ -17,11 +20,19 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
         email: true,
         slack: false,
         teams: false,
-        webhook: false
     })
     const [step, setStep] = useState<'email' | 'verify' | 'preferences' | 'success'>('email')
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState("")
+
+    // For internal users, skip to preferences step with their email
+    useEffect(() => {
+        if (isInternalUser && isOpen) {
+            setEmail(user?.navIdent + "@nav.no")
+            setStep('preferences')
+            setSelectedServices(services.map(s => s.id || ''))
+        }
+    }, [isInternalUser, isOpen])
 
     const handleEmailSubmit = async () => {
         if (!email || !isValidEmail(email)) {
@@ -33,7 +44,6 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
         setError("")
 
         try {
-            // TODO: Send OTP to email
             const response = await fetch('/api/subscriptions/send-otp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -43,7 +53,8 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
             if (response.ok) {
                 setStep('verify')
             } else {
-                setError("Kunne ikke sende bekreftelseskode. Prøv igjen.")
+                const data = await response.json().catch(() => ({}))
+                setError(data.message || "Kunne ikke sende bekreftelseskode. Prøv igjen.")
             }
         } catch {
             setError("En feil oppstod. Prøv igjen senere.")
@@ -65,15 +76,15 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
             const response = await fetch('/api/subscriptions/verify-otp', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email, otpCode })
+                body: JSON.stringify({ email, code: otpCode })
             })
 
             if (response.ok) {
                 setStep('preferences')
-                // Pre-select all services by default
                 setSelectedServices(services.map(s => s.id || ''))
             } else {
-                setError("Ugyldig kode. Prøv igjen.")
+                const data = await response.json().catch(() => ({}))
+                setError(data.message || "Ugyldig kode. Prøv igjen.")
             }
         } catch {
             setError("En feil oppstod. Prøv igjen senere.")
@@ -84,7 +95,7 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
 
     const handleSubscriptionCreate = async () => {
         if (selectedServices.length === 0) {
-            setError("Velg minst én tjeneste å abonnere på")
+            setError("Velg minst en tjeneste a abonnere pa")
             return
         }
 
@@ -97,8 +108,8 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     email,
-                    services: selectedServices,
-                    channels: notificationChannels
+                    serviceIds: selectedServices,
+                    isInternal: isInternalUser
                 })
             })
 
@@ -115,8 +126,8 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
     }
 
     const handleClose = () => {
-        setStep('email')
-        setEmail("")
+        setStep(isInternalUser ? 'preferences' : 'email')
+        if (!isInternalUser) setEmail("")
         setOtpCode("")
         setSelectedServices([])
         setError("")
@@ -128,7 +139,7 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
     }
 
     return (
-        <Modal open={isOpen} onClose={handleClose} header={{ heading: "Abonner på statusoppdateringer" }}>
+        <Modal open={isOpen} onClose={handleClose} header={{ heading: "Abonner pa statusoppdateringer" }}>
             <Modal.Body>
                 {error && (
                     <Alert variant="error" style={{ marginBottom: "1rem" }}>
@@ -139,7 +150,7 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
                 {step === 'email' && (
                     <EmailStep>
                         <BodyShort spacing>
-                            Få varsler om driftsmeldinger og planlagt vedlikehold direkte i innboksen din.
+                            Fa varsler om driftsmeldinger og planlagt vedlikehold direkte i innboksen din.
                         </BodyShort>
                         <TextField
                             label="E-postadresse"
@@ -156,7 +167,7 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
                     <VerifyStep>
                         <BodyShort spacing>
                             Vi har sendt en 6-siffer bekreftelseskode til <strong>{email}</strong>.
-                            Oppgi koden under for å bekrefte e-postadressen din.
+                            Oppgi koden under for a bekrefte e-postadressen din.
                         </BodyShort>
                         <TextField
                             label="Bekreftelseskode"
@@ -170,6 +181,11 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
 
                 {step === 'preferences' && (
                     <PreferencesStep>
+                        {isInternalUser && (
+                            <BodyShort spacing>
+                                Logget inn som <strong>{user?.name || user?.navIdent}</strong>. Varsler sendes til {email}.
+                            </BodyShort>
+                        )}
                         <Heading size="small" spacing>Velg tjenester</Heading>
                         <ServicesList>
                             {services.map((service) => (
@@ -231,11 +247,11 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
                         <Alert variant="success">
                             <Heading size="small">Abonnement opprettet!</Heading>
                             <BodyShort>
-                                Du vil nå motta varsler om driftsmeldinger for de valgte tjenestene på {email}.
+                                Du vil na motta varsler om driftsmeldinger for de valgte tjenestene pa {email}.
                             </BodyShort>
                         </Alert>
                         <BodyShort style={{ marginTop: "1rem" }}>
-                            Du kan administrere eller avbryte abonnementet ditt ved å følge lenken i varslene du mottar.
+                            Du kan administrere eller avbryte abonnementet ditt ved a folge lenken i varslene du mottar.
                         </BodyShort>
                     </SuccessStep>
                 )}
@@ -262,7 +278,10 @@ const SubscriptionModal = ({ isOpen, onClose, services }: SubscriptionModalProps
 
                 {step === 'preferences' && (
                     <>
-                        <Button variant="secondary" onClick={() => setStep('verify')}>Tilbake</Button>
+                        {!isInternalUser && (
+                            <Button variant="secondary" onClick={() => setStep('verify')}>Tilbake</Button>
+                        )}
+                        <Button variant="secondary" onClick={handleClose}>Avbryt</Button>
                         <Button onClick={handleSubscriptionCreate} loading={loading}>
                             Opprett abonnement
                         </Button>

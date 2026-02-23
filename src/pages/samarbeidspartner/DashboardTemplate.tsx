@@ -10,7 +10,7 @@ import Link from "next/link";
 import { PlusIcon } from '@navikt/aksel-icons';
 import { fetchMessageByServiceList } from "@/utils/dashboardsAPI";
 import { isAfter, isBefore } from "date-fns";
-import SubscriptionModal from "@/components/SubscriptionModal";
+import SubscriptionModal from "@/components/StatusPage/SubscriptionModal";
 import OpsMessageModal from "@/components/OpsMessageModal";
 import { enrichMessagesWithServiceInfo } from "@/utils/messageServiceMapper";
 
@@ -181,6 +181,7 @@ const DashboardTemplate = ({ services, user }: DashboardTemplateProps) => {
           isOpen={isSubscriptionModalOpen}
           onClose={() => setIsSubscriptionModalOpen(false)}
           services={services}
+          user={user}
         />
 
         {/* Create Ops Message Modal */}
