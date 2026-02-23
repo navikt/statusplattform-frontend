@@ -51,6 +51,7 @@ spec:
               - /_next/**
               - /api/requestGateway
               - /api/userInfo
+              - /api/subscriptions/**
               - /favicon.ico
               - /assets/nav-logo/png/black.png
     accessPolicy:
