@@ -42,12 +42,15 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
 
   
     let claims = decodeJwt(accessToken);
-    const usersWithAccess = process.env.NEXT_PUBLIC_APPROVED_USERS?.split(",")
+    const ADMIN_GROUP_ID = "caa1c79e-c174-4084-bb48-7f03b8da43d1"
+    const OPS_GROUP_ID = "48523717-9e5e-4ad5-bb62-914425c35e37"
+    const groups = (claims.groups as string[]) || []
+    const adminAccess = groups.includes(ADMIN_GROUP_ID) || groups.includes(OPS_GROUP_ID)
     let userInfo = {
                        name: claims.name,
                        navIdent: claims.NAVident,
                        email: claims.preferred_username,
-                       adminAccess: usersWithAccess.includes(String(claims.NAVident))
+                       adminAccess
                    }
                    
     res.status(200).json(userInfo);

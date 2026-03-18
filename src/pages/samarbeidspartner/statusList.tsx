@@ -33,6 +33,13 @@ const StatusList = ({ service_ids, user, services, opsMessages }: StatusListProp
       return;
     }
 
+    // Admin users can edit all messages
+    if (user.adminAccess) {
+      setEditingMessage(message);
+      setIsEditModalOpen(true);
+      return;
+    }
+
     // Check if message has affected services
     if (message.affectedServices.length === 0) {
       toast.error("Du har ikke tilgang til å redigere denne driftsmeldingen - ingen tjenester tilknyttet");

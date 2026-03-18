@@ -529,7 +529,13 @@ const AffectedServicesSelect = ({
         toast.info("Ingen tjeneste valgt");
         return;
       }
-  
+
+      // Admin users can add any service without team membership check
+      if (user.adminAccess) {
+        handleUpdateListOfAffectedServices(selectedService);
+        return;
+      }
+
       // Check if the current user is a member of the team that owns the selected service
         const service: Service = await fetchServiceFromId(selectedService.id);
         const team: Team = await fetchSimplifiedTeamByName(service.team);

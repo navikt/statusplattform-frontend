@@ -85,6 +85,12 @@ const OpsMessageComponent = ({ opsMessage: serverSideOpsMessage }) => {
 
     useEffect(() => {
         const fetchMembership = async () => {
+            // Admin users can edit all ops messages
+            if (user.adminAccess) {
+                setIsMember(true);
+                return;
+            }
+
             if (opsMessage.affectedServices.length > 0 && opsMessage.affectedServices[0].teamId) {
                 try {
                     const result = await checkUserMembershipInTeam(opsMessage.affectedServices[0].teamId, user.navIdent);

@@ -37,6 +37,9 @@ spec:
             enabled: true
             tenant: nav.no
             claims:
+                groups:
+                    - id: "caa1c79e-c174-4084-bb48-7f03b8da43d1"
+                    - id: "48523717-9e5e-4ad5-bb62-914425c35e37"
                 extra:
                     - "NAVident"
                     - "azp_name"

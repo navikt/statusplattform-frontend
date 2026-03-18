@@ -43,13 +43,13 @@ export const UserStateProvider: React.FC<{children: ReactNode}> = ({children}) =
         return <CustomNavSpinner />
     }
 
-    const { name, navIdent } = user
+    const { name, navIdent, adminAccess } = user
 
     return (
         <UserStateContext.Provider value={{
             name,
             navIdent,
-            adminAccess:false
+            adminAccess
         }}>
             {children}
         </UserStateContext.Provider>
