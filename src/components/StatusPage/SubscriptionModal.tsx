@@ -28,7 +28,7 @@ const SubscriptionModal = ({ isOpen, onClose, services, user }: SubscriptionModa
     // For internal users, skip to preferences step with their email
     useEffect(() => {
         if (isInternalUser && isOpen) {
-            setEmail(user?.navIdent + "@nav.no")
+            setEmail(user?.email || user?.navIdent + "@nav.no")
             setStep('preferences')
             setSelectedServices(services.map(s => s.id || ''))
         }

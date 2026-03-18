@@ -15,6 +15,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
         let userInfo = {
             name: "LOKAL, BRUKER",
             navIdent: "J162994",
+            email: "jonas.juvet@nav.no",
             adminAccess: true
         }
         res.status(200).json(userInfo);
@@ -45,6 +46,7 @@ export default async (req: NextApiRequest, res: NextApiResponse) => {
     let userInfo = {
                        name: claims.name,
                        navIdent: claims.NAVident,
+                       email: claims.preferred_username,
                        adminAccess: usersWithAccess.includes(String(claims.NAVident))
                    }
                    
