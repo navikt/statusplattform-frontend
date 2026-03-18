@@ -19,7 +19,7 @@
         "jose": "^4.11.1",
         "less": "^4.1.1",
         "lodash.throttle": "^4.1.1",
-        "next": "^14.2.32",
+        "next": "^14.2.35",
         "next-compose-plugins": "^2.2.1",
         "next-transpile-modules": "^9.1.0",
         "prop-types": "^15.7.2",
@@ -36,7 +36,7 @@
         "styled-components": "^5.2.1",
         "suneditor": "^2.46.2",
         "suneditor-react": "^3.6.1",
-        "webpack": "^5.75.0"
+        "webpack": "^5.104.1"
     },
     "devDependencies": {
         "@babel/core": "^7.16.0",
@@ -91,5 +91,9 @@
     "prettier": {
         "tabWidth": 4,
         "semi": false
+    },
+    "overrides": {
+        "serialize-javascript": "^7.0.3",
+        "minimatch": "^9.0.7"
     }
 }
