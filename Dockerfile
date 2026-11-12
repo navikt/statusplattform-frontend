@@ -1,5 +1,5 @@
 # Base on official Node.js Alpine image
-FROM node:18-alpine 
+FROM node:22-alpine
 # AS builder
 
 # Set working directory
@@ -8,11 +8,9 @@ WORKDIR /usr/src/app
 # Copy package.json and package-lock.json to utilize Docker cache
 COPY package*.json ./
 
-RUN --mount=type=secret,id=NODE_AUTH_TOKEN sh -c \
-    'npm config set //npm.pkg.github.com/:_authToken=$(cat /run/secrets/NODE_AUTH_TOKEN)'
-RUN npm config set @navikt:registry=https://npm.pkg.github.com
+COPY .npmrc .npmrc
 
-RUN npm install
+RUN npm ci
 
 # Copy the remaining files for the build process
 COPY babel.config.json babel.config.json
