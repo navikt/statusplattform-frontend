@@ -5,7 +5,7 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 Install the following:
 
 ```
-Node version 16.17.0
+Node version 22.13.0 or newer within Node 22
 JDK 17.x.x
 Maven 3.8.6
 ```
@@ -13,8 +13,12 @@ Maven 3.8.6
 ## Frontend
 
 ```
-npm install
+npm ci
 ```
+
+The frontend uses Next.js 15 with the pages router and React 18. All npm dependencies,
+including the public NAV Aksel packages, are installed from npmjs.org without a
+GitHub Packages token.
 
 Run the development server:
 
